@@ -8,6 +8,8 @@
     <modules>
         <module>irh-mall</module>
         <module>irh-common</module>
+        <module>irh-registry</module>
+        <module>irh-registry</module>
     </modules>
 
     <groupId>top.imuster</groupId>
@@ -32,7 +34,6 @@
         <druid.starter.version>1.1.9</druid.starter.version>
         <mysql.version>5.1.32</mysql.version>
         <pageHelper.starter.version>1.2.3</pageHelper.starter.version>
-        <leyou.latest.version>1.0.0-SNAPSHOT</leyou.latest.version>
         <fastDFS.client.version>1.26.1-RELEASE</fastDFS.client.version>
         <fastJson.version>1.2.60</fastJson.version>
     </properties>
