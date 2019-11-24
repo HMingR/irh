@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class BaseDaoImpl<T,KEY extends Serializable> extends MyBatisSupport implements BaseDao<T,KEY>{
     private static final String DEFAULT_INSERT_KEY = "insertEntry";
-    private static final String DEFAULT_INSERT_LAST_SEQUENCE_KEY = "lastSequence";
+    //private static final String DEFAULT_INSERT_LAST_SEQUENCE_KEY = "lastSequence";
     private static final String DEFAULT_DELETE_ARRAY_KEY = "deleteByArrayKey";
     private static final String DEFAULT_DELETE_CONDTION = "deleteByCondition";
     private static final String DEFAULT_UPDATE_KEY = "updateByKey";
