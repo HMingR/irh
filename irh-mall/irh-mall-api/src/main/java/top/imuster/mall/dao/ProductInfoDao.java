@@ -10,5 +10,4 @@ import top.imuster.mall.domain.ProductInfo;
  */
 public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
     //自定义扩展
-
 }
