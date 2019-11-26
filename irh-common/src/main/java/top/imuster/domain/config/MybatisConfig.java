@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 /**
  * @ClassName: MybatisConfig
- * @Description:
+ * @Description: 创建sqlSessionTemplate，用于执行sql
  * @author: hmr
  * @date: 2019/11/25 10:32
  */

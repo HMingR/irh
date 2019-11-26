@@ -5,7 +5,6 @@ import java.util.Date;
 import top.imuster.domain.base.BaseDomain;
 
 /**
- * 
  * @author 黄明人
  * @since 2019-11-24 16:31:57
  */
