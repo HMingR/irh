@@ -9,7 +9,6 @@
         <module>irh-mall</module>
         <module>irh-common</module>
         <module>irh-registry</module>
-        <module>irh-registry</module>
     </modules>
 
     <groupId>top.imuster</groupId>
