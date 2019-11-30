@@ -6,9 +6,11 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>irh-mall</module>
+        <module>irh-item</module>
         <module>irh-common</module>
         <module>irh-registry</module>
+        <module>irh-gateway</module>
+        <module>irh-upload</module>
     </modules>
 
     <groupId>top.imuster</groupId>
@@ -116,6 +118,12 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

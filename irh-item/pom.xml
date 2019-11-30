@@ -7,18 +7,15 @@
         <groupId>top.imuster</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>irh-item-api</module>
+        <module>irh-item-provider</module>
+    </modules>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>top.imuster.registry</groupId>
-    <artifactId>irh-registry</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-        </dependency>
-    </dependencies>
+    <artifactId>irh-item</artifactId>
 
 
 </project>
