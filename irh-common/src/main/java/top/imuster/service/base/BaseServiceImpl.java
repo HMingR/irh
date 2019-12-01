@@ -9,13 +9,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * service实现类
- * @since 2014-03-18
- * @param <T> 实体
- * @param <KEY> 主键
- */
+ * @Description: 实现类
+ * @Author: hmr
+ * @Date: 2019/12/1 10:04
+ **/
 public abstract class BaseServiceImpl<T, KEY extends Serializable> implements BaseService<T, KEY> {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(BaseServiceImpl.class);
+	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * 获取DAO操作类

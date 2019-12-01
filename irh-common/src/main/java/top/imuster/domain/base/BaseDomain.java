@@ -1,39 +1,45 @@
 package top.imuster.domain.base;
 
-import java.text.SimpleDateFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class BaseDomain extends BaseQuery {
-    private Date gmtCreate;
-    private Date gmtModify;
-    private Integer yn;
+public class BaseDomain extends BaseQuery implements Serializable {
+    private static final long serialVersionUID = 1120417172791934400L;
 
+    //创建时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
-    public Date getGmtCreate() {
-        return gmtCreate;
+    //最后更新时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+
+    //状态
+    private Integer state;
+
+    public Integer getState() {
+        return state;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setState(Integer state) {
+        this.state = state;
     }
 
-    public Date getGmtModify() {
-        return gmtModify;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Integer getYn() {
-        return yn;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setYn(Integer yn) {
-        this.yn = yn;
-    }
-
-    public String dateToString(Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

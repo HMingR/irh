@@ -1,0 +1,16 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: irh-gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka
+    registry-fetch-interval-seconds: 5           # 设置拉取服务的间隔时间
+zuul:
+  prefix: /api      # 配置前缀
+  routes:
+    item-service: /item/**    # 路由到商品的微服务
+#    search-service: /search/**   #路由到搜索微服务
+

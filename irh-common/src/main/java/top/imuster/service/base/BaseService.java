@@ -5,12 +5,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 定义一些基本CRUD
- * service基类<实体,主键>
- * @since 2014-03-18
- * @param <T> 实体
- * @param <KEY> 主键
- */
+ * @Description: 基本的CRUD
+ * @Author: hmr
+ * @Date: 2019/12/1 10:03
+ **/
 public interface BaseService<T,KEY extends Serializable> {
 
 	/**

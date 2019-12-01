@@ -1,6 +1,6 @@
 package top.imuster.domain.base;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -23,8 +23,8 @@ class BaseQuery implements Serializable {
 	private transient Map<String, Object> queryData;// 查询扩展
 	
 	private transient String keyword;// 关键则查询
-	
-	@JSONField(serialize=false)
+
+	@JsonIgnore
 	public Integer getStartIndex() {
 		return startIndex;
 	}
@@ -32,7 +32,7 @@ class BaseQuery implements Serializable {
 		this.startIndex = startIndex;
 	}
 	
-	@JSONField(serialize=false)
+	@JsonIgnore
 	public Integer getEndIndex() {
 		return endIndex;
 	}
@@ -41,31 +41,31 @@ class BaseQuery implements Serializable {
 	}
 	
 	//每页显示条数
-	@JSONField(serialize=false)
+	@JsonIgnore
 	public Integer getPageSize() {
 		if(endIndex != null && startIndex != null) {
 			return endIndex - startIndex;
 		}
 		return null;
 	}
-	
-	@JSONField(serialize=false)
+
+	@JsonIgnore
 	public String getOrderField() {
 		return orderField;
 	}
 	public void setOrderField(String orderField) {
 		this.orderField = orderField;
 	}
-	
-	@JSONField(serialize=false)
+
+	@JsonIgnore
 	public String getOrderFieldType() {
 		if("DESC".equalsIgnoreCase(orderFieldType) || "ASC".equalsIgnoreCase(orderFieldType)) {
 			return orderFieldType.toUpperCase();
 		}
 		return null;
 	}
-	
-	@JSONField(serialize=false)
+
+	@JsonIgnore
 	public String getOrderFieldNextType() {
 		if("ASC".equalsIgnoreCase(orderFieldType)) {
 			return "DESC";
@@ -76,8 +76,8 @@ class BaseQuery implements Serializable {
 	public void setOrderFieldType(String orderFieldType) {
 		this.orderFieldType = orderFieldType;
 	}
-	
-	@JSONField(serialize=false)
+
+	@JsonIgnore
 	public Map<String, Object> getQueryData() {
 		if(queryData != null && queryData.size() > 0) {
 			return queryData;

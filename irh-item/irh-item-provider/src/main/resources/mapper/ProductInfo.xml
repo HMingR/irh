@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imuster.item.dao.ProductInfoDao">
+
+	<!-- product_info 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+            id,
+            product_name AS productName,
+            main_pic_url AS mainPicUrl,
+            unit,
+            original_price AS originalPrice,
+            sale_price AS salePrice,
+            old_degree AS oldDegree,
+            product_title AS productTitle,
+            product_desc AS productDesc,
+            product_details_page AS productDetailsPage,
+            trade_type AS tradeType,
+            parent_category_id AS parentCategoryId,
+            create_time AS createTime,
+            update_time AS updateTime 
+		]]>
+	</sql>
+
+	<!-- product_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM product_info]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+            <if test="productName != null and productName != ''"><![CDATA[AND product_name = #{productName}]]></if>
+            <if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[AND main_pic_url = #{mainPicUrl}]]></if>
+            <if test="unit != null and unit != ''"><![CDATA[AND unit = #{unit}]]></if>
+            <if test="originalPrice != null and originalPrice != ''"><![CDATA[AND original_price = #{originalPrice}]]></if>
+            <if test="salePrice != null and salePrice != ''"><![CDATA[AND sale_price = #{salePrice}]]></if>
+            <if test="oldDegree != null and oldDegree != ''"><![CDATA[AND old_degree = #{oldDegree}]]></if>
+            <if test="productTitle != null and productTitle != ''"><![CDATA[AND product_title = #{productTitle}]]></if>
+            <if test="productDesc != null and productDesc != ''"><![CDATA[AND product_desc = #{productDesc}]]></if>
+            <if test="productDetailsPage != null and productDetailsPage != ''"><![CDATA[AND product_details_page = #{productDetailsPage}]]></if>
+            <if test="tradeType != null and tradeType != ''"><![CDATA[AND trade_type = #{tradeType}]]></if>
+            <if test="parentCategoryId != null and parentCategoryId != ''"><![CDATA[AND parent_category_id = #{parentCategoryId}]]></if>
+            <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="productName != null"><![CDATA[product_name = #{productName},]]></if>
+			<if test="mainPicUrl != null"><![CDATA[main_pic_url = #{mainPicUrl},]]></if>
+			<if test="unit != null"><![CDATA[unit = #{unit},]]></if>
+			<if test="originalPrice != null"><![CDATA[original_price = #{originalPrice},]]></if>
+			<if test="salePrice != null"><![CDATA[sale_price = #{salePrice},]]></if>
+			<if test="oldDegree != null"><![CDATA[old_degree = #{oldDegree},]]></if>
+			<if test="productTitle != null"><![CDATA[product_title = #{productTitle},]]></if>
+			<if test="productDesc != null"><![CDATA[product_desc = #{productDesc},]]></if>
+			<if test="productDetailsPage != null"><![CDATA[product_details_page = #{productDetailsPage},]]></if>
+			<if test="tradeType != null"><![CDATA[trade_type = #{tradeType},]]></if>
+			<if test="parentCategoryId != null"><![CDATA[parent_category_id = #{parentCategoryId},]]></if>
+			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+		</set>
+	</sql>
+
+	<!-- 插入app记录 -->
+	<insert id="insertEntry" parameterType="productInfo" >
+		<![CDATA[
+			INSERT INTO product_info
+				(
+                id, 
+                product_name, 
+                main_pic_url, 
+                unit, 
+                original_price, 
+                sale_price, 
+                old_degree, 
+                product_title, 
+                product_desc, 
+                product_details_page, 
+                trade_type, 
+                parent_category_id, 
+                create_time, 
+                update_time 
+				)
+			VALUES
+				(
+                #{id}, 
+                #{productName}, 
+                #{mainPicUrl}, 
+                #{unit}, 
+                #{originalPrice}, 
+                #{salePrice}, 
+                #{oldDegree}, 
+                #{productTitle}, 
+                #{productDesc}, 
+                #{productDetailsPage}, 
+                #{tradeType}, 
+                #{parentCategoryId}, 
+                #{createTime}, 
+                #{updateTime} 
+				)
+		]]>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM product_info WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<delete id="deleteByCondtion" parameterType="productInfo" >
+		<![CDATA[DELETE FROM product_info]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</delete>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="productInfo" >
+		<![CDATA[UPDATE product_info]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="productInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="productInfo" resultType="productInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="productInfo" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+</mapper>
