@@ -75,7 +75,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 	 * @Date: 2019/11/26 10:56
 	 * @param condition
 	 * @param page
-	 * @reture: top.imuster.domain.base.Page<T>
+	 * @reture: top.imuster.pojo.base.Page<T>
 	 **/
 	public Page<T> selectPage(T condition, Page<T> page) throws Exception {
 		try {

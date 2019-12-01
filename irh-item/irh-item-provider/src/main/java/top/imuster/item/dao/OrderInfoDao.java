@@ -1,7 +1,7 @@
 package top.imuster.item.dao;
 
 import top.imuster.domain.base.BaseDao;
-import top.imuster.item.domain.OrderInfo;
+import top.imuster.item.pojo.OrderInfo;
 
 /**
  * OrderInfoDao 接口

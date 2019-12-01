@@ -3,7 +3,7 @@ package top.imuster.item.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.domain.base.BaseDaoImpl;
 import top.imuster.item.dao.InterestTagInfoDao;
-import top.imuster.item.domain.InterestTagInfo;
+import top.imuster.item.pojo.InterestTagInfo;
 
 /**
  * InterestTagInfoDao 实现类

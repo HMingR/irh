@@ -3,7 +3,7 @@ package top.imuster.item.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.domain.base.BaseDaoImpl;
 import top.imuster.item.dao.ProductCategoryRelDao;
-import top.imuster.item.domain.ProductCategoryRel;
+import top.imuster.item.pojo.ProductCategoryRel;
 
 /**
  * ProductCategoryRelDao 实现类

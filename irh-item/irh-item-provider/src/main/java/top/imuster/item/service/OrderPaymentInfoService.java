@@ -1,6 +1,6 @@
 package top.imuster.item.service;
 
-import top.imuster.item.domain.OrderPaymentInfo;
+import top.imuster.item.pojo.OrderPaymentInfo;
 import top.imuster.service.base.BaseService;
 
 /**

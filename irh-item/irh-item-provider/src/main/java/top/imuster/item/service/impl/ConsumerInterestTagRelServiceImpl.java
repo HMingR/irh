@@ -3,7 +3,7 @@ package top.imuster.item.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.domain.base.BaseDao;
 import top.imuster.item.dao.ConsumerInterestTagRelDao;
-import top.imuster.item.domain.ConsumerInterestTagRel;
+import top.imuster.item.pojo.ConsumerInterestTagRel;
 import top.imuster.item.service.ConsumerInterestTagRelService;
 import top.imuster.service.base.BaseServiceImpl;
 

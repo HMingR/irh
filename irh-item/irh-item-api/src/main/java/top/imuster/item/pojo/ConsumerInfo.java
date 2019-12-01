@@ -1,4 +1,4 @@
-package top.imuster.item.domain;
+package top.imuster.item.pojo;
 
 import top.imuster.domain.base.BaseDomain;
 

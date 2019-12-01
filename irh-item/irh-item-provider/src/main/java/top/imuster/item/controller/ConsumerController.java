@@ -3,7 +3,7 @@ package top.imuster.item.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.Controller.BaseController;
-import top.imuster.item.domain.ConsumerInfo;
+import top.imuster.item.pojo.ConsumerInfo;
 import top.imuster.item.service.ConsumerInfoService;
 import top.imuster.wrapper.Message;
 

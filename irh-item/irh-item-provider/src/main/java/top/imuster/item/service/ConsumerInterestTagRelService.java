@@ -1,6 +1,6 @@
 package top.imuster.item.service;
 
-import top.imuster.item.domain.ConsumerInterestTagRel;
+import top.imuster.item.pojo.ConsumerInterestTagRel;
 import top.imuster.service.base.BaseService;
 
 /**

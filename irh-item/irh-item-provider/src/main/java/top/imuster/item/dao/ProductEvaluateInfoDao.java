@@ -1,7 +1,7 @@
 package top.imuster.item.dao;
 
 import top.imuster.domain.base.BaseDao;
-import top.imuster.item.domain.ProductEvaluateInfo;
+import top.imuster.item.pojo.ProductEvaluateInfo;
 
 /**
  * ProductEvaluateInfoDao 接口

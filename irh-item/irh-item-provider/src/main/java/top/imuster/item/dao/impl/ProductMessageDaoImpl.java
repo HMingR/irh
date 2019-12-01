@@ -4,7 +4,7 @@ package top.imuster.item.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.domain.base.BaseDaoImpl;
 import top.imuster.item.dao.ProductMessageDao;
-import top.imuster.item.domain.ProductMessage;
+import top.imuster.item.pojo.ProductMessage;
 
 /**
  * ProductMessageDao 实现类

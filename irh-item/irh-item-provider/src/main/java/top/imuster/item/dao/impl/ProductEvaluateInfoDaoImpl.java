@@ -3,7 +3,7 @@ package top.imuster.item.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.domain.base.BaseDaoImpl;
 import top.imuster.item.dao.ProductEvaluateInfoDao;
-import top.imuster.item.domain.ProductEvaluateInfo;
+import top.imuster.item.pojo.ProductEvaluateInfo;
 
 /**
  * ProductEvaluateInfoDao 实现类

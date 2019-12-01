@@ -1,6 +1,4 @@
-package top.imuster.item.domain;
-
-import java.util.Date;
+package top.imuster.item.pojo;
 
 import top.imuster.domain.base.BaseDomain;
 

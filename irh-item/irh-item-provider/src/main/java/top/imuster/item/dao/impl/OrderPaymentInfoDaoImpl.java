@@ -3,7 +3,7 @@ package top.imuster.item.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.domain.base.BaseDaoImpl;
 import top.imuster.item.dao.OrderPaymentInfoDao;
-import top.imuster.item.domain.OrderPaymentInfo;
+import top.imuster.item.pojo.OrderPaymentInfo;
 
 /**
  * OrderPaymentInfoDao 实现类

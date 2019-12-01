@@ -3,7 +3,7 @@ package top.imuster.item.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.domain.base.BaseDaoImpl;
 import top.imuster.item.dao.ConsumerInfoDao;
-import top.imuster.item.domain.ConsumerInfo;
+import top.imuster.item.pojo.ConsumerInfo;
 
 /**
  * ConsumerInfoDao 实现类

@@ -1,7 +1,7 @@
 package top.imuster.item.dao;
 
 import top.imuster.domain.base.BaseDao;
-import top.imuster.item.domain.ProductCategoryRel;
+import top.imuster.item.pojo.ProductCategoryRel;
 
 /**
  * ProductCategoryRelDao 接口
