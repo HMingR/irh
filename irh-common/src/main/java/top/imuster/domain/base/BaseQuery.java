@@ -96,7 +96,8 @@ class BaseQuery implements Serializable {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-	
+
+	@JsonIgnore
 	public String getkeyword() {
 		return keyword;
 	}

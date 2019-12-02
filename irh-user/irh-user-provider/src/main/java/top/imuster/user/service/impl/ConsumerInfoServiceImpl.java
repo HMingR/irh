@@ -1,11 +1,11 @@
-package top.imuster.item.service.impl;
+package top.imuster.user.service.impl;
 
 import org.springframework.stereotype.Service;
 import top.imuster.domain.base.BaseDao;
-import top.imuster.item.dao.ConsumerInfoDao;
-import top.imuster.item.pojo.ConsumerInfo;
-import top.imuster.item.service.ConsumerInfoService;
+import top.imuster.user.dao.ConsumerInfoDao;
 import top.imuster.service.base.BaseServiceImpl;
+import top.imuster.user.pojo.ConsumerInfo;
+import top.imuster.user.service.ConsumerInfoService;
 
 import javax.annotation.Resource;
 

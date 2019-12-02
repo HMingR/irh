@@ -1,7 +1,7 @@
-package top.imuster.item.dao;
+package top.imuster.user.dao;
 
 import top.imuster.domain.base.BaseDao;
-import top.imuster.item.pojo.ConsumerInfo;
+import top.imuster.user.pojo.ConsumerInfo;
 
 /**
  * ConsumerInfoDao 接口

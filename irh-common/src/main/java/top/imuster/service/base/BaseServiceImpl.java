@@ -107,4 +107,5 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
     public List<T> selectEntryList (KEY... key) throws Exception {
     	return getDao().selectEntryList(key);
 	}
+
 }

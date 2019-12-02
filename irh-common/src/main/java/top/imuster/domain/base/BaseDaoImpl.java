@@ -13,7 +13,6 @@ public abstract class BaseDaoImpl<T,KEY extends Serializable> extends MyBatisSup
     private static final String DEFAULT_SELECT_ARRAY_KEY = "selectEntryArray";
     private static final String DEFAULT_SELECT_CONDTION = "selectEntryList";
     private static final String DEFAULT_SELECT_CONDTION_COUNT = "selectEntryListCount";
-
     /**
      * 获取命名空前前缀
      * @param statement

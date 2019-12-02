@@ -1,5 +1,6 @@
-package top.imuster.item.pojo;
+package top.imuster.user.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import top.imuster.domain.base.BaseDomain;
 
 /**
@@ -23,6 +24,7 @@ public class ConsumerInfo extends BaseDomain {
 	private String email;
 
 	// md5加密的32位密码
+	@JsonIgnore
 	private String password;
 
 	// 支付宝账号, max length: 13
