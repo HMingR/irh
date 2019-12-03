@@ -12,6 +12,7 @@
         <module>irh-gateway</module>
         <module>irh-upload</module>
         <module>irh-utils</module>
+        <module>irh-user</module>
     </modules>
 
     <groupId>top.imuster</groupId>
