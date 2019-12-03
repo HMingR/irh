@@ -20,7 +20,7 @@ public abstract class BaseDaoImpl<T,KEY extends Serializable> extends MyBatisSup
      */
     public abstract String getNameSpace(String statement);
 
-    public int insertEntry(T...t) throws Exception {
+    public int insertEntry(T...t) {
         int result = 0;
         if (t == null || t.length <= 0) {return result;}
         for (T o : t) {
@@ -31,19 +31,19 @@ public abstract class BaseDaoImpl<T,KEY extends Serializable> extends MyBatisSup
         return result;
     }
 
-    public int deleteByKey(KEY...key) throws Exception {
+    public int deleteByKey(KEY...key) {
         return this.delete(getNameSpace(DEFAULT_DELETE_ARRAY_KEY), key);
     }
 
-    public int deleteByKey(T t) throws Exception {
+    public int deleteByKey(T t) {
         return this.delete(getNameSpace(DEFAULT_DELETE_CONDTION), t);
     }
 
-    public int updateByKey(T t) throws Exception {
+    public int updateByKey(T t) {
         return this.update(getNameSpace(DEFAULT_UPDATE_KEY), t);
     }
 
-    public T selectEntry(KEY key) throws Exception {
+    public T selectEntry(KEY key) {
         @SuppressWarnings("unchecked")
         List<T> list = this.selectEntryList(key);
         if(list != null && list.size() > 0) {
@@ -52,16 +52,16 @@ public abstract class BaseDaoImpl<T,KEY extends Serializable> extends MyBatisSup
         return null;
     }
 
-    public List<T> selectEntryList(KEY...key) throws Exception {
+    public List<T> selectEntryList(KEY...key) {
         if (key == null || key.length <= 0) {return null;}
         return this.selectList(getNameSpace(DEFAULT_SELECT_ARRAY_KEY), key);
     }
 
-    public List<T> selectEntryList(T t) throws Exception {
+    public List<T> selectEntryList(T t) {
         return this.selectList(getNameSpace(DEFAULT_SELECT_CONDTION), t);
     }
 
-    public Integer selectEntryListCount(T t) throws Exception {
+    public Integer selectEntryListCount(T t) {
         return this.select(getNameSpace(DEFAULT_SELECT_CONDTION_COUNT), t);
     }
 }

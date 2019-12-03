@@ -1,4 +1,4 @@
-package top.imuster.user.security;
+package top.imuster.auth.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

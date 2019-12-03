@@ -29,7 +29,6 @@ mybatis:
   mapper-locations: /mapper/*
   type-aliases-package: top.imuster.user.pojo  #别名扫描
 
-debug: true
 
 logging:
   level:

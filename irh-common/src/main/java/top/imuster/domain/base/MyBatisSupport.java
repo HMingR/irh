@@ -23,7 +23,7 @@ public class MyBatisSupport {
         this.sqlSessionTemplate = batchSqlSessionTemplate;
     }
 
-    protected int insert(String statement, Object parameter) throws Exception {
+    protected int insert(String statement, Object parameter){
         int res = 0;
         try {
             res = sqlSessionTemplate.insert(statement, parameter);
@@ -33,7 +33,7 @@ public class MyBatisSupport {
         return res;
     }
 
-    protected int delete(String statement, Object parameter) throws Exception {
+    protected int delete(String statement, Object parameter){
         int res = 0;
         try {
             res = sqlSessionTemplate.delete(statement, parameter);
@@ -43,7 +43,7 @@ public class MyBatisSupport {
         return res;
     }
 
-    protected int update(String statement, Object parameter) throws Exception {
+    protected int update(String statement, Object parameter){
         int res = 0;
         try {
             res = sqlSessionTemplate.update(statement, parameter);
@@ -53,7 +53,7 @@ public class MyBatisSupport {
         return res;
     }
 
-    protected <T> T select(String statement, Object parameter) throws Exception {
+    protected <T> T select(String statement, Object parameter) {
         T obj = null;
         try {
             obj = (T) sqlSessionTemplate.selectOne(statement, parameter);
@@ -63,7 +63,7 @@ public class MyBatisSupport {
         return obj;
     }
 
-    protected <T> List<T> selectList(String statement, Object parameter) throws Exception {
+    protected <T> List<T> selectList(String statement, Object parameter){
         List<T> list = null;
         try {
             list = sqlSessionTemplate.selectList(statement, parameter);

@@ -36,8 +36,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
 
     @Override
     public ManagementInfo managementLoginByName(String name) throws Exception{
-        ManagementInfo managementInfo = new ManagementInfo();
-        managementInfo.setName(name);
+        ManagementInfo managementInfo = new ManagementInfo(name, null, null);
         managementInfo.setState(2);
         return managementInfoDao.selectEntryList(managementInfo).get(0);
     }

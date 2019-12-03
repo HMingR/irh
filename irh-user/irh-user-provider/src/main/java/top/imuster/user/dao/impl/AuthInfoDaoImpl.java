@@ -20,7 +20,7 @@ public class AuthInfoDaoImpl extends BaseDaoImpl<AuthInfo, Long> implements Auth
 	}
 
 	@Override
-	public AuthInfo selectAuthInfoById(Long authInfoId) throws Exception {
+	public AuthInfo selectAuthInfoById(Long authInfoId){
 		return this.select(SELECT_AUTHINFO_BY_ID, authInfoId);
 	}
 }

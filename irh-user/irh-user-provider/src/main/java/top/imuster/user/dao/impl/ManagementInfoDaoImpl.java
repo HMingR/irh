@@ -22,7 +22,7 @@ public class ManagementInfoDaoImpl extends BaseDaoImpl<ManagementInfo, Long> imp
 	}
 
 	@Override
-	public ManagementInfo selectManagementRoleByCondition(ManagementInfo condition) throws Exception {
+	public ManagementInfo selectManagementRoleByCondition(ManagementInfo condition){
 		return this.select(getNameSpace(SELECT_MANAGEMENT_ROLE_BY_CONDITION), condition);
 	}
 }

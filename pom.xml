@@ -13,6 +13,7 @@
         <module>irh-upload</module>
         <module>irh-utils</module>
         <module>irh-user</module>
+        <module>irh-auth</module>
     </modules>
 
     <groupId>top.imuster</groupId>

@@ -1,4 +1,4 @@
-package top.imuster.user.security;
+package top.imuster.auth.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

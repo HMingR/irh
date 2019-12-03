@@ -21,7 +21,7 @@ public class ManagementRoleRelDaoImpl extends BaseDaoImpl<ManagementRoleRel, Lon
 	}
 
 	@Override
-	public RoleInfo selectManagementRoleInfoByManagementId(Long managementId) throws Exception {
+	public RoleInfo selectManagementRoleInfoByManagementId(Long managementId){
 		return this.select(getNameSpace(SELECT_MANAGEMENT_ROLEINFO_BY_MANAGEMENTID), managementId);
 	}
 }

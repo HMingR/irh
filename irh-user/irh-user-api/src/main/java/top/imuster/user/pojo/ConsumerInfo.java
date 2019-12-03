@@ -1,19 +1,24 @@
 package top.imuster.user.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import top.imuster.domain.base.BaseDomain;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author 黄明人
  * @since 2019-11-24 16:31:57
  */
-public class ConsumerInfo extends BaseDomain {
+public class ConsumerInfo extends User {
 
 	private static final long serialVersionUID = 23378053182L;
 
-	public ConsumerInfo() {
-		//默认无参构造方法
-	}
 	// 自动生成的id
 	private Long id;
 
@@ -66,8 +71,31 @@ public class ConsumerInfo extends BaseDomain {
 	// 专业, max length: 255
 	private String majorName;
 
-	// 10:注销 20:锁定 30:审核中  40:审核通过
-	//private Short state;
+	//创建时间
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date createTime;
+
+	//最后更新时间
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date updateTime;
+
+	// 10:注销 20:锁定 30:审核中 40:审核通过
+	private Integer state;
+
+	private List<RoleInfo> roleList;
+
+	public ConsumerInfo(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+		super(username, password, authorities);
+	}
+
+	public List<RoleInfo> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<RoleInfo> roleList) {
+		this.roleList = roleList;
+	}
 
 	public Long getId() {
 		return this.id;
@@ -186,5 +214,67 @@ public class ConsumerInfo extends BaseDomain {
 	}
     public void setMajorName(String majorName) {
 		this.majorName = majorName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (RoleInfo role : roleList) {
+			authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+		}
+		return authorities;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return state >= 20;
+	}
+
+	@Override
+	public String getUsername() {
+		return nickname;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
 	}
 }

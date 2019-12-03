@@ -1,4 +1,4 @@
-package top.imuster.user.config;
+package top.imuster.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @ClassName: AuthConfig
- * @Description: TODO
+ * @Description: 安全认证的工具类
  * @author: hmr
  * @date: 2019/12/1 20:26
  */

@@ -23,23 +23,33 @@ public class ManagementController extends BaseController {
     @Resource
     ManagementInfoService managementInfoService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @GetMapping("/management")
     public Message test(){
         try{
-            String encode = passwordEncoder.encode("123456");
+           /* String encode = passwordEncoder.encode("123456");
             this.logger.info("加密之后的密码是:" + encode);
             this.logger.info("对比:" + passwordEncoder.matches("123456", "$2a$10$QDGDZDkNan7AKACYqjMoxOrJoHKs4HfzxfFQStzyQtfuyRMMZUsu2"));
-            ManagementInfo managementInfo = new ManagementInfo();
+            ManagementInfo managementInfo = new ManagementInfo("hmr", "123456", null);
             managementInfo.setName("hmr");
             managementInfo.setState(2);
-            return Message.createBySuccess(managementInfoService.getManagementRoleByCondition(managementInfo));
+            return Message.createBySuccess(managementInfoService.getManagementRoleByCondition(managementInfo));*/
         }catch (Exception e){
             e.printStackTrace();
         }
         return Message.createByError();
+    }
+
+    @GetMapping("/login")
+    public Message managementLogin(){
+        try{
+            ManagementInfo managementInfo = new ManagementInfo("hmr", "123456", null);
+            managementInfo.setName("hmr");
+            managementInfo.setState(2);
+            return Message.createBySuccess(managementInfoService.getManagementRoleByCondition(managementInfo));
+        }catch (Exception e){
+            logger.info("登录失败" + e);
+        }
+        return null;
     }
 
 }
