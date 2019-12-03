@@ -1,6 +1,6 @@
 package top.imuster.item.controller;
 
-import top.imuster.Controller.BaseController;
+import top.imuster.controller.BaseController;
 
 /**
  * @ClassName: ProductController

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.item.dao.ConsumerInfoDao">
+<mapper namespace="top.imuster.user.dao.ConsumerInfoDao">
 
 	<!-- consumer_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -191,7 +191,6 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
-	
 	<!-- 其它SQL语句 -->
-	
+
 </mapper>

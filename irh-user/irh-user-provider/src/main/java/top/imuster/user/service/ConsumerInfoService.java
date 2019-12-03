@@ -1,7 +1,7 @@
-package top.imuster.item.service;
+package top.imuster.user.service;
 
-import top.imuster.item.pojo.ConsumerInfo;
 import top.imuster.service.base.BaseService;
+import top.imuster.user.pojo.ConsumerInfo;
 
 /**
  * ConsumerInfoService接口

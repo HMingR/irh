@@ -27,4 +27,11 @@ eureka:
 
 mybatis:
   mapper-locations: /mapper/*
-  type-aliases-package: top.imuster.item.pojo  #别名扫描
+  type-aliases-package: top.imuster.user.pojo  #别名扫描
+
+debug: true
+
+logging:
+  level:
+    top.imuster.user: debug
+
