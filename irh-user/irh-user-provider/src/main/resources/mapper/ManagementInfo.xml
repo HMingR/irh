@@ -9,7 +9,7 @@
             id,
             name,
             type,
-            desc,
+            'desc',
             create_time AS createTime,
             update_time AS updateTime,
             state,

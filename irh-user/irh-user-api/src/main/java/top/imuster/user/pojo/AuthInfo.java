@@ -1,26 +1,32 @@
 package top.imuster.user.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.domain.base.BaseDomain;
 
 /**
  * @author 黄明人
  * @since 2019-12-01 19:29:14
  */
+@ApiModel("权限信息")
 public class AuthInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 9096740427L;
 
-
 	// 权限表中的主键
+	@ApiModelProperty("权限表中的主键")
 	private Long id;
 
 	// 父权限id
+	@ApiModelProperty("父权限id")
 	private Long parentId;
 
 	// 权限名称, max length: 255
+	@ApiModelProperty("权限名称")
 	private String authName;
 
 	// 权限描述
+	@ApiModelProperty("权限描述")
 	private String authDesc;
 
 	// 状态 1:无效 2:有效

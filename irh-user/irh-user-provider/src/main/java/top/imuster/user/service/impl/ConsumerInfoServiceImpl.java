@@ -24,4 +24,10 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
     public BaseDao<ConsumerInfo, Long> getDao() {
         return this.consumerInfoDao;
     }
+
+    @Override
+    public ConsumerInfo loginByName(String name) {
+        ConsumerInfo consumerInfo = new ConsumerInfo();
+        return consumerInfoDao.selectEntryList(consumerInfo).get(0);
+    }
 }

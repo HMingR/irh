@@ -1,5 +1,6 @@
 package top.imuster.user.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.service.base.BaseService;
 import top.imuster.user.pojo.ManagementInfo;
 
@@ -17,14 +18,24 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @param name
      * @reture: top.imuster.user.pojo.ManagementInfo
      **/
-    ManagementInfo getManagementRoleByCondition(ManagementInfo condition) throws Exception;
+    ManagementInfo getManagementRoleByCondition(ManagementInfo condition);
 
     /**
-     * @Description: 根据管理员的姓名登录
+     * @Description: 根据管理员的姓名加载信息
      * @Author: hmr
      * @Date: 2019/12/2 17:14
      * @param name
      * @reture: top.imuster.user.pojo.ManagementInfo
      **/
-    ManagementInfo managementLoginByName(String name) throws Exception;
+    UserDetails loadManagementByName(String name);
+
+    /**
+     * @Description: 管理员登录用
+     * @Author: hmr
+     * @Date: 2019/12/7 10:20
+     * @param name
+     * @param password
+     * @reture: String   返回一个token
+     **/
+    String login(String name, String password);
 }

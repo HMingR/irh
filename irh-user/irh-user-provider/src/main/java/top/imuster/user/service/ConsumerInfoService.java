@@ -10,4 +10,5 @@ import top.imuster.user.pojo.ConsumerInfo;
  */
 public interface ConsumerInfoService extends BaseService<ConsumerInfo, Long> {
 
+    ConsumerInfo loginByName(String name);
 }

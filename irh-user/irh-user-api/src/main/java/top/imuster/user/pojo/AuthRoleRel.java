@@ -1,27 +1,32 @@
 package top.imuster.user.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.domain.base.BaseDomain;
-
-import java.util.Date;
 
 /**
  * @author 黄明人
  * @since 2019-12-01 19:29:14
  */
+@ApiModel("权限角色管理表")
 public class AuthRoleRel extends BaseDomain {
 
 	private static final long serialVersionUID = 6931487658L;
 
 	// 角色权限表主键
+	@ApiModelProperty("角色权限表主键")
 	private Long id;
 
 	// 角色表中的id
+	@ApiModelProperty("角色表中的id")
 	private Long roleId;
 
 	// 权限表中的id
+	@ApiModelProperty("权限表中的id")
 	private Long authId;
 
 	// 创建人编号
+	@ApiModelProperty("创建人编号")
 	private Long createManagementId;
 
 	public AuthRoleRel() {

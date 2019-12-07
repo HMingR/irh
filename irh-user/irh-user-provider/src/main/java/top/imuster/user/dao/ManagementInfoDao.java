@@ -10,5 +10,5 @@ import top.imuster.user.pojo.ManagementInfo;
  */
 public interface ManagementInfoDao extends BaseDao<ManagementInfo, Long> {
     //自定义扩展
-    ManagementInfo selectManagementRoleByCondition(ManagementInfo condition) throws Exception;
+    ManagementInfo selectManagementRoleByCondition(ManagementInfo condition);
 }

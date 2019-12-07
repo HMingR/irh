@@ -4,11 +4,11 @@ import org.springframework.web.bind.annotation.RestController;
 import top.imuster.controller.BaseController;
 
 /**
- * @ClassName: UserController
+ * @ClassName: ConsumerController
  * @Description: consumer的处理器
  * @author: lpf
  * @date: 2019/12/1 18:28
  */
 @RestController
-public class UserController extends BaseController {
+public class ConsumerController extends BaseController {
 }
