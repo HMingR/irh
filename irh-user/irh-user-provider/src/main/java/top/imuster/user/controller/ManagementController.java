@@ -3,7 +3,10 @@ package top.imuster.user.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.controller.BaseController;
 import top.imuster.user.pojo.ManagementInfo;
@@ -25,6 +28,12 @@ import java.util.Map;
 @RequestMapping("/management")
 @Api(tags = "ManagementController", description = "后台管理页面")
 public class ManagementController extends BaseController {
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
@@ -59,6 +68,8 @@ public class ManagementController extends BaseController {
             Map<String, String> tokenMap = new HashMap<>();
             tokenMap.put("token", token);
             tokenMap.put("tokenHead", tokenHead);
+            redisTemplate.opsForValue().set("123", "2345");
+            stringRedisTemplate.opsForValue().set(managementInfo.getName(), token);
             return Message.createBySuccess(tokenMap);
         }catch (Exception e){
             logger.error("管理人员登录失败:{}", e.getMessage());

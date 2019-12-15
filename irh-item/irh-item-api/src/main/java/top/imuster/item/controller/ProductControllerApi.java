@@ -1,6 +1,8 @@
 package top.imuster.item.controller;
 
+//import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.cloud.openfeign.FeignClient;
+//import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * @ClassName: ProductControllerApi

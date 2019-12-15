@@ -5,7 +5,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 import top.imuster.wrapper.Message;
-import top.imuster.wrapper.MessageCode;
+import top.imuster.enums.MessageCode;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

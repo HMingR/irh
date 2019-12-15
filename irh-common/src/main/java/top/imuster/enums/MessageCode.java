@@ -1,4 +1,4 @@
-package top.imuster.wrapper;
+package top.imuster.enums;
 
 /**
  * @ClassName: MessageCode

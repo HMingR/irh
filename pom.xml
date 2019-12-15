@@ -47,7 +47,7 @@
             <properties>
                 <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
-                <irh.mysql.password>123456</irh.mysql.password>
+                <irh.mysql.password>197877346Hmr</irh.mysql.password>
             </properties>
         </profile>
     </profiles>
@@ -70,6 +70,8 @@
         <spring-data-commons.version>2.1.5.RELEASE</spring-data-commons.version>
         <hutool.version>5.0.7</hutool.version>
         <swagger.version>2.5.0</swagger.version>
+        <aspectj.version>1.8.13</aspectj.version>
+        <common.version>3.4</common.version>
     </properties>
 
 
@@ -112,6 +114,12 @@
             </dependency>
 
             <dependency>
+                <groupId>eu.bitwalker</groupId>
+                <artifactId>UserAgentUtils</artifactId>
+                <version>1.20</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
@@ -125,12 +133,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <!-- mybatis启动器 -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.starter.version}</version>
             </dependency>
+
             <!-- mysql驱动 -->
             <dependency>
                 <groupId>mysql</groupId>
@@ -175,6 +185,32 @@
                 <artifactId>spring-boot-devtools</artifactId>
                 <version>2.2.0.RELEASE</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${common.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
