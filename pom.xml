@@ -6,13 +6,12 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>irh-item</module>
         <module>irh-common</module>
         <module>irh-registry</module>
         <module>irh-gateway</module>
-        <module>irh-upload</module>
-        <module>irh-user</module>
         <module>irh-security</module>
+        <module>irh-service-api</module>
+        <module>irh-service</module>
     </modules>
 
     <groupId>top.imuster</groupId>
@@ -36,6 +35,9 @@
                 <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>123456</irh.mysql.password>
+                <irh.redis.host>192.168.2.128</irh.redis.host>
+                <irh.redis.password></irh.redis.password>
+                <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
             </properties>
         </profile>
 
@@ -45,10 +47,31 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.mysql.url>
+                <irh.mysql.url>jdbc:mysql://39.105.0.169:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>197877346Hmr</irh.mysql.password>
+                <irh.redis.host>39.105.0.169</irh.redis.host>
+                <irh.redis.password>197877346h</irh.redis.password>
+                <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
             </properties>
+        </profile>
+
+
+        <profile>
+            <id>online</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <irh.musql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.musql.url>
+                <irh.mysql.username>root</irh.mysql.username>
+                <irh.mysql.password>197877346Hmr</irh.mysql.password>
+                <irh.redis.host>localhost</irh.redis.host>
+                <irh.redis.password>197877346h</irh.redis.password>
+                <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
+            </properties>
+
+
         </profile>
     </profiles>
 
@@ -84,7 +107,6 @@
                 <artifactId>hutool-json</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
-
 
             <!--Hutool Java工具包-->
             <dependency>

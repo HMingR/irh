@@ -4,8 +4,8 @@ import cn.hutool.json.JSONUtil;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import top.imuster.wrapper.Message;
-import top.imuster.enums.MessageCode;
+import top.imuster.common.base.config.MessageCode;
+import top.imuster.common.base.wrapper.Message;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

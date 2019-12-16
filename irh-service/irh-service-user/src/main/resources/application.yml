@@ -1,0 +1,75 @@
+server:
+  port: 8085
+
+spring:
+  redis:
+    database: @irh.redis.databaseIndex@
+    host: @irh.redis.host@
+    port: 6379
+    jedis:
+      pool:
+        max-active: 30
+        max-idle: 10
+        max-wait: -1
+    timeout: 1000
+    password: @irh.redis.password@
+
+  application:
+    name: user-service
+
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+  freemarker:
+    cache: false    #页面不加载缓存，修改即时生效
+
+  datasource:
+      druid:
+        driver-class-name: com.mysql.jdbc.Driver
+        username: @irh.mysql.username@
+        password: @irh.mysql.password@
+        url: @irh.mysql.url@
+        initial-size: 5     # 初始化大小
+        max-active: 20      # 连接池中最大的活动数
+        max-wait: 30000                             # 最大连接等待时间
+        time-between-eviction-runs-millis: 60000    # 配置检测可以关闭的空闲连接间隔时间
+        validation-query: select '1' from dual      # 测试连接
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5        # 心跳时间
+    lease-expiration-duration-in-seconds: 15    # 过期时间
+
+mybatis:
+  mapper-locations: /mapper/*
+  type-aliases-package: top.imuster.user.api.pojo  #别名扫描
+
+
+logging:
+  level:
+    top.imuster.user: debug
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /actuator/**
+      - /druid/**
+      - /admin/login
+      - /admin/register
+
+debug:
+  true
+
+
