@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.config.GlobalConstant;
 import top.imuster.controller.BaseController;
 import top.imuster.user.pojo.ManagementInfo;
 import top.imuster.user.service.ManagementInfoService;
@@ -35,12 +36,6 @@ public class ManagementController extends BaseController {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
-
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Resource
     ManagementInfoService managementInfoService;
 
@@ -67,7 +62,7 @@ public class ManagementController extends BaseController {
             }
             Map<String, String> tokenMap = new HashMap<>();
             tokenMap.put("token", token);
-            tokenMap.put("tokenHead", tokenHead);
+            tokenMap.put("tokenHead", GlobalConstant.JWT_TOKEN_HEAD);
             redisTemplate.opsForValue().set("123", "2345");
             stringRedisTemplate.opsForValue().set(managementInfo.getName(), token);
             return Message.createBySuccess(tokenMap);

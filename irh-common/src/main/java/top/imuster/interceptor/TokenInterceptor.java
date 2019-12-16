@@ -9,9 +9,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import top.imuster.config.GlobalConstant;
 import top.imuster.utils.CusThreadLocal;
 import top.imuster.dto.UserDto;
-import top.imuster.enums.GlobalConstant;
 import top.imuster.utils.RedisUtil;
 
 import javax.annotation.Resource;
@@ -49,7 +49,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             logger.error("根据用户的token获得用户信息失败,需要重新登录");
             return false;
         }
-        CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO.getValue(), loginUser);
+        CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO, loginUser);
         return true;
     }
 
