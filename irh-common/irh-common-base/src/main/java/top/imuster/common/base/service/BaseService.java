@@ -18,7 +18,7 @@ public interface BaseService<T,KEY extends Serializable> {
 	 * @param t
 	 * @return
 	 */
-	int insertEntry(T... t) throws Exception;
+	int insertEntry(T... t);
 	
 	/**
 	 * 添加对象并且设置主键ID值(需要事务支持)
@@ -39,23 +39,23 @@ public interface BaseService<T,KEY extends Serializable> {
 	 * @param condtion
 	 * @return 影响条数
 	 */
-	int deleteByCondtion(T condtion) throws Exception;
+	int deleteByCondtion(T condtion);
 	
 	/**
 	 * 更新对象,条件主键Id
 	 * @param condtion 更新对象
 	 * @return 影响条数
 	 */
-	int updateByKey(T condtion) throws Exception;
+	int updateByKey(T condtion);
 	
 	/**
 	 * 保存或更新对象(条件主键Id)
 	 * @param t 需更新的对象
 	 * @return 影响条数
 	 */
-	int saveOrUpdate(T t) throws Exception;
+	int saveOrUpdate(T t);
 	
-	int saveOrUpdateByKey(T t, String idMethodName) throws Exception;
+	int saveOrUpdateByKey(T t, String idMethodName);
 	
 	/**
 	 * 查询对象,条件主键
@@ -69,27 +69,27 @@ public interface BaseService<T,KEY extends Serializable> {
 	 * @param key
 	 * @return 对象列表
 	 */
-	List<T> selectEntryList(KEY... key) throws Exception;
+	List<T> selectEntryList(KEY... key);
 	
 	/**
 	 * 查询对象,只要不为NULL与空则为条件
 	 * @param condtion 查询条件
 	 * @return 对象列表
 	 */
-	List<T> selectEntryList(T condtion) throws Exception;
+	List<T> selectEntryList(T condtion);
 	
 	/**
 	 * 分页查询
 	 * @param condtion 查询条件
 	 * @return 分页对象
 	 */
-	Page<T> selectPage(T condtion, Page<T> page) throws Exception;
+	Page<T> selectPage(T condtion, Page<T> page);
 
     /**
      * 查询记录数量,add by luojinsong@jd.com 20150221;
      * @param condition;
      * @return 记录数量;
      */
-    Integer selectEntryListCount(T condition) throws Exception;
+    Integer selectEntryListCount(T condition);
 
 }

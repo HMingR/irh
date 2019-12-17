@@ -37,6 +37,16 @@ public class AuthInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 
+	@Override
+	public String toString() {
+		return "AuthInfo{" +
+				"id=" + id +
+				", parentId=" + parentId +
+				", authName='" + authName + '\'' +
+				", authDesc='" + authDesc + '\'' +
+				'}';
+	}
+
 	public Long getId() {
 		return this.id;
 	}

@@ -1,6 +1,7 @@
 package top.imuster.goods.provider.controller;
 
-import top.imuster.controller.BaseController;
+
+import top.imuster.common.base.controller.BaseController;
 
 /**
  * @ClassName: ProductController

@@ -45,7 +45,9 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
         logger.info("获得token为:{}", token);
+        logger.debug(RedisUtil.getAccessToken(token));
         UserDto loginUser = (UserDto)redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
+        logger.debug("获得的loginUser为:{}", loginUser);
         if(null == loginUser){
             logger.error("根据用户的token获得用户信息失败,需要重新登录");
             return false;
