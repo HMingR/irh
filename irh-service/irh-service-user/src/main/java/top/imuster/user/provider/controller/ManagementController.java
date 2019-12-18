@@ -7,7 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import sun.security.util.Password;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
@@ -29,6 +31,9 @@ import java.util.Map;
 @RequestMapping("/management")
 @Api(tags = "ManagementController", description = "后台管理页面")
 public class ManagementController extends BaseController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -57,6 +62,8 @@ public class ManagementController extends BaseController {
     @PostMapping("/login")
     public Message managementLogin(@RequestBody ManagementInfo managementInfo){
         try{
+           /* String encode = passwordEncoder.encode(managementInfo.getPassword());
+            System.out.println(encode);*/
             String token = managementInfoService.login(managementInfo.getName(), managementInfo.getPassword());
             if(StringUtils.isEmpty(token)){
                 return Message.createByError("用户名或密码错误");
@@ -68,7 +75,7 @@ public class ManagementController extends BaseController {
             stringRedisTemplate.opsForValue().set(managementInfo.getName(), token);
             return Message.createBySuccess(tokenMap);
         }catch (Exception e){
-            logger.error("管理人员登录失败:{}", e.getMessage());
+            logger.error("管理人员登录失败:{}", e);
         }
         return Message.createByError();
     }

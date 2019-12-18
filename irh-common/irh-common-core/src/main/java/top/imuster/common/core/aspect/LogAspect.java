@@ -27,7 +27,7 @@ import java.util.Date;
 public class LogAspect {
     private ThreadLocal<Date> threadLocal = new ThreadLocal<>();
 
-    @Pointcut("@annotation(top.imuster.annotation.LogAnnotation)")
+    @Pointcut("@annotation(top.imuster.common.core.annotation.LogAnnotation)")
     public void logAnnotation(){}
 
 
