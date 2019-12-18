@@ -22,20 +22,20 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 	 */
 	public abstract BaseDao<T, KEY> getDao();
 	
-	public int insertEntry(T...t) throws Exception {
+	public int insertEntry(T...t){
 		return getDao().insertEntry(t);
 	}
 
-	public int deleteByCondtion(T condtion) throws Exception {
+	public int deleteByCondtion(T condtion){
 		return getDao().deleteByKey(condtion);
 	}
 	
-	public int updateByKey(T condtion) throws Exception {
+	public int updateByKey(T condtion){
 		return getDao().updateByKey(condtion);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int saveOrUpdate(T t) throws Exception {
+	public int saveOrUpdate(T t){
 		KEY id = null;
 		try {
 			Class<?> clz = t.getClass();
@@ -51,7 +51,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int saveOrUpdateByKey(T t ,String idMethodName) throws Exception {
+	public int saveOrUpdateByKey(T t ,String idMethodName){
 	        KEY id = null;
 	        try {
 	            Class<?> clz = t.getClass();
@@ -66,7 +66,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 	        return this.insertEntry(t);
 	    }
 	
-	public List<T> selectEntryList(T condtion) throws Exception {
+	public List<T> selectEntryList(T condtion){
 		return getDao().selectEntryList(condtion);
 	}
 
@@ -78,7 +78,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 	 * @param page
 	 * @reture: top.imuster.pojo.base.Page<T>
 	 **/
-	public Page<T> selectPage(T condition, Page<T> page) throws Exception {
+	public Page<T> selectPage(T condition, Page<T> page){
 		try {
 			Class<?> clz = condition.getClass();
 			clz.getMethod("setStartIndex", Integer.class).invoke(condition, page.getStartIndex());
@@ -100,12 +100,12 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
      * @param condition;
      * @return
      */
-    public Integer selectEntryListCount(T condition) throws Exception {
+    public Integer selectEntryListCount(T condition){
         Integer size = getDao().selectEntryListCount(condition);
         return size;
     }
 
-    public List<T> selectEntryList (KEY... key) throws Exception {
+    public List<T> selectEntryList (KEY... key){
     	return getDao().selectEntryList(key);
 	}
 

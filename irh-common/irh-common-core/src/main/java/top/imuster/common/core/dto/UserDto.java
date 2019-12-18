@@ -21,8 +21,11 @@ public class UserDto extends BaseDomain {
     //用户的类型 10:普通用户  20:卖家  30:社团组织  40: 管理员
     private Integer groupType;
 
-    //用户组织的名称
-    private String groupName;
+    public UserDto(Long userId, String loginName, Integer groupType) {
+        this.userId = userId;
+        this.loginName = loginName;
+        this.groupType = groupType;
+    }
 
     public Long getUserId() {
         return userId;
@@ -48,11 +51,4 @@ public class UserDto extends BaseDomain {
         this.groupType = groupType;
     }
 
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
 }

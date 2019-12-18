@@ -13,7 +13,6 @@ import javax.annotation.Resource;
  * @date: 2019/12/15 20:23
  */
 @Configuration
-@EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Resource

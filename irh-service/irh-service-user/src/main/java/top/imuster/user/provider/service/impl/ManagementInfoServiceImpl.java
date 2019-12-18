@@ -60,7 +60,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
         if(managementInfo == null) {
             throw new UsernameNotFoundException("用户名或者密码错误");
         }
-        if(managementInfo.getType() <= 20){
+        if(managementInfo.getType() == null || managementInfo.getType() <= 20){
             throw new RuntimeException("该账号已被冻结,请联系管理员");
         }
         return new ManagementDetails(managementInfo, getAuthList(managementInfo.getRoleList()));
