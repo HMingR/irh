@@ -11,5 +11,30 @@
 
     <artifactId>irh-service-order</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>top.imuster</groupId>
+            <artifactId>irh-common-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-commons</artifactId>
+            <version>2.1.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>top.imuster</groupId>
+            <artifactId>irh-service-order-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-openfeign-core</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+    </dependencies>
+
 
 </project>
