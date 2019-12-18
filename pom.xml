@@ -49,7 +49,7 @@
             <properties>
                 <irh.mysql.url>jdbc:mysql://39.105.0.169:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
-                <irh.mysql.password>197877346Hmr</irh.mysql.password>
+                <irh.mysql.password>197877346hmr</irh.mysql.password>
                 <irh.redis.host>39.105.0.169</irh.redis.host>
                 <irh.redis.password>197877346h</irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
@@ -65,7 +65,7 @@
             <properties>
                 <irh.musql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.musql.url>
                 <irh.mysql.username>root</irh.mysql.username>
-                <irh.mysql.password>197877346Hmr</irh.mysql.password>
+                <irh.mysql.password>197877346hmr</irh.mysql.password>
                 <irh.redis.host>localhost</irh.redis.host>
                 <irh.redis.password>197877346h</irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>

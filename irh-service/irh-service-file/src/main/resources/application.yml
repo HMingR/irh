@@ -2,7 +2,7 @@ server:
   port: 8091
 spring:
   application:
-    name: upload-service
+    name: file-service
   servlet:
     multipart:
       max-file-size: 5MB      #最大文件大小
@@ -13,6 +13,9 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5      # 心跳时间
     lease-expiration-duration-in-seconds: 15  # 过期时间
+feign:
+  hystrix:
+    enabled: true
 #fdfs:
 #  so-timeout: 1501 # 读取超时时间
 #  connect-timeout: 5001 # 连接超时时间
