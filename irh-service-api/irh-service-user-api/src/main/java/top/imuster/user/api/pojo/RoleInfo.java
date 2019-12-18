@@ -28,11 +28,21 @@ public class RoleInfo extends BaseDomain {
 	// 状态 1:无效  2:有效
 	// private Short state;
 
-	// 创建人id
-	private Long createManagementId;
+	// 创建人姓名
+	private String createManagement;
 
 	//角色对应的权限
 	private List<AuthInfo> authInfoList;
+
+	@Override
+	public String toString() {
+		return "RoleInfo{" +
+				"id=" + id +
+				", roleName='" + roleName + '\'' +
+				", roleDesc='" + roleDesc + '\'' +
+				", createManagement=" + createManagement +
+				'}';
+	}
 
 	public Long getId() {
 		return this.id;
@@ -55,11 +65,11 @@ public class RoleInfo extends BaseDomain {
 		this.roleDesc = roleDesc;
 	}
 	
-	public Long getCreateManagementId() {
-		return this.createManagementId;
+	public String getCreateManagement() {
+		return this.createManagement;
 	}
-    public void setCreateManagementId(Long createManagementId) {
-		this.createManagementId = createManagementId;
+    public void setCreateManagement(String createManagementId) {
+		this.createManagement = createManagement;
 	}
 
 	public List<AuthInfo> getAuthInfoList() {

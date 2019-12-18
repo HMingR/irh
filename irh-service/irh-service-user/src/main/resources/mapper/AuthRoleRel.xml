@@ -123,5 +123,16 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectAuthListByRoleId" parameterType="long" resultType="top.imuster.user.api.pojo.AuthInfo">
+		SELECT
+			ai.id AS id,
+			ai.auth_name AS authName,
+			ai.auth_desc AS authDesc,
+			ai.create_time AS createTime
+		FROM
+			auth_role_rel AS arr
+			LEFT JOIN auth_info ai ON arr.auth_id = ai.id
+		WHERE arr.role_id = #{roleId}
+	</select>
 	
 </mapper>

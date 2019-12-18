@@ -1,10 +1,8 @@
 package top.imuster.user.provider.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,12 +13,8 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
-import top.imuster.user.api.pojo.RoleInfo;
-import top.imuster.user.provider.service.AuthInfoService;
 import top.imuster.user.provider.service.ManagementInfoService;
-import top.imuster.user.provider.service.RoleInfoService;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -40,15 +34,8 @@ public class ManagementController extends BaseController {
     @Autowired
     RedisTemplate redisTemplate;
 
-
     @Resource
     ManagementInfoService managementInfoService;
-
-    @Resource
-    RoleInfoService roleInfoService;
-
-    @Resource
-    AuthInfoService authInfoService;
 
     @ApiOperation("查看所有的管理员")
     @GetMapping("/managementList")
@@ -86,109 +73,4 @@ public class ManagementController extends BaseController {
             return Message.createByError(e.getMessage());
         }
     }
-
-
-    /**
-     * @Description: 分页查询角色列表
-     * @Author: hmr
-     * @Date: 2019/12/17 20:14
-     * @param
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(httpMethod = "Get", value = "分页查询角色列表")
-    @GetMapping("/role")
-    public Message roleList(Page<RoleInfo> page){
-        try{
-            Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(new RoleInfo(), page);
-            return Message.createBySuccess(roleInfoPage);
-        }catch (Exception e){
-            logger.error("获得用户角色失败", e.getMessage());
-            return Message.createByError();
-        }
-    }
-
-    /**
-     * @Description: 分页查询权限列表
-     * @Author: hmr
-     * @Date: 2019/12/17 20:10
-     * @param type 1表示查询无效的权限列表     2:表示查询有效的权限列表
-     * @param page
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(httpMethod = "Get", value = "分页查询权限列表")
-    @GetMapping("/auth/{type}")
-    public Message authList(@PathVariable(value = "type", required = true) Integer type,@RequestBody Page<AuthInfo> page){
-        try{
-            if(type != 1 && type != 2){
-                return Message.createByError("参数错误");
-            }
-            AuthInfo authInfo = new AuthInfo();
-            authInfo.setState(type);
-            Page<AuthInfo> authInfoPage = authInfoService.selectPage(authInfo, page);
-            return Message.createBySuccess(authInfoPage);
-        }catch (Exception e){
-            logger.error("获得权限列表失败", e.getMessage());
-            return Message.createByError();
-        }
-    }
-
-
-    /**
-     * @Description: 按权限的主键删除权限
-     * @Author: hmr
-     * @Date: 2019/12/17 20:34
-     * @param authId
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(httpMethod = "Delete", value = "按权限的主键删除权限")
-    @DeleteMapping("/auth/{authId}")
-    public Message deleteAuth(@ApiParam(value = "authId", required = true) @PathVariable(value = "authId", required = true) Long authId){
-        try{
-            authInfoService.deleteAuthById(authId);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("删除权限失败,原因{},权限id{}",e.getMessage(), authId);
-            return Message.createByError();
-        }
-    }
-
-
-    /**
-     * @Description: 添加权限
-     * @Author: hmr
-     * @Date: 2019/12/17 20:57
-     * @param authInfo
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "添加权限", httpMethod = "Put")
-    @PostMapping("/auth")
-    public Message addAuth(@RequestBody AuthInfo authInfo){
-        try{
-            authInfoService.insertEntry(authInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("添加权限失败:{};权限信息为:{}",e.getMessage(),authInfo);
-            return Message.createByError();
-        }
-    }
-
-    /**
-     * @Description: 更新权限信息
-     * @Author: hmr
-     * @Date: 2019/12/17 21:11
-     * @param authInfo
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "更新权限信息", httpMethod = "Put")
-    @PutMapping("/auth")
-    public Message editAuth(@RequestBody AuthInfo authInfo){
-        try{
-            authInfoService.updateByKey(authInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("更新权限信息失败,报错{};权限信息为{}", e.getMessage(), authInfo);
-            return Message.createByError();
-        }
-    }
-
 }
