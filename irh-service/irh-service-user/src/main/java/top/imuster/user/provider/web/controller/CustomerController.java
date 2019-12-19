@@ -1,4 +1,4 @@
-package top.imuster.user.provider.controller;
+package top.imuster.user.provider.web.controller;
 
 /**
  * @ClassName: CustomerController

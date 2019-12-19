@@ -1,4 +1,4 @@
-package top.imuster.user.provider.controller;
+package top.imuster.user.provider.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -7,7 +7,6 @@ import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.AuthInfo;
-import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.provider.service.AuthInfoService;
 import top.imuster.user.provider.service.AuthRoleRelService;
 
@@ -25,8 +24,6 @@ public class AuthController extends BaseController {
     @Resource
     AuthInfoService authInfoService;
 
-    @Resource
-    AuthRoleRelService authRoleRelService;
 
     /**
      * @Description: 分页查询权限列表
@@ -115,22 +112,5 @@ public class AuthController extends BaseController {
         }
     }
 
-    /**
-     * @Description: 修改角色的权限信息
-     * @Author: hmr
-     * @Date: 2019/12/18 12:18
-     * @param
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "修改角色的权限信息", httpMethod = "PUT")
-    @PutMapping("/auth/editRoleAuth")
-    public Message editRoleAuth(@RequestBody AuthRoleRel authRoleRel){
-        try{
-            authRoleRelService.insertEntry(authRoleRel);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("给角色添加新的权限失败,错误信息为{},");
-            return Message.createByError();
-        }
-    }
+
 }

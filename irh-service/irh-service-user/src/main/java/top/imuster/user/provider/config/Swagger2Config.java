@@ -39,7 +39,7 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包下controller生成API文档
-                .apis(RequestHandlerSelectors.basePackage("top.imuster.user.provider.controller"))
+                .apis(RequestHandlerSelectors.basePackage("top.imuster.user.provider.web.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 //添加登录认证
