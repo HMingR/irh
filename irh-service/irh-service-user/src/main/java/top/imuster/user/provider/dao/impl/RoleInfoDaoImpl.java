@@ -14,9 +14,15 @@ import top.imuster.user.provider.dao.RoleInfoDao;
 @Repository("roleInfoDao")
 public class RoleInfoDaoImpl extends BaseDaoImpl<RoleInfo, Long> implements RoleInfoDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.RoleInfoDao.";
-	
+	private final static String SELECT_ROLE_AUTH_BY_ROLEID = "selectRoleAndAuthByRoleId";
+
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public RoleInfo selectRoleAndAuthByRoleId(Long roleId) {
+		return this.select(getNameSpace(SELECT_ROLE_AUTH_BY_ROLEID), roleId);
 	}
 }

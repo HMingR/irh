@@ -25,7 +25,6 @@ public class MallSecurityConfig extends BrowserSecurityConfig {
     @Resource
     ManagementInfoService managementInfoService;
 
-
     @Bean
     public UserDetailsService userDetailsService(){
         return (username) -> managementInfoService.loadManagementByName(username);

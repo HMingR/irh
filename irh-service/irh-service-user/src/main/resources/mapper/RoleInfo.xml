@@ -12,7 +12,7 @@
             state,
             create_time AS createTime,
             update_time AS updateTime,
-            create_management _id AS createManagement Id 
+            create_management AS createManagement
 		]]>
 	</sql>
 
@@ -28,7 +28,7 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
-            <if test="createManagement Id != null and createManagement Id != ''"><![CDATA[AND create_management _id = #{createManagement Id}]]></if> 
+            <if test="createManagement != null and createManagement != ''"><![CDATA[AND create_management = #{createManagement Id}]]></if>
 		</where>
 	</sql>
 	
@@ -46,7 +46,7 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
-			<if test="createManagement Id != null"><![CDATA[create_management _id = #{createManagement Id},]]></if>
+			<if test="createManagement != null"><![CDATA[create_management = #{createManagement},]]></if>
 		</set>
 	</sql>
 
@@ -61,7 +61,7 @@
                 state, 
                 create_time, 
                 update_time, 
-                create_management _id 
+                create_management
 				)
 			VALUES
 				(
@@ -71,7 +71,7 @@
                 #{state}, 
                 #{createTime}, 
                 #{updateTime}, 
-                #{createManagement Id} 
+                #{createManagement}
 				)
 		]]>
 	</insert>
@@ -128,5 +128,23 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<resultMap id="includeAuth" type="roleInfo">
+		<id column="id" property="id"></id>
+		<result column="role_desc" property="roleDesc"></result>
+		<result column="role_name" property="roleName"></result>
+		<result column="create_time" property="createTime"></result>
+		<result column="update_time" property="updateTime"></result>
+		<result column="create_management" property="createManagement"></result>
+		<collection property="authInfoList"
+					column="id"
+					ofType="top.imuster.user.api.pojo.AuthInfo"
+					select="top.imuster.user.provider.dao.AuthRoleRelDao.selectAuthListByRoleId"></collection>
+	</resultMap>
+
+	<select id="selectRoleAndAuthByRoleId" parameterType="Long" resultMap="includeAuth">
+		<![CDATA[SELECT *]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{roleId}
+	</select>
 	
 </mapper>

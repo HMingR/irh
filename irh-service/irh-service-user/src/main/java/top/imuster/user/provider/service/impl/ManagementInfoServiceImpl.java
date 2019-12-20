@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import top.imuster.auth.utils.JwtTokenUtil;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.core.utils.JwtTokenUtil;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
@@ -32,9 +32,6 @@ import java.util.List;
  */
 @Service("managementInfoService")
 public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, Long> implements ManagementInfoService {
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -76,7 +73,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = jwtTokenUtil.generateToken(userDetails);
+            token = JwtTokenUtil.generateToken(userDetails);
         }catch (AuthenticationException a){
             this.LOGGER.error("管理员登录异常:{}" , a.getMessage());
             throw new RuntimeException();

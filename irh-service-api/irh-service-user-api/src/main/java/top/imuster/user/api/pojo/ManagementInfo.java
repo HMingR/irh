@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -18,10 +20,14 @@ public class ManagementInfo extends BaseDomain {
 
 	// 管理人员表主键
 	@ApiModelProperty("管理人员表主键id")
+	@NotBlank(groups = editGroup.class, message = "管理人员的id不能为空")    //在修改的时候，主键不能为空
+	@NotNull(groups = editGroup.class, message = "管理人员的id不能为没有")
 	private Long id;
 
 	// 姓名, max length: 255
 	@ApiModelProperty("姓名")
+	@NotBlank(groups = {loginGroup.class, addGroup.class}, message = "用户名不能为空")
+	@NotNull(groups = {loginGroup.class, addGroup.class}, message = "用户名不能为空")
 	private String name;
 
 	// 10:服务人员 20:校园组织 25:公益组织 30:校园社团 40:管理员
@@ -34,6 +40,7 @@ public class ManagementInfo extends BaseDomain {
 
 	// 登录密码
 	@ApiModelProperty("登录密码")
+	@NotBlank(groups = {loginGroup.class, addGroup.class}, message = "密码不能为空")
 	private String password;
 
 	//管理员对应的角色
@@ -43,6 +50,14 @@ public class ManagementInfo extends BaseDomain {
 	// 10:注销 20:锁定 30:审核中 40:审核通过
 	// private Short state;
 
+	//登录时候的校验规则
+	public interface loginGroup{}
+
+	//修改信息的校验规则
+	public interface editGroup{}
+
+	//添加信息的谣言规则
+	public interface addGroup{}
 
 	public Long getId() {
 		return this.id;

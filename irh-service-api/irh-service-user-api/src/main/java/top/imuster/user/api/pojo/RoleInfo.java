@@ -3,6 +3,8 @@ package top.imuster.user.api.pojo;
 
 import top.imuster.common.base.domain.BaseDomain;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -17,22 +19,44 @@ public class RoleInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 角色表的主键
+	@NotNull(groups = editGroup.class,message = "角色id不能为空")
+	@NotBlank(groups = editGroup.class,message = "角色id不能为空")
 	private Long id;
 
-	// 权限名称, max length: 255
+	// 角色名称, max length: 255
+	@NotBlank(groups = addGroup.class, message = "角色名称不能为空")
+	@NotNull(groups = addGroup.class, message = "角色名称不能为空")
 	private String roleName;
 
-	// 权限描述
+	// 角色描述
+	@NotBlank(groups = addGroup.class, message = "角色描述不能为空")
+	@NotNull(groups = addGroup.class, message = "角色描述不能为空")
 	private String roleDesc;
 
 	// 状态 1:无效  2:有效
 	// private Short state;
 
-	// 创建人id
-	private Long createManagementId;
+	// 创建人姓名
+	@NotBlank(groups = addGroup.class)
+	@NotNull(groups = addGroup.class)
+	private String createManagement;
 
 	//角色对应的权限
 	private List<AuthInfo> authInfoList;
+
+	public interface addGroup{}
+
+	public interface editGroup{}
+
+	@Override
+	public String toString() {
+		return "RoleInfo{" +
+				"id=" + id +
+				", roleName='" + roleName + '\'' +
+				", roleDesc='" + roleDesc + '\'' +
+				", createManagement=" + createManagement +
+				'}';
+	}
 
 	public Long getId() {
 		return this.id;
@@ -55,11 +79,11 @@ public class RoleInfo extends BaseDomain {
 		this.roleDesc = roleDesc;
 	}
 	
-	public Long getCreateManagementId() {
-		return this.createManagementId;
+	public String getCreateManagement() {
+		return this.createManagement;
 	}
-    public void setCreateManagementId(Long createManagementId) {
-		this.createManagementId = createManagementId;
+    public void setCreateManagement(String createManagementId) {
+		this.createManagement = createManagement;
 	}
 
 	public List<AuthInfo> getAuthInfoList() {

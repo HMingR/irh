@@ -129,7 +129,7 @@
 	
 	<!-- 其它SQL语句 -->
 
-	<select id="selectAuthInfoById" resultType="authInfo" parameterType="long">
+	<select id="selectAuthInfoById" resultType="top.imuster.user.api.pojo.AuthInfo" parameterType="long">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>

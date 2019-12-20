@@ -19,7 +19,7 @@ import top.imuster.auth.component.JwtAuthenticationTokenFilter;
 import top.imuster.auth.component.LoginSuccessHandle;
 import top.imuster.auth.component.RestAuthenticationEntryPoint;
 import top.imuster.auth.component.RestfulAccessDeniedHandler;
-import top.imuster.auth.utils.JwtTokenUtil;
+import top.imuster.common.core.utils.JwtTokenUtil;
 
 /**
  * @ClassName: BrowserSecurityConfig
@@ -30,12 +30,6 @@ import top.imuster.auth.utils.JwtTokenUtil;
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    @Primary
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
     @Autowired
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
@@ -45,6 +39,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     LoginSuccessHandle loginSuccessHandle(){
         return new LoginSuccessHandle();
+    }
+
+    @Bean
+    @Primary
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     @Override

@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @author 黄明人
  * @since 2019-12-01 19:29:14
@@ -19,10 +21,12 @@ public class AuthRoleRel extends BaseDomain {
 
 	// 角色表中的id
 	@ApiModelProperty("角色表中的id")
+	@NotBlank(groups = editGroup.class)
 	private Long roleId;
 
 	// 权限表中的id
 	@ApiModelProperty("权限表中的id")
+	@NotBlank(groups = editGroup.class)
 	private Long authId;
 
 	// 创建人编号
@@ -32,6 +36,8 @@ public class AuthRoleRel extends BaseDomain {
 	public AuthRoleRel() {
 		//默认无参构造方法
 	}
+
+	public interface editGroup{}
 
 	public Long getId() {
 		return this.id;

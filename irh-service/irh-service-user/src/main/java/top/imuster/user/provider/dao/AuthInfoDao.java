@@ -12,5 +12,12 @@ import top.imuster.user.api.pojo.AuthInfo;
 public interface AuthInfoDao extends BaseDao<AuthInfo, Long> {
     //自定义扩展
 
+    /**
+     * @Description: 根据id查询authInfo
+     * @Author: hmr
+     * @Date: 2019/12/18 14:40
+     * @param authInfoId
+     * @reture: top.imuster.user.api.pojo.AuthInfo
+     **/
     AuthInfo selectAuthInfoById(Long authInfoId) throws Exception;
 }
