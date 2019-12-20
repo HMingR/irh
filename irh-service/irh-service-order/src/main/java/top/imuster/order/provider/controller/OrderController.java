@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.base.wrapper.Message;
 
 /**
  * @ClassName: OrderController
@@ -12,12 +13,12 @@ import top.imuster.common.base.controller.BaseController;
  * @date: 2019/12/18 18:03
  */
 @Controller
-@RequestMapping("order")
+@RequestMapping
 public class OrderController extends BaseController{
 
     @GetMapping("test")
-    public String test() {
-
-        return "test";
+    public Message<String> test() {
+        System.out.println("testing................");
+        return Message.createBySuccess("测试成功", "测试数据");
     }
 }
