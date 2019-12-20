@@ -1,19 +1,13 @@
 package top.imuster.common.core.interceptor;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.core.dto.UserDto;
-import top.imuster.common.core.utils.CusThreadLocal;
-import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +37,7 @@ public class TokenInterceptor implements HandlerInterceptor {
      * @reture: boolean
      **/
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
+        /*String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
         logger.info("获得token为:{}", token);
         logger.debug(RedisUtil.getAccessToken(token));
         UserDto loginUser = (UserDto)redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
@@ -52,7 +46,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             logger.error("根据用户的token获得用户信息失败,需要重新登录");
             return false;
         }
-        CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO, loginUser);
+        CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO, loginUser);*/
         return true;
     }
 

@@ -12,7 +12,7 @@ public class GlobalConstant {
 
     //redis相关
     public static final Long REDIS_JWT_EXPIRATION = 1800L;              //redis中jwt的过期时间
-
+    public static final String REDIS_ACCESS_TOKEN = "irh:token:accessToken:";  //redis中保存的token前缀
 
     //jwt相关
     public static final String JWT_TOKEN_HEADER = "Authorization";      //请求头中设置的字段，存放jwt

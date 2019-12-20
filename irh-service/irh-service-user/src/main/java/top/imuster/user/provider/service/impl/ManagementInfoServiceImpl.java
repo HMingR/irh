@@ -10,8 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.core.dto.UserDto;
+import top.imuster.common.core.utils.CusThreadLocal;
 import top.imuster.common.core.utils.JwtTokenUtil;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.AuthInfo;
@@ -22,6 +25,7 @@ import top.imuster.user.provider.service.ManagementInfoService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +54,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
     }
 
     @Override
-    public UserDetails loadManagementByName(String name){
+    public ManagementDetails loadManagementByName(String name){
         ManagementInfo managementInfo = new ManagementInfo();
         managementInfo.setName(name);
         managementInfo = managementInfoDao.selectManagementRoleByCondition(managementInfo);
@@ -65,20 +69,25 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
 
     @Override
     public String login(String name, String password) {
-        String token = null;
         try{
-            UserDetails userDetails = loadManagementByName(name);
-            if(!passwordEncoder.matches(password, userDetails.getPassword())){
+            Date date = new Date();
+            String token;
+            ManagementDetails managementDetails = loadManagementByName(name);
+            if(!passwordEncoder.matches(password, managementDetails.getPassword())){
                 throw new BadCredentialsException("密码不正确");
             }
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(managementDetails, null, managementDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = JwtTokenUtil.generateToken(userDetails);
+            token = JwtTokenUtil.generateToken(managementDetails.getUsername(), date);
+            ManagementInfo managementInfo = managementDetails.getManagementInfo();
+
+            //将用户的基本信息和登录时间放入本地线程中
+            CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO, new UserDto(managementInfo.getId(), managementInfo.getName(), managementInfo.getDesc(), managementInfo.getType(), new Date()));
+            return token;
         }catch (AuthenticationException a){
             this.LOGGER.error("管理员登录异常:{}" , a.getMessage());
             throw new RuntimeException();
         }
-        return token;
     }
 
     public List<AuthInfo> getAuthList(List<RoleInfo> roleInfoList){

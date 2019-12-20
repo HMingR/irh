@@ -15,6 +15,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.pojo.ManagementInfo;
@@ -23,6 +24,7 @@ import top.imuster.user.provider.service.ManagementInfoService;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/management")
 @Api(tags = "ManagementController", description = "后台管理页面")
-public class ManagementController extends BaseController {
+public class UserController extends BaseController {
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -47,15 +49,18 @@ public class ManagementController extends BaseController {
     ManagementInfoService managementInfoService;
 
     @ApiOperation("查看所有的管理员")
-    @GetMapping("/")
-    public Message managementList(@RequestBody Page<ManagementInfo> page){
+    @GetMapping("/list")
+    @NeedLogin(validate = true)
+    public Message managementList(/*Page<ManagementInfo> page*/){
         try{
-            Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(new ManagementInfo(), page);
-            if(null != managementInfoPage){
+            //Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(new ManagementInfo(), page);
+            List<ManagementInfo> managementInfos = managementInfoService.selectEntryList(new ManagementInfo());
+
+            /*if(null != managementInfoPage){
                 //将密码全都设置成空
                 managementInfoPage.getResult().stream().forEach(managementInfo -> managementInfo.setPassword(""));
-            }
-            return Message.createBySuccess(managementInfoPage);
+            }*/
+            return Message.createBySuccess(managementInfos);
         }catch (Exception e){
             logger.error("查看管理员列表失败:{}", e.getMessage());
             return Message.createByError();
@@ -112,11 +117,11 @@ public class ManagementController extends BaseController {
             redisTemplate.opsForValue()
                     .set(RedisUtil.getAccessToken(token),
                          new UserDto(managementInfo.getId(),
-                         managementInfo.getName(), 40),
+                         managementInfo.getName(), "管理员", 40),
                          GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
             return Message.createBySuccess(tokenMap);
         }catch (Exception e){
-            logger.error(GlobalConstant.getErrorLog("管理员登录"), e.getMessage(), managementInfo);
+            logger.error(GlobalConstant.getErrorLog("管理员登录失败,{}"), e.getMessage(), managementInfo);
             return Message.createByError(e.getMessage());
         }
     }

@@ -1,6 +1,7 @@
 package top.imuster.user.provider.service;
 
 
+import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.ConsumerInfo;
 
@@ -11,5 +12,5 @@ import top.imuster.user.api.pojo.ConsumerInfo;
  */
 public interface ConsumerInfoService extends BaseService<ConsumerInfo, Long> {
 
-    ConsumerInfo loginByName(String name);
+    UserDetails loginByName(String name);
 }

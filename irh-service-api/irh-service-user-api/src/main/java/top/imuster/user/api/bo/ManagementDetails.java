@@ -36,6 +36,22 @@ public class ManagementDetails implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    public ManagementInfo getManagementInfo() {
+        return managementInfo;
+    }
+
+    public void setManagementInfo(ManagementInfo managementInfo) {
+        this.managementInfo = managementInfo;
+    }
+
+    public List<AuthInfo> getAuthInfoList() {
+        return authInfoList;
+    }
+
+    public void setAuthInfoList(List<AuthInfo> authInfoList) {
+        this.authInfoList = authInfoList;
+    }
+
     @Override
     public String getPassword() {
         return managementInfo.getPassword();

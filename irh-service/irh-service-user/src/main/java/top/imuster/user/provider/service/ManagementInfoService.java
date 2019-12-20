@@ -3,6 +3,7 @@ package top.imuster.user.provider.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ManagementInfo;
 
 /**
@@ -28,7 +29,7 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @param name
      * @reture: top.imuster.user.pojo.ManagementInfo
      **/
-    UserDetails loadManagementByName(String name);
+    ManagementDetails loadManagementByName(String name);
 
     /**
      * @Description: 管理员登录用

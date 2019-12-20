@@ -12,10 +12,10 @@ import top.imuster.common.base.controller.BaseController;
  * @date: 2019/12/18 18:03
  */
 @Controller
-@RequestMapping("order")
+@RequestMapping("/order")
 public class OrderController extends BaseController{
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public String test() {
 
         return "test";

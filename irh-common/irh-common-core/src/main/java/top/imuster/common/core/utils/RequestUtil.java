@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.core.dto.UserDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -85,6 +87,23 @@ public class RequestUtil {
             }
         }
         return ipAddress;
+    }
+
+
+    /**
+     * @Description: 从本地线程中获得事先存入的UserDto对象
+     * @Author: hmr
+     * @Date: 2019/12/20 19:30
+     * @param
+     * @reture: top.imuster.common.core.dto.UserDto
+     **/
+    public static UserDto getLoginUser() {
+        UserDto userDto = (UserDto) CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO);
+        if (null == userDto) {
+            throw new RuntimeException("解析token失败");
+        }
+        return userDto;
+
     }
 
 
