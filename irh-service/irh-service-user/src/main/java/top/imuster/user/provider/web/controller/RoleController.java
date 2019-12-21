@@ -37,7 +37,7 @@ public class RoleController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(httpMethod = "GET", value = "分页查询角色列表")
-    @GetMapping("/")
+    @GetMapping("/list")
     public Message roleList(Page<RoleInfo> page, RoleInfo roleInfo){
         try{
             Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(roleInfo, page);

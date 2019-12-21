@@ -1,5 +1,7 @@
 package top.imuster.common.core.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,53 +11,61 @@ import java.util.Map;
  * @author: hmr
  * @date: 2019/12/15 16:10
  */
-public class CusThreadLocal {
+@Slf4j
+public class CusThreadLocal extends ThreadLocal<Map<String, Object>> {
 
-    private static ThreadLocal<Map<String, Object>> mapThreadLocal = new MapThreadLocal();
+    /**
+     * The constant threadContext.
+     */
+    private final static ThreadLocal<Map<String, Object>> THREAD_CONTEXT = new CusThreadLocal();
 
-    public static void put(String key, Object value){
-        mapThreadLocal.get().put(key, value);
+    /**
+     * Put.
+     *
+     * @param key   the key
+     * @param value the value
+     */
+    public static void put(String key, Object value) {
+        log.info("线程的值为====", THREAD_CONTEXT.toString());
+        getContextMap().put(key, value);
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
+        stringObjectHashMap.put(key, value);
+        THREAD_CONTEXT.set(stringObjectHashMap);
     }
 
     /**
-     * @Description: 根据key获得一个对象
-     * @Author: hmr
-     * @Date: 2019/12/15 16:21
-     * @param key
-     * @reture: java.lang.Object
-     **/
-    public static Object get(String key){
-        return mapThreadLocal.get().get(key);
+     * Remove object.
+     *
+     * @param key the key
+     *
+     * @return the object
+     */
+    public static Object remove(String key) {
+        return getContextMap().remove(key);
     }
 
     /**
-     * @Description: 根据key删除线程中的对象
-     * @Author: hmr
-     * @Date: 2019/12/15 16:20
-     * @param key
-     * @reture: java.lang.Object
-     **/
-    public static Object remove(String key){
-        return mapThreadLocal.get().remove(key);
+     * Get object.
+     *
+     * @param key the key
+     *
+     * @return the object
+     */
+    public static Object get(String key) {
+        return getContextMap().get(key);
     }
 
-    /**
-     * @Description: 清除线程中所有的对象
-     * @Author: hmr
-     * @Date: 2019/12/15 16:20
-     * @param
-     * @reture: void
-     **/
-    public static void clear(){
-        mapThreadLocal.get().clear();
-    }
-
-    private static class MapThreadLocal extends ThreadLocal<Map<String, Object>> {
-
+    /*private static class MapThreadLocal extends ThreadLocal<Map<String, Object>> {
+        *//**
+         * Initial value map.
+         *
+         * @return the map
+         *//*
         @Override
         protected Map<String, Object> initialValue() {
             return new HashMap<String, Object>(8) {
-                private static final long serialVersionUID = -5871556411091439769L;
+
+                private static final long serialVersionUID = 3637958959138295593L;
 
                 @Override
                 public Object put(String key, Object value) {
@@ -63,6 +73,23 @@ public class CusThreadLocal {
                 }
             };
         }
+    }*/
+
+    /**
+     * 取得thread context Map的实例。
+     *
+     * @return thread context Map的实例
+     */
+    private static Map<String, Object> getContextMap() {
+        return THREAD_CONTEXT.get();
     }
+
+    /**
+     * 清理线程所有被hold住的对象。以便重用！
+     */
+    /*public static void remove() {
+        getContextMap().clear();
+    }*/
+
 
 }

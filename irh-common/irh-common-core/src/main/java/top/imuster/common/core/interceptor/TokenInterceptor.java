@@ -1,18 +1,28 @@
 package top.imuster.common.core.interceptor;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.dto.UserDto;
+import top.imuster.common.core.exception.NeedLoginException;
+import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * @ClassName: TokenInterceptor
@@ -20,9 +30,9 @@ import java.io.IOException;
  * @author: hmr
  * @date: 2019/12/15 15:21
  */
-@Component("tokenInterceptor")
+@Component
+@Slf4j
 public class TokenInterceptor implements HandlerInterceptor {
-    private static Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -37,18 +47,36 @@ public class TokenInterceptor implements HandlerInterceptor {
      * @reture: boolean
      **/
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        /*String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
-        logger.info("获得token为:{}", token);
-        logger.debug(RedisUtil.getAccessToken(token));
+        String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), GlobalConstant.JWT_TOKEN_HEAD);
+        validate(token, handler);
+        log.info("拦截器中获得的token为---->", token);
         UserDto loginUser = (UserDto)redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
-        logger.debug("获得的loginUser为:{}", loginUser);
         if(null == loginUser){
-            logger.error("根据用户的token获得用户信息失败,需要重新登录");
-            return false;
+            log.error("根据用户的token获得用户信息失败,需要重新登录");
+            throw new NeedLoginException("根据用户的token获得用户信息失败,需要重新登录");
         }
-        CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO, loginUser);*/
         return true;
     }
+
+    /**
+     * @Description: 校验是否有@NeedLogin注解，如果有，则判断token是否为空
+     * @Author: hmr
+     * @Date: 2019/12/21 16:33
+     * @param
+     * @reture: boolean
+     **/
+    private void validate(String token, Object handler)throws NeedLoginException{
+        HandlerMethod handlerMethod = (HandlerMethod)handler;
+        Method method = handlerMethod.getMethod();
+        NeedLogin annotation = method.getAnnotation(NeedLogin.class);
+        if(null == annotation || !annotation.validate()) {
+            return;
+        }
+        if(StringUtils.isEmpty(token)) {
+            throw new NeedLoginException("请先登录");
+        }
+    }
+
 
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
     }
@@ -70,7 +98,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         res.resetBuffer();
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
-        res.getWriter().write("{\"code\":500 ,\"text\" :\"解析token失败\"}");
+        res.getWriter().write(new ObjectMapper().writeValueAsString(Message.createByError("登录超时或没有登录,请先登录")));
         res.flushBuffer();
     }
 

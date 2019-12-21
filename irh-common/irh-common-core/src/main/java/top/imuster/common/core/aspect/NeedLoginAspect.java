@@ -2,22 +2,31 @@ package top.imuster.common.core.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
-import top.imuster.common.core.utils.CusThreadLocal;
-import top.imuster.common.core.utils.JwtTokenUtil;
 import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
-import java.lang.annotation.Annotation;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 /**
  * @ClassName: NeedLoginAspect
@@ -30,7 +39,6 @@ import java.lang.annotation.Annotation;
 @Slf4j
 @Component
 public class NeedLoginAspect {
-
     @Resource
     RedisTemplate<String, Object> redisTemplate;
 
@@ -41,32 +49,38 @@ public class NeedLoginAspect {
 
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) throws Exception{
-        log.info("进入校验切面");
+        //获取当前请求对象
+        /*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();*/
+        /*HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        log.info("request-------->", request);
+
+        log.info("进入校验切面, 是否需要校验{}", needValidate(joinPoint));
+
+        String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
+
         if(!needValidate(joinPoint))
             return;
 
-        UserDto loginUser = (UserDto) CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO);
-        log.info("本地线程中国的的对象是:{}", new ObjectMapper().writeValueAsString(loginUser));
-        if(null == loginUser)
-            throw new NeedLoginException("用户没有登录或者登录超时,请重新登录");
+        if(StringUtils.isEmpty(token)){
+            throw new NeedLoginException("需要登录");
+        }
 
-        String token = JwtTokenUtil.generateToken(loginUser.getLoginName(), loginUser.getCreateTime());
         UserDto redisUser = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
         log.info("redis中获得的对象是:{}", new ObjectMapper().writeValueAsString(redisUser));
         if(null == redisUser)
-            throw new NeedLoginException("用户没有登录或者登录超时,请重新登录");
+            throw new NeedLoginException("用户没有登录或者登录超时,请重新登录");*/
     }
 
 
-    private boolean needValidate(JoinPoint joinPoint){
-        Annotation[] annotations = joinPoint.getClass().getAnnotations();
-        for (Annotation annotation : annotations) {
-            if(annotation instanceof NeedLogin){
-                if(((NeedLogin) annotation).validate()){
-                    return true;
-                }
-            }
-        }
+    private boolean needValidate(JoinPoint joinPoint) throws NoSuchMethodException {
+        Class<?> clazz = joinPoint.getTarget().getClass();
+        String methodName = joinPoint.getSignature().getName();
+        Method method = clazz.getMethod(methodName);
+        NeedLogin annotation = method.getAnnotation(NeedLogin.class);
+        if(null != annotation && annotation.validate())
+            return true;
         return false;
     }
 

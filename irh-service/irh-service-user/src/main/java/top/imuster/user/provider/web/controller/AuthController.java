@@ -11,6 +11,7 @@ import top.imuster.user.provider.service.AuthInfoService;
 import top.imuster.user.provider.service.AuthRoleRelService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: AuthController
@@ -34,18 +35,19 @@ public class AuthController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(httpMethod = "Get", value = "分页查询权限列表")
-    @GetMapping("/auth/list")
-    public Message authList(Integer type, Page<AuthInfo> page){
+    @GetMapping("/auth/list/{type}")
+    public Message authList(@PathVariable("type") Integer type, Page<AuthInfo> page){
         try{
             if(type != 1 && type != 2){
                 return Message.createByError("参数错误");
             }
             AuthInfo authInfo = new AuthInfo();
             authInfo.setState(type);
-            Page<AuthInfo> authInfoPage = authInfoService.selectPage(authInfo, page);
-            return Message.createBySuccess(authInfoPage);
+            //Page<AuthInfo> authInfoPage = authInfoService.selectPage(authInfo, page);
+            List<AuthInfo> authInfos = authInfoService.selectEntryList(authInfo);
+            return Message.createBySuccess(authInfos);
         }catch (Exception e){
-            logger.error("获得权限列表失败", e.getMessage());
+            logger.error("获得权限列表失败", e.getMessage(), e);
             return Message.createByError();
         }
     }

@@ -1,6 +1,8 @@
 package top.imuster.user.provider.service.impl;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +37,7 @@ import java.util.List;
  * @since 2019-12-01 19:29:14
  */
 @Service("managementInfoService")
+@Slf4j
 public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, Long> implements ManagementInfoService {
 
     @Autowired
@@ -82,10 +85,16 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
             ManagementInfo managementInfo = managementDetails.getManagementInfo();
 
             //将用户的基本信息和登录时间放入本地线程中
-            CusThreadLocal.put(GlobalConstant.USER_TOKEN_DTO, new UserDto(managementInfo.getId(), managementInfo.getName(), managementInfo.getDesc(), managementInfo.getType(), new Date()));
+            UserDto userDto = new UserDto(managementInfo.getId(), managementInfo.getName(), managementInfo.getDesc(), managementInfo.getType(), new Date());
+            log.info("userDto的值是", userDto);
+//            this.LOGGER.info("从线程池中取出", CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO));
+            this.LOGGER.info("将{}放入本地线程", new ObjectMapper().writeValueAsString(userDto));
             return token;
         }catch (AuthenticationException a){
-            this.LOGGER.error("管理员登录异常:{}" , a.getMessage());
+            this.LOGGER.error("管理员登录异常:{}" , a.getMessage(), a);
+            throw new RuntimeException();
+        }catch (Exception e){
+            this.LOGGER.error("管理员登录异常,服务器内部错误:{}" , e.getMessage(), e);
             throw new RuntimeException();
         }
     }
