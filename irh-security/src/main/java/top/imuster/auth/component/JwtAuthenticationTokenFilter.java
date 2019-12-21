@@ -1,6 +1,7 @@
 package top.imuster.auth.component;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.utils.JwtTokenUtil;
 
 import javax.servlet.FilterChain;
@@ -25,6 +27,7 @@ import java.io.IOException;
  * @author: hmr
  * @date: 2019/12/6 18:41
  */
+@Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 

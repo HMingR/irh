@@ -4,6 +4,7 @@ package top.imuster.user.provider.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -18,6 +19,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.utils.CusThreadLocal;
 import top.imuster.common.core.utils.JwtTokenUtil;
+import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ManagementInfoService 实现类
@@ -45,6 +48,9 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
 
     @Resource
     private ManagementInfoDao managementInfoDao;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @Override
     public BaseDao<ManagementInfo, Long> getDao() {
@@ -81,14 +87,17 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(managementDetails, null, managementDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = JwtTokenUtil.generateToken(managementDetails.getUsername(), date);
+            token = JwtTokenUtil.generateToken(managementDetails.getUsername());
             ManagementInfo managementInfo = managementDetails.getManagementInfo();
 
-            //将用户的基本信息和登录时间放入本地线程中
-            UserDto userDto = new UserDto(managementInfo.getId(), managementInfo.getName(), managementInfo.getDesc(), managementInfo.getType(), new Date());
-            log.info("userDto的值是", userDto);
-//            this.LOGGER.info("从线程池中取出", CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO));
-            this.LOGGER.info("将{}放入本地线程", new ObjectMapper().writeValueAsString(userDto));
+            //将用户的基本信息存入redis中，并设置过期时间
+            redisTemplate.opsForValue()
+                    .set(RedisUtil.getAccessToken(token),
+                            new UserDto(managementInfo.getId(),
+                                        managementInfo.getName(),
+                                        GlobalConstant.userType.MANAGEMENT.getName(),
+                                        GlobalConstant.userType.MANAGEMENT.getType()),
+                            GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
             return token;
         }catch (AuthenticationException a){
             this.LOGGER.error("管理员登录异常:{}" , a.getMessage(), a);

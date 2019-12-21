@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
 import top.imuster.common.core.utils.RedisUtil;
 
@@ -23,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: TokenInterceptor
@@ -47,36 +47,43 @@ public class TokenInterceptor implements HandlerInterceptor {
      * @reture: boolean
      **/
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), GlobalConstant.JWT_TOKEN_HEAD);
-        validate(token, handler);
-        log.info("拦截器中获得的token为---->", token);
-        UserDto loginUser = (UserDto)redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
-        if(null == loginUser){
+        String token = StringUtils.substringAfter(
+                request.getHeader(HttpHeaders.AUTHORIZATION), GlobalConstant.JWT_TOKEN_HEAD);
+        HandlerMethod handlerMethod = (HandlerMethod)handler;
+        Method method = handlerMethod.getMethod();
+        NeedLogin annotation = method.getAnnotation(NeedLogin.class);
+        //没有@NeedLogin注解的可以直接返回
+        if(null == annotation || !annotation.validate()){
+            return true;
+        }
+        //有@NeedLogin注解的
+        if(StringUtils.isBlank(token)) {
+            throw new NeedLoginException("请先登录");
+        }
+        if(!redisTemplate.hasKey(RedisUtil.getAccessToken(token))){
             log.error("根据用户的token获得用户信息失败,需要重新登录");
             throw new NeedLoginException("根据用户的token获得用户信息失败,需要重新登录");
         }
+        refresh(token);
         return true;
     }
 
     /**
-     * @Description: 校验是否有@NeedLogin注解，如果有，则判断token是否为空
+     * @Description: 刷新redis中的token的过期时间
      * @Author: hmr
-     * @Date: 2019/12/21 16:33
+     * @Date: 2019/12/21 18:17
      * @param
-     * @reture: boolean
+     * @reture: String
      **/
-    private void validate(String token, Object handler)throws NeedLoginException{
-        HandlerMethod handlerMethod = (HandlerMethod)handler;
-        Method method = handlerMethod.getMethod();
-        NeedLogin annotation = method.getAnnotation(NeedLogin.class);
-        if(null == annotation || !annotation.validate()) {
-            return;
-        }
-        if(StringUtils.isEmpty(token)) {
-            throw new NeedLoginException("请先登录");
+    private void refresh(String token) {
+        try{
+            //刷新redis的过期时间
+            redisTemplate.expire(token, GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
+            log.info("刷新redis中的token过期时间");
+        }catch (Exception e){
+            throw new RuntimeException("刷新token失败");
         }
     }
-
 
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
     }

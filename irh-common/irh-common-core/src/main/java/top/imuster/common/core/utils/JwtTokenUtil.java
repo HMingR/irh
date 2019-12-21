@@ -22,6 +22,8 @@ import java.util.Map;
  * {"sub":"wang","created":1489079981393,"exp":1489684781}
  * signature的生成算法：
  * HMACSHA512(base64UrlEncode(header) + "." +base64UrlEncode(payload),secret)
+ *
+ * 取消了时间，就通过用户名生成token
  */
 public class JwtTokenUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
@@ -34,7 +36,6 @@ public class JwtTokenUtil {
     private static String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, GlobalConstant.JWT_SECRET)
                 .compact();
     }
@@ -80,44 +81,37 @@ public class JwtTokenUtil {
      * 验证token是否还有效
      *
      * @param token       客户端传入的token
-     * @param userDetails 从数据库中查询出来的用户信息
+     * @param userName    用户名
      */
     public static boolean validateToken(String token, String userName) {
         String username = getUserNameFromToken(token);
-        return username.equals(userName) && !isTokenExpired(token);
+        return username.equals(userName) /*&& !isTokenExpired(token)*/;
     }
 
     /**
      * 判断token是否已经失效
      */
-    private static boolean isTokenExpired(String token) {
+    /*private static boolean isTokenExpired(String token) {
         Date expiredDate = getExpiredDateFromToken(token);
         return expiredDate.before(new Date());
-    }
+    }*/
 
     /**
      * 从token中获取过期时间
      */
-    private static Date getExpiredDateFromToken(String token) {
+    /*private static Date getExpiredDateFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
         return claims.getExpiration();
-    }
+    }*/
 
     /**
      * 根据用户信息生成token
      */
-    public static String generateToken(String userName, Date date) {
+    public static String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userName);
-        claims.put(CLAIM_KEY_CREATED, date);
         return generateToken(claims);
     }
-
-    /*public static void main(String[] args) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-        claims.put(CLAIM_KEY_CREATED, new Date());
-    }*/
 
     /**
      * 当原来的token没过期时是可以刷新的
@@ -138,14 +132,14 @@ public class JwtTokenUtil {
             return null;
         }
         //如果token已经过期，不支持刷新
-        if(isTokenExpired(token)){
+        /*if(isTokenExpired(token)){
             return null;
-        }
+        }*/
         //如果token在30分钟之内刚刷新过，返回原token
         if(tokenRefreshJustBefore(token,30*60)){
             return token;
         }else{
-            claims.put(CLAIM_KEY_CREATED, new Date());
+            //claims.put(CLAIM_KEY_CREATED, new Date());
             return generateToken(claims);
         }
     }
@@ -164,5 +158,12 @@ public class JwtTokenUtil {
             return true;
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        String hmr = generateToken("hmr");
+        System.out.println(hmr);
+        String userNameFromToken = getUserNameFromToken(hmr);
+        System.out.println(userNameFromToken);
     }
 }
