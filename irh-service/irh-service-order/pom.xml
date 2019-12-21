@@ -29,11 +29,6 @@
             <artifactId>spring-cloud-openfeign-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>top.imuster</groupId>
-            <artifactId>irh-security</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
 
