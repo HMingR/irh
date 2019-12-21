@@ -8,19 +8,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import top.imuster.auth.config.BrowserSecurityConfig;
 import top.imuster.user.provider.service.ManagementInfoService;
+import top.imuster.user.provider.service.impl.ManagementInfoServiceImpl;
 
 import javax.annotation.Resource;
 
 /**
- * @ClassName: MallSecurityConfig
+ * @ClassName: UserSecurityConfig
  * @Description: TODO
  * @author: hmr
  * @date: 2019/12/6 18:48
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
-public class MallSecurityConfig extends BrowserSecurityConfig {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class ManagementSecurityConfig extends BrowserSecurityConfig {
 
     @Resource
     ManagementInfoService managementInfoService;

@@ -7,4 +7,12 @@ package top.imuster.common.core.exception;
  * @date: 2019/12/19 15:23
  */
 public class GlobalException extends Exception {
+
+    public GlobalException(){
+        super();
+    }
+
+    public GlobalException(String message){
+        super(message);
+    }
 }

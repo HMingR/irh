@@ -1,4 +1,4 @@
-package top.imuster.user.provider.config;
+package top.imuster.goods.config;
 
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -13,11 +13,9 @@ import top.imuster.common.core.config.BaseSwagger2Config;
 @Configuration
 @EnableSwagger2
 public class Swagger2Config extends BaseSwagger2Config {
+    String basePackage = "top.imuster.goods.controller";
 
-    String scanPackage = "top.imuster.user.provider.web";
-
-    @Override
-    public void setPackage(String basePackage) {
-        super.setPackage(scanPackage);
+    public void setPackage() {
+        super.setPackage(basePackage);
     }
 }

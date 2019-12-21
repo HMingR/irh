@@ -59,6 +59,12 @@ public class GlobalExceptionHandler {
         return Message.createByError(message);
     }
 
+    @ExceptionHandler(NeedLoginException.class)
+    public Message needLoginExceptionHandler(NeedLoginException exception){
+        String message = exception.getMessage();
+        return Message.createByError(message);
+    }
+
 
     /**
      * @Description: 配置校验规则，当有很多数据需要校验的时候，一个出现问题，则停止校验，直接抛出异常

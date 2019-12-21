@@ -1,16 +1,12 @@
 package top.imuster.user.provider;
 
-//import org.springframework.cloud.netflix.feign.EnableFeignClients;
-//import org.springframework.cloud.openfeign.EnableFeignClients;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.context.request.RequestContextListener;
 
 /**
  * @ClassName: UserApplication
@@ -21,16 +17,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
+@ComponentScan(basePackages = {
+        "top.imuster.common.core.aspect",
+        "top.imuster.user.provider",
+        "top.imuster.common.core.config",
+        "top.imuster.common.core.interceptor"})
 public class UserProviderApplication {
+    public static void main(String[] args) {
 
-    @Bean
-    @Primary
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        SpringApplication.run(UserProviderApplication.class, args);
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(UserProviderApplication.class, args);
+    @Bean
+    public RequestContextListener requestContextListener(){
+        return new RequestContextListener();
     }
 }
 

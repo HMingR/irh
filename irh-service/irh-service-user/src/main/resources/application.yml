@@ -44,7 +44,7 @@ eureka:
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
 mybatis:
-  mapper-locations: /mapper/*
+  mapper-locations: mapper/*
   type-aliases-package: top.imuster.user.api.pojo  #别名扫描
 
 

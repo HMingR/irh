@@ -1,6 +1,7 @@
 package top.imuster.user.provider.service.impl;
 
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -27,8 +28,9 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
     }
 
     @Override
-    public ConsumerInfo loginByName(String name) {
+    public UserDetails loginByName(String name) {
         ConsumerInfo consumerInfo = new ConsumerInfo();
-        return consumerInfoDao.selectEntryList(consumerInfo).get(0);
+        //return consumerInfoDao.selectEntryList(consumerInfo).get(0);
+        return null;
     }
 }

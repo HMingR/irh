@@ -7,7 +7,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.common.base.config.GlobalConstant;
 
 import java.util.Date;
@@ -83,9 +82,9 @@ public class JwtTokenUtil {
      * @param token       客户端传入的token
      * @param userDetails 从数据库中查询出来的用户信息
      */
-    public static boolean validateToken(String token, UserDetails userDetails) {
+    public static boolean validateToken(String token, String userName) {
         String username = getUserNameFromToken(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return username.equals(userName) && !isTokenExpired(token);
     }
 
     /**
@@ -107,12 +106,18 @@ public class JwtTokenUtil {
     /**
      * 根据用户信息生成token
      */
-    public  static String generateToken(UserDetails userDetails) {
+    public static String generateToken(String userName, Date date) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_USERNAME, userName);
+        claims.put(CLAIM_KEY_CREATED, date);
+        return generateToken(claims);
+    }
+
+    /*public static void main(String[] args) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
-    }
+    }*/
 
     /**
      * 当原来的token没过期时是可以刷新的

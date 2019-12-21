@@ -3,6 +3,8 @@ package top.imuster.order.provider.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 
@@ -12,8 +14,7 @@ import top.imuster.common.base.wrapper.Message;
  * @author: lpf
  * @date: 2019/12/18 18:03
  */
-@Controller
-@RequestMapping
+@RestController
 public class OrderController extends BaseController{
 
     @GetMapping("test")
