@@ -2,9 +2,17 @@ package top.imuster.goods.controller;
 
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.base.domain.Page;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.config.GoodsException;
+import top.imuster.goods.service.ProductInfoService;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName: ProductController
@@ -13,13 +21,38 @@ import top.imuster.common.base.controller.BaseController;
  * @date: 2019/12/1 14:53
  */
 @Controller
-@RequestMapping("product")
+@RequestMapping("/product")
 public class ProductController extends BaseController {
 
-    @GetMapping("test")
-    public String test() {
+    @Resource
+    ProductInfoService productInfoService;
 
-        return "test";
+    @PostMapping("/list")
+    public Message productList(Page<ProductInfo> page, ProductInfo productInfo) throws GoodsException{
+        Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
+        return Message.createBySuccess(productInfoPage);
     }
 
+    @PostMapping("/edit")
+    public Message editProduct(@RequestBody @Validated(ProductInfo.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
+        validData(bindingResult);
+        int i = productInfoService.updateByKey(productInfo);
+        if(i != 0){
+            return Message.createBySuccess();
+        }
+        return Message.createByError();
+    }
+
+    @DeleteMapping("/{id}")
+    public Message delProduct(@PathVariable("id") Long id){
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setId(id);
+        productInfo.setState(1);
+        int i = productInfoService.updateByKey(productInfo);
+        if(i != 0){
+            return Message.createBySuccess();
+        }
+
+        return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
+    }
 }

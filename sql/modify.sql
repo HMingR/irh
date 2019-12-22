@@ -10,3 +10,11 @@ CHANGE COLUMN `create_management _id` `create_management` varchar(50) NULL DEFAU
 
 ALTER TABLE `irh`.`auth_role_rel`
 CHANGE COLUMN `create_ management _id` `create_ management` varchar(50) NULL DEFAULT NULL COMMENT '创建人' AFTER `update_time`;
+
+/*2019.12.22*/
+ALTER TABLE `irh`.`product_info`
+ADD COLUMN `state` tinyint(1) UNSIGNED NULL COMMENT '1-无效 2-有效' AFTER `update_time`;
+ALTER TABLE `irh`.`product_category_info`
+MODIFY COLUMN `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1:无效  2:有效' AFTER `update_time`;
+ALTER TABLE `irh`.`product_info`
+CHANGE COLUMN `parent_category_id` `category_id` bigint(20) NULL DEFAULT NULL COMMENT '分类id' AFTER `trade_type`;

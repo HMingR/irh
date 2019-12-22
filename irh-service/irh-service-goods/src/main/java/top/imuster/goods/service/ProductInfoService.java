@@ -11,4 +11,13 @@ import top.imuster.goods.api.pojo.ProductInfo;
  */
 public interface ProductInfoService extends BaseService<ProductInfo, Long> {
 
+    /**
+     * @Description: 按条件更新指定商品的类别
+     * @Author: hmr
+     * @Date: 2019/12/22 15:26
+     * @param productInfo
+     * @reture: void
+     **/
+    Integer updateProductCategoryByCondition(ProductInfo productInfo);
+
 }

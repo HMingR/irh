@@ -3,6 +3,7 @@ package top.imuster.goods;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @ClassName: GoodsProviderApplication
@@ -12,6 +13,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
+@ComponentScan(basePackages = {
+        "top.imuster.common.core",
+        "top.imuster.goods"})
 public class GoodsProviderApplication {
 
     public static void main(String[] args) {

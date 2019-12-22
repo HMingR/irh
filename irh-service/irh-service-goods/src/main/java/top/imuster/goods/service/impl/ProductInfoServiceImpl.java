@@ -1,6 +1,8 @@
 package top.imuster.goods.service.impl;
 
 
+
+
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -24,5 +26,10 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public BaseDao<ProductInfo, Long> getDao() {
         return this.productInfoDao;
+    }
+
+    @Override
+    public Integer updateProductCategoryByCondition(ProductInfo productInfo) {
+        return productInfoDao.updateProductCategoryByCondition(productInfo);
     }
 }

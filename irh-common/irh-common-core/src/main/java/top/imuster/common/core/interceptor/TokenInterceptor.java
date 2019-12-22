@@ -47,7 +47,7 @@ public class TokenInterceptor implements HandlerInterceptor {
      * @reture: boolean
      **/
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = StringUtils.substringAfter(
+        /*String token = StringUtils.substringAfter(
                 request.getHeader(HttpHeaders.AUTHORIZATION), GlobalConstant.JWT_TOKEN_HEAD);
         HandlerMethod handlerMethod = (HandlerMethod)handler;
         Method method = handlerMethod.getMethod();
@@ -64,7 +64,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             log.error("根据用户的token获得用户信息失败,需要重新登录");
             throw new NeedLoginException("根据用户的token获得用户信息失败,需要重新登录");
         }
-        refresh(token);
+        refresh(token);*/
         return true;
     }
 

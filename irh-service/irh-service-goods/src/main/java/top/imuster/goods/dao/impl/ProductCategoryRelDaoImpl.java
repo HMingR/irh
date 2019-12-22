@@ -13,7 +13,7 @@ import top.imuster.goods.dao.ProductCategoryRelDao;
  */
 @Repository("productCategoryRelDao")
 public class ProductCategoryRelDaoImpl extends BaseDaoImpl<ProductCategoryRel, Long> implements ProductCategoryRelDao {
-	private final static String NAMESPACE = "ProductCategoryRelDao.";
+	private final static String NAMESPACE = "top.imuster.goods.dao.ProductCategoryRelDao.";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
