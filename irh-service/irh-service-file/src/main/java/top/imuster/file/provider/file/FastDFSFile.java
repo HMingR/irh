@@ -1,12 +1,22 @@
-package top.imuster.file.provider.utils;
+package top.imuster.file.provider.file;
+
+import java.io.Serializable;
 
 /**
- * @Description: 上传文件的封装实体类
- * @Author: lpf
- * @Date: 2019/12/18 10:51
- * @reture:
- **/
-public class FastDFSFile {
+ * @ClassName: FastDFSFile
+ * @Description: TODO
+ * @author: lpf
+ * @date: 2019/12/23 12:21
+ * 封装文件上传信息
+ *      文件上传的时间
+ *      Author：
+ *      type：
+ *      size:
+ *      附加信息：
+ *      后缀：
+ *      文件的内容->文件的字节数组
+ */
+public class FastDFSFile implements Serializable {
     //文件名字
     private String name;
     //文件内容
@@ -18,20 +28,19 @@ public class FastDFSFile {
     //文件创建作者
     private String author;
 
-    public FastDFSFile(String name, byte[] content, String ext, String height,
-                       String width, String author) {
-        super();
+    public FastDFSFile(String name, byte[] content, String ext, String md5, String author) {
         this.name = name;
         this.content = content;
         this.ext = ext;
+        this.md5 = md5;
         this.author = author;
     }
 
     public FastDFSFile(String name, byte[] content, String ext) {
-        super();
         this.name = name;
         this.content = content;
         this.ext = ext;
+
     }
 
     public String getName() {
