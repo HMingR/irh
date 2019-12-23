@@ -11,4 +11,13 @@ import top.imuster.goods.api.pojo.ProductInfo;
  */
 public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
     //自定义扩展
+
+    /**
+     * @Description: 按条件更新商品的分类
+     * @Author: hmr
+     * @Date: 2019/12/22 15:28
+     * @param productInfo
+     * @reture: void
+     **/
+    Integer updateProductCategoryByCondition(ProductInfo productInfo);
 }

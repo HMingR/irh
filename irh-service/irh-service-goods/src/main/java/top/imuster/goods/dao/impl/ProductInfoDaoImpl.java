@@ -13,10 +13,15 @@ import top.imuster.goods.dao.ProductInfoDao;
  */
 @Repository("productInfoDao")
 public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implements ProductInfoDao {
-	private final static String NAMESPACE = "ProductInfoDao.";
-	
+	private final static String NAMESPACE = "top.imuster.goods.dao.ProductInfoDao.";
+	private final static String UPDATE_PRODUCT_CATEGORY_BY_CONDITION= "updateProductCategoryByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public Integer updateProductCategoryByCondition(ProductInfo productInfo) {
+		return this.update(getNameSpace(UPDATE_PRODUCT_CATEGORY_BY_CONDITION), productInfo);
 	}
 }

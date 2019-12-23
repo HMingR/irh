@@ -6,6 +6,10 @@ mybatis:
   type-aliases-package: top.imuster.goods.api.pojo   #别名扫描
 
 spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
   datasource:
     druid:
       driver-class-name: com.mysql.jdbc.Driver
@@ -28,5 +32,6 @@ eureka:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
-debug:
-  true
+logging:
+  level:
+    top.imuster.goods: debug

@@ -50,9 +50,9 @@ public class NeedLoginAspect {
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) throws Exception{
         //获取当前请求对象
-        /*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();*/
-        /*HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         log.info("request-------->", request);
 
@@ -70,7 +70,7 @@ public class NeedLoginAspect {
         UserDto redisUser = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
         log.info("redis中获得的对象是:{}", new ObjectMapper().writeValueAsString(redisUser));
         if(null == redisUser)
-            throw new NeedLoginException("用户没有登录或者登录超时,请重新登录");*/
+            throw new NeedLoginException("用户没有登录或者登录超时,请重新登录");
     }
 
 

@@ -13,7 +13,7 @@ import top.imuster.goods.dao.ProductEvaluateInfoDao;
  */
 @Repository("productEvaluateInfoDao")
 public class ProductEvaluateInfoDaoImpl extends BaseDaoImpl<ProductEvaluateInfo, Long> implements ProductEvaluateInfoDao {
-	private final static String NAMESPACE = "ProductEvaluateInfoDao.";
+	private final static String NAMESPACE = "top.imuster.goods.dao.ProductEvaluateInfoDao.";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {

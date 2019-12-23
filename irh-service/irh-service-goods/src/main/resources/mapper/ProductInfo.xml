@@ -17,9 +17,10 @@
             product_desc AS productDesc,
             product_details_page AS productDetailsPage,
             trade_type AS tradeType,
-            parent_category_id AS parentCategoryId,
+            category_id AS categoryId,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            state AS state
 		]]>
 	</sql>
 
@@ -40,9 +41,10 @@
             <if test="productDesc != null and productDesc != ''"><![CDATA[AND product_desc = #{productDesc}]]></if>
             <if test="productDetailsPage != null and productDetailsPage != ''"><![CDATA[AND product_details_page = #{productDetailsPage}]]></if>
             <if test="tradeType != null and tradeType != ''"><![CDATA[AND trade_type = #{tradeType}]]></if>
-            <if test="parentCategoryId != null and parentCategoryId != ''"><![CDATA[AND parent_category_id = #{parentCategoryId}]]></if>
+            <if test="categoryId != null and categoryId != ''"><![CDATA[AND category_id = #{categoryId}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
 		</where>
 	</sql>
 	
@@ -65,9 +67,10 @@
 			<if test="productDesc != null"><![CDATA[product_desc = #{productDesc},]]></if>
 			<if test="productDetailsPage != null"><![CDATA[product_details_page = #{productDetailsPage},]]></if>
 			<if test="tradeType != null"><![CDATA[trade_type = #{tradeType},]]></if>
-			<if test="parentCategoryId != null"><![CDATA[parent_category_id = #{parentCategoryId},]]></if>
+			<if test="categoryId != null"><![CDATA[category_id = #{categoryId},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
 		</set>
 	</sql>
 
@@ -87,9 +90,10 @@
                 product_desc, 
                 product_details_page, 
                 trade_type, 
-                parent_category_id, 
+                category_id, 
                 create_time, 
-                update_time 
+                update_time,
+                state
 				)
 			VALUES
 				(
@@ -104,9 +108,10 @@
                 #{productDesc}, 
                 #{productDetailsPage}, 
                 #{tradeType}, 
-                #{parentCategoryId}, 
+                #{categoryId}, 
                 #{createTime}, 
                 #{updateTime} 
+                #{state}
 				)
 		]]>
 	</insert>
@@ -163,5 +168,12 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<update id="updateProductCategoryByCondition" parameterType="productInfo">
+		<![CDATA[UPDATE product_info]]>
+		<![CDATA[ SET ]]>
+		<if test="newCategoryId != null"><![CDATA[category_id = #{newCategoryId}]]></if>
+		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
+	</update>
 	
 </mapper>

@@ -1,5 +1,6 @@
 package top.imuster.user.provider.web.controller;
 
+
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.service.AuthRoleRelService;
@@ -58,7 +60,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "按主键修改角色信息", httpMethod = "PUT")
     @PutMapping("/")
-    public Message editRoleInfo(@Validated(RoleInfo.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
+    public Message editRoleInfo(@Validated(ValidateGroup.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
             roleInfoService.updateByKey(roleInfo);
@@ -103,7 +105,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation("添加角色")
     @PostMapping("/")
-    public Message insertRole(@Validated(RoleInfo.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
+    public Message insertRole(@Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
             roleInfoService.insertEntry(roleInfo);

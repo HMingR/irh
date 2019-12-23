@@ -3,6 +3,8 @@ package top.imuster.goods.api.pojo;
 
 import top.imuster.common.base.domain.BaseDomain;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 
  * @author 黄明人
@@ -16,6 +18,7 @@ public class ProductInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 商品表的主键
+	@NotBlank(groups = editGroup.class)
 	private Long id;
 
 	// 商品名称, max length: 255
@@ -49,7 +52,12 @@ public class ProductInfo extends BaseDomain {
 	private Integer tradeType;
 
 	// 父级分类id
-	private Long parentCategoryId;
+	private Long categoryId;
+
+	//更新分类时存放新的category
+	private Long newCategoryId;
+
+	public interface editGroup{}
 
 	public Long getId() {
 		return this.id;
@@ -57,7 +65,23 @@ public class ProductInfo extends BaseDomain {
     public void setId(Long id) {
 		this.id = id;
 	}
-	
+
+	public Long getNewCategoryId() {
+		return newCategoryId;
+	}
+
+	public void setNewCategoryId(Long newCategoryId) {
+		this.newCategoryId = newCategoryId;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
 	public String getProductName() {
 		return this.productName;
 	}
@@ -128,10 +152,4 @@ public class ProductInfo extends BaseDomain {
 		this.tradeType = tradeType;
 	}
 	
-	public Long getParentCategoryId() {
-		return this.parentCategoryId;
-	}
-    public void setParentCategoryId(Long parentCategoryId) {
-		this.parentCategoryId = parentCategoryId;
-	}
 }

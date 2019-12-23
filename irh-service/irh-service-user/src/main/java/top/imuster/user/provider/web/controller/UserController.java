@@ -13,6 +13,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.ManagementRoleRel;
 import top.imuster.user.provider.service.ManagementInfoService;
@@ -81,7 +82,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("修改管理员信息(修改基本信息，包括删除)")
     @PutMapping("/")
-    public Message editManagement(@Validated(value = ManagementInfo.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult){
+    public Message editManagement(@Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
             managementInfoService.updateByKey(managementInfo);
@@ -95,7 +96,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("登录成功返回token")
     @PostMapping("/login")
-    public Message managementLogin(@Validated(ManagementInfo.loginGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult result){
+    public Message managementLogin(@Validated(ValidateGroup.loginGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult result){
         validData(result);
         try{
             String token = managementInfoService.login(managementInfo.getName(), managementInfo.getPassword());

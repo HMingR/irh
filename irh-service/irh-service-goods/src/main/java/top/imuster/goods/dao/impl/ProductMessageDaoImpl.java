@@ -14,7 +14,7 @@ import top.imuster.goods.dao.ProductMessageDao;
  */
 @Repository("productMessageDao")
 public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessage, Long> implements ProductMessageDao {
-	private final static String NAMESPACE = "ProductMessageDao.";
+	private final static String NAMESPACE = "top.imuster.goods.dao.ProductMessageDao.";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
