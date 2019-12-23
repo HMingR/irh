@@ -2,14 +2,13 @@ package top.imuster.file.provider.controller;
 
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.file.provider.utils.FastDFSClient;
-import top.imuster.file.provider.utils.FastDFSFile;
+import top.imuster.file.provider.file.FastDFSFile;
+import top.imuster.file.provider.utils.FastDFSUtil;
+
 /**
  * @Description: 文件上传代码实现
  * @Author: lpf
@@ -18,39 +17,35 @@ import top.imuster.file.provider.utils.FastDFSFile;
  **/
 @RestController
 @RequestMapping("/file")
+@CrossOrigin
 public class FileController extends BaseController {
 
-    @PostMapping("/upload")
-    public Message<String> uploadFile(MultipartFile file){
-        try{
-            //判断文件是否存在
-            if (file == null){
-                throw new RuntimeException("文件不存在");
-            }
-            //获取文件的完整名称
-            String originalFilename = file.getOriginalFilename();
-            if (StringUtils.isEmpty(originalFilename)){
-                throw new RuntimeException("文件不存在");
-            }
 
-            //获取文件的扩展名称  abc.jpg   jpg
-            String extName = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+    /**
+     * @Description:
+     * @Author: lpf
+     * @Date: 2019/12/23 12:54
+     * @param file
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @PostMapping
+    public Message upload(@RequestParam(value = "file")MultipartFile file) throws Exception {
+        //疯转文件信息
+        FastDFSFile fastDFSFile = new FastDFSFile(
+                file.getOriginalFilename(),   //文件名 1.jpg
+                file.getBytes(),              //文件的字节数组
+                org.springframework.util.StringUtils.getFilenameExtension(file.getOriginalFilename())    //获取文件拓展名
+        );
 
-            //获取文件内容
-            byte[] content = file.getBytes();
+        //调用FastDFSUtil工具类将文件上传到FastDFS中
+        String[] uploads = FastDFSUtil.upload(fastDFSFile);
 
-            //创建文件上传的封装实体类
-            FastDFSFile fastDFSFile = new FastDFSFile(originalFilename,content,extName);
-
-            //基于工具类进行文件上传,并接受返回参数  String[]
-            String[] uploadResult = FastDFSClient.upload(fastDFSFile);
-
-            //封装返回结果
-            String url = FastDFSClient.getTrackerUrl()+uploadResult[0]+"/"+uploadResult[1];
-            return Message.createBySuccess("文件上传成功",url);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return Message.createByError("文件上传失败");
+        //拼接访问地址 url = http://39.105.0.169:8080/group1/M00/00/00/hjdfhjhfjs3278yf47.jpg
+        //String url = "http://39.105.0.169:8080/" + uploads[0] + "/" + uploads[1];
+        String url = FastDFSUtil.getTrackerInfo()+ "/" + uploads[0] + "/" + uploads[1];
+        return Message.createBySuccess("文件上传成功", url);
     }
+
+
+
 }
