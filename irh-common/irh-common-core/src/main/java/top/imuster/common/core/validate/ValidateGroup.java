@@ -16,4 +16,7 @@ public class ValidateGroup {
     //登录分组
     public interface loginGroup{}
 
+    //下单分组
+    public interface prePayment{}
+
 }

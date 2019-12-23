@@ -241,6 +241,19 @@
                 <version>3.7.110.ALL</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.api</groupId>
+                <artifactId>alipay-trade-sdk-20161215</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>3.3.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

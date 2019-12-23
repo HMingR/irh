@@ -25,4 +25,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     public BaseDao<OrderInfo, Long> getDao() {
         return this.orderInfoDao;
     }
+
+    @Override
+    public OrderInfo getOrderInfoByOrderCode(String orderCode) {
+        return orderInfoDao.selectOrderByOrderCode(orderCode);
+    }
 }

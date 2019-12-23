@@ -12,4 +12,13 @@ import top.imuster.order.api.pojo.OrderInfo;
 public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
     //自定义扩展
 
+    /**
+     * @Description: 通过订单号查询订单信息
+     * @Author: hmr
+     * @Date: 2019/12/23 21:30
+     * @param orderCode
+     * @reture: top.imuster.order.api.pojo.OrderInfo
+     **/
+    OrderInfo selectOrderByOrderCode(String orderCode);
+
 }

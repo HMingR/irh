@@ -11,4 +11,13 @@ import top.imuster.order.api.pojo.OrderInfo;
  */
 public interface OrderInfoService extends BaseService<OrderInfo, Long> {
 
+    /**
+     * @Description: 根据订单号查询订单
+     * @Author: hmr
+     * @Date: 2019/12/23 21:29
+     * @param orderCode
+     * @reture: top.imuster.order.api.pojo.OrderInfo
+     **/
+    OrderInfo getOrderInfoByOrderCode(String orderCode);
+
 }

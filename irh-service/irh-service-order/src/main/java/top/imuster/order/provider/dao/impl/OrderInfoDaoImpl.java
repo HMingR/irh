@@ -14,9 +14,15 @@ import top.imuster.order.provider.dao.OrderInfoDao;
 @Repository("orderInfoDao")
 public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements OrderInfoDao {
 	private final static String NAMESPACE = "top.imuster.order.provider.dao.OrderInfoDao.";
-	
+	private final static String SELECT_ORDER_BY_ORDER_CODE = "selectOrderByOrderCode";
+
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public OrderInfo selectOrderByOrderCode(String orderCode) {
+		return this.select(getNameSpace(SELECT_ORDER_BY_ORDER_CODE), orderCode);
 	}
 }

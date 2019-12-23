@@ -19,6 +19,7 @@
             create_time AS createTime,
             finish_time AS finishTime,
             update_time AS updateTime,
+            order_code AS orderCode
             state 
 		]]>
 	</sql>
@@ -43,6 +44,7 @@
             <if test="finishTime != null and finishTime != ''"><![CDATA[AND finish_time = #{finishTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode}]]></if>
 		</where>
 	</sql>
 	
@@ -68,6 +70,8 @@
 			<if test="finishTime != null"><![CDATA[finish_time = #{finishTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode},]]></if>
+
 		</set>
 	</sql>
 
@@ -88,7 +92,8 @@
                 payment_time, 
                 create_time, 
                 finish_time, 
-                update_time, 
+                update_time,
+                order_code
                 state 
 				)
 			VALUES
@@ -105,7 +110,8 @@
                 #{paymentTime}, 
                 #{createTime}, 
                 #{finishTime}, 
-                #{updateTime}, 
+                #{updateTime},
+                #{orderCode}
                 #{state} 
 				)
 		]]>
@@ -163,5 +169,12 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectOrderByOrderCode" parameterType="string" resultType="top.imuster.order.api.pojo.OrderInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ WHERE order_code = #{orderCode} ]]>
+	</select>
 	
 </mapper>

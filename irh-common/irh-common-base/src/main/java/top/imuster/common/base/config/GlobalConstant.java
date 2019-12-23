@@ -8,6 +8,8 @@ package top.imuster.common.base.config;
  */
 public class GlobalConstant {
 
+    private GlobalConstant(){}
+
     public static final String USER_TOKEN_DTO = "userTokenDto";         //在本地线程map中的key
 
     //redis相关
