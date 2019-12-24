@@ -6,10 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import top.imuster.common.base.wrapper.Message;
 
 import javax.validation.*;
@@ -28,6 +31,8 @@ public class GlobalExceptionHandler {
 
     //处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常。
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Message handleValidationExceptionHandler(MethodArgumentNotValidException exception){
         String message = exception.getBindingResult().getAllErrors()
                         .stream()
@@ -39,6 +44,8 @@ public class GlobalExceptionHandler {
 
     //处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是javax.validation.ConstraintViolationException
     @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Message constraintViolationExceptionHandler(ConstraintViolationException e) {
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
         LOGGER.error("错误信息为", message);
@@ -46,6 +53,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BindException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Message bindExceptionHandler(BindException exception){
         String defaultMessage = exception.getAllErrors().get(0).getDefaultMessage();
         LOGGER.error("错误信息为", defaultMessage);
@@ -53,6 +62,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Message validationExceptionHandler(ValidationException exception){
         String message = exception.getMessage();
         LOGGER.error("错误信息为", message);
@@ -60,6 +71,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NeedLoginException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Message needLoginExceptionHandler(NeedLoginException exception){
         String message = exception.getMessage();
         return Message.createByError(message);

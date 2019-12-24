@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.RoleInfo;
 
+import java.util.List;
+
 /**
  * RoleInfoDao 接口
  * @author 黄明人
@@ -21,5 +23,14 @@ public interface RoleInfoDao extends BaseDao<RoleInfo, Long> {
      * @reture: top.imuster.user.api.pojo.RoleInfo
      **/
     RoleInfo selectRoleAndAuthByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * @Description: 获得所有角色和对应的权限
+     * @Author: hmr
+     * @Date: 2019/12/24 16:10
+     * @param
+     * @reture: java.util.List<top.imuster.user.api.pojo.RoleInfo>
+     **/
+    List<RoleInfo> selectRoleAndAuth();
 
 }

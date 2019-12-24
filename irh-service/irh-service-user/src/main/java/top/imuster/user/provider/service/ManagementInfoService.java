@@ -1,7 +1,6 @@
 package top.imuster.user.provider.service;
 
 
-import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ManagementInfo;

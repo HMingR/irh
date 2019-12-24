@@ -15,7 +15,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @ComponentScan(basePackages = {
         "top.imuster.common.core",
-        "top.imuster.goods"})
+        "top.imuster.goods",
+        "top.imuster.user.api.service"})
 public class GoodsProviderApplication {
 
     public static void main(String[] args) {

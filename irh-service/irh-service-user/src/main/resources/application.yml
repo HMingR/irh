@@ -68,8 +68,10 @@ secure:
       - /druid/**
       - /admin/login
       - /admin/register
+      - /customer/login
+      - /customer/register
 
-debug:
-  true
+
+
 
 

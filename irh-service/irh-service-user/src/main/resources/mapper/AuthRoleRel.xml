@@ -133,6 +133,7 @@
 			auth_role_rel AS arr
 			LEFT JOIN auth_info ai ON arr.auth_id = ai.id
 		WHERE arr.role_id = #{roleId}
+		ORDER BY ai.id
 	</select>
-	
+
 </mapper>

@@ -1,4 +1,4 @@
-package top.imuster.user.provider.web.controller;
+package top.imuster.user.provider.controller;
 
 
 import io.swagger.annotations.ApiOperation;
@@ -59,7 +59,7 @@ public class RoleController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "按主键修改角色信息", httpMethod = "PUT")
-    @PutMapping("/")
+    @PostMapping("/edit")
     public Message editRoleInfo(@Validated(ValidateGroup.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
@@ -103,7 +103,7 @@ public class RoleController extends BaseController {
      * @param roleInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("添加角色")
+    @ApiOperation(value = "添加角色", httpMethod = "POST")
     @PostMapping("/")
     public Message insertRole(@Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
@@ -124,7 +124,7 @@ public class RoleController extends BaseController {
      * @param roleId
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "根据角色id获得角色的所有权限")
+    @ApiOperation(value = "根据角色id获得角色的所有权限", httpMethod = "GET")
     @GetMapping("/{roleId}")
     public Message toEditRoleAuth(@PathVariable(value = "roleId")Long roleId){
         try{

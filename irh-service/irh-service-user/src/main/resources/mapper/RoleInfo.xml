@@ -128,6 +128,8 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<!--通过id查询具体的角色权限信息-->
 	<resultMap id="includeAuth" type="roleInfo">
 		<id column="id" property="id"></id>
 		<result column="role_desc" property="roleDesc"></result>
@@ -145,6 +147,12 @@
 		<![CDATA[SELECT *]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{roleId}
+	</select>
+
+	<select id="selectRoleAndAuth" resultMap="includeAuth">
+		<![CDATA[SELECT *]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = 2
 	</select>
 	
 </mapper>

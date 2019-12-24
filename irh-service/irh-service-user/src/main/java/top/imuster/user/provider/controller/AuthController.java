@@ -1,4 +1,4 @@
-package top.imuster.user.provider.web.controller;
+package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -8,10 +8,8 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.provider.service.AuthInfoService;
-import top.imuster.user.provider.service.AuthRoleRelService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: AuthController
@@ -19,7 +17,7 @@ import java.util.List;
  * @author: hmr
  * @date: 2019/12/18 10:14
  */
-@RestController("/")
+@RestController("/auth")
 public class AuthController extends BaseController {
 
     @Resource
@@ -30,22 +28,15 @@ public class AuthController extends BaseController {
      * @Description: 分页查询权限列表
      * @Author: hmr
      * @Date: 2019/12/17 20:10
-     * @param type 1表示查询无效的权限列表     2:表示查询有效的权限列表
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(httpMethod = "Get", value = "分页查询权限列表")
-    @GetMapping("/auth/list/{type}")
-    public Message authList(@PathVariable("type") Integer type, Page<AuthInfo> page){
+    @ApiOperation(httpMethod = "GET", value = "分页查询权限列表")
+    @PostMapping("/list")
+    public Message authList(Page<AuthInfo> page, AuthInfo authInfo){
         try{
-            if(type != 1 && type != 2){
-                return Message.createByError("参数错误");
-            }
-            AuthInfo authInfo = new AuthInfo();
-            authInfo.setState(type);
-            //Page<AuthInfo> authInfoPage = authInfoService.selectPage(authInfo, page);
-            List<AuthInfo> authInfos = authInfoService.selectEntryList(authInfo);
-            return Message.createBySuccess(authInfos);
+            Page<AuthInfo> authInfoPage = authInfoService.selectPage(authInfo, page);
+            return Message.createBySuccess(authInfoPage);
         }catch (Exception e){
             logger.error("获得权限列表失败", e.getMessage(), e);
             return Message.createByError();
@@ -60,8 +51,8 @@ public class AuthController extends BaseController {
      * @param authId
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(httpMethod = "Delete", value = "按主键删除权限")
-    @DeleteMapping("/auth/{authId}")
+    @ApiOperation(httpMethod = "DELETE", value = "按主键删除权限")
+    @DeleteMapping("/{authId}")
     public Message deleteAuth(@ApiParam(value = "authId", required = true) @PathVariable(value = "authId", required = true) Long authId){
         try{
             AuthInfo authInfo = new AuthInfo();
@@ -83,8 +74,8 @@ public class AuthController extends BaseController {
      * @param authInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "添加权限", httpMethod = "Put")
-    @PostMapping("/auth")
+    @ApiOperation(value = "添加权限", httpMethod = "PUT")
+    @PostMapping("/add")
     public Message addAuth(@RequestBody AuthInfo authInfo){
         try{
             authInfoService.insertEntry(authInfo);
@@ -102,8 +93,8 @@ public class AuthController extends BaseController {
      * @param authInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "更新权限信息", httpMethod = "Put")
-    @PutMapping("/auth/edit")
+    @ApiOperation(value = "更新权限信息", httpMethod = "PUT")
+    @PutMapping("/edit")
     public Message editAuth(@RequestBody AuthInfo authInfo){
         try{
             authInfoService.updateByKey(authInfo);

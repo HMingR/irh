@@ -4,6 +4,8 @@ package top.imuster.user.provider.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.RoleInfo;
 
+import java.util.List;
+
 /**
  * RoleInfoService接口
  * @author 黄明人
@@ -28,5 +30,14 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
      * @reture: top.imuster.user.api.pojo.RoleInfo
      **/
     RoleInfo getRoleAndAuthByRoleId(Long roleId);
+
+    /**
+     * @Description: 获得所有的角色和对应的权限
+     * @Author: hmr
+     * @Date: 2019/12/24 16:07
+     * @param
+     * @reture: java.util.List<top.imuster.user.api.pojo.RoleInfo>
+     **/
+    List<RoleInfo> getRoleAndAuthList();
 
 }

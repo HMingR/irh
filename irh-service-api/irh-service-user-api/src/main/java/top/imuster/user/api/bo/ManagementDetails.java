@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
+import top.imuster.user.api.pojo.RoleInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,18 +22,18 @@ public class ManagementDetails implements UserDetails {
 
     private ManagementInfo managementInfo;
 
-    private List<AuthInfo> authInfoList;
+    private List<RoleInfo> roleInfoList;
 
-    public ManagementDetails(ManagementInfo managementInfo, List<AuthInfo> authInfoList) {
+    public ManagementDetails(ManagementInfo managementInfo, List<RoleInfo> roleInfoList) {
         this.managementInfo = managementInfo;
-        this.authInfoList = authInfoList;
+        this.roleInfoList = roleInfoList;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authInfoList.stream()
-                .filter(authInfo -> authInfo.getAuthName() != null)
-                .map(authInfo -> new SimpleGrantedAuthority(authInfo.getAuthName()))
+        return roleInfoList.stream()
+                .filter(roleInfo -> roleInfo.getRoleName() != null)
+                .map(roleInfo -> new SimpleGrantedAuthority(roleInfo.getRoleName()))
                 .collect(Collectors.toList());
     }
 
@@ -42,14 +43,6 @@ public class ManagementDetails implements UserDetails {
 
     public void setManagementInfo(ManagementInfo managementInfo) {
         this.managementInfo = managementInfo;
-    }
-
-    public List<AuthInfo> getAuthInfoList() {
-        return authInfoList;
-    }
-
-    public void setAuthInfoList(List<AuthInfo> authInfoList) {
-        this.authInfoList = authInfoList;
     }
 
     @Override
@@ -79,6 +72,16 @@ public class ManagementDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+
+
         return managementInfo.getState() >= 20;
+    }
+
+    public List<RoleInfo> getRoleInfoList() {
+        return roleInfoList;
+    }
+
+    public void setRoleInfoList(List<RoleInfo> roleInfoList) {
+        this.roleInfoList = roleInfoList;
     }
 }

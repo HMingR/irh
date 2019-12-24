@@ -73,7 +73,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
         if(managementInfo.getType() == null || managementInfo.getType() <= 20){
             throw new RuntimeException("该账号已被冻结,请联系管理员");
         }
-        return new ManagementDetails(managementInfo, getAuthList(managementInfo.getRoleList()));
+        return new ManagementDetails(managementInfo, managementInfo.getRoleList());
     }
 
     @Override
@@ -106,17 +106,5 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
             this.LOGGER.error("管理员登录异常,服务器内部错误:{}" , e.getMessage(), e);
             throw new RuntimeException();
         }
-    }
-
-    public List<AuthInfo> getAuthList(List<RoleInfo> roleInfoList){
-        ArrayList<AuthInfo> authList = new ArrayList<>();
-        Iterator<RoleInfo> iterator = roleInfoList.iterator();
-        while(iterator.hasNext()){
-            List<AuthInfo> authInfoList = iterator.next().getAuthInfoList();
-            for (AuthInfo authInfo : authInfoList) {
-                authList.add(authInfo);
-            }
-        }
-        return authList;
     }
 }

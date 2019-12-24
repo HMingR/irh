@@ -9,6 +9,7 @@ import top.imuster.common.core.exception.GlobalException;
  * @date: 2019/12/22 10:51
  */
 public class GoodsException extends GlobalException {
+
     public GoodsException(){
         super();
     }

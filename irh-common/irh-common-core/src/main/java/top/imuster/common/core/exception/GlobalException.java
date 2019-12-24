@@ -6,7 +6,7 @@ package top.imuster.common.core.exception;
  * @author: hmr
  * @date: 2019/12/19 15:23
  */
-public class GlobalException extends Exception {
+public class GlobalException extends RuntimeException {
 
     public GlobalException(){
         super();

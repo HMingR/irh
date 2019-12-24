@@ -15,6 +15,7 @@ import top.imuster.user.provider.service.ManagementRoleRelService;
 import top.imuster.user.provider.service.RoleInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * RoleInfoService 实现类
@@ -58,5 +59,10 @@ public class RoleInfoServiceImpl extends BaseServiceImpl<RoleInfo, Long> impleme
     @Override
     public RoleInfo getRoleAndAuthByRoleId(Long roleId) {
         return roleInfoDao.selectRoleAndAuthByRoleId(roleId);
+    }
+
+    @Override
+    public List<RoleInfo> getRoleAndAuthList() {
+        return roleInfoDao.selectRoleAndAuth();
     }
 }
