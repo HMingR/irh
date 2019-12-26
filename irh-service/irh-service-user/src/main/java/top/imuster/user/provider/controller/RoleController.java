@@ -11,6 +11,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
+import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.AuthRoleRelService;
 import top.imuster.user.provider.service.RoleInfoService;
 
@@ -22,7 +23,8 @@ import javax.annotation.Resource;
  * @author: hmr
  * @date: 2019/12/18 10:13
  */
-@RestController("/role")
+@RestController
+@RequestMapping("/role")
 public class RoleController extends BaseController {
 
     @Resource
@@ -39,14 +41,14 @@ public class RoleController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(httpMethod = "GET", value = "分页查询角色列表")
-    @GetMapping("/list")
-    public Message roleList(Page<RoleInfo> page, RoleInfo roleInfo){
+    @PostMapping("/list")
+    public Message roleList(@RequestBody Page<RoleInfo> page,@RequestBody RoleInfo roleInfo){
         try{
             Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(roleInfo, page);
             return Message.createBySuccess(roleInfoPage);
         }catch (Exception e){
             logger.error("获得用户角色失败", e.getMessage());
-            return Message.createByError();
+            throw new UserException("获得用户角色失败:" + e.getMessage());
         }
     }
 
@@ -58,7 +60,7 @@ public class RoleController extends BaseController {
      * @param roleInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "按主键修改角色信息", httpMethod = "PUT")
+    @ApiOperation(value = "按主键修改角色信息（）", httpMethod = "PUT")
     @PostMapping("/edit")
     public Message editRoleInfo(@Validated(ValidateGroup.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
@@ -67,7 +69,7 @@ public class RoleController extends BaseController {
             return Message.createBySuccess();
         }catch (Exception e){
             logger.error("修改权限信息失败{},角色信息为{}",e.getMessage(),roleInfo);
-            return Message.createByError();
+            throw new UserException("修改权限信息失败:" + e.getMessage());
         }
     }
 
@@ -87,7 +89,7 @@ public class RoleController extends BaseController {
             roleInfo.setState(1);
             int i = roleInfoService.updateByKey(roleInfo);
             if(i != 1){
-                return Message.createByError("没有该记录");
+                return Message.createByError("操作失败,请刷新后重试");
             }
             return Message.createBySuccess();
         }catch (Exception e){
@@ -112,7 +114,7 @@ public class RoleController extends BaseController {
             return Message.createBySuccess();
         }catch (Exception e){
             logger.error("添加角色失败,错误信息为{},角色信息为{}", e.getMessage(), roleInfo);
-            return Message.createByError();
+            throw new UserException("添加角色失败"+e.getMessage());
         }
     }
 
@@ -143,7 +145,7 @@ public class RoleController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "修改角色的权限", httpMethod = "PUT")
+    @ApiOperation(value = "添加角色的权限", httpMethod = "PUT")
     @PutMapping("/editAuth")
     public Message editRoleAuth(@Validated({AuthRoleRel.editGroup.class}) @RequestBody AuthRoleRel authRoleRel, BindingResult bindingResult){
         validData(bindingResult);

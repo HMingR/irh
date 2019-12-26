@@ -21,6 +21,7 @@ public class LoginSuccessHandle implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        System.out.println(roles.toArray().toString());
         //获取到登陆者的权限，然后做跳转
         if (roles.contains("ROLE_ADMIN")){
             response.sendRedirect("/****");

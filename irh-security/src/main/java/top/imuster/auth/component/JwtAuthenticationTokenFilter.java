@@ -1,6 +1,7 @@
 package top.imuster.auth.component;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.utils.JwtTokenUtil;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,10 @@ import java.io.IOException;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
-    @Autowired
+    public JwtAuthenticationTokenFilter(UserDetailsService userDetailsService){
+        this.userDetailsService = userDetailsService;
+    }
+
     UserDetailsService userDetailsService;
 
     @Autowired
@@ -53,6 +58,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     logger.info("authenticated user:{}", username);
+                    //将登录者的信息存入SecurityContextHolder(本地线程中)
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }

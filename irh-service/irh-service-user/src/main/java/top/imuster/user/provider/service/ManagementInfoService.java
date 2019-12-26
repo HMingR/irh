@@ -39,4 +39,14 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @reture: String   返回一个token
      **/
     String login(String name, String password);
+
+    /**
+     * @Description: 根据管理员的id修改管理员的角色
+     * @Author: hmr
+     * @Date: 2019/12/26 19:57
+     * @param managementId
+     * @param roleIds
+     * @reture: void
+     **/
+    void editManagementRoleById(Long managementId, String roleIds) throws Exception;
 }

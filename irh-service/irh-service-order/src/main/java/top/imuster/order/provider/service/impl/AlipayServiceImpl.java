@@ -126,6 +126,11 @@ public class AlipayServiceImpl implements AlipayService {
     public void aliCallBack(Map<String, String> params) throws OrderException {
         OrderInfo orderInfo = validateParams(params);
         orderInfo.setState(40);
+        orderInfo.setTradeType(10);
+
+        //更新订单状态
+        orderInfoService.updateByKey(orderInfo);
+
     }
 
     /**

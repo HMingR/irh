@@ -25,4 +25,9 @@ public class ManagementRoleRelServiceImpl extends BaseServiceImpl<ManagementRole
     public BaseDao<ManagementRoleRel, Long> getDao() {
         return this.managementRoleRelDao;
     }
+
+    @Override
+    public Integer getCountByCondition(ManagementRoleRel managementRoleRel) {
+        return managementRoleRelDao.selectEntryListCount(managementRoleRel);
+    }
 }

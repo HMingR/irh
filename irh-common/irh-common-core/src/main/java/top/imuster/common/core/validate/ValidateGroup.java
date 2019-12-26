@@ -19,4 +19,7 @@ public class ValidateGroup {
     //下单分组
     public interface prePayment{}
 
+    //注册分组
+    public interface register{}
+
 }

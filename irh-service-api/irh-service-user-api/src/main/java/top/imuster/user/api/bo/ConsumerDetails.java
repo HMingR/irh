@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ConsumerInfo;
+import top.imuster.user.api.pojo.RoleInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,18 +20,20 @@ import java.util.stream.Collectors;
 public class ConsumerDetails implements UserDetails {
     private ConsumerInfo consumerInfo;
 
-    private List<AuthInfo> authInfoList;
+    private List<RoleInfo> roleInfoList;
 
-    public ConsumerDetails(ConsumerInfo consumerInfo, List<AuthInfo> authInfoList) {
+    public ConsumerDetails(ConsumerInfo consumerInfo) {
         this.consumerInfo = consumerInfo;
-        this.authInfoList = authInfoList;
+        RoleInfo roleInfo = new RoleInfo();
+        roleInfo.setRoleName("USER");
+        roleInfoList.add(roleInfo);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authInfoList.stream()
-                .filter(authInfo -> authInfo.getAuthName() != null)
-                .map(authInfo -> new SimpleGrantedAuthority(authInfo.getAuthName()))
+        return roleInfoList.stream()
+                .filter(roleInfo -> roleInfo.getRoleName() != null)
+                .map(roleInfo -> new SimpleGrantedAuthority(roleInfo.getRoleName()))
                 .collect(Collectors.toList());
     }
 

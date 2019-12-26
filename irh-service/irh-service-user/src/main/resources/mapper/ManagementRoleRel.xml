@@ -9,7 +9,7 @@
             id,
             staff_id AS staffId,
             role_id AS roleId,
-            create_ management _id AS createManagement Id,
+            create_management AS createManagement,
             create_time AS createTime,
             update_time AS updateTime,
             state 
@@ -25,7 +25,7 @@
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="staffId != null and staffId != ''"><![CDATA[AND staff_id = #{staffId}]]></if>
             <if test="roleId != null and roleId != ''"><![CDATA[AND role_id = #{roleId}]]></if>
-            <if test="createManagement Id != null and createManagement Id != ''"><![CDATA[AND create_ management _id = #{createManagement Id}]]></if>
+            <if test="createManagement Id != null and createManagement Id != ''"><![CDATA[AND create_management = #{createManagement}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
@@ -43,7 +43,7 @@
 		<set>
 			<if test="staffId != null"><![CDATA[staff_id = #{staffId},]]></if>
 			<if test="roleId != null"><![CDATA[role_id = #{roleId},]]></if>
-			<if test="createManagement Id != null"><![CDATA[create_ management _id = #{createManagement Id},]]></if>
+			<if test="createManagement Id != null"><![CDATA[create_management = #{createManagement},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
@@ -58,7 +58,7 @@
                 id, 
                 staff_id, 
                 role_id, 
-                create_ management _id, 
+                create_ management,
                 create_time, 
                 update_time, 
                 state 
@@ -68,7 +68,7 @@
                 #{id}, 
                 #{staffId}, 
                 #{roleId}, 
-                #{createManagement Id}, 
+                #{createManagement},
                 #{createTime}, 
                 #{updateTime}, 
                 #{state} 

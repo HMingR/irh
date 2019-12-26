@@ -1,5 +1,6 @@
 package top.imuster.auth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -29,17 +30,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         return new LoginSuccessHandle();
     }
 
-    @Bean
-    @Primary
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService())
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -61,11 +58,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public IgnoreUrlsConfig ignoreUrlsConfig(){
         return new IgnoreUrlsConfig();
-    }
-
-    @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
-        return new JwtAuthenticationTokenFilter();
     }
 
     @Bean

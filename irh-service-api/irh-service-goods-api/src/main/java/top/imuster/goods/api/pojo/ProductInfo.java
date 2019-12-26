@@ -1,15 +1,20 @@
 package top.imuster.goods.api.pojo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 
  * @author 黄明人
  * @since 2019-11-24 16:31:58
  */
+@ApiModel("商品实体类")
 public class ProductInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 18274143046L;
@@ -18,46 +23,56 @@ public class ProductInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 商品表的主键
-	@NotBlank(groups = editGroup.class)
+	@ApiModelProperty("商品表的主键id")
+	@NotEmpty(groups = ValidateGroup.editGroup.class)
 	private Long id;
 
 	// 商品名称, max length: 255
+	@ApiModelProperty("商品名称")
 	private String productName;
 
 	// 商品主图url
+	@ApiModelProperty("商品主图url")
 	private String mainPicUrl;
 
 	// 计量单位, max length: 255
+	@ApiModelProperty("计量单位")
 	private String unit;
 
 	// 商品原价
+	@ApiModelProperty("商品原价")
 	private String originalPrice;
 
 	// 售卖价格
+	@ApiModelProperty("售卖价格")
 	private String salePrice;
 
 	// 商品的新旧程度,1~10数值越大越新
+	@ApiModelProperty("商品的新旧程度,1~10数值越大越新")
 	private Integer oldDegree;
 
 	// 商品标题, max length: 255
+	@ApiModelProperty("商品标题")
 	private String productTitle;
 
 	// 商品描述
+	@ApiModelProperty("商品描述")
 	private String productDesc;
 
 	// 商品详情页, max length: 255
+	@ApiModelProperty("商品详情页")
 	private String productDetailsPage;
 
 	// 10-正常交易  20-公益捐赠
+	@ApiModelProperty("0-正常交易  20-公益捐赠")
 	private Integer tradeType;
 
 	// 父级分类id
+	@ApiModelProperty("父级分类id")
 	private Long categoryId;
 
 	//更新分类时存放新的category
 	private Long newCategoryId;
-
-	public interface editGroup{}
 
 	public Long getId() {
 		return this.id;

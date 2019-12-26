@@ -9,5 +9,11 @@ import top.imuster.common.core.exception.GlobalException;
  * @date: 2019/12/19 20:50
  */
 public class UserException extends GlobalException {
+    public UserException(){
+        super();
+    }
 
+    public UserException(String message){
+        super(message);
+    }
 }

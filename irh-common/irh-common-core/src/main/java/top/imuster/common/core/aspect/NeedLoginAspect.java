@@ -54,10 +54,7 @@ public class NeedLoginAspect {
         HttpServletRequest request = attributes.getRequest();
         //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        log.info("request-------->", request);
-
         log.info("进入校验切面, 是否需要校验{}", needValidate(joinPoint));
-
         String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
 
         if(!needValidate(joinPoint))

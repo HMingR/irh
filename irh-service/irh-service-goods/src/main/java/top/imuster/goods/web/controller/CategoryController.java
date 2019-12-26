@@ -1,7 +1,6 @@
-package top.imuster.goods.controller;
+package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/category")
 public class CategoryController extends BaseController {
-
-    @Resource
-    private TestCustomerServiceFeign testCustomerServiceFeign;
-
-    @GetMapping("/test")
-    public void test(){
-        testCustomerServiceFeign.test();
-    }
 
     @Resource
     ProductCategoryInfoService productCategoryInfoService;

@@ -11,11 +11,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.ManagementRoleRel;
+import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ManagementInfoService;
 
 import javax.annotation.Resource;
@@ -30,9 +34,12 @@ import java.util.Map;
  * @date: 2019/12/1 18:59
  */
 @RestController
-@RequestMapping("/management")
-@Api(tags = "ManagementController", description = "后台管理页面")
-public class UserController extends BaseController {
+@RequestMapping("/admin")
+@Api(tags = "adminController", description = "后台管理页面")
+public class AdminController extends BaseController {
+
+    @Autowired
+    GoodsServiceFeignApi goodsServiceFeignApi;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -41,18 +48,16 @@ public class UserController extends BaseController {
     ManagementInfoService managementInfoService;
 
     @ApiOperation("查看所有的管理员")
-    @GetMapping("/list")
+    @PostMapping("/list")
     @NeedLogin(validate = true)
-    public Message managementList(/*Page<ManagementInfo> page*/){
+    public Message managementList(@RequestBody Page<ManagementInfo> page, @RequestBody ManagementInfo managementInfo){
         try{
-            //Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(new ManagementInfo(), page);
-            List<ManagementInfo> managementInfos = managementInfoService.selectEntryList(new ManagementInfo());
-
-            /*if(null != managementInfoPage){
+            Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(managementInfo, page);
+            if(null != managementInfoPage){
                 //将密码全都设置成空
-                managementInfoPage.getResult().stream().forEach(managementInfo -> managementInfo.setPassword(""));
-            }*/
-            return Message.createBySuccess(managementInfos);
+                managementInfoPage.getResult().stream().forEach(mi -> mi.setPassword(""));
+            }
+            return Message.createBySuccess(managementInfoPage);
         }catch (Exception e){
             logger.error("查看管理员列表失败:{}", e.getMessage());
             return Message.createByError();
@@ -113,8 +118,6 @@ public class UserController extends BaseController {
         }
     }
 
-
-
     /**
      * @Description: 修改管理员的角色
      * @Author: hmr
@@ -122,13 +125,25 @@ public class UserController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @PostMapping("/managementRole")
-    public Message editManagementRole(ManagementRoleRel managementRoleRel){
+    @PostMapping("/adminRole")
+    public Message editManagementRole(Long managementId, String roleIds){
         try{
-
+            managementInfoService.editManagementRoleById(managementId, roleIds);
+            return Message.createBySuccess("修改成功");
         }catch (Exception e){
-            logger.error(GlobalConstant.getErrorLog("修改管理员角色"), e.getMessage() );
+            logger.error(GlobalConstant.getErrorLog("修改管理员角色失败"), e.getMessage());
+            throw new UserException(e.getMessage());
         }
-        return null;
+    }
+
+
+    @PostMapping("/goods/es")
+    public Message goodsList(Integer currentPage, @RequestBody ProductInfo productInfo){
+        try{
+            return goodsServiceFeignApi.list(currentPage, productInfo);
+        }catch (Exception e){
+            logger.error("远程调用goods模块出现异常", e.getMessage(), e);
+            throw new UserException("远程调用goods模块出现异常" + e.getMessage());
+        }
     }
 }

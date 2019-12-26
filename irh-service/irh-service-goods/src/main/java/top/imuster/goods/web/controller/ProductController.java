@@ -1,4 +1,4 @@
-package top.imuster.goods.controller;
+package top.imuster.goods.web.controller;
 
 
 import org.springframework.stereotype.Controller;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.config.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
@@ -34,7 +35,7 @@ public class ProductController extends BaseController {
     }
 
     @PostMapping("/edit")
-    public Message editProduct(@RequestBody @Validated(ProductInfo.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
+    public Message editProduct(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
         int i = productInfoService.updateByKey(productInfo);
         if(i != 0){

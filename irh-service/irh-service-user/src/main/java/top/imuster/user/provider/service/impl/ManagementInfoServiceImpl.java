@@ -1,7 +1,6 @@
 package top.imuster.user.provider.service.impl;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,7 +8,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,21 +15,16 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.UserDto;
-import top.imuster.common.core.utils.CusThreadLocal;
 import top.imuster.common.core.utils.JwtTokenUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ManagementDetails;
-import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
-import top.imuster.user.api.pojo.RoleInfo;
+import top.imuster.user.api.pojo.ManagementRoleRel;
 import top.imuster.user.provider.dao.ManagementInfoDao;
 import top.imuster.user.provider.service.ManagementInfoService;
+import top.imuster.user.provider.service.ManagementRoleRelService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,6 +41,9 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
 
     @Resource
     private ManagementInfoDao managementInfoDao;
+
+    @Resource
+    private ManagementRoleRelService managementRoleRelService;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -79,7 +75,6 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
     @Override
     public String login(String name, String password) {
         try{
-            Date date = new Date();
             String token;
             ManagementDetails managementDetails = loadManagementByName(name);
             if(!passwordEncoder.matches(password, managementDetails.getPassword())){
@@ -105,6 +100,27 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
         }catch (Exception e){
             this.LOGGER.error("管理员登录异常,服务器内部错误:{}" , e.getMessage(), e);
             throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public void editManagementRoleById(Long managementId, String roleIds) throws Exception {
+        ManagementDetails currentManagement = (ManagementDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String name = currentManagement.getManagementInfo().getName();
+        String[] roles = roleIds.split(",");
+        for (String role : roles) {
+            ManagementRoleRel managementRoleRel = new ManagementRoleRel();
+            managementRoleRel.setRoleId(Long.parseLong(role));
+            managementRoleRel.setStaffId(managementId);
+            Integer count = managementRoleRelService.getCountByCondition(managementRoleRel);
+            // todo 删除操作
+
+
+            //新增操作
+            if (count == 0) {
+                managementRoleRel.setCreateManagemen(name);
+                managementRoleRelService.insertEntry(managementRoleRel);
+            }
         }
     }
 }

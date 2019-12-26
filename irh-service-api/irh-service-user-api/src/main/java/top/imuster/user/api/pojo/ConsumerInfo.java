@@ -4,7 +4,10 @@ package top.imuster.user.api.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -18,6 +21,7 @@ public class ConsumerInfo extends BaseDomain {
 
 	// 自动生成的id
 	@ApiModelProperty("会员表的主键")
+	@NotEmpty(groups = ValidateGroup.editGroup.class, message = "修改的参数错误")
 	private Long id;
 
 	// 年龄
@@ -26,10 +30,13 @@ public class ConsumerInfo extends BaseDomain {
 
 	// 登录用的邮箱, max length: 50
 	@ApiModelProperty("登录用的邮箱")
+	@Email(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class, ValidateGroup.editGroup.class}, message = "邮箱参数错误")
+	@NotEmpty(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "邮箱不能为空")
 	private String email;
 
 	// 密码
 	@ApiModelProperty("密码")
+	@NotEmpty(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "密码不能为空")
 	private String password;
 
 	// 支付宝账号, max length: 13

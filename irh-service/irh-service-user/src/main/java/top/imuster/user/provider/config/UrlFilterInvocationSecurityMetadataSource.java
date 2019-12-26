@@ -7,6 +7,7 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
+import top.imuster.auth.config.IgnoreUrlsConfig;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.service.RoleInfoService;
 
@@ -30,18 +31,20 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Autowired
     AntPathMatcher antPathMatcher;
 
+    @Autowired
+    IgnoreUrlsConfig ignoreUrlsConfig;
+
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
         log.info("访问的地址是{}", requestUrl);
         //登录
-        if ("/login".equals(requestUrl)) {
+        List<String> ignoreUrls = ignoreUrlsConfig.getUrls();
+        if(ignoreUrls.contains(requestUrl)){
             return null;
         }
-        String x = "";
         ArrayList<String> roles = new ArrayList<>();
         List<RoleInfo> roleAndAuthList = roleInfoService.getRoleAndAuthList();
-
         roleAndAuthList.stream().forEach(roleInfo -> {
             roleInfo.getAuthInfoList().stream().forEach(authInfo -> {
                 if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){
