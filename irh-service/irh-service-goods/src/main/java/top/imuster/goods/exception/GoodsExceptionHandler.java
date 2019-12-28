@@ -1,4 +1,4 @@
-package top.imuster.goods.config;
+package top.imuster.goods.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;

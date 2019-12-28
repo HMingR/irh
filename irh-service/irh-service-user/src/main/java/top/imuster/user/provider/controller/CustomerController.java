@@ -2,19 +2,22 @@ package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.user.api.pojo.ConsumerInfo;
-import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ConsumerInfoService;
 
@@ -32,6 +35,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/consumer")
 public class CustomerController extends BaseController {
+
+    @Autowired
+    OrderServiceFeignApi orderServiceFeignApi;
 
     @Resource
     ConsumerInfoService consumerInfoService;
@@ -92,6 +98,23 @@ public class CustomerController extends BaseController {
             return Message.createBySuccess("修改个人信息成功");
         }catch (Exception e){
             logger.error("修改用户个人信息失败",e, e.getMessage());
+            throw new UserException(e.getMessage());
+        }
+    }
+
+    /**
+     * @Description: 用户根据条件分页查看自己的账单
+     * @Author: hmr
+     * @Date: 2019/12/27 15:42
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @PostMapping("/order")
+    public Message orderList(@RequestBody Page<OrderInfo> page){
+        try{
+            return orderServiceFeignApi.list(page);
+        }catch (Exception e){
+            logger.error("会员查询账单失败",e.getMessage(),e);
             throw new UserException(e.getMessage());
         }
     }

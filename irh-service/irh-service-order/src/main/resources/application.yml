@@ -19,7 +19,6 @@ spring:
       validation-query: select '1' from dual      # 测试连接
   application:
     name: order-service
-
 eureka:
   client:
     service-url:
@@ -30,3 +29,4 @@ eureka:
 
 debug:
   true
+

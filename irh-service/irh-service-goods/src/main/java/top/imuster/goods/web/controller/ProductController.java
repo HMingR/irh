@@ -10,7 +10,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.config.GoodsException;
+import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
@@ -44,6 +44,13 @@ public class ProductController extends BaseController {
         return Message.createByError();
     }
 
+    /**
+     * @Description: 用户下架商品
+     * @Author: hmr
+     * @Date: 2019/12/27 15:11
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
     @DeleteMapping("/{id}")
     public Message delProduct(@PathVariable("id") Long id){
         ProductInfo productInfo = new ProductInfo();
@@ -53,7 +60,7 @@ public class ProductController extends BaseController {
         if(i != 0){
             return Message.createBySuccess();
         }
-
         return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
     }
+
 }

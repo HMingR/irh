@@ -24,3 +24,9 @@ ALTER TABLE `irh`.`order_info`
 ADD COLUMN `order_code` char(64) NOT NULL COMMENT '订单编号,必须保证唯一,且64位之内64个字符以内,只能包含字母、数字、下划线' AFTER `state`;
 ALTER TABLE `irh`.`order_info`
 MODIFY COLUMN `order_remark` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单标题' AFTER `payment_money`;
+
+/*12.28*/
+ALTER TABLE `irh`.`product_info`
+ADD COLUMN `consumer_id` bigint(20) NULL COMMENT '出售商品的人的id' AFTER `state`;
+ALTER TABLE `irh`.`order_info`
+MODIFY COLUMN `state` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功 ' AFTER `update_time`;

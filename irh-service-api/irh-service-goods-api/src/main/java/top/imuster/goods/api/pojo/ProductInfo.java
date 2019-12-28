@@ -74,6 +74,38 @@ public class ProductInfo extends BaseDomain {
 	//更新分类时存放新的category
 	private Long newCategoryId;
 
+	//出售商品的人
+	private Long consumerId;
+
+	//state 1-无效 2-有效 3-锁定
+
+	@Override
+	public String toString() {
+		return "ProductInfo{" +
+				"id=" + id +
+				", productName='" + productName + '\'' +
+				", mainPicUrl='" + mainPicUrl + '\'' +
+				", unit='" + unit + '\'' +
+				", originalPrice='" + originalPrice + '\'' +
+				", salePrice='" + salePrice + '\'' +
+				", oldDegree=" + oldDegree +
+				", productTitle='" + productTitle + '\'' +
+				", productDesc='" + productDesc + '\'' +
+				", productDetailsPage='" + productDetailsPage + '\'' +
+				", tradeType=" + tradeType +
+				", categoryId=" + categoryId +
+				", newCategoryId=" + newCategoryId +
+				'}';
+	}
+
+	public Long getConsumerId() {
+		return consumerId;
+	}
+
+	public void setConsumerId(Long consumerId) {
+		this.consumerId = consumerId;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

@@ -13,11 +13,7 @@ import top.imuster.common.core.config.BaseSwagger2Config;
 @Configuration
 @EnableSwagger2
 public class Swagger2Config extends BaseSwagger2Config {
-
-    String scanPackage = "top.imuster.user.provider.web";
-
-    @Override
-    public void setPackage(String basePackage) {
-        super.setPackage(scanPackage);
+    public Swagger2Config(){
+        super("top.imuster.user.provider.web");
     }
 }

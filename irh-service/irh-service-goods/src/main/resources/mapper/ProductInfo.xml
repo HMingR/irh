@@ -20,7 +20,8 @@
             category_id AS categoryId,
             create_time AS createTime,
             update_time AS updateTime,
-            state AS state
+            state AS state,
+            consumer_id AS consumerId
 		]]>
 	</sql>
 
@@ -45,6 +46,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>
 		</where>
 	</sql>
 	
@@ -71,6 +73,7 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="consumerId != null"><![CDATA[consumer_id = #{consumerId},]]></if>
 		</set>
 	</sql>
 
@@ -93,7 +96,8 @@
                 category_id, 
                 create_time, 
                 update_time,
-                state
+                state,
+                consumer_id
 				)
 			VALUES
 				(
@@ -111,7 +115,8 @@
                 #{categoryId}, 
                 #{createTime}, 
                 #{updateTime} 
-                #{state}
+                #{state},
+                #{consumerId}
 				)
 		]]>
 	</insert>

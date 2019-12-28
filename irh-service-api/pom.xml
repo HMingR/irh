@@ -16,6 +16,7 @@
         <module>irh-service-goods-api</module>
         <module>irh-service-order-api</module>
         <module>irh-service-user-api</module>
+        <module>irh-service-message-api</module>
     </modules>
 
     <dependencies>

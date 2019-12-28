@@ -1,4 +1,4 @@
-package top.imuster.goods.config;
+package top.imuster.goods.exception;
 
 import top.imuster.common.core.exception.GlobalException;
 

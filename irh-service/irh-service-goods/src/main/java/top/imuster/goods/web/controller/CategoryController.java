@@ -8,9 +8,8 @@ import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
-import top.imuster.goods.config.GoodsException;
+import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductCategoryInfoService;
-import top.imuster.user.api.service.TestCustomerServiceFeign;
 
 import javax.annotation.Resource;
 import java.util.List;

@@ -3,6 +3,7 @@ package top.imuster.order.api.pojo;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -26,14 +27,15 @@ public class OrderInfo extends BaseDomain {
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "订单编号不能为空")
 	private String orderCode;
 
-	// 会员表的id
+	// 卖家的id
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "卖家的id不能为空")
 	private Long salerId;
 
-	// 会员表的nickname字段, max length: 255
+	// 卖家的用户名, max length: 255
 	private String salerNickname;
 
 	// 会员表的id
+	@NotEmpty(groups = ValidateGroup.queryGroup.class, message = "会员的id不能为空")
 	private Long buyerId;
 
 	// 商品id
@@ -44,7 +46,7 @@ public class OrderInfo extends BaseDomain {
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "支付金额不能为空")
 	private String paymentMoney;
 
-	// 订单标题, max length: 1000
+	// 订单备注, max length: 1000
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "订单编号不能为空")
 	private String orderRemark;
 
@@ -60,7 +62,7 @@ public class OrderInfo extends BaseDomain {
 	// 交易完成时间,用户确定收货的时间
 	private Date finishTime;
 
-	// 10:订单超时 20:取消订单 30:删除订单 40:交易成功
+	// 10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功
 	//private Short state;
 
 

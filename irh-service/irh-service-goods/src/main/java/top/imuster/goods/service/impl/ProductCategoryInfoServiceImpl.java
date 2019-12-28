@@ -10,7 +10,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.pojo.ProductCategoryRel;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.config.GoodsException;
+import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.dao.ProductCategoryInfoDao;
 import top.imuster.goods.service.ProductCategoryInfoService;
 import top.imuster.goods.service.ProductCategoryRelService;

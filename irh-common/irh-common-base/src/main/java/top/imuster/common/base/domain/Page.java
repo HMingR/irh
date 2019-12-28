@@ -1,5 +1,6 @@
 package top.imuster.common.base.domain;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ public class Page<T> {
 	private final static int INIT_SIZE = 10;
 	private int pageSize = INIT_SIZE;
 	private int totalCount;
+	@NotEmpty(message = "当前页不能为空")
 	private int currentPage;
 	private List<T> data;
 	private T searchCondition;

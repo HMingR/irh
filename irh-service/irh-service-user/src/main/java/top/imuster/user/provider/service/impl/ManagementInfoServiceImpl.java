@@ -82,7 +82,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(managementDetails, null, managementDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = JwtTokenUtil.generateToken(managementDetails.getUsername());
+            token = JwtTokenUtil.generateToken(managementDetails.getUsername(), managementDetails.getManagementInfo().getId());
             ManagementInfo managementInfo = managementDetails.getManagementInfo();
 
             //将用户的基本信息存入redis中，并设置过期时间

@@ -22,4 +22,6 @@ public class ValidateGroup {
     //注册分组
     public interface register{}
 
+    //查询分组
+    public interface queryGroup{}
 }

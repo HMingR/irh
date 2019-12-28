@@ -61,7 +61,7 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
             if(StringUtils.isEmpty(String.valueOf(consumerInfo.getState())) || consumerInfo.getState() <= 20){
                 throw new UserException("用户信息异常或用户被锁定");
             }
-            String token = JwtTokenUtil.generateToken(consumerInfo.getEmail());
+            String token = JwtTokenUtil.generateToken(consumerInfo.getEmail(), consumerInfo.getId());
             //将用户的基本信息存入redis中，并设置过期时间
             redisTemplate.opsForValue()
                     .set(RedisUtil.getAccessToken(token),

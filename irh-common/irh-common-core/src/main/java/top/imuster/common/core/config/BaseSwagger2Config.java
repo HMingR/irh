@@ -16,13 +16,20 @@ import java.util.List;
 
 /**
  * @ClassName: BaseSwagger2Config
- * @Description: TODO
+ * @Description: 基础swagger配置类
  * @author: hmr
  * @date: 2019/12/20 15:32
  */
 public class BaseSwagger2Config {
 
     private String BASE_PACKAGE = "";
+
+    public BaseSwagger2Config() {
+    }
+
+    public BaseSwagger2Config(String BASE_PACKAGE) {
+        this.BASE_PACKAGE = BASE_PACKAGE;
+    }
 
     public void setPackage(String basePackage){
         this.BASE_PACKAGE = basePackage;

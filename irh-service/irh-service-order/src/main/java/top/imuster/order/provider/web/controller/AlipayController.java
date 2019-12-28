@@ -1,4 +1,4 @@
-package top.imuster.order.provider.controller;
+package top.imuster.order.provider.web.controller;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -25,20 +25,20 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * @ClassName: OrderController
- * @Description: TODO
- * @author: lpf
- * @date: 2019/12/18 18:03
+ * @ClassName: AlipayController
+ * @Description: 支付宝控制器
+ * @author: hmr
+ * @date: 2019/12/28 9:43
  */
 @RestController
 @RequestMapping("/alipay")
-public class OrderController extends BaseController{
+public class AlipayController extends BaseController {
 
     @Resource
     AlipayService alipayService;
 
     /**
-     * @Description: 提交订单准备预下单,返回一个BufferedImage的文件流
+     * @Description: 提交订单准备预下单,返回一个支付宝网站,需要解析里面的地址生成二维码
      * @Author: hmr
      * @Date: 2019/12/23 12:05
      * @param orderInfo
@@ -46,12 +46,11 @@ public class OrderController extends BaseController{
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     //@NeedLogin(validate = true)
-    @ApiOperation("提交订单准备预下单,返回一个BufferedImage的文件流")
+    @ApiOperation("提交订单准备预下单,返回一个支付宝网站,需要解析里面的地址生成二维码")
     @PostMapping("/perPayment")
     public Message prePayment(@RequestBody @Validated(ValidateGroup.prePayment.class) OrderInfo orderInfo, BindingResult bindingResult, HttpServletRequest request) throws OrderException {
         validData(bindingResult);
         try{
-            String contextPath = request.getSession().getServletContext().getContextPath();
             AlipayTradePrecreateResponse alipayResponse = alipayService.alipayF2F(orderInfo);
             return Message.createBySuccess(alipayResponse.getQrCode());
         }catch (Exception e){
@@ -75,7 +74,6 @@ public class OrderController extends BaseController{
             String[] values = (String[]) requestParams.get(name);
             String valueStr = "";
             for(int i = 0 ; i <values.length;i++){
-
                 valueStr = (i == values.length -1)?valueStr + values[i]:valueStr + values[i]+",";
             }
             params.put(name,valueStr);
@@ -91,8 +89,9 @@ public class OrderController extends BaseController{
         } catch (AlipayApiException e) {
             logger.error("支付宝验证回调异常",e);
         }
-
-        //todo 验证各种数据
+        alipayService.aliCallBack(params);
         return null;
     }
+
+
 }

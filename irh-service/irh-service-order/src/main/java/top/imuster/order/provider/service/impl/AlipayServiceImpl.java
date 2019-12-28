@@ -69,13 +69,12 @@ public class AlipayServiceImpl implements AlipayService {
         //唯一的订单编号
         String orderCode = orderInfo.getOrderCode();
         //订单标题
-        String orderRemark = orderInfo.getOrderRemark();
+        String subject = "irh校园智慧服务平台";
         String paymentMoney = orderInfo.getPaymentMoney();
 
         //这个字段表示卖家支付宝id，为空则表示自动进入平台的支付宝账号中
         String sellerId = "";
-
-        String body = new StringBuilder().append("购买了").append(orderRemark).append("共计消费:").append(paymentMoney).append("元").toString();
+        String body = new StringBuilder().append(subject).append("共计消费:").append(paymentMoney).append("元").toString();
 
         //卖家id，可以用来做统计
         String operatorId = String.valueOf(orderInfo.getSalerId());
@@ -85,10 +84,10 @@ public class AlipayServiceImpl implements AlipayService {
 
         //商品详情
         List<GoodsDetail> productInfos = new ArrayList<>();
-        // todo 通过Feign向goods模块发送请求,查询商品的详情
+        //todo 通过Feign向goods模块发送请求,查询商品的详情,还需要通知卖家
 
         AlipayTradePrecreateRequestBuilder builder = new AlipayTradePrecreateRequestBuilder()
-                .setSubject(orderRemark).setTotalAmount(paymentMoney).setOutTradeNo(orderCode)
+                .setSubject(subject).setTotalAmount(paymentMoney).setOutTradeNo(orderCode)
                 .setSellerId(sellerId).setBody(body)
                 .setOperatorId(operatorId).setStoreId(operatorId)
                 .setTimeoutExpress(timeoutExpress)
@@ -127,6 +126,7 @@ public class AlipayServiceImpl implements AlipayService {
         OrderInfo orderInfo = validateParams(params);
         orderInfo.setState(40);
         orderInfo.setTradeType(10);
+        //orderInfo.setPaymentTime();
 
         //更新订单状态
         orderInfoService.updateByKey(orderInfo);

@@ -15,8 +15,10 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.goods.api.dto.ProductInfoDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
+import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.ManagementRoleRel;
 import top.imuster.user.provider.exception.UserException;
@@ -136,14 +138,35 @@ public class AdminController extends BaseController {
         }
     }
 
-
+    /**
+     * @Description: 管理二手商品，按条件分页查询
+     * @Author: hmr
+     * @Date: 2019/12/27 12:07
+     * @param productInfo
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @ApiOperation("查看二手商品，按条件分页查询")
     @PostMapping("/goods/es")
-    public Message goodsList(Integer currentPage, @RequestBody ProductInfo productInfo){
+    public Message goodsList(@RequestBody ProductInfoDto productInfoDto){
         try{
-            return goodsServiceFeignApi.list(currentPage, productInfo);
+            return goodsServiceFeignApi.list(productInfoDto);
         }catch (Exception e){
             logger.error("远程调用goods模块出现异常", e.getMessage(), e);
             throw new UserException("远程调用goods模块出现异常" + e.getMessage());
         }
     }
+
+    /**
+     * @Description: 管理员根据id下架二手商品
+     * @Author: hmr
+     * @Date: 2019/12/27 15:10
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @DeleteMapping("/goods/{id}")
+    @ApiOperation("管理员根据id下架二手商品")
+    public Message delGoodsById(@PathVariable("id") Long id) throws UserException{
+        return goodsServiceFeignApi.delProduct(id);
+    }
+
 }

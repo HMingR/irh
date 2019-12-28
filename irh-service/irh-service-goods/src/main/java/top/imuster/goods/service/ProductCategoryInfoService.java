@@ -3,7 +3,7 @@ package top.imuster.goods.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
-import top.imuster.goods.config.GoodsException;
+import top.imuster.goods.exception.GoodsException;
 
 import java.util.List;
 

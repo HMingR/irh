@@ -28,6 +28,7 @@ import java.util.Map;
 public class JwtTokenUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
     private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_USER_ID = "jti";
     private static final String CLAIM_KEY_CREATED = "created";
 
     /**
@@ -77,6 +78,16 @@ public class JwtTokenUtil {
         return username;
     }
 
+    public static Long getUserIdFromToken(String token){
+        try{
+            Claims claims = getClaimsFromToken(token);
+            String id = claims.getId();
+            return Long.parseLong(id);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     /**
      * 验证token是否还有效
      *
@@ -107,9 +118,10 @@ public class JwtTokenUtil {
     /**
      * 根据用户信息生成token
      */
-    public static String generateToken(String userName) {
+    public static String generateToken(String userName, Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userName);
+        claims.put(CLAIM_USER_ID, userId);
         return generateToken(claims);
     }
 
@@ -161,7 +173,7 @@ public class JwtTokenUtil {
     }
 
     public static void main(String[] args) {
-        String hmr = generateToken("hmr");
+        String hmr = generateToken("hmr", 3L);
         System.out.println(hmr);
         String userNameFromToken = getUserNameFromToken(hmr);
         System.out.println(userNameFromToken);
