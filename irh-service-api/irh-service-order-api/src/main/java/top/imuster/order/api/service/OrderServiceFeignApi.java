@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.service.hystrix.OrderServiceFeignApiHystrix;
 
 /**
  * @ClassName: OrderServiceFeignApi
@@ -14,7 +15,7 @@ import top.imuster.order.api.pojo.OrderInfo;
  * @date: 2019/12/27 15:28
  */
 
-@FeignClient(value = "order-service", path = "/feign/order")
+@FeignClient(value = "order-service", path = "/feign/order", fallback = OrderServiceFeignApiHystrix.class)
 public interface OrderServiceFeignApi {
 
     /**

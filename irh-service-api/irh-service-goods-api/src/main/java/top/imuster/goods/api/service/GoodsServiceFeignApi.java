@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
 import top.imuster.goods.api.dto.ProductInfoDto;
+import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
 
 /**
  * @ClassName: GoodsServiceFeignApi
@@ -12,7 +13,7 @@ import top.imuster.goods.api.dto.ProductInfoDto;
  * @author: hmr
  * @date: 2019/12/26 20:34
  */
-@FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign")
+@FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign",fallback = GoodsServiceFeignApiHystrix.class)
 public interface GoodsServiceFeignApi {
 
     /**
