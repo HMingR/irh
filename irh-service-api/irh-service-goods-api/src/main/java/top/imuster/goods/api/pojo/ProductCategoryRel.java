@@ -1,6 +1,8 @@
 package top.imuster.goods.api.pojo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +10,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2019-11-24 16:31:57
  */
+@ApiModel("商品分类实体类")
 public class ProductCategoryRel extends BaseDomain {
 
 	private static final long serialVersionUID = 6719726738L;
@@ -16,12 +19,15 @@ public class ProductCategoryRel extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 商品分类表主键
+	@ApiModelProperty("商品分类表主键")
 	private Long id;
 
 	// 商品id
+	@ApiModelProperty("商品id")
 	private Long productId;
 
 	// 分类id
+	@ApiModelProperty("分类id")
 	private Long categoryId;
 
 	// 1-无效 2-有效

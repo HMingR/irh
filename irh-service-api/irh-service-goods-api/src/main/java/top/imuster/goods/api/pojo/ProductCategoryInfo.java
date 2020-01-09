@@ -1,6 +1,8 @@
 package top.imuster.goods.api.pojo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -13,6 +15,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2019-11-24 16:31:57
  */
+@ApiModel("商品分类信息表")
 public class ProductCategoryInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 6182073821L;
@@ -21,18 +24,23 @@ public class ProductCategoryInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 商品分类信息表的主键
+	@ApiModelProperty("商品分类信息表的主键")
 	@NotBlank(groups = ValidateGroup.editGroup.class)
 	private Long id;
 
-	@NotBlank(groups = ValidateGroup.addGroup.class)
-	private Long parentId;
-	// 当值为0的时候标识根节点
 
-	// 分类名称, max length: 255
+	@ApiModelProperty("当值为0的时候标识根节点")
+	@NotBlank(groups = ValidateGroup.addGroup.class)
+	// 当值为0的时候标识根节点
+	private Long parentId;
+
+	// 分类名称, max length: 255、
+	@ApiModelProperty("分类名称")
 	@NotBlank(groups = ValidateGroup.addGroup.class)
 	private String name;
 
 	// 分类的描述
+	@ApiModelProperty("分类的描述")
 	@NotBlank(groups = ValidateGroup.addGroup.class)
 	private String desc;
 

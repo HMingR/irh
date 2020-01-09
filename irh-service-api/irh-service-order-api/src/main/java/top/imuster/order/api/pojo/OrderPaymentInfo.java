@@ -1,6 +1,8 @@
 package top.imuster.order.api.pojo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +10,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2019-11-24 16:31:57
  */
+@ApiModel("订单支付情况实体类")
 public class OrderPaymentInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 11925240015L;
@@ -16,21 +19,27 @@ public class OrderPaymentInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 订单支付情况表主键
+	@ApiModelProperty("订单支付情况表主键")
 	private Long id;
 
 	// 会员id
+	@ApiModelProperty("会员id")
 	private Long buyerId;
 
 	// 订单id
+	@ApiModelProperty("订单id")
 	private Long orderId;
 
 	// 平台交易号, max length: 100
+	@ApiModelProperty("平台交易号")
 	private String platformTransactionNum;
 
 	// 10:支付宝 20:线下
+	@ApiModelProperty("10:支付宝 20:线下")
 	private String paymentType;
 
 	// 1-失败 2-成功
+	@ApiModelProperty("1-失败 2-成功")
 	private Integer paymentState;
 
 	public Long getId() {

@@ -1,6 +1,8 @@
 package top.imuster.user.api.pojo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +10,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2019-11-24 16:31:57
  */
+@ApiModel("用户兴趣关联表")
 public class ConsumerInterestTagRel extends BaseDomain {
 
 	private static final long serialVersionUID = 5983772176L;
@@ -15,15 +18,19 @@ public class ConsumerInterestTagRel extends BaseDomain {
 	public ConsumerInterestTagRel() {
 		//默认无参构造方法
 	}
+	@ApiModelProperty("用户兴趣关联表主键")
 	private Long id;
 
 	// 用户表的主键id
+	@ApiModelProperty("用户表的主键id")
 	private Long consumerId;
 
 	// 标签表的主键id
+	@ApiModelProperty("标签表的主键id")
 	private Long tagId;
 
 	// 评分
+	@ApiModelProperty("评分")
 	private Short score;
 
 	public Long getId() {
