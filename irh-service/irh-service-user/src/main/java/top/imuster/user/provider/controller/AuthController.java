@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * @date: 2019/12/18 10:14
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("admin/auth")
 public class AuthController extends BaseController {
 
     @Resource

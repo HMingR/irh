@@ -24,4 +24,7 @@ public class ValidateGroup {
 
     //查询分组
     public interface queryGroup{}
+
+    //评价商品分组
+    public interface evaluateGroup{}
 }

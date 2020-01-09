@@ -15,7 +15,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.UserDto;
-import top.imuster.common.core.utils.JwtTokenUtil;
+import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ManagementInfo;

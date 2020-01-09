@@ -129,11 +129,6 @@ public class BrowserMultipleSecurityConfig {
     @Order(2)
     public class ConsumerSecurityConfig extends BrowserSecurityConfig{
 
-        @Bean("consumerJwtFilter")
-        public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(@Qualifier("consumerDetailsService") UserDetailsService userDetailsService){
-            return new JwtAuthenticationTokenFilter(userDetailsService);
-        }
-
         @Resource
         ConsumerInfoService consumerInfoService;
 
@@ -175,8 +170,6 @@ public class BrowserMultipleSecurityConfig {
                     .authenticated();
             // 禁用缓存
             httpSecurity.headers().cacheControl();
-            // 添加JWT filter
-            httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(consumerDetailsService()), UsernamePasswordAuthenticationFilter.class);
             //添加自定义未授权和未登录结果返回
             httpSecurity.exceptionHandling()
                     .accessDeniedHandler(restfulAccessDeniedHandler())

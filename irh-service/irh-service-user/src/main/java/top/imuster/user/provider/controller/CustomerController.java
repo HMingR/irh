@@ -6,15 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.user.api.pojo.ConsumerInfo;
@@ -31,7 +29,7 @@ import java.util.Map;
  * @author: hmr
  * @date: 2019/12/18 19:11
  */
-@Api(tags = "用户controller")
+@Api(tags = "用户controller,这个控制器主要是对自己信息的一些操作")
 @RestController
 @RequestMapping("/consumer")
 public class CustomerController extends BaseController {
@@ -73,6 +71,7 @@ public class CustomerController extends BaseController {
     public Message register(@RequestBody @Validated({ValidateGroup.register.class}) ConsumerInfo consumerInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
+            consumerInfo.setState(30);
             consumerInfoService.insertEntry(consumerInfo);
             return Message.createBySuccess("注册成功,请完善后续必要的信息才能正常使用");
         }catch (Exception e){
@@ -118,25 +117,4 @@ public class CustomerController extends BaseController {
             throw new UserException(e.getMessage());
         }
     }
-
-    /**
-     * @Description: 分页条件查询所有的用户
-     * @Author: hmr
-     * @Date: 2019/12/26 19:43
-     * @param page
-     * @param consumerInfo
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "分页条件查询所有的用户", httpMethod = "POST")
-    @PostMapping("/list")
-    public Message list(@RequestBody Page<ConsumerInfo> page,@RequestBody ConsumerInfo consumerInfo){
-        try{
-            Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(consumerInfo, page);
-            return Message.createBySuccess(consumerInfoPage);
-        }catch (Exception e){
-            logger.error("分页查看用户信息失败", e.getMessage(), e);
-            throw new UserException(e.getMessage());
-        }
-    }
-
 }

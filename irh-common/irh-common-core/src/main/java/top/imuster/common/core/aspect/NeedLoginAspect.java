@@ -7,17 +7,11 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
@@ -25,8 +19,8 @@ import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+
 
 /**
  * @ClassName: NeedLoginAspect
@@ -42,10 +36,8 @@ public class NeedLoginAspect {
     @Resource
     RedisTemplate<String, Object> redisTemplate;
 
-
     @Pointcut("@annotation(top.imuster.common.core.annotation.NeedLogin)")
     private void pointCut(){}
-
 
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) throws Exception{

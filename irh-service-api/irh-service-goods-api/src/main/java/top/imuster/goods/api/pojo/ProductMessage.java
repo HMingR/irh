@@ -3,6 +3,8 @@ package top.imuster.goods.api.pojo;
 
 import top.imuster.common.base.domain.BaseDomain;
 
+import java.util.List;
+
 /**
  * 
  * @author 黄明人
@@ -24,7 +26,7 @@ public class ProductMessage extends BaseDomain {
 	// 用户编号
 	private Long consumerId;
 
-	// 回复消息的id，-1表示是新的留言的时候 
+	// 回复消息的id，0表示是新的留言的时候
 	private Long parentId;
 
 	// 内容, max length: 1000
@@ -32,6 +34,16 @@ public class ProductMessage extends BaseDomain {
 
 	// 1-无效 2-有效
 	//private Short state;
+
+	private List<ProductMessage> childs;
+
+	public List<ProductMessage> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<ProductMessage> childs) {
+		this.childs = childs;
+	}
 
 	public Long getId() {
 		return this.id;

@@ -3,6 +3,7 @@ package top.imuster.goods.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
+import top.imuster.order.api.pojo.OrderInfo;
 
 /**
  * ProductEvaluateInfoService接口
@@ -11,4 +12,13 @@ import top.imuster.goods.api.pojo.ProductEvaluateInfo;
  */
 public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateInfo, Long> {
 
+    /**
+     * @Description: 根据订单编号给指定的商品进行评价
+     * @Author: hmr
+     * @Date: 2020/1/9 14:33
+     * @param order
+     * @param productEvaluateInfo
+     * @reture: void
+     **/
+    void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo) throws Exception;
 }

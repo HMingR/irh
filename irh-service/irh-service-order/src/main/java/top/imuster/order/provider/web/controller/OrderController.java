@@ -1,5 +1,6 @@
 package top.imuster.order.provider.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -22,12 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName: OrderController
- * @Description: TODO
+ * @Description: 订单控制器
  * @author: lpf
  * @date: 2019/12/18 18:03
  */
 @RestController
 @RequestMapping("/order")
+@Api("订单控制器")
 public class OrderController extends BaseController{
 
     @Resource

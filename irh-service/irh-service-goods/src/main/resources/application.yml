@@ -6,6 +6,8 @@ mybatis:
   type-aliases-package: top.imuster.goods.api.pojo   #别名扫描
 
 spring:
+  profiles:
+    active: dev
   devtools:
     restart:
       enabled: true
@@ -24,6 +26,13 @@ spring:
   application:
     name: goods-service
 
+  rabbitmq:
+    host: 39.105.0.169
+    port: 5672
+    username: admin
+    password: 197877346hmr
+
+
 eureka:
   client:
     service-url:
@@ -33,5 +42,14 @@ eureka:
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
 logging:
-  level:
-    top.imuster.goods: debug
+  config: classpath:logback-spring.xml
+
+goods:
+  queue:
+    name: goods.order.email.queue
+  exchange:
+    name: goods.order.email.exchange
+  routing:
+    key: goods.order.email.routing.key
+
+

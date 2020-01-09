@@ -57,8 +57,14 @@ public class DateUtils {
        return new SimpleDateFormat("yyyy-MM-dd HH:mm:dd").parse(time);
     }
 
+    public static Date parse() throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:dd").parse(now());
+    }
+
     public static void main(String[] args) throws ParseException {
-        Date parse = parse("2019-12-18 19:04:01");
+        String now = now();
+        System.out.println(now);
+        Date parse = parse("2019-12-30 16:00:30");
         System.out.println(parse);
     }
 

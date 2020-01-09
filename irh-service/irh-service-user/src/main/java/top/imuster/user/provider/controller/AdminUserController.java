@@ -15,33 +15,30 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.goods.api.dto.ProductInfoDto;
-import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
-import top.imuster.user.api.pojo.ManagementRoleRel;
 import top.imuster.user.provider.exception.UserException;
+import top.imuster.user.provider.service.ConsumerInfoService;
 import top.imuster.user.provider.service.ManagementInfoService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @ClassName: ManagementController
- * @Description: 管理人员的controller
+ * @Description: 管理人员的controller(包括管理员和会员)
  * @author: hmr
  * @date: 2019/12/1 18:59
  */
 @RestController
 @RequestMapping("/admin")
-@Api(tags = "adminController", description = "后台管理页面")
-public class AdminController extends BaseController {
+@Api(tags = "adminController", description = "操作管理员的权限角色等")
+public class AdminUserController extends BaseController {
 
-    @Autowired
-    GoodsServiceFeignApi goodsServiceFeignApi;
+    @Resource
+    ConsumerInfoService consumerInfoService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -50,7 +47,7 @@ public class AdminController extends BaseController {
     ManagementInfoService managementInfoService;
 
     @ApiOperation("查看所有的管理员")
-    @PostMapping("/list")
+    @PostMapping("/list/1")
     @NeedLogin(validate = true)
     public Message managementList(@RequestBody Page<ManagementInfo> page, @RequestBody ManagementInfo managementInfo){
         try{
@@ -75,28 +72,28 @@ public class AdminController extends BaseController {
      **/
     @ApiOperation("添加管理员")
     @PostMapping("/")
-    public Message addManagement(@RequestBody ManagementInfo managementInfo){
+    public Message addManagement(@RequestBody ManagementInfo managementInfo) throws IOException {
         try{
             String real_pwd = passwordEncoder.encode(managementInfo.getPassword());
             managementInfo.setPassword(real_pwd);
             managementInfoService.insertEntry(managementInfo);
             return Message.createBySuccess();
         }catch (Exception e){
-            logger.error(GlobalConstant.getErrorLog("添加管理员"), e.getMessage(), managementInfo);
-            return Message.createByError();
+            logger.error(GlobalConstant.getErrorLog("添加管理员"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
+            throw new UserException("添加管理员失败");
         }
     }
 
     @ApiOperation("修改管理员信息(修改基本信息，包括删除)")
     @PutMapping("/")
-    public Message editManagement(@Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult){
+    public Message editManagement(@Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
         validData(bindingResult);
         try{
             managementInfoService.updateByKey(managementInfo);
             return Message.createBySuccess();
         }catch (Exception e){
-            logger.error(GlobalConstant.getErrorLog("修改管理员信息"), e.getMessage(), managementInfo);
-            return Message.createByError();
+            logger.error(GlobalConstant.getErrorLog("修改管理员信息"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
+            throw new UserException("修改管理员信息失败");
         }
     }
 
@@ -139,34 +136,22 @@ public class AdminController extends BaseController {
     }
 
     /**
-     * @Description: 管理二手商品，按条件分页查询
+     * @Description: 分页条件查询所有的会员
      * @Author: hmr
-     * @Date: 2019/12/27 12:07
-     * @param productInfo
+     * @Date: 2019/12/26 19:43
+     * @param page
+     * @param consumerInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("查看二手商品，按条件分页查询")
-    @PostMapping("/goods/es")
-    public Message goodsList(@RequestBody ProductInfoDto productInfoDto){
+    @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
+    @PostMapping("/list/2")
+    public Message list(@RequestBody Page<ConsumerInfo> page,@RequestBody ConsumerInfo consumerInfo){
         try{
-            return goodsServiceFeignApi.list(productInfoDto);
+            Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(consumerInfo, page);
+            return Message.createBySuccess(consumerInfoPage);
         }catch (Exception e){
-            logger.error("远程调用goods模块出现异常", e.getMessage(), e);
-            throw new UserException("远程调用goods模块出现异常" + e.getMessage());
+            logger.error("分页查看用户信息失败", e.getMessage(), e);
+            throw new UserException(e.getMessage());
         }
     }
-
-    /**
-     * @Description: 管理员根据id下架二手商品
-     * @Author: hmr
-     * @Date: 2019/12/27 15:10
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @DeleteMapping("/goods/{id}")
-    @ApiOperation("管理员根据id下架二手商品")
-    public Message delGoodsById(@PathVariable("id") Long id) throws UserException{
-        return goodsServiceFeignApi.delProduct(id);
-    }
-
 }

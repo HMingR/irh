@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  * @date: 2019/12/18 10:13
  */
 @RestController
-@RequestMapping("/role")
+@RequestMapping("admin/role")
 public class RoleController extends BaseController {
 
     @Resource

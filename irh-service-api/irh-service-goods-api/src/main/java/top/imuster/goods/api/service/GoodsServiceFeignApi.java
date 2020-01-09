@@ -2,9 +2,10 @@ package top.imuster.goods.api.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
-import top.imuster.goods.api.dto.ProductInfoDto;
+import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
 
 /**
@@ -20,11 +21,11 @@ public interface GoodsServiceFeignApi {
      * @Description: 分页条件查询二手商品
      * @Author: hmr
      * @Date: 2019/12/26 20:38
-     * @param type
+     * @param page
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping(value = "/es/list")
-    Message list(@RequestBody ProductInfoDto productInfoDto);
+    Message list(@RequestBody Page<ProductInfo> page);
 
     /**
      * @Description: 提供给管理员的下架商品接口
@@ -45,5 +46,15 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/lockStock/{productId}")
     boolean lockStock(@PathVariable("productId") Long productId);
+
+    /**
+     * @Description: 交易成功之后修改商品状态为下架
+     * @Author: hmr
+     * @Date: 2019/12/30 16:08
+     * @param productId
+     * @reture: boolean
+     **/
+    @GetMapping("/es/stockOut/{productId}")
+    boolean productStockOut(@PathVariable("productId") Long productId);
 
 }

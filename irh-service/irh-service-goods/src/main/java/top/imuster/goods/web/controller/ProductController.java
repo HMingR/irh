@@ -1,6 +1,13 @@
 package top.imuster.goods.web.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +21,7 @@ import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @ClassName: ProductController
@@ -21,19 +29,22 @@ import javax.annotation.Resource;
  * @author: hmr
  * @date: 2019/12/1 14:53
  */
+@Api("商品controller")
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/goods")
 public class ProductController extends BaseController {
 
     @Resource
     ProductInfoService productInfoService;
 
+    @ApiOperation("条件查询商品列表")
     @PostMapping("/list")
     public Message productList(Page<ProductInfo> page, ProductInfo productInfo) throws GoodsException{
         Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
         return Message.createBySuccess(productInfoPage);
     }
 
+    @ApiOperation("修改商品信息")
     @PostMapping("/edit")
     public Message editProduct(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
@@ -51,6 +62,7 @@ public class ProductController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
+    @ApiOperation("用户下架商品")
     @DeleteMapping("/{id}")
     public Message delProduct(@PathVariable("id") Long id){
         ProductInfo productInfo = new ProductInfo();
@@ -61,6 +73,25 @@ public class ProductController extends BaseController {
             return Message.createBySuccess();
         }
         return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
+    }
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${goods.queue.name}")
+    private String queueName;
+
+    @Value("${goods.exchange.name}")
+    private String exchange;
+
+    @Value("${goods.routing.key}")
+    private String routingKey;
+
+    @GetMapping("/send")
+    public void send() throws UnsupportedEncodingException {
+        rabbitTemplate.setExchange(exchange);
+        rabbitTemplate.setRoutingKey(routingKey);
+        rabbitTemplate.send(MessageBuilder.withBody("测试".getBytes("UTF-8")).build());
     }
 
 }

@@ -10,7 +10,7 @@
             product_id AS productId,
             product_name AS productName,
             buyer_id AS buyerId,
-            buyer_ nickname AS buyerNickname,
+            saler_id AS salerId,
             order_id AS orderId,
             content,
             product_quality_evaluate AS productQualityEvaluate,
@@ -32,7 +32,7 @@
             <if test="productId != null and productId != ''"><![CDATA[AND product_id = #{productId}]]></if>
             <if test="productName != null and productName != ''"><![CDATA[AND product_name = #{productName}]]></if>
             <if test="buyerId != null and buyerId != ''"><![CDATA[AND buyer_id = #{buyerId}]]></if>
-            <if test="buyerNickname != null and buyerNickname != ''"><![CDATA[AND buyer_ nickname = #{buyerNickname}]]></if>
+            <if test="salerId != null and salerId != ''"><![CDATA[AND saler_id = #{salerId}]]></if>
             <if test="orderId != null and orderId != ''"><![CDATA[AND order_id = #{orderId}]]></if>
             <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
             <if test="productQualityEvaluate != null and productQualityEvaluate != ''"><![CDATA[AND product_quality_evaluate = #{productQualityEvaluate}]]></if>
@@ -56,7 +56,7 @@
 			<if test="productId != null"><![CDATA[product_id = #{productId},]]></if>
 			<if test="productName != null"><![CDATA[product_name = #{productName},]]></if>
 			<if test="buyerId != null"><![CDATA[buyer_id = #{buyerId},]]></if>
-			<if test="buyerNickname != null"><![CDATA[buyer_ nickname = #{buyerNickname},]]></if>
+			<if test="salerId != null"><![CDATA[saler_id = #{salerId},]]></if>
 			<if test="orderId != null"><![CDATA[order_id = #{orderId},]]></if>
 			<if test="content != null"><![CDATA[content = #{content},]]></if>
 			<if test="productQualityEvaluate != null"><![CDATA[product_quality_evaluate = #{productQualityEvaluate},]]></if>
@@ -77,7 +77,7 @@
                 product_id, 
                 product_name, 
                 buyer_id, 
-                buyer_ nickname, 
+                saler_id,
                 order_id, 
                 content, 
                 product_quality_evaluate, 
@@ -93,7 +93,7 @@
                 #{productId}, 
                 #{productName}, 
                 #{buyerId}, 
-                #{buyerNickname}, 
+                #{salerId},
                 #{orderId}, 
                 #{content}, 
                 #{productQualityEvaluate}, 

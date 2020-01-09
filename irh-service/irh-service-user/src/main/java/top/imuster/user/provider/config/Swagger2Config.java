@@ -13,7 +13,11 @@ import top.imuster.common.core.config.BaseSwagger2Config;
 @Configuration
 @EnableSwagger2
 public class Swagger2Config extends BaseSwagger2Config {
+
+    private static String BASE_PACKAGE = "top.imuster.user.provider.controller";
+
     public Swagger2Config(){
-        super("top.imuster.user.provider.web");
+        super(BASE_PACKAGE);
     }
+
 }

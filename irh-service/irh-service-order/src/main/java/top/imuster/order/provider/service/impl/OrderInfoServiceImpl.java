@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.core.utils.JwtTokenUtil;
+import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.utils.UuidUtils;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;

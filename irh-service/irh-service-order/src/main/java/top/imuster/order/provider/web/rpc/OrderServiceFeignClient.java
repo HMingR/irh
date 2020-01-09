@@ -1,9 +1,8 @@
 package top.imuster.order.provider.web.rpc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.pojo.OrderInfo;
@@ -21,6 +20,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/")
+@Slf4j
 public class OrderServiceFeignClient implements OrderServiceFeignApi {
 
     @Resource
@@ -31,5 +31,12 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     public Message list(Page<OrderInfo> page) throws OrderException {
         OrderInfo condition =  page.getSearchCondition();
         return Message.createBySuccess(orderInfoService.selectPage(condition, page));
+    }
+
+    @Override
+    @GetMapping("/feign/order/{orderId}")
+    public OrderInfo getOrderById(@PathVariable("orderId") Long orderId) {
+        OrderInfo orderInfo = orderInfoService.selectEntryList(orderId).get(0);
+        return orderInfo;
     }
 }

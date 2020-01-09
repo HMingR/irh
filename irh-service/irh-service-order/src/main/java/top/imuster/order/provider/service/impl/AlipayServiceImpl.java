@@ -16,13 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.core.utils.DateUtils;
+import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
-import top.imuster.order.provider.config.AlipayConfig;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.AlipayService;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +38,12 @@ import java.util.Map;
 @Service("alipayService")
 @Slf4j
 public class AlipayServiceImpl implements AlipayService {
+
     @Autowired
-    AlipayConfig alipayConfig;
+    GoodsServiceFeignApi goodsServiceFeignApi;
+
+    //@Autowired
+    //AlipayConfig alipayConfig;
 
     @Resource
     OrderInfoService orderInfoService;
@@ -80,7 +86,7 @@ public class AlipayServiceImpl implements AlipayService {
         String operatorId = String.valueOf(orderInfo.getSalerId());
 
         //支付超时时间
-        String timeoutExpress = alipayConfig.getTimeoutExpress();
+        String timeoutExpress = "30m";
 
         //商品详情
         List<GoodsDetail> productInfos = new ArrayList<>();
@@ -122,25 +128,28 @@ public class AlipayServiceImpl implements AlipayService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void aliCallBack(Map<String, String> params) throws OrderException {
+    public void aliCallBack(Map<String, String> params) throws OrderException, ParseException {
         OrderInfo orderInfo = validateParams(params);
         orderInfo.setState(40);
         orderInfo.setTradeType(10);
-        //orderInfo.setPaymentTime();
 
         //更新订单状态
         orderInfoService.updateByKey(orderInfo);
+        //更新商品库存状态
+        goodsServiceFeignApi.productStockOut(orderInfo.getProductId());
+
+        // todo 需要使用消息队列给卖家发送消息
 
     }
 
     /**
-     * @Description: 校验支付宝回调的参数
+     * @Description: 校验支付宝回调的参数(必须校验支付宝的回调,以免支付宝的消息被替换)
      * @Author: hmr
      * @Date: 2019/12/23 21:45
      * @param paras
      * @reture: java.lang.String 返回订单编号
      **/
-    private OrderInfo validateParams(Map<String, String> paras) throws OrderException {
+    private OrderInfo validateParams(Map<String, String> paras) throws OrderException, ParseException {
         if(!Configs.getAppid().equals(paras.get("app_id"))){
             log.error("支付宝回调校验失败,appid被篡改");
             throw new OrderException("支付宝回调校验失败,appid被篡改");
@@ -157,7 +166,9 @@ public class AlipayServiceImpl implements AlipayService {
         }
         String gmt_payment = paras.get("gmt_payment");
         if(StringUtils.isNotEmpty(gmt_payment)){
-            //realOrder.setPaymentTime();
+            realOrder.setPaymentTime(DateUtils.parse(gmt_payment));
+        }else{
+            realOrder.setPaymentTime(DateUtils.parse());
         }
         return realOrder;
     }

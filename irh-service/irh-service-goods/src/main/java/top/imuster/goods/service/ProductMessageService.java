@@ -4,6 +4,8 @@ package top.imuster.goods.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.goods.api.pojo.ProductMessage;
 
+import java.util.List;
+
 /**
  * ProductMessageService接口
  * @author 黄明人
@@ -11,4 +13,12 @@ import top.imuster.goods.api.pojo.ProductMessage;
  */
 public interface ProductMessageService extends BaseService<ProductMessage, Long> {
 
+    /**
+     * @Description: 根据id生成某个商品的留言树
+     * @Author: hmr
+     * @Date: 2020/1/9 15:23
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    List<ProductMessage> generateMessageTree(Long id);
 }

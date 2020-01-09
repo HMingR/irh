@@ -7,6 +7,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.dao.ProductEvaluateInfoDao;
 import top.imuster.goods.service.ProductEvaluateInfoService;
+import top.imuster.order.api.pojo.OrderInfo;
 
 import javax.annotation.Resource;
 
@@ -24,5 +25,16 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Override
     public BaseDao<ProductEvaluateInfo, Long> getDao() {
         return this.productEvaluateInfoDao;
+    }
+
+    @Override
+    public void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo) throws Exception {
+        ProductEvaluateInfo evaluateInfo = new ProductEvaluateInfo();
+        evaluateInfo.setBuyerId(order.getBuyerId());
+        evaluateInfo.setProductId(order.getProductId());
+        evaluateInfo.setSalerId(order.getSalerId());
+        evaluateInfo.setOrderId(order.getId());
+        evaluateInfo.setState(2);
+        productEvaluateInfoDao.insertEntry(evaluateInfo);
     }
 }

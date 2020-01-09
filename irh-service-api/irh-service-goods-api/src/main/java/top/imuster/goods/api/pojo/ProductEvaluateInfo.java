@@ -2,6 +2,9 @@ package top.imuster.goods.api.pojo;
 
 
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
+
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 
@@ -27,10 +30,11 @@ public class ProductEvaluateInfo extends BaseDomain {
 	// 买家编号
 	private Long buyerId;
 
-	// 买家昵称, max length: 255
-	private String buyerNickname;
+	// 卖家id
+	private Long salerId;
 
 	// 订单id
+	@NotEmpty(groups = ValidateGroup.evaluateGroup.class, message = "评价商品的订单编号不能为空")
 	private Long orderId;
 
 	// 内容, max length: 1000
@@ -76,13 +80,6 @@ public class ProductEvaluateInfo extends BaseDomain {
 		this.buyerId = buyerId;
 	}
 	
-	public String getBuyerNickname() {
-		return this.buyerNickname;
-	}
-    public void setBuyerNickname(String buyerNickname) {
-		this.buyerNickname = buyerNickname;
-	}
-	
 	public Long getOrderId() {
 		return this.orderId;
 	}
@@ -116,5 +113,13 @@ public class ProductEvaluateInfo extends BaseDomain {
 	}
     public void setWholeEvaluate(Integer wholeEvaluate) {
 		this.wholeEvaluate = wholeEvaluate;
+	}
+
+	public Long getSalerId() {
+		return salerId;
+	}
+
+	public void setSalerId(Long salerId) {
+		this.salerId = salerId;
 	}
 }

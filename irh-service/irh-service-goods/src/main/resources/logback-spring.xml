@@ -1,0 +1,89 @@
+<configuration debug="true" scan="true" scanPeriod="30 seconds" packagingData="false">
+
+    <!--logback 不需要DTD 文件,节点不区分大小写-->
+
+    <!--日志存放路径,windows会将日志存放到当前磁盘 c:/opt/applog/myApp/log/myApp.log -->
+    <!--日志存放路径,Linux会将日志存放到当前磁盘 /opt/applog/myApp/log/myApp.log -->
+    <property scope="context" name="APP_NAME" value="myApp"/>
+    <property scope="context" name="LOG_FILE_PATH" value="/opt/applog/${APP_NAME}/log" />
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+
+    <!--配置输出到控制台-->
+    <!-- Appender 有两个属性name 和class可以配置
+         name属性指定appender的名称，而class属性指定要实例化的appender类的完全限定名称
+        <appender>元素可以包含零个或一个<layout>元素，零个或多个<encoder>元素以及零个或多个<filter>元素。 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+        <!--
+        <encoder>
+        默认使用 ch.qos.logback.classic.encoder.PatternLayoutEncoder 实现类
+        如果使用自定义类，则需要指定完全限定名称
+        如下所示:
+        <encoder class="com.xingun.custom.MyPatternLayoutEncoder">
+          -->
+        <!--<encoder>
+            &lt;!&ndash;配置控制台输出格式，由于是控制台，我这里调成了日志高亮显示 &ndash;&gt;
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) -&#45;&#45; %cyan(%logger{36}) -&#45;&#45; %c:%L:%n%m%n</pattern>
+        </encoder>-->
+        <encoder>
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            <charset>UTF-8</charset> <!-- 设置字符集 -->
+        </encoder>
+    </appender>
+
+    <!--配置输出到控制台-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--配置日志输出的文件路径和名称-->
+        <file>${LOG_FILE_PATH}/${APP_NAME}.log</file>
+        <!--配置日志是追加还是覆盖重写,默认值true-->
+        <append>true</append>
+        <!--配置日志是否立即刷新,默认值true -->
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <!--配置日志输出格式,这里没有使用高亮显示，因为使用了也没用。 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- %logger{36} --- %c:%L:%n%m%n</pattern>
+        </encoder>
+        <!--日志滚动策略，这里配置根据大小和日期自动滚动 -->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            &lt;!&ndash; 首先按照每天滚动，根据日志放到不同文件夹中，最后根据大小进行滚动分割 &ndash;&gt;
+            <fileNamePattern>${LOG_FILE_PATH}/%d{yyyy-MM-dd,aux}/${APP_NAME}-%d{yyyy-MM-dd,UTC}.%i.log</fileNamePattern>
+            &lt;!&ndash; 每个日志文件至少 100MB,保存30天,但是所有日志占用空间最大不能超过 20GB，超过后清理较旧的日志 &ndash;&gt;
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+            &lt;!&ndash;启动时候清理日志&ndash;&gt;
+            <cleanHistoryOnStart>false</cleanHistoryOnStart>
+            &lt;!&ndash;  可选的totalSizeCap属性控制所有存档文件的总大小。&ndash;&gt;
+            &lt;!&ndash;  超过总大小上限时，将异步删除最旧的归档。&ndash;&gt;
+            &lt;!&ndash;  totalSizeCap属性也需要设置maxHistory属性。 &ndash;&gt;
+            &lt;!&ndash; 此外，始终首先应用“最大历史记录”限制，然后应用“总大小上限”限制。&ndash;&gt;
+        </rollingPolicy>-->
+    </appender>
+
+    <!--配置根节点日志记录器
+    <root>元素配置根记录器,它支持单个属性，即level属性。它不允许任何其他属性。
+    <root>的level 可选值:TRACE，DEBUG，INFO，WARN，ERROR，ALL或OFF  -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+       <!-- <appender-ref ref="FILE" />-->
+    </root>
+
+    <!--自定义修改
+       这里修改为自己应用的包名，配置应用日志记录器
+       additivity="true" 是默认值，如果是true 可以省略不写
+       由于使用了additivity="true"会继承自root节点的追加配置，将日志追加到控制台和文件中
+       -->
+    <logger name="top.imuster.goods" level="INFO" additivity="true"/>
+    <!-- 如果想打印SQL,则一般需要将相关包设置为DEBUG级别 -->
+    <logger name="top.imuster.goods.dao" level="DEBUG" additivity="true"/>
+</configuration>

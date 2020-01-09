@@ -1,10 +1,15 @@
 package top.imuster.common.base.controller;
 
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.utils.JwtTokenUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 
 /**
@@ -16,6 +21,8 @@ import javax.validation.ValidationException;
 public class BaseController {
     protected  final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    protected final static ObjectMapper objectMapper = new ObjectMapper();
+
     protected void validData(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuffer sb = new StringBuffer();
@@ -24,5 +31,15 @@ public class BaseController {
             }
             throw new ValidationException(sb.toString());
         }
+    }
+
+    protected String getNameByToken(HttpServletRequest request) throws Exception{
+        String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
+        return JwtTokenUtil.getUserNameFromToken(token);
+    }
+
+    protected Long getIdByToken(HttpServletRequest request)throws Exception{
+        String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
+        return JwtTokenUtil.getUserIdFromToken(token);
     }
 }

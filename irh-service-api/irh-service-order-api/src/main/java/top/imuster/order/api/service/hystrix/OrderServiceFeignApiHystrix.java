@@ -21,4 +21,10 @@ public class OrderServiceFeignApiHystrix implements OrderServiceFeignApi {
         log.error("OrderServiceFeignApiHystrix--> 根据会员的id条件查询该会员的订单信息服务失败");
         return Message.createByError("当前服务暂时无法访问，请稍后重试");
     }
+
+    @Override
+    public OrderInfo getOrderById(Long orderId) {
+        log.error("OrderServiceFeignApiHystrix--> 根据订单的id条件查询订单信息服务失败");
+        return null;
+    }
 }

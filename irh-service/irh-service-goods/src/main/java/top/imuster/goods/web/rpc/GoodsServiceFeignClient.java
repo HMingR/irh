@@ -1,11 +1,9 @@
 package top.imuster.goods.web.rpc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.UserException;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.dto.ProductInfoDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.goods.exception.GoodsException;
@@ -29,10 +27,9 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Override
     @PostMapping(value = "/es/list")
-    public Message list(@RequestBody ProductInfoDto productInfoDto) {
+    public Message list(@RequestBody Page<ProductInfo> page) {
         try{
-            Page<ProductInfo> page = productInfoDto.getPage();
-            ProductInfo productInfo = productInfoDto.getProductInfo();
+            ProductInfo productInfo = page.getSearchCondition();
             Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
             return Message.createBySuccess(productInfoPage);
         }catch (Exception e){
@@ -73,6 +70,20 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
             return true;
         }catch (Exception e){
             throw new GoodsException("锁定库存失败");
+        }
+    }
+
+    @Override
+    @GetMapping("/es/stockOut/{productId}")
+    public boolean productStockOut(@PathVariable("productId") Long productId) {
+        try{
+            ProductInfo productInfo = new ProductInfo();
+            productInfo.setId(productId);
+            productInfo.setState(2);
+            productInfoService.updateByKey(productInfo);
+            return true;
+        }catch (Exception e){
+            throw new GoodsException("商品下单失败,请稍后重试");
         }
     }
 }

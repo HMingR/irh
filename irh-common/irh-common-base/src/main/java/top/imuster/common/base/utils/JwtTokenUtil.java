@@ -1,4 +1,4 @@
-package top.imuster.common.core.utils;
+package top.imuster.common.base.utils;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -73,7 +73,7 @@ public class JwtTokenUtil {
             Claims claims = getClaimsFromToken(token);
             username = claims.getSubject();
         } catch (Exception e) {
-            username = null;
+            throw new RuntimeException("从jwt中解析用户name失败");
         }
         return username;
     }
@@ -84,7 +84,7 @@ public class JwtTokenUtil {
             String id = claims.getId();
             return Long.parseLong(id);
         }catch (Exception e){
-            return null;
+            throw new RuntimeException("从jwt中解析用户id失败");
         }
     }
 

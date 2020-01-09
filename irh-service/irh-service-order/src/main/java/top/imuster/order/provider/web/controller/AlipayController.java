@@ -5,6 +5,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.config.Configs;
 import com.google.common.collect.Maps;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import top.imuster.order.provider.service.AlipayService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/alipay")
+@Api("支付宝控制器")
 public class AlipayController extends BaseController {
 
     @Resource
@@ -66,7 +69,7 @@ public class AlipayController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping("/alipayNotify")
-    public Message payResult(HttpServletRequest request){
+    public Message payResult(HttpServletRequest request) throws ParseException {
         Map<String,String> params = Maps.newHashMap();
         Map requestParams = request.getParameterMap();
         for(Iterator iter = requestParams.keySet().iterator(); iter.hasNext();){
@@ -90,7 +93,7 @@ public class AlipayController extends BaseController {
             logger.error("支付宝验证回调异常",e);
         }
         alipayService.aliCallBack(params);
-        return null;
+        return Message.createBySuccess("支付成功,已提醒卖家");
     }
 
 

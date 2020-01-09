@@ -4,7 +4,6 @@ package top.imuster.user.provider.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,18 +11,15 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.UserDto;
-import top.imuster.common.core.utils.JwtTokenUtil;
+import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ConsumerDetails;
-import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ConsumerInfo;
-import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.provider.dao.ConsumerInfoDao;
 import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ConsumerInfoService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**

@@ -4,6 +4,7 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
 
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -30,5 +31,5 @@ public interface AlipayService {
      * @param params
      * @reture: void
      **/
-    void aliCallBack(Map<String, String>  params) throws OrderException;
+    void aliCallBack(Map<String, String>  params) throws OrderException, ParseException;
 }

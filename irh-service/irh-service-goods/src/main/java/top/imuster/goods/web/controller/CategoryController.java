@@ -1,5 +1,6 @@
 package top.imuster.goods.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +21,9 @@ import java.util.List;
  * @author: hmr
  * @date: 2019/12/22 11:03
  */
+@Api("商品分类controller")
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/goods/category")
 public class CategoryController extends BaseController {
 
     @Resource
@@ -36,7 +38,7 @@ public class CategoryController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("获得分类的树形结构数据")
-    @GetMapping("/list")
+    @GetMapping
     public Message list() throws GoodsException {
         List<ProductCategoryInfo> categoryTree = productCategoryInfoService.getCategoryTree();
         return Message.createBySuccess(categoryTree);
@@ -49,7 +51,8 @@ public class CategoryController extends BaseController {
      * @param productCategoryInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @PutMapping("/")
+    @ApiOperation("添加分类")
+    @PutMapping
     public Message addCategory(@RequestBody @Validated(ValidateGroup.addGroup.class) ProductCategoryInfo productCategoryInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
         try{
