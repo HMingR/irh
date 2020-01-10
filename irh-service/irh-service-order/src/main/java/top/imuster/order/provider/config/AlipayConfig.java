@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName: AlipayConfig
- * @Description: TODO
+ * @Description:
  * @author: hmr
  * @date: 2019/12/22 21:58
  */

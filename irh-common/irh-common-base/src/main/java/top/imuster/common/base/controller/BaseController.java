@@ -33,13 +33,29 @@ public class BaseController {
         }
     }
 
+    /**
+     * @Description: 从token中解析得到当前用户的用户名
+     * @Author: hmr
+     * @Date: 2020/1/10 16:00
+     * @param request
+     * @reture: java.lang.String
+     **/
     protected String getNameByToken(HttpServletRequest request) throws Exception{
         String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
         return JwtTokenUtil.getUserNameFromToken(token);
     }
 
+    /**
+     * @Description: 从token中解析当前用户的id
+     * @Author: hmr
+     * @Date: 2020/1/10 16:00
+     * @param request
+     * @reture: java.lang.Long
+     **/
     protected Long getIdByToken(HttpServletRequest request)throws Exception{
         String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
         return JwtTokenUtil.getUserIdFromToken(token);
     }
+
+
 }

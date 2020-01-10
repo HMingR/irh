@@ -5,8 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
+import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
+
+import java.util.List;
 
 /**
  * @ClassName: GoodsServiceFeignApi
@@ -56,5 +60,4 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/stockOut/{productId}")
     boolean productStockOut(@PathVariable("productId") Long productId);
-
 }

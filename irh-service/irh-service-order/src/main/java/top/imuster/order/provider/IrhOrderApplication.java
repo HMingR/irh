@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @ClassName: IrhOrderApplication
- * @Description: TODO
+ * @Description:
  * @author: lpf
  * @date: 2019/12/18 17:11
  */

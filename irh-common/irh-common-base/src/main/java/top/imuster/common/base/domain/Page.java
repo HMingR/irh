@@ -1,5 +1,8 @@
 package top.imuster.common.base.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -7,16 +10,32 @@ import java.util.List;
  * 分页对象
  * @param <T> 实体
  */
+@ApiModel("分页实体类")
 public class Page<T> {
 	//初始化size
+	@ApiModelProperty("初始化size")
 	private final static int INIT_SIZE = 10;
+
+	@ApiModelProperty("页面大小")
 	private int pageSize = INIT_SIZE;
+
+	@ApiModelProperty("总记录数")
 	private int totalCount;
+
+	@ApiModelProperty("当前页")
 	@NotEmpty(message = "当前页不能为空")
 	private int currentPage;
+
+	@ApiModelProperty("封装的数据")
 	private List<T> data;
+
+	@ApiModelProperty("分页条件查询时的条件")
 	private T searchCondition;
+
+	@ApiModelProperty("单位")
 	private String unit = "条";   //单位
+
+	@ApiModelProperty("拓展信息")
 	private String extInfo;      //扩展信息
 
 	public Page() {

@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 /**
  * @ClassName: OrderServuceFeignClient
- * @Description: TODO
+ * @Description:
  * @author: hmr
  * @date: 2019/12/27 15:33
  */
@@ -25,13 +25,6 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
 
     @Resource
     OrderInfoService orderInfoService;
-
-    @Override
-    @PostMapping("/feign/order/list")
-    public Message list(Page<OrderInfo> page) throws OrderException {
-        OrderInfo condition =  page.getSearchCondition();
-        return Message.createBySuccess(orderInfoService.selectPage(condition, page));
-    }
 
     @Override
     @GetMapping("/feign/order/{orderId}")

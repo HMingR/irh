@@ -33,10 +33,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/consumer")
 public class CustomerController extends BaseController {
-
-    @Autowired
-    OrderServiceFeignApi orderServiceFeignApi;
-
     @Resource
     ConsumerInfoService consumerInfoService;
 
@@ -73,6 +69,8 @@ public class CustomerController extends BaseController {
         try{
             consumerInfo.setState(30);
             consumerInfoService.insertEntry(consumerInfo);
+            //todo 需要发送邮箱
+
             return Message.createBySuccess("注册成功,请完善后续必要的信息才能正常使用");
         }catch (Exception e){
             logger.error("会员注册失败", e.getMessage(), e);
@@ -101,20 +99,4 @@ public class CustomerController extends BaseController {
         }
     }
 
-    /**
-     * @Description: 用户根据条件分页查看自己的账单
-     * @Author: hmr
-     * @Date: 2019/12/27 15:42
-     * @param page
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @PostMapping("/order")
-    public Message orderList(@RequestBody Page<OrderInfo> page){
-        try{
-            return orderServiceFeignApi.list(page);
-        }catch (Exception e){
-            logger.error("会员查询账单失败",e.getMessage(),e);
-            throw new UserException(e.getMessage());
-        }
-    }
 }

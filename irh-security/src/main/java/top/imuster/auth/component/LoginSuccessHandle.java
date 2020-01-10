@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * @ClassName: LoginSuccessHandle
- * @Description: TODO
+ * @Description: 登录成功跳转的逻辑
  * @author: hmr
  * @date: 2019/12/3 16:38
  */

@@ -7,7 +7,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 /**
  * @ClassName: IrhGatewayApplication
- * @Description: TODO
+ * @Description:
  * @author: lpf
  * @date: 2019/11/30 19:11
  */

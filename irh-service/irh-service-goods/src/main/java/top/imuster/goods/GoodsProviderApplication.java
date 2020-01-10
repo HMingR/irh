@@ -8,13 +8,14 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @ClassName: GoodsProviderApplication
- * @Description: TODO
+ * @Description:
  * @author: lpf
  * @date: 2019/12/1 15:21
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = "top.imuster.order.api.service")
+@EnableFeignClients(basePackages = {"top.imuster.order.api.service",
+                                    "top.imuster.file.api.service"})
 @ComponentScan(basePackages = {
         "top.imuster.common.core",
         "top.imuster.goods",

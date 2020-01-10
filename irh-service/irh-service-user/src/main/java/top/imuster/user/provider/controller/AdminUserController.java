@@ -71,7 +71,7 @@ public class AdminUserController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("添加管理员")
-    @PostMapping("/")
+    @PostMapping
     public Message addManagement(@RequestBody ManagementInfo managementInfo) throws IOException {
         try{
             String real_pwd = passwordEncoder.encode(managementInfo.getPassword());
@@ -85,7 +85,7 @@ public class AdminUserController extends BaseController {
     }
 
     @ApiOperation("修改管理员信息(修改基本信息，包括删除)")
-    @PutMapping("/")
+    @PutMapping
     public Message editManagement(@Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
         validData(bindingResult);
         try{
@@ -116,6 +116,18 @@ public class AdminUserController extends BaseController {
             return Message.createByError(e.getMessage());
         }
     }
+
+    @GetMapping("/toEdit/{id}")
+    public Message toEdit(@PathVariable("id") Long id){
+        ManagementInfo condition = new ManagementInfo();
+        condition.setId(id);
+        ManagementInfo managementInfo = managementInfoService.selectEntryList(condition).get(0);
+        if(null == managementInfo){
+            return Message.createByError("修改管理员信息失败,请刷新后重试");
+        }
+        return Message.createBySuccess(managementInfo);
+    }
+
 
     /**
      * @Description: 修改管理员的角色
@@ -150,7 +162,7 @@ public class AdminUserController extends BaseController {
             Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(consumerInfo, page);
             return Message.createBySuccess(consumerInfoPage);
         }catch (Exception e){
-            logger.error("分页查看用户信息失败", e.getMessage(), e);
+            logger.error("分页条件查询所有的会员失败", e.getMessage(), e);
             throw new UserException(e.getMessage());
         }
     }

@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 /**
  * @ClassName: IrhRegistryApplication
- * @Description: TODO
+ * @Description:
  * @author: lpf
  * @date: 2019/11/30 18:49
  */

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @ClassName: FastDFSFile
- * @Description: TODO
+ * @Description:
  * @author: lpf
  * @date: 2019/12/23 12:21
  * 封装文件上传信息

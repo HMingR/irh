@@ -4,8 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
+
+import java.util.List;
 
 /**
  * @ClassName: GoodsServiceFeignApiHystrix

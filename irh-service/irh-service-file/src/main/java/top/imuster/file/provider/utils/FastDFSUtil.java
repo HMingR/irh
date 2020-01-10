@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 /**
  * @ClassName: FastDFSUtil
- * @Description: TODO
+ * @Description:
  * @author: lpf
  * @date: 2019/12/23 12:27
  * 实现FastDFS文件管理

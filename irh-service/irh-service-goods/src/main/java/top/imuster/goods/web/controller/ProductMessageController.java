@@ -60,6 +60,8 @@ public class ProductMessageController extends BaseController {
                 logger.error("留言失败,插入的数量异常,插入留言的条数为{}", i);
                 return Message.createByError("留言失败,请刷新后重试");
             }
+
+            //todo 如果parentId是0，则给卖家发送消息；如果不是，则给卖家和parentId对应的会员发送消息
             return Message.createBySuccess("留言成功");
         }catch (Exception e){
             logger.error("留言失败，出现异常为",e.getMessage(), e);

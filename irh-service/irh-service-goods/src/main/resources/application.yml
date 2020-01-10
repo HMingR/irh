@@ -53,3 +53,10 @@ goods:
     key: goods.order.email.routing.key
 
 
+image:
+  fileTypes:
+    - jpg
+    - png
+    - bmp
+
+

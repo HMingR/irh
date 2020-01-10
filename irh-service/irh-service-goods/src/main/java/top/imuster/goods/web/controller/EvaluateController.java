@@ -43,7 +43,7 @@ public class EvaluateController extends BaseController {
      * @param productEvaluateInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("根据订单的id评论(用户的订单只有在收货状态的时候才能进行评论,前台可以先进行一次逻辑判断)")
+    @ApiOperation("根据订单的id评价(用户的订单只有在收货状态的时候才能进行评论,前台可以先进行一次逻辑判断)")
     @PostMapping("/{orderId}")
     public Message evaluateByOrderId(@PathVariable("orderId") Long orderId,@RequestBody ProductEvaluateInfo productEvaluateInfo){
         try{
@@ -55,6 +55,8 @@ public class EvaluateController extends BaseController {
                 return Message.createByError("请先确定收货，完成该订单之后才能进行评价");
             }
             productEvaluateInfoService.evaluateByOrder(order, productEvaluateInfo);
+
+            //todo 评论完成之后需要给卖家发送消息
             return Message.createBySuccess("评论成功");
         }catch (Exception e){
             logger.error("用户根据订单id评价商品失败", e.getMessage(), e);
