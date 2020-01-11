@@ -13,7 +13,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = "top.imuster.goods.api.service")
+@EnableFeignClients(basePackages = {"top.imuster.goods.api.service",
+                                    "top.imuster.order.api.service"})
 public class IrhOrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(IrhOrderApplication.class, args);

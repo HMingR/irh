@@ -10,6 +10,8 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.hystrix.OrderServiceFeignApiHystrix;
 
+import java.util.List;
+
 /**
  * @ClassName: OrderServiceFeignApi
  * @Description: order模块提供给其他模块的接口
@@ -29,4 +31,13 @@ public interface OrderServiceFeignApi {
      **/
     @GetMapping("/{orderId}")
     OrderInfo getOrderById(@PathVariable("orderId") Long orderId);
+
+    /**
+     * @Description: 分页条件查询订单
+     * @Author: hmr
+     * @Date: 2020/1/11 10:35
+     * @param page
+     * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    List<OrderInfo> orderList(@RequestBody Page<OrderInfo> page);
 }

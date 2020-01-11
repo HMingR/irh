@@ -18,7 +18,7 @@ import top.imuster.user.provider.exception.UserException;
  * @date: 2020/1/9 11:10
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/goods")
 @Api("管理员用来管理商品和商品下面的留言")
 public class AdminGoodsController extends BaseController {
 
@@ -32,8 +32,8 @@ public class AdminGoodsController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @DeleteMapping("/goods/{id}")
-    @ApiOperation("管理员根据id下架二手商品")
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "管理员根据id下架二手商品", httpMethod = "DELETE")
     public Message delGoodsById(@PathVariable("id") Long id) throws UserException {
         return goodsServiceFeignApi.delProduct(id);
     }
@@ -45,8 +45,8 @@ public class AdminGoodsController extends BaseController {
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("查看二手商品，按条件分页查询")
-    @PostMapping("/goods/es")
+    @ApiOperation(value = "查看二手商品，按条件分页查询", httpMethod = "POST")
+    @PostMapping("/es")
     public Message goodsList(@RequestBody Page<ProductInfo> page){
         try{
             return goodsServiceFeignApi.list(page);
@@ -55,5 +55,4 @@ public class AdminGoodsController extends BaseController {
             throw new UserException("远程调用goods模块出现异常" + e.getMessage());
         }
     }
-
 }

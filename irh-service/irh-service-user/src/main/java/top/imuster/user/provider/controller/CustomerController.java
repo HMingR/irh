@@ -16,10 +16,13 @@ import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.user.api.pojo.ConsumerInfo;
+import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ConsumerInfoService;
+import top.imuster.user.provider.service.ReportFeedbackInfoService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +36,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/consumer")
 public class CustomerController extends BaseController {
+
+    @Resource
+    ReportFeedbackInfoService reportFeedbackInfoService;
+
     @Resource
     ConsumerInfoService consumerInfoService;
 
@@ -96,6 +103,32 @@ public class CustomerController extends BaseController {
         }catch (Exception e){
             logger.error("修改用户个人信息失败",e, e.getMessage());
             throw new UserException(e.getMessage());
+        }
+    }
+
+    /**
+     * @Description:
+     * @Author: hmr
+     * @Date: 2020/1/11 12:18
+     * @param type
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @GetMapping("/report/{type}/{id}")
+    @ApiOperation("用户举报(type可选择 1-商品举报 2-留言举报 3-评价举报 4-帖子举报),id则为举报对象的id")
+    public Message reportFeedback(@PathVariable("type") Integer type, @PathVariable("id") Long id, HttpServletRequest request){
+        try{
+            Long userId = getIdByToken(request);
+            ReportFeedbackInfo reportFeedbackInfo = new ReportFeedbackInfo();
+            reportFeedbackInfo.setCustomerId(userId);
+            reportFeedbackInfo.setType(type);
+            reportFeedbackInfo.setTargetId(id);
+            reportFeedbackInfo.setState(2);
+            reportFeedbackInfoService.insertEntry(reportFeedbackInfo);
+            return Message.createBySuccess("反馈成功,我们会尽快处理");
+        }catch (Exception e){
+            logger.error("用户举报反馈失败",e.getMessage(),e);
+            throw new UserException("反馈失败,请稍后重试或者联系管理员");
         }
     }
 

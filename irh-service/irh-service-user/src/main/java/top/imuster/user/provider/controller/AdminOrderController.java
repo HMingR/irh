@@ -1,7 +1,15 @@
 package top.imuster.user.provider.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.base.domain.Page;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.service.OrderServiceFeignApi;
+
+import java.util.List;
 
 /**
  * @ClassName: AdminOrderController
@@ -10,7 +18,35 @@ import org.springframework.web.bind.annotation.RestController;
  * @date: 2020/1/9 11:13
  */
 @RestController
-@RequestMapping("/admin")
-public class AdminOrderController {
+@RequestMapping("/admin/order")
+public class AdminOrderController extends BaseController {
+
+    @Autowired
+    OrderServiceFeignApi orderServiceFeignApi;
+
+    /**
+     * @Description: 管理员分页条件查询订单
+     * @Author: hmr
+     * @Date: 2020/1/11 10:41
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @PostMapping
+    @ApiOperation("管理员分页条件查询订单")
+    public Message orderList(@RequestBody Page<OrderInfo> page){
+        List<OrderInfo> orderInfos = orderServiceFeignApi.orderList(page);
+        if(null == orderInfos){
+            logger.error("分页条件查询订单失败");
+            return Message.createByError("查询失败");
+        }
+        return Message.createBySuccess(orderInfos);
+    }
+
+    @GetMapping("/{id}")
+    public Message getOrderById(@PathVariable("id") Long id){
+        OrderInfo order = orderServiceFeignApi.getOrderById(id);
+        return Message.createBySuccess(order);
+    }
 
 }
+

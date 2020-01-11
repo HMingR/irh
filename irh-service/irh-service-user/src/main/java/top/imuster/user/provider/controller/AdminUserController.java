@@ -64,6 +64,26 @@ public class AdminUserController extends BaseController {
     }
 
     /**
+     * @Description: 分页条件查询所有的会员
+     * @Author: hmr
+     * @Date: 2019/12/26 19:43
+     * @param page
+     * @param consumerInfo
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
+    @PostMapping("/list/2")
+    public Message list(@RequestBody Page<ConsumerInfo> page,@RequestBody ConsumerInfo consumerInfo){
+        try{
+            Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(consumerInfo, page);
+            return Message.createBySuccess(consumerInfoPage);
+        }catch (Exception e){
+            logger.error("分页条件查询所有的会员失败", e.getMessage(), e);
+            throw new UserException(e.getMessage());
+        }
+    }
+
+    /**
      * @Description: 添加管理员
      * @Author: hmr
      * @Date: 2019/12/19 11:14
@@ -143,26 +163,6 @@ public class AdminUserController extends BaseController {
             return Message.createBySuccess("修改成功");
         }catch (Exception e){
             logger.error(GlobalConstant.getErrorLog("修改管理员角色失败"), e.getMessage());
-            throw new UserException(e.getMessage());
-        }
-    }
-
-    /**
-     * @Description: 分页条件查询所有的会员
-     * @Author: hmr
-     * @Date: 2019/12/26 19:43
-     * @param page
-     * @param consumerInfo
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
-    @PostMapping("/list/2")
-    public Message list(@RequestBody Page<ConsumerInfo> page,@RequestBody ConsumerInfo consumerInfo){
-        try{
-            Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(consumerInfo, page);
-            return Message.createBySuccess(consumerInfoPage);
-        }catch (Exception e){
-            logger.error("分页条件查询所有的会员失败", e.getMessage(), e);
             throw new UserException(e.getMessage());
         }
     }

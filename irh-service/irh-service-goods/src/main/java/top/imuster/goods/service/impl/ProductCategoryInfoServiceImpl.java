@@ -60,7 +60,13 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     public Integer delCategoryById(Long id) throws GoodsException {
         Long parentId = productCategoryInfoDao.selectEntryList(id).get(0).getParentId();
         if(0 == parentId){
-            throw new GoodsException("删除的是根分类,请先将根节点的商品全部修改或删除再重试");
+            ProductCategoryInfo condition = new ProductCategoryInfo();
+            condition.setParentId(parentId);
+            condition.setState(2);
+            Integer count = productCategoryInfoDao.selectEntryListCount(condition);
+            if(count != 0){
+                throw new GoodsException("删除的是根分类,请先将根节点的商品全部修改或删除再重试");
+            }
         }
 
         //更新分类

@@ -11,6 +11,7 @@ import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: OrderServuceFeignClient
@@ -31,5 +32,13 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     public OrderInfo getOrderById(@PathVariable("orderId") Long orderId) {
         OrderInfo orderInfo = orderInfoService.selectEntryList(orderId).get(0);
         return orderInfo;
+    }
+
+    @Override
+    public List<OrderInfo> orderList(Page<OrderInfo> page) {
+        OrderInfo condition = page.getSearchCondition();
+        condition.setState(2);
+        return orderInfoService.selectEntryList(condition);
+
     }
 }

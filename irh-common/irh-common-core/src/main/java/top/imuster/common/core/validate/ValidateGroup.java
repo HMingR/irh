@@ -27,4 +27,10 @@ public class ValidateGroup {
 
     //评价商品分组
     public interface evaluateGroup{}
+
+    //发布商品分组
+    public interface releaseGroup{}
+
+    //处理举报反馈分组
+    public interface processGroup{}
 }
