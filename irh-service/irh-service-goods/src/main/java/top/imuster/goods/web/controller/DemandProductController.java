@@ -1,19 +1,18 @@
 package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.ApiOperation;
-import org.codehaus.jackson.map.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.util.logging.resources.logging;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
@@ -27,11 +26,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/goods/demand")
+@PropertySource("classpath:application.yml")
 public class DemandProductController extends BaseController {
+    @Value("${image.fileTypes}")
+    private List<String> types;
 
-    //todo
-    @Value("${image.fileType}")
-    private static List<String> fileTypes;
+    @Value(("${logging.config}"))
+    private String x;
 
     @Resource
     ProductInfoService productInfoService;
@@ -47,30 +48,27 @@ public class DemandProductController extends BaseController {
 
     @ApiOperation("发布需求,采用表单的形式，不采用json形式传递其他信息，且上传的图片的<input>或其他标签name必须是file")
     @PutMapping
-    public Message add(@RequestParam("file") MultipartFile file, ProductInfo productInfo, BindingResult bindingResult){
+    public Message add(@RequestParam("file") MultipartFile file, ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        try{
-            if(!file.isEmpty()){
-                int last = file.getOriginalFilename().length();
-                String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);
-                if(null == fileType || "jpg".equals(fileType) || "png".equals(fileType)){
-                    return Message.createByError("图片格式不正确,请更换图片");
-                }
-                String url = fileServiceFeignApi.upload(file).getText();
-                productInfo.setMainPicUrl(url);
+        if(!file.isEmpty()){
+            int last = file.getOriginalFilename().length();
+            String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);
+            if(null == fileType || "jpg".equals(fileType) || "png".equals(fileType)){
+                return Message.createByError("图片格式不正确,请更换图片");
             }
-            productInfoService.insertEntry(productInfo);
-            // todo 需要向消息队列中发送生成详情页的消息
-            return Message.createBySuccess("发布商品成功");
-        }catch (Exception e){
-            logger.error("发布需求失败",e.getMessage(),e);
-            throw new GoodsException("需求发布失败");
+            String url = fileServiceFeignApi.upload(file).getText();
+            productInfo.setMainPicUrl(url);
         }
+        productInfoService.insertEntry(productInfo);
+        // todo 需要向消息队列中发送生成详情页的消息
+        return Message.createBySuccess("发布商品成功");
     }
 
-    @PostMapping
-    public Message edit(ProductInfo productInfo){
-        return null;
+    @PostMapping("/test")
+    public Message edit(/*ProductInfo productInfo*/){
+//        logger.info("",types);
+        System.out.println( x);
+        return Message.createByError(x);
     }
 
     @ApiOperation("删除用户自己发布的需求")

@@ -1,0 +1,18 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5        # 心跳时间
+    lease-expiration-duration-in-seconds: 15    # 过期时间
+server:
+  port: 8888
+spring:
+  application:
+    name: message-server
+
+  rabbitmq:
+    host: 39.105.0.169
+    port: 5672
+    username: admin
+    password: 197877346hmr

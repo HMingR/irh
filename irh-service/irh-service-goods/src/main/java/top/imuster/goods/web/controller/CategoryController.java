@@ -55,12 +55,8 @@ public class CategoryController extends BaseController {
     @PutMapping
     public Message addCategory(@RequestBody @Validated(ValidateGroup.addGroup.class) ProductCategoryInfo productCategoryInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
-        try{
-            productCategoryInfoService.insertEntry(productCategoryInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            throw new GoodsException("添加商品分类失败");
-        }
+        productCategoryInfoService.insertEntry(productCategoryInfo);
+        return Message.createBySuccess();
     }
 
     /**
@@ -95,15 +91,7 @@ public class CategoryController extends BaseController {
     @PostMapping("/edit")
     public Message editCategory(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductCategoryInfo productCategoryInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
-        try{
-            int i = productCategoryInfoService.updateByKey(productCategoryInfo);
-            if(i != 0){
-                return Message.createBySuccess("更新成功");
-            }
-        }catch (Exception e){
-            logger.error("更新商品分类失败",e.getMessage(), e, productCategoryInfo);
-            throw new GoodsException("更新失败");
-        }
-        return Message.createByError("更新失败");
+        productCategoryInfoService.updateByKey(productCategoryInfo);
+        return Message.createBySuccess("更新成功");
     }
 }

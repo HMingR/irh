@@ -3,12 +3,15 @@ package top.imuster.goods.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.base.utils.JwtTokenUtil;
+import top.imuster.common.core.config.RabbitMqConfig;
+import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductEvaluateInfoService;
@@ -30,6 +33,9 @@ import java.util.List;
 @RequestMapping("/goods/evaluate")
 public class EvaluateController extends BaseController {
 
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
     @Resource
     ProductEvaluateInfoService productEvaluateInfoService;
 
@@ -49,19 +55,31 @@ public class EvaluateController extends BaseController {
         try{
             OrderInfo order = orderServiceFeignApi.getOrderById(orderId);
             if(order == null){
-                return Message.createByError("未找到指定的订单号");
+                throw new GoodsException("未找到指定的订单号");
             }
             if(order.getState() != 50){
-                return Message.createByError("请先确定收货，完成该订单之后才能进行评价");
+                throw new GoodsException("请先确定收货，完成该订单之后才能进行评价");
             }
             productEvaluateInfoService.evaluateByOrder(order, productEvaluateInfo);
 
             //todo 评论完成之后需要给卖家发送消息
+            SendEmailDto sendEmailDto = new SendEmailDto();
+            sendEmailDto.setMsg("有人对您发布的商品{}进行了评价,快来看看吧");
+            sendEmailDto.setSourceType(30);
+            sendEmailDto.setSourceId(-1L);
+            rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, RabbitMqConfig.QUEUE_INFORM_EMAIL, "有人对你的商品进行了评价");
             return Message.createBySuccess("评论成功");
         }catch (Exception e){
             logger.error("用户根据订单id评价商品失败", e.getMessage(), e);
             throw new GoodsException("用户根据订单id评价商品失败");
         }
+    }
+
+    @GetMapping("/test/{message}")
+    public Message test(@PathVariable("message") String message){
+        System.out.println("asdf");
+        rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, "info.1.email", message);
+        return Message.createBySuccess("成功");
     }
 
 

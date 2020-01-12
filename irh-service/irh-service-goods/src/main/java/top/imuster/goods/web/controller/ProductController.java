@@ -75,23 +75,5 @@ public class ProductController extends BaseController {
         return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
     }
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Value("${goods.queue.name}")
-    private String queueName;
-
-    @Value("${goods.exchange.name}")
-    private String exchange;
-
-    @Value("${goods.routing.key}")
-    private String routingKey;
-
-    @GetMapping("/send")
-    public void send() throws UnsupportedEncodingException {
-        rabbitTemplate.setExchange(exchange);
-        rabbitTemplate.setRoutingKey(routingKey);
-        rabbitTemplate.send(MessageBuilder.withBody("测试".getBytes("UTF-8")).build());
-    }
 
 }

@@ -44,19 +44,11 @@ eureka:
 logging:
   config: classpath:logback-spring.xml
 
-goods:
-  queue:
-    name: goods.order.email.queue
-  exchange:
-    name: goods.order.email.exchange
-  routing:
-    key: goods.order.email.routing.key
 
+image.fileTypes:
+  - jpg
+  - png
+  - bmp
 
-image:
-  fileTypes:
-    - jpg
-    - png
-    - bmp
 
 

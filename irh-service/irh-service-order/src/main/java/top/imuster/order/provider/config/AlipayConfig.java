@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @PropertySource(value = "classpath:zfbinfo.properties", encoding = "utf-8")
 @Component
 public class AlipayConfig {
-    @Value("${alipay.timeoutExpress}")
+    @Value("${timeoutExpress}")
     private String timeoutExpress;
 
     public String getTimeoutExpress() {
