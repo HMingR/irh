@@ -2,19 +2,22 @@ package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
-import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.config.RabbitMqConfig;
+import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
-import top.imuster.order.api.pojo.OrderInfo;
-import top.imuster.order.api.service.OrderServiceFeignApi;
+import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.provider.exception.UserException;
@@ -25,6 +28,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: CustomerController
@@ -37,6 +42,9 @@ import java.util.Map;
 @RequestMapping("/consumer")
 public class CustomerController extends BaseController {
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
     @Resource
     ReportFeedbackInfoService reportFeedbackInfoService;
 
@@ -45,6 +53,9 @@ public class CustomerController extends BaseController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @ApiOperation("登录，成功返回token")
     @PostMapping("/login")
@@ -85,6 +96,45 @@ public class CustomerController extends BaseController {
         }
     }
 
+    @ApiOperation("用户在注册的时候需要校验各种参数(用户名、邮箱、手机号等)必须唯一")
+    @PostMapping("/check")
+    public Message checkValid(@RequestBody CheckValidDto checkValidDto, BindingResult bindingResult){
+        validData(bindingResult);
+        String type = checkValidDto.getType();
+        String validValue = checkValidDto.getValidValue();
+        ConsumerInfo condition = new ConsumerInfo();
+        //用户名
+        if("NICKNAME".equals(type)){
+            condition.setNickname(validValue);
+        }
+
+        //邮箱
+        if("EMAIL".equals(type)){
+            condition.setNickname(validValue);
+        }
+
+        //电话号
+        if("PHONENUM".equals(type)){
+            condition.setNickname(validValue);
+        }
+
+        //qq号
+        if("QQ".equals(type)){
+            condition.setNickname(validValue);
+        }
+
+        //支付宝账号
+        if("ALIPAYNUM".equals(type)){
+            condition.setNickname(validValue);
+        }
+        boolean valid = consumerInfoService.checkValid(condition);
+        if(!valid){
+            return Message.createByError(type + "已经被使用过了");
+        }
+        return Message.createBySuccess();
+
+    }
+
     /**
      * @Description: 修改会员的个人信息
      * @Author: hmr
@@ -94,7 +144,7 @@ public class CustomerController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping("/edit")
-    @ApiOperation(value = "修改会员的个人信息", httpMethod = "POST")
+    @ApiOperation(value = "修改会员的个人信息(先校验一些信息是否存在)", httpMethod = "POST")
     public Message editInfo(@RequestBody @Validated(ValidateGroup.editGroup.class) ConsumerInfo consumerInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
@@ -104,6 +154,19 @@ public class CustomerController extends BaseController {
             logger.error("修改用户个人信息失败",e, e.getMessage());
             throw new UserException(e.getMessage());
         }
+    }
+
+    @ApiOperation("准备重置密码的时候需要发送验证码")
+    @PostMapping("/reset/pwd/email")
+    public Message submitResetPwdEmail(HttpServletRequest request) throws Exception {
+        Long id = getIdByToken(request);
+        ConsumerInfo consumerInfo = consumerInfoService.selectEntryList(id).get(0);
+        if(null == consumerInfo){
+            throw new UserException("用户验证已经过期，请重新登录");
+        }
+        // todo 需要向用户的邮箱中发送验证码
+        consumerInfoService.resetPwdByEmail(consumerInfo.getEmail());
+        return Message.createBySuccess("验证码已经发送到您的邮箱");
     }
 
     /**
@@ -131,5 +194,4 @@ public class CustomerController extends BaseController {
             throw new UserException("反馈失败,请稍后重试或者联系管理员");
         }
     }
-
 }

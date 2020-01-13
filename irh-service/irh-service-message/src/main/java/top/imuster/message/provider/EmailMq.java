@@ -15,8 +15,8 @@ import top.imuster.common.core.config.RabbitMqConfig;
 public class EmailMq {
 
     @RabbitListener(queues = {RabbitMqConfig.QUEUE_INFORM_EMAIL})
-    public void sendEmail(String msg, Channel channel){
-        System.out.println(msg + "----" + "---"+channel);
+    public void sendEmail(String msg){
+        System.out.println(msg + "----" + "---");
     }
 
 }

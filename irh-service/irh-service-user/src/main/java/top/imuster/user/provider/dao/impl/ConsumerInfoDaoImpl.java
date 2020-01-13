@@ -14,8 +14,15 @@ import top.imuster.user.provider.dao.ConsumerInfoDao;
 @Repository("consumerInfoDao")
 public class ConsumerInfoDaoImpl extends BaseDaoImpl<ConsumerInfo, Long> implements ConsumerInfoDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.ConsumerInfoDao.";
+	private final static String CHECK_INFO = "checkInfo";
+
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public int checkInfo(ConsumerInfo consumerInfo) {
+		return this.select(getNameSpace(CHECK_INFO), consumerInfo);
 	}
 }

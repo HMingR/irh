@@ -22,6 +22,12 @@ public class GlobalConstant {
     public static final Long JWT_EXPIRATION = 1800L;               //jwt的超时(失效)时间，单位为秒
     public static final String JWT_TOKEN_HEAD = "Bearer ";               //Authorization头字段中的首部
 
+    //使用邮箱更换密码时保存在redis中的key头部
+    public static final String REDIS_RESET_PWD_EMAIL_TOKEN = "irh:reset:pwd:email:token:";
+
+    //使用手机更换密码时保存在redis中的key头部
+    public static final String REDIS_RESET_PWD_PHONE_TOKEN = "irh:reset:pwd:phone:token:";
+
     //日志相关
     public static String getErrorLog(String operation){
         return operation + "失败,错误信息为{},实体信息为{}";

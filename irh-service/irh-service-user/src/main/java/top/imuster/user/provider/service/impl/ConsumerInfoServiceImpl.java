@@ -1,6 +1,8 @@
 package top.imuster.user.provider.service.impl;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.core.annotation.MqGenerate;
+import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.utils.RedisUtil;
@@ -20,6 +24,7 @@ import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ConsumerInfoService;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -85,4 +90,32 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
         }
         return new ConsumerDetails(consumerInfo);
     }
+
+    @Override
+    public boolean checkValid(ConsumerInfo consumerInfo) {
+        int i = consumerInfoDao.checkInfo(consumerInfo);
+        return i == 0;
+    }
+
+    @Override
+    public void resetPwdByEmail(String email) throws JsonProcessingException {
+        LOGGER.info("发送邮箱");
+        String msg = UUID.randomUUID().toString().substring(0, 4);
+        SendMessageDto sendMessageDto = new SendMessageDto();
+        sendMessageDto.setSourceId(-1L);
+        sendMessageDto.setBody(msg);
+        sendMessageDto.setTopic("修改密码的验证码");
+        sendMessageDto.setSourceType(30);
+        sendMessageDto.setType("EMAIL");
+        sendMessageDto.setUnit(TimeUnit.MINUTES);
+        sendMessageDto.setRedisKey(RedisUtil.getResetPwdByEmailToken(email));
+        sendMessageDto.setRedisValue(msg);
+        generate(sendMessageDto);
+    }
+
+    @MqGenerate(isSaveToRedis = true)
+    private void generate(SendMessageDto sendMessageDto) throws JsonProcessingException {
+        LOGGER.info("发送邮箱,发送的内容为{}", new ObjectMapper().writeValueAsString(sendMessageDto));
+    }
+
 }

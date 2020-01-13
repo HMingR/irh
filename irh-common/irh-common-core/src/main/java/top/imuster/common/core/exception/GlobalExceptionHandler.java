@@ -1,5 +1,6 @@
 package top.imuster.common.core.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +96,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClassCastException.class)
     public Message classCastExceptionHandler(ClassCastException e) {
         return Message.createByError("服务器内部出现异常," + e.getMessage());
+    }
+
+    //json解析异常
+    @ExceptionHandler(JsonProcessingException.class)
+    public Message jsonProcessingExceptionHandler(JsonProcessingException e){
+        return Message.createByError("服务器内部错误,解析json失败");
     }
 
     @ExceptionHandler(Exception.class)
