@@ -36,7 +36,7 @@ public class SendMessageDto implements Serializable {
     private String redisKey;
 
     //redis中储存的value
-    private String redisValue;
+    private String value;
 
     //过期时间
     private Long expiration;
@@ -44,20 +44,34 @@ public class SendMessageDto implements Serializable {
     //过期时间单位
     private TimeUnit unit;
 
+    public SendMessageDto() {
+    }
+
+    public SendMessageDto(String topic, String body, Integer sourceType, Long sourceId, Date sendDate, String type, Long expiration, TimeUnit unit) {
+        this.topic = topic;
+        this.body = body;
+        this.sourceType = sourceType;
+        this.sourceId = sourceId;
+        this.sendDate = sendDate;
+        this.type = type;
+        this.expiration = expiration;
+        this.unit = unit;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getRedisKey() {
         return redisKey;
     }
 
     public void setRedisKey(String redisKey) {
         this.redisKey = redisKey;
-    }
-
-    public String getRedisValue() {
-        return redisValue;
-    }
-
-    public void setRedisValue(String redisValue) {
-        this.redisValue = redisValue;
     }
 
     public Long getExpiration() {

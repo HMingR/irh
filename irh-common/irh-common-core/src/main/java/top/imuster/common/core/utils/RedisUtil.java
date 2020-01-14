@@ -25,5 +25,12 @@ public class RedisUtil {
         throw new RuntimeException("token为空");
     }
 
+    public static String getConsumerRegisterByEmailToken(String token){
+        if(StringUtils.isNotEmpty(token)){
+            return GlobalConstant.REDIS_CUSTOMER_EMAIL_REGISTER + token;
+        }
+        throw new RuntimeException("token为空");
+    }
+
 
 }

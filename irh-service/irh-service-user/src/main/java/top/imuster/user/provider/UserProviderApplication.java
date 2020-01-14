@@ -2,6 +2,7 @@ package top.imuster.user.provider;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,6 @@ import org.springframework.web.context.request.RequestContextListener;
         "top.imuster.common.core.interceptor"})
 public class UserProviderApplication {
     public static void main(String[] args) {
-
         SpringApplication.run(UserProviderApplication.class, args);
     }
 

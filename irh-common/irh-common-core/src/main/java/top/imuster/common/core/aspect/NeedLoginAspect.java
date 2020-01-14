@@ -34,7 +34,7 @@ import java.lang.reflect.Method;
 @Component
 public class NeedLoginAspect {
     @Resource
-    RedisTemplate<String, Object> redisTemplate;
+    RedisTemplate redisTemplate;
 
     @Pointcut("@annotation(top.imuster.common.core.annotation.NeedLogin)")
     private void pointCut(){}

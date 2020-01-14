@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.provider.dao.AuthInfoDao;
@@ -25,6 +26,7 @@ public class AuthInfoServiceImpl extends BaseServiceImpl<AuthInfo, Long> impleme
     @Resource
     private AuthInfoDao authInfoDao;
 
+    @Resource
     private AuthRoleRelService authRoleRelService;
 
     @Override

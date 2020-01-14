@@ -28,6 +28,9 @@ public class GlobalConstant {
     //使用手机更换密码时保存在redis中的key头部
     public static final String REDIS_RESET_PWD_PHONE_TOKEN = "irh:reset:pwd:phone:token:";
 
+    //会员注册时发送的邮箱验证码
+    public static final String REDIS_CUSTOMER_EMAIL_REGISTER = "irh:customer:email:register:";
+
     //日志相关
     public static String getErrorLog(String operation){
         return operation + "失败,错误信息为{},实体信息为{}";

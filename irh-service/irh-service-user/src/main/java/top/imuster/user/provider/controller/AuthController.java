@@ -20,10 +20,8 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("admin/auth")
 public class AuthController extends BaseController {
-
     @Resource
     AuthInfoService authInfoService;
-
 
     /**
      * @Description: 分页查询权限列表

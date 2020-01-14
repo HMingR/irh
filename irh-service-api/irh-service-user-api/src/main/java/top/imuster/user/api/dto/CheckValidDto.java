@@ -1,8 +1,8 @@
 package top.imuster.user.api.dto;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import top.imuster.user.api.enums.CheckTypeEnum;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -25,7 +25,15 @@ public class CheckValidDto implements Serializable {
     //需要校验的类型
     @NotEmpty(message = "校验类型不能为空")
     @ApiModelProperty("需要校验的类型")
-    private String type;
+    private CheckTypeEnum type;
+
+    public void setType(CheckTypeEnum type) {
+        this.type = type;
+    }
+
+    public CheckTypeEnum getType() {
+        return type;
+    }
 
     public String getValidValue() {
         return validValue;
@@ -33,13 +41,5 @@ public class CheckValidDto implements Serializable {
 
     public void setValidValue(String validValue) {
         this.validValue = validValue;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

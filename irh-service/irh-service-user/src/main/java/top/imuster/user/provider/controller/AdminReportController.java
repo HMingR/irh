@@ -1,6 +1,5 @@
 package top.imuster.user.provider.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

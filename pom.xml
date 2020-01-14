@@ -38,6 +38,10 @@
                 <irh.redis.host>192.168.2.128</irh.redis.host>
                 <irh.redis.password></irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
+                <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
+                <irh.rabbitmq.port>5672</irh.rabbitmq.port>
+                <irh.rabbitmq.username>admin</irh.rabbitmq.username>
+                <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
             </properties>
         </profile>
 
@@ -53,6 +57,10 @@
                 <irh.redis.host>localhost</irh.redis.host>
                 <irh.redis.password></irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
+                <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
+                <irh.rabbitmq.port>5672</irh.rabbitmq.port>
+                <irh.rabbitmq.username>admin</irh.rabbitmq.username>
+                <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
             </properties>
         </profile>
 
@@ -69,6 +77,10 @@
                 <irh.redis.host>39.105.0.169</irh.redis.host>
                 <irh.redis.password>197877346h</irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
+                <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
+                <irh.rabbitmq.port>5672</irh.rabbitmq.port>
+                <irh.rabbitmq.username>admin</irh.rabbitmq.username>
+                <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
             </properties>
 
 

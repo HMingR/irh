@@ -64,10 +64,10 @@ public class EvaluateController extends BaseController {
 
             //todo 评论完成之后需要给卖家发送消息
             SendMessageDto sendMessageDto = new SendMessageDto();
-            sendMessageDto.setMsg("有人对您发布的商品{}进行了评价,快来看看吧");
+            sendMessageDto.setBody("有人对您发布的商品{}进行了评价,快来看看吧");
             sendMessageDto.setSourceType(30);
             sendMessageDto.setSourceId(-1L);
-            rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, RabbitMqConfig.QUEUE_INFORM_EMAIL, "有人对你的商品进行了评价");
+            rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, "info.1.email.1", "有人对你的商品进行了评价");
             return Message.createBySuccess("评论成功");
         }catch (Exception e){
             logger.error("用户根据订单id评价商品失败", e.getMessage(), e);

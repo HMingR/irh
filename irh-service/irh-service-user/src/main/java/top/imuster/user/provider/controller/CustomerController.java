@@ -1,11 +1,9 @@
 package top.imuster.user.provider.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -41,10 +38,6 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/consumer")
 public class CustomerController extends BaseController {
-
-    @Autowired
-    RedisTemplate redisTemplate;
-
     @Resource
     ReportFeedbackInfoService reportFeedbackInfoService;
 
@@ -54,8 +47,6 @@ public class CustomerController extends BaseController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
 
     @ApiOperation("登录，成功返回token")
     @PostMapping("/login")
@@ -70,6 +61,24 @@ public class CustomerController extends BaseController {
         }catch (Exception e){
             logger.error(GlobalConstant.getErrorLog("会员登录失败,{}"), e.getMessage(), consumerInfo);
             return Message.createByError(e.getMessage());
+        }
+    }
+
+    @ApiOperation("发送email验证码")
+    @GetMapping("/sendCode/{email}")
+    public Message getCode(@PathVariable("email") String email, SendMessageDto sendMessageDto){
+        try{
+            String code = UUID.randomUUID().toString().substring(0, 4);
+            sendMessageDto.setUnit(TimeUnit.MINUTES);
+            sendMessageDto.setExpiration(10L);
+            sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+            sendMessageDto.setValue(code);
+            sendMessageDto.setTopic("注册");
+            sendMessageDto.setBody("欢迎注册,本次注册的验证码是" + code + ",该验证码有效期为10分钟");
+            consumerInfoService.getCode(sendMessageDto, email);
+            return Message.createBySuccess();
+        }catch (Exception e){
+            return Message.createByError("服务器内部错误,请稍后重试或联系管理员");
         }
     }
 
@@ -96,43 +105,23 @@ public class CustomerController extends BaseController {
         }
     }
 
+    /**
+     * @Description 用户在注册的时候需要校验各种参数
+     * @Author hmr
+     * @Date 12:53 2020/1/14
+     * @Param checkValidDto
+     * @param bindingResult
+     * @return top.imuster.common.base.wrapper.Message 
+     **/
     @ApiOperation("用户在注册的时候需要校验各种参数(用户名、邮箱、手机号等)必须唯一")
     @PostMapping("/check")
-    public Message checkValid(@RequestBody CheckValidDto checkValidDto, BindingResult bindingResult){
+    public Message checkValid(@RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        String type = checkValidDto.getType();
-        String validValue = checkValidDto.getValidValue();
-        ConsumerInfo condition = new ConsumerInfo();
-        //用户名
-        if("NICKNAME".equals(type)){
-            condition.setNickname(validValue);
+        boolean flag = consumerInfoService.checkValid(checkValidDto);
+        if(flag){
+            return Message.createBySuccess();
         }
-
-        //邮箱
-        if("EMAIL".equals(type)){
-            condition.setNickname(validValue);
-        }
-
-        //电话号
-        if("PHONENUM".equals(type)){
-            condition.setNickname(validValue);
-        }
-
-        //qq号
-        if("QQ".equals(type)){
-            condition.setNickname(validValue);
-        }
-
-        //支付宝账号
-        if("ALIPAYNUM".equals(type)){
-            condition.setNickname(validValue);
-        }
-        boolean valid = consumerInfoService.checkValid(condition);
-        if(!valid){
-            return Message.createByError(type + "已经被使用过了");
-        }
-        return Message.createBySuccess();
-
+        return Message.createByError("已经存在");
     }
 
     /**
@@ -165,7 +154,7 @@ public class CustomerController extends BaseController {
             throw new UserException("用户验证已经过期，请重新登录");
         }
         // todo 需要向用户的邮箱中发送验证码
-        consumerInfoService.resetPwdByEmail(consumerInfo.getEmail());
+        consumerInfoService.resetPwdByEmail(new SendMessageDto(),consumerInfo.getEmail());
         return Message.createBySuccess("验证码已经发送到您的邮箱");
     }
 
@@ -193,5 +182,12 @@ public class CustomerController extends BaseController {
             logger.error("用户举报反馈失败",e.getMessage(),e);
             throw new UserException("反馈失败,请稍后重试或者联系管理员");
         }
+    }
+
+    @GetMapping("/test")
+    public Message test() throws JsonProcessingException {
+        SendMessageDto sendMessageDto = new SendMessageDto();
+        consumerInfoService.getCode(sendMessageDto, "1978773465@qq.com");
+        return Message.createBySuccess();
     }
 }
