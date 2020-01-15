@@ -29,7 +29,6 @@ public class CategoryController extends BaseController {
     @Resource
     ProductCategoryInfoService productCategoryInfoService;
 
-
     /**
      * @Description: 获得分类的树形结构数据
      * @Author: hmr
@@ -37,8 +36,8 @@ public class CategoryController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("获得分类的树形结构数据")
-    @GetMapping
+    @ApiOperation(value = "获得分类的树形结构数据", httpMethod = "GET")
+    @GetMapping("/tree")
     public Message list() throws GoodsException {
         List<ProductCategoryInfo> categoryTree = productCategoryInfoService.getCategoryTree();
         return Message.createBySuccess(categoryTree);
@@ -51,7 +50,7 @@ public class CategoryController extends BaseController {
      * @param productCategoryInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("添加分类")
+    @ApiOperation(value = "添加分类", httpMethod = "PUT")
     @PutMapping
     public Message addCategory(@RequestBody @Validated(ValidateGroup.addGroup.class) ProductCategoryInfo productCategoryInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
@@ -66,7 +65,7 @@ public class CategoryController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("删除商品分类,再删除分类的时候需要提示用户会更新所有该分类下的商品分类为其父节点")
+    @ApiOperation(value = "删除商品分类,再删除分类的时候需要提示用户会更新所有该分类下的商品分类为其父节点", httpMethod = "DELETE")
     @DeleteMapping("/{id}")
     public Message delCategory(@PathVariable("id") Long id) throws GoodsException{
         Integer integer = productCategoryInfoService.delCategoryById(id);
@@ -74,20 +73,20 @@ public class CategoryController extends BaseController {
     }
 
     /**
-     * @Description: 修改数据时的数据回显
+     * @Description: 根据id查询
      * @Author: hmr
      * @Date: 2019/12/22 15:53
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("修改数据时的数据回显")
-    @GetMapping("/toEdit/{id}")
+    @ApiOperation(value = "根据id查询", httpMethod = "GET")
+    @GetMapping("/{id}")
     public Message toEdit(@PathVariable("id") Long id){
         ProductCategoryInfo productCategoryInfo = productCategoryInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(productCategoryInfo);
     }
 
-    @ApiOperation("修改分类")
+    @ApiOperation(value = "修改分类信息", httpMethod = "POST")
     @PostMapping("/edit")
     public Message editCategory(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductCategoryInfo productCategoryInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);

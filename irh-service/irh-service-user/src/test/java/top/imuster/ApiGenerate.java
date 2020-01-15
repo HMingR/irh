@@ -20,8 +20,9 @@ import java.nio.file.Paths;
 public class ApiGenerate {
     public static void main(String[] args) {
         try{
-            generateMd();
+            //generateMd();
             //generateCf();
+            ExportConfig();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -69,6 +70,17 @@ public class ApiGenerate {
                 .withConfig(config)
                 .build()
                 .toFolder(Paths.get("./docs/confluence/generated"));
+    }
+
+
+    public static void ExportConfig() throws MalformedURLException {
+        // 输出Ascii格式
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withMarkupLanguage(MarkupLanguage.ASCIIDOC)
+                .withOutputLanguage(Language.ZH).withPathsGroupedBy(GroupBy.TAGS).withGeneratedExamples()
+                .withoutInlineSchema().build();
+
+        Swagger2MarkupConverter.from(new URL("http://localhost:8085/v2/api-docs")).withConfig(config)
+                .build().toFolder(Paths.get("src/docs/asciidoc/generated"));
     }
 
 

@@ -46,7 +46,7 @@ public class AdminUserController extends BaseController {
     @Resource
     ManagementInfoService managementInfoService;
 
-    @ApiOperation("查看所有的管理员")
+    @ApiOperation(value = "查看所有的管理员", httpMethod = "POST")
     @PostMapping("/list/1")
     @NeedLogin(validate = true)
     public Message managementList(@RequestBody Page<ManagementInfo> page, @RequestBody ManagementInfo managementInfo){
@@ -90,7 +90,7 @@ public class AdminUserController extends BaseController {
      * @param managementInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("添加管理员")
+    @ApiOperation(value = "添加管理员", httpMethod = "POST")
     @PostMapping
     public Message addManagement(@RequestBody ManagementInfo managementInfo) throws IOException {
         try{
@@ -104,7 +104,7 @@ public class AdminUserController extends BaseController {
         }
     }
 
-    @ApiOperation("修改管理员信息(修改基本信息，包括删除)")
+    @ApiOperation(value = "修改管理员信息(修改基本信息，包括删除)", httpMethod = "PUT")
     @PutMapping
     public Message editManagement(@Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
         validData(bindingResult);
@@ -118,7 +118,7 @@ public class AdminUserController extends BaseController {
     }
 
 
-    @ApiOperation("登录成功返回token")
+    @ApiOperation(value = "登录成功返回token", httpMethod = "POST")
     @PostMapping("/login")
     public Message managementLogin(@Validated(ValidateGroup.loginGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult result){
         validData(result);
@@ -137,7 +137,8 @@ public class AdminUserController extends BaseController {
         }
     }
 
-    @GetMapping("/toEdit/{id}")
+    @ApiOperation(value = "根据id获得管理员信息", httpMethod = "GET")
+    @GetMapping("/{id}")
     public Message toEdit(@PathVariable("id") Long id){
         ManagementInfo condition = new ManagementInfo();
         condition.setId(id);
@@ -156,6 +157,7 @@ public class AdminUserController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
+    @ApiOperation("提交修改管理员的角色")
     @PostMapping("/adminRole")
     public Message editManagementRole(Long managementId, String roleIds){
         try{

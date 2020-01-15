@@ -17,7 +17,7 @@ public class SendMessageDto implements Serializable {
     //主题
     private String topic;
 
-    //发送的消息
+    //发送的消息体
     private String body;
 
     //发送消息的来源类型  10-会员 20-管理员 30-系统
@@ -43,6 +43,34 @@ public class SendMessageDto implements Serializable {
 
     //过期时间单位
     private TimeUnit unit;
+
+    //目标id
+    private Long targetId;
+
+    @Override
+    public String toString() {
+        return "SendMessageDto{" +
+                "topic='" + topic + '\'' +
+                ", body='" + body + '\'' +
+                ", sourceType=" + sourceType +
+                ", sourceId=" + sourceId +
+                ", sendDate=" + sendDate +
+                ", type='" + type + '\'' +
+                ", redisKey='" + redisKey + '\'' +
+                ", value='" + value + '\'' +
+                ", expiration=" + expiration +
+                ", unit=" + unit +
+                ", targetId=" + targetId +
+                '}';
+    }
+
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
+    }
 
     public SendMessageDto() {
     }

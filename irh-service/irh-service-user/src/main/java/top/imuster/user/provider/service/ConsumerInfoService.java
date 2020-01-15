@@ -47,15 +47,6 @@ public interface ConsumerInfoService extends BaseService<ConsumerInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 重置密码时发送email
-     * @Date: 2020/1/14 13:04
-     * @param email
-     * @reture: void
-     **/
-    void resetPwdByEmail(SendMessageDto sendMessageDto, String email) throws JsonProcessingException;
-    
-    /**
-     * @Author hmr
      * @Description 用户注册的一系列逻辑
      * @Date: 2020/1/14 13:00
      * @param consumerInfo
@@ -65,11 +56,13 @@ public interface ConsumerInfoService extends BaseService<ConsumerInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 获得验证码
-     * @Date: 2020/1/14 16:46
-     * @param
+     * @Description 发送验证码
+     * @Date: 2020/1/15 10:41
+     * @param sendMessageDto
+     * @param email
+     * @param type 1-注册验证码   2-重置密码验证码
      * @reture: void
      **/
-    void getCode(SendMessageDto sendMessageDto, String email) throws JsonProcessingException;
+    void getCode(SendMessageDto sendMessageDto, String email, Integer type) throws JsonProcessingException;
 
 }

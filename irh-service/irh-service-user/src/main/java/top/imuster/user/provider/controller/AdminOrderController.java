@@ -32,7 +32,7 @@ public class AdminOrderController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping
-    @ApiOperation("管理员分页条件查询订单")
+    @ApiOperation(value = "管理员分页条件查询订单", httpMethod = "POST")
     public Message orderList(@RequestBody Page<OrderInfo> page){
         List<OrderInfo> orderInfos = orderServiceFeignApi.orderList(page);
         if(null == orderInfos){
@@ -42,6 +42,7 @@ public class AdminOrderController extends BaseController {
         return Message.createBySuccess(orderInfos);
     }
 
+    @ApiOperation(value = "根据id查询订单", httpMethod = "GET")
     @GetMapping("/{id}")
     public Message getOrderById(@PathVariable("id") Long id){
         OrderInfo order = orderServiceFeignApi.getOrderById(id);

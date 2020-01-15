@@ -8,12 +8,16 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.base.utils.JwtTokenUtil;
+import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.exception.GoodsException;
+import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +34,9 @@ public class ProductMessageController extends BaseController {
     @Resource
     ProductMessageService productMessageService;
 
+    @Resource
+    ProductInfoService productInfoService;
+
     /**
      * @Description: 根据商品的id查询商品的留言信息(树形结构)
      * @Author: hmr
@@ -40,31 +47,22 @@ public class ProductMessageController extends BaseController {
     @ApiOperation("根据商品的id查询商品的留言信息(树形结构)")
     @GetMapping("/{goodsId}")
     public Message list(@PathVariable("goodsId") Long id){
-        try{
-            List<ProductMessage> messageTree = productMessageService.generateMessageTree(id);
-            return Message.createBySuccess(messageTree);
-        }catch (Exception e){
-            logger.error("获得商品的留言信息失败", e.getMessage(), e);
-            throw new GoodsException("获得商品的留言信息失败");
-        }
+        List<ProductMessage> messageTree = productMessageService.generateMessageTree(id);
+        return Message.createBySuccess(messageTree);
     }
 
     @ApiOperation("根据商品id和留言父id写留言信息(如果是新的留言,则parentId写成0)")
     @PostMapping("/write")
-    public Message writeMessage(@RequestBody ProductMessage productMessage, HttpServletRequest request){
+    public Message writeMessage(@RequestBody ProductMessage productMessage, HttpServletRequest request, SendMessageDto sendMessageDto){
         try{
             Long userId = getIdByToken(request);
-            productMessage.setConsumerId(userId);
-            int i = productMessageService.insertEntry(productMessage);
-            if(i != 1){
-                logger.error("留言失败,插入的数量异常,插入留言的条数为{}", i);
-                return Message.createByError("留言失败,请刷新后重试");
-            }
-
-            //todo 如果parentId是0，则给卖家发送消息；如果不是，则给卖家和parentId对应的会员发送消息
+            ProductInfo productInfo = productInfoService.selectEntryList(productMessage.getProductId()).get(0);
+            //如果parentId是0，则给卖家发送消息；如果不是，则给卖家和parentId对应的会员发送消息
+            sendMessageDto.setTargetId(productInfo.getConsumerId());
+            productMessageService.generateSendMessage(sendMessageDto, productMessage.getParentId());
             return Message.createBySuccess("留言成功");
         }catch (Exception e){
-            logger.error("留言失败，出现异常为",e.getMessage(), e);
+            logger.error("留言失败，出现异常为{}",e.getMessage(), e);
             throw new GoodsException("留言失败");
         }
     }
@@ -95,5 +93,11 @@ public class ProductMessageController extends BaseController {
         }
     }
 
+    @GetMapping("/test")
+    public Message test() throws Exception{
+        List<SendMessageDto> sendMessageDtos = new ArrayList<>();
+        productMessageService.test(sendMessageDtos);
+        return Message.createBySuccess();
+    }
 
 }

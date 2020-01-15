@@ -40,7 +40,7 @@ public class RoleController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(httpMethod = "GET", value = "分页查询角色列表")
+    @ApiOperation(httpMethod = "POST", value = "分页查询角色列表")
     @PostMapping("/list")
     public Message roleList(@RequestBody Page<RoleInfo> page,@RequestBody RoleInfo roleInfo){
         try{
@@ -53,6 +53,13 @@ public class RoleController extends BaseController {
     }
 
 
+    @ApiOperation(value = "根据id获得角色信息", httpMethod = "GET")
+    @GetMapping("/{roleId}")
+    public Message toEditRoleInfo(@PathVariable("roleId") Long roleId){
+        RoleInfo roleInfo = roleInfoService.selectEntryList(roleId).get(0);
+        return Message.createBySuccess(roleInfo);
+    }
+
     /**
      * @Description: 按主键修改角色信息
      * @Author: hmr
@@ -60,7 +67,7 @@ public class RoleController extends BaseController {
      * @param roleInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "按主键修改角色信息（）", httpMethod = "PUT")
+    @ApiOperation(value = "按主键修改角色信息", httpMethod = "POST")
     @PostMapping("/edit")
     public Message editRoleInfo(@Validated(ValidateGroup.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
@@ -127,7 +134,7 @@ public class RoleController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "根据角色id获得角色的所有权限", httpMethod = "GET")
-    @GetMapping("/{roleId}")
+    @GetMapping("/ra/{roleId}")
     public Message toEditRoleAuth(@PathVariable(value = "roleId")Long roleId){
         try{
             RoleInfo roleInfo = roleInfoService.getRoleAndAuthByRoleId(roleId);
@@ -146,7 +153,7 @@ public class RoleController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "添加角色的权限", httpMethod = "PUT")
-    @PutMapping("/editAuth")
+    @PutMapping("/editRoleAuth")
     public Message editRoleAuth(@Validated({AuthRoleRel.editGroup.class}) @RequestBody AuthRoleRel authRoleRel, BindingResult bindingResult){
         validData(bindingResult);
         try{

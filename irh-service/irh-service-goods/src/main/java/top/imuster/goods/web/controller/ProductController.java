@@ -37,14 +37,21 @@ public class ProductController extends BaseController {
     @Resource
     ProductInfoService productInfoService;
 
-    @ApiOperation("条件查询商品列表")
+    @ApiOperation(value = "条件分页查询商品列表", httpMethod = "POST")
     @PostMapping("/list")
     public Message productList(Page<ProductInfo> page, ProductInfo productInfo) throws GoodsException{
         Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
         return Message.createBySuccess(productInfoPage);
     }
 
-    @ApiOperation("修改商品信息")
+    @ApiOperation(value = "根据id获得商品信息", httpMethod = "GET")
+    @GetMapping("/{id}")
+    public Message getProductById(@PathVariable("id")Long id){
+        ProductInfo productInfo = productInfoService.selectEntryList(id).get(0);
+        return Message.createBySuccess(productInfo);
+    }
+
+    @ApiOperation(value = "修改商品信息", httpMethod = "POST")
     @PostMapping("/edit")
     public Message editProduct(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
@@ -70,7 +77,7 @@ public class ProductController extends BaseController {
         productInfo.setState(1);
         int i = productInfoService.updateByKey(productInfo);
         if(i != 0){
-            return Message.createBySuccess();
+            return Message.createBySuccess("操作成功");
         }
         return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
     }

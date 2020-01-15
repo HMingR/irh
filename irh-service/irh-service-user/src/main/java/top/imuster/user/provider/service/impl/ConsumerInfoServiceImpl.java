@@ -97,9 +97,9 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
 
     @Override
     public boolean checkValid(CheckValidDto checkValidDto) throws Exception{
-            ConsumerInfo condition = generateCheckCondition(checkValidDto);
-            int i = consumerInfoDao.checkInfo(condition);
-            return i == 0;
+        ConsumerInfo condition = generateCheckCondition(checkValidDto);
+        int i = consumerInfoDao.checkInfo(condition);
+        return i == 0;
     }
 
     /**
@@ -116,22 +116,6 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
         String field = type.getType();
         BeanUtils.setProperty(condition, field, validValue);
         return condition;
-    }
-
-    @Override
-    @MqGenerate(isSaveToRedis = true)
-    public void resetPwdByEmail(SendMessageDto sendMessageDto, String email) throws JsonProcessingException {
-        String msg = UUID.randomUUID().toString().substring(0, 4);
-        sendMessageDto.setSourceId(-1L);
-        sendMessageDto.setBody("该验证码用于重置密码," + msg + ",有效期为10分钟");
-        sendMessageDto.setTopic("修改密码");
-        sendMessageDto.setSourceType(30);
-        sendMessageDto.setType("EMAIL");
-        sendMessageDto.setUnit(TimeUnit.MINUTES);
-        sendMessageDto.setExpiration(10L);
-        sendMessageDto.setRedisKey(RedisUtil.getResetPwdByEmailToken(email));
-        sendMessageDto.setValue(msg);
-        LOGGER.info("重置密码准备发送邮箱的实体类{}",sendMessageDto);
     }
 
     @Override
@@ -162,14 +146,23 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
 
     @Override
     @MqGenerate(isSaveToRedis = true)
-    public void getCode(SendMessageDto sendMessageDto, String email) throws JsonProcessingException {
+    public void getCode(SendMessageDto sendMessageDto, String email, Integer type) throws JsonProcessingException {
         String code = UUID.randomUUID().toString().substring(0, 4);
         sendMessageDto.setUnit(TimeUnit.MINUTES);
         sendMessageDto.setExpiration(10L);
-        sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken("1978773465@qq.com"));
         sendMessageDto.setValue(code);
-        sendMessageDto.setTopic("注册");
         sendMessageDto.setType("EMAIL");
-        sendMessageDto.setBody("欢迎注册,本次注册的验证码是" + code + ",该验证码有效期为10分钟");
+        if(type == 1){
+            sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+            sendMessageDto.setTopic("注册");
+            String body = new StringBuilder().append("欢迎注册,本次注册的验证码是").append(code).append(",该验证码有效期为10分钟").toString();
+            sendMessageDto.setBody(body);
+        }
+        if(type == 2){
+            sendMessageDto.setRedisKey(RedisUtil.getResetPwdByEmailToken(email));
+            sendMessageDto.setTopic("修改密码");
+            String body = new StringBuilder().append("该验证码用于重置密码:").append(code).append(",该验证码有效期为10分钟").toString();
+            sendMessageDto.setBody(body);
+        }
     }
 }

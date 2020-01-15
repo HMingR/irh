@@ -30,7 +30,7 @@ public class AuthController extends BaseController {
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(httpMethod = "GET", value = "分页查询权限列表")
+    @ApiOperation(httpMethod = "POST", value = "分页查询权限列表")
     @PostMapping("/list")
     public Message authList(Page<AuthInfo> page, AuthInfo authInfo){
         try{
@@ -73,7 +73,7 @@ public class AuthController extends BaseController {
      * @param authInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "添加权限", httpMethod = "PUT")
+    @ApiOperation(value = "添加权限", httpMethod = "POST")
     @PostMapping("/add")
     public Message addAuth(@RequestBody AuthInfo authInfo){
         try{
@@ -85,14 +85,21 @@ public class AuthController extends BaseController {
         }
     }
 
+    @ApiOperation(value = "根据id修改权限信息", httpMethod = "GET")
+    @GetMapping("/authId")
+    public Message toEdit(@PathVariable("authId")Long authId){
+        AuthInfo authInfo = authInfoService.selectEntryList(authId).get(0);
+        return Message.createBySuccess(authInfo);
+    }
+
     /**
-     * @Description: 更新权限信息
+     * @Description: 修改权限信息
      * @Author: hmr
      * @Date: 2019/12/17 21:11
      * @param authInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "更新权限信息", httpMethod = "PUT")
+    @ApiOperation(value = "修改权限信息", httpMethod = "PUT")
     @PutMapping("/edit")
     public Message editAuth(@RequestBody AuthInfo authInfo){
         try{

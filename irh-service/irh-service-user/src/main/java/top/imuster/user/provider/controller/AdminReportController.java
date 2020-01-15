@@ -52,7 +52,7 @@ public class AdminReportController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("根据id查询用户反馈")
+    @ApiOperation(value = "根据id查询用户反馈", httpMethod = "GET")
     @GetMapping("/{id}")
     public Message getReportById(@PathVariable("id")Long id){
         try{
@@ -71,7 +71,7 @@ public class AdminReportController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("处理用户提交的举报")
+    @ApiOperation(value = "处理用户提交的举报", httpMethod = "POST")
     @PostMapping("/process")
     public Message processReport(@RequestBody ReportFeedbackInfo reportFeedbackInfo, BindingResult bindingResult){
         validData(bindingResult);

@@ -109,6 +109,11 @@ public class GlobalExceptionHandler {
         return Message.createByError("服务器出现未知错误");
     }
 
+    @ExceptionHandler(GlobalException.class)
+    public Message globalExceptionHandler(){
+        return Message.createByError("服务器内部错误");
+    }
+
     /**
      * @Description: 配置校验规则，当有很多数据需要校验的时候，一个出现问题，则停止校验，直接抛出异常
      * @Author: hmr

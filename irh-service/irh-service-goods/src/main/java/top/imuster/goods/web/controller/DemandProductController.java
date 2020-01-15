@@ -40,13 +40,13 @@ public class DemandProductController extends BaseController {
     @Autowired
     FileServiceFeignApi fileServiceFeignApi;
 
-    @ApiOperation("条件查询")
+    @ApiOperation(value = "条件查询", httpMethod = "POST")
     @PostMapping("/list")
     public Message list(Page<ProductInfo> page){
         return null;
     }
 
-    @ApiOperation("发布需求,采用表单的形式，不采用json形式传递其他信息，且上传的图片的<input>或其他标签name必须是file")
+    @ApiOperation(value = "发布需求,采用表单的形式，不采用json形式传递其他信息，且上传的图片的<input>或其他标签name必须是file", httpMethod = "PUT")
     @PutMapping
     public Message add(@RequestParam("file") MultipartFile file, ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
@@ -64,14 +64,7 @@ public class DemandProductController extends BaseController {
         return Message.createBySuccess("发布商品成功");
     }
 
-    @PostMapping("/test")
-    public Message edit(/*ProductInfo productInfo*/){
-//        logger.info("",types);
-        System.out.println( x);
-        return Message.createByError(x);
-    }
-
-    @ApiOperation("删除用户自己发布的需求")
+    @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")
     @DeleteMapping("/{productId}")
     public Message del(@PathVariable("productId") Long id){
 

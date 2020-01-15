@@ -2,6 +2,7 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.goods.api.pojo.ProductMessage;
 
 import java.util.List;
@@ -21,4 +22,17 @@ public interface ProductMessageService extends BaseService<ProductMessage, Long>
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     List<ProductMessage> generateMessageTree(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 发送消息
+     * @Date: 2020/1/15 13:44
+     * @param sendMessageDto
+     * @param parentId 如果parentId是0，则给卖家发送消息；如果不是，则给卖家和parentId对应的会员发送消息
+     * @reture: void
+     **/
+    void generateSendMessage(SendMessageDto sendMessageDto, Long parentId);
+
+    void test(List<SendMessageDto> sendMessageDtos);
+
 }

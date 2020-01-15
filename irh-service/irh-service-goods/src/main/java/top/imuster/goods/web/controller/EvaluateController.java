@@ -63,11 +63,7 @@ public class EvaluateController extends BaseController {
             productEvaluateInfoService.evaluateByOrder(order, productEvaluateInfo);
 
             //todo 评论完成之后需要给卖家发送消息
-            SendMessageDto sendMessageDto = new SendMessageDto();
-            sendMessageDto.setBody("有人对您发布的商品{}进行了评价,快来看看吧");
-            sendMessageDto.setSourceType(30);
-            sendMessageDto.setSourceId(-1L);
-            rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, "info.1.email.1", "有人对你的商品进行了评价");
+            productEvaluateInfoService.generateSendMessage(new SendMessageDto());
             return Message.createBySuccess("评论成功");
         }catch (Exception e){
             logger.error("用户根据订单id评价商品失败", e.getMessage(), e);
@@ -75,15 +71,7 @@ public class EvaluateController extends BaseController {
         }
     }
 
-    @GetMapping("/test/{message}")
-    public Message test(@PathVariable("message") String message){
-        System.out.println("asdf");
-        rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, "info.1.email", message);
-        return Message.createBySuccess("成功");
-    }
-
-
-    @ApiOperation("根据评论id删除自己的评价,别人不能删除")
+    @ApiOperation("根据评论id删除自己的评价")
     @DeleteMapping("/{id}")
     public Message deleteEvaluateById(@PathVariable("id") Long id, HttpServletRequest request){
         try{
@@ -108,9 +96,16 @@ public class EvaluateController extends BaseController {
             }
             return Message.createBySuccess("删除成功");
         }catch (Exception e){
-            logger.error("用户根据id删除评论失败",e.getMessage(), e);
+            logger.error("用户根据id删除评论失败,错误信息为{}",e.getMessage(), e);
             throw new GoodsException("用户根据id删除评论失败");
         }
+    }
+
+    @ApiOperation("根据id查询评价")
+    @GetMapping("/{id}")
+    public Message getEvaluateById(@PathVariable("id") Long id){
+        ProductEvaluateInfo productEvaluateInfo = productEvaluateInfoService.selectEntryList(id).get(0);
+        return Message.createBySuccess(productEvaluateInfo);
     }
 
     /**
@@ -123,19 +118,14 @@ public class EvaluateController extends BaseController {
     @ApiOperation("根据用户的id查询对该用户的所有评价(1:查询自己 2:查询卖家被评论的记录)")
     @GetMapping("/{type}/{customerId}")
     public Message listById(@PathVariable("customerId") Long id, @PathVariable("type") Integer type){
-        try{
-            ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
-            if(type == 1)
-                productEvaluateInfo.setBuyerId(id);
-            if(type == 2)
-                productEvaluateInfo.setSalerId(id);
+        ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
+        if(type == 1)
+            productEvaluateInfo.setBuyerId(id);
+        if(type == 2)
+            productEvaluateInfo.setSalerId(id);
 
-            productEvaluateInfo.setState(2);
-            List<ProductEvaluateInfo> productEvaluateInfos = productEvaluateInfoService.selectEntryList(productEvaluateInfo);
-            return Message.createBySuccess(productEvaluateInfos);
-        }catch (Exception e){
-            logger.error("用户评价失败",e.getMessage(), e);
-            throw new GoodsException("用户查询评价失败");
-        }
+        productEvaluateInfo.setState(2);
+        List<ProductEvaluateInfo> productEvaluateInfos = productEvaluateInfoService.selectEntryList(productEvaluateInfo);
+        return Message.createBySuccess(productEvaluateInfos);
     }
 }
