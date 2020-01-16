@@ -27,7 +27,7 @@ public class RabbitMqConfig {
     public static final String QUEUE_INFORM_EMAIL = "queue_inform_email";
 
     //当会员修改商品信息时需要修改静态页面
-    public static final String QUEUE_INFORM_SMS = "queue_inform_sms";
+    public static final String QUEUE_INFORM_SMS = "queue_inform_detail";
 
     //交换机名称
     public static final String EXCHANGE_TOPICS_INFORM = "exchange_topics_inform";
@@ -78,6 +78,6 @@ public class RabbitMqConfig {
 
     @Bean
     public Binding smsQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
-        return BindingBuilder.bind(smsQueue()).to(exchange).with("info.#.sms.#").noargs();
+        return BindingBuilder.bind(smsQueue()).to(exchange).with("info.#.detail.#").noargs();
     }
 }

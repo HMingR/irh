@@ -4,6 +4,8 @@ package top.imuster.user.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 
+import java.util.List;
+
 /**
  * ReportFeedbackInfoDao 接口
  * @author 黄明人
@@ -11,5 +13,6 @@ import top.imuster.user.api.pojo.ReportFeedbackInfo;
  */
 public interface ReportFeedbackInfoDao extends BaseDao<ReportFeedbackInfo, Long> {
     //自定义扩展
+    List<ReportFeedbackInfo> selectStatisticsByCondition(ReportFeedbackInfo condition);
 
 }

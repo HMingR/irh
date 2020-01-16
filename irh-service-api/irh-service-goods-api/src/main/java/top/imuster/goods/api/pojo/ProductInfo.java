@@ -83,7 +83,6 @@ public class ProductInfo extends BaseDomain {
 	private Long newCategoryId;
 
 	//出售商品的人
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "卖家id不能为空")
 	private Long consumerId;
 
 	//state 1-无效 2-有效 3-锁定

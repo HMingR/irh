@@ -6,6 +6,9 @@ package top.imuster.goods.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.core.annotation.MqGenerate;
+import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
@@ -31,5 +34,11 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public Integer updateProductCategoryByCondition(ProductInfo productInfo) {
         return productInfoDao.updateProductCategoryByCondition(productInfo);
+    }
+
+    @Override
+    @MqGenerate
+    public void generateDetailPage(SendMessageDto sendMessageDto) {
+        sendMessageDto.setType(MqTypeEnum.DETAIL);
     }
 }

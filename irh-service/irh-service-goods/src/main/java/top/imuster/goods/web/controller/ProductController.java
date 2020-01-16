@@ -3,6 +3,7 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +13,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * @ClassName: ProductController
@@ -29,13 +35,42 @@ import java.io.UnsupportedEncodingException;
  * @author: hmr
  * @date: 2019/12/1 14:53
  */
-@Api("商品controller")
+@Api("二手商品controller")
 @Controller
-@RequestMapping("/goods")
+@RequestMapping("/goods/es")
 public class ProductController extends BaseController {
+
+    @Value("${image.fileTypes}")
+    private List<String> types;
 
     @Resource
     ProductInfoService productInfoService;
+
+    @Autowired
+    FileServiceFeignApi fileServiceFeignApi;
+
+    @ApiOperation("会员发布二手商品,,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
+    @PutMapping
+    public Message insertProduct(@RequestParam("file") MultipartFile file, @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult, HttpServletRequest request) throws Exception {
+        validData(bindingResult);
+        Long currentUserId = getIdByToken(request);
+        productInfo.setConsumerId(currentUserId);
+        if(!file.isEmpty()){
+            int last = file.getOriginalFilename().length();
+            String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);
+            if(!types.contains(fileType)){
+                return Message.createByError("图片格式不正确,请更换图片格式");
+            }
+            String url = fileServiceFeignApi.upload(file).getText();
+            productInfo.setMainPicUrl(url);
+        }
+        productInfoService.insertEntry(productInfo);
+        SendMessageDto sendMessageDto = new SendMessageDto();
+        sendMessageDto.setBody(new ObjectMapper().writeValueAsString(productInfo));
+        productInfoService.generateDetailPage(sendMessageDto);
+        return Message.createBySuccess("发布商品成功");
+    }
+
 
     @ApiOperation(value = "条件分页查询商品列表", httpMethod = "POST")
     @PostMapping("/list")

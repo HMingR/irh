@@ -17,6 +17,8 @@ import java.util.Date;
  */
 public class DateUtils {
 
+    private static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:dd";
+
     private DateUtils(){}
 
     /**
@@ -28,10 +30,9 @@ public class DateUtils {
      **/
     public static String now(){
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:dd");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(DEFAULT_FORMAT);
         return now.format(format);
     }
-
 
     /**
      * @Description: 获得当前时间，该方法是线程安全的
@@ -46,6 +47,12 @@ public class DateUtils {
         return now.format(format);
     }
 
+    public static Date current() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_FORMAT);
+        String now = now();
+        return simpleDateFormat.parse(now);
+    }
+
     /**
      * @Description: 解析时间
      * @Author: hmr
@@ -54,11 +61,13 @@ public class DateUtils {
      * @reture: java.time.LocalDate
      **/
     public static Date parse(String time) throws ParseException {
-       return new SimpleDateFormat("yyyy-MM-dd HH:mm:dd").parse(time);
+       return new SimpleDateFormat(DEFAULT_FORMAT).parse(time);
     }
 
     public static Date parse() throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:dd").parse(now());
+        SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_FORMAT);
+        String format = sdf.format(now());
+        return sdf.parse(format);
     }
 
     public static void main(String[] args) throws ParseException {

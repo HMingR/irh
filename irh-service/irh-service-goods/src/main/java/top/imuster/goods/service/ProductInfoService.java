@@ -2,6 +2,7 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
 /**
@@ -19,5 +20,14 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: void
      **/
     Integer updateProductCategoryByCondition(ProductInfo productInfo);
+
+    /**
+     * @Author hmr
+     * @Description 向消息队列中发送消息，生成商品详情页
+     * @Date: 2020/1/16 10:40
+     * @param sendMessageDto
+     * @reture: void
+     **/
+    void generateDetailPage(SendMessageDto sendMessageDto);
 
 }

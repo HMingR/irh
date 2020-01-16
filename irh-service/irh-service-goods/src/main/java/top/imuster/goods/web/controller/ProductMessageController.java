@@ -88,16 +88,9 @@ public class ProductMessageController extends BaseController {
             }
             return Message.createBySuccess("更新成功");
         }catch (Exception e){
-            logger.error("按照id删除留言信息失败，出现的异常为",e.getMessage(), e);
+            logger.error("按照id删除留言信息失败，出现的异常为{}",e.getMessage(), e);
             throw new GoodsException("按照id删除留言信息失败");
         }
-    }
-
-    @GetMapping("/test")
-    public Message test() throws Exception{
-        List<SendMessageDto> sendMessageDtos = new ArrayList<>();
-        productMessageService.test(sendMessageDtos);
-        return Message.createBySuccess();
     }
 
 }

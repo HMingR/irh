@@ -42,6 +42,8 @@ public class Page<T> {
 		// 默认构造器
 	}
 
+
+
 	public Page(int currentPage) {
 		this.currentPage = currentPage;
 	}

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.exception.GlobalException;
 
 import java.io.IOException;
@@ -124,10 +125,10 @@ public class MqGenerateAspect {
         validate(sendMessageDto, annotation.isSaveToRedis());
         String body = new ObjectMapper().writeValueAsString(sendMessageDto);
         //接收该消息的队列
-        String queueType = sendMessageDto.getType().toLowerCase().contains(RabbitMqConfig.QUEUE_INFORM_SMS)?RabbitMqConfig.QUEUE_INFORM_SMS:RabbitMqConfig.QUEUE_INFORM_EMAIL;
+        MqTypeEnum queueType = sendMessageDto.getType();
         log.info("向{}消息队列中发送消息,消息体为{}",queueType, body);
         //校验参数
-        rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, "info.1.email.1", body);
+        rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM,  queueType.getRoutingKey(), body);
         if(annotation.isSaveToRedis()){
             log.info("向redis中存入值, key为{},value为{}", sendMessageDto.getRedisKey(), sendMessageDto.getValue());
             redisTemplate.opsForValue().set(sendMessageDto.getRedisKey(), sendMessageDto.getValue(), sendMessageDto.getExpiration(), sendMessageDto.getUnit());
@@ -167,8 +168,13 @@ public class MqGenerateAspect {
             }
         }
 
-        String queueType = sendMessageDto.getType();
-        if(StringUtils.isBlank(queueType)){
+        if(sendMessageDto.getBody().isEmpty()){
+            log.error("校验参数--->mq中的body不能为空");
+            throw new GlobalException("服务器内部错误,参数异常");
+        }
+
+        MqTypeEnum queueType = sendMessageDto.getType();
+        if(queueType == null){
             log.error("校验参数--->mq中的queueType不能为空");
             throw new GlobalException("服务器内部错误,参数异常");
         }

@@ -6,6 +6,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.dao.ProductMessageDao;
 import top.imuster.goods.service.ProductMessageService;
@@ -46,7 +47,7 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessage, L
 
     @Override
     public void generateSendMessage(SendMessageDto sendMessageDto, Long parentId) {
-        sendMessageDto.setType("EMAIL");
+        sendMessageDto.setType(MqTypeEnum.EMAIL);
         if(parentId == 0){
             sendMessageDto.setSourceType(30);
             sendMessageDto.setSourceId(-1L);

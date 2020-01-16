@@ -62,11 +62,13 @@ public class EvaluateController extends BaseController {
             }
             productEvaluateInfoService.evaluateByOrder(order, productEvaluateInfo);
 
-            //todo 评论完成之后需要给卖家发送消息
-            productEvaluateInfoService.generateSendMessage(new SendMessageDto());
+            SendMessageDto sendMessageDto = new SendMessageDto();
+            sendMessageDto.setTargetId(order.getSalerId());
+            sendMessageDto.setSourceId(order.getBuyerId());
+            productEvaluateInfoService.generateSendMessage(sendMessageDto);
             return Message.createBySuccess("评论成功");
         }catch (Exception e){
-            logger.error("用户根据订单id评价商品失败", e.getMessage(), e);
+            logger.error("用户根据订单id评价商品失败,错误信息为{}", e.getMessage(), e);
             throw new GoodsException("用户根据订单id评价商品失败");
         }
     }

@@ -4,10 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.goods.exception.GoodsException;
+import top.imuster.goods.service.ProductEvaluateInfoService;
 import top.imuster.goods.service.ProductInfoService;
+import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
 
@@ -24,6 +28,12 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Resource
     ProductInfoService productInfoService;
+
+    @Resource
+    ProductMessageService productMessageService;
+
+    @Resource
+    ProductEvaluateInfoService productEvaluateInfoService;
 
     @Override
     @PostMapping(value = "/es/list")
@@ -85,5 +95,25 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
         }catch (Exception e){
             throw new GoodsException("商品下单失败,请稍后重试");
         }
+    }
+
+    @Override
+    @DeleteMapping("/es/pm/{id}")
+    public boolean deleteProductMessageById(@PathVariable("id") Long id) {
+        ProductMessage condition = new ProductMessage();
+        condition.setId(id);
+        condition.setState(1);
+        int i = productMessageService.updateByKey(condition);
+        return i == 1;
+    }
+
+    @Override
+    @DeleteMapping("/es/pe/{id}")
+    public boolean deleteProductEvaluate(@PathVariable("id") Long id) {
+        ProductEvaluateInfo condition = new ProductEvaluateInfo();
+        condition.setState(1);
+        condition.setId(id);
+        int i = productEvaluateInfoService.updateByKey(condition);
+        return i == 1;
     }
 }

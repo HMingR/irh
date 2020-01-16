@@ -17,6 +17,7 @@ import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ConsumerDetails;
 import top.imuster.user.api.dto.CheckValidDto;
@@ -151,7 +152,7 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
         sendMessageDto.setUnit(TimeUnit.MINUTES);
         sendMessageDto.setExpiration(10L);
         sendMessageDto.setValue(code);
-        sendMessageDto.setType("EMAIL");
+        sendMessageDto.setType(MqTypeEnum.EMAIL);
         if(type == 1){
             sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
             sendMessageDto.setTopic("注册");

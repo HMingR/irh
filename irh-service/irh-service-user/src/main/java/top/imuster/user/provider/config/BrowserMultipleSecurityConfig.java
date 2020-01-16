@@ -42,10 +42,10 @@ public class BrowserMultipleSecurityConfig {
     @Order(1)
     public class AdminSecurityConfig extends BrowserSecurityConfig {
 
-        @Bean("adminJwtFilter")
+        /*@Bean("adminJwtFilter")
         public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(@Qualifier("adminDetailsService") UserDetailsService userDetailsService){
             return new JwtAuthenticationTokenFilter(userDetailsService);
-        }
+        }*/
 
         @Resource
         ManagementInfoService managementInfoService;
@@ -111,7 +111,7 @@ public class BrowserMultipleSecurityConfig {
             // 禁用缓存
             httpSecurity.headers().cacheControl();
             // 添加JWT filter
-            httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(adminDetailsService()), UsernamePasswordAuthenticationFilter.class);
+//            httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(adminDetailsService()), UsernamePasswordAuthenticationFilter.class);
             //添加自定义未授权和未登录结果返回
             httpSecurity.exceptionHandling()
                     .accessDeniedHandler(restfulAccessDeniedHandler())

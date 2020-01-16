@@ -1,21 +1,24 @@
 package top.imuster.goods.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import sun.util.logging.resources.logging;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.file.api.service.FileServiceFeignApi;
+import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.service.ProductInfoService;
+import top.imuster.goods.service.ProductDemandInfoService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -24,21 +27,13 @@ import java.util.List;
  * @author: hmr
  * @date: 2019/12/31 20:35
  */
+@Api("会员发布的需求")
 @RestController
 @RequestMapping("/goods/demand")
 @PropertySource("classpath:application.yml")
 public class DemandProductController extends BaseController {
-    @Value("${image.fileTypes}")
-    private List<String> types;
-
-    @Value(("${logging.config}"))
-    private String x;
-
     @Resource
-    ProductInfoService productInfoService;
-
-    @Autowired
-    FileServiceFeignApi fileServiceFeignApi;
+    ProductDemandInfoService productDemandInfoService;
 
     @ApiOperation(value = "条件查询", httpMethod = "POST")
     @PostMapping("/list")
@@ -46,28 +41,45 @@ public class DemandProductController extends BaseController {
         return null;
     }
 
-    @ApiOperation(value = "发布需求,采用表单的形式，不采用json形式传递其他信息，且上传的图片的<input>或其他标签name必须是file", httpMethod = "PUT")
+    @ApiOperation(value = "发布需求", httpMethod = "PUT")
     @PutMapping
-    public Message add(@RequestParam("file") MultipartFile file, ProductInfo productInfo, BindingResult bindingResult) throws Exception {
+    public Message add(HttpServletRequest request, @RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        if(!file.isEmpty()){
-            int last = file.getOriginalFilename().length();
-            String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);
-            if(null == fileType || "jpg".equals(fileType) || "png".equals(fileType)){
-                return Message.createByError("图片格式不正确,请更换图片");
-            }
-            String url = fileServiceFeignApi.upload(file).getText();
-            productInfo.setMainPicUrl(url);
+        Long userId = getIdByToken(request);
+        productDemandInfo.setConsumerId(userId);
+        productDemandInfo.setState(2);
+        int i = productDemandInfoService.insertEntry(productDemandInfo);
+        if(i == 1){
+            return Message.createBySuccess("发布成功");
         }
-        productInfoService.insertEntry(productInfo);
-        // todo 需要向消息队列中发送生成详情页的消息
-        return Message.createBySuccess("发布商品成功");
+        return Message.createByError("发布失败");
+    }
+
+    @ApiOperation(value = "根据id查询", httpMethod = "GET")
+    @GetMapping("/{id}")
+    public Message getById(@PathVariable("id") Long id){
+        ProductDemandInfo productDemandInfo = productDemandInfoService.selectEntryList(id).get(0);
+        return Message.createBySuccess(productDemandInfo);
+    }
+
+    @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
+    @PostMapping
+    public Message edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
+        validData(bindingResult);
+        productDemandInfoService.updateByKey(productDemandInfo);
+        return Message.createBySuccess("修改成功");
     }
 
     @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")
-    @DeleteMapping("/{productId}")
-    public Message del(@PathVariable("productId") Long id){
-
-        return null;
+    @DeleteMapping("/{id}")
+    public Message del(@PathVariable("id") Long id){
+        ProductDemandInfo condition = new ProductDemandInfo();
+        condition.setId(id);
+        condition.setState(1);
+        int i = productDemandInfoService.updateByKey(condition);
+        if(i == 1){
+            return Message.createBySuccess("删除成功");
+        }
+        return Message.createByError("删除失败");
     }
 }

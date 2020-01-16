@@ -43,4 +43,16 @@ public class GoodsServiceFeignApiHystrix implements GoodsServiceFeignApi {
         log.error("商品下单后改变商品状态失败，服务降级");
         return false;
     }
+
+    @Override
+    public boolean deleteProductMessageById(Long id) {
+        log.error("删除商品留言失败，服务降级");
+        return false;
+    }
+
+    @Override
+    public boolean deleteProductEvaluate(Long id) {
+        log.error("删除商品评价失败，服务降级");
+        return false;
+    }
 }

@@ -60,4 +60,24 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/stockOut/{productId}")
     boolean productStockOut(@PathVariable("productId") Long productId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id删除商品的留言信息
+     * @Date: 2020/1/16 20:34
+     * @param id
+     * @reture: boolean
+     **/
+    @DeleteMapping("/es/pm/{id}")
+    boolean deleteProductMessageById(@PathVariable("id") Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据id删除评价信息
+     * @Date: 2020/1/16 20:40
+     * @param id
+     * @reture: boolean
+     **/
+    @DeleteMapping("/es/pe/{id}")
+    boolean deleteProductEvaluate(@PathVariable("id") Long id);
 }

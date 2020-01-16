@@ -7,6 +7,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.dao.ProductEvaluateInfoDao;
 import top.imuster.goods.service.ProductEvaluateInfoService;
@@ -45,8 +46,8 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Override
     @MqGenerate
     public void generateSendMessage(SendMessageDto sendMessageDto) {
-        sendMessageDto.setBody("有人对您发布的商品{}进行了评价,快来看看吧");
-        sendMessageDto.setSourceType(30);
-        sendMessageDto.setSourceId(-1L);
+        sendMessageDto.setBody("我对您发布的商品进行了评价,快来看看吧");
+        sendMessageDto.setSourceType(10);
+        sendMessageDto.setType(MqTypeEnum.EMAIL);
     }
 }

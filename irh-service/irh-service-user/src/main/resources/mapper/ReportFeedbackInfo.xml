@@ -26,8 +26,8 @@
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
-            <if test="targetId != null and targetId != ''"><![CDATA[AND target_id = #{targetId}]]></if>
-            <if test="customerId != null and customerId != ''"><![CDATA[AND customer_id = #{customerId}]]></if>
+            <if test="targetId != null and targetId != '' and targetId != -1"><![CDATA[AND target_id = #{targetId}]]></if>
+            <if test="customerId != null and customerId != '' and customerId != -1"><![CDATA[AND customer_id = #{customerId}]]></if>
             <if test="remark != null and remark != ''"><![CDATA[AND remark = #{remark}]]></if>
             <if test="result != null and result != ''"><![CDATA[AND result = #{result}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
@@ -138,5 +138,22 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<!--按照条件统计-->
+	<select id="selectStatisticsByCondition" parameterType="reportFeedbackInfo" resultType="reportFeedbackInfo">
+		<![CDATA[SELECT id, COUNT(1) AS total, ]]>
+		<if test="targetId != null and targetId != -1"><![CDATA[target_id AS targetId ]]></if>
+		<if test="customerId != null and customerId != -1"><![CDATA[customer_id AS consumerId]]></if>
+		<if test="customerId == -1"><![CDATA[customer_id AS consumerId ]]></if>
+		<if test="targetId == -1 and customerId == -1"><![CDATA[ , ]]></if>
+		<if test="targetId == -1"><![CDATA[target_id AS targetId]]></if>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<![CDATA[ GROUP BY ]]>
+		<if test="targetId != null || targetId == -1"><![CDATA[target_id ]]></if>
+		<if test="targetId == -1 and customerId == -1"><![CDATA[ , ]]></if>
+		<if test="customerId != null || customerId == -1"><![CDATA[customer_id ]]></if>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
 	
 </mapper>

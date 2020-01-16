@@ -1,5 +1,7 @@
 package top.imuster.common.core.dto;
 
+import top.imuster.common.core.enums.MqTypeEnum;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @ClassName: SendMessageDto
  * @Description: 发送邮箱信息的dto传输对象，向消息队列中传输这个类
+ * 只发送mq必须有: topic  body  sourceType  sourceId  type
  * @author: hmr
  * @date: 2020/1/12 14:53
  */
@@ -29,8 +32,8 @@ public class SendMessageDto implements Serializable {
     //消息发送的时间
     private Date sendDate;
 
-    //发送消息的类型  "EMAIL" 和 "SMS"
-    private String type;
+    //发送消息的类型
+    private MqTypeEnum type;
 
     //当消息具有一定的时效性时，需要保存在redis中，该值标识储存在redis中的key
     private String redisKey;
@@ -75,15 +78,12 @@ public class SendMessageDto implements Serializable {
     public SendMessageDto() {
     }
 
-    public SendMessageDto(String topic, String body, Integer sourceType, Long sourceId, Date sendDate, String type, Long expiration, TimeUnit unit) {
-        this.topic = topic;
-        this.body = body;
-        this.sourceType = sourceType;
-        this.sourceId = sourceId;
-        this.sendDate = sendDate;
+    public MqTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(MqTypeEnum type) {
         this.type = type;
-        this.expiration = expiration;
-        this.unit = unit;
     }
 
     public String getValue() {
@@ -116,14 +116,6 @@ public class SendMessageDto implements Serializable {
 
     public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Integer getSourceType() {
