@@ -55,4 +55,10 @@ public class GoodsServiceFeignApiHystrix implements GoodsServiceFeignApi {
         log.error("删除商品评价失败，服务降级");
         return false;
     }
+
+    @Override
+    public Long getConsumerIdByType(Long id, Integer type) {
+        log.error("根据商品id查询会员id失败，服务降级");
+        return null;
+    }
 }

@@ -206,4 +206,11 @@
 		AND state != 10
 	</select>
 
+
+	<select id="selectEmailById" parameterType="long" resultType="string">
+		<![CDATA[SELECT email]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ WHERE id = #{id}]]>
+	</select>
+
 </mapper>

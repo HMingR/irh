@@ -22,7 +22,7 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
      * @param reportFeedbackInfo
      * @reture: void
      **/
-    void processReport(ReportFeedbackInfo reportFeedbackInfo);
+    void processReport(ReportFeedbackInfo reportFeedbackInfo) throws Exception;
 
     /**
      * @Author hmr
@@ -33,22 +33,4 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
      *
      * @return*/
     Page<ReportFeedbackInfo> statistic(Page<ReportFeedbackInfo> page);
-
-     /**
-      * @Author hmr
-      * @Description 发送多个消息
-      * @Date: 2020/1/16 19:04
-      * @param sendMessageDto
-      * @reture: void
-      **/
-     void generateSendMessage(List<SendMessageDto> sendMessageDto) throws ParseException;
-
-     /**
-      * @Author hmr
-      * @Description 发送单个消息
-      * @Date: 2020/1/16 20:10
-      * @param sendMessageDto
-      * @reture: void
-      **/
-     void generateSendMessage(SendMessageDto sendMessageDto, ReportFeedbackInfo reportFeedbackInfo) throws ParseException;
 }

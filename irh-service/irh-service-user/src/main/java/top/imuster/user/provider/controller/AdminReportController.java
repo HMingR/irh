@@ -13,6 +13,7 @@ import top.imuster.common.core.utils.DateUtils;
 import top.imuster.user.api.enums.FeedbackEnum;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.provider.exception.UserException;
+import top.imuster.user.provider.service.ConsumerInfoService;
 import top.imuster.user.provider.service.ReportFeedbackInfoService;
 
 import javax.annotation.Resource;
@@ -104,26 +105,9 @@ public class AdminReportController extends BaseController {
      **/
     @ApiOperation(value = "处理用户提交的举报", httpMethod = "POST")
     @PostMapping("/process")
-    public Message processReport(@RequestBody ReportFeedbackInfo reportFeedbackInfo, BindingResult bindingResult) throws ParseException {
+    public Message processReport(@RequestBody ReportFeedbackInfo reportFeedbackInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        ReportFeedbackInfo info = reportFeedbackInfoService.selectEntryList(reportFeedbackInfo.getId()).get(0);
         reportFeedbackInfoService.processReport(reportFeedbackInfo);
-        if(reportFeedbackInfo.getResult() == 3 || info.getResult() == 5){
-            SendMessageDto sendMessageDto = new SendMessageDto();
-            sendMessageDto.setTopic("警告");
-            sendMessageDto.setBody("您在irh中发布的" + FeedbackEnum.getNameByType(info.getType()) + "被人举报，经过核实，举报属实。如果再次发现类似情况，您的账号将被冻结");
-            reportFeedbackInfoService.generateSendMessage(sendMessageDto, reportFeedbackInfo);
-        }
-        if(reportFeedbackInfo.getResult() == 4){
-            ArrayList<SendMessageDto> sendMessageDtos = new ArrayList<>();
-            SendMessageDto customerMessage = new SendMessageDto();
-            SendMessageDto targetMessage = new SendMessageDto();
-            customerMessage.setBody("您于" + info.getCreateTime() + "举报的关于" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
-            targetMessage.setBody("由于您多次违反irh平台的相关规定或多次被用户举报并核实，您的账号已经被冻结。请联系管理员取消冻结");
-            sendMessageDtos.add(customerMessage);
-            sendMessageDtos.add(targetMessage);
-            reportFeedbackInfoService.generateSendMessage(sendMessageDtos);
-        }
         return Message.createBySuccess("处理成功");
     }
 }

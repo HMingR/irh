@@ -12,6 +12,7 @@ import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductEvaluateInfoService;
 import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
+import top.imuster.user.api.pojo.ConsumerInfo;
 
 import javax.annotation.Resource;
 
@@ -38,14 +39,9 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @Override
     @PostMapping(value = "/es/list")
     public Message list(@RequestBody Page<ProductInfo> page) {
-        try{
-            ProductInfo productInfo = page.getSearchCondition();
-            Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
-            return Message.createBySuccess(productInfoPage);
-        }catch (Exception e){
-            log.error("商品模块的feign代理出现异常", e.getMessage(), e);
-            throw new GoodsException("商品模块的feign代理出现异常"+ e.getMessage());
-        }
+        ProductInfo productInfo = page.getSearchCondition();
+        Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
+        return Message.createBySuccess(productInfoPage);
     }
 
     @Override
@@ -115,5 +111,25 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
         condition.setId(id);
         int i = productEvaluateInfoService.updateByKey(condition);
         return i == 1;
+    }
+
+    /**
+     * @Description 1-商品 2-留言 3-评价
+     * @Date: 2020/1/17 11:01
+     **/
+    @Override
+    @GetMapping("/es/{type}/{id}")
+    public Long getConsumerIdByType(@PathVariable("id") Long id, @PathVariable("type") Integer type) {
+        if(type == 1){
+            ProductInfo productInfo = productInfoService.selectEntryList(id).get(0);
+            return productInfo.getConsumerId();
+        } else if(type == 2){
+            ProductMessage productMessage = productMessageService.selectEntryList(id).get(0);
+            return productMessage.getConsumerId();
+        }else if(type == 3){
+            ProductEvaluateInfo productEvaluateInfo = productEvaluateInfoService.selectEntryList(id).get(0);
+            return productEvaluateInfo.getBuyerId();
+        }
+        return null;
     }
 }

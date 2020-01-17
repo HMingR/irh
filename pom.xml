@@ -110,8 +110,8 @@
 
 
     <dependencyManagement>
+        
         <dependencies>
-
             <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-json -->
             <dependency>
                 <groupId>cn.hutool</groupId>

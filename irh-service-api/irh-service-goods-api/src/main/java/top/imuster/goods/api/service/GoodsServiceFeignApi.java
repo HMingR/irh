@@ -80,4 +80,14 @@ public interface GoodsServiceFeignApi {
      **/
     @DeleteMapping("/es/pe/{id}")
     boolean deleteProductEvaluate(@PathVariable("id") Long id);
+
+    /**
+     * @Author hmr
+     * @Description 1-商品 2-留言 3-评价 4-帖子
+     * @Date: 2020/1/17 10:59
+     * @param null
+     * @reture:
+     **/
+    @GetMapping("/es/{type}/{id}")
+    Long getConsumerIdByType(@PathVariable("id") Long id, @PathVariable("type")Integer type);
 }

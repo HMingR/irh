@@ -21,4 +21,6 @@ public interface ConsumerInfoDao extends BaseDao<ConsumerInfo, Long> {
      **/
     int checkInfo(ConsumerInfo consumerInfo);
 
+    String selectEmailById(Long id);
+
 }

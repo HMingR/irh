@@ -65,4 +65,13 @@ public interface ConsumerInfoService extends BaseService<ConsumerInfo, Long> {
      **/
     void getCode(SendMessageDto sendMessageDto, String email, Integer type) throws JsonProcessingException;
 
+    /**
+     * @Author hmr
+     * @Description 根据id获得邮箱
+     * @Date: 2020/1/17 10:21
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String getEmailById(Long id);
+
 }

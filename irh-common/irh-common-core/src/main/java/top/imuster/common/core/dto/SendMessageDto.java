@@ -17,13 +17,16 @@ public class SendMessageDto implements Serializable {
 
     private static final long serialVersionUID = 1459082982569650090L;
 
+    //消息中心的主键
+    private Long id;
+
     //主题
     private String topic;
 
     //发送的消息体
     private String body;
 
-    //发送消息的来源类型  10-会员 20-管理员 30-系统
+    //发送消息的来源类型  10-会员 20-系统
     private Integer sourceType;
 
     //发送消息的来源id
@@ -31,6 +34,9 @@ public class SendMessageDto implements Serializable {
 
     //消息发送的时间
     private Date sendDate;
+
+    //接收消息的id
+    private String sendTo;
 
     //发送消息的类型
     private MqTypeEnum type;
@@ -47,8 +53,19 @@ public class SendMessageDto implements Serializable {
     //过期时间单位
     private TimeUnit unit;
 
-    //目标id
+    //(被举报的信息)id
     private Long targetId;
+
+    public SendMessageDto(String topic, String body, Integer sourceType, Long sourceId, Date sendDate, String sendTo, MqTypeEnum type, Long targetId) {
+        this.topic = topic;
+        this.body = body;
+        this.sourceType = sourceType;
+        this.sourceId = sourceId;
+        this.sendDate = sendDate;
+        this.sendTo = sendTo;
+        this.type = type;
+        this.targetId = targetId;
+    }
 
     @Override
     public String toString() {
@@ -67,15 +84,31 @@ public class SendMessageDto implements Serializable {
                 '}';
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public SendMessageDto() {
+    }
+
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
+    }
+
     public Long getTargetId() {
         return targetId;
     }
 
     public void setTargetId(Long targetId) {
         this.targetId = targetId;
-    }
-
-    public SendMessageDto() {
     }
 
     public MqTypeEnum getType() {

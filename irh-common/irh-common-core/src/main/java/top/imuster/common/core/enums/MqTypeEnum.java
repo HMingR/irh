@@ -10,15 +10,26 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  */
 public enum  MqTypeEnum {
 
-    EMAIL("email", "info.1.email.1"),
-    DETAIL("detail", "info.2.detail.2");
+    EMAIL("email", "info.#.email.#", "queue_inform_email"),
+    DETAIL("detail", "info.#.detail.#", "queue_inform_detail"),
+    CENTER("center", "info.#.center.#", "queue_inform_center");
 
     String type;
     String routingKey;
+    String queueName;
 
-    MqTypeEnum(String type, String routingKey) {
+    MqTypeEnum(String type, String routingKey, String queueName) {
         this.type = type;
         this.routingKey = routingKey;
+        this.queueName = queueName;
+    }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
     }
 
     public String getRoutingKey() {
@@ -47,4 +58,5 @@ public enum  MqTypeEnum {
         }
         return null;
     }
+
 }

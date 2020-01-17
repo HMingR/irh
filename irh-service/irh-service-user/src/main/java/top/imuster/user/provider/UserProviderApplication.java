@@ -27,7 +27,8 @@ import org.springframework.web.context.request.RequestContextListener;
         "top.imuster.common.core.aspect",
         "top.imuster.user.provider",
         "top.imuster.common.core.config",
-        "top.imuster.common.core.interceptor"})
+        "top.imuster.common.core.interceptor",
+        "top.imuster.common.core.utils"})
 public class UserProviderApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserProviderApplication.class, args);

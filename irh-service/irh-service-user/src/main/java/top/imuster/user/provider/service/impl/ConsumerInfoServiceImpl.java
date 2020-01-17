@@ -166,4 +166,9 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
             sendMessageDto.setBody(body);
         }
     }
+
+    @Override
+    public String getEmailById(Long id) {
+        return null;
+    }
 }

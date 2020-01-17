@@ -100,7 +100,8 @@ public class MqGenerateAspect {
         return result;
     }
 
-    /**
+
+   /**
      * @Author hmr
      * @Description 发送多个消息
      * @Date: 2020/1/15 16:39
