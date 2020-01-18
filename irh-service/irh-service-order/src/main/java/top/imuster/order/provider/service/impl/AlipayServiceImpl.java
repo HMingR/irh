@@ -26,6 +26,7 @@ import top.imuster.order.provider.service.OrderInfoService;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -168,7 +169,7 @@ public class AlipayServiceImpl implements AlipayService {
         if(StringUtils.isNotEmpty(gmt_payment)){
             realOrder.setPaymentTime(DateUtils.parse(gmt_payment));
         }else{
-            realOrder.setPaymentTime(DateUtils.parse());
+            realOrder.setPaymentTime(DateUtils.parse(new Date()));
         }
         return realOrder;
     }

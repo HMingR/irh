@@ -35,7 +35,7 @@ public class SendMessageDto implements Serializable {
     //消息发送的时间
     private Date sendDate;
 
-    //接收消息的id
+    //接收消息的id或者email
     private String sendTo;
 
     //发送消息的类型

@@ -3,6 +3,7 @@ package top.imuster.message.provider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @ClassName: MessageProviderApplication
@@ -12,6 +13,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  */
 @SpringBootApplication
 @EnableEurekaClient
+@ComponentScan(basePackages = {"top.imuster.message", "top.imuster.common.core"})
 public class MessageProviderApplication {
     public static void main(String[] args) {
         SpringApplication.run(MessageProviderApplication.class, args);

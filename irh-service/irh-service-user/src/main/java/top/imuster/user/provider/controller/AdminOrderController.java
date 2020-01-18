@@ -1,6 +1,7 @@
 package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
@@ -33,7 +34,7 @@ public class AdminOrderController extends BaseController {
      **/
     @PostMapping
     @ApiOperation(value = "管理员分页条件查询订单", httpMethod = "POST")
-    public Message orderList(@RequestBody Page<OrderInfo> page){
+    public Message orderList(@ApiParam @RequestBody Page<OrderInfo> page){
         List<OrderInfo> orderInfos = orderServiceFeignApi.orderList(page);
         if(null == orderInfos){
             logger.error("分页条件查询订单失败");
@@ -44,7 +45,7 @@ public class AdminOrderController extends BaseController {
 
     @ApiOperation(value = "根据id查询订单", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message getOrderById(@PathVariable("id") Long id){
+    public Message getOrderById(@ApiParam("订单id") @PathVariable("id") Long id){
         OrderInfo order = orderServiceFeignApi.getOrderById(id);
         return Message.createBySuccess(order);
     }

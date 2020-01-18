@@ -69,17 +69,17 @@ public class RabbitMqConfig {
 
     @Bean
     public Binding emailQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
-        return BindingBuilder.bind(emailQueue()).to(exchange).with(MqTypeEnum.EMAIL.getRoutingKey()).noargs();
+        return BindingBuilder.bind(emailQueue()).to(exchange).with(MqTypeEnum.EMAIL.getRoutingKeyMatchRule()).noargs();
     }
 
     @Bean
     public Binding smsQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
-        return BindingBuilder.bind(smsQueue()).to(exchange).with(MqTypeEnum.DETAIL.getRoutingKey()).noargs();
+        return BindingBuilder.bind(smsQueue()).to(exchange).with(MqTypeEnum.DETAIL.getRoutingKeyMatchRule()).noargs();
     }
 
     @Bean
     public Binding centerQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
-        return BindingBuilder.bind(centerQueue()).to(exchange).with(MqTypeEnum.CENTER.getRoutingKey()).noargs();
+        return BindingBuilder.bind(centerQueue()).to(exchange).with(MqTypeEnum.CENTER.getRoutingKeyMatchRule()).noargs();
     }
 
 }

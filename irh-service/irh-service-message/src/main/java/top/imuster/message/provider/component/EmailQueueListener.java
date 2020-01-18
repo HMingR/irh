@@ -1,4 +1,4 @@
-package top.imuster.message.provider.mqListeners;
+package top.imuster.message.provider.component;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;

@@ -2,10 +2,12 @@ package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.provider.service.AuthInfoService;
 
@@ -32,9 +34,9 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(httpMethod = "POST", value = "分页查询权限列表")
     @PostMapping("/list")
-    public Message authList(Page<AuthInfo> page, AuthInfo authInfo){
+    public Message authList(Page<AuthInfo> page){
         try{
-            Page<AuthInfo> authInfoPage = authInfoService.selectPage(authInfo, page);
+            Page<AuthInfo> authInfoPage = authInfoService.selectPage(page.getSearchCondition(), page);
             return Message.createBySuccess(authInfoPage);
         }catch (Exception e){
             logger.error("获得权限列表失败", e.getMessage(), e);
@@ -52,7 +54,7 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(httpMethod = "DELETE", value = "按主键删除权限")
     @DeleteMapping("/{authId}")
-    public Message deleteAuth(@ApiParam(value = "authId", required = true) @PathVariable(value = "authId", required = true) Long authId){
+    public Message deleteAuth(@ApiParam(value = "auth主键", required = true) @PathVariable(value = "authId") Long authId){
         try{
             AuthInfo authInfo = new AuthInfo();
             authInfo.setState(1);
@@ -75,7 +77,7 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(value = "添加权限", httpMethod = "POST")
     @PostMapping("/add")
-    public Message addAuth(@RequestBody AuthInfo authInfo){
+    public Message addAuth(@ApiParam("AuthInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody AuthInfo authInfo){
         try{
             authInfoService.insertEntry(authInfo);
             return Message.createBySuccess();
@@ -87,7 +89,7 @@ public class AuthController extends BaseController {
 
     @ApiOperation(value = "根据id修改权限信息", httpMethod = "GET")
     @GetMapping("/authId")
-    public Message toEdit(@PathVariable("authId")Long authId){
+    public Message toEdit(@ApiParam(value = "权限id", required = true) @PathVariable("authId")Long authId){
         AuthInfo authInfo = authInfoService.selectEntryList(authId).get(0);
         return Message.createBySuccess(authInfo);
     }
@@ -101,7 +103,7 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(value = "修改权限信息", httpMethod = "PUT")
     @PutMapping("/edit")
-    public Message editAuth(@RequestBody AuthInfo authInfo){
+    public Message editAuth(@ApiParam("AuthInfo实体类") @RequestBody AuthInfo authInfo){
         try{
             authInfoService.updateByKey(authInfo);
             return Message.createBySuccess();

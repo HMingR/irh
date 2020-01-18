@@ -68,10 +68,10 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         target.setSourceId(-1L);
         target.setSourceType(20);
         target.setSendDate(DateUtils.current());
-        target.setType(MqTypeEnum.EMAIL);
         String sendToId = getSendToId(info.getType(), info.getTargetId());
         target.setSendTo(sendToId);
         if(condition.getResult() == 3 || condition.getResult() == 4){
+            target.setType(MqTypeEnum.CENTER);
             target.setTopic("警告");
             target.setBody("您在irh中发布的" + FeedbackEnum.getNameByType(info.getType()) + "被人举报，经过核实举报属实。如果再次发现类似情况，您的账号将被冻结");
             generateSendMessageService.sendToMq(target);
@@ -81,7 +81,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             customerMessage.setSourceId(-1L);
             customerMessage.setSourceType(20);
             customerMessage.setSendDate(DateUtils.current());
-            customerMessage.setType(MqTypeEnum.EMAIL);
+            customerMessage.setType(MqTypeEnum.CENTER);
             customerMessage.setBody("您于" + info.getCreateTime() + "举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
             String emailById = consumerInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
@@ -90,6 +90,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             }
             customerMessage.setSendTo(emailById);
             target.setBody("由于您多次违反irh平台的相关规定或多次被用户举报并核实，您的账号已经被冻结。请联系管理员取消冻结");
+            target.setType(MqTypeEnum.EMAIL);
             sendMessageDtos.add(customerMessage);
             sendMessageDtos.add(target);
             generateSendMessageService.senManyToMq(sendMessageDtos);

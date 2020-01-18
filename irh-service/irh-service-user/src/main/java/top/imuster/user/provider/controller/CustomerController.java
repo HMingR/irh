@@ -2,6 +2,7 @@ package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -62,7 +63,7 @@ public class CustomerController extends BaseController {
 
     @ApiOperation(value = "发送email验证码,type标识(1-注册验证码  2-重置密码验证码),当type为2时，email可取任意值",httpMethod = "GET")
     @GetMapping("/sendCode/{type}/{email}")
-    public Message getCode(HttpServletRequest request, @PathVariable("type") Integer type, @PathVariable("email") String email, SendMessageDto sendMessageDto) throws Exception {
+    public Message getCode(HttpServletRequest request,@ApiParam("1-注册验证码  2-重置密码验证码") @PathVariable("type") Integer type, @ApiParam("邮箱地址") @PathVariable("email") String email, SendMessageDto sendMessageDto) throws Exception {
         if(type == 1){
             consumerInfoService.getCode(sendMessageDto, email, type);
         }
@@ -84,7 +85,7 @@ public class CustomerController extends BaseController {
      **/
     @ApiOperation(value = "会员注册,code为发送的验证码", httpMethod = "POST")
     @PostMapping("/register/{code}")
-    public Message register(@RequestBody @Validated({ValidateGroup.register.class}) ConsumerInfo consumerInfo, BindingResult bindingResult, @PathVariable String code) throws Exception {
+    public Message register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) ConsumerInfo consumerInfo, BindingResult bindingResult,@ApiParam("发送的验证码") @PathVariable String code) throws Exception {
         validData(bindingResult);
         consumerInfoService.register(consumerInfo, code);
         return Message.createBySuccess("注册成功,请完善后续必要的信息才能正常使用");
@@ -100,7 +101,7 @@ public class CustomerController extends BaseController {
      **/
     @ApiOperation(value = "用户在注册的时候需要校验各种参数(用户名、邮箱、手机号等)必须唯一",httpMethod = "POST")
     @PostMapping("/check")
-    public Message checkValid(@RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
+    public Message checkValid(@ApiParam("CheckValidDto实体类") @RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
         boolean flag = consumerInfoService.checkValid(checkValidDto);
         if(flag){
@@ -119,7 +120,7 @@ public class CustomerController extends BaseController {
      **/
     @PostMapping("/edit")
     @ApiOperation(value = "修改会员的个人信息(先校验一些信息是否存在)", httpMethod = "POST")
-    public Message editInfo(@RequestBody @Validated(ValidateGroup.editGroup.class) ConsumerInfo consumerInfo, BindingResult bindingResult){
+    public Message editInfo(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated(ValidateGroup.editGroup.class) ConsumerInfo consumerInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
             consumerInfoService.updateByKey(consumerInfo);
@@ -140,7 +141,7 @@ public class CustomerController extends BaseController {
      **/
     @GetMapping("/report/{type}/{id}")
     @ApiOperation(value = "用户举报(type可选择 1-商品举报 2-留言举报 3-评价举报 4-帖子举报),id则为举报对象的id", httpMethod = "GET")
-    public Message reportFeedback(@PathVariable("type") Integer type, @PathVariable("id") Long id, HttpServletRequest request) throws Exception {
+    public Message reportFeedback(@ApiParam("1-商品举报 2-留言举报 3-评价举报 4-帖子举报")@PathVariable("type") Integer type, @ApiParam("举报对象的id") @PathVariable("id") Long id, HttpServletRequest request) throws Exception {
         Long userId = getIdByToken(request);
         ReportFeedbackInfo reportFeedbackInfo = new ReportFeedbackInfo();
         reportFeedbackInfo.setCustomerId(userId);

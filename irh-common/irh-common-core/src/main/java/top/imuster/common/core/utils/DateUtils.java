@@ -64,9 +64,9 @@ public class DateUtils {
        return new SimpleDateFormat(DEFAULT_FORMAT).parse(time);
     }
 
-    public static Date parse() throws ParseException {
+    public static Date parse(Date date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_FORMAT);
-        String format = sdf.format(now());
+        String format = sdf.format(date);
         return sdf.parse(format);
     }
 

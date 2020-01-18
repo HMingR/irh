@@ -8,20 +8,30 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * @author: hmr
  * @date: 2020/1/16 11:04
  */
-public enum  MqTypeEnum {
+public enum MqTypeEnum {
 
-    EMAIL("email", "info.#.email.#", "queue_inform_email"),
-    DETAIL("detail", "info.#.detail.#", "queue_inform_detail"),
-    CENTER("center", "info.#.center.#", "queue_inform_center");
+    EMAIL("email", "info.1.email.1", "queue_inform_email", "info.#.email.#"),
+    DETAIL("detail", "info.2.detail.2", "queue_inform_detail","info.#.detail.#"),
+    CENTER("center", "info.3.center.3", "queue_inform_center", "info.#.center.#");
 
     String type;
     String routingKey;
     String queueName;
+    String routingKeyMatchRule;
 
-    MqTypeEnum(String type, String routingKey, String queueName) {
+    MqTypeEnum(String type, String routingKey, String queueName, String routingKeyMatchRule) {
         this.type = type;
         this.routingKey = routingKey;
         this.queueName = queueName;
+        this.routingKeyMatchRule = routingKeyMatchRule;
+    }
+
+    public String getRoutingKeyMatchRule() {
+        return routingKeyMatchRule;
+    }
+
+    public void setRoutingKeyMatchRule(String routingKeyMatchRule) {
+        this.routingKeyMatchRule = routingKeyMatchRule;
     }
 
     public String getQueueName() {
@@ -58,5 +68,4 @@ public enum  MqTypeEnum {
         }
         return null;
     }
-
 }

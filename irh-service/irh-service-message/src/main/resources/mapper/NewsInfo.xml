@@ -13,7 +13,8 @@
             news_type AS newsType,
             create_time AS createTime,
             state,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            sender_id AS senderId
 		]]>
 	</sql>
 
@@ -31,6 +32,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="senderId != null and senderId != ''"><![CDATA[AND sender_id = #{senderId}]]></if>
 		</where>
 	</sql>
 	
@@ -50,6 +52,7 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="senderId != null"><![CDATA[sender_id = #{senderId},]]></if>
 		</set>
 	</sql>
 
@@ -65,7 +68,8 @@
                 news_type, 
                 create_time, 
                 state, 
-                update_time 
+                update_time,
+                sender_id
 				)
 			VALUES
 				(
@@ -76,7 +80,8 @@
                 #{newsType}, 
                 #{createTime}, 
                 #{state}, 
-                #{updateTime} 
+                #{updateTime},
+                #{senderId}
 				)
 		]]>
 	</insert>

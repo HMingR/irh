@@ -2,6 +2,7 @@ package top.imuster.user.provider.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
@@ -34,7 +35,7 @@ public class AdminGoodsController extends BaseController {
      **/
     @DeleteMapping("/{id}")
     @ApiOperation(value = "管理员根据id下架二手商品", httpMethod = "DELETE")
-    public Message delGoodsById(@PathVariable("id") Long id) throws UserException {
+    public Message delGoodsById(@PathVariable("id") @ApiParam("二手商品id") Long id) throws UserException {
         return goodsServiceFeignApi.delProduct(id);
     }
 
@@ -47,11 +48,11 @@ public class AdminGoodsController extends BaseController {
      **/
     @ApiOperation(value = "查看二手商品，按条件分页查询", httpMethod = "POST")
     @PostMapping("/es")
-    public Message goodsList(@RequestBody Page<ProductInfo> page){
+    public Message goodsList(@RequestBody @ApiParam Page<ProductInfo> page){
         try{
             return goodsServiceFeignApi.list(page);
         }catch (Exception e){
-            logger.error("远程调用goods模块出现异常", e.getMessage(), e);
+            logger.error("远程调用goods模块出现异常{}", e.getMessage(), e);
             throw new UserException("远程调用goods模块出现异常" + e.getMessage());
         }
     }

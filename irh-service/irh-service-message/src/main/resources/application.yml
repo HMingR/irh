@@ -6,7 +6,7 @@ eureka:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
 server:
-  port: 8888
+  port: 20200
 spring:
   application:
     name: message-server
