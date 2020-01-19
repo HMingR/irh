@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
                         .stream()
                         .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .collect(Collectors.joining());
-        logger.error("错误信息为", message);
+        logger.error("错误信息为{}", message);
         return Message.createByError(message);
     }
 
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Message constraintViolationExceptionHandler(ConstraintViolationException e) {
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
-        logger.error("错误信息为", message);
+        logger.error("错误信息为{}", message);
         return Message.createByError(message);
     }
 
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Message bindExceptionHandler(BindException exception){
         String defaultMessage = exception.getAllErrors().get(0).getDefaultMessage();
-        logger.error("错误信息为", defaultMessage);
+        logger.error("错误信息为{}", defaultMessage);
         return Message.createByError(defaultMessage);
     }
 
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Message validationExceptionHandler(ValidationException exception){
         String message = exception.getMessage();
-        logger.error("错误信息为", message);
+        logger.error("错误信息为{}", message);
         return Message.createByError(message);
     }
 
@@ -82,31 +82,34 @@ public class GlobalExceptionHandler {
      **/
     @ExceptionHandler(NullPointerException.class)
     public Message nullPointerExceptionHandler(NullPointerException e){
-        logger.error("服务器出现空指针异常", e.getMessage(), e);
+        logger.error("服务器出现空指针异常{}", e.getMessage(), e);
         return Message.createByError("服务器内部出现异常," + e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
     public Message runtimeExceptionHandler(RuntimeException e){
-        logger.error("服务器内部出现运行时异常",e.getMessage(), e);
+        logger.error("服务器内部出现运行时异常{}",e.getMessage(), e);
         return Message.createByError("服务器内部出现异常," + e.getMessage());
     }
 
     //类型转换异常
     @ExceptionHandler(ClassCastException.class)
     public Message classCastExceptionHandler(ClassCastException e) {
-        return Message.createByError("服务器内部出现异常," + e.getMessage());
+        logger.error("服务器内部出现类型转换异常{}",e.getMessage(),e);
+        return Message.createByError("服务器内部出现异常");
     }
 
     //json解析异常
     @ExceptionHandler(JsonProcessingException.class)
     public Message jsonProcessingExceptionHandler(JsonProcessingException e){
+        logger.error("服务器内部错误,解析json失败,错误信息为{}",e.getMessage(), e);
         return Message.createByError("服务器内部错误,解析json失败");
     }
 
     @ExceptionHandler(Exception.class)
-    public Message exception(){
-        return Message.createByError("服务器出现未知错误");
+    public Message exception(Exception e){
+        logger.error("服务器出现未知错误,错误信息为{}",e.getMessage(),e);
+        return Message.createByError("服务器出现未知错误，请稍后重试或联系管理员");
     }
 
     @ExceptionHandler(GlobalException.class)

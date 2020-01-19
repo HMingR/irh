@@ -38,7 +38,7 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Override
     @PostMapping(value = "/es/list")
-    public Message list(@RequestBody Page<ProductInfo> page) {
+    public Message<Page<ProductInfo>> list(@RequestBody Page<ProductInfo> page) {
         ProductInfo productInfo = page.getSearchCondition();
         Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
         return Message.createBySuccess(productInfoPage);
@@ -46,7 +46,7 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Override
     @DeleteMapping("/es/{id}")
-    public Message delProduct(@PathVariable("id") Long id) throws GoodsException {
+    public Message<String> delProduct(@PathVariable("id") Long id) throws GoodsException {
         ProductInfo productInfo = new ProductInfo();
         productInfo.setId(id);
         productInfo.setState(1);

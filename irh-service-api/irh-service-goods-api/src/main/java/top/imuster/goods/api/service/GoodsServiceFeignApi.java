@@ -29,7 +29,7 @@ public interface GoodsServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping(value = "/es/list")
-    Message list(@RequestBody Page<ProductInfo> page);
+    Message<Page<ProductInfo>> list(@RequestBody Page<ProductInfo> page);
 
     /**
      * @Description: 提供给管理员的下架商品接口
@@ -39,7 +39,7 @@ public interface GoodsServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @DeleteMapping("/es/{id}")
-    Message delProduct(@PathVariable("id") Long id);
+    Message<String> delProduct(@PathVariable("id") Long id);
 
     /**
      * @Description: 用户在下单的时候校验库存,如果有库存，则锁住库存.如果没有库存或者没有锁住库存，则返回false

@@ -40,5 +40,5 @@ public interface OrderServiceFeignApi {
      * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
      **/
     @PostMapping
-    List<OrderInfo> orderList(@RequestBody Page<OrderInfo> page);
+    Message<Page<OrderInfo>> orderList(@RequestBody Page<OrderInfo> page);
 }

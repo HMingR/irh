@@ -35,7 +35,7 @@ public class AdminGoodsController extends BaseController {
      **/
     @DeleteMapping("/{id}")
     @ApiOperation(value = "管理员根据id下架二手商品", httpMethod = "DELETE")
-    public Message delGoodsById(@PathVariable("id") @ApiParam("二手商品id") Long id) throws UserException {
+    public Message<String> delGoodsById(@PathVariable("id") @ApiParam("二手商品id") Long id) throws UserException {
         return goodsServiceFeignApi.delProduct(id);
     }
 
@@ -48,12 +48,7 @@ public class AdminGoodsController extends BaseController {
      **/
     @ApiOperation(value = "查看二手商品，按条件分页查询", httpMethod = "POST")
     @PostMapping("/es")
-    public Message goodsList(@RequestBody @ApiParam Page<ProductInfo> page){
-        try{
-            return goodsServiceFeignApi.list(page);
-        }catch (Exception e){
-            logger.error("远程调用goods模块出现异常{}", e.getMessage(), e);
-            throw new UserException("远程调用goods模块出现异常" + e.getMessage());
-        }
+    public Message<Page<ProductInfo>> goodsList(@RequestBody @ApiParam Page<ProductInfo> page){
+        return goodsServiceFeignApi.list(page);
     }
 }

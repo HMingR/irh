@@ -21,13 +21,13 @@ import java.util.List;
 @Slf4j
 public class GoodsServiceFeignApiHystrix implements GoodsServiceFeignApi {
     @Override
-    public Message list(Page<ProductInfo> page) {
+    public Message<Page<ProductInfo>> list(Page<ProductInfo> page) {
         log.error("二手商品查询列表服务降级");
         return Message.createByError("当前网络繁忙,请稍后再试");
     }
 
     @Override
-    public Message delProduct(Long id) {
+    public Message<String> delProduct(Long id) {
         log.error("二手商品删除服务降级");
         return Message.createByError("当前网络繁忙,请稍后再试");
     }

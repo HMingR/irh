@@ -39,7 +39,7 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
             //当前请求需要的角色
             String needRole = ca.getAttribute();
             System.out.println("访问需要的权限是" + needRole);
-            log.info("访问需要的权限是--->",needRole);
+            log.info("访问需要的权限是--->{}",needRole);
             if ("ROLE_LOGIN".equals(needRole)) {
                 if (authentication instanceof AnonymousAuthenticationToken) {
                     throw new BadCredentialsException("未登录");

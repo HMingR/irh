@@ -139,7 +139,7 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
             throw new UserException("邮箱或用户名重复");
         }
         String realToken = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerRegisterByEmailToken(email));
-        if(realToken.isEmpty() || !code.equalsIgnoreCase(realToken)){
+        if(StringUtils.isBlank(realToken) || !code.equalsIgnoreCase(realToken)){
             throw new UserException("验证码错误");
         }
         consumerInfo.setState(30);
@@ -169,6 +169,6 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
 
     @Override
     public String getEmailById(Long id) {
-        return null;
+        return consumerInfoDao.selectEmailById(id);
     }
 }

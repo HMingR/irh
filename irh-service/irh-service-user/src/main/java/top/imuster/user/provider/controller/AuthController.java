@@ -34,14 +34,9 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(httpMethod = "POST", value = "分页查询权限列表")
     @PostMapping("/list")
-    public Message authList(Page<AuthInfo> page){
-        try{
-            Page<AuthInfo> authInfoPage = authInfoService.selectPage(page.getSearchCondition(), page);
-            return Message.createBySuccess(authInfoPage);
-        }catch (Exception e){
-            logger.error("获得权限列表失败", e.getMessage(), e);
-            return Message.createByError();
-        }
+    public Message<Page<AuthInfo>> authList(Page<AuthInfo> page){
+        Page<AuthInfo> authInfoPage = authInfoService.selectPage(page.getSearchCondition(), page);
+        return Message.createBySuccess(authInfoPage);
     }
 
 
@@ -54,17 +49,12 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(httpMethod = "DELETE", value = "按主键删除权限")
     @DeleteMapping("/{authId}")
-    public Message deleteAuth(@ApiParam(value = "auth主键", required = true) @PathVariable(value = "authId") Long authId){
-        try{
-            AuthInfo authInfo = new AuthInfo();
-            authInfo.setState(1);
-            authInfo.setId(authId);
-            authInfoService.updateByKey(authInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("删除权限失败,原因{},权限id{}",e.getMessage(), authId);
-            return Message.createByError();
-        }
+    public Message<String> deleteAuth(@ApiParam(value = "auth主键", required = true) @PathVariable(value = "authId") Long authId){
+        AuthInfo authInfo = new AuthInfo();
+        authInfo.setState(1);
+        authInfo.setId(authId);
+        authInfoService.updateByKey(authInfo);
+        return Message.createBySuccess();
     }
 
 
@@ -77,14 +67,9 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(value = "添加权限", httpMethod = "POST")
     @PostMapping("/add")
-    public Message addAuth(@ApiParam("AuthInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody AuthInfo authInfo){
-        try{
-            authInfoService.insertEntry(authInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("添加权限失败:{};权限信息为:{}",e.getMessage(),authInfo);
-            return Message.createByError();
-        }
+    public Message<String> addAuth(@ApiParam("AuthInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody AuthInfo authInfo){
+        authInfoService.insertEntry(authInfo);
+        return Message.createBySuccess();
     }
 
     @ApiOperation(value = "根据id修改权限信息", httpMethod = "GET")
@@ -103,14 +88,9 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(value = "修改权限信息", httpMethod = "PUT")
     @PutMapping("/edit")
-    public Message editAuth(@ApiParam("AuthInfo实体类") @RequestBody AuthInfo authInfo){
-        try{
-            authInfoService.updateByKey(authInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("更新权限信息失败,报错{};权限信息为{}", e.getMessage(), authInfo);
-            return Message.createByError();
-        }
+    public Message<String> editAuth(@ApiParam("AuthInfo实体类") @RequestBody AuthInfo authInfo){
+        authInfoService.updateByKey(authInfo);
+        return Message.createBySuccess();
     }
 
 

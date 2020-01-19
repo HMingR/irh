@@ -10,8 +10,6 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 
-import java.util.List;
-
 /**
  * @ClassName: AdminOrderController
  * @Description: 管理员操作订单的控制器
@@ -34,18 +32,18 @@ public class AdminOrderController extends BaseController {
      **/
     @PostMapping
     @ApiOperation(value = "管理员分页条件查询订单", httpMethod = "POST")
-    public Message orderList(@ApiParam @RequestBody Page<OrderInfo> page){
-        List<OrderInfo> orderInfos = orderServiceFeignApi.orderList(page);
-        if(null == orderInfos){
+    public Message<Page<OrderInfo>> orderList(@ApiParam @RequestBody Page<OrderInfo> page){
+        Message<Page<OrderInfo>> pageMessage = orderServiceFeignApi.orderList(page);
+        if(null == pageMessage){
             logger.error("分页条件查询订单失败");
             return Message.createByError("查询失败");
         }
-        return Message.createBySuccess(orderInfos);
+        return pageMessage;
     }
 
     @ApiOperation(value = "根据id查询订单", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message getOrderById(@ApiParam("订单id") @PathVariable("id") Long id){
+    public Message<OrderInfo> getOrderById(@ApiParam("订单id") @PathVariable("id") Long id){
         OrderInfo order = orderServiceFeignApi.getOrderById(id);
         return Message.createBySuccess(order);
     }

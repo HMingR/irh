@@ -35,10 +35,11 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     }
 
     @Override
-    public List<OrderInfo> orderList(Page<OrderInfo> page) {
+    public Message<Page<OrderInfo>> orderList(Page<OrderInfo> page) {
         OrderInfo condition = page.getSearchCondition();
         condition.setState(2);
-        return orderInfoService.selectEntryList(condition);
+        Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(condition, page);
+        return Message.createBySuccess(orderInfoPage);
 
     }
 }

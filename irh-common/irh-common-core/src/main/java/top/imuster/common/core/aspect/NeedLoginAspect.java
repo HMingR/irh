@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.imuster.common.core.annotation.LogAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
@@ -19,6 +20,7 @@ import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 
@@ -64,12 +66,21 @@ public class NeedLoginAspect {
 
 
     private boolean needValidate(JoinPoint joinPoint) throws NoSuchMethodException {
-        Class<?> clazz = joinPoint.getTarget().getClass();
+        /*Class<?> clazz = joinPoint.getTarget().getClass();
         String methodName = joinPoint.getSignature().getName();
         Method method = clazz.getMethod(methodName);
         NeedLogin annotation = method.getAnnotation(NeedLogin.class);
         if(null != annotation && annotation.validate())
             return true;
+        return false;*/
+        Annotation[] declaredAnnotations = joinPoint.getTarget().getClass().getDeclaredAnnotations();
+        for (Annotation annotation : declaredAnnotations) {
+            if(annotation instanceof NeedLogin){
+                if(((NeedLogin) annotation).validate()){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

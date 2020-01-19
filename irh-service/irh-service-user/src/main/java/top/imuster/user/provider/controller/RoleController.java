@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(httpMethod = "POST", value = "分页查询角色列表")
     @PostMapping("/list")
-    public Message roleList(@ApiParam("page实体类") @RequestBody Page<RoleInfo> page){
+    public Message<Page<RoleInfo>> roleList(@ApiParam("page实体类") @RequestBody Page<RoleInfo> page){
         try{
             Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(page.getSearchCondition(), page);
             return Message.createBySuccess(roleInfoPage);
@@ -56,7 +56,7 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "根据id获得角色信息", httpMethod = "GET")
     @GetMapping("/{roleId}")
-    public Message toEditRoleInfo(@ApiParam("角色id") @PathVariable("roleId") Long roleId){
+    public Message<RoleInfo> toEditRoleInfo(@ApiParam("角色id") @PathVariable("roleId") Long roleId){
         RoleInfo roleInfo = roleInfoService.selectEntryList(roleId).get(0);
         return Message.createBySuccess(roleInfo);
     }
@@ -70,15 +70,10 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "按主键修改角色信息", httpMethod = "POST")
     @PostMapping("/edit")
-    public Message editRoleInfo(@ApiParam("RoleInfo实体类")@Validated(ValidateGroup.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
+    public Message<String> editRoleInfo(@ApiParam("RoleInfo实体类")@Validated(ValidateGroup.editGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
-        try{
-            roleInfoService.updateByKey(roleInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("修改权限信息失败{},角色信息为{}",e.getMessage(),roleInfo);
-            throw new UserException("修改权限信息失败:" + e.getMessage());
-        }
+        roleInfoService.updateByKey(roleInfo);
+        return Message.createBySuccess();
     }
 
     /**
@@ -90,7 +85,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "根据主键删除角色", httpMethod = "DELETE")
     @DeleteMapping("/{roleId}")
-    public Message deleteById(@ApiParam("角色id") @PathVariable Long roleId){
+    public Message<String> deleteById(@ApiParam("角色id") @PathVariable Long roleId){
         try{
             RoleInfo roleInfo = new RoleInfo();
             roleInfo.setId(roleId);
@@ -115,7 +110,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "添加角色", httpMethod = "POST")
     @PostMapping("/")
-    public Message insertRole(@ApiParam("RoleInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
+    public Message<String> insertRole(@ApiParam("RoleInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
         try{
             roleInfoService.insertEntry(roleInfo);
@@ -136,7 +131,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "根据角色id获得角色的所有权限", httpMethod = "GET")
     @GetMapping("/ra/{roleId}")
-    public Message toEditRoleAuth(@ApiParam("角色id") @PathVariable(value = "roleId")Long roleId){
+    public Message<RoleInfo> toEditRoleAuth(@ApiParam("角色id") @PathVariable(value = "roleId")Long roleId){
         try{
             RoleInfo roleInfo = roleInfoService.getRoleAndAuthByRoleId(roleId);
             return Message.createBySuccess(roleInfo);
@@ -155,7 +150,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "添加角色的权限", httpMethod = "PUT")
     @PutMapping("/editRoleAuth")
-    public Message editRoleAuth(@ApiParam("AuthRoleRel实体类") @Validated({AuthRoleRel.editGroup.class}) @RequestBody AuthRoleRel authRoleRel, BindingResult bindingResult){
+    public Message<String> editRoleAuth(@ApiParam("AuthRoleRel实体类") @Validated({AuthRoleRel.editGroup.class}) @RequestBody AuthRoleRel authRoleRel, BindingResult bindingResult){
         validData(bindingResult);
         authRoleRelService.insertEntry(authRoleRel);
         return Message.createBySuccess();

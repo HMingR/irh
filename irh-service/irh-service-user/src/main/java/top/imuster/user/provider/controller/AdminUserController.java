@@ -49,39 +49,28 @@ public class AdminUserController extends BaseController {
 
     @ApiOperation(value = "查看所有的管理员", httpMethod = "POST")
     @PostMapping("/list/1")
-    @NeedLogin(validate = true)
-    public Message managementList(@ApiParam @RequestBody Page<ManagementInfo> page){
-        try{
-            Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(page.getSearchCondition(), page);
-            if(null != managementInfoPage){
-                //将密码全都设置成空
-                managementInfoPage.getResult().stream().forEach(mi -> mi.setPassword(""));
-            }
-            return Message.createBySuccess(managementInfoPage);
-        }catch (Exception e){
-            logger.error("查看管理员列表失败:{}", e.getMessage());
-            return Message.createByError();
+    //@NeedLogin(validate = true)
+    public Message<Page<ManagementInfo>> managementList(@ApiParam @RequestBody Page<ManagementInfo> page){
+        Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(page.getSearchCondition(), page);
+        if(null != managementInfoPage){
+            //将密码全都设置成空
+            managementInfoPage.getResult().stream().forEach(mi -> mi.setPassword(""));
         }
+        return Message.createBySuccess(managementInfoPage);
     }
 
-    /**
-     * @Description: 分页条件查询所有的会员
-     * @Author: hmr
-     * @Date: 2019/12/26 19:43
-     * @param page
-     * @param consumerInfo
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
+   /**
+    * @Author hmr
+    * @Description 分页条件查询所有的会员
+    * @Date: 2020/1/19 16:46
+    * @param page
+    * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.user.api.pojo.ConsumerInfo>>
+    **/
     @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
     @PostMapping("/list/2")
-    public Message list(@ApiParam @RequestBody Page<ConsumerInfo> page){
-        try{
-            Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(page.getSearchCondition(), page);
-            return Message.createBySuccess(consumerInfoPage);
-        }catch (Exception e){
-            logger.error("分页条件查询所有的会员失败{}", e.getMessage(), e);
-            throw new UserException(e.getMessage());
-        }
+    public Message<Page<ConsumerInfo>> list(@ApiParam @RequestBody Page<ConsumerInfo> page){
+        Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(page.getSearchCondition(), page);
+        return Message.createBySuccess(consumerInfoPage);
     }
 
     /**
@@ -93,7 +82,7 @@ public class AdminUserController extends BaseController {
      **/
     @ApiOperation(value = "添加管理员", httpMethod = "POST")
     @PostMapping
-    public Message addManagement(@ApiParam("ManagementInfo实体") @RequestBody ManagementInfo managementInfo) throws IOException {
+    public Message<String> addManagement(@ApiParam("ManagementInfo实体") @RequestBody ManagementInfo managementInfo) throws IOException {
         try{
             String real_pwd = passwordEncoder.encode(managementInfo.getPassword());
             managementInfo.setPassword(real_pwd);
@@ -107,7 +96,7 @@ public class AdminUserController extends BaseController {
 
     @ApiOperation(value = "修改管理员信息(修改基本信息，包括删除)", httpMethod = "PUT")
     @PutMapping
-    public Message editManagement(@ApiParam("ManagementInfo实体") @Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
+    public Message<String> editManagement(@ApiParam("ManagementInfo实体") @Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
         validData(bindingResult);
         try{
             managementInfoService.updateByKey(managementInfo);
@@ -121,17 +110,15 @@ public class AdminUserController extends BaseController {
 
     @ApiOperation(value = "登录成功返回token", httpMethod = "POST")
     @PostMapping("/login")
-    public Message managementLogin(@ApiParam("ManagementInfo实体") @Validated(ValidateGroup.loginGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult result){
+    public Message<String> managementLogin(@ApiParam("ManagementInfo实体") @Validated(ValidateGroup.loginGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult result){
         validData(result);
         try{
             String token = managementInfoService.login(managementInfo.getName(), managementInfo.getPassword());
             if(StringUtils.isEmpty(token)){
                 return Message.createByError("用户名或密码错误");
             }
-            Map<String, String> tokenMap = new HashMap<>();
-            tokenMap.put("token", token);
-            tokenMap.put("tokenHead", GlobalConstant.JWT_TOKEN_HEAD);
-            return Message.createBySuccess(tokenMap);
+            logger.info("{}登录成功",managementInfo);
+            return Message.createBySuccess(GlobalConstant.JWT_TOKEN_HEAD + token);
         }catch (Exception e){
             logger.error(GlobalConstant.getErrorLog("管理员登录失败,{}"), e.getMessage(), managementInfo);
             return Message.createByError(e.getMessage());
@@ -140,7 +127,7 @@ public class AdminUserController extends BaseController {
 
     @ApiOperation(value = "根据id获得管理员信息", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message toEdit(@ApiParam("管理员id") @PathVariable("id") Long id){
+    public Message<ManagementInfo> toEdit(@ApiParam("管理员id") @PathVariable("id") Long id){
         ManagementInfo condition = new ManagementInfo();
         condition.setId(id);
         ManagementInfo managementInfo = managementInfoService.selectEntryList(condition).get(0);
@@ -161,7 +148,7 @@ public class AdminUserController extends BaseController {
     //todo 修改逻辑需要修改
     @ApiOperation("提交修改管理员的角色")
     @PostMapping("/adminRole")
-    public Message editManagementRole(Long managementId, String roleIds){
+    public Message<String> editManagementRole(Long managementId, String roleIds){
         try{
             managementInfoService.editManagementRoleById(managementId, roleIds);
             return Message.createBySuccess("修改成功");
