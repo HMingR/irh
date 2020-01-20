@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.user.api.bo.ConsumerDetails;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
@@ -48,13 +50,10 @@ public class CustomerController extends BaseController {
 
     @ApiOperation(value = "登录，成功返回token", httpMethod = "POST")
     @PostMapping("/login")
-    public Message<String> managementLogin(@Validated(ValidateGroup.loginGroup.class) @RequestBody ConsumerInfo consumerInfo, BindingResult result){
+    public Message<ConsumerInfo> managementLogin(@Validated(ValidateGroup.loginGroup.class) @RequestBody ConsumerInfo consumerInfo, BindingResult result){
         validData(result);
-        String token = consumerInfoService.login(consumerInfo.getEmail(), consumerInfo.getPassword());
-        if(StringUtils.isBlank(token)){
-            throw new UserException("登录失败");
-        }
-        return Message.createBySuccess(GlobalConstant.JWT_TOKEN_HEAD + token);
+        ConsumerDetails details = consumerInfoService.login(consumerInfo.getEmail(), consumerInfo.getPassword());
+        return Message.createBySuccess(details.getToken() ,details.getConsumerInfo());
     }
 
     @ApiOperation(value = "发送email验证码,type标识(1-注册验证码  2-重置密码验证码),当type为2时，email可取任意值",httpMethod = "GET")
@@ -115,6 +114,7 @@ public class CustomerController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping("/edit")
+    @NeedLogin(validate = true)
     @ApiOperation(value = "修改会员的个人信息(先校验一些信息是否存在)", httpMethod = "POST")
     public Message<String> editInfo(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated(ValidateGroup.editGroup.class) ConsumerInfo consumerInfo, BindingResult bindingResult){
         validData(bindingResult);
@@ -131,6 +131,7 @@ public class CustomerController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @GetMapping("/report/{type}/{id}")
+    @NeedLogin(validate = true)
     @ApiOperation(value = "用户举报(type可选择 1-商品举报 2-留言举报 3-评价举报 4-帖子举报),id则为举报对象的id", httpMethod = "GET")
     public Message<String> reportFeedback(@ApiParam("1-商品举报 2-留言举报 3-评价举报 4-帖子举报")@PathVariable("type") Integer type, @ApiParam("举报对象的id") @PathVariable("id") Long id, HttpServletRequest request) throws Exception {
         Long userId = getIdByToken(request);

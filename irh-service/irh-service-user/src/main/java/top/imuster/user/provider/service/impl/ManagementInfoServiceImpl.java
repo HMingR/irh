@@ -2,6 +2,7 @@ package top.imuster.user.provider.service.impl;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,17 +15,19 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.base.utils.JwtTokenUtil;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.ManagementRoleRel;
 import top.imuster.user.provider.dao.ManagementInfoDao;
+import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ManagementInfoService;
 import top.imuster.user.provider.service.ManagementRoleRelService;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -59,7 +62,7 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
     }
 
     @Override
-    public ManagementDetails loadManagementByName(String name){
+    public ManagementDetails loadManagementByName(String name) throws Exception{
         ManagementInfo managementInfo = new ManagementInfo();
         managementInfo.setName(name);
         managementInfo = managementInfoDao.selectManagementRoleByCondition(managementInfo);
@@ -67,40 +70,38 @@ public class ManagementInfoServiceImpl extends BaseServiceImpl<ManagementInfo, L
             throw new UsernameNotFoundException("用户名或者密码错误");
         }
         if(managementInfo.getType() == null || managementInfo.getType() <= 20){
-            throw new RuntimeException("该账号已被冻结,请联系管理员");
+            throw new UserException("该账号已被冻结,请联系管理员");
         }
         return new ManagementDetails(managementInfo, managementInfo.getRoleList());
     }
 
     @Override
-    public String login(String name, String password) {
-        try{
-            String token;
-            ManagementDetails managementDetails = loadManagementByName(name);
-            if(!passwordEncoder.matches(password, managementDetails.getPassword())){
-                throw new BadCredentialsException("密码不正确");
-            }
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(managementDetails, null, managementDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = JwtTokenUtil.generateToken(managementDetails.getUsername(), managementDetails.getManagementInfo().getId());
-            ManagementInfo managementInfo = managementDetails.getManagementInfo();
-
-            //将用户的基本信息存入redis中，并设置过期时间
-            redisTemplate.opsForValue()
-                    .set(RedisUtil.getAccessToken(token),
-                            new UserDto(managementInfo.getId(),
-                                        managementInfo.getName(),
-                                        GlobalConstant.userType.MANAGEMENT.getName(),
-                                        GlobalConstant.userType.MANAGEMENT.getType()),
-                            GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
-            return token;
-        }catch (AuthenticationException a){
-            this.LOGGER.error("管理员登录异常:{}" , a.getMessage(), a);
-            throw new RuntimeException();
-        }catch (Exception e){
-            this.LOGGER.error("管理员登录异常,服务器内部错误:{}" , e.getMessage(), e);
-            throw new RuntimeException();
+    public ManagementDetails login(String name, String password) throws Exception {
+        ManagementDetails managementDetails = loadManagementByName(name);
+        if(!passwordEncoder.matches(password, managementDetails.getPassword())){
+            throw new BadCredentialsException("密码不正确");
         }
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(managementDetails, null, managementDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        //在token中存放username和id
+        String token = JwtTokenUtil.generateToken(managementDetails.getUsername(), managementDetails.getManagementInfo().getId());
+        if(StringUtils.isBlank(token)){
+            log.error("管理员登录时根据username和token获得token失败");
+            throw new UserException("服务器内部出现异常,请稍后重试");
+        }
+        ManagementInfo managementInfo = managementDetails.getManagementInfo();
+
+        //将用户的基本信息存入redis中，并设置过期时间，redis中存放id、username、userType
+        redisTemplate.opsForValue()
+                .set(RedisUtil.getAccessToken(token),
+                        new UserDto(managementInfo.getId(),
+                                    managementInfo.getName(),
+                                    GlobalConstant.userType.MANAGEMENT.getName(),
+                                    GlobalConstant.userType.MANAGEMENT.getType()),
+                        GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
+        managementDetails.setToken(GlobalConstant.JWT_TOKEN_HEAD + token);
+        return managementDetails;
     }
 
     @Override

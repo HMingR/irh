@@ -1,6 +1,7 @@
 package top.imuster.user.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -37,6 +38,7 @@ public class ConsumerInfo extends BaseDomain {
 	// 密码
 	@ApiModelProperty("密码")
 	@NotEmpty(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "密码不能为空")
+	@JsonIgnore
 	private String password;
 
 	// 支付宝账号, max length: 13

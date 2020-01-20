@@ -28,7 +28,7 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @param name
      * @reture: top.imuster.user.pojo.ManagementInfo
      **/
-    ManagementDetails loadManagementByName(String name);
+    ManagementDetails loadManagementByName(String name) throws Exception;
 
     /**
      * @Description: 管理员登录用
@@ -38,7 +38,7 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @param password
      * @reture: String   返回一个token
      **/
-    String login(String name, String password);
+    ManagementDetails login(String name, String password) throws Exception;
 
     /**
      * @Description: 根据管理员的id修改管理员的角色

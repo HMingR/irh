@@ -1,6 +1,8 @@
 package top.imuster.user.provider.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,5 +24,17 @@ public class UserExceptionHandler extends GlobalExceptionHandler {
     public Message serExceptionHandler(UserException exception){
         log.error("user模块出现异常,异常信息为{}",exception.getMessage(), exception);
         return Message.createByError(exception.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public Message usernameNotFoundExceptionHandler(UsernameNotFoundException e){
+        log.error("登录失败{}",e.getMessage());
+        return Message.createByError("用户名或密码错误");
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public Message authenticationExceptionHandler(AuthenticationException e){
+        log.error("登录异常{}",e.getMessage(),e);
+        return Message.createByError("用户名或密码错误");
     }
 }

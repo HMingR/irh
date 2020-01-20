@@ -17,6 +17,7 @@ import top.imuster.auth.component.JwtAuthenticationTokenFilter;
 import top.imuster.auth.component.LoginSuccessHandle;
 import top.imuster.auth.component.UrlAccessDecisionManager;
 import top.imuster.auth.config.BrowserSecurityConfig;
+import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ConsumerInfoService;
 import top.imuster.user.provider.service.ManagementInfoService;
 
@@ -52,7 +53,13 @@ public class BrowserMultipleSecurityConfig {
 
         @Bean
         public UserDetailsService adminDetailsService(){
-            return (username) -> managementInfoService.loadManagementByName(username);
+            return (username) -> {
+                try {
+                    return managementInfoService.loadManagementByName(username);
+                } catch (Exception e) {
+                    throw new UserException("用户名或密码错误");
+                }
+            };
         }
 
         @Bean

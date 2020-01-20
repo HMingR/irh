@@ -44,13 +44,8 @@ public class RoleController extends BaseController {
     @ApiOperation(httpMethod = "POST", value = "分页查询角色列表")
     @PostMapping("/list")
     public Message<Page<RoleInfo>> roleList(@ApiParam("page实体类") @RequestBody Page<RoleInfo> page){
-        try{
-            Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(page.getSearchCondition(), page);
-            return Message.createBySuccess(roleInfoPage);
-        }catch (Exception e){
-            logger.error("获得用户角色失败", e.getMessage());
-            throw new UserException("获得用户角色失败:" + e.getMessage());
-        }
+        Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(page.getSearchCondition(), page);
+        return Message.createBySuccess(roleInfoPage);
     }
 
 
@@ -86,19 +81,14 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "根据主键删除角色", httpMethod = "DELETE")
     @DeleteMapping("/{roleId}")
     public Message<String> deleteById(@ApiParam("角色id") @PathVariable Long roleId){
-        try{
-            RoleInfo roleInfo = new RoleInfo();
-            roleInfo.setId(roleId);
-            roleInfo.setState(1);
-            int i = roleInfoService.updateByKey(roleInfo);
-            if(i != 1){
-                return Message.createByError("操作失败,请刷新后重试");
-            }
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("删除角色失败,报错:{},角色id为{}",e.getMessage(),roleId);
-            return Message.createByError();
+        RoleInfo roleInfo = new RoleInfo();
+        roleInfo.setId(roleId);
+        roleInfo.setState(1);
+        int i = roleInfoService.updateByKey(roleInfo);
+        if(i != 1){
+            return Message.createByError("操作失败,请刷新后重试");
         }
+        return Message.createBySuccess();
     }
 
     /**
@@ -112,13 +102,8 @@ public class RoleController extends BaseController {
     @PostMapping("/")
     public Message<String> insertRole(@ApiParam("RoleInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
-        try{
-            roleInfoService.insertEntry(roleInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error("添加角色失败,错误信息为{},角色信息为{}", e.getMessage(), roleInfo);
-            throw new UserException("添加角色失败"+e.getMessage());
-        }
+        roleInfoService.insertEntry(roleInfo);
+        return Message.createBySuccess();
     }
 
 
@@ -132,13 +117,8 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "根据角色id获得角色的所有权限", httpMethod = "GET")
     @GetMapping("/ra/{roleId}")
     public Message<RoleInfo> toEditRoleAuth(@ApiParam("角色id") @PathVariable(value = "roleId")Long roleId){
-        try{
-            RoleInfo roleInfo = roleInfoService.getRoleAndAuthByRoleId(roleId);
-            return Message.createBySuccess(roleInfo);
-        }catch (Exception e){
-            logger.error("进入角色权限列表页面失败,报错{}",e.getMessage());
-            return Message.createByError();
-        }
+        RoleInfo roleInfo = roleInfoService.getRoleAndAuthByRoleId(roleId);
+        return Message.createBySuccess(roleInfo);
     }
 
     /**

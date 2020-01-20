@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 
@@ -32,6 +33,7 @@ public class AdminOrderController extends BaseController {
      **/
     @PostMapping
     @ApiOperation(value = "管理员分页条件查询订单", httpMethod = "POST")
+    @NeedLogin(validate = true)
     public Message<Page<OrderInfo>> orderList(@ApiParam @RequestBody Page<OrderInfo> page){
         Message<Page<OrderInfo>> pageMessage = orderServiceFeignApi.orderList(page);
         if(null == pageMessage){
@@ -43,6 +45,7 @@ public class AdminOrderController extends BaseController {
 
     @ApiOperation(value = "根据id查询订单", httpMethod = "GET")
     @GetMapping("/{id}")
+    @NeedLogin(validate = true)
     public Message<OrderInfo> getOrderById(@ApiParam("订单id") @PathVariable("id") Long id){
         OrderInfo order = orderServiceFeignApi.getOrderById(id);
         return Message.createBySuccess(order);

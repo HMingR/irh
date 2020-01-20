@@ -24,6 +24,8 @@ public class ManagementDetails implements UserDetails {
 
     private List<RoleInfo> roleInfoList;
 
+    private String token;
+
     public ManagementDetails(ManagementInfo managementInfo, List<RoleInfo> roleInfoList) {
         this.managementInfo = managementInfo;
         this.roleInfoList = roleInfoList;
@@ -35,6 +37,14 @@ public class ManagementDetails implements UserDetails {
                 .filter(roleInfo -> roleInfo.getRoleName() != null)
                 .map(roleInfo -> new SimpleGrantedAuthority(roleInfo.getRoleName()))
                 .collect(Collectors.toList());
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public ManagementInfo getManagementInfo() {

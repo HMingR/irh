@@ -7,6 +7,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,10 @@ import java.lang.reflect.Method;
 @Slf4j
 @Component
 public class NeedLoginAspect {
+
+    @Value("enable.needLogin")
+    private static boolean enable;
+
     @Resource
     RedisTemplate redisTemplate;
 
@@ -43,6 +48,10 @@ public class NeedLoginAspect {
 
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) throws Exception{
+        if(!enable){
+            log.info("由于关闭了NeedLogin注解功能，取消检测");
+            return;
+        }
         //获取当前请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -66,13 +75,6 @@ public class NeedLoginAspect {
 
 
     private boolean needValidate(JoinPoint joinPoint) throws NoSuchMethodException {
-        /*Class<?> clazz = joinPoint.getTarget().getClass();
-        String methodName = joinPoint.getSignature().getName();
-        Method method = clazz.getMethod(methodName);
-        NeedLogin annotation = method.getAnnotation(NeedLogin.class);
-        if(null != annotation && annotation.validate())
-            return true;
-        return false;*/
         Annotation[] declaredAnnotations = joinPoint.getTarget().getClass().getDeclaredAnnotations();
         for (Annotation annotation : declaredAnnotations) {
             if(annotation instanceof NeedLogin){

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
@@ -45,6 +46,7 @@ public class AdminReportController extends BaseController {
      **/
     @ApiOperation(value = "管理员分页条件查询用户举报反馈",httpMethod = "POST")
     @PostMapping
+    @NeedLogin(validate = true)
     public Message<Page<ReportFeedbackInfo>> reportFeedbackList(@ApiParam Page<ReportFeedbackInfo> page){
         ReportFeedbackInfo searchCondition = page.getSearchCondition();
         Page<ReportFeedbackInfo> feedbackInfoPage = reportFeedbackInfoService.selectPage(searchCondition, page);
@@ -53,6 +55,7 @@ public class AdminReportController extends BaseController {
 
     @ApiOperation("高级查询,统计被举报的目标的总次数或被举报人的总次数(当要查询被举报目标的总次数或者举报人举报次数时，将其中的targetId或者customerId置为-1即可)")
     @PostMapping("/statisic")
+    @NeedLogin(validate = true)
     public Message<Page<ReportFeedbackInfo>> statistics(@ApiParam @RequestBody Page<ReportFeedbackInfo> page){
         Page<ReportFeedbackInfo> statistic = reportFeedbackInfoService.statistic(page);
         return Message.createBySuccess(statistic);
@@ -68,6 +71,7 @@ public class AdminReportController extends BaseController {
      **/
     @ApiOperation("根据id高级查询，type的取值(1-被举报的目标  2-举报人)，该id不是主键id，是被举报目标id或者举报人id")
     @GetMapping("/statisic/{type}/{id}")
+    @NeedLogin(validate = true)
     public Message<List<ReportFeedbackInfo>> getStatisticsById(@ApiParam("1-被举报的目标  2-举报人") @PathVariable("type") Integer type,@ApiParam("该id不是主键id，是被举报目标id或者举报人id") @PathVariable("id")Long id){
         ReportFeedbackInfo reportFeedbackInfo = new ReportFeedbackInfo();
         if(type == 1) reportFeedbackInfo.setTargetId(id);
@@ -87,6 +91,7 @@ public class AdminReportController extends BaseController {
      **/
     @ApiOperation(value = "根据id查询用户反馈", httpMethod = "GET")
     @GetMapping("/{id}")
+    @NeedLogin(validate = true)
     public Message<ReportFeedbackInfo> getReportById(@ApiParam("反馈id") @PathVariable("id")Long id){
         ReportFeedbackInfo search = reportFeedbackInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(search);
@@ -101,6 +106,7 @@ public class AdminReportController extends BaseController {
      **/
     @ApiOperation(value = "处理用户提交的举报", httpMethod = "POST")
     @PostMapping("/process")
+    @NeedLogin(validate = true)
     public Message<String> processReport(@ApiParam("ReportFeedbackInfo实体类") @RequestBody ReportFeedbackInfo reportFeedbackInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
         reportFeedbackInfoService.processReport(reportFeedbackInfo);

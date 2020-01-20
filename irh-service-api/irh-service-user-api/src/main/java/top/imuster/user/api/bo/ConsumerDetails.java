@@ -22,11 +22,19 @@ public class ConsumerDetails implements UserDetails {
 
     private List<RoleInfo> roleInfoList;
 
+    //用来暂时保存token
+    private String token;
+
     public ConsumerDetails(ConsumerInfo consumerInfo) {
         this.consumerInfo = consumerInfo;
         RoleInfo roleInfo = new RoleInfo();
         roleInfo.setRoleName("USER");
         roleInfoList.add(roleInfo);
+    }
+
+    public ConsumerDetails(ConsumerInfo consumerInfo, String token){
+        this.consumerInfo = consumerInfo;
+        this.token = token;
     }
 
     @Override
@@ -79,5 +87,21 @@ public class ConsumerDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return consumerInfo.getState() > 20;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public ConsumerInfo getConsumerInfo() {
+        return consumerInfo;
+    }
+
+    public void setConsumerInfo(ConsumerInfo consumerInfo) {
+        this.consumerInfo = consumerInfo;
     }
 }

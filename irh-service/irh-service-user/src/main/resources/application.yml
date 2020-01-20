@@ -17,12 +17,6 @@ spring:
   application:
     name: user-service
 
-  devtools:
-    restart:
-      enabled: true  #设置开启热部署
-  freemarker:
-    cache: false    #页面不加载缓存，修改即时生效
-
   datasource:
       druid:
         driver-class-name: com.mysql.jdbc.Driver
@@ -56,6 +50,10 @@ mybatis:
 logging:
   level:
     top.imuster.user: debug
+
+enable:
+  needLogin: false
+
 
 
 

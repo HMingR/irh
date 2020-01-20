@@ -18,14 +18,14 @@ import java.lang.reflect.InvocationTargetException;
  */
 public interface ConsumerInfoService extends BaseService<ConsumerInfo, Long> {
     /**
-     * @Description: 会员登录使用
-     * @Author: hmr
-     * @Date: 2019/12/26 15:54
+     * @Author hmr
+     * @Description 会员登录使用
+     * @Date: 2020/1/20 21:01
      * @param email
-     * @param password
-     * @reture: java.lang.String 返回token
+     * @param password
+     * @reture: top.imuster.user.api.bo.ConsumerDetails
      **/
-    String login(String email, String password);
+    ConsumerDetails login(String email, String password);
 
     /**
      * @Description:

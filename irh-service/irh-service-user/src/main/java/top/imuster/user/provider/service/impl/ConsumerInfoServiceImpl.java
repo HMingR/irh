@@ -55,31 +55,27 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
     }
 
     @Override
-    public String login(String email, String password) {
-        try{
-            ConsumerInfo condition = new ConsumerInfo();
-            condition.setEmail(email);
-            ConsumerInfo consumerInfo = consumerInfoDao.selectEntryList(condition).get(0);
-            boolean matches = passwordEncoder.matches(password, consumerInfo.getPassword());
-            if(!matches){
-                throw new UsernameNotFoundException("用户名或者密码错误");
-            }
-            if(StringUtils.isEmpty(String.valueOf(consumerInfo.getState())) || consumerInfo.getState() <= 20){
-                throw new UserException("用户信息异常或用户被锁定");
-            }
-            String token = JwtTokenUtil.generateToken(consumerInfo.getEmail(), consumerInfo.getId());
-            //将用户的基本信息存入redis中，并设置过期时间
-            redisTemplate.opsForValue()
-                    .set(RedisUtil.getAccessToken(token),
-                            new UserDto(consumerInfo.getId(),
-                                    consumerInfo.getEmail(),
-                                    GlobalConstant.userType.MANAGEMENT.getName(),
-                                    GlobalConstant.userType.MANAGEMENT.getType()),
-                            GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
-            return token;
-        }catch (Exception e){
-            throw new UserException(e.getMessage());
+    public ConsumerDetails login(String email, String password) {
+        ConsumerInfo condition = new ConsumerInfo();
+        condition.setEmail(email);
+        ConsumerInfo consumerInfo = consumerInfoDao.selectEntryList(condition).get(0);
+        boolean matches = passwordEncoder.matches(password, consumerInfo.getPassword());
+        if(!matches){
+            throw new UsernameNotFoundException("用户名或者密码错误");
         }
+        if(StringUtils.isEmpty(String.valueOf(consumerInfo.getState())) || consumerInfo.getState() <= 20){
+            throw new UserException("用户信息异常或用户被锁定");
+        }
+        String token = JwtTokenUtil.generateToken(consumerInfo.getEmail(), consumerInfo.getId());
+        //将用户的基本信息存入redis中，并设置过期时间
+        redisTemplate.opsForValue()
+                .set(RedisUtil.getAccessToken(token),
+                        new UserDto(consumerInfo.getId(),
+                                consumerInfo.getEmail(),
+                                GlobalConstant.userType.MANAGEMENT.getName(),
+                                GlobalConstant.userType.MANAGEMENT.getType()),
+                        GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
+        return new ConsumerDetails(consumerInfo, GlobalConstant.JWT_TOKEN_HEAD + token);
     }
 
     @Override
@@ -91,7 +87,7 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
             throw new UsernameNotFoundException("用户名或者密码错误");
         }
         if(consumerInfo.getState() == null || consumerInfo.getState() <= 20){
-            throw new RuntimeException("该账号已被冻结,请联系管理员");
+            throw new UserException("该账号已被冻结,请联系管理员");
         }
         return new ConsumerDetails(consumerInfo);
     }
