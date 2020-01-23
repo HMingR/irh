@@ -14,7 +14,8 @@
             create_time AS createTime,
             state,
             update_time AS updateTime,
-            sender_id AS senderId
+            sender_id AS senderId,
+            target_id AS targetId
 		]]>
 	</sql>
 
@@ -33,6 +34,7 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="senderId != null and senderId != ''"><![CDATA[AND sender_id = #{senderId}]]></if>
+            <if test="targetId != null and targetId != ''"><![CDATA[AND target_id = #{targetId}]]></if>
 		</where>
 	</sql>
 	
@@ -53,6 +55,7 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="senderId != null"><![CDATA[sender_id = #{senderId},]]></if>
+			<if test="targetId != null"><![CDATA[target_id = #{targetId},]]></if>
 		</set>
 	</sql>
 
@@ -69,7 +72,8 @@
                 create_time, 
                 state, 
                 update_time,
-                sender_id
+                sender_id,
+                target_id
 				)
 			VALUES
 				(
@@ -81,7 +85,8 @@
                 #{createTime}, 
                 #{state}, 
                 #{updateTime},
-                #{senderId}
+                #{senderId},
+                #{targetId}
 				)
 		]]>
 	</insert>

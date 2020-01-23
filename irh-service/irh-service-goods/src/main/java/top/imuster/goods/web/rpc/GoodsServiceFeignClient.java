@@ -12,7 +12,6 @@ import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductEvaluateInfoService;
 import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
-import top.imuster.user.api.pojo.ConsumerInfo;
 
 import javax.annotation.Resource;
 
@@ -131,5 +130,16 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
             return productEvaluateInfo.getBuyerId();
         }
         return null;
+    }
+
+    @Override
+    @GetMapping("/es/pi/{psId}")
+    public ProductInfo getProductInfoByProductMessage(@PathVariable("psId") Long targetId) {
+        return productInfoService.getProductInfoByMessageId(targetId);
+    }
+
+    @Override
+    public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(Long targetId) {
+        return productEvaluateInfoService.selectEntryList(targetId).get(0);
     }
 }

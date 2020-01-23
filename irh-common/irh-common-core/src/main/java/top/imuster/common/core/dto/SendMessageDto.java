@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @ClassName: SendMessageDto
  * @Description: 发送邮箱信息的dto传输对象，向消息队列中传输这个类
  * 只发送mq必须有: topic  body  sourceType  sourceId  type
+ * 发送到消息中心必须有:topic body sourceId sentTo targetId newsType
  * @author: hmr
  * @date: 2020/1/12 14:53
  */
@@ -26,10 +27,7 @@ public class SendMessageDto implements Serializable {
     //发送的消息体
     private String body;
 
-    //发送消息的来源类型  10-会员 20-系统
-    private Integer sourceType;
-
-    //发送消息的来源id
+    //发送消息的来源id -1标识管理员发送
     private Long sourceId;
 
     //消息发送的时间
@@ -38,7 +36,7 @@ public class SendMessageDto implements Serializable {
     //接收消息的id或者email
     private String sendTo;
 
-    //发送消息的类型
+    //发送到mq类型
     private MqTypeEnum type;
 
     //当消息具有一定的时效性时，需要保存在redis中，该值标识储存在redis中的key
@@ -53,26 +51,17 @@ public class SendMessageDto implements Serializable {
     //过期时间单位
     private TimeUnit unit;
 
-    //(被举报的信息)id
+    //目标id
     private Long targetId;
 
-    public SendMessageDto(String topic, String body, Integer sourceType, Long sourceId, Date sendDate, String sendTo, MqTypeEnum type, Long targetId) {
-        this.topic = topic;
-        this.body = body;
-        this.sourceType = sourceType;
-        this.sourceId = sourceId;
-        this.sendDate = sendDate;
-        this.sendTo = sendTo;
-        this.type = type;
-        this.targetId = targetId;
-    }
+    // 消息类型 10-订单  20-商品留言  30-商品评价(即定位targetId对应的表) 40-举报处理
+    private Integer newsType;
 
     @Override
     public String toString() {
         return "SendMessageDto{" +
                 "topic='" + topic + '\'' +
                 ", body='" + body + '\'' +
-                ", sourceType=" + sourceType +
                 ", sourceId=" + sourceId +
                 ", sendDate=" + sendDate +
                 ", type='" + type + '\'' +
@@ -82,6 +71,19 @@ public class SendMessageDto implements Serializable {
                 ", unit=" + unit +
                 ", targetId=" + targetId +
                 '}';
+    }
+
+    public void setTargetIdAndNewsId(Long targetId, Integer newsType){
+        this.targetId = targetId;
+        this.newsType = newsType;
+    }
+
+    public Integer getNewsType() {
+        return newsType;
+    }
+
+    public void setNewsType(Integer newsType) {
+        this.newsType = newsType;
     }
 
     public Long getId() {
@@ -149,14 +151,6 @@ public class SendMessageDto implements Serializable {
 
     public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
-    }
-
-    public Integer getSourceType() {
-        return sourceType;
-    }
-
-    public void setSourceType(Integer sourceType) {
-        this.sourceType = sourceType;
     }
 
     public Long getSourceId() {

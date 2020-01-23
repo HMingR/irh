@@ -154,5 +154,14 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = 2
 	</select>
+
+	<select id="selectOtherRoleByAdminId" parameterType="long" resultType="roleInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		FROM
+			role_info ri
+		WHERE
+			ri.id NOT IN ( SELECT role_id FROM management_role_rel mrr WHERE mrr.staff_id = #{adminId} )
+	</select>
 	
 </mapper>

@@ -2,13 +2,17 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.exception.GoodsException;
@@ -34,9 +38,6 @@ public class ProductMessageController extends BaseController {
     @Resource
     ProductMessageService productMessageService;
 
-    @Resource
-    ProductInfoService productInfoService;
-
     /**
      * @Description: 根据商品的id查询商品的留言信息(树形结构)
      * @Author: hmr
@@ -46,30 +47,26 @@ public class ProductMessageController extends BaseController {
      **/
     @ApiOperation("根据商品的id查询商品的留言信息(树形结构)")
     @GetMapping("/{goodsId}")
-    public Message list(@PathVariable("goodsId") Long id){
+    public Message<List<ProductMessage>> list(@PathVariable("goodsId") Long id){
         List<ProductMessage> messageTree = productMessageService.generateMessageTree(id);
         return Message.createBySuccess(messageTree);
     }
 
     @ApiOperation("根据商品id和留言父id写留言信息(如果是新的留言,则parentId写成0)")
     @PostMapping("/write")
-    public Message writeMessage(@RequestBody ProductMessage productMessage, HttpServletRequest request, SendMessageDto sendMessageDto){
-        try{
-            Long userId = getIdByToken(request);
-            ProductInfo productInfo = productInfoService.selectEntryList(productMessage.getProductId()).get(0);
-            //如果parentId是0，则给卖家发送消息；如果不是，则给卖家和parentId对应的会员发送消息
-            sendMessageDto.setTargetId(productInfo.getConsumerId());
-            productMessageService.generateSendMessage(sendMessageDto, productMessage.getParentId());
-            return Message.createBySuccess("留言成功");
-        }catch (Exception e){
-            logger.error("留言失败，出现异常为{}",e.getMessage(), e);
-            throw new GoodsException("留言失败");
-        }
+    public Message<String> writeMessage(@ApiParam("在写留言信息的时候，留言的商品id、parentId、内容不能为空") @Validated(ValidateGroup.addGroup.class) @RequestBody ProductMessage productMessage,
+                                BindingResult bindingResult,
+                                HttpServletRequest request) throws Exception{
+        validData(bindingResult);
+        Long userId = getIdByToken(request);
+        productMessage.setConsumerId(userId);
+        productMessageService.generateSendMessage(productMessage);
+        return Message.createBySuccess("留言成功");
     }
 
     @ApiOperation("根据留言id删除自己的留言信息")
     @DeleteMapping("/{id}")
-    public Message deleteMsg(@PathVariable("id") Long id, HttpServletRequest request){
+    public Message<String> deleteMsg(@ApiParam("留言的id") @PathVariable("id") Long id, HttpServletRequest request){
         try{
             Long userId = getIdByToken(request);
             ProductMessage productMessage = productMessageService.selectEntryList(id).get(0);

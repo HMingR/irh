@@ -18,6 +18,7 @@ import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.bo.ConsumerDetails;
 import top.imuster.user.api.dto.CheckValidDto;
@@ -48,6 +49,9 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
 
     @Resource
     private ConsumerInfoDao consumerInfoDao;
+
+    @Autowired
+    GenerateSendMessageService generateSendMessageService;
 
     @Override
     public BaseDao<ConsumerInfo, Long> getDao() {
@@ -139,10 +143,10 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
             throw new UserException("验证码错误");
         }
         consumerInfo.setState(30);
+        consumerInfoDao.insertEntry(consumerInfo);
     }
 
     @Override
-    @MqGenerate(isSaveToRedis = true)
     public void getCode(SendMessageDto sendMessageDto, String email, Integer type) throws JsonProcessingException {
         String code = UUID.randomUUID().toString().substring(0, 4);
         sendMessageDto.setUnit(TimeUnit.MINUTES);
@@ -161,6 +165,7 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
             String body = new StringBuilder().append("该验证码用于重置密码:").append(code).append(",该验证码有效期为10分钟").toString();
             sendMessageDto.setBody(body);
         }
+        generateSendMessageService.sendToMqAndReids(sendMessageDto);
     }
 
     @Override

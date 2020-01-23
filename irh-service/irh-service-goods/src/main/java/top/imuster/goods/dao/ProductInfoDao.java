@@ -20,4 +20,22 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: void
      **/
     Integer updateProductCategoryByCondition(ProductInfo productInfo);
+
+   /**
+    * @Author hmr
+    * @Description 根据id查询卖家email
+    * @Date: 2020/1/21 10:47
+    * @param id
+    * @reture: java.lang.String
+    **/
+    String selectSalerEmailByProductId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据留言id查询所属商品
+     * @Date: 2020/1/22 11:37
+     * @param id
+     * @reture: top.imuster.goods.api.pojo.ProductInfo
+     **/
+    ProductInfo selectProductInfoByMessageId(Long id);
 }

@@ -20,9 +20,11 @@ import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
+import top.imuster.user.api.pojo.ManagementRoleRel;
 import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.ConsumerInfoService;
 import top.imuster.user.provider.service.ManagementInfoService;
+import top.imuster.user.provider.service.ManagementRoleRelService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -38,7 +40,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 @Api(tags = "adminController", description = "操作管理员的权限角色等")
-public class AdminUserController extends BaseController {
+public class AdminController extends BaseController {
 
     @Resource
     ConsumerInfoService consumerInfoService;
@@ -49,23 +51,13 @@ public class AdminUserController extends BaseController {
     @Resource
     ManagementInfoService managementInfoService;
 
-    @ApiOperation(value = "修改管理员信息(修改基本信息，包括删除)", httpMethod = "PUT")
-    @NeedLogin(validate = true)
-    @PutMapping
-    public Message<String> editManagement(@ApiParam("ManagementInfo实体") @Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
-        validData(bindingResult);
-        try{
-            managementInfoService.updateByKey(managementInfo);
-            return Message.createBySuccess();
-        }catch (Exception e){
-            logger.error(GlobalConstant.getErrorLog("修改管理员信息"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
-            throw new UserException("修改管理员信息失败");
-        }
-    }
+    @Resource
+    ManagementRoleRelService managementRoleRelService;
+
 
     @ApiOperation(value = "查看所有的管理员", httpMethod = "POST")
-    @PostMapping("/list/1")
     @NeedLogin(validate = true)
+    @PostMapping("/list/1")
     public Message<Page<ManagementInfo>> managementList(@ApiParam @RequestBody Page<ManagementInfo> page){
         Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(page.getSearchCondition(), page);
         if(null != managementInfoPage){
@@ -152,5 +144,57 @@ public class AdminUserController extends BaseController {
     public Message<String> editManagementRole(Long managementId, String roleIds) throws Exception {
         managementInfoService.editManagementRoleById(managementId, roleIds);
         return Message.createBySuccess("修改成功");
+    }
+
+    @ApiOperation(value = "修改管理员信息(修改基本信息，包括删除)", httpMethod = "PUT")
+    @NeedLogin(validate = true)
+    @PutMapping
+    public Message<String> editManagement(@ApiParam("ManagementInfo实体") @Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
+        validData(bindingResult);
+        try{
+            managementInfoService.updateByKey(managementInfo);
+            return Message.createBySuccess();
+        }catch (Exception e){
+            logger.error(GlobalConstant.getErrorLog("修改管理员信息"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
+            throw new UserException("修改管理员信息失败");
+        }
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据管理员id删除指定的角色
+     * @Date: 2020/1/21 14:11
+     * @param id
+     * @param roleId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @ApiOperation("根据管理员id删除指定的角色")
+    @DeleteMapping("/{userId}/{roleId}")
+    @NeedLogin(validate = true)
+    public Message<String> deleteManagementRole(@PathVariable("userId")Long id, @PathVariable("roleId")Long roleId){
+        ManagementRoleRel condition = new ManagementRoleRel();
+        condition.setRoleId(roleId);
+        condition.setStaffId(id);
+        managementRoleRelService.deleteByCondtion(condition);
+        return Message.createBySuccess();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据管理员的id改变管理员的状态
+     * @Date: 2020/1/22 13:29
+     * @param id
+     * @param state
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @ApiOperation("根据管理员的id改变管理员的状态")
+    @NeedLogin(validate = true)
+    @DeleteMapping("/{id}/{state}")
+    public Message<String> deleteManagement(@ApiParam("管理员id")@PathVariable Long id, @ApiParam("需要改变的状态10:注销 20:锁定 30:审核中 40:审核通过")@PathVariable("state")Integer state){
+        ManagementInfo managementInfo = new ManagementInfo();
+        managementInfo.setId(id);
+        managementInfo.setState(state);
+        managementInfoService.updateByKey(managementInfo);
+        return Message.createBySuccess();
     }
 }

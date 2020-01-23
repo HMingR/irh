@@ -66,7 +66,6 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         ReportFeedbackInfo info = reportFeedbackInfoService.selectEntryList(condition.getId()).get(0);
         SendMessageDto target = new SendMessageDto();
         target.setSourceId(-1L);
-        target.setSourceType(20);
         target.setSendDate(DateUtils.current());
         String sendToId = getSendToId(info.getType(), info.getTargetId());
         target.setSendTo(sendToId);
@@ -79,14 +78,12 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             ArrayList<SendMessageDto> sendMessageDtos = new ArrayList<>();
             SendMessageDto customerMessage = new SendMessageDto();
             customerMessage.setSourceId(-1L);
-            customerMessage.setSourceType(20);
             customerMessage.setSendDate(DateUtils.current());
             customerMessage.setType(MqTypeEnum.CENTER);
             customerMessage.setBody("您于" + info.getCreateTime() + "举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
             String emailById = consumerInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
                 log.info("根据id{}查询会员email失败",info.getCustomerId());
-                throw new UserException("服务器内部错误,请联系管理员");
             }
             customerMessage.setSendTo(emailById);
             target.setBody("由于您多次违反irh平台的相关规定或多次被用户举报并核实，您的账号已经被冻结。请联系管理员取消冻结");
@@ -109,12 +106,15 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         if (reportFeedbackInfo.getType() == 1) {
             //商品
             goodsServiceFeignApi.delProduct(reportFeedbackInfo.getTargetId());
+            log.info("管理员删除编号为{}的商品",reportFeedbackInfo.getTargetId());
         }else if(reportFeedbackInfo.getType() == 2){
             //留言
             goodsServiceFeignApi.deleteProductMessageById(reportFeedbackInfo.getTargetId());
+            log.info("管理员删除编号为{}的留言",reportFeedbackInfo.getTargetId());
         }else if(reportFeedbackInfo.getType() == 3){
             //评价
             goodsServiceFeignApi.deleteProductEvaluate(reportFeedbackInfo.getTargetId());
+            log.info("管理员删除编号为{}的评价",reportFeedbackInfo.getTargetId());
         }else if(reportFeedbackInfo.getType() == 4){
             //todo 删除帖子
         }

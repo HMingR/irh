@@ -38,8 +38,13 @@ public class NewsInfo extends BaseDomain {
 	@ApiModelProperty("内容")
 	private String content;
 
-	// 消息类型 10:系统通知
-	private Short newsType;
+	// 消息类型 10-订单  20-商品留言  30-商品评价
+	@ApiModelProperty("消息类型 10-订单  20-商品留言  30-商品评价")
+	private Integer newsType;
+
+	//根据news_type指向不同表的id
+	@ApiModelProperty("根据news_type指向不同表的id")
+	private Long targetId;
 
 	// 10:删除  20:已读  30:未读
 	//private Short state;
@@ -53,15 +58,25 @@ public class NewsInfo extends BaseDomain {
 				", senderId=" + senderId +
 				", title='" + title + '\'' +
 				", content='" + content + '\'' +
+				", newsType=" + newsType +
+				", targetId=" + targetId +
 				'}';
 	}
 
-	public Short getNewsType() {
+	public Integer getNewsType() {
 		return newsType;
 	}
 
-	public void setNewsType(Short newsType) {
+	public void setNewsType(Integer newsType) {
 		this.newsType = newsType;
+	}
+
+	public Long getTargetId() {
+		return targetId;
+	}
+
+	public void setTargetId(Long targetId) {
+		this.targetId = targetId;
 	}
 
 	public Long getSenderId() {

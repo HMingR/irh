@@ -180,5 +180,19 @@
 		<if test="newCategoryId != null"><![CDATA[category_id = #{newCategoryId}]]></if>
 		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
 	</update>
+
+	<select id="selectSalerEmailByProductId" parameterType="long" resultType="string">
+		SELECT ci.email
+		FROM product_info pi, consumer_info ci
+		WHERE pi.id = #{id}
+		AND pi.consumer_id = ci.id
+	</select>
+
+	<select id="selectProductInfoByMessageId" parameterType="long" resultType="productInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		FROM product_info pi
+		WHERE pi.id = (SELECT product_id FROM product_message pm WHERE pm.id = #{id})
+	</select>
 	
 </mapper>

@@ -1,14 +1,19 @@
 package top.imuster.goods.service.impl;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.dao.ProductMessageDao;
+import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
@@ -17,6 +22,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +35,12 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessage, L
 
     @Resource
     private ProductMessageDao productMessageDao;
+
+    @Autowired
+    GenerateSendMessageService generateSendMessageService;
+
+    @Resource
+    ProductInfoService productInfoService;
 
     @Override
     public BaseDao<ProductMessage, Long> getDao() {
@@ -46,32 +58,28 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessage, L
     }
 
     @Override
-    public void generateSendMessage(SendMessageDto sendMessageDto, Long parentId) {
-        sendMessageDto.setType(MqTypeEnum.EMAIL);
-        if(parentId == 0){
-            sendMessageDto.setSourceType(30);
-            sendMessageDto.setSourceId(-1L);
-            sendMessageDto.setTopic("商品留言");
-            sendMessageDto.setValue("有人对你的商品进行了留言,快来看看吧!");
-            //sendMessageDto.setTargetId();
-        }else {
-            //sendMessageDto.setSourceId();
+    public void generateSendMessage(ProductMessage productMessage) throws Exception{
+        Long messageId = productMessageDao.insertReturnId(productMessage);
+        SendMessageDto sendToSaler = new SendMessageDto();
+        sendToSaler.setType(MqTypeEnum.CENTER);
+        sendToSaler.setTopic("商品留言");
+        String salerEmail = productInfoService.getConsumerEmailById(productMessage.getProductId());
+        sendToSaler.setSourceId(productMessage.getConsumerId());
+        sendToSaler.setBody("有人对你的商品进行了留言:" + productMessage.getContent());
+        sendToSaler.setSendTo(salerEmail);
+        sendToSaler.setTargetIdAndNewsId(messageId, 20);
+        if(productMessage.getParentId() != 0){
+            SendMessageDto sendToParentId = new SendMessageDto();
+            sendToParentId.setType(MqTypeEnum.CENTER);
+            sendToParentId.setTopic("商品留言");
+            String email = productMessageDao.selectProductEmailByMessageParentId(productMessage.getParentId());
+            sendToParentId.setBody("有人对你的留言进行了回复:" + productMessage.getContent());
+            sendToParentId.setSendTo(email);
+            sendToParentId.setSourceId(productMessage.getConsumerId());
+            sendToParentId.setTargetIdAndNewsId(messageId, 20);
+            generateSendMessageService.sendToMq(sendToParentId);
         }
-    }
-
-    @Override
-    @MqGenerate(one = false)
-    public void test(List<SendMessageDto> sendMessageDtos) {
-        SendMessageDto sendMessageDto1 = new SendMessageDto();
-        sendMessageDto1.setTargetId(1L);
-        SendMessageDto sendMessageDto2 = new SendMessageDto();
-        sendMessageDto2.setTargetId(2L);
-        SendMessageDto sendMessageDto3 = new SendMessageDto();
-        sendMessageDto3.setTargetId(3L );
-        sendMessageDtos.add(sendMessageDto1);
-        sendMessageDtos.add(sendMessageDto2);
-        sendMessageDtos.add(sendMessageDto3);
-        System.out.println("asdf");
+        generateSendMessageService.sendToMq(sendToSaler);
     }
 
     public static void main(String[] args) throws Exception {

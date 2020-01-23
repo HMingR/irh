@@ -2,6 +2,7 @@ package top.imuster.message.provider.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -14,9 +15,15 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.exception.GlobalException;
 import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.goods.api.pojo.ProductEvaluateInfo;
+import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.message.pojo.NewsInfo;
 import top.imuster.message.provider.service.NewsInfoService;
+import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.service.OrderServiceFeignApi;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +50,12 @@ public class MessageCenterController extends BaseController {
     @Resource
     NewsInfoService newsInfoService;
 
+    @Autowired
+    GoodsServiceFeignApi goodsServiceFeignApi;
+
+    @Autowired
+    OrderServiceFeignApi orderServiceFeignApi;
+
     @ApiOperation("分页查询消息，未读的排在前面")
     @GetMapping
     public Message list(HttpServletRequest request, Page<NewsInfo> page) throws Exception{
@@ -57,7 +70,7 @@ public class MessageCenterController extends BaseController {
 
 
     @ApiOperation("更新消息状态,type为10-删除 20-已读")
-    @GetMapping("/type/id")
+    @GetMapping("/type/{id}")
     public Message updateById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         NewsInfo newsInfo = new NewsInfo();
         newsInfo.setId(id);
@@ -66,30 +79,20 @@ public class MessageCenterController extends BaseController {
         return Message.createBySuccess();
     }
 
-
-    @GetMapping("/test")
-    public void test(){
-        String emailServiceCode = "1234";
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("注册验证码");
-        message.setFrom("1978773465@qq.com");
-        message.setText("注册验证码是：" + emailServiceCode);
-        message.setTo("2452035127@qq.com");
-        mailSender.send(message);
-    }
-
-    @GetMapping("/1")
-    public void test2() throws ParseException {
-        SendMessageDto sendMessageDto = new SendMessageDto();
-        sendMessageDto.setType(MqTypeEnum.CENTER);
-        sendMessageDto.setTopic("测试");
-        sendMessageDto.setBody("测试内容");
-        sendMessageDto.setSourceType(2);
-        sendMessageDto.setSourceId(0L);
-        sendMessageDto.setTargetId(234L);
-        sendMessageDto.setSendDate(new Date());
-        generateSendMessageService.sendToMq(sendMessageDto);
-
+    @ApiOperation("根据消息的类型获得定位到消息的具体位置,根据不同的type有不同的响实体类信息")
+    @GetMapping("/{newsType}/{targetId}")
+    public Message newsDetail(@ApiParam("消息类型 10-订单(响应OrderInfo)  20-商品留言(ProductMessage)  30-商品评价(ProductEvaluate)") @PathVariable("newsType")Long newsType, @PathVariable("targetId")Long targetId){
+        if(newsType == 10){
+            OrderInfo orderById = orderServiceFeignApi.getOrderById(targetId);
+            return Message.createBySuccess(orderById);
+        }else if(newsType == 20){
+            ProductInfo productInfo = goodsServiceFeignApi.getProductInfoByProductMessage(targetId);
+            return Message.createBySuccess(productInfo);
+        }else if(newsType == 30){
+            ProductEvaluateInfo info = goodsServiceFeignApi.getProductEvaluateInfoByEvaluateId(targetId);
+            return Message.createBySuccess(info);
+        }
+        throw new GlobalException("参数错误,请刷新后重试");
     }
 
 }

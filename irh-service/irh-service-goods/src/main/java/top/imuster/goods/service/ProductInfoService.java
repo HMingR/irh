@@ -30,4 +30,21 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      **/
     void generateDetailPage(SendMessageDto sendMessageDto);
 
+    /**
+     * @Author hmr
+     * @Description 根据商品id查询卖家邮箱
+     * @Date: 2020/1/21 10:27
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    String getConsumerEmailById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据商品留言id获得商品信息
+     * @Date: 2020/1/22 11:36
+     * @param id
+     * @reture: top.imuster.goods.api.pojo.ProductInfo
+     **/
+    ProductInfo getProductInfoByMessageId(Long id);
 }

@@ -40,4 +40,13 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
      **/
     List<RoleInfo> getRoleAndAuthList();
 
+    /**
+     * @Author hmr
+     * @Description 根据管理员id获得该管理员没有拥有的角色
+     * @Date: 2020/1/22 10:17
+     * @param adminId
+     * @reture: java.util.ArrayList<top.imuster.user.api.pojo.RoleInfo>
+     *
+     * @return*/
+    List<RoleInfo> getOtherRoleByAdminId(Long adminId);
 }

@@ -118,4 +118,18 @@ public class ProductController extends BaseController {
     }
 
 
+    /**
+     * @Author hmr
+     * @Description 获得商品详情页
+     * @Date: 2020/1/21 9:45
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @GetMapping("/detail")
+    public Message<String> getProductDetailUrl(){
+
+        return null;
+    }
+
+
 }

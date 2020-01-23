@@ -133,5 +133,38 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<insert id="insertReturnId" parameterType="productMessage" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			INSERT INTO product_message
+				(
+                id,
+                product_id,
+                consumer_id,
+                parent_id,
+                content,
+                create_time,
+                update_time,
+                state
+				)
+			VALUES
+				(
+                #{id},
+                #{productId},
+                #{consumerId},
+                #{parentId},
+                #{content},
+                #{createTime},
+                #{updateTime},
+                #{state}
+				)
+		]]>
+	</insert>
+
+	<select id="selectProductEmailByMessageParentId" parameterType="long" resultType="string">
+		SELECT ci.email
+		FROM consumer_info ci, product_message pm
+		WHERE pm.parent_id = #{parentId} and pm.consumer_id = ci.id
+	</select>
+
 	
 </mapper>

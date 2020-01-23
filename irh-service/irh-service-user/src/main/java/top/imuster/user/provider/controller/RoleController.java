@@ -1,6 +1,7 @@
 package top.imuster.user.provider.controller;
 
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,8 @@ import top.imuster.user.provider.service.AuthRoleRelService;
 import top.imuster.user.provider.service.RoleInfoService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName: RoleController
@@ -26,6 +29,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("admin/role")
+@Api("角色控制器")
 public class RoleController extends BaseController {
 
     @Resource
@@ -134,5 +138,19 @@ public class RoleController extends BaseController {
         validData(bindingResult);
         authRoleRelService.insertEntry(authRoleRel);
         return Message.createBySuccess();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据管理员id获得该管理员没有拥有的角色
+     * @Date: 2020/1/22 10:08
+     * @param adminId
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @ApiOperation(value = "根据管理员id获得该管理员没有拥有的角色", httpMethod = "GET")
+    @GetMapping("/other/{adminId}")
+    public Message getOtherRoleByAdminId(@ApiParam("管理员id") @PathVariable("adminId") Long adminId){
+        List<RoleInfo> roleInfos =  roleInfoService.getOtherRoleByAdminId(adminId);
+        return Message.createBySuccess(roleInfos);
     }
 }

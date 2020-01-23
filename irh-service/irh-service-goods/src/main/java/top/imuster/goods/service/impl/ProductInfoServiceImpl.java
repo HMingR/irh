@@ -26,6 +26,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Resource
     private ProductInfoDao productInfoDao;
 
+
     @Override
     public BaseDao<ProductInfo, Long> getDao() {
         return this.productInfoDao;
@@ -40,5 +41,15 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @MqGenerate
     public void generateDetailPage(SendMessageDto sendMessageDto) {
         sendMessageDto.setType(MqTypeEnum.DETAIL);
+    }
+
+    @Override
+    public String getConsumerEmailById(Long id) {
+        return productInfoDao.selectSalerEmailByProductId(id);
+    }
+
+    @Override
+    public ProductInfo getProductInfoByMessageId(Long id) {
+        return productInfoDao.selectProductInfoByMessageId(id);
     }
 }

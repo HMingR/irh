@@ -61,4 +61,15 @@ public class GoodsServiceFeignApiHystrix implements GoodsServiceFeignApi {
         log.error("根据商品id查询会员id失败，服务降级");
         return null;
     }
+
+    @Override
+    public ProductInfo getProductInfoByProductMessage(Long targetId) {
+        log.error("根据商品留言信息查询商品信息失败,服务降级");
+        return null;
+    }
+
+    @Override
+    public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(Long targetId) {
+        return null;
+    }
 }

@@ -7,10 +7,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
-
-import java.util.List;
 
 /**
  * @ClassName: GoodsServiceFeignApi
@@ -90,4 +87,25 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/{type}/{id}")
     Long getConsumerIdByType(@PathVariable("id") Long id, @PathVariable("type")Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 根据商品留言信息查找商品
+     * @Date: 2020/1/22 11:32
+     * @param targetId
+     * @reture: java.lang.String
+     **/
+    @GetMapping("/es/pi/pm/{psId}")
+    ProductInfo getProductInfoByProductMessage(@PathVariable("psId") Long targetId);
+
+    /**
+     * @Author hmr
+     * @Description 根据商品评价的id查找商品
+     * @Date: 2020/1/22 11:46
+     * @param targetId
+     * @reture: top.imuster.goods.api.pojo.ProductInfo
+     *
+     * @return*/
+    @GetMapping("/es/pi/ei/{id}")
+    ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(@PathVariable("id") Long targetId);
 }

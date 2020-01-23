@@ -35,7 +35,8 @@ public class NewsInfoServiceImpl extends BaseServiceImpl<NewsInfo, Long> impleme
         newsInfo.setTitle(sendMessageDto.getTopic());
         newsInfo.setSenderId(sendMessageDto.getSourceId());
         newsInfo.setReceiverId(Long.parseLong(sendMessageDto.getSendTo()));
-        newsInfo.setCreateTime(sendMessageDto.getSendDate());
+        newsInfo.setTargetId(sendMessageDto.getTargetId());
+        newsInfo.setNewsType(sendMessageDto.getNewsType());
         newsInfoDao.insertEntry(newsInfo);
     }
 }
