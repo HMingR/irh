@@ -17,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -49,7 +51,7 @@ public class ProductController extends BaseController {
     @Autowired
     FileServiceFeignApi fileServiceFeignApi;
 
-    @ApiOperation("会员发布二手商品,,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
+    @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
     @PutMapping
     public Message insertProduct(@RequestParam("file") MultipartFile file, @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult, HttpServletRequest request) throws Exception {
         validData(bindingResult);
@@ -80,6 +82,7 @@ public class ProductController extends BaseController {
     }
 
     @ApiOperation(value = "根据id获得商品信息", httpMethod = "GET")
+    @BrowserTimesAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT)
     @GetMapping("/{id}")
     public Message getProductById(@PathVariable("id")Long id){
         ProductInfo productInfo = productInfoService.selectEntryList(id).get(0);
@@ -130,6 +133,5 @@ public class ProductController extends BaseController {
 
         return null;
     }
-
 
 }

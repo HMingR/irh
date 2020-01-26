@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.exception.GoodsException;

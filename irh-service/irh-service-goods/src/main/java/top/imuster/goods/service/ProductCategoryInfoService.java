@@ -1,6 +1,7 @@
 package top.imuster.goods.service;
 
 
+import org.springframework.web.bind.annotation.PathVariable;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.exception.GoodsException;
@@ -31,5 +32,4 @@ public interface ProductCategoryInfoService extends BaseService<ProductCategoryI
      * @reture: void
      **/
     Integer delCategoryById(Long id) throws GoodsException;
-
 }
