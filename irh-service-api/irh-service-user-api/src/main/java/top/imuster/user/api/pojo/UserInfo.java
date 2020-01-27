@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2019-11-24 16:31:57
  */
 @ApiModel("会员实体类")
-public class ConsumerInfo extends BaseDomain {
+public class UserInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 23378053182L;
 
@@ -96,6 +96,16 @@ public class ConsumerInfo extends BaseDomain {
 	// 10:注销 20:锁定 30:审核中 40:审核通过
 
 	private List<RoleInfo> roleList;
+
+	private String token;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public List<RoleInfo> getRoleList() {
 		return roleList;

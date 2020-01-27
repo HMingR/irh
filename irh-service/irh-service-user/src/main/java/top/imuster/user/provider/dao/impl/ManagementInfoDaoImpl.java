@@ -13,7 +13,7 @@ import top.imuster.user.provider.dao.ManagementInfoDao;
  */
 @Repository("managementInfoDao")
 public class ManagementInfoDaoImpl extends BaseDaoImpl<ManagementInfo, Long> implements ManagementInfoDao {
-	private final static String NAMESPACE = "top.imuster.user.provider.dao.ManagementInfoDao.";
+	private final static String NAMESPACE = "top.imuster.auth.dao.ManagementInfoDao.";
 	private final static String SELECT_MANAGEMENT_ROLE_BY_CONDITION = "selectManagementRoleByCondition";
 
 

@@ -3,7 +3,6 @@ package top.imuster.user.provider.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.AuthRoleRel;
-import top.imuster.user.api.pojo.RoleInfo;
 
 /**
  * AuthRoleRelService接口

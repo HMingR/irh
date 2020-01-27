@@ -1,12 +1,10 @@
-package top.imuster.user.provider.controller;
+package top.imuster.user.provider.web.controller;
 
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -17,19 +15,16 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.user.api.bo.ManagementDetails;
-import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
-import top.imuster.user.api.pojo.ManagementRoleRel;
+import top.imuster.user.api.pojo.UserInfo;
+import top.imuster.user.api.pojo.UserRoleRel;
 import top.imuster.user.provider.exception.UserException;
-import top.imuster.user.provider.service.ConsumerInfoService;
 import top.imuster.user.provider.service.ManagementInfoService;
-import top.imuster.user.provider.service.ManagementRoleRelService;
+import top.imuster.user.provider.service.UserInfoService;
+import top.imuster.user.provider.service.UserRoleRelService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName: ManagementController
@@ -42,8 +37,6 @@ import java.util.Map;
 @Api(tags = "adminController", description = "操作管理员的权限角色等")
 public class AdminController extends BaseController {
 
-    @Resource
-    ConsumerInfoService consumerInfoService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -52,7 +45,7 @@ public class AdminController extends BaseController {
     ManagementInfoService managementInfoService;
 
     @Resource
-    ManagementRoleRelService managementRoleRelService;
+    UserRoleRelService userRoleRelService;
 
 
     @ApiOperation(value = "查看所有的管理员", httpMethod = "POST")
@@ -72,13 +65,13 @@ public class AdminController extends BaseController {
     * @Description 分页条件查询所有的会员
     * @Date: 2020/1/19 16:46
     * @param page
-    * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.user.api.pojo.ConsumerInfo>>
+    * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.user.api.pojo.UserInfo>>
     **/
     @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
     @PostMapping("/list/2")
     @NeedLogin(validate = true)
-    public Message<Page<ConsumerInfo>> list(@ApiParam @RequestBody Page<ConsumerInfo> page){
-        Page<ConsumerInfo> consumerInfoPage = consumerInfoService.selectPage(page.getSearchCondition(), page);
+    public Message<Page<UserInfo>> list(@ApiParam @RequestBody Page<UserInfo> page){
+        Page<UserInfo> consumerInfoPage = userInfoService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(consumerInfoPage);
     }
 
@@ -172,10 +165,10 @@ public class AdminController extends BaseController {
     @DeleteMapping("/{userId}/{roleId}")
     @NeedLogin(validate = true)
     public Message<String> deleteManagementRole(@PathVariable("userId")Long id, @PathVariable("roleId")Long roleId){
-        ManagementRoleRel condition = new ManagementRoleRel();
+        UserRoleRel condition = new UserRoleRel();
         condition.setRoleId(roleId);
         condition.setStaffId(id);
-        managementRoleRelService.deleteByCondtion(condition);
+        userRoleRelService.deleteByCondtion(condition);
         return Message.createBySuccess();
     }
 

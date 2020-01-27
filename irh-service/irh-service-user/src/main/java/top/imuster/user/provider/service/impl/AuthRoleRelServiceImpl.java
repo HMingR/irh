@@ -25,4 +25,6 @@ public class AuthRoleRelServiceImpl extends BaseServiceImpl<AuthRoleRel, Long> i
     public BaseDao<AuthRoleRel, Long> getDao() {
         return this.authRoleRelDao;
     }
+
+
 }

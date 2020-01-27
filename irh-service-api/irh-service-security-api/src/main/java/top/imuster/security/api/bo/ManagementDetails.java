@@ -1,10 +1,9 @@
-package top.imuster.user.api.bo;
+package top.imuster.security.api.bo;
 
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.RoleInfo;
 

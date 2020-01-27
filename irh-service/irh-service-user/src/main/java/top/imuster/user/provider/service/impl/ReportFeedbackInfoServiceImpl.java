@@ -8,22 +8,19 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.user.api.enums.FeedbackEnum;
-import top.imuster.user.api.pojo.ConsumerInfo;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.provider.dao.ReportFeedbackInfoDao;
 import top.imuster.user.provider.exception.UserException;
-import top.imuster.user.provider.service.ConsumerInfoService;
+import top.imuster.user.provider.service.UserInfoService;
 import top.imuster.user.provider.service.ReportFeedbackInfoService;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     private GenerateSendMessageService generateSendMessageService;
 
     @Resource
-    ConsumerInfoService consumerInfoService;
+    UserInfoService userInfoService;
 
 
     @Override
@@ -81,7 +78,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             customerMessage.setSendDate(DateUtils.current());
             customerMessage.setType(MqTypeEnum.CENTER);
             customerMessage.setBody("您于" + info.getCreateTime() + "举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
-            String emailById = consumerInfoService.getEmailById(info.getCustomerId());
+            String emailById = userInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
                 log.info("根据id{}查询会员email失败",info.getCustomerId());
             }
@@ -134,7 +131,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             log.info("没有在{}表中找到id为{}的信息",type, targetId);
             throw new UserException("操作失败,请刷新后重试或联系管理员");
         }
-        return consumerInfoService.getEmailById(consumerId);
+        return userInfoService.getEmailById(consumerId);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package top.imuster.user.provider.controller;
+package top.imuster.user.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

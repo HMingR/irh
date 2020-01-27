@@ -2,7 +2,7 @@ package top.imuster.user.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.user.api.pojo.AuthInfo;
+import top.imuster.security.api.pojo.AuthInfo;
 
 /**
  * AuthInfoDao 接口

@@ -1,32 +1,24 @@
-package top.imuster.user.provider.controller;
+package top.imuster.user.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.user.api.bo.ConsumerDetails;
 import top.imuster.user.api.dto.CheckValidDto;
-import top.imuster.user.api.pojo.ConsumerInfo;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
-import top.imuster.user.provider.exception.UserException;
-import top.imuster.user.provider.service.ConsumerInfoService;
+import top.imuster.user.provider.service.UserInfoService;
 import top.imuster.user.provider.service.ReportFeedbackInfoService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName: CustomerController
@@ -42,30 +34,18 @@ public class CustomerController extends BaseController {
     ReportFeedbackInfoService reportFeedbackInfoService;
 
     @Resource
-    ConsumerInfoService consumerInfoService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-
-    @ApiOperation(value = "登录，成功返回token", httpMethod = "POST")
-    @PostMapping("/login")
-    public Message<ConsumerInfo> managementLogin(@Validated(ValidateGroup.loginGroup.class) @RequestBody ConsumerInfo consumerInfo, BindingResult result){
-        validData(result);
-        ConsumerDetails details = consumerInfoService.login(consumerInfo.getEmail(), consumerInfo.getPassword());
-        return Message.createBySuccess(details.getToken() ,details.getConsumerInfo());
-    }
+    UserInfoService userInfoService;
 
     @ApiOperation(value = "发送email验证码,type标识(1-注册验证码  2-重置密码验证码),当type为2时，email可取任意值",httpMethod = "GET")
     @GetMapping("/sendCode/{type}/{email}")
     public Message<String> getCode(HttpServletRequest request,@ApiParam("1-注册验证码  2-重置密码验证码") @PathVariable("type") Integer type, @ApiParam("邮箱地址") @PathVariable("email") String email, SendMessageDto sendMessageDto) throws Exception {
         if(type == 1){
-            consumerInfoService.getCode(sendMessageDto, email, type);
+            userInfoService.getCode(sendMessageDto, email, type);
         }
         if(type == 2){
             Long userId = getIdByToken(request);
-            ConsumerInfo consumerInfo = consumerInfoService.selectEntryList(userId).get(0);
-            consumerInfoService.getCode(sendMessageDto, consumerInfo.getEmail(), type);
+            UserInfo userInfo = userInfoService.selectEntryList(userId).get(0);
+            userInfoService.getCode(sendMessageDto, userInfo.getEmail(), type);
         }
         return Message.createBySuccess();
     }
@@ -74,15 +54,15 @@ public class CustomerController extends BaseController {
      * @Description: 会员注册
      * @Author: hmr
      * @Date: 2019/12/26 19:29
-     * @param consumerInfo
+     * @param userInfo
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "会员注册,code为发送的验证码", httpMethod = "POST")
     @PostMapping("/register/{code}")
-    public Message<String> register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) ConsumerInfo consumerInfo, BindingResult bindingResult,@ApiParam("发送的验证码") @PathVariable String code) throws Exception {
+    public Message<String> register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) UserInfo userInfo, BindingResult bindingResult, @ApiParam("发送的验证码") @PathVariable String code) throws Exception {
         validData(bindingResult);
-        consumerInfoService.register(consumerInfo, code);
+        userInfoService.register(userInfo, code);
         return Message.createBySuccess("注册成功,请完善后续必要的信息才能正常使用");
     }
 
@@ -98,7 +78,7 @@ public class CustomerController extends BaseController {
     @PostMapping("/check")
     public Message<String> checkValid(@ApiParam("CheckValidDto实体类") @RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        boolean flag = consumerInfoService.checkValid(checkValidDto);
+        boolean flag = userInfoService.checkValid(checkValidDto);
         if(flag){
             return Message.createBySuccess();
         }
@@ -109,16 +89,16 @@ public class CustomerController extends BaseController {
      * @Description: 修改会员的个人信息
      * @Author: hmr
      * @Date: 2019/12/26 19:37
-     * @param consumerInfo
+     * @param userInfo
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping("/edit")
     @NeedLogin(validate = true)
     @ApiOperation(value = "修改会员的个人信息(先校验一些信息是否存在)", httpMethod = "POST")
-    public Message<String> editInfo(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated(ValidateGroup.editGroup.class) ConsumerInfo consumerInfo, BindingResult bindingResult){
+    public Message<String> editInfo(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated(ValidateGroup.editGroup.class) UserInfo userInfo, BindingResult bindingResult){
         validData(bindingResult);
-        consumerInfoService.updateByKey(consumerInfo);
+        userInfoService.updateByKey(userInfo);
         return Message.createBySuccess("修改个人信息成功");
     }
 

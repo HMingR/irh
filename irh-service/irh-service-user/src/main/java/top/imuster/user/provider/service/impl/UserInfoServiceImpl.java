@@ -1,32 +1,27 @@
 package top.imuster.user.provider.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.utils.JwtTokenUtil;
-import top.imuster.common.core.annotation.MqGenerate;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.user.api.bo.ConsumerDetails;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.enums.CheckTypeEnum;
-import top.imuster.user.api.pojo.ConsumerInfo;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.provider.dao.ConsumerInfoDao;
 import top.imuster.user.provider.exception.UserException;
-import top.imuster.user.provider.service.ConsumerInfoService;
+import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
@@ -34,18 +29,15 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * ConsumerInfoService 实现类
+ * UserInfoService 实现类
  * @author 黄明人
  * @since 2019-11-26 10:46:26
  */
 @Service("consumerInfoService")
-public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long> implements ConsumerInfoService {
+public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> implements UserInfoService {
 
     @Autowired
     RedisTemplate redisTemplate;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Resource
     private ConsumerInfoDao consumerInfoDao;
@@ -54,51 +46,27 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
     GenerateSendMessageService generateSendMessageService;
 
     @Override
-    public BaseDao<ConsumerInfo, Long> getDao() {
+    public BaseDao<UserInfo, Long> getDao() {
         return this.consumerInfoDao;
     }
 
     @Override
-    public ConsumerDetails login(String email, String password) {
-        ConsumerInfo condition = new ConsumerInfo();
-        condition.setEmail(email);
-        ConsumerInfo consumerInfo = consumerInfoDao.selectEntryList(condition).get(0);
-        boolean matches = passwordEncoder.matches(password, consumerInfo.getPassword());
-        if(!matches){
-            throw new UsernameNotFoundException("用户名或者密码错误");
+    public UserInfo loadUserDetailsByEmail(String email) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setEmail(email);
+        userInfo = consumerInfoDao.selectEntryList(userInfo).get(0);
+        if(userInfo == null) {
+            throw new UserException("用户名或者密码错误");
         }
-        if(StringUtils.isEmpty(String.valueOf(consumerInfo.getState())) || consumerInfo.getState() <= 20){
-            throw new UserException("用户信息异常或用户被锁定");
-        }
-        String token = JwtTokenUtil.generateToken(consumerInfo.getEmail(), consumerInfo.getId());
-        //将用户的基本信息存入redis中，并设置过期时间
-        redisTemplate.opsForValue()
-                .set(RedisUtil.getAccessToken(token),
-                        new UserDto(consumerInfo.getId(),
-                                consumerInfo.getEmail(),
-                                GlobalConstant.userType.MANAGEMENT.getName(),
-                                GlobalConstant.userType.MANAGEMENT.getType()),
-                        GlobalConstant.REDIS_JWT_EXPIRATION, TimeUnit.SECONDS);
-        return new ConsumerDetails(consumerInfo, GlobalConstant.JWT_TOKEN_HEAD + token);
-    }
-
-    @Override
-    public ConsumerDetails loadConsumerDetailsByName(String userName) {
-        ConsumerInfo consumerInfo = new ConsumerInfo();
-        consumerInfo.setEmail(userName);
-        consumerInfo = consumerInfoDao.selectEntryList(consumerInfo).get(0);
-        if(consumerInfo == null) {
-            throw new UsernameNotFoundException("用户名或者密码错误");
-        }
-        if(consumerInfo.getState() == null || consumerInfo.getState() <= 20){
+        if(userInfo.getState() == null || userInfo.getState() <= 20){
             throw new UserException("该账号已被冻结,请联系管理员");
         }
-        return new ConsumerDetails(consumerInfo);
+        return userInfo;
     }
 
     @Override
     public boolean checkValid(CheckValidDto checkValidDto) throws Exception{
-        ConsumerInfo condition = generateCheckCondition(checkValidDto);
+        UserInfo condition = generateCheckCondition(checkValidDto);
         int i = consumerInfoDao.checkInfo(condition);
         return i == 0;
     }
@@ -108,29 +76,29 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
      * @Description 生成校验用户信息是否合法的参数
      * @Date: 2020/1/14 13:16
      * @param checkValidDto
-     * @reture: top.imuster.user.api.pojo.ConsumerInfo
+     * @reture: top.imuster.user.api.pojo.UserInfo
      **/
-    private ConsumerInfo generateCheckCondition(CheckValidDto checkValidDto) throws InvocationTargetException, IllegalAccessException {
+    private UserInfo generateCheckCondition(CheckValidDto checkValidDto) throws InvocationTargetException, IllegalAccessException {
         CheckTypeEnum type = checkValidDto.getType();
         String validValue = checkValidDto.getValidValue();
-        ConsumerInfo condition = new ConsumerInfo();
+        UserInfo condition = new UserInfo();
         String field = type.getType();
         BeanUtils.setProperty(condition, field, validValue);
         return condition;
     }
 
     @Override
-    public void register(ConsumerInfo consumerInfo, String code)throws Exception {
-        ConsumerInfo condition;
+    public void register(UserInfo userInfo, String code)throws Exception {
+        UserInfo condition;
         CheckValidDto checkValidDto = new CheckValidDto();
         //校验邮箱
-        String email = consumerInfo.getEmail();
+        String email = userInfo.getEmail();
         checkValidDto.setType(CheckTypeEnum.EMAIL);
         checkValidDto.setValidValue(email);
         condition = generateCheckCondition(checkValidDto);
         int i = consumerInfoDao.checkInfo(condition);
         //校验nickname
-        String nickname = consumerInfo.getNickname();
+        String nickname = userInfo.getNickname();
         checkValidDto.setValidValue(nickname);
         checkValidDto.setType(CheckTypeEnum.NICKNAME);
         condition = generateCheckCondition(checkValidDto);
@@ -142,8 +110,8 @@ public class ConsumerInfoServiceImpl extends BaseServiceImpl<ConsumerInfo, Long>
         if(StringUtils.isBlank(realToken) || !code.equalsIgnoreCase(realToken)){
             throw new UserException("验证码错误");
         }
-        consumerInfo.setState(30);
-        consumerInfoDao.insertEntry(consumerInfo);
+        userInfo.setState(30);
+        consumerInfoDao.insertEntry(userInfo);
     }
 
     @Override

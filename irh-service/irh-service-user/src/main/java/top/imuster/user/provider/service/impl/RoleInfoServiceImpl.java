@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.user.api.pojo.AuthRoleRel;
-import top.imuster.user.api.pojo.ManagementRoleRel;
+import top.imuster.user.api.pojo.UserRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.dao.RoleInfoDao;
 import top.imuster.user.provider.service.AuthRoleRelService;
-import top.imuster.user.provider.service.ManagementRoleRelService;
+import top.imuster.user.provider.service.UserRoleRelService;
 import top.imuster.user.provider.service.RoleInfoService;
 
 import javax.annotation.Resource;
@@ -32,7 +32,7 @@ public class RoleInfoServiceImpl extends BaseServiceImpl<RoleInfo, Long> impleme
     private AuthRoleRelService authRoleRelService;
 
     @Resource
-    private ManagementRoleRelService managementRoleRelService;
+    private UserRoleRelService userRoleRelService;
 
     @Override
     public BaseDao<RoleInfo, Long> getDao() {
@@ -51,9 +51,9 @@ public class RoleInfoServiceImpl extends BaseServiceImpl<RoleInfo, Long> impleme
         authRoleRel.setRoleId(roleId);
         authRoleRelService.deleteByCondtion(authRoleRel);
 
-        ManagementRoleRel managementRoleRel = new ManagementRoleRel();
-        managementRoleRel.setRoleId(roleId);
-        managementRoleRelService.deleteByCondtion(managementRoleRel);
+        UserRoleRel userRoleRel = new UserRoleRel();
+        userRoleRel.setRoleId(roleId);
+        userRoleRelService.deleteByCondtion(userRoleRel);
     }
 
     @Override

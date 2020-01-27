@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.AuthRoleRel;
-import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.dao.AuthRoleRelDao;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 @Repository("authRoleRelDao")
 public class AuthRoleRelDaoImpl extends BaseDaoImpl<AuthRoleRel, Long> implements AuthRoleRelDao {
-	private final static String NAMESPACE = "top.imuster.user.provider.dao.AuthRoleRelDao.";
+	private final static String NAMESPACE = "top.imuster.auth.dao.AuthRoleRelDao.";
 	private final static String SELECT_AUTH_LIST_BY_ROLEID= "selectAuthListByRoleId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {

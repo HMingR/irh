@@ -1,10 +1,10 @@
 package top.imuster.user.provider.dao;
 
 
+
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.AuthRoleRel;
-import top.imuster.user.api.pojo.RoleInfo;
 
 import java.util.List;
 

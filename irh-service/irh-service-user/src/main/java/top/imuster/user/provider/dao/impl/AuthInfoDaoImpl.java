@@ -2,9 +2,9 @@ package top.imuster.user.provider.dao.impl;
 
 
 import org.springframework.stereotype.Repository;
+import top.imuster.auth.dao.AuthInfoDao;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.user.api.pojo.AuthInfo;
-import top.imuster.user.provider.dao.AuthInfoDao;
+import top.imuster.security.api.pojo.AuthInfo;
 
 /**
  * AuthInfoDao 实现类
@@ -13,7 +13,7 @@ import top.imuster.user.provider.dao.AuthInfoDao;
  */
 @Repository("authInfoDao")
 public class AuthInfoDaoImpl extends BaseDaoImpl<AuthInfo, Long> implements AuthInfoDao {
-	private final static String NAMESPACE = "top.imuster.user.provider.dao.AuthInfoDao.";
+	private final static String NAMESPACE = "top.imuster.auth.dao.AuthInfoDao.";
 	private final static String SELECT_AUTHINFO_BY_ID = "selectAuthInfoById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {

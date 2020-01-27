@@ -11,11 +11,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2019-12-01 19:29:14
  */
 @ApiModel("管理员角色关系实体类")
-public class ManagementRoleRel extends BaseDomain {
+public class UserRoleRel extends BaseDomain {
 
 	private static final long serialVersionUID = 6925444191L;
 
-	public ManagementRoleRel() {
+	public UserRoleRel() {
 		//默认无参构造方法
 	}
 	// 管理员角色表的主键

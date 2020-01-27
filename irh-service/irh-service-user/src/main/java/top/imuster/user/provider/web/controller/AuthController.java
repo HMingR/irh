@@ -1,4 +1,4 @@
-package top.imuster.user.provider.controller;
+package top.imuster.user.provider.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -10,7 +10,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.pojo.AuthInfo;
-import top.imuster.user.provider.service.AuthInfoService;
+import top.imuster.auth.service.AuthInfoService;
 
 import javax.annotation.Resource;
 

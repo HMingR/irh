@@ -3,28 +3,32 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>irh</artifactId>
+        <artifactId>irh-service-api</artifactId>
         <groupId>top.imuster</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>irh-service-api</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>irh-service-file-api</module>
-        <module>irh-service-goods-api</module>
-        <module>irh-service-order-api</module>
-        <module>irh-service-user-api</module>
-        <module>irh-service-message-api</module>
-        <module>irh-service-security-api</module>
-    </modules>
+    <artifactId>irh-service-security-api</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>top.imuster</groupId>
-            <artifactId>irh-common-base</artifactId>
+            <artifactId>irh-common-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>top.imuster</groupId>
+            <artifactId>irh-service-user-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+
 </project>

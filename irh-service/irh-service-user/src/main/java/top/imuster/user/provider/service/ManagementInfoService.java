@@ -2,7 +2,6 @@ package top.imuster.user.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.user.api.bo.ManagementDetails;
 import top.imuster.user.api.pojo.ManagementInfo;
 
 /**
@@ -16,7 +15,7 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @Description: 根据管理员的名称查询管理员的所有信息,包括权限信息
      * @Author: hmr
      * @Date: 2019/12/2 16:53
-     * @param name
+     * @param ManagementInfo
      * @reture: top.imuster.user.pojo.ManagementInfo
      **/
     ManagementInfo getManagementRoleByCondition(ManagementInfo condition);
@@ -28,17 +27,7 @@ public interface ManagementInfoService extends BaseService<ManagementInfo, Long>
      * @param name
      * @reture: top.imuster.user.pojo.ManagementInfo
      **/
-    ManagementDetails loadManagementByName(String name) throws Exception;
-
-    /**
-     * @Description: 管理员登录用
-     * @Author: hmr
-     * @Date: 2019/12/7 10:20
-     * @param name
-     * @param password
-     * @reture: String   返回一个token
-     **/
-    ManagementDetails login(String name, String password) throws Exception;
+    ManagementInfo loadManagementByName(String name) throws Exception;
 
     /**
      * @Description: 根据管理员的id修改管理员的角色

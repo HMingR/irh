@@ -1,10 +1,9 @@
-package top.imuster.user.api.bo;
+package top.imuster.security.api.bo;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import top.imuster.user.api.pojo.AuthInfo;
-import top.imuster.user.api.pojo.ConsumerInfo;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.pojo.RoleInfo;
 
 import java.util.Collection;
@@ -18,22 +17,22 @@ import java.util.stream.Collectors;
  * @date: 2019/12/7 15:12
  */
 public class ConsumerDetails implements UserDetails {
-    private ConsumerInfo consumerInfo;
+    private UserInfo userInfo;
 
     private List<RoleInfo> roleInfoList;
 
     //用来暂时保存token
     private String token;
 
-    public ConsumerDetails(ConsumerInfo consumerInfo) {
-        this.consumerInfo = consumerInfo;
+    public ConsumerDetails(UserInfo userInfo) {
+        this.userInfo = userInfo;
         RoleInfo roleInfo = new RoleInfo();
         roleInfo.setRoleName("USER");
         roleInfoList.add(roleInfo);
     }
 
-    public ConsumerDetails(ConsumerInfo consumerInfo, String token){
-        this.consumerInfo = consumerInfo;
+    public ConsumerDetails(UserInfo userInfo, String token){
+        this.userInfo = userInfo;
         this.token = token;
     }
 
@@ -47,12 +46,12 @@ public class ConsumerDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return consumerInfo.getPassword();
+        return userInfo.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return consumerInfo.getNickname();
+        return userInfo.getNickname();
     }
 
     @Override
@@ -69,7 +68,7 @@ public class ConsumerDetails implements UserDetails {
      **/
     @Override
     public boolean isAccountNonLocked() {
-        return consumerInfo.getState() == 20;
+        return userInfo.getState() == 20;
     }
 
     @Override
@@ -86,7 +85,7 @@ public class ConsumerDetails implements UserDetails {
      **/
     @Override
     public boolean isEnabled() {
-        return consumerInfo.getState() > 20;
+        return userInfo.getState() > 20;
     }
 
     public String getToken() {
@@ -97,11 +96,11 @@ public class ConsumerDetails implements UserDetails {
         this.token = token;
     }
 
-    public ConsumerInfo getConsumerInfo() {
-        return consumerInfo;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setConsumerInfo(ConsumerInfo consumerInfo) {
-        this.consumerInfo = consumerInfo;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }

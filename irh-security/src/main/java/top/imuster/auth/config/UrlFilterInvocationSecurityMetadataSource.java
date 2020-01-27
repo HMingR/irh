@@ -1,4 +1,5 @@
-package top.imuster.user.provider.config;
+package top.imuster.auth.config;
+
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,8 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
-import top.imuster.auth.config.IgnoreUrlsConfig;
-import top.imuster.user.api.pojo.RoleInfo;
-import top.imuster.user.provider.service.RoleInfoService;
+import top.imuster.auth.service.RoleInfoService;
+import top.imuster.security.api.pojo.RoleInfo;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
  * @date: 2019/12/24 15:03
  */
 @Slf4j
-public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
+public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Resource
     RoleInfoService roleInfoService;

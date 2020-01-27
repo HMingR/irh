@@ -45,8 +45,20 @@ public class ManagementInfo extends BaseDomain {
 	@ApiModelProperty("管理员对应的角色")
 	private List<RoleInfo> roleList;
 
+	@ApiModelProperty("登录成功之后得到的token")
+	private String token;
+
 	// 10:注销 20:锁定 30:审核中 40:审核通过
 	// private Short state;
+
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public Long getId() {
 		return this.id;

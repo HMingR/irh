@@ -1,6 +1,7 @@
 package top.imuster.user.provider.service;
 
 
+
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.RoleInfo;
 
@@ -27,7 +28,7 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
      * @Author: hmr
      * @Date: 2019/12/18 12:31
      * @param roleId
-     * @reture: top.imuster.user.api.pojo.RoleInfo
+     * @reture: top.imuster.security.api.pojo.RoleInfo
      **/
     RoleInfo getRoleAndAuthByRoleId(Long roleId);
 
@@ -36,7 +37,7 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
      * @Author: hmr
      * @Date: 2019/12/24 16:07
      * @param
-     * @reture: java.util.List<top.imuster.user.api.pojo.RoleInfo>
+     * @reture: java.util.List<top.imuster.security.api.pojo.RoleInfo>
      **/
     List<RoleInfo> getRoleAndAuthList();
 
@@ -45,7 +46,7 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
      * @Description 根据管理员id获得该管理员没有拥有的角色
      * @Date: 2020/1/22 10:17
      * @param adminId
-     * @reture: java.util.ArrayList<top.imuster.user.api.pojo.RoleInfo>
+     * @reture: java.util.ArrayList<top.imuster.security.api.pojo.RoleInfo>
      *
      * @return*/
     List<RoleInfo> getOtherRoleByAdminId(Long adminId);

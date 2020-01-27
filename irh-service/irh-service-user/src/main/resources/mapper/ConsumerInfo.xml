@@ -90,7 +90,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="consumerInfo" >
+	<insert id="insertEntry" parameterType="userInfo" >
 		<![CDATA[
 			INSERT INTO consumer_info
 				(
@@ -153,20 +153,20 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="consumerInfo" >
+	<delete id="deleteByCondtion" parameterType="userInfo" >
 		<![CDATA[DELETE FROM consumer_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="consumerInfo" >
+	<update id="updateByKey" parameterType="userInfo" >
 		<![CDATA[UPDATE consumer_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="consumerInfo">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="userInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -177,7 +177,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="consumerInfo" resultType="consumerInfo">
+	<select id="selectEntryList" parameterType="userInfo" resultType="userInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -186,14 +186,14 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="consumerInfo" resultType="int">
+	<select id="selectEntryListCount" parameterType="userInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 	<!-- 其它SQL语句 -->
 
-	<select id="checkInfo" resultType="int" parameterType="consumerInfo">
+	<select id="checkInfo" resultType="int" parameterType="userInfo">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<where>
