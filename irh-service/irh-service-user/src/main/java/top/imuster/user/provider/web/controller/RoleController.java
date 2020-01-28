@@ -13,8 +13,8 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
-import top.imuster.auth.service.AuthRoleRelService;
-import top.imuster.auth.service.RoleInfoService;
+import top.imuster.user.provider.service.AuthRoleRelService;
+import top.imuster.user.provider.service.RoleInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;

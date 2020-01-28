@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * @author 黄明人
  * @since 2019-11-26 10:46:26
  */
-@Service("consumerInfoService")
+@Service("userInfoService")
 public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> implements UserInfoService {
 
     @Autowired

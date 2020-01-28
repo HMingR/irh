@@ -37,6 +37,8 @@ import java.io.IOException;
 @Api(tags = "adminController", description = "操作管理员的权限角色等")
 public class AdminController extends BaseController {
 
+    @Resource
+    UserInfoService userInfoService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -95,18 +97,6 @@ public class AdminController extends BaseController {
             logger.error(GlobalConstant.getErrorLog("添加管理员"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
             throw new UserException("添加管理员失败");
         }
-    }
-
-
-    @ApiOperation(value = "登录成功返回token和基本信息", httpMethod = "POST")
-    @PostMapping("/login")
-    public Message<ManagementInfo> managementLogin(@ApiParam("ManagementInfo实体") @Validated(ValidateGroup.loginGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws Exception {
-        validData(bindingResult);
-        ManagementDetails details = managementInfoService.login(managementInfo.getName(), managementInfo.getPassword());
-        logger.info("{}登录成功",managementInfo);
-        ManagementInfo result = details.getManagementInfo();
-        result.setRoleList(details.getRoleInfoList());
-        return Message.createBySuccess(details.getToken(), result);
     }
 
     @ApiOperation(value = "根据id获得管理员信息", httpMethod = "GET")

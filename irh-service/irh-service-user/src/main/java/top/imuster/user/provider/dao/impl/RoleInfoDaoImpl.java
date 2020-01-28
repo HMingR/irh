@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("roleInfoDao")
 public class RoleInfoDaoImpl extends BaseDaoImpl<RoleInfo, Long> implements RoleInfoDao {
-	private final static String NAMESPACE = "top.imuster.auth.dao.RoleInfoDao.";
+	private final static String NAMESPACE = "top.imuster.user.provider.dao.RoleInfoDao.";
 	private final static String SELECT_ROLE_AUTH_BY_ROLEID = "selectRoleAndAuthByRoleId";
 	private final static String SELECT_ROLE_AND_AUTH = "selectRoleAndAuth";
 	private final static String SELECT_OTHER_ROLE_BY_ADMIN_ID = "selectOtherRoleByAdminId";

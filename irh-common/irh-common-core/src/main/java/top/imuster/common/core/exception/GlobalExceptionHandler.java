@@ -10,6 +10,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -115,6 +116,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GlobalException.class)
     public Message globalExceptionHandler(){
         return Message.createByError("服务器内部错误");
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Message httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException exception){
+        logger.error("请求方式错误{}",exception.getMessage());
+        return Message.createByError("非法的请求方式");
     }
 
     /**

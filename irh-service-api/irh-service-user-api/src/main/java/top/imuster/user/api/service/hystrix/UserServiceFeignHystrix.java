@@ -2,9 +2,11 @@ package top.imuster.user.api.service.hystrix;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
-import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
+
+import java.util.List;
 
 /**
  * @ClassName: UserServiceFeignHystrix
@@ -15,13 +17,14 @@ import top.imuster.user.api.service.UserServiceFeignApi;
 @Component
 @Slf4j
 public class UserServiceFeignHystrix implements UserServiceFeignApi {
+
     @Override
-    public ManagementInfo loadManagementByName(String name) {
+    public UserInfo loadUserInfoByEmail(String email) {
         return null;
     }
 
     @Override
-    public UserInfo loadConsumerInfoByEmail(String email) {
+    public List<RoleInfo> getAllRoleAndAuth() {
         return null;
     }
 }

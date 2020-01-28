@@ -144,7 +144,7 @@
 		<collection property="roleList"
 					column="id"
 					ofType="top.imuster.user.api.pojo.RoleInfo"
-					select="top.imuster.user.provider.dao.ManagementRoleRelDao.selectManagementRoleInfoByManagementId">
+					select="top.imuster.user.provider.dao.UserRoleRelDao.selectManagementRoleInfoByManagementId">
 		</collection>
 	</resultMap>
 

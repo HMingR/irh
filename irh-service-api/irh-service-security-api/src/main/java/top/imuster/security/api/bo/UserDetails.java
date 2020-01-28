@@ -29,6 +29,10 @@ public class UserDetails implements org.springframework.security.core.userdetail
                 .collect(Collectors.toList());
     }
 
+
+    public UserDetails() {
+    }
+
     public UserDetails(UserInfo userInfo){
         this.roleInfos = userInfo.getRoleList();
         this.userInfo = userInfo;

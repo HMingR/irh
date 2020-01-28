@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.user.api.pojo.UserRoleRel;
-import top.imuster.user.provider.dao.ManagementRoleRelDao;
+import top.imuster.user.provider.dao.UserRoleRelDao;
 import top.imuster.user.provider.service.UserRoleRelService;
 
 import javax.annotation.Resource;
@@ -19,15 +19,15 @@ import javax.annotation.Resource;
 public class UserRoleRelServiceImpl extends BaseServiceImpl<UserRoleRel, Long> implements UserRoleRelService {
 
     @Resource
-    private ManagementRoleRelDao managementRoleRelDao;
+    private UserRoleRelDao userRoleRelDao;
 
     @Override
     public BaseDao<UserRoleRel, Long> getDao() {
-        return this.managementRoleRelDao;
+        return this.userRoleRelDao;
     }
 
     @Override
     public Integer getCountByCondition(UserRoleRel userRoleRel) {
-        return managementRoleRelDao.selectEntryListCount(userRoleRel);
+        return userRoleRelDao.selectEntryListCount(userRoleRel);
     }
 }

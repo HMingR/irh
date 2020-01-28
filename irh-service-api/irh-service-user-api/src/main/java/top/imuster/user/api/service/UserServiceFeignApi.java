@@ -3,8 +3,11 @@ package top.imuster.user.api.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
+
+import java.util.List;
 
 /**
  * @ClassName: UserServiceFeignApi
@@ -17,4 +20,7 @@ public interface UserServiceFeignApi {
 
     @GetMapping("/login/{email}")
     UserInfo loadUserInfoByEmail(@PathVariable("email") String email);
+
+    @GetMapping("/roleAndAuth")
+    List<RoleInfo> getAllRoleAndAuth();
 }

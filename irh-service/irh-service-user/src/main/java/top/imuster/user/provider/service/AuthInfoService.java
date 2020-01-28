@@ -2,7 +2,7 @@ package top.imuster.user.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.security.api.pojo.AuthInfo;
+import top.imuster.user.api.pojo.AuthInfo;
 
 /**
  * AuthInfoService接口

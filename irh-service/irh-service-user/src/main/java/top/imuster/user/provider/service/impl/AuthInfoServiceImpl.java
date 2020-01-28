@@ -4,13 +4,13 @@ package top.imuster.user.provider.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import top.imuster.auth.dao.AuthInfoDao;
-import top.imuster.auth.service.AuthInfoService;
-import top.imuster.auth.service.AuthRoleRelService;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.security.api.pojo.AuthInfo;
-import top.imuster.security.api.pojo.AuthRoleRel;
+import top.imuster.user.api.pojo.AuthInfo;
+import top.imuster.user.api.pojo.AuthRoleRel;
+import top.imuster.user.provider.dao.AuthInfoDao;
+import top.imuster.user.provider.service.AuthInfoService;
+import top.imuster.user.provider.service.AuthRoleRelService;
 
 import javax.annotation.Resource;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.user.provider.dao.ManagementRoleRelDao">
+<mapper namespace="top.imuster.user.provider.dao.UserRoleRelDao">
 
 	<!-- management_role_rel 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -17,7 +17,7 @@
 	</sql>
 
 	<!-- management_role_rel 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM management_role_rel]]></sql>
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM user_role_rel]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
@@ -139,13 +139,13 @@
 					select="top.imuster.user.provider.dao.AuthInfoDao.selectAuthInfoById"></collection>
 	</resultMap>
 
-	<select id="selectManagementRoleInfoByManagementId" resultMap="includeAuthMap" parameterType="long">
+	<select id="selectUserRoleInfoByUserId" resultMap="includeAuthMap" parameterType="long">
 		SELECT
 			mrr.role_id,
 			role.role_name,
 			role.role_desc
 		FROM
-			management_role_rel AS mrr
+			user_role_rel AS mrr
 			LEFT JOIN (
 				SELECT
 					role_name,
