@@ -30,17 +30,19 @@ import java.security.KeyPair;
 class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
+
     //jwt令牌转换器
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
+
     @Autowired
     UserDetailsService userDetailsService;
+
     @Autowired
     AuthenticationManager authenticationManager;
+
     @Autowired
     TokenStore tokenStore;
-    @Autowired
-    private CustomUserAuthenticationConverter customUserAuthenticationConverter;
 
     //读取密钥的配置
     @Bean("keyProp")
@@ -57,6 +59,8 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
+
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(this.dataSource).clients(this.clientDetails());
@@ -67,6 +71,7 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
         return new JwtTokenStore(jwtAccessTokenConverter);
     }
+
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -79,6 +84,7 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         accessTokenConverter.setUserTokenConverter(customUserAuthenticationConverter);
         return converter;
     }
+
     //授权服务器端点配置
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {

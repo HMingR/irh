@@ -2,6 +2,7 @@ package top.imuster.security.api.bo;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 
@@ -15,57 +16,14 @@ import java.util.stream.Collectors;
  * @author: hmr
  * @date: 2020/1/27 21:42
  */
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetails extends User {
 
     UserInfo userInfo;
 
     List<RoleInfo> roleInfos;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roleInfos.stream()
-                .filter(roleInfo -> roleInfo.getRoleName() != null)
-                .map(roleInfo -> new SimpleGrantedAuthority(roleInfo.getRoleName()))
-                .collect(Collectors.toList());
-    }
-
-
-    public UserDetails() {
-    }
-
-    public UserDetails(UserInfo userInfo){
-        this.roleInfos = userInfo.getRoleList();
-        this.userInfo = userInfo;
-    }
-
-    @Override
-    public String getPassword() {
-        return userInfo.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return userInfo.getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return userInfo.getState() == 20;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return userInfo.getState() >= 20;
+    public UserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
     }
 
     public UserInfo getUserInfo() {

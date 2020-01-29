@@ -98,7 +98,7 @@ public class LogAspect {
             operationLogDto.setEndTime(endTime);
             operationLogDto.setRequestUrl(requestURI);
             operationLogDto.setExcuteTime(endTime.getTime() - startTime.getTime());
-            operationLogDto.setGroupName(loginUser.getGroupName());
+            operationLogDto.setGroupName(loginUser.getUserType().getName());
             operationLogDto.setCreator(loginUser.getLoginName());
             operationLogDto.setCreatorId(loginUser.getUserId());
             operationLogDto.setOs(os.getName());

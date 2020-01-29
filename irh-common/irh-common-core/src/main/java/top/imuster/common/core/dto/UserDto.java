@@ -2,6 +2,7 @@ package top.imuster.common.core.dto;
 
 
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.enums.UserType;
 
 import java.util.Date;
 
@@ -20,39 +21,11 @@ public class UserDto extends BaseDomain {
     //登录名
     private String loginName;
 
-    private String groupName;
-
-    //用户的类型 10:普通用户  20:卖家  30:社团组织  40: 管理员
-    private Integer groupType;
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+    //用户类型
+    private UserType userType;
 
     public Long getUserId() {
         return userId;
-    }
-
-    public UserDto() {
-    }
-
-    public UserDto(Long userId, String loginName, String groupName, Integer groupType, Date loginTime) {
-        this.userId = userId;
-        this.loginName = loginName;
-        this.groupName = groupName;
-        this.groupType = groupType;
-        this.setCreateTime(loginTime);
-    }
-
-    public UserDto(Long userId, String loginName, String groupName, Integer groupType) {
-        this.userId = userId;
-        this.loginName = loginName;
-        this.groupName = groupName;
-        this.groupType = groupType;
     }
 
     public void setUserId(Long userId) {
@@ -67,12 +40,11 @@ public class UserDto extends BaseDomain {
         this.loginName = loginName;
     }
 
-    public Integer getGroupType() {
-        return groupType;
+    public UserType getUserType() {
+        return userType;
     }
 
-    public void setGroupType(Integer groupType) {
-        this.groupType = groupType;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
-
 }

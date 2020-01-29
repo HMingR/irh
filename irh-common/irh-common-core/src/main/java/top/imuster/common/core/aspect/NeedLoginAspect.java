@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.imuster.common.core.annotation.LogAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
@@ -22,7 +21,6 @@ import top.imuster.common.core.utils.RedisUtil;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
 
 /**

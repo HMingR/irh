@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -53,6 +54,7 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "查看所有的管理员", httpMethod = "POST")
     @NeedLogin(validate = true)
     @PostMapping("/list/1")
+    @PreAuthorize("hasAuthority('login')")
     public Message<Page<ManagementInfo>> managementList(@ApiParam @RequestBody Page<ManagementInfo> page){
         Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(page.getSearchCondition(), page);
         if(null != managementInfoPage){
@@ -72,6 +74,7 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
     @PostMapping("/list/2")
     @NeedLogin(validate = true)
+    @PreAuthorize("hasAuthority('login1')")
     public Message<Page<UserInfo>> list(@ApiParam @RequestBody Page<UserInfo> page){
         Page<UserInfo> consumerInfoPage = userInfoService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(consumerInfoPage);

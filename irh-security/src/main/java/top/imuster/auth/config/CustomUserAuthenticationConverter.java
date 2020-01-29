@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.stereotype.Component;
-import top.imuster.security.api.bo.UserJwt;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,19 +23,15 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
         response.put("user_name", name);
 
         Object principal = authentication.getPrincipal();
-        UserJwt userJwt = null;
-        if(principal instanceof  UserJwt){
-            userJwt = (UserJwt) principal;
+        top.imuster.security.api.bo.UserDetails userDetails = null;
+        if(principal instanceof top.imuster.security.api.bo.UserDetails){
+            userDetails = (top.imuster.security.api.bo.UserDetails) principal;
         }else{
-            //refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 UserJwt
-            UserDetails userDetails = userDetailsService.loadUserByUsername(name);
-            userJwt = (UserJwt) userDetails;
+            //refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 top.imuster.security.api.bo.UserDetails
+            UserDetails userDetails1 = userDetailsService.loadUserByUsername(name);
+            userDetails = (top.imuster.security.api.bo.UserDetails) userDetails1;
         }
-        response.put("name", userJwt.getName());
-        response.put("id", userJwt.getId());
-        response.put("utype",userJwt.getUtype());
-        response.put("userpic",userJwt.getUserpic());
-        response.put("companyId",userJwt.getCompanyId());
+        response.put("email", userDetails.getUsername());
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }

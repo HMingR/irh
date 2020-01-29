@@ -44,5 +44,10 @@ public class UserProviderApplication {
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    AntPathMatcher antPathMatcher(){
+        return new AntPathMatcher();
+    }
 }
 

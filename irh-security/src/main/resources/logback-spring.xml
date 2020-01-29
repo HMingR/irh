@@ -83,7 +83,7 @@
        additivity="true" 是默认值，如果是true 可以省略不写
        由于使用了additivity="true"会继承自root节点的追加配置，将日志追加到控制台和文件中
        -->
-    <logger name="top.imuster.user" level="INFO" additivity="true"/>
+    <logger name="top.imuster.auth" level="DEBUG" additivity="true"/>
     <!-- 如果想打印SQL,则一般需要将相关包设置为DEBUG级别 -->
-    <logger name="top.imuster.user.dao" level="DEBUG" additivity="true"/>
+    <logger name="top.imuster.auth" level="DEBUG" additivity="true"/>
 </configuration>

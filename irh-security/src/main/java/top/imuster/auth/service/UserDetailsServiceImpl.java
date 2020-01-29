@@ -1,5 +1,6 @@
 package top.imuster.auth.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,10 @@ import top.imuster.security.api.bo.UserDetails;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -47,8 +52,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (StringUtils.isEmpty(username)) {
             return null;
         }
+
         UserInfo userInfo = userServiceFeignApi.loadUserInfoByEmail(username);
-        UserDetails userDetails = new UserDetails(userInfo);
+
+        if(userInfo == null){
+            return null;
+        }
+        //todo
+        log.info("查询到的用户信息为{}", userInfo);
+        /*List<SimpleGrantedAuthority> collect = roleList.stream()
+                .filter(roleInfo -> roleInfo.getRoleName() != null)
+                .map(roleInfo -> new SimpleGrantedAuthority(roleInfo.getRoleName()))
+                .collect(Collectors.toList());*/
+
+        List<String> collect = new ArrayList<>();
+        collect.add("login");
+        String userAuth  = StringUtils.join(collect.toArray(), ",");
+        UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
+        userDetails.setUserInfo(userInfo);
         return userDetails;
     }
 }

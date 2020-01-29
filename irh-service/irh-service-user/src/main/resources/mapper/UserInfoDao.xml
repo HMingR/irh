@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.user.provider.dao.ConsumerInfoDao">
+<mapper namespace="top.imuster.user.provider.dao.UserInfoDao">
 
 	<!-- consumer_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -211,6 +211,28 @@
 		<![CDATA[SELECT email]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[ WHERE id = #{id}]]>
+	</select>
+
+	<resultMap id="includeRoleMap" type="userInfo">
+		<id column="id" property="id"></id>
+		<result column="email" property="email"></result>
+		<result column="password" property="password"></result>
+		<result column="nickname" property="nickname"></result>
+		<result column="state" property="state"></result>
+		<result column="type" property="type"></result>
+		<collection property="roleList"
+					column="id"
+					ofType="top.imuster.user.api.pojo.RoleInfo"
+					select="top.imuster.user.provider.dao.UserRoleRelDao.selectUserRoleInfoByUserId">
+		</collection>
+	</resultMap>
+
+
+	<select id="selectUserRoleByCondition" parameterType="userInfo" resultMap="includeRoleMap">
+		<![CDATA[SELECT id, email, password, nickname, state, type ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
 	</select>
 
 </mapper>

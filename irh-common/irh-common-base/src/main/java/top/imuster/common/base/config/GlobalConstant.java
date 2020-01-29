@@ -22,6 +22,8 @@ public class GlobalConstant {
     public static final Long JWT_EXPIRATION = 1800L;               //jwt的超时(失效)时间，单位为秒
     public static final String JWT_TOKEN_HEAD = "Bearer ";               //Authorization头字段中的首部
 
+    public static final String COOKIE_ACCESS_TOKEN_NAME = "userAccessToken";
+
     //redis中会员发布的需求浏览次数的key
 
 
@@ -38,38 +40,5 @@ public class GlobalConstant {
     public static String getErrorLog(String operation){
         return operation + "失败,错误信息为{},实体信息为{}";
     }
-
-    public enum userType{
-        CUSTOMER(10, "普通会员"),
-        SELLER(20, "卖家"),
-        ORGANIZATION(30, "组织社团"),
-        MANAGEMENT(40, "管理员");
-
-        int type;
-        String name;
-
-        userType(Integer type, String name){
-            this.type = type;
-            this.name = name;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-
 
 }

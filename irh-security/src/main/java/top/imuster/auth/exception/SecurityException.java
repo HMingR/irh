@@ -9,4 +9,13 @@ import top.imuster.common.core.exception.GlobalException;
  * @date: 2020/1/27 16:02
  */
 public class SecurityException extends GlobalException {
+
+    public SecurityException(){
+        super();
+    }
+
+    public SecurityException(String msg){
+        super(msg);
+    }
+
 }

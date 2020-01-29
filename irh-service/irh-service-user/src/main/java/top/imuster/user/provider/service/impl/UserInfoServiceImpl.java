@@ -5,21 +5,17 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.dto.SendMessageDto;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.enums.CheckTypeEnum;
 import top.imuster.user.api.pojo.UserInfo;
-import top.imuster.user.provider.dao.ConsumerInfoDao;
+import top.imuster.user.provider.dao.UserInfoDao;
 import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.UserInfoService;
 
@@ -40,21 +36,21 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     RedisTemplate redisTemplate;
 
     @Resource
-    private ConsumerInfoDao consumerInfoDao;
+    private UserInfoDao userInfoDao;
 
     @Autowired
     GenerateSendMessageService generateSendMessageService;
 
     @Override
     public BaseDao<UserInfo, Long> getDao() {
-        return this.consumerInfoDao;
+        return this.userInfoDao;
     }
 
     @Override
     public UserInfo loadUserDetailsByEmail(String email) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setEmail(email);
-        userInfo = consumerInfoDao.selectEntryList(userInfo).get(0);
+        UserInfo condition = new UserInfo();
+        condition.setEmail(email);
+        UserInfo userInfo = userInfoDao.selectUserRoleByCondition(condition);
         if(userInfo == null) {
             throw new UserException("用户名或者密码错误");
         }
@@ -67,7 +63,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     @Override
     public boolean checkValid(CheckValidDto checkValidDto) throws Exception{
         UserInfo condition = generateCheckCondition(checkValidDto);
-        int i = consumerInfoDao.checkInfo(condition);
+        int i = userInfoDao.checkInfo(condition);
         return i == 0;
     }
 
@@ -96,13 +92,13 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         checkValidDto.setType(CheckTypeEnum.EMAIL);
         checkValidDto.setValidValue(email);
         condition = generateCheckCondition(checkValidDto);
-        int i = consumerInfoDao.checkInfo(condition);
+        int i = userInfoDao.checkInfo(condition);
         //校验nickname
         String nickname = userInfo.getNickname();
         checkValidDto.setValidValue(nickname);
         checkValidDto.setType(CheckTypeEnum.NICKNAME);
         condition = generateCheckCondition(checkValidDto);
-        i += consumerInfoDao.checkInfo(condition);
+        i += userInfoDao.checkInfo(condition);
         if(i != 0){
             throw new UserException("邮箱或用户名重复");
         }
@@ -111,7 +107,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
             throw new UserException("验证码错误");
         }
         userInfo.setState(30);
-        consumerInfoDao.insertEntry(userInfo);
+        userInfoDao.insertEntry(userInfo);
     }
 
     @Override
@@ -138,6 +134,6 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
 
     @Override
     public String getEmailById(Long id) {
-        return consumerInfoDao.selectEmailById(id);
+        return userInfoDao.selectEmailById(id);
     }
 }

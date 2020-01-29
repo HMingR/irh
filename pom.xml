@@ -106,12 +106,29 @@
         <swagger.version>2.5.0</swagger.version>
         <aspectj.version>1.8.13</aspectj.version>
         <common.version>3.4</common.version>
+        <okHttp.version>3.9.1</okHttp.version>
+        <feign-okhttp.version>8.18.0</feign-okhttp.version>
     </properties>
 
 
     <dependencyManagement>
         
         <dependencies>
+
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okHttp.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.netflix.feign</groupId>
+                <artifactId>feign-okhttp</artifactId>
+                <version>${feign-okhttp.version}</version>
+            </dependency>
+
+
             <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-json -->
             <dependency>
                 <groupId>cn.hutool</groupId>

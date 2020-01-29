@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NeedLoginException.class)
     @ResponseBody
     public Message needLoginExceptionHandler(NeedLoginException exception){
-        return Message.createByError(exception.getMessage());
+        return Message.createByError("当前暂时未登录,请登陆后重试");
     }
 
     /**
@@ -84,13 +84,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public Message nullPointerExceptionHandler(NullPointerException e){
         logger.error("服务器出现空指针异常{}", e.getMessage(), e);
-        return Message.createByError("服务器内部出现异常," + e.getMessage());
+        return Message.createByError("服务器内部出现异常");
     }
 
     @ExceptionHandler(RuntimeException.class)
     public Message runtimeExceptionHandler(RuntimeException e){
         logger.error("服务器内部出现运行时异常{}",e.getMessage(), e);
-        return Message.createByError("服务器内部出现异常," + e.getMessage());
+        return Message.createByError("服务器内部出现异常");
     }
 
     //类型转换异常

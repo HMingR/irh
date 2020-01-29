@@ -38,7 +38,6 @@ public class UserInfo extends BaseDomain {
 	// 密码
 	@ApiModelProperty("密码")
 	@NotEmpty(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "密码不能为空")
-	@JsonIgnore
 	private String password;
 
 	// 支付宝账号, max length: 13
@@ -94,10 +93,48 @@ public class UserInfo extends BaseDomain {
 	private String majorName;
 
 	// 10:注销 20:锁定 30:审核中 40:审核通过
+	//state
 
 	private List<RoleInfo> roleList;
 
 	private String token;
+
+	//10:普通会员 20:服务人员 30:校园组织 35:公益组织 40:校园社团 50:管理员
+	private Integer type;
+
+	@Override
+	public String toString() {
+		return "UserInfo{" +
+				"id=" + id +
+				", age=" + age +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", alipayNum='" + alipayNum + '\'' +
+				", nickname='" + nickname + '\'' +
+				", qq='" + qq + '\'' +
+				", gender=" + gender +
+				", phoneNum='" + phoneNum + '\'' +
+				", buildingNum='" + buildingNum + '\'' +
+				", buildingStorey='" + buildingStorey + '\'' +
+				", dormNum='" + dormNum + '\'' +
+				", realName='" + realName + '\'' +
+				", certificateNum='" + certificateNum + '\'' +
+				", schoolName='" + schoolName + '\'' +
+				", academyName='" + academyName + '\'' +
+				", majorName='" + majorName + '\'' +
+				", roleList=" + roleList +
+				", token='" + token + '\'' +
+				", type=" + type +
+				'}';
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
 	public String getToken() {
 		return token;
