@@ -2,7 +2,6 @@ package top.imuster.user.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.UserInfo;
 
 /**

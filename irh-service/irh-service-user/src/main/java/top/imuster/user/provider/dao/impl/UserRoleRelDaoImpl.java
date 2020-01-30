@@ -7,6 +7,8 @@ import top.imuster.user.api.pojo.UserRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.dao.UserRoleRelDao;
 
+import java.util.List;
+
 /**
  * UserRoleRelDao 实现类
  * @author 黄明人
@@ -16,6 +18,8 @@ import top.imuster.user.provider.dao.UserRoleRelDao;
 public class UserRoleRelDaoImpl extends BaseDaoImpl<UserRoleRel, Long> implements UserRoleRelDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.UserRoleRelDao.";
 	private final static String SELECT_USER_ROLE_INFO_BY_USER_ID = "selectUserRoleInfoByUserId";
+	private final static String SELECT_ROLE_NAME_BY_USER_NAME = "selectRoleNameByUserName";
+
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -24,5 +28,10 @@ public class UserRoleRelDaoImpl extends BaseDaoImpl<UserRoleRel, Long> implement
 	@Override
 	public RoleInfo selectUserRoleInfoByUserId(Long userId){
 		return this.select(getNameSpace(SELECT_USER_ROLE_INFO_BY_USER_ID), userId);
+	}
+
+	@Override
+	public List<String> selectRoleNameByUserName(String loginName) {
+		return this.selectList(getNameSpace(SELECT_ROLE_NAME_BY_USER_NAME), loginName);
 	}
 }

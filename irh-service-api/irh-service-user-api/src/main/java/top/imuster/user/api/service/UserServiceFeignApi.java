@@ -23,4 +23,14 @@ public interface UserServiceFeignApi {
 
     @GetMapping("/roleAndAuth")
     List<RoleInfo> getAllRoleAndAuth();
+
+    /**
+     * @Author hmr
+     * @Description 通过用户登录名获得用户的角色
+     * @Date: 2020/1/30 17:52
+     * @param name
+     * @reture: java.util.List<java.lang.String>
+     **/
+    @GetMapping("/userRole/{loginName}")
+    List<String> getRoleByUserName(@PathVariable("loginName") String loginName);
 }

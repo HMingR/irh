@@ -9,6 +9,7 @@ import top.imuster.user.provider.dao.UserRoleRelDao;
 import top.imuster.user.provider.service.UserRoleRelService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * UserRoleRelService 实现类
@@ -29,5 +30,10 @@ public class UserRoleRelServiceImpl extends BaseServiceImpl<UserRoleRel, Long> i
     @Override
     public Integer getCountByCondition(UserRoleRel userRoleRel) {
         return userRoleRelDao.selectEntryListCount(userRoleRel);
+    }
+
+    @Override
+    public List<String> getRoleNameByUserName(String loginName) {
+        return userRoleRelDao.selectRoleNameByUserName(loginName);
     }
 }

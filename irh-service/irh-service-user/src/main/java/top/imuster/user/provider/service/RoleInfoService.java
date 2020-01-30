@@ -33,6 +33,15 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
     RoleInfo getRoleAndAuthByRoleId(Long roleId);
 
     /**
+     * @Author hmr
+     * @Description 根据roleName获得role的信息，包括权限信息
+     * @Date: 2020/1/30 16:30
+     * @param name
+     * @reture: top.imuster.user.api.pojo.RoleInfo
+     **/
+    RoleInfo getRoleAndAuthByRoleName(String name);
+
+    /**
      * @Description: 获得所有的角色和对应的权限
      * @Author: hmr
      * @Date: 2019/12/24 16:07
@@ -50,4 +59,13 @@ public interface RoleInfoService extends BaseService<RoleInfo, Long> {
      *
      * @return*/
     List<RoleInfo> getOtherRoleByAdminId(Long adminId);
+
+    /**
+     * @Author hmr
+     * @Description 通过登录名查询用户的角色名称
+     * @Date: 2020/1/30 17:54
+     * @param loginName
+     * @reture: java.util.List<java.lang.String>
+     **/
+    List<String> getRoleNameByUserName(String loginName);
 }

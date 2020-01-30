@@ -19,6 +19,8 @@ public class RoleInfoDaoImpl extends BaseDaoImpl<RoleInfo, Long> implements Role
 	private final static String SELECT_ROLE_AUTH_BY_ROLEID = "selectRoleAndAuthByRoleId";
 	private final static String SELECT_ROLE_AND_AUTH = "selectRoleAndAuth";
 	private final static String SELECT_OTHER_ROLE_BY_ADMIN_ID = "selectOtherRoleByAdminId";
+	private final static String SELECT_ROLE_AND_AUTH_BY_ROLE_NAME = "selectRoleAndAuthByRoleName";
+
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -37,5 +39,10 @@ public class RoleInfoDaoImpl extends BaseDaoImpl<RoleInfo, Long> implements Role
 	@Override
 	public List<RoleInfo> selectOtherRoleByAdminId(Long adminId) {
 		return this.selectList(getNameSpace(SELECT_OTHER_ROLE_BY_ADMIN_ID), adminId);
+	}
+
+	@Override
+	public RoleInfo selectRoleAndAuthByRoleName(String roleName) {
+		return this.select(getNameSpace(SELECT_ROLE_AND_AUTH_BY_ROLE_NAME), roleName);
 	}
 }

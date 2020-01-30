@@ -16,11 +16,9 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.user.api.pojo.ManagementInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.pojo.UserRoleRel;
 import top.imuster.user.provider.exception.UserException;
-import top.imuster.user.provider.service.ManagementInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 import top.imuster.user.provider.service.UserRoleRelService;
 
@@ -45,40 +43,27 @@ public class AdminController extends BaseController {
     PasswordEncoder passwordEncoder;
 
     @Resource
-    ManagementInfoService managementInfoService;
-
-    @Resource
     UserRoleRelService userRoleRelService;
-
 
     @ApiOperation(value = "查看所有的管理员", httpMethod = "POST")
     @NeedLogin(validate = true)
-    @PostMapping("/list/1")
-    @PreAuthorize("hasAuthority('login')")
-    public Message<Page<ManagementInfo>> managementList(@ApiParam @RequestBody Page<ManagementInfo> page){
-        Page<ManagementInfo> managementInfoPage = managementInfoService.selectPage(page.getSearchCondition(), page);
-        if(null != managementInfoPage){
-            //将密码全都设置成空
-            managementInfoPage.getResult().stream().forEach(mi -> mi.setPassword(""));
+    @PostMapping("/list/{type}")
+    public Message<Page<UserInfo>> managementList(@ApiParam @RequestBody Page<UserInfo> page, @PathVariable("type")Integer type){
+        if(type == 1){
+            Page<UserInfo> managementInfoPage = userInfoService.selectPage(page.getSearchCondition(), page);
+            if(null != managementInfoPage){
+                //将密码全都设置成空
+                managementInfoPage.getResult().stream().forEach(mi -> mi.setPassword(""));
+            }
+            return Message.createBySuccess(managementInfoPage);
         }
-        return Message.createBySuccess(managementInfoPage);
+        if(type == 2){
+            Page<UserInfo> consumerInfoPage = userInfoService.selectPage(page.getSearchCondition(), page);
+            return Message.createBySuccess(consumerInfoPage);
+        }
+        return Message.createByError("参数错误");
     }
 
-   /**
-    * @Author hmr
-    * @Description 分页条件查询所有的会员
-    * @Date: 2020/1/19 16:46
-    * @param page
-    * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.user.api.pojo.UserInfo>>
-    **/
-    @ApiOperation(value = "分页条件查询所有的会员", httpMethod = "POST")
-    @PostMapping("/list/2")
-    @NeedLogin(validate = true)
-    @PreAuthorize("hasAuthority('login1')")
-    public Message<Page<UserInfo>> list(@ApiParam @RequestBody Page<UserInfo> page){
-        Page<UserInfo> consumerInfoPage = userInfoService.selectPage(page.getSearchCondition(), page);
-        return Message.createBySuccess(consumerInfoPage);
-    }
 
     /**
      * @Description: 添加管理员
@@ -90,11 +75,11 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "添加管理员", httpMethod = "POST")
     @PostMapping
     @NeedLogin(validate = true)
-    public Message<String> addManagement(@ApiParam("ManagementInfo实体") @RequestBody ManagementInfo managementInfo) throws IOException {
+    public Message<String> addManagement(@ApiParam("ManagementInfo实体") @RequestBody UserInfo managementInfo) throws IOException {
         try{
             String real_pwd = passwordEncoder.encode(managementInfo.getPassword());
             managementInfo.setPassword(real_pwd);
-            managementInfoService.insertEntry(managementInfo);
+            userInfoService.insertEntry(managementInfo);
             return Message.createBySuccess();
         }catch (Exception e){
             logger.error(GlobalConstant.getErrorLog("添加管理员"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
@@ -105,14 +90,14 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "根据id获得管理员信息", httpMethod = "GET")
     @GetMapping("/{id}")
     @NeedLogin(validate = true)
-    public Message<ManagementInfo> toEdit(@ApiParam("管理员id") @PathVariable("id") Long id){
-        ManagementInfo condition = new ManagementInfo();
+    public Message<UserInfo> toEdit(@ApiParam("管理员id") @PathVariable("id") Long id){
+        UserInfo condition = new UserInfo();
         condition.setId(id);
-        ManagementInfo managementInfo = managementInfoService.selectEntryList(condition).get(0);
-        if(null == managementInfo){
+        UserInfo userInfo = userInfoService.selectEntryList(condition).get(0);
+        if(null == userInfo){
             return Message.createByError("未找到对饮的管理员信息，请刷新后重试");
         }
-        return Message.createBySuccess(managementInfo);
+        return Message.createBySuccess(condition);
     }
 
 
@@ -123,25 +108,25 @@ public class AdminController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    //todo 修改逻辑需要修改
     @ApiOperation("提交修改管理员的角色")
-    @PostMapping("/adminRole")
+    @PutMapping("/adminRole")
     @NeedLogin(validate = true)
     public Message<String> editManagementRole(Long managementId, String roleIds) throws Exception {
-        managementInfoService.editManagementRoleById(managementId, roleIds);
+        //todo
+        //userInfoService.editManagementRoleById(managementId, roleIds);
         return Message.createBySuccess("修改成功");
     }
 
     @ApiOperation(value = "修改管理员信息(修改基本信息，包括删除)", httpMethod = "PUT")
     @NeedLogin(validate = true)
     @PutMapping
-    public Message<String> editManagement(@ApiParam("ManagementInfo实体") @Validated(value = ValidateGroup.editGroup.class) @RequestBody ManagementInfo managementInfo, BindingResult bindingResult) throws IOException {
+    public Message<String> editManagement(@ApiParam("ManagementInfo实体") @Validated(value = ValidateGroup.editGroup.class) @RequestBody UserInfo userInfo, BindingResult bindingResult) throws IOException {
         validData(bindingResult);
         try{
-            managementInfoService.updateByKey(managementInfo);
+            userInfoService.updateByKey(userInfo);
             return Message.createBySuccess();
         }catch (Exception e){
-            logger.error(GlobalConstant.getErrorLog("修改管理员信息"), e.getMessage(), objectMapper.writeValueAsString(managementInfo));
+            logger.error(GlobalConstant.getErrorLog("修改管理员信息"), e.getMessage(), objectMapper.writeValueAsString(userInfo));
             throw new UserException("修改管理员信息失败");
         }
     }
@@ -157,6 +142,7 @@ public class AdminController extends BaseController {
     @ApiOperation("根据管理员id删除指定的角色")
     @DeleteMapping("/{userId}/{roleId}")
     @NeedLogin(validate = true)
+    @PreAuthorize("hasPermission('')")
     public Message<String> deleteManagementRole(@PathVariable("userId")Long id, @PathVariable("roleId")Long roleId){
         UserRoleRel condition = new UserRoleRel();
         condition.setRoleId(roleId);
@@ -177,10 +163,10 @@ public class AdminController extends BaseController {
     @NeedLogin(validate = true)
     @DeleteMapping("/{id}/{state}")
     public Message<String> deleteManagement(@ApiParam("管理员id")@PathVariable Long id, @ApiParam("需要改变的状态10:注销 20:锁定 30:审核中 40:审核通过")@PathVariable("state")Integer state){
-        ManagementInfo managementInfo = new ManagementInfo();
-        managementInfo.setId(id);
-        managementInfo.setState(state);
-        managementInfoService.updateByKey(managementInfo);
+        UserInfo condition = new UserInfo();
+        condition.setId(id);
+        condition.setState(state);
+        userInfoService.updateByKey(condition);
         return Message.createBySuccess();
     }
 }

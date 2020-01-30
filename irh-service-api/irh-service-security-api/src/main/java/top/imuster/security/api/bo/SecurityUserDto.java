@@ -21,7 +21,6 @@ public class SecurityUserDto extends UserDto {
         this.authToken = authToken;
     }
 
-
     public String getNickname() {
         return nickname;
     }

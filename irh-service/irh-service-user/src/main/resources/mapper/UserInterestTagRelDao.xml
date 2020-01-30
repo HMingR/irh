@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.user.provider.dao.ManagementInfoDao">
+<mapper namespace="top.imuster.user.provider.dao.UserInterestTagRelDao">
 
-	<!-- management_info 所有查询列 -->
+	<!-- consumer_interest_tag_rel 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
-            name,
-            type,
-            'desc',
+            consumer_id AS consumerId,
+            tag_id AS tagId,
             create_time AS createTime,
             update_time AS updateTime,
-            state,
-            password
+            score 
 		]]>
 	</sql>
 
-	<!-- management_info 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM management_info]]></sql>
+	<!-- consumer_interest_tag_rel 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM consumer_interest_tag_rel]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="name != null and name != ''"><![CDATA[AND name = #{name}]]></if>
-            <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
-            <if test="desc != null and desc != ''"><![CDATA[AND desc = #{desc}]]></if>
+            <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>
+            <if test="tagId != null and tagId != ''"><![CDATA[AND tag_id = #{tagId}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
-            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
-			<if test="password != null and password != ''"><![CDATA[AND password = #{password}]]></if>
+            <if test="score != null and score != ''"><![CDATA[AND score = #{score}]]></if> 
 		</where>
 	</sql>
 	
@@ -43,40 +39,34 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="name != null"><![CDATA[name = #{name},]]></if>
-			<if test="type != null"><![CDATA[type = #{type},]]></if>
-			<if test="desc != null"><![CDATA[desc = #{desc},]]></if>
+			<if test="consumerId != null"><![CDATA[consumer_id = #{consumerId},]]></if>
+			<if test="tagId != null"><![CDATA[tag_id = #{tagId},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
-			<if test="state != null"><![CDATA[state = #{state},]]></if>
-			<if test="password != null and password != ''"><![CDATA[AND password = #{password}]]></if>
+			<if test="score != null"><![CDATA[score = #{score},]]></if>
 		</set>
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="managementInfo" >
+	<insert id="insertEntry" parameterType="userInterestTagRel" >
 		<![CDATA[
-			INSERT INTO management_info
+			INSERT INTO consumer_interest_tag_rel
 				(
                 id, 
-                name, 
-                type, 
-                desc, 
+                consumer_id, 
+                tag_id, 
                 create_time, 
                 update_time, 
-                state,
-                password
+                score 
 				)
 			VALUES
 				(
                 #{id}, 
-                #{name}, 
-                #{type}, 
-                #{desc}, 
+                #{consumerId}, 
+                #{tagId}, 
                 #{createTime}, 
                 #{updateTime}, 
-                #{state},
-                #{password}
+                #{score} 
 				)
 		]]>
 	</insert>
@@ -86,27 +76,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM management_info WHERE id IN]]>
+		<![CDATA[DELETE FROM consumer_interest_tag_rel WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="managementInfo" >
-		<![CDATA[DELETE FROM management_info]]>
+	<delete id="deleteByCondtion" parameterType="userInterestTagRel" >
+		<![CDATA[DELETE FROM consumer_interest_tag_rel]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="managementInfo" >
-		<![CDATA[UPDATE management_info]]>
+	<update id="updateByKey" parameterType="userInterestTagRel" >
+		<![CDATA[UPDATE consumer_interest_tag_rel]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="managementInfo">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="userInterestTagRel">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -117,7 +107,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="managementInfo" resultType="managementInfo">
+	<select id="selectEntryList" parameterType="userInterestTagRel" resultType="userInterestTagRel">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -126,34 +116,12 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="managementInfo" resultType="int">
+	<select id="selectEntryListCount" parameterType="userInterestTagRel" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
-
-	<resultMap id="includeRoleMap" type="managementInfo">
-		<id column="id" property="id"></id>
-		<result column="name" property="name"></result>
-		<result column="type" property="type"></result>
-		<result column="desc" property="desc"></result>
-		<result column="create_time" property="createTime"></result>
-		<result column="update_time" property="updateTime"></result>
-		<result column="state" property="state"></result>
-		<result column="password" property="password"></result>
-		<collection property="roleList"
-					column="id"
-					ofType="top.imuster.user.api.pojo.RoleInfo"
-					select="top.imuster.user.provider.dao.UserRoleRelDao.selectManagementRoleInfoByManagementId">
-		</collection>
-	</resultMap>
-
+	
 	<!-- 其它SQL语句 -->
-	<select id="selectManagementRoleByCondition" parameterType="managementInfo" resultMap="includeRoleMap">
-		<![CDATA[SELECT *]]>
-		<include refid="QUERY_FROM_TABLE"/>
-		<include refid="QUERY_WHERE_CLAUSE"/>
-		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
-	</select>
-
+	
 </mapper>

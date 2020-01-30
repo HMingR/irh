@@ -149,6 +149,12 @@
 		WHERE id = #{roleId}
 	</select>
 
+	<select id="selectRoleAndAuthByRoleName" parameterType="Long" resultMap="includeAuth">
+		<![CDATA[SELECT *]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{roleId}
+	</select>
+
 	<select id="selectRoleAndAuth" resultMap="includeAuth">
 		<![CDATA[SELECT *]]>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -163,5 +169,5 @@
 		WHERE
 			ri.id NOT IN ( SELECT role_id FROM management_role_rel mrr WHERE mrr.staff_id = #{adminId} )
 	</select>
-	
+
 </mapper>

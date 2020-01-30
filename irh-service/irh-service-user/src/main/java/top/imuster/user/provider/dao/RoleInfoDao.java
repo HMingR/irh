@@ -42,4 +42,13 @@ public interface RoleInfoDao extends BaseDao<RoleInfo, Long> {
      *
      * @return*/
     List<RoleInfo> selectOtherRoleByAdminId(Long adminId);
+
+     /**
+      * @Author hmr
+      * @Description 根据角色的名称查询角色所有的权限
+      * @Date: 2020/1/30 16:31
+      * @param roleName
+      * @reture: top.imuster.user.api.pojo.RoleInfo
+      **/
+    RoleInfo selectRoleAndAuthByRoleName(String roleName);
 }

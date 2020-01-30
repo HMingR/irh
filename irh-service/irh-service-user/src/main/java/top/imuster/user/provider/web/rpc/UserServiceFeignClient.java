@@ -40,4 +40,10 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     public List<RoleInfo> getAllRoleAndAuth() {
         return roleInfoService.getRoleAndAuthList();
     }
+
+    @Override
+    @GetMapping("/userRole/{loginName}")
+    public List<String> getRoleByUserName(@PathVariable("loginName") String loginName) {
+        return roleInfoService.getRoleNameByUserName(loginName);
+    }
 }

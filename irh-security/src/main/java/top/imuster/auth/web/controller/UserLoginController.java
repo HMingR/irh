@@ -49,7 +49,6 @@ public class UserLoginController extends BaseController {
     @ApiOperation(value = "会员登录，成功返回token", httpMethod = "POST")
     @PostMapping("login")
     public Message<SecurityUserDto> login(@Validated(ValidateGroup.loginGroup.class) @RequestBody UserInfo userInfo, BindingResult bindingResult) throws JsonProcessingException {
-        System.out.println("登录");
         validData(bindingResult);
         SecurityUserDto result = userLoginService.login(userInfo.getEmail(), userInfo.getPassword());
         saveAccessTokenToCookie(result.getAuthToken().getAccessToken());

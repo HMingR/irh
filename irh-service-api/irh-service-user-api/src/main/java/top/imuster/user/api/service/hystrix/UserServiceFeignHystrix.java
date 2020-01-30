@@ -27,4 +27,9 @@ public class UserServiceFeignHystrix implements UserServiceFeignApi {
     public List<RoleInfo> getAllRoleAndAuth() {
         return null;
     }
+
+    @Override
+    public List<String> getRoleByUserName(String loginName) {
+        return null;
+    }
 }

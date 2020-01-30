@@ -61,23 +61,8 @@ public class AuthController extends BaseController {
     }
 
 
-    /**
-     * @Description: 添加权限
-     * @Author: hmr
-     * @Date: 2019/12/17 20:57
-     * @param authInfo
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "添加权限", httpMethod = "POST")
-    @PostMapping("/add")
-    @NeedLogin(validate = true)
-    public Message<String> addAuth(@ApiParam("AuthInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody AuthInfo authInfo){
-        authInfoService.insertEntry(authInfo);
-        return Message.createBySuccess();
-    }
-
-    @ApiOperation(value = "根据id修改权限信息", httpMethod = "GET")
-    @GetMapping("/authId")
+    @ApiOperation(value = "根据id获得权限信息", httpMethod = "GET")
+    @GetMapping("/{authId}")
     @NeedLogin(validate = true)
     public Message toEdit(@ApiParam(value = "权限id", required = true) @PathVariable("authId")Long authId){
         AuthInfo authInfo = authInfoService.selectEntryList(authId).get(0);
@@ -91,7 +76,7 @@ public class AuthController extends BaseController {
      * @param authInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "修改权限信息", httpMethod = "PUT")
+    @ApiOperation(value = "修改权限信息,不能修改权限描述,前端前端描述部分不允许操作，只显示", httpMethod = "PUT")
     @PutMapping("/edit")
     @NeedLogin(validate = true)
     public Message<String> editAuth(@ApiParam("AuthInfo实体类") @RequestBody AuthInfo authInfo){

@@ -1,6 +1,7 @@
-package top.imuster.auth.config;
+package top.imuster.user.provider.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author: hmr
  * @date: 2019/12/6 22:06
  */
-
+@Configuration
 @ConfigurationProperties(prefix = "secure.ignored")
 public class IgnoreUrlsConfig {
     private List<String> urls = new ArrayList<>();

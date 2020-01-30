@@ -18,6 +18,7 @@
         <module>irh-service-user-api</module>
         <module>irh-service-message-api</module>
         <module>irh-service-security-api</module>
+        <module>irh-service-forum-api</module>
     </modules>
 
     <dependencies>

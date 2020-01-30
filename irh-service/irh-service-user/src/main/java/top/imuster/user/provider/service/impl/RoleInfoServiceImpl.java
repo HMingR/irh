@@ -62,6 +62,11 @@ public class RoleInfoServiceImpl extends BaseServiceImpl<RoleInfo, Long> impleme
     }
 
     @Override
+    public RoleInfo getRoleAndAuthByRoleName(String name) {
+        return roleInfoDao.selectRoleAndAuthByRoleName(name);
+    }
+
+    @Override
     public List<RoleInfo> getRoleAndAuthList() {
         return roleInfoDao.selectRoleAndAuth();
     }
@@ -69,5 +74,10 @@ public class RoleInfoServiceImpl extends BaseServiceImpl<RoleInfo, Long> impleme
     @Override
     public List<RoleInfo> getOtherRoleByAdminId(Long adminId) {
         return roleInfoDao.selectOtherRoleByAdminId(adminId);
+    }
+
+    @Override
+    public List<String> getRoleNameByUserName(String loginName) {
+        return userRoleRelService.getRoleNameByUserName(loginName);
     }
 }

@@ -12,7 +12,8 @@
             auth_desc AS authDesc,
             create_time AS createTime,
             update_time AS updateTime,
-            state 
+            state,
+            http_method AS httpMethod
 		]]>
 	</sql>
 
@@ -29,6 +30,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="httpMethod != null and httpMethod != ''"><![CDATA[AND http_method = #{httpMethod}]]></if>
 		</where>
 	</sql>
 	
@@ -47,6 +49,7 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="httpMethod != null"><![CDATA[http_method = #{httpMethod},]]></if>
 		</set>
 	</sql>
 
@@ -61,7 +64,8 @@
                 auth_desc, 
                 create_time, 
                 update_time, 
-                state 
+                state,
+                http_method
 				)
 			VALUES
 				(
@@ -71,7 +75,8 @@
                 #{authDesc}, 
                 #{createTime}, 
                 #{updateTime}, 
-                #{state} 
+                #{state},
+                #{httpMethod}
 				)
 		]]>
 	</insert>

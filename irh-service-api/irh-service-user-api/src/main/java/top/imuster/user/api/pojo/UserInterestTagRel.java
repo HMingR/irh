@@ -11,11 +11,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2019-11-24 16:31:57
  */
 @ApiModel("用户兴趣关联表")
-public class ConsumerInterestTagRel extends BaseDomain {
+public class UserInterestTagRel extends BaseDomain {
 
 	private static final long serialVersionUID = 5983772176L;
 
-	public ConsumerInterestTagRel() {
+	public UserInterestTagRel() {
 		//默认无参构造方法
 	}
 	@ApiModelProperty("用户兴趣关联表主键")

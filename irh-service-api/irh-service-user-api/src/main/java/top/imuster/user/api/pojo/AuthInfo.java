@@ -36,6 +36,9 @@ public class AuthInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "参数异常")
 	private String authDesc;
 
+	@ApiModelProperty(value = "该url的访问Http方式")
+	private String httpMethod;
+
 	// 状态 1:无效 2:有效
 	// private Short state;
 
@@ -51,6 +54,14 @@ public class AuthInfo extends BaseDomain {
 				", authName='" + authName + '\'' +
 				", authDesc='" + authDesc + '\'' +
 				'}';
+	}
+
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	public void setHttpMethod(String httpMethod) {
+		this.httpMethod = httpMethod;
 	}
 
 	public Long getId() {
