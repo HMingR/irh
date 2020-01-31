@@ -42,6 +42,7 @@
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>
                 <irh.rabbitmq.username>admin</irh.rabbitmq.username>
                 <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
+                <irh.elasticsearch.host>localhost:9200</irh.elasticsearch.host>
             </properties>
         </profile>
 

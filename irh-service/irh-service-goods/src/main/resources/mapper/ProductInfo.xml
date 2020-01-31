@@ -13,7 +13,6 @@
             original_price AS originalPrice,
             sale_price AS salePrice,
             old_degree AS oldDegree,
-            product_title AS productTitle,
             product_desc AS productDesc,
             product_details_page AS productDetailsPage,
             trade_type AS tradeType,
@@ -38,7 +37,6 @@
             <if test="originalPrice != null and originalPrice != ''"><![CDATA[AND original_price = #{originalPrice}]]></if>
             <if test="salePrice != null and salePrice != ''"><![CDATA[AND sale_price = #{salePrice}]]></if>
             <if test="oldDegree != null and oldDegree != ''"><![CDATA[AND old_degree = #{oldDegree}]]></if>
-            <if test="productTitle != null and productTitle != ''"><![CDATA[AND product_title = #{productTitle}]]></if>
             <if test="productDesc != null and productDesc != ''"><![CDATA[AND product_desc = #{productDesc}]]></if>
             <if test="productDetailsPage != null and productDetailsPage != ''"><![CDATA[AND product_details_page = #{productDetailsPage}]]></if>
             <if test="tradeType != null and tradeType != ''"><![CDATA[AND trade_type = #{tradeType}]]></if>
@@ -65,7 +63,6 @@
 			<if test="originalPrice != null"><![CDATA[original_price = #{originalPrice},]]></if>
 			<if test="salePrice != null"><![CDATA[sale_price = #{salePrice},]]></if>
 			<if test="oldDegree != null"><![CDATA[old_degree = #{oldDegree},]]></if>
-			<if test="productTitle != null"><![CDATA[product_title = #{productTitle},]]></if>
 			<if test="productDesc != null"><![CDATA[product_desc = #{productDesc},]]></if>
 			<if test="productDetailsPage != null"><![CDATA[product_details_page = #{productDetailsPage},]]></if>
 			<if test="tradeType != null"><![CDATA[trade_type = #{tradeType},]]></if>
@@ -89,8 +86,7 @@
                 original_price, 
                 sale_price, 
                 old_degree, 
-                product_title, 
-                product_desc, 
+                product_desc,
                 product_details_page, 
                 trade_type, 
                 category_id, 
@@ -108,8 +104,7 @@
                 #{originalPrice}, 
                 #{salePrice}, 
                 #{oldDegree}, 
-                #{productTitle}, 
-                #{productDesc}, 
+                #{productDesc},
                 #{productDetailsPage}, 
                 #{tradeType}, 
                 #{categoryId}, 

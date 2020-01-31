@@ -55,11 +55,6 @@ public class ProductInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品的新旧程度不能为空")
 	private Integer oldDegree;
 
-	// 商品标题, max length: 255
-	@ApiModelProperty("商品标题")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品标题不能为空")
-	private String productTitle;
-
 	// 商品描述
 	@ApiModelProperty("商品描述")
 	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品描述不能为空")
@@ -97,7 +92,6 @@ public class ProductInfo extends BaseDomain {
 				", originalPrice='" + originalPrice + '\'' +
 				", salePrice='" + salePrice + '\'' +
 				", oldDegree=" + oldDegree +
-				", productTitle='" + productTitle + '\'' +
 				", productDesc='" + productDesc + '\'' +
 				", productDetailsPage='" + productDetailsPage + '\'' +
 				", tradeType=" + tradeType +
@@ -177,13 +171,6 @@ public class ProductInfo extends BaseDomain {
 	}
     public void setOldDegree(Integer oldDegree) {
 		this.oldDegree = oldDegree;
-	}
-	
-	public String getProductTitle() {
-		return this.productTitle;
-	}
-    public void setProductTitle(String productTitle) {
-		this.productTitle = productTitle;
 	}
 	
 	public String getProductDesc() {

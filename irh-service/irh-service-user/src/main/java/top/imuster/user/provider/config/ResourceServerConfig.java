@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import top.imuster.common.core.interceptor.FeignClientInterceptor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,6 +70,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         } catch (IOException ioe) {
             return null;
         }
+    }
+
+    @Bean
+    FeignClientInterceptor feignClientInterceptor(){
+        return new FeignClientInterceptor();
     }
 
     @Bean

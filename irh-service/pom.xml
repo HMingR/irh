@@ -16,7 +16,7 @@
         <module>irh-service-goods</module>
         <module>irh-service-order</module>
         <module>irh-service-user</module>
-        <module>irh-service-message</module>
+        <module>irh-service-messageAndSearch</module>
         <module>irh-service-forum</module>
     </modules>
 

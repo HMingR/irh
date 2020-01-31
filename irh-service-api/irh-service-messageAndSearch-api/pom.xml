@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>irh-service-message-api</artifactId>
+    <artifactId>irh-service-messageAndSearch-api</artifactId>
 
 
 </project>
