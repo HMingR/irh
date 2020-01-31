@@ -19,13 +19,19 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.exception.SecurityException;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,6 +58,9 @@ public class UserLoginService {
 
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
+
+    @Autowired
+    GenerateSendMessageService generateSendMessageService;
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -99,6 +108,22 @@ public class UserLoginService {
         }
     }
 
+    public void getCode(String email){
+        SendMessageDto sendMessageDto = new SendMessageDto();
+        String code = UUID.randomUUID().toString().substring(0, 4);
+        sendMessageDto.setUnit(TimeUnit.MINUTES);
+        sendMessageDto.setExpiration(10L);
+        sendMessageDto.setValue(code);
+        sendMessageDto.setType(MqTypeEnum.EMAIL);
+        sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+        sendMessageDto.setTopic("注册");
+        String body = new StringBuilder().append("欢迎注册,本次注册的验证码是").append(code).append(",该验证码有效期为10分钟").toString();
+        sendMessageDto.setBody(body);
+        generateSendMessageService.sendToMqAndReids(sendMessageDto);
+    }
+
+
+
     /**
      * @Author hmr
      * @Description 从redis中获得存储的AuthToken对象
@@ -127,8 +152,6 @@ public class UserLoginService {
      * @reture: top.imuster.security.api.bo.AuthToken
      **/
     private AuthToken applyToken(String loginName, String password, String clientId, String clientSecret){
-//        ServiceInstance serviceInstance = loadBalancerClient.choose(applicationName);
-//        URI uri = serviceInstance.getUri();
         String authUrl =  "http://localhost:10000/oauth/token";
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         String httpBasic = getHttpBasic(clientId, clientSecret);

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
@@ -45,5 +46,10 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     @GetMapping("/userRole/{loginName}")
     public List<String> getRoleByUserName(@PathVariable("loginName") String loginName) {
         return roleInfoService.getRoleNameByUserName(loginName);
+    }
+
+    @Override
+    public Message<String> register(UserInfo userInfo, String code){
+        return userInfoService.register(userInfo, code);
     }
 }

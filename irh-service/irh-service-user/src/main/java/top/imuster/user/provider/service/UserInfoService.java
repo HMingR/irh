@@ -3,6 +3,7 @@ package top.imuster.user.provider.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.UserInfo;
@@ -39,18 +40,7 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @param userInfo
      * @reture: void
      **/
-    void register(UserInfo userInfo, String code) throws Exception;
-
-    /**
-     * @Author hmr
-     * @Description 发送验证码
-     * @Date: 2020/1/15 10:41
-     * @param sendMessageDto
-     * @param email
-     * @param type 1-注册验证码   2-重置密码验证码
-     * @reture: void
-     **/
-    void getCode(SendMessageDto sendMessageDto, String email, Integer type) throws JsonProcessingException;
+    Message<String> register(UserInfo userInfo, String code);
 
     /**
      * @Author hmr
@@ -61,4 +51,13 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      **/
     String getEmailById(Long id);
 
+    /**
+     * @Author hmr
+     * @Description 根据用户id修改用户的角色
+     * @Date: 2020/1/31 14:49
+     * @param userId 用户id
+     * @param roleIds 角色id集合，用逗号分隔
+     * @reture: void
+     **/
+    void editUserRoleById(Long userId, String roleIds);
 }

@@ -1,5 +1,6 @@
 package top.imuster.user.provider.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import top.imuster.order.api.service.OrderServiceFeignApi;
  */
 @RestController
 @RequestMapping("/admin/order")
+@Api("后台管理订单")
 public class AdminOrderController extends BaseController {
 
     @Autowired

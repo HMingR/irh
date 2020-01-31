@@ -92,6 +92,11 @@ public class UserInfo extends BaseDomain {
 	@ApiModelProperty("专业")
 	private String majorName;
 
+	//10:普通会员 20:服务人员 30:校园组织 35:公益组织 40:校园社团 50:管理员
+	@ApiModelProperty("10:普通会员 20:服务人员 30:校园组织 35:公益组织 40:校园社团 50:管理员")
+	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "用户类型不能为空")
+	private Integer type;
+
 	// 10:注销 20:锁定 30:审核中 40:审核通过
 	//state
 
@@ -99,8 +104,6 @@ public class UserInfo extends BaseDomain {
 
 	private String token;
 
-	//10:普通会员 20:服务人员 30:校园组织 35:公益组织 40:校园社团 50:管理员
-	private Integer type;
 
 	@Override
 	public String toString() {

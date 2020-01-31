@@ -35,7 +35,6 @@ public class AuthController extends BaseController {
      **/
     @ApiOperation(httpMethod = "POST", value = "分页查询权限列表")
     @PostMapping("/list")
-    @NeedLogin(validate = true)
     public Message<Page<AuthInfo>> authList(Page<AuthInfo> page){
         Page<AuthInfo> authInfoPage = authInfoService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(authInfoPage);
@@ -49,12 +48,11 @@ public class AuthController extends BaseController {
      * @param authId
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(httpMethod = "DELETE", value = "按主键删除权限")
-    @DeleteMapping("/{authId}")
-    @NeedLogin(validate = true)
-    public Message<String> deleteAuth(@ApiParam(value = "auth主键", required = true) @PathVariable(value = "authId") Long authId){
+    @ApiOperation(httpMethod = "DELETE", value = "按主键修改权限状态")
+    @DeleteMapping("/{authId}/{state}")
+    public Message<String> deleteAuth(@ApiParam(value = "auth主键", required = true) @PathVariable(value = "authId") Long authId, @PathVariable("state")Integer state){
         AuthInfo authInfo = new AuthInfo();
-        authInfo.setState(1);
+        authInfo.setState(state);
         authInfo.setId(authId);
         authInfoService.updateByKey(authInfo);
         return Message.createBySuccess();
@@ -63,7 +61,6 @@ public class AuthController extends BaseController {
 
     @ApiOperation(value = "根据id获得权限信息", httpMethod = "GET")
     @GetMapping("/{authId}")
-    @NeedLogin(validate = true)
     public Message toEdit(@ApiParam(value = "权限id", required = true) @PathVariable("authId")Long authId){
         AuthInfo authInfo = authInfoService.selectEntryList(authId).get(0);
         return Message.createBySuccess(authInfo);

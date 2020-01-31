@@ -3,6 +3,7 @@ package top.imuster.user.api.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
@@ -33,4 +34,14 @@ public interface UserServiceFeignApi {
      **/
     @GetMapping("/userRole/{loginName}")
     List<String> getRoleByUserName(@PathVariable("loginName") String loginName);
+
+    /**
+     * @Author hmr
+     * @Description 用户注册
+     * @Date: 2020/1/31 15:06
+     * @param userInfo 用户信息
+     * @param code 发送到邮箱的验证码
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> register(UserInfo userInfo, String code);
 }

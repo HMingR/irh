@@ -197,11 +197,11 @@
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<where>
-			<if test="email != null"><![CDATA[email = #{email},]]></if>
-			<if test="alipayNum != null"><![CDATA[alipay_num = #{alipayNum},]]></if>
-			<if test="nickname != null"><![CDATA[nickname = #{nickname},]]></if>
-			<if test="qq != null"><![CDATA[qq = #{qq},]]></if>
-			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
+			<if test="email != null"><![CDATA[AND email = #{email}]]></if>
+			<if test="alipayNum != null"><![CDATA[AND alipay_num = #{alipayNum}]]></if>
+			<if test="nickname != null"><![CDATA[AND nickname = #{nickname}]]></if>
+			<if test="qq != null"><![CDATA[AND qq = #{qq}]]></if>
+			<if test="phoneNum != null"><![CDATA[AND phone_num = #{phoneNum}]]></if>
 		</where>
 		AND state != 10
 	</select>

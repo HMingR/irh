@@ -1,6 +1,7 @@
 package top.imuster.user.provider.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2019-11-26 10:46:26
  */
 @Service("userInfoService")
+@Slf4j
 public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> implements UserInfoService {
 
     @Autowired
@@ -74,17 +77,22 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
      * @param checkValidDto
      * @reture: top.imuster.user.api.pojo.UserInfo
      **/
-    private UserInfo generateCheckCondition(CheckValidDto checkValidDto) throws InvocationTargetException, IllegalAccessException {
-        CheckTypeEnum type = checkValidDto.getType();
-        String validValue = checkValidDto.getValidValue();
-        UserInfo condition = new UserInfo();
-        String field = type.getType();
-        BeanUtils.setProperty(condition, field, validValue);
-        return condition;
+    private UserInfo generateCheckCondition(CheckValidDto checkValidDto){
+        try{
+            CheckTypeEnum type = checkValidDto.getType();
+            String validValue = checkValidDto.getValidValue();
+            UserInfo condition = new UserInfo();
+            String field = type.getType();
+            BeanUtils.setProperty(condition, field, validValue);
+            return condition;
+        }catch (Exception e){
+            log.error("生成校验用户信息是否合法的参数是出现错误{}",e.getMessage(), e);
+            throw new UserException("服务器繁忙,请稍后重试");
+        }
     }
 
     @Override
-    public void register(UserInfo userInfo, String code)throws Exception {
+    public Message<String> register(UserInfo userInfo, String code){
         UserInfo condition;
         CheckValidDto checkValidDto = new CheckValidDto();
         //校验邮箱
@@ -100,40 +108,28 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         condition = generateCheckCondition(checkValidDto);
         i += userInfoDao.checkInfo(condition);
         if(i != 0){
-            throw new UserException("邮箱或用户名重复");
+            return Message.createByError("邮箱或用户名重复");
         }
         String realToken = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerRegisterByEmailToken(email));
         if(StringUtils.isBlank(realToken) || !code.equalsIgnoreCase(realToken)){
-            throw new UserException("验证码错误");
+            return Message.createByError("验证码错误");
         }
         userInfo.setState(30);
-        userInfoDao.insertEntry(userInfo);
-    }
-
-    @Override
-    public void getCode(SendMessageDto sendMessageDto, String email, Integer type) throws JsonProcessingException {
-        String code = UUID.randomUUID().toString().substring(0, 4);
-        sendMessageDto.setUnit(TimeUnit.MINUTES);
-        sendMessageDto.setExpiration(10L);
-        sendMessageDto.setValue(code);
-        sendMessageDto.setType(MqTypeEnum.EMAIL);
-        if(type == 1){
-            sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
-            sendMessageDto.setTopic("注册");
-            String body = new StringBuilder().append("欢迎注册,本次注册的验证码是").append(code).append(",该验证码有效期为10分钟").toString();
-            sendMessageDto.setBody(body);
+        int result = userInfoDao.insertEntry(userInfo);
+        if(result != 1){
+            log.error("用户注册失败,校验参数没有问题,但是在最后存入数据库的时候出现问题,用户注册信息为{}", userInfo);
+            return Message.createByError("服务器内部错误,请稍后重试");
         }
-        if(type == 2){
-            sendMessageDto.setRedisKey(RedisUtil.getResetPwdByEmailToken(email));
-            sendMessageDto.setTopic("修改密码");
-            String body = new StringBuilder().append("该验证码用于重置密码:").append(code).append(",该验证码有效期为10分钟").toString();
-            sendMessageDto.setBody(body);
-        }
-        generateSendMessageService.sendToMqAndReids(sendMessageDto);
+        return Message.createBySuccess("注册成功");
     }
 
     @Override
     public String getEmailById(Long id) {
         return userInfoDao.selectEmailById(id);
+    }
+
+    @Override
+    public void editUserRoleById(Long userId, String roleIds) {
+
     }
 }

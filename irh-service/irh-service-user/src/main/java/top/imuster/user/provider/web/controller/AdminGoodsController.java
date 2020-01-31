@@ -21,7 +21,7 @@ import top.imuster.user.provider.exception.UserException;
  */
 @RestController
 @RequestMapping("/admin/goods")
-@Api("管理员用来管理商品和商品下面的留言")
+@Api("管理员用来管理商城模块")
 public class AdminGoodsController extends BaseController {
 
     @Autowired

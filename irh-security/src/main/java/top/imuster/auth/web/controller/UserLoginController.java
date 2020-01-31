@@ -2,6 +2,7 @@ package top.imuster.auth.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.utils.CookieUtil;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.security.api.bo.AuthToken;
@@ -45,6 +47,9 @@ public class UserLoginController extends BaseController {
 
     @Autowired
     UserLoginService userLoginService;
+
+    @Autowired
+    UserServiceFeignApi userServiceFeignApi;
 
     @ApiOperation(value = "会员登录，成功返回token", httpMethod = "POST")
     @PostMapping("login")
@@ -80,6 +85,29 @@ public class UserLoginController extends BaseController {
     }
 
     /**
+     * @Description: 会员注册
+     * @Author: hmr
+     * @Date: 2019/12/26 19:29
+     * @param userInfo
+     * @param bindingResult
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @ApiOperation(value = "会员注册,code为发送的验证码", httpMethod = "POST")
+    @PostMapping("/register/{code}")
+    public Message<String> register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) UserInfo userInfo, BindingResult bindingResult, @ApiParam("发送的验证码") @PathVariable String code) throws Exception {
+        validData(bindingResult);
+        return userServiceFeignApi.register(userInfo, code);
+    }
+
+
+    @ApiOperation(value = "发送email验证码",httpMethod = "GET")
+    @GetMapping("/sendCode/{email}")
+    public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email) throws Exception {
+        userLoginService.getCode(email);
+        return Message.createBySuccess();
+    }
+
+    /**
      * @Author hmr
      * @Description 将用户申请到的令牌保存到cookie中
      * @Date: 2020/1/29 16:08
@@ -95,7 +123,7 @@ public class UserLoginController extends BaseController {
      * @Author hmr
      * @Description 根据名字从cookies中删除相应的cookie
      * @Date: 2020/1/29 16:10
-     * @param cookieName
+     * @param accessToken
      * @reture: void
      **/
     private void deleteAccessTokenFromCookie(String accessToken){
