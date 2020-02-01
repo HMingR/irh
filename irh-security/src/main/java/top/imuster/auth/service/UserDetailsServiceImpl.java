@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
@@ -57,13 +58,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(userInfo == null){
             return null;
         }
-        //todo
         log.info("查询到的用户信息为{}", userInfo);
         List<String> roleName = userServiceFeignApi.getRoleByUserName(username);
 
+        UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
+
         String userAuth  = StringUtils.join(roleName.toArray(), ",");
         UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
-        userDetails.setUserInfo(userInfo);
+        userDetails.setUserInfo(userDto);
         return userDetails;
     }
 }

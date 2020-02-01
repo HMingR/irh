@@ -30,10 +30,30 @@ public class ArticleInfo extends BaseDomain {
 	// 内容
 	private String content;
 
+	//浏览次数
+	private Long browserTimes;
+
+	//发布者id
+	private Long userId;
+
 	// 1-无效  2-有效
 //	private Short state;
 
+	public Long getBrowserTimes() {
+		return browserTimes;
+	}
 
+	public void setBrowserTimes(Long browserTimes) {
+		this.browserTimes = browserTimes;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	public Long getId() {
 		return this.id;

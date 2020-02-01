@@ -15,6 +15,6 @@ import java.lang.annotation.*;
 public @interface NeedLogin {
 
     //是否需要校验，默认为false
-    boolean validate() default false;
+    boolean validate() default true;
 
 }

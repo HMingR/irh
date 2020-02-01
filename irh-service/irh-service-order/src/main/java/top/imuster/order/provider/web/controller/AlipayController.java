@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.order.api.pojo.OrderInfo;

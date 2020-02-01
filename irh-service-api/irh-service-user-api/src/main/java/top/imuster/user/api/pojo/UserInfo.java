@@ -97,6 +97,9 @@ public class UserInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "用户类型不能为空")
 	private Integer type;
 
+	@ApiModelProperty("用户头像地址")
+	private String portrait;
+
 	// 10:注销 20:锁定 30:审核中 40:审核通过
 	//state
 
@@ -129,6 +132,14 @@ public class UserInfo extends BaseDomain {
 				", token='" + token + '\'' +
 				", type=" + type +
 				'}';
+	}
+
+	public String getPortrait() {
+		return portrait;
+	}
+
+	public void setPortrait(String portrait) {
+		this.portrait = portrait;
 	}
 
 	public Integer getType() {

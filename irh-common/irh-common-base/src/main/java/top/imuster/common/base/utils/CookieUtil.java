@@ -1,4 +1,4 @@
-package top.imuster.common.core.utils;
+package top.imuster.common.base.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

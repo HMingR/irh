@@ -3,7 +3,7 @@ package top.imuster.file.provider.web.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.file.provider.exception.FileException;

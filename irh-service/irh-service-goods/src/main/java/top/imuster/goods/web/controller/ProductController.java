@@ -4,17 +4,14 @@ package top.imuster.goods.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.amqp.core.MessageBuilder;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserTimesAnnotation;
@@ -28,7 +25,6 @@ import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**

@@ -18,11 +18,28 @@ public class UserDto extends BaseDomain {
     //用户的主键id
     private Long userId;
 
-    //登录名
+    //用户名
+    private String nickname;
+
+    //用户头像地址
+    private String pic;
+
+    //登录名--一般为email
     private String loginName;
 
     //用户类型
     private UserType userType;
+
+    public UserDto() {
+    }
+
+    public UserDto(Long userId, String loginName, String nickname, String pic, Integer userType) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.pic = pic;
+        this.loginName = loginName;
+        setUserTypeById(userType);
+    }
 
     public Long getUserId() {
         return userId;
@@ -46,5 +63,27 @@ public class UserDto extends BaseDomain {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    //根据用户type得到用户UserType枚举
+    public void setUserTypeById(Integer id){
+        UserType userTypeById = UserType.getUserTypeById(id);
+        this.userType = userTypeById;
     }
 }

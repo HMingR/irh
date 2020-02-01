@@ -25,7 +25,8 @@
             major_name AS majorName,
             state,
             update_time AS updateTime,
-            create_time AS createTime 
+            create_time AS createTime,
+            portrait
 		]]>
 	</sql>
 
@@ -55,6 +56,7 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if> 
+            <if test="portrait != null and portrait != ''"><![CDATA[AND portrait = #{portrait}]]></if>
 		</where>
 	</sql>
 	
@@ -86,6 +88,7 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+			<if test="portrait != null"><![CDATA[portrait = #{portrait},]]></if>
 		</set>
 	</sql>
 
@@ -113,7 +116,8 @@
                 major_name, 
                 state, 
                 update_time, 
-                create_time 
+                create_time,
+                portrait
 				)
 			VALUES
 				(
@@ -136,7 +140,8 @@
                 #{majorName}, 
                 #{state}, 
                 #{updateTime}, 
-                #{createTime} 
+                #{createTime},
+                #{portrait}
 				)
 		]]>
 	</insert>

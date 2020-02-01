@@ -19,14 +19,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.exception.SecurityException;
-import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
-import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.io.IOException;

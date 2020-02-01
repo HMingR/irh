@@ -13,21 +13,18 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendMessageDto;
-import top.imuster.common.core.utils.CookieUtil;
+import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @ClassName: UserLoginController
@@ -131,20 +128,4 @@ public class UserLoginController extends BaseController {
         CookieUtil.addCookie(response, cookieDomain, "/", GlobalConstant.COOKIE_ACCESS_TOKEN_NAME, accessToken, 0, false);
     }
 
-
-    /**
-     * @Author hmr
-     * @Description 从cookie中获得accessToken
-     * @Date: 2020/1/29 16:15
-     * @param
-     * @reture: java.lang.String
-     **/
-    private String getAccessTokenFromCookie(){
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Map<String, String> map = CookieUtil.readCookie(request, GlobalConstant.COOKIE_ACCESS_TOKEN_NAME);
-        if(map!=null && map.get(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME)!=null){
-            return map.get(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME);
-        }
-        return null;
-    }
 }

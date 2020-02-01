@@ -12,7 +12,7 @@ public enum UserType{
     ORGANIZATION(30, "组织社团"),
     MANAGEMENT(40, "管理员");
 
-    int type;
+    Integer type;
     String name;
 
     UserType(Integer type, String name){
@@ -34,5 +34,15 @@ public enum UserType{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static UserType getUserTypeById(Integer type){
+        UserType[] values = UserType.values();
+        for (UserType value : values) {
+            if(value.type == type){
+                return value;
+            }
+        }
+        return null;
     }
 }

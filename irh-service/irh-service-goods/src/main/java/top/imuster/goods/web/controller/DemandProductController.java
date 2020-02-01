@@ -2,24 +2,20 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.ProductDemandInfoService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @ClassName: DemandProductController

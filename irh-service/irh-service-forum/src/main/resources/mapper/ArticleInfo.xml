@@ -13,7 +13,9 @@
             content,
             state,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            user_id AS userId,
+            browser_times AS browserTimes
 		]]>
 	</sql>
 
@@ -31,6 +33,8 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
+            <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
 		</where>
 	</sql>
 	
@@ -50,6 +54,8 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
 		</set>
 	</sql>
 
@@ -65,7 +71,9 @@
                 content, 
                 state, 
                 create_time, 
-                update_time 
+                update_time,
+                user_id,
+                browser_times
 				)
 			VALUES
 				(
@@ -76,7 +84,9 @@
                 #{content}, 
                 #{state}, 
                 #{createTime}, 
-                #{updateTime} 
+                #{updateTime},
+                #{userId},
+                #{browserTimes}
 				)
 		]]>
 	</insert>
@@ -133,5 +143,12 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectListByCondition" parameterType="articleInfo" resultType="top.imuster.forum.api.pojo.ArticleInfo">
+		<![CDATA[SELECT id, title, article_category AS articleCategory, browser_times AS browserTimes, create_time AS createTime]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
 	
 </mapper>

@@ -4,17 +4,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendMessageDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.exception.GlobalException;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
@@ -27,8 +24,6 @@ import top.imuster.order.api.service.OrderServiceFeignApi;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.util.Date;
 
 /**
  * @ClassName: MessageCenterController

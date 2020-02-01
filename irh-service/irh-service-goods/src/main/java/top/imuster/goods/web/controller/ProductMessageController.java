@@ -3,25 +3,18 @@ package top.imuster.goods.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.base.controller.BaseController;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.base.utils.JwtTokenUtil;
-import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessage;
 import top.imuster.goods.exception.GoodsException;
-import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
