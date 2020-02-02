@@ -8,9 +8,11 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.forum.api.pojo.ArticleReview;
 import top.imuster.forum.provider.dao.ArticleInfoDao;
 import top.imuster.forum.provider.exception.ForumException;
 import top.imuster.forum.provider.service.ArticleInfoService;
+import top.imuster.forum.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,6 +28,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Resource
     private ArticleInfoDao articleInfoDao;
+
+    @Resource
+    private ArticleReviewService articleReviewService;
 
     @Override
     public BaseDao<ArticleInfo, Long> getDao() {
@@ -45,5 +50,15 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public List<ArticleInfo> list(Page<ArticleInfo> page) {
         return articleInfoDao.selectListByCondition(page.getSearchCondition());
+    }
+
+    @Override
+    public ArticleInfo getArticleDetailById(Long id) {
+        ArticleInfo result = articleInfoDao.selectEntryList(id).get(0);
+
+        //获得一级留言信息和其对应的回复总数
+        List<ArticleReview> review = articleReviewService.getFirstClassReviewInfoById(id);
+        result.setChilds(review);
+        return result;
     }
 }

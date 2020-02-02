@@ -33,4 +33,13 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
      **/
     List<ArticleInfo> list(Page<ArticleInfo> page);
+
+    /**
+     * @Author hmr
+     * @Description 根据帖子id获得帖子的详细信息
+     * @Date: 2020/2/2 10:57
+     * @param id
+     * @reture: top.imuster.forum.api.pojo.ArticleInfo
+     **/
+    ArticleInfo getArticleDetailById(Long id);
 }

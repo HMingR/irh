@@ -72,8 +72,7 @@ public class AuthController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "修改权限信息,不能修改权限描述,前端前端描述部分不允许操作，只显示", httpMethod = "PUT")
-    @PutMapping("/edit")
-    @NeedLogin(validate = true)
+    @PutMapping
     public Message<String> editAuth(@ApiParam("AuthInfo实体类") @RequestBody AuthInfo authInfo){
         authInfoService.updateByKey(authInfo);
         return Message.createBySuccess();

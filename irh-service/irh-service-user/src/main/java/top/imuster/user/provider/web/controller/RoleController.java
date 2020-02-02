@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("admin/role")
-@Api("角色控制器")
+@Api("RoleController角色控制器")
 public class RoleController extends BaseController {
 
     @Resource
@@ -101,7 +101,7 @@ public class RoleController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "添加角色", httpMethod = "POST")
-    @PostMapping("/")
+    @PutMapping
     public Message<String> insertRole(@ApiParam("RoleInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
         roleInfoService.insertEntry(roleInfo);

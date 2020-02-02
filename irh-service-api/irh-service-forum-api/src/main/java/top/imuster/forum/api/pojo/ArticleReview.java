@@ -3,6 +3,8 @@ package top.imuster.forum.api.pojo;
 
 import top.imuster.common.base.domain.BaseDomain;
 
+import java.util.List;
+
 /**
  * 
  * @author 黄明人
@@ -30,9 +32,31 @@ public class ArticleReview extends BaseDomain {
 	// 内容, max length: 2048
 	private String content;
 
+	//一级留言下的回复总数
+	private Integer childTotalCount;
+
+	//每个留言下的回复数
+	private List<ArticleReview> childs;
+
 	// 1-无效 2-有效
 //	private Short state;
 
+
+	public Integer getChildTotalCount() {
+		return childTotalCount;
+	}
+
+	public void setChildTotalCount(Integer childTotalCount) {
+		this.childTotalCount = childTotalCount;
+	}
+
+	public List<ArticleReview> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<ArticleReview> childs) {
+		this.childs = childs;
+	}
 
 	public Long getId() {
 		return this.id;

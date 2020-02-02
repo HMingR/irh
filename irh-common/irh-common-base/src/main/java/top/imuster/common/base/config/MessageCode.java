@@ -7,7 +7,7 @@ package top.imuster.common.base.config;
  * @date: 2019/12/1 9:21
  */
 public enum MessageCode {
-    SUCCESS(200, "响应成功"),
+    SUCCESS(200, "操作成功"),
     ERROR(500, "服务器错误"),
     FORBID(401, "禁止访问"),
     ILLEGAL_ARGUMENT_CODE(100, "非法参数"),

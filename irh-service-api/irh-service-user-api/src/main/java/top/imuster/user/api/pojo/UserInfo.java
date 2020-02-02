@@ -105,9 +105,6 @@ public class UserInfo extends BaseDomain {
 
 	private List<RoleInfo> roleList;
 
-	private String token;
-
-
 	@Override
 	public String toString() {
 		return "UserInfo{" +
@@ -129,7 +126,6 @@ public class UserInfo extends BaseDomain {
 				", academyName='" + academyName + '\'' +
 				", majorName='" + majorName + '\'' +
 				", roleList=" + roleList +
-				", token='" + token + '\'' +
 				", type=" + type +
 				'}';
 	}
@@ -148,14 +144,6 @@ public class UserInfo extends BaseDomain {
 
 	public void setType(Integer type) {
 		this.type = type;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public List<RoleInfo> getRoleList() {

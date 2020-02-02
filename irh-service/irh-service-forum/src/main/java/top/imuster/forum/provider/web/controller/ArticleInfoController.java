@@ -91,11 +91,18 @@ public class ArticleInfoController extends BaseController {
         return Message.createBySuccess(page);
     }
 
+    /**
+     * @Author hmr
+     * @Description 根据id查看帖子的详细信息(包括一级留言)，
+     * @Date: 2020/2/2 10:56
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.forum.api.pojo.ArticleInfo>
+     **/
     @ApiOperation("根据id查看帖子的所有信息")
     @GetMapping("/{id}")
     @BrowserTimesAnnotation(browserType = BrowserType.FORUM)
     public Message<ArticleInfo> getArticleInfoById(@PathVariable("id") Long id){
-        ArticleInfo articleInfo = articleInfoService.selectEntryList(id).get(0);
-        return Message.createBySuccess(articleInfo);
+        ArticleInfo articleDetail = articleInfoService.getArticleDetailById(id);
+        return Message.createBySuccess(articleDetail);
     }
 }

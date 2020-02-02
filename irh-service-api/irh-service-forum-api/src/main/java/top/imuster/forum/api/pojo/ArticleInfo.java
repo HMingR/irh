@@ -3,6 +3,8 @@ package top.imuster.forum.api.pojo;
 
 import top.imuster.common.base.domain.BaseDomain;
 
+import java.util.List;
+
 /**
  * 
  * @author 黄明人
@@ -36,8 +38,20 @@ public class ArticleInfo extends BaseDomain {
 	//发布者id
 	private Long userId;
 
+	//每个文章下的一级留言信息
+	private List<ArticleReview> childs;
+
 	// 1-无效  2-有效
 //	private Short state;
+
+
+	public List<ArticleReview> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<ArticleReview> childs) {
+		this.childs = childs;
+	}
 
 	public Long getBrowserTimes() {
 		return browserTimes;
