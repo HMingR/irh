@@ -35,7 +35,6 @@ public class AdminOrderController extends BaseController {
      **/
     @PostMapping
     @ApiOperation(value = "管理员分页条件查询订单", httpMethod = "POST")
-    @NeedLogin(validate = true)
     public Message<Page<OrderInfo>> orderList(@ApiParam @RequestBody Page<OrderInfo> page){
         Message<Page<OrderInfo>> pageMessage = orderServiceFeignApi.orderList(page);
         if(null == pageMessage){
@@ -47,7 +46,6 @@ public class AdminOrderController extends BaseController {
 
     @ApiOperation(value = "根据id查询订单", httpMethod = "GET")
     @GetMapping("/{id}")
-    @NeedLogin(validate = true)
     public Message<OrderInfo> getOrderById(@ApiParam("订单id") @PathVariable("id") Long id){
         OrderInfo order = orderServiceFeignApi.getOrderById(id);
         return Message.createBySuccess(order);

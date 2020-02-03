@@ -49,10 +49,10 @@ public class ProductController extends BaseController {
 
     @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
     @PutMapping
-    public Message insertProduct(@RequestParam("file") MultipartFile file, @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult, HttpServletRequest request) throws Exception {
+    public Message insertProduct(@RequestParam("file") MultipartFile file, @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        Long currentUserId = getIdByToken(request);
-        productInfo.setConsumerId(currentUserId);
+        Long userId = getCurrentUserIdFromCookie();
+        productInfo.setConsumerId(userId);
         if(!file.isEmpty()){
             int last = file.getOriginalFilename().length();
             String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);

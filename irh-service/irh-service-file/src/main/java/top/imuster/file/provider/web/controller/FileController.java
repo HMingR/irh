@@ -22,7 +22,7 @@ import top.imuster.file.provider.utils.FastDFSUtil;
 public class FileController extends BaseController implements FileServiceFeignApi {
 
     /**
-     * @Description:
+     * @Description: 返回的是相对路径
      * @Author: lpf
      * @Date: 2019/12/23 12:54
      * @param file
@@ -44,7 +44,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
 
             //拼接访问地址 url = http://39.105.0.169:8080/group1/M00/00/00/hjdfhjhfjs3278yf47.jpg
             //String url = "http://39.105.0.169:8080/" + uploads[0] + "/" + uploads[1];
-            String url = FastDFSUtil.getTrackerInfo()+ "/" + uploads[0] + "/" + uploads[1];
+            String url =/* FastDFSUtil.getTrackerInfo()+ "/" + */uploads[0] + "/" + uploads[1];
             return Message.createBySuccess(url);
         }catch (Exception e){
             logger.error("上传文件失败",e.getMessage(),e);

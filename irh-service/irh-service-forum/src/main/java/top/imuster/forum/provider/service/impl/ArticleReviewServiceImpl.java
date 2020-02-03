@@ -49,15 +49,18 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     @Override
     public List<ArticleReview> reviewDetails(Long id) {
         ArticleReview articleReview = new ArticleReview();
-        articleReview.setParentId(id);
         articleReview.setState(2);
-        List<ArticleReview> articleReviews = articleReviewDao.selectEntryList(articleReview);
+        articleReview.setFirstClassId(id);
+        return articleReviewDao.selectEntryList(articleReview);
+    }
 
-        articleReviews.stream().forEach(articleReview1 -> {
-            articleReview.setParentId(articleReview1.getId());
-
-        });
-
-        return null;
+    @Override
+    public List<ArticleReview> list(Long userId) {
+        ArticleReview articleReview = new ArticleReview();
+        articleReview.setUserId(userId);
+        articleReview.setState(2);
+        articleReview.setOrderField("create_time");
+        articleReview.setOrderFieldType("DESC");
+        return articleReviewDao.selectEntryList(articleReview);
     }
 }

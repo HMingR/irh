@@ -31,4 +31,13 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      **/
     List<ArticleReview> reviewDetails(Long id);
 
+    /**
+     * @Author hmr
+     * @Description 用户查看自己的留言记录
+     * @Date: 2020/2/3 11:02
+     * @param userId
+     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
+     **/
+    List<ArticleReview> list(Long userId);
+
 }

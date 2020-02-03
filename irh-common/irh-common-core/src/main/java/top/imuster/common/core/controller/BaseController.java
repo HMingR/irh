@@ -67,7 +67,11 @@ public class BaseController {
      **/
     protected UserDto getCurrentUserFromCookie(){
         String accessToken = getAccessTokenFromCookie();
-        return (UserDto)redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
+        UserDto userDto = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
+        if(userDto == null){
+            throw new RuntimeException("用户身份货过期,请重新登录后再操作");
+        }
+        return userDto;
     }
 
     /**
@@ -77,7 +81,7 @@ public class BaseController {
      * @param
      * @reture: java.lang.Long
      **/
-    protected Long getcurrentUserIdFromCookie(){
+    protected Long getCurrentUserIdFromCookie(){
         UserDto currentUser = getCurrentUserFromCookie();
         if(currentUser == null){
             throw new GlobalException("用户身份过期,请重新登录");

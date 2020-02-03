@@ -13,7 +13,8 @@
             content,
             state,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            first_class_id AS firstClassId
 		]]>
 	</sql>
 
@@ -31,6 +32,7 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="firstClassId != null and firstClassId != ''"><![CDATA[AND first_class_id = #{firstClassId}]]></if>
 		</where>
 	</sql>
 	
@@ -50,6 +52,7 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="firstClassId != null"><![CDATA[first_class_id = #{firstClassId},]]></if>
 		</set>
 	</sql>
 
@@ -65,7 +68,8 @@
                 content, 
                 state, 
                 create_time, 
-                update_time 
+                update_time,
+                first_class_id
 				)
 			VALUES
 				(
@@ -76,7 +80,8 @@
                 #{content}, 
                 #{state}, 
                 #{createTime}, 
-                #{updateTime} 
+                #{updateTime},
+                #{firstClassId}
 				)
 		]]>
 	</insert>

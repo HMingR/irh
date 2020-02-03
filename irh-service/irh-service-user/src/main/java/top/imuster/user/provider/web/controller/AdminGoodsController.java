@@ -36,7 +36,6 @@ public class AdminGoodsController extends BaseController {
      **/
     @DeleteMapping("/{id}")
     @ApiOperation(value = "管理员根据id下架二手商品", httpMethod = "DELETE")
-    @NeedLogin(validate = true)
     public Message<String> delGoodsById(@PathVariable("id") @ApiParam("二手商品id") Long id) throws UserException {
         return goodsServiceFeignApi.delProduct(id);
     }
@@ -50,7 +49,6 @@ public class AdminGoodsController extends BaseController {
      **/
     @ApiOperation(value = "查看二手商品，按条件分页查询", httpMethod = "POST")
     @PostMapping("/es")
-    @NeedLogin(validate = true)
     public Message<Page<ProductInfo>> goodsList(@RequestBody @ApiParam Page<ProductInfo> page){
         return goodsServiceFeignApi.list(page);
     }
