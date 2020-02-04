@@ -43,14 +43,10 @@ public class OrderController extends BaseController{
      **/
     @ApiOperation("生成订单")
     @PostMapping("/generateOrder")
-    public Message generateOrder(@RequestBody ProductOrderDto productOrderDto, HttpServletRequest request){
-        try{
-            String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
-            OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, token);
-            return Message.createBySuccess(order);
-        }catch (Exception e){
-            throw new OrderException(e.getMessage());
-        }
+    public Message generateOrder(@RequestBody ProductOrderDto productOrderDto, HttpServletRequest request) throws Exception {
+        String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
+        OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, token);
+        return Message.createBySuccess(order);
     }
 
     /**
@@ -64,13 +60,8 @@ public class OrderController extends BaseController{
     @PostMapping
     public Message orderList(@RequestBody @Validated(value = ValidateGroup.queryGroup.class)Page<OrderInfo> page, BindingResult bindingResult){
         validData(bindingResult);
-        try{
-            Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(page.getSearchCondition(), page);
-            return Message.createBySuccess(orderInfoPage);
-        }catch (Exception e){
-            logger.error("条件查询会员自己的订单失败",e.getMessage(), e);
-            throw new OrderException(e.getMessage());
-        }
+        Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(page.getSearchCondition(), page);
+        return Message.createBySuccess(orderInfoPage);
     }
 
     /**
@@ -83,18 +74,13 @@ public class OrderController extends BaseController{
     @ApiOperation("根据id删除订单")
     @DeleteMapping("/{orderId}")
     public Message editOrder(@PathVariable("orderId") Long orderId){
-        try{
-            OrderInfo orderInfo = new OrderInfo();
-            orderInfo.setId(orderId);
-            orderInfo.setState(30);
-            int i = orderInfoService.updateByKey(orderInfo);
-            if(i == 0){
-                return Message.createByError("删除订单失败,没有找到当前订单,请刷新后重试");
-            }
-            return Message.createBySuccess("删除订单成功");
-        }catch (Exception e){
-            logger.error("删除会员订单失败",e.getMessage(), e);
-            throw new OrderException(e.getMessage());
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setId(orderId);
+        orderInfo.setState(30);
+        int i = orderInfoService.updateByKey(orderInfo);
+        if(i == 0){
+            return Message.createByError("删除订单失败,没有找到当前订单,请刷新后重试");
         }
+        return Message.createBySuccess();
     }
 }

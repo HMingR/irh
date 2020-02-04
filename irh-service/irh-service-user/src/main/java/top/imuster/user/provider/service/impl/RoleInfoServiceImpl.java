@@ -6,16 +6,21 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.api.pojo.UserRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.dao.RoleInfoDao;
+import top.imuster.user.provider.service.AuthInfoService;
 import top.imuster.user.provider.service.AuthRoleRelService;
 import top.imuster.user.provider.service.UserRoleRelService;
 import top.imuster.user.provider.service.RoleInfoService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * RoleInfoService 实现类
@@ -33,6 +38,9 @@ public class RoleInfoServiceImpl extends BaseServiceImpl<RoleInfo, Long> impleme
 
     @Resource
     private UserRoleRelService userRoleRelService;
+
+    @Resource
+    private AuthInfoService authInfoService;
 
     @Override
     public BaseDao<RoleInfo, Long> getDao() {

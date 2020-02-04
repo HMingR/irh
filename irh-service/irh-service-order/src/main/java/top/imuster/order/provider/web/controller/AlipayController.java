@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -48,7 +49,7 @@ public class AlipayController extends BaseController {
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    //@NeedLogin(validate = true)
+    @NeedLogin
     @ApiOperation("提交订单准备预下单,返回一个支付宝网站,需要解析里面的地址生成二维码")
     @PostMapping("/perPayment")
     public Message prePayment(@RequestBody @Validated(ValidateGroup.prePayment.class) OrderInfo orderInfo, BindingResult bindingResult, HttpServletRequest request) throws OrderException {

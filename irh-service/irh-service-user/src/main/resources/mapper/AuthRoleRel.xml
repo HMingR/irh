@@ -11,7 +11,7 @@
             auth_id AS authId,
             create_time AS createTime,
             update_time AS updateTime,
-            create_ management _id AS createManagement Id 
+            create_management_id AS createManagementId
 		]]>
 	</sql>
 
@@ -26,7 +26,7 @@
             <if test="authId != null and authId != ''"><![CDATA[AND auth_id = #{authId}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
-            <if test="createManagement Id != null and createManagement Id != ''"><![CDATA[AND create_ management _id = #{createManagement Id}]]></if> 
+            <if test="createManagementId != null and createManagementId != ''"><![CDATA[AND create_management_id = #{createManagementId}]]></if>
 		</where>
 	</sql>
 	
@@ -43,7 +43,7 @@
 			<if test="authId != null"><![CDATA[auth_id = #{authId},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
-			<if test="createManagement Id != null"><![CDATA[create_ management _id = #{createManagement Id},]]></if>
+			<if test="createManagementId != null"><![CDATA[create_management_id = #{createManagementId},]]></if>
 		</set>
 	</sql>
 
@@ -57,7 +57,7 @@
                 auth_id, 
                 create_time, 
                 update_time, 
-                create_ management _id 
+                create_management_id
 				)
 			VALUES
 				(
@@ -66,7 +66,7 @@
                 #{authId}, 
                 #{createTime}, 
                 #{updateTime}, 
-                #{createManagement Id} 
+                #{createManagementId}
 				)
 		]]>
 	</insert>
@@ -135,5 +135,11 @@
 		WHERE arr.role_id = #{roleId}
 		ORDER BY ai.id
 	</select>
+
+	<delete id="deleteByCondition" parameterType="authInfo">
+		<![CDATA[DELETE]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</delete>
 
 </mapper>

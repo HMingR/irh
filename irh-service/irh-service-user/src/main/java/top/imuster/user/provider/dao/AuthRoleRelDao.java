@@ -25,4 +25,12 @@ public interface AuthRoleRelDao extends BaseDao<AuthRoleRel, Long> {
      **/
     List<AuthInfo> selectAuthListByRoleId(Long id);
 
+    /**
+     * @Author hmr
+     * @Description 根据条件删除
+     * @Date: 2020/2/4 15:30
+     * @reture: void
+     **/
+    void deleteByCondition(AuthRoleRel condition);
+
 }

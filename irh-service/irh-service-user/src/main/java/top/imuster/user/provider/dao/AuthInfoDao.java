@@ -4,6 +4,8 @@ package top.imuster.user.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.AuthInfo;
 
+import java.util.List;
+
 /**
  * AuthInfoDao 接口
  * @author 黄明人
@@ -20,4 +22,5 @@ public interface AuthInfoDao extends BaseDao<AuthInfo, Long> {
      * @reture: top.imuster.user.api.pojo.AuthInfo
      **/
     AuthInfo selectAuthInfoById(Long authInfoId) throws Exception;
+
 }

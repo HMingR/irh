@@ -7,6 +7,8 @@ import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 黄明人
@@ -39,11 +41,32 @@ public class AuthInfo extends BaseDomain {
 	@ApiModelProperty(value = "该url的访问Http方式")
 	private String httpMethod;
 
+	private List<AuthInfo> childs = new ArrayList<>();
+
+	//当是查看角色的权限时，拥有则为1，为拥有则为0
+	private Integer have;
+
 	// 状态 1:无效 2:有效
 	// private Short state;
 
 	public AuthInfo() {
 		//默认无参构造方法
+	}
+
+	public List<AuthInfo> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<AuthInfo> childs) {
+		this.childs = childs;
+	}
+
+	public Integer getHave() {
+		return have;
+	}
+
+	public void setHave(Integer have) {
+		this.have = have;
 	}
 
 	@Override

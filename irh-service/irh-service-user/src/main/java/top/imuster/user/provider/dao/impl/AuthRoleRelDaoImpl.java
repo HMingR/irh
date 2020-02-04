@@ -18,6 +18,7 @@ import java.util.List;
 public class AuthRoleRelDaoImpl extends BaseDaoImpl<AuthRoleRel, Long> implements AuthRoleRelDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.AuthRoleRelDao.";
 	private final static String SELECT_AUTH_LIST_BY_ROLEID= "selectAuthListByRoleId";
+	private final static String DELETE_BY_CONDITION = "deleteByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -26,5 +27,10 @@ public class AuthRoleRelDaoImpl extends BaseDaoImpl<AuthRoleRel, Long> implement
 	@Override
 	public List<AuthInfo> selectAuthListByRoleId(Long id) {
 		return this.select(getNameSpace(SELECT_AUTH_LIST_BY_ROLEID), id);
+	}
+
+	@Override
+	public void deleteByCondition(AuthRoleRel condition) {
+		this.delete(getNameSpace(DELETE_BY_CONDITION), condition);
 	}
 }

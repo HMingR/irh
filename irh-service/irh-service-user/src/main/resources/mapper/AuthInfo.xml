@@ -140,5 +140,5 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE id = #{authInfoId} AND state = 2]]>
 	</select>
-	
+
 </mapper>

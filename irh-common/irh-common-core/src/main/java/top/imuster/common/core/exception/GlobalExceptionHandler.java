@@ -114,8 +114,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GlobalException.class)
-    public Message globalExceptionHandler(){
-        return Message.createByError("服务器内部错误");
+    public Message globalExceptionHandler(GlobalException e){
+        return Message.createByError(e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

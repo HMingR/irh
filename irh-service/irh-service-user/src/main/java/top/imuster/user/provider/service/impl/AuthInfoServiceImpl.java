@@ -13,6 +13,9 @@ import top.imuster.user.provider.service.AuthInfoService;
 import top.imuster.user.provider.service.AuthRoleRelService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * AuthInfoService 实现类
@@ -44,5 +47,45 @@ public class AuthInfoServiceImpl extends BaseServiceImpl<AuthInfo, Long> impleme
         AuthRoleRel authRoleRel = new AuthRoleRel();
         authRoleRel.setAuthId(authId);
         authRoleRelService.deleteByCondtion(authRoleRel);
+    }
+
+    @Override
+    public List<AuthInfo> tree(Long roleId) {
+
+        //先获得该角色拥有的权限id
+        AuthRoleRel authRoleRel = new AuthRoleRel();
+        authRoleRel.setRoleId(roleId);
+        List<AuthRoleRel> authRoleRels = authRoleRelService.selectEntryList(authRoleRel);
+        List<Long> authIdList = authRoleRels.stream().map(AuthRoleRel::getAuthId).collect(Collectors.toList());
+
+        //获得所有的权限
+        AuthInfo condition = new AuthInfo();
+        condition.setState(2);
+        List<AuthInfo> allAuth = authInfoDao.selectEntryList(condition);
+        List<AuthInfo> parents = new ArrayList<>();
+        allAuth.stream().forEach(authInfo -> {
+            if(authInfo.getParentId() == 0){
+                parents.add(authInfo);
+            }
+        });
+        for (AuthInfo parent : parents) {
+            generateTree(allAuth, parent, authIdList);
+        }
+        return allAuth;
+    }
+
+
+    private void generateTree(List<AuthInfo> authInfoList, AuthInfo parent, List<Long> authIdList){
+        for (AuthInfo authInfo : authInfoList) {
+            if(authIdList.contains(authInfo.getId())){
+                authInfo.setHave(2);
+            }else{
+                authInfo.setHave(1);
+            }
+            if(authInfo.getParentId() == parent.getId()){
+                parent.getChilds().add(authInfo);
+                generateTree(authInfoList, authInfo, authIdList);
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.provider.service.AuthInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: AuthController
@@ -38,7 +39,6 @@ public class AuthController extends BaseController {
         return Message.createBySuccess(authInfoPage);
     }
 
-
     /**
      * @Description: 按主键删除权限
      * @Author: hmr
@@ -56,10 +56,9 @@ public class AuthController extends BaseController {
         return Message.createBySuccess();
     }
 
-
-    @ApiOperation(value = "根据id获得权限信息", httpMethod = "GET")
+    @ApiOperation(value = "根据权限id获得权限信息", httpMethod = "GET")
     @GetMapping("/{authId}")
-    public Message toEdit(@ApiParam(value = "权限id", required = true) @PathVariable("authId")Long authId){
+    public Message<AuthInfo> toEdit(@ApiParam(value = "权限id", required = true) @PathVariable("authId")Long authId){
         AuthInfo authInfo = authInfoService.selectEntryList(authId).get(0);
         return Message.createBySuccess(authInfo);
     }
@@ -77,6 +76,4 @@ public class AuthController extends BaseController {
         authInfoService.updateByKey(authInfo);
         return Message.createBySuccess();
     }
-
-
 }

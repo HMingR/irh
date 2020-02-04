@@ -4,6 +4,8 @@ package top.imuster.user.provider.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.AuthInfo;
 
+import java.util.List;
+
 /**
  * AuthInfoService接口
  * @author 黄明人
@@ -20,4 +22,13 @@ public interface AuthInfoService extends BaseService<AuthInfo, Long> {
      * @reture: int
      **/
     void deleteAuthById(Long authId);
+
+    /**
+     * @Author hmr
+     * @Description 根据角色id生成权限树
+     * @Date: 2020/2/4 13:55
+     * @param roleId 角色id
+     * @reture: java.util.List<top.imuster.user.api.pojo.AuthInfo>
+     **/
+    List<AuthInfo> tree(Long roleId);
 }

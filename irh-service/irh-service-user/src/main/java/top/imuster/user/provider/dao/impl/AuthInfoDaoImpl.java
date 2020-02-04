@@ -6,6 +6,8 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.provider.dao.AuthInfoDao;
 
+import java.util.List;
+
 /**
  * AuthInfoDao 实现类
  * @author 黄明人
@@ -15,6 +17,7 @@ import top.imuster.user.provider.dao.AuthInfoDao;
 public class AuthInfoDaoImpl extends BaseDaoImpl<AuthInfo, Long> implements AuthInfoDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.AuthInfoDao.";
 	private final static String SELECT_AUTHINFO_BY_ID = "selectAuthInfoById";
+	private final static String SELECT_OTHER_AUTH_BY_ROLE_ID = "selectOtherAuthByRoleId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;

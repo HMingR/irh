@@ -3,8 +3,10 @@ package top.imuster.user.api.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author 黄明人
@@ -21,23 +23,31 @@ public class AuthRoleRel extends BaseDomain {
 
 	// 角色表中的id
 	@ApiModelProperty("角色表中的id")
-	@NotBlank(groups = editGroup.class)
+	@NotBlank(groups = ValidateGroup.editGroup.class, message = "参数错误,角色id不能为空")
 	private Long roleId;
 
 	// 权限表中的id
 	@ApiModelProperty("权限表中的id")
-	@NotBlank(groups = editGroup.class)
 	private Long authId;
 
 	// 创建人编号
 	@ApiModelProperty("创建人编号")
 	private Long createManagementId;
 
+	@NotEmpty(groups = ValidateGroup.editGroup.class)
+	private String ids;
+
 	public AuthRoleRel() {
 		//默认无参构造方法
 	}
 
-	public interface editGroup{}
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
 
 	public Long getId() {
 		return this.id;

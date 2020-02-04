@@ -11,8 +11,10 @@ import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.AuthRoleRel;
 import top.imuster.user.api.pojo.RoleInfo;
+import top.imuster.user.provider.service.AuthInfoService;
 import top.imuster.user.provider.service.AuthRoleRelService;
 import top.imuster.user.provider.service.RoleInfoService;
 
@@ -36,6 +38,9 @@ public class RoleController extends BaseController {
     @Resource
     AuthRoleRelService authRoleRelService;
 
+    @Resource
+    AuthInfoService authInfoService;
+
     /**
      * @Description: 分页条件查询角色列表
      * @Author: hmr
@@ -48,6 +53,13 @@ public class RoleController extends BaseController {
     public Message<Page<RoleInfo>> roleList(@ApiParam("page实体类") @RequestBody Page<RoleInfo> page){
         Page<RoleInfo> roleInfoPage = roleInfoService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(roleInfoPage);
+    }
+
+    @ApiOperation("根据角色id获得权限的树形结构")
+    @GetMapping("/tree/{id}")
+    public Message<List<AuthInfo>> adminAuthTree(@PathVariable("id") Long id){
+        List<AuthInfo> tree = authInfoService.tree(id);
+        return Message.createBySuccess(tree);
     }
 
 
@@ -132,9 +144,11 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "添加角色的权限", httpMethod = "PUT")
     @PutMapping("/editRoleAuth")
-    public Message<String> editRoleAuth(@ApiParam("AuthRoleRel实体类") @Validated({AuthRoleRel.editGroup.class}) @RequestBody AuthRoleRel authRoleRel, BindingResult bindingResult){
+    public Message<String> editRoleAuth(@Validated(ValidateGroup.editGroup.class) @RequestBody AuthRoleRel authRoleRel, BindingResult bindingResult){
         validData(bindingResult);
-        authRoleRelService.insertEntry(authRoleRel);
+        Long userId = getCurrentUserIdFromCookie();
+        authRoleRel.setCreateManagementId(userId);
+        authRoleRelService.editRoleAuth(authRoleRel);
         return Message.createBySuccess();
     }
 
