@@ -3,14 +3,19 @@ package top.imuster.common.core.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.core.dto.UserDto;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 /**
  * @ClassName: RequestUtil
@@ -20,6 +25,9 @@ import java.net.UnknownHostException;
  */
 public class RequestUtil {
     protected static final Logger logger = LoggerFactory.getLogger(RequestUtil.class);
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     public static final String X_REAL_IP = "X-Real-IP";
     public static final String UNKNOWN = "unknown";
@@ -97,14 +105,18 @@ public class RequestUtil {
      * @param
      * @reture: top.imuster.common.core.dto.UserDto
      **/
-    public static UserDto getLoginUser() {
-        UserDto userDto = (UserDto) CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO);
-        if (null == userDto) {
-            throw new RuntimeException("解析token失败");
+    // todo
+    /*public static UserDto getLoginUser(String jwt) {
+        Map<String, String> map = CookieUtil.readCookie(request, GlobalConstant.COOKIE_ACCESS_TOKEN_NAME);
+        if(map!=null && map.get(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME)!=null){
+            String accessToken = map.get(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME);
         }
-        return userDto;
+        UserDto userDto = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
+        if(userDto == null){
+            throw new RuntimeException("用户身份货过期,请重新登录后再操作");
+        }
 
-    }
+    }*/
 
 
 

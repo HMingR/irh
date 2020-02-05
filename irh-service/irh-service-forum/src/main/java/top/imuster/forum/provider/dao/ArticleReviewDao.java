@@ -12,4 +12,14 @@ import top.imuster.forum.api.pojo.ArticleReview;
 public interface ArticleReviewDao extends BaseDao<ArticleReview, Long> {
     //自定义扩展
 
+    /**
+     * @Author hmr
+     * @Description 根据回复id获得用户id
+     * @Date: 2020/2/5 10:44
+     * @param targetId
+     * @reture: java.lang.Long
+     **/
+    Long selectUserIdByReviewId(Long targetId);
+
+
 }

@@ -61,4 +61,13 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         result.setChilds(review);
         return result;
     }
+
+    @Override
+    public Long getUserIdByArticleId(Long targetId) {
+        ArticleInfo condition = new ArticleInfo();
+        condition.setId(targetId);
+        condition.setState(2);
+        ArticleInfo articleInfo = articleInfoDao.selectListByCondition(condition).get(0);
+        return articleInfo.getUserId();
+    }
 }

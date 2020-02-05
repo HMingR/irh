@@ -12,12 +12,12 @@ import java.lang.annotation.*;
  * @date: 2019/12/14 14:54
  */
 
-@Target({ElementType.METHOD, ElementType.PARAMETER})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface LogAnnotation {
 
-    LogTypeEnum logType() default LogTypeEnum.OPERATION_LOG;
+    LogTypeEnum logType();
 
     /**
      * @Description: 是否保存请求参数

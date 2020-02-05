@@ -138,5 +138,11 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectUserIdByReviewId" parameterType="long" resultType="long">
+		<![CDATA[SELECT user_id AS userId]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id = #{targetId}]]>
+	</select>
 	
 </mapper>

@@ -74,4 +74,15 @@ public interface ForumServiceFeignApi {
      **/
     @DeleteMapping("/review/{id}")
     boolean adminDeleteArticleReview(@PathVariable("id") Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据type获得用户的id
+     * @Date: 2020/2/5 10:35
+     * @param targetId 帖子id或者帖子留言的id
+     * @param type 帖子或者留言 4-帖子 5-帖子留言
+     * @reture: java.lang.Long
+     **/
+    @GetMapping("/consumer/{targetId}/{type}")
+    Long getUserIdByType(@PathVariable("targetId") Long targetId, @PathVariable("type") Integer type);
 }

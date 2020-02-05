@@ -9,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.imuster.common.core.annotation.LogAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.enums.LogTypeEnum;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.user.api.dto.CheckValidDto;
@@ -55,6 +57,11 @@ public class UserController extends BaseController {
         types.add("bmp");
     }
 
+    @GetMapping("/test/{id}")
+    @LogAnnotation(logType = LogTypeEnum.OPERATION_LOG, isSaveRequestData = true, isSaveResponseData = true)
+    public Message test(@PathVariable("id") Long id){
+        return Message.createBySuccess(id);
+    }
 
     /**
      * @Description 用户在注册的时候需要校验各种参数

@@ -2,11 +2,7 @@ package top.imuster.user.provider.service;
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
-import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
-
-import java.text.ParseException;
-import java.util.List;
 
 /**
  * ReportFeedbackInfoService接口
@@ -20,9 +16,10 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
      * @Author: hmr
      * @Date: 2020/1/11 16:35
      * @param reportFeedbackInfo
+     * @param userId
      * @reture: void
      **/
-    void processReport(ReportFeedbackInfo reportFeedbackInfo) throws Exception;
+    void processReport(ReportFeedbackInfo reportFeedbackInfo, Long userId) throws Exception;
 
     /**
      * @Author hmr

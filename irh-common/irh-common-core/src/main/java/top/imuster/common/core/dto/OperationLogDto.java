@@ -127,6 +127,35 @@ public class OperationLogDto extends BaseDomain implements Serializable {
      */
     private Long creatorId;
 
+    public OperationLogDto() {
+    }
+
+    public OperationLogDto(Long id, Long groupId, String groupName, Integer logType, String logName, Long actionId, String actionCode, String actionName, String os, String browser, String ip, String location, String mac, String description, String requestData, String requestUrl, String responseData, String className, String methodName, Date startTime, Date endTime, Long excuteTime, String creator, Long creatorId) {
+        this.id = id;
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.logType = logType;
+        this.logName = logName;
+        this.actionId = actionId;
+        this.actionCode = actionCode;
+        this.actionName = actionName;
+        this.os = os;
+        this.browser = browser;
+        this.ip = ip;
+        this.location = location;
+        this.mac = mac;
+        this.description = description;
+        this.requestData = requestData;
+        this.requestUrl = requestUrl;
+        this.responseData = responseData;
+        this.className = className;
+        this.methodName = methodName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.excuteTime = excuteTime;
+        this.creator = creator;
+        this.creatorId = creatorId;
+    }
 
     public Long getId() {
         return id;

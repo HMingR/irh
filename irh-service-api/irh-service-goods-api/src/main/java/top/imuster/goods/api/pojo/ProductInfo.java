@@ -65,7 +65,7 @@ public class ProductInfo extends BaseDomain {
 	private String productDetailsPage;
 
 	// 10-正常交易  20-公益捐赠
-	@ApiModelProperty("0-正常交易  20-公益捐赠")
+	@ApiModelProperty("10-正常交易  20-公益捐赠")
 	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "交易类型不能为空")
 	private Integer tradeType;
 

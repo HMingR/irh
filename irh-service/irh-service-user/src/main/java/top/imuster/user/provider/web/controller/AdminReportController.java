@@ -65,7 +65,6 @@ public class AdminReportController extends BaseController {
         reportFeedbackInfo.setState(2);
         List<ReportFeedbackInfo> reportFeedbackInfos = reportFeedbackInfoService.selectEntryList(reportFeedbackInfo);
         return Message.createBySuccess(reportFeedbackInfos);
-
     }
 
     /**
@@ -82,6 +81,7 @@ public class AdminReportController extends BaseController {
         return Message.createBySuccess(search);
     }
 
+
     /**
      * @Description: 处理反馈
      * @Author: hmr
@@ -93,7 +93,8 @@ public class AdminReportController extends BaseController {
     @PostMapping("/process")
     public Message<String> processReport(@ApiParam("ReportFeedbackInfo实体类") @RequestBody ReportFeedbackInfo reportFeedbackInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
-        reportFeedbackInfoService.processReport(reportFeedbackInfo);
+        Long userId = getCurrentUserIdFromCookie();
+        reportFeedbackInfoService.processReport(reportFeedbackInfo, userId);
         return Message.createBySuccess("处理成功");
     }
 }

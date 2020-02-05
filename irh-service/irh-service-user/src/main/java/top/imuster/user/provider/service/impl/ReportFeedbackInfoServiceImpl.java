@@ -12,6 +12,7 @@ import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.forum.api.service.ForumServiceFeignApi;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.user.api.enums.FeedbackEnum;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
@@ -43,6 +44,9 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     private ReportFeedbackInfoService reportFeedbackInfoService;
 
     @Autowired
+    private ForumServiceFeignApi forumServiceFeignApi;
+
+    @Autowired
     private GenerateSendMessageService generateSendMessageService;
 
     @Resource
@@ -55,7 +59,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     }
 
     @Override
-    public void processReport(ReportFeedbackInfo condition) throws Exception {
+    public void processReport(ReportFeedbackInfo condition, Long userId) throws Exception {
         reportFeedbackInfoDao.updateByKey(condition);
         if(condition.getResult() == 1){
             return;
@@ -89,7 +93,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             sendMessageDtos.add(target);
             generateSendMessageService.senManyToMq(sendMessageDtos);
         }
-        deleteByCondition(info);
+        deleteByCondition(info, userId);
     }
 
     /**
@@ -97,23 +101,31 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
      * @Description 核事之后需要删除相关信息
      * @Date: 2020/1/17 11:17
      * @param reportFeedbackInfo
+     * @param userId
      * @reture: void
      **/
-    private void deleteByCondition(ReportFeedbackInfo reportFeedbackInfo){
+    private void deleteByCondition(ReportFeedbackInfo reportFeedbackInfo, Long userId){
+        Long targetId = reportFeedbackInfo.getTargetId();
         if (reportFeedbackInfo.getType() == 1) {
             //商品
-            goodsServiceFeignApi.delProduct(reportFeedbackInfo.getTargetId());
-            log.info("管理员删除编号为{}的商品",reportFeedbackInfo.getTargetId());
+            goodsServiceFeignApi.delProduct(targetId);
+            log.info("编号为{}的管理员删除编号为{}的商品",userId, targetId);
         }else if(reportFeedbackInfo.getType() == 2){
-            //留言
-            goodsServiceFeignApi.deleteProductMessageById(reportFeedbackInfo.getTargetId());
-            log.info("管理员删除编号为{}的留言",reportFeedbackInfo.getTargetId());
+            //商品留言
+            goodsServiceFeignApi.deleteProductMessageById(targetId);
+            log.info("编号为{}的管理员删除编号为{}的留言", userId, targetId);
         }else if(reportFeedbackInfo.getType() == 3){
-            //评价
-            goodsServiceFeignApi.deleteProductEvaluate(reportFeedbackInfo.getTargetId());
-            log.info("管理员删除编号为{}的评价",reportFeedbackInfo.getTargetId());
+            //商品评价
+            goodsServiceFeignApi.deleteProductEvaluate(targetId);
+            log.info("编号为{}的管理员删除编号为{}的评价",userId, targetId);
         }else if(reportFeedbackInfo.getType() == 4){
-            //todo 删除帖子
+            //论坛帖子
+            forumServiceFeignApi.adminDeleteArticle(targetId);
+            log.info("编号为{}的管理员删除编号为{}的文章",userId, targetId);
+        }else if(reportFeedbackInfo.getType() == 5){
+            //论坛帖子留言
+            forumServiceFeignApi.adminDeleteArticleReview(targetId);
+            log.info("编号为{}的管理员删除了编号为{}的帖子留言", userId, targetId);
         }
     }
 
@@ -121,12 +133,17 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
      * @Author hmr
      * @Description 根据不同的type获得不同的被举报信息的发布者的email
      * @Date: 2020/1/17 10:43
-     * @param type 1-商品举报 2-留言举报 3-评价举报 4-帖子举报
+     * @param type 1-商品举报 2-留言举报 3-评价举报 4-帖子举报 5-帖子留言举报
      * @param targetId
      * @reture: java.lang.String 会员email
      **/
     private String getSendToId(Integer type, Long targetId){
-        Long consumerId = goodsServiceFeignApi.getConsumerIdByType(targetId, type);
+        Long consumerId;
+        if(type <= 3){
+            consumerId = goodsServiceFeignApi.getConsumerIdByType(targetId, type);
+        }else{
+            consumerId = forumServiceFeignApi.getUserIdByType(targetId, type);
+        }
         if(consumerId == null){
             log.info("没有在{}表中找到id为{}的信息",type, targetId);
             throw new UserException("操作失败,请刷新后重试或联系管理员");

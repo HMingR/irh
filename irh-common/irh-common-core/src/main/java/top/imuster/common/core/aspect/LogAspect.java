@@ -8,11 +8,14 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Component;
+import sun.rmi.runtime.Log;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.annotation.LogAnnotation;
 import top.imuster.common.core.dto.OperationLogDto;
 import top.imuster.common.core.dto.UserDto;
@@ -61,9 +64,11 @@ public class LogAspect {
      **/
     @AfterReturning(value = "logAnnotation()", returning = "returnValue")
     public void afterReturning(JoinPoint joinPoint, Object returnValue){
+        log.info("返回信息为{}", returnValue);
         if(returnValue instanceof Message){
             Message message =(Message) returnValue;
             if(null != message && message.getCode() == MessageCode.SUCCESS.getCode()){
+                log.info("进入方法");
                 this.handleLog(joinPoint, message);
             }
         }
@@ -81,7 +86,7 @@ public class LogAspect {
             if(null == annotation){
                 return;
             }
-            UserDto loginUser = (UserDto) CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO);
+            //UserDto loginUser = (UserDto) CusThreadLocal.get(GlobalConstant.USER_TOKEN_DTO);
             OperationLogDto operationLogDto = new OperationLogDto();
             //获得客户端的操作系统
             OperatingSystem os = userAgent.getOperatingSystem();
@@ -98,15 +103,17 @@ public class LogAspect {
             operationLogDto.setEndTime(endTime);
             operationLogDto.setRequestUrl(requestURI);
             operationLogDto.setExcuteTime(endTime.getTime() - startTime.getTime());
-            operationLogDto.setGroupName(loginUser.getUserType().getName());
-            operationLogDto.setCreator(loginUser.getLoginName());
-            operationLogDto.setCreatorId(loginUser.getUserId());
+//            operationLogDto.setGroupName(loginUser.getUserType().getName());
+//            operationLogDto.setCreator(loginUser.getLoginName());
+//            operationLogDto.setCreatorId(loginUser.getUserId());
             operationLogDto.setOs(os.getName());
             //获得日志的类型
             operationLogDto.setLogType(annotation.logType().getType());
             operationLogDto.setLogName(annotation.logType().getName());
 
             getControllerMethodDescription(annotation, operationLogDto, message, joinPoint);
+            System.out.println(operationLogDto);
+            log.info("信息为{}", operationLogDto);
         }catch (Exception e){
             log.error("通过注解设置日志失败{}",e.getMessage(),e);
         }
@@ -175,13 +182,8 @@ public class LogAspect {
      * @reture: top.imuster.common.core.annotation.LogAnnotation
      **/
     private static LogAnnotation getAnnotation(JoinPoint joinPoint){
-        Annotation[] declaredAnnotations = joinPoint.getTarget().getClass().getDeclaredAnnotations();
-        for (Annotation annotation : declaredAnnotations) {
-            if(annotation instanceof LogAnnotation){
-                return (LogAnnotation) annotation;
-            }
-        }
-        return null;
+        MethodSignature signature = (MethodSignature)joinPoint.getSignature();
+        return signature.getMethod().getAnnotation(LogAnnotation.class);
     }
 
 }

@@ -1,7 +1,6 @@
 package top.imuster.user.api.pojo;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;

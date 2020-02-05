@@ -14,9 +14,14 @@ import top.imuster.forum.provider.dao.ArticleReviewDao;
 @Repository("articleReviewDao")
 public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> implements ArticleReviewDao {
 	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleReviewDao.";
-	
+	private final static String SELECT_USER_ID_BY_REVIEW_ID = "selectUserIdByReviewId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public Long selectUserIdByReviewId(Long targetId) {
+		return this.select(getNameSpace(SELECT_USER_ID_BY_REVIEW_ID), targetId);
 	}
 }

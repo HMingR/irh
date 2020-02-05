@@ -78,4 +78,16 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
         articleReviewService.updateByKey(articleReview);
         return false;
     }
+
+    @Override
+    @GetMapping("/consumer/{targetId}/{type}")
+    public Long getUserIdByType(@PathVariable("targetId") Long targetId, @PathVariable("type") Integer type) {
+        Long userId = null;
+        if(type == 4){
+            userId = articleInfoService.getUserIdByArticleId(targetId);
+        }else if(type == 5){
+            userId = articleReviewService.getUserIdByArticleReviewId(targetId);
+        }
+        return userId;
+    }
 }

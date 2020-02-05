@@ -40,4 +40,12 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      **/
     List<ArticleReview> list(Long userId);
 
+    /**
+     * @Author hmr
+     * @Description 根据帖子回复id获得发布者id
+     * @Date: 2020/2/5 10:43
+     * @param targetId
+     * @reture: java.lang.Long
+     **/
+    Long getUserIdByArticleReviewId(Long targetId);
 }

@@ -27,7 +27,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 用户查看自己发布的帖子
+     * @Description 用户查看自己发布的帖子，不包括帖子的内容
      * @Date: 2020/2/1 19:44
      * @param page
      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
@@ -42,4 +42,13 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: top.imuster.forum.api.pojo.ArticleInfo
      **/
     ArticleInfo getArticleDetailById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据帖子的id获得用户id
+     * @Date: 2020/2/5 10:39
+     * @param targetId
+     * @reture: java.lang.Long
+     **/
+    Long getUserIdByArticleId(Long targetId);
 }

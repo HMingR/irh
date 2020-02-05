@@ -50,4 +50,10 @@ public class ForumServiceFeignHystrix implements ForumServiceFeignApi {
         log.error("管理员根据留言id删除帖子留言失败,留言id为{}", id);
         return false;
     }
+
+    @Override
+    public Long getUserIdByType(Long targetId, Integer type) {
+        log.error("管理员根据类型查看用户id失败");
+        return null;
+    }
 }

@@ -63,4 +63,9 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
         articleReview.setOrderFieldType("DESC");
         return articleReviewDao.selectEntryList(articleReview);
     }
+
+    @Override
+    public Long getUserIdByArticleReviewId(Long targetId) {
+        return articleReviewDao.selectUserIdByReviewId(targetId);
+    }
 }
