@@ -3,6 +3,8 @@ package top.imuster.user.api.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
@@ -43,5 +45,6 @@ public interface UserServiceFeignApi {
      * @param code 发送到邮箱的验证码
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> register(UserInfo userInfo, String code);
+    @PostMapping("/register/{code}")
+    Message<String> register(@RequestBody UserInfo userInfo,@PathVariable("code") String code);
 }

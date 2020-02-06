@@ -1,6 +1,7 @@
 package top.imuster.forum.provider.web.rpc;
 
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.forum.api.pojo.ArticleCategory;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ArticleReview;
@@ -10,6 +11,7 @@ import top.imuster.forum.provider.service.ArticleInfoService;
 import top.imuster.forum.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: ForumServiceFeignClient
@@ -50,6 +52,12 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
     }
 
     @Override
+    @PostMapping("/category")
+    public Page<ArticleCategory> adminCategoryList(Page<ArticleCategory> page) {
+        return articleCategoryService.selectPage(page.getSearchCondition(), page);
+    }
+
+    @Override
     @GetMapping("/category/{id}")
     public ArticleCategory getCategoryInfoById(@PathVariable("id") Long id) {
         return articleCategoryService.selectEntryList(id).get(0);
@@ -77,6 +85,18 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
         articleReview.setState(1);
         articleReviewService.updateByKey(articleReview);
         return false;
+    }
+
+    @Override
+    @PostMapping("/article/list")
+    public Page<ArticleInfo> adminGetArticleList(Page<ArticleInfo> page) {
+        ArticleInfo searchCondition = page.getSearchCondition();
+        searchCondition.setState(2);
+        searchCondition.setOrderField("create_time");
+        searchCondition.setOrderFieldType("DESC");
+        List<ArticleInfo> list = articleInfoService.list(page);
+        page.setResult(list);
+        return page;
     }
 
     @Override

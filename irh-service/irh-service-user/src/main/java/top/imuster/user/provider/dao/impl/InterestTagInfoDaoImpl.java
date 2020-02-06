@@ -14,9 +14,14 @@ import top.imuster.user.provider.dao.InterestTagInfoDao;
 @Repository("interestTagInfoDao")
 public class InterestTagInfoDaoImpl extends BaseDaoImpl<InterestTagInfo, Long> implements InterestTagInfoDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.InterestTagInfoDao.";
-	
+	private final static String SELECT_TAG_NAME_BY_ID = "selectTagNameById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public String selectTagNameById(Long id) {
+		return this.select(getNameSpace(SELECT_TAG_NAME_BY_ID), id);
 	}
 }

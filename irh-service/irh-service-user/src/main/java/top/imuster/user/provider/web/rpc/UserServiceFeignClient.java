@@ -1,9 +1,6 @@
 package top.imuster.user.provider.web.rpc;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
@@ -49,7 +46,8 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     }
 
     @Override
-    public Message<String> register(UserInfo userInfo, String code){
+    @PostMapping("/register")
+    public Message<String> register(@RequestBody UserInfo userInfo,@PathVariable("code") String code) {
         return userInfoService.register(userInfo, code);
     }
 }

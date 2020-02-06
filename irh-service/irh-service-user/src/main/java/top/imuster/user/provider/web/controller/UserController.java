@@ -57,12 +57,6 @@ public class UserController extends BaseController {
         types.add("bmp");
     }
 
-    @GetMapping("/test/{id}")
-    @LogAnnotation(logType = LogTypeEnum.OPERATION_LOG, isSaveRequestData = true, isSaveResponseData = true)
-    public Message test(@PathVariable("id") Long id){
-        return Message.createBySuccess(id);
-    }
-
     /**
      * @Description 用户在注册的时候需要校验各种参数
      * @Author hmr
@@ -128,5 +122,17 @@ public class UserController extends BaseController {
         reportFeedbackInfo.setState(2);
         reportFeedbackInfoService.insertEntry(reportFeedbackInfo);
         return Message.createBySuccess("反馈成功,我们会尽快处理");
+    }
+
+    @ApiOperation(value = "根据用户id获得用户昵称", httpMethod = "GET")
+    @GetMapping("/{id}")
+    public Message<String> getUserNameById(@PathVariable("id") Long id){
+        return Message.createBySuccess(userInfoService.getUserNameById(id));
+    }
+
+        //todo
+    public Message<String> editInterestTag(){
+
+        return null;
     }
 }

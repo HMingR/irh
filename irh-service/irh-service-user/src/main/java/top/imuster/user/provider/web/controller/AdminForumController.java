@@ -4,8 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.service.ForumServiceFeignApi;
 
 /**
@@ -21,6 +23,44 @@ public class AdminForumController {
 
     @Autowired
     ForumServiceFeignApi forumServiceFeignApi;
+
+    @ApiOperation(value = "管理员分页查看文章信息，没有文章内容", httpMethod = "POST")
+    @PostMapping("/article")
+    public Message<Page<ArticleInfo>> articleList(@RequestBody Page<ArticleInfo> page){
+        Page<ArticleInfo> articleInfoPage = forumServiceFeignApi.adminGetArticleList(page);
+        return Message.createBySuccess(articleInfoPage);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据id删除帖子信息
+     * @Date: 2020/2/1 14:44
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @ApiOperation("根据id删除帖子信息")
+    @DeleteMapping("/{id}")
+    public Message<String> deleteArticleInfoById(@PathVariable("id") Long id){
+        boolean b = forumServiceFeignApi.adminDeleteArticle(id);
+        if(b) {
+            return Message.createBySuccess();
+        }
+        return Message.createByError("删除失败,请刷新后重试或联系管理员");
+    }
+
+    /**
+     * @Author hmr
+     * @Description 分页条件查询分类
+     * @Date: 2020/2/6 19:30
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleCategory>>
+     **/
+    @ApiOperation(value = "分页条件查询分类", httpMethod = "POST")
+    @PostMapping("/category/list")
+    public Message<Page<ArticleCategory>> categoryList(@RequestBody Page<ArticleCategory> page){
+        Page<ArticleCategory> articleCategoryPage = forumServiceFeignApi.adminCategoryList(page);
+        return Message.createBySuccess(articleCategoryPage);
+    }
 
     /**
      * @Author hmr
@@ -87,20 +127,5 @@ public class AdminForumController {
         return Message.createByError("修改失败,请刷新后重试或联系管理员");
     }
 
-    /**
-     * @Author hmr
-     * @Description 根据id删除帖子信息
-     * @Date: 2020/2/1 14:44
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    @ApiOperation("根据id删除帖子信息")
-    @DeleteMapping("/{id}")
-    public Message<String> deleteArticleInfoById(@PathVariable("id") Long id){
-        boolean b = forumServiceFeignApi.adminDeleteArticle(id);
-        if(b) {
-            return Message.createBySuccess();
-        }
-        return Message.createByError("删除失败,请刷新后重试或联系管理员");
-    }
+
 }

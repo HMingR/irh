@@ -26,12 +26,7 @@ public class MybatisConfig {
     @Autowired
     DataSource druidDataSource;
 
-    @Bean
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource druidDataSource(){
-        return new DruidDataSource();
-    }
+
 
     /**
      * @Description:

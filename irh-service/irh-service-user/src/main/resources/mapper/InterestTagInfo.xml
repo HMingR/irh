@@ -123,5 +123,10 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectTagNameById" parameterType="long" resultType="string">
+		<![CDATA[SELECT tag_name]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id}
+	</select>
 	
 </mapper>

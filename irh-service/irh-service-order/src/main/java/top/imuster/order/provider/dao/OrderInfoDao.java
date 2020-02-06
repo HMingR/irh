@@ -21,4 +21,13 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      **/
     OrderInfo selectOrderByOrderCode(String orderCode);
 
+    /**
+     * @Author hmr
+     * @Description 存储订单信息,并且返回生成的id
+     * @Date: 2020/2/6 12:04
+     * @param orderInfo
+     * @reture: java.lang.Long
+     **/
+    Long insertOrder(OrderInfo orderInfo);
+
 }

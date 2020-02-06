@@ -14,9 +14,14 @@ import top.imuster.user.provider.dao.UserInterestTagRelDao;
 @Repository("userInterestTagRelDao")
 public class UserInterestTagRelDaoImpl extends BaseDaoImpl<UserInterestTagRel, Long> implements UserInterestTagRelDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.UserInterestTagRelDao.";
-	
+	private final static String SELECT_TAG_COUNT_BY_TAG_ID = "selectTagCountByTagId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public Long selectTagCountByTagId(Long id) {
+		return (Long)this.select(getNameSpace(SELECT_TAG_COUNT_BY_TAG_ID), id);
 	}
 }

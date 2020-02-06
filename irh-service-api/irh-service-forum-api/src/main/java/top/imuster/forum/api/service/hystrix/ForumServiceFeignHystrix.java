@@ -2,7 +2,9 @@ package top.imuster.forum.api.service.hystrix;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import top.imuster.common.base.domain.Page;
 import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.service.ForumServiceFeignApi;
 
 /**
@@ -28,6 +30,12 @@ public class ForumServiceFeignHystrix implements ForumServiceFeignApi {
     }
 
     @Override
+    public Page<ArticleCategory> adminCategoryList(Page<ArticleCategory> page) {
+        log.error("管理员分页条件查询帖子分类失败,page对象为{}",page);
+        return null;
+    }
+
+    @Override
     public ArticleCategory getCategoryInfoById(Long id) {
         log.error("管理员根据id获得帖子分类信息失败,帖子分类id为{}", id);
         return null;
@@ -49,6 +57,12 @@ public class ForumServiceFeignHystrix implements ForumServiceFeignApi {
     public boolean adminDeleteArticleReview(Long id) {
         log.error("管理员根据留言id删除帖子留言失败,留言id为{}", id);
         return false;
+    }
+
+    @Override
+    public Page<ArticleInfo> adminGetArticleList(Page<ArticleInfo> page) {
+        log.error("管理员分页条件查询帖子信息失败,page对象为{}", page);
+        return null;
     }
 
     @Override

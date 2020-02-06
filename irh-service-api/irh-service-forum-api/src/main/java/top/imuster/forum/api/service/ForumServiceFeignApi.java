@@ -3,7 +3,9 @@ package top.imuster.forum.api.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.service.hystrix.ForumServiceFeignHystrix;
 
 /**
@@ -35,6 +37,9 @@ public interface ForumServiceFeignApi {
     @DeleteMapping("/category/{id}")
     boolean adminDeleteArticleCategory(@PathVariable("id") Long id);
 
+    @PostMapping("/category")
+    Page<ArticleCategory> adminCategoryList(@RequestBody Page<ArticleCategory> page);
+
     /**
      * @Author hmr
      * @Description 根据id获得分类信息
@@ -52,7 +57,7 @@ public interface ForumServiceFeignApi {
      * @param category
      * @reture: boolean
      **/
-    @PostMapping("/category")
+    @PutMapping("/category")
     boolean addArticleCategory(@RequestBody ArticleCategory category);
 
     /**
@@ -74,6 +79,16 @@ public interface ForumServiceFeignApi {
      **/
     @DeleteMapping("/review/{id}")
     boolean adminDeleteArticleReview(@PathVariable("id") Long id);
+
+    /**
+     * @Author hmr
+     * @Description 管理员分页查看帖子信息,不显示内容
+     * @Date: 2020/2/6 15:05
+     * @param page
+     * @reture: top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleInfo>
+     **/
+    @PostMapping("/article/list")
+    Page<ArticleInfo> adminGetArticleList(@RequestBody Page<ArticleInfo> page);
 
     /**
      * @Author hmr

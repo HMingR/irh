@@ -13,12 +13,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
 import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 
@@ -47,41 +49,25 @@ public class NeedLoginAspect {
     @Before("pointCut()")
     public void before(JoinPoint joinPoint) throws Exception{
         if(!enable){
-            log.info("由于关闭了NeedLogin注解功能，取消检测");
+            log.info("测试模式,关闭了NeedLogin注解功能，取消检测");
             return;
         }
         //获取当前请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
-        log.info("进入校验切面, 是否需要校验{}", needValidate(joinPoint));
-        String token = StringUtils.substringAfter(request.getHeader(HttpHeaders.AUTHORIZATION), "Bearer ");
-
-        if(!needValidate(joinPoint))
-            return;
-
-        if(StringUtils.isEmpty(token)){
-            throw new NeedLoginException("需要登录");
-        }
-
-        UserDto redisUser = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(token));
-        log.info("redis中获得的对象是:{}", new ObjectMapper().writeValueAsString(redisUser));
-        if(null == redisUser)
-            throw new NeedLoginException("用户没有登录或者登录超时,请重新登录");
-    }
-
-
-    private boolean needValidate(JoinPoint joinPoint) throws NoSuchMethodException {
-        Annotation[] declaredAnnotations = joinPoint.getTarget().getClass().getDeclaredAnnotations();
-        for (Annotation annotation : declaredAnnotations) {
-            if(annotation instanceof NeedLogin){
-                if(((NeedLogin) annotation).validate()){
-                    return true;
-                }
+        Cookie[] cookies = request.getCookies();
+        String accessToken = null;
+        for (Cookie cookie : cookies) {
+            if(cookie.getName().equals(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME)){
+                accessToken = cookie.getValue();
+                break;
             }
         }
-        return false;
+
+        if(StringUtils.isBlank(accessToken)) throw new NeedLoginException("您暂时还没有登录,请登陆后重试");
+
+        Boolean hasKey = redisTemplate.hasKey(RedisUtil.getAccessToken(accessToken));
+        if(!hasKey) throw new NeedLoginException("您当前的会话已经超时,请重新登录");
     }
 
 }

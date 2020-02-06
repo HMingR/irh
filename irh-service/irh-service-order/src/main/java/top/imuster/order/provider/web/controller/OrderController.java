@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -43,9 +44,10 @@ public class OrderController extends BaseController{
      **/
     @ApiOperation("生成订单")
     @PostMapping("/generateOrder")
-    public Message generateOrder(@RequestBody ProductOrderDto productOrderDto, HttpServletRequest request) throws Exception {
-        String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
-        OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, token);
+    @NeedLogin
+    public Message<OrderInfo> generateOrder(@RequestBody ProductOrderDto productOrderDto, HttpServletRequest request) throws Exception {
+        Long userId = getCurrentUserIdFromCookie();
+        OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, userId);
         return Message.createBySuccess(order);
     }
 
@@ -57,10 +59,15 @@ public class OrderController extends BaseController{
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
+    @ApiOperation("条件分页查询会员自己的订单，按照时间降序排序")
     @PostMapping
-    public Message orderList(@RequestBody @Validated(value = ValidateGroup.queryGroup.class)Page<OrderInfo> page, BindingResult bindingResult){
+    @NeedLogin
+    public Message<Page<OrderInfo>> orderList(@RequestBody @Validated(value = ValidateGroup.queryGroup.class)Page<OrderInfo> page, BindingResult bindingResult){
         validData(bindingResult);
-        Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(page.getSearchCondition(), page);
+        OrderInfo condition = page.getSearchCondition();
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
+        Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(condition, page);
         return Message.createBySuccess(orderInfoPage);
     }
 
@@ -73,6 +80,7 @@ public class OrderController extends BaseController{
      **/
     @ApiOperation("根据id删除订单")
     @DeleteMapping("/{orderId}")
+    @NeedLogin
     public Message editOrder(@PathVariable("orderId") Long orderId){
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setId(orderId);
@@ -82,5 +90,13 @@ public class OrderController extends BaseController{
             return Message.createByError("删除订单失败,没有找到当前订单,请刷新后重试");
         }
         return Message.createBySuccess();
+    }
+
+    @ApiOperation(value = "根据id获得订单详情", httpMethod = "GET")
+    @GetMapping("/{id}")
+    @NeedLogin
+    public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id){
+        OrderInfo orderInfo = orderInfoService.selectEntryList(id).get(0);
+        return Message.createBySuccess(orderInfo);
     }
 }

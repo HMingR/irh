@@ -60,4 +60,13 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: void
      **/
     void editUserRoleById(Long userId, String roleIds);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户昵称
+     * @Date: 2020/2/6 16:55
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String getUserNameById(Long id);
 }

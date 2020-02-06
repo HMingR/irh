@@ -240,4 +240,10 @@
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
 	</select>
 
+	<select id="selectUserNameById" resultType="string" parameterType="long">
+		<![CDATA[SELECT nickname]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id}
+	</select>
+
 </mapper>

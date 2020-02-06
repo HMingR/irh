@@ -44,10 +44,12 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "查看所有的用户", httpMethod = "POST")
     @PostMapping("/list")
     public Message<Page<UserInfo>> UserList(@ApiParam @RequestBody Page<UserInfo> page){
+        if(page.getSearchCondition() == null){
+            page.setSearchCondition(new UserInfo());
+        }
         Page<UserInfo> consumerInfoPage = userInfoService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(consumerInfoPage);
     }
-
 
     /**
      * @Description: 添加用户

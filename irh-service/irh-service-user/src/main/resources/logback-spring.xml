@@ -85,5 +85,5 @@
        -->
     <logger name="top.imuster.user" level="INFO" additivity="true"/>
     <!-- 如果想打印SQL,则一般需要将相关包设置为DEBUG级别 -->
-    <logger name="top.imuster.user.dao" level="DEBUG" additivity="true"/>
+    <logger name="top.imuster" level="DEBUG" additivity="true"/>
 </configuration>

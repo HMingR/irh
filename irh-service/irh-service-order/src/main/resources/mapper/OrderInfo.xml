@@ -176,5 +176,46 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[ WHERE order_code = #{orderCode} ]]>
 	</select>
+
+	<insert id="insertOrder" parameterType="orderInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		<![CDATA[
+			INSERT INTO order_info
+				(
+                id,
+                saler_id,
+                saler_ nickname,
+                buyer_id,
+                product_id,
+                payment_money,
+                order_remark,
+                address,
+                trade_type,
+                payment_time,
+                create_time,
+                finish_time,
+                update_time,
+                order_code
+                state
+				)
+			VALUES
+				(
+                #{id},
+                #{salerId},
+                #{salerNickname},
+                #{buyerId},
+                #{productId},
+                #{paymentMoney},
+                #{orderRemark},
+                #{address},
+                #{tradeType},
+                #{paymentTime},
+                #{createTime},
+                #{finishTime},
+                #{updateTime},
+                #{orderCode}
+                #{state}
+				)
+		]]>
+	</insert>
 	
 </mapper>

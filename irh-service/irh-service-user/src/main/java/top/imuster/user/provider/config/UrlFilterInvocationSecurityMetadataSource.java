@@ -2,6 +2,7 @@ package top.imuster.user.provider.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -25,6 +26,9 @@ import java.util.List;
 @Slf4j
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
 
+    @Value("${enable.needLogin}")
+    boolean enable;
+
     @Resource
     RoleInfoService roleInfoService;
 
@@ -36,6 +40,10 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
+        if(!enable){
+            return null;
+        }
+
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
 
         List<String> ignoreUrls = ignoreUrlsConfig.getUrls();

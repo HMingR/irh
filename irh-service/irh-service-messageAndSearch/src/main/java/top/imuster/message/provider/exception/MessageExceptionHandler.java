@@ -17,7 +17,7 @@ public class MessageExceptionHandler {
 
     @ExceptionHandler({MessageException.class})
     public Message messageExceptionHandler(Exception e){
-        log.error("message模块出现异常,异常信息为{}",e.getMessage(),e);
-        return Message.createByError("服务器内部异常,请刷新后重试或联系管理员");
+        log.error("message模块出现异常,异常信息为{}",e.getMessage());
+        return Message.createByError(e.getMessage());
     }
 }

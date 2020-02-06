@@ -32,4 +32,12 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      **/
     UserInfo selectUserRoleByCondition(UserInfo condition);
 
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户昵称
+     * @Date: 2020/2/6 16:56
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String selectUserNameById(Long id);
 }

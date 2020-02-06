@@ -116,7 +116,6 @@ public class ProductController extends BaseController {
         return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
     }
 
-
     /**
      * @Author hmr
      * @Description 获得商品详情页

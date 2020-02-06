@@ -123,5 +123,11 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectTagCountByTagId" parameterType="long" resultType="long">
+		SELECT COUNT(1)
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE tag_id = #{id}
+	</select>
 	
 </mapper>

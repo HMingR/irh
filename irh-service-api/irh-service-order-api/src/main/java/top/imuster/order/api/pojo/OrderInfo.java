@@ -29,7 +29,7 @@ public class OrderInfo extends BaseDomain {
 
 	//订单编号,必须保证唯一,且64位之内64个字符以内,只能包含字母、数字、下划线
 	@ApiModelProperty("订单编号")
-	@NotNull(groups = ValidateGroup.prePayment.class, message = "订单编号不能为空")
+	@NotEmpty(groups = ValidateGroup.prePayment.class, message = "订单编号不能为空")
 	private String orderCode;
 
 	// 卖家的id

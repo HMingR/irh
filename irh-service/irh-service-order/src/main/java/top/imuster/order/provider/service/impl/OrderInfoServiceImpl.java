@@ -1,6 +1,7 @@
 package top.imuster.order.provider.service.impl;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
  * @author 黄明人
  * @since 2019-11-26 10:46:26
  */
+@Slf4j
 @Service("orderInfoService")
 public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> implements OrderInfoService {
 
@@ -42,7 +44,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
-    public OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, String token) throws Exception {
+    public OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId) throws Exception {
         ProductInfo productInfo = productOrderDto.getProductInfo();
         OrderInfo orderInfo = productOrderDto.getOrderInfo();
         boolean b = checkProduct(productInfo.getId());
@@ -52,11 +54,17 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         orderInfo.setProductId(productInfo.getId());
         orderInfo.setPaymentMoney(productInfo.getSalePrice());
         orderInfo.setSalerId(productInfo.getConsumerId());
-        orderInfo.setOrderCode(String.valueOf(UuidUtils.nextId()));
-        orderInfo.setBuyerId(JwtTokenUtil.getUserIdFromToken(token));
+        String orderCode = String.valueOf(UuidUtils.nextId());
+        orderInfo.setOrderCode(orderCode);
+        orderInfo.setBuyerId(userId);
         orderInfo.setState(40);
         orderInfo.setTradeType(orderInfo.getTradeType());
-        orderInfoDao.insertEntry(orderInfo);
+        Long id = orderInfoDao.insertOrder(orderInfo);
+        if(id == null){
+            log.error("插入订单返回插入值的id为null,订单信息为{}", orderInfo);
+            throw new OrderException("生成订单失败,请稍后重试");
+        }
+        orderInfo.setId(id);
         return orderInfo;
     }
 

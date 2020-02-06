@@ -161,7 +161,7 @@ public class RoleController extends BaseController {
      **/
     @ApiOperation(value = "根据管理员id获得该管理员没有拥有的角色", httpMethod = "GET")
     @GetMapping("/other/{adminId}")
-    public Message getOtherRoleByAdminId(@ApiParam("管理员id") @PathVariable("adminId") Long adminId){
+    public Message<List<RoleInfo>> getOtherRoleByAdminId(@ApiParam("管理员id") @PathVariable("adminId") Long adminId){
         List<RoleInfo> roleInfos =  roleInfoService.getOtherRoleByAdminId(adminId);
         return Message.createBySuccess(roleInfos);
     }

@@ -1,8 +1,11 @@
 package top.imuster.user.provider.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.InterestTagInfo;
+
+import java.util.List;
 
 /**
  * InterestTagInfoService接口
@@ -11,4 +14,30 @@ import top.imuster.user.api.pojo.InterestTagInfo;
  */
 public interface InterestTagInfoService extends BaseService<InterestTagInfo, Long> {
 
+    /**
+     * @Author hmr
+     * @Description 获得有效的兴趣标签,按照使用的多少排序
+     * @Date: 2020/2/6 12:43
+     * @param
+     * @reture: top.imuster.user.api.pojo.InterestTagInfo
+     **/
+    Page<InterestTagInfo> list(Page<InterestTagInfo> page);
+
+    /**
+     * @Author hmr
+     * @Description 根据id删除兴趣标签
+     * @Date: 2020/2/6 12:56
+     * @param id
+     * @reture: void
+     **/
+    void deleteById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得兴趣标签的名字
+     * @Date: 2020/2/6 17:39
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String getTagNameById(Long id);
 }

@@ -17,7 +17,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	private final static String CHECK_INFO = "checkInfo";
 	private final static String SELECT_EMAIL_BY_ID = "selectEmailById";
 	private final static String SELECT_USER_ROLE_BY_CONDITION = "selectUserRoleByCondition";
-
+	private final static String SELECT_USERNAME_BY_ID = "selectUserNameById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -36,5 +36,10 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	@Override
 	public UserInfo selectUserRoleByCondition(UserInfo condition) {
 		return this.select(getNameSpace(SELECT_USER_ROLE_BY_CONDITION), condition);
+	}
+
+	@Override
+	public String selectUserNameById(Long id) {
+		return this.select(getNameSpace(SELECT_USERNAME_BY_ID), id);
 	}
 }

@@ -2,7 +2,6 @@ package top.imuster.order.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 
@@ -27,7 +26,8 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @Author: hmr
      * @Date: 2019/12/28 9:57
      * @param productInfo
+     * @param token
      * @reture: top.imuster.order.api.pojo.OrderInfo
      **/
-    OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, String token) throws Exception;
+    OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId) throws Exception;
 }
