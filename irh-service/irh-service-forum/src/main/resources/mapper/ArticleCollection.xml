@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.forum.provider.dao.ArticleReviewDao">
+<mapper namespace="top.imuster.forum.provider.dao.ArticleCollectionDao">
 
-	<!-- article_review 所有查询列 -->
+	<!-- article_collection 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
             article_id AS articleId,
             user_id AS userId,
-            parent_id AS parentId,
-            content,
-            state,
             create_time AS createTime,
             update_time AS updateTime,
-            first_class_id AS firstClassId，
-            up_total AS upTotal
+            state 
 		]]>
 	</sql>
 
-	<!-- article_review 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_review]]></sql>
+	<!-- article_collection 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_collection]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
@@ -28,13 +24,9 @@
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="articleId != null and articleId != ''"><![CDATA[AND article_id = #{articleId}]]></if>
             <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
-            <if test="parentId != null and parentId != ''"><![CDATA[AND parent_id = #{parentId}]]></if>
-            <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
-            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
-            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
-            <if test="firstClassId != null and firstClassId != ''"><![CDATA[AND first_class_id = #{firstClassId}]]></if>
-            <if test="upTotal != null and upTotal != ''"><![CDATA[AND up_total = #{upTotal}]]></if>
+            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
 		</where>
 	</sql>
 	
@@ -49,44 +41,32 @@
 		<set>
 			<if test="articleId != null"><![CDATA[article_id = #{articleId},]]></if>
 			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
-			<if test="parentId != null"><![CDATA[parent_id = #{parentId},]]></if>
-			<if test="content != null"><![CDATA[content = #{content},]]></if>
-			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
-			<if test="firstClassId != null"><![CDATA[first_class_id = #{firstClassId},]]></if>
-			<if test="upTotal != null"><![CDATA[up_total = #{upTotal},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
 		</set>
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleReview" >
+	<insert id="insertEntry" parameterType="articleCollection" >
 		<![CDATA[
-			INSERT INTO article_review
+			INSERT INTO article_collection
 				(
                 id, 
                 article_id, 
                 user_id, 
-                parent_id, 
-                content, 
-                state, 
                 create_time, 
-                update_time,
-                first_class_id,
-                up_total
+                update_time, 
+                state 
 				)
 			VALUES
 				(
                 #{id}, 
                 #{articleId}, 
                 #{userId}, 
-                #{parentId}, 
-                #{content}, 
-                #{state}, 
                 #{createTime}, 
-                #{updateTime},
-                #{firstClassId},
-                #{upTotal}
+                #{updateTime}, 
+                #{state} 
 				)
 		]]>
 	</insert>
@@ -96,27 +76,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM article_review WHERE id IN]]>
+		<![CDATA[DELETE FROM article_collection WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="articleReview" >
-		<![CDATA[DELETE FROM article_review]]>
+	<delete id="deleteByCondtion" parameterType="articleCollection" >
+		<![CDATA[DELETE FROM article_collection]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleReview" >
-		<![CDATA[UPDATE article_review]]>
+	<update id="updateByKey" parameterType="articleCollection" >
+		<![CDATA[UPDATE article_collection]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleReview">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleCollection">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -127,7 +107,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleReview" resultType="articleReview">
+	<select id="selectEntryList" parameterType="articleCollection" resultType="articleCollection">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -136,26 +116,12 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleReview" resultType="int">
+	<select id="selectEntryListCount" parameterType="articleCollection" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 	
 	<!-- 其它SQL语句 -->
-
-	<select id="selectUserIdByReviewId" parameterType="long" resultType="long">
-		<![CDATA[SELECT user_id AS userId]]>
-		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE id = #{targetId}]]>
-	</select>
-
-	<select id="selectUpTotalByIds" parameterType="java.lang.reflect.Array" resultType="articleReview">
-		SELECT up_total AS upTotal, id
-		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE id IN]]>
-		<foreach collection="array" item="id" open="(" separator="," close=")">
-			<![CDATA[#{id}]]>
-		</foreach>
-	</select>
+	
 </mapper>

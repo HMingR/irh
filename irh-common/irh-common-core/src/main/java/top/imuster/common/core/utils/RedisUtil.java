@@ -22,13 +22,6 @@ public class RedisUtil {
         throw new RuntimeException("token为空");
     }
 
-    public static String getResetPwdByEmailToken(String token){
-        if(!StringUtils.isNotEmpty(token)){
-            return GlobalConstant.REDIS_RESET_PWD_EMAIL_TOKEN + token;
-        }
-        throw new RuntimeException("token为空");
-    }
-
     /**
      * @Author hmr
      * @Description 获得会员注册时发送给会员的验证码
@@ -41,5 +34,32 @@ public class RedisUtil {
             return GlobalConstant.REDIS_CUSTOMER_EMAIL_REGISTER + token;
         }
         throw new GlobalException("token为空");
+    }
+
+    /**
+     * @Author hmr
+     * @Description 获得在redis中存储点赞记录的key
+     * @Date: 2020/2/8 17:45
+     * @param targetId
+     * @param type
+     * @param userId
+     * @reture: java.lang.String
+     **/
+    public static String getUpKey(Long targetId, Integer type, Long userId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(targetId).append("::").append(type).append("::").append(userId);
+        return stringBuffer.toString();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 获得在redis中存储的评论或留言的总数
+     * @Date: 2020/2/8 18:42
+     * @param targetId
+     * @param type
+     * @reture: java.lang.String
+     **/
+    public static String getUpTotalKey(Long targetId, Integer type){
+        return new StringBuffer().append(targetId).append("::").append(type).toString();
     }
 }

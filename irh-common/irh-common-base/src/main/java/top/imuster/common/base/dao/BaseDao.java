@@ -46,6 +46,7 @@ public interface BaseDao<T,KEY extends Serializable> {
      */
     List<T> selectEntryList(KEY... key);
 
+
     /**
      * 查询对象,只要不为NULL与空则为条件
      * @param t

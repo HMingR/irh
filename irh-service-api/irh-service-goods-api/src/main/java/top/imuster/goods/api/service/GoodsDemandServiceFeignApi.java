@@ -1,10 +1,7 @@
 package top.imuster.goods.api.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
@@ -47,5 +44,6 @@ public interface GoodsDemandServiceFeignApi {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.goods.api.pojo.ProductDemandInfo>
      **/
-    Message<ProductDemandInfo> getDemandById(Long id);
+    @GetMapping("/{id}")
+    Message<ProductDemandInfo> getDemandById(@PathVariable("id") Long id);
 }

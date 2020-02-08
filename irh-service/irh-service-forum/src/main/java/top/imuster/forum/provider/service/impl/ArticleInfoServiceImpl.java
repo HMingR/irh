@@ -70,4 +70,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         ArticleInfo articleInfo = articleInfoDao.selectListByCondition(condition).get(0);
         return articleInfo.getUserId();
     }
+
+    @Override
+    public List<ArticleInfo> getUpTotalByIds(Long[] ids) {
+        return articleInfoDao.selectUpTotalByIds(ids);
+    }
 }

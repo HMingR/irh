@@ -69,13 +69,14 @@ public class ArticleReviewController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "用户根据评论id删除评论", httpMethod = "DELETE")
+    @ApiOperation(value = "用户根据评论id删除自己的评论", httpMethod = "DELETE")
     @NeedLogin
     @DeleteMapping("/{id}")
     public Message deleteReview(@PathVariable("id") Long id){
         ArticleReview condition = new ArticleReview();
         condition.setId(id);
         condition.setState(1);
+        condition.setUserId(getCurrentUserIdFromCookie());
         articleReviewService.updateByKey(condition);
         return Message.createBySuccess();
     }
@@ -95,5 +96,7 @@ public class ArticleReviewController extends BaseController {
         List<ArticleReview> list = articleReviewService.list(userId);
         return Message.createBySuccess(list);
     }
+
+
 
 }

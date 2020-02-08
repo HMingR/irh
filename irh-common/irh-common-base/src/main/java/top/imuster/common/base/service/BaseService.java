@@ -92,4 +92,7 @@ public interface BaseService<T,KEY extends Serializable> {
      */
     Integer selectEntryListCount(T condition);
 
+
+//    List<T> selectEntryList(List<Long> keys);
+
 }

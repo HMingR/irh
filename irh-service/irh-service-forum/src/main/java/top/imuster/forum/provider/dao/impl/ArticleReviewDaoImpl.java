@@ -6,6 +6,8 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.forum.api.pojo.ArticleReview;
 import top.imuster.forum.provider.dao.ArticleReviewDao;
 
+import java.util.List;
+
 /**
  * ArticleReviewDao 实现类
  * @author 黄明人
@@ -15,6 +17,7 @@ import top.imuster.forum.provider.dao.ArticleReviewDao;
 public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> implements ArticleReviewDao {
 	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleReviewDao.";
 	private final static String SELECT_USER_ID_BY_REVIEW_ID = "selectUserIdByReviewId";
+	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -23,5 +26,10 @@ public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> imple
 	@Override
 	public Long selectUserIdByReviewId(Long targetId) {
 		return this.select(getNameSpace(SELECT_USER_ID_BY_REVIEW_ID), targetId);
+	}
+
+	@Override
+	public List<ArticleReview> selectUpTotalByIds(Long[] reviewIds) {
+		return selectList(getNameSpace(SELECT_UP_TOTAL_BY_IDS), reviewIds);
 	}
 }

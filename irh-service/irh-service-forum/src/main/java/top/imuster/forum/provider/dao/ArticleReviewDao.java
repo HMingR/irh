@@ -4,6 +4,8 @@ package top.imuster.forum.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.forum.api.pojo.ArticleReview;
 
+import java.util.List;
+
 /**
  * ArticleReviewDao 接口
  * @author 黄明人
@@ -22,4 +24,12 @@ public interface ArticleReviewDao extends BaseDao<ArticleReview, Long> {
     Long selectUserIdByReviewId(Long targetId);
 
 
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/2/8 20:42
+     * @param reviewIds
+     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
+     **/
+    List<ArticleReview> selectUpTotalByIds(Long[] reviewIds);
 }

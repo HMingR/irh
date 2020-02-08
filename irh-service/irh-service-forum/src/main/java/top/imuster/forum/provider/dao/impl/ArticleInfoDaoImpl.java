@@ -17,7 +17,7 @@ import java.util.List;
 public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implements ArticleInfoDao {
 	private final static String NAMESPACE = "top.imuster.forum.provider.dao.ArticleInfoDao.";
 	private final static String SELECT_LIST_BY_CONDITION = "selectListByCondition";
-
+	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -26,5 +26,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public List<ArticleInfo> selectListByCondition(ArticleInfo articleInfo) {
 		return this.selectList(getNameSpace(SELECT_LIST_BY_CONDITION), articleInfo);
+	}
+
+	@Override
+	public List<ArticleInfo> selectUpTotalByIds(Long[] ids) {
+		return this.selectList(getNameSpace(SELECT_UP_TOTAL_BY_IDS), ids);
 	}
 }

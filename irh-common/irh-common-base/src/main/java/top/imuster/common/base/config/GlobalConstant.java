@@ -26,6 +26,10 @@ public class GlobalConstant {
 
     //redis中会员发布的需求浏览次数的key
 
+    //redis中会员点赞记录的mapkey
+    public static final String IRH_USER_UP_MAP = "IRH_USER_UP_MAP";
+
+    public static final String IRH_USER_UP_TOTAL = "IRH_USER_UP_TOTAL";
 
     //使用邮箱更换密码时保存在redis中的key头部
     public static final String REDIS_RESET_PWD_EMAIL_TOKEN = "irh:reset:pwd:email:token:";

@@ -1,10 +1,7 @@
 package top.imuster.goods.web.rpc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
@@ -35,7 +32,8 @@ public class GoodsDemandServiceFeignClient implements GoodsDemandServiceFeignApi
     }
 
     @Override
-    public Message<String> deleteDemandById(Long id) {
+    @DeleteMapping("/{id}")
+    public Message<String> deleteDemandById(@PathVariable("id") Long id) {
         ProductDemandInfo condition = new ProductDemandInfo();
         condition.setId(id);
         condition.setState(1);
@@ -48,7 +46,8 @@ public class GoodsDemandServiceFeignClient implements GoodsDemandServiceFeignApi
     }
 
     @Override
-    public Message<ProductDemandInfo> getDemandById(Long id) {
+    @GetMapping("{id}")
+    public Message<ProductDemandInfo> getDemandById(@PathVariable("id") Long id) {
         ProductDemandInfo productDemandInfo = productDemandInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(productDemandInfo);
     }

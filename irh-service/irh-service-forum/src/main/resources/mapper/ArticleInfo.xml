@@ -15,7 +15,9 @@
             create_time AS createTime,
             update_time AS updateTime,
             user_id AS userId,
-            browser_times AS browserTimes
+            browser_times AS browserTimes,
+            collect_total AS collectTotal,
+            up_total AS upTotal
 		]]>
 	</sql>
 
@@ -35,6 +37,8 @@
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
             <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
+            <if test="collectTotal != null and collectTotal != ''"><![CDATA[AND collect_total = #{collectTotal}]]></if>
+            <if test="upTotal != null and upTotal != ''"><![CDATA[AND up_total = #{upTotal}]]></if>
 		</where>
 	</sql>
 	
@@ -56,6 +60,8 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
 			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
+			<if test="collectTotal != null"><![CDATA[collect_total = #{collectTotal},]]></if>
+			<if test="upTotal != null"><![CDATA[up_total = #{upTotal},]]></if>
 		</set>
 	</sql>
 
@@ -73,7 +79,9 @@
                 create_time, 
                 update_time,
                 user_id,
-                browser_times
+                browser_times,
+                up_total,
+                collect_total
 				)
 			VALUES
 				(
@@ -87,6 +95,8 @@
                 #{updateTime},
                 #{userId},
                 #{browserTimes}
+                #{upTotal}
+                #{collectTotal}
 				)
 		]]>
 	</insert>
@@ -149,6 +159,15 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<select id="selectUpTotalByIds" parameterType="java.lang.reflect.Array" resultType="articleInfo">
+		SELECT up_total AS upTotal, id
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
 	</select>
 	
 </mapper>

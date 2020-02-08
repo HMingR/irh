@@ -55,12 +55,23 @@ public class ArticleReview extends BaseDomain {
 	@NotBlank(groups = ValidateGroup.addGroup.class, message = "一级留言的id不能为空")
 	private Long firstClassId;
 
+	@ApiModelProperty("点赞总数")
+	private Long upTotal;
+
 	//每个留言下的回复数
 	private List<ArticleReview> childs;
 
 	// 1-无效 2-有效
 //	private Short state;
 
+
+	public Long getUpTotal() {
+		return upTotal;
+	}
+
+	public void setUpTotal(Long upTotal) {
+		this.upTotal = upTotal;
+	}
 
 	public Long getFirstClassId() {
 		return firstClassId;

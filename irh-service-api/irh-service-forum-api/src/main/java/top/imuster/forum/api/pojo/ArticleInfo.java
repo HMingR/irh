@@ -48,6 +48,12 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("发布者id")
 	private Long userId;
 
+	@ApiModelProperty("收藏总数")
+	private Long collectTotal;
+
+	@ApiModelProperty("点赞总数")
+	private Long upTotal;
+
 	//每个文章下的一级留言信息
 	@ApiModelProperty("每个文章下的一级留言信息")
 	private List<ArticleReview> childs;
@@ -55,6 +61,22 @@ public class ArticleInfo extends BaseDomain {
 	// 1-无效  2-有效
 //	private Short state;
 
+
+	public Long getCollectTotal() {
+		return collectTotal;
+	}
+
+	public void setCollectTotal(Long collectTotal) {
+		this.collectTotal = collectTotal;
+	}
+
+	public Long getUpTotal() {
+		return upTotal;
+	}
+
+	public void setUpTotal(Long upTotal) {
+		this.upTotal = upTotal;
+	}
 
 	public List<ArticleReview> getChilds() {
 		return childs;
