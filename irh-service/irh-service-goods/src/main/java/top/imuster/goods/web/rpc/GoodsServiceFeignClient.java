@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessage;
@@ -14,6 +15,7 @@ import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: GoodsServiceFeignClient
@@ -139,7 +141,8 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     }
 
     @Override
-    public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(Long targetId) {
+    @GetMapping("/es/pi/ei/{id}")
+    public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(@PathVariable("id") Long targetId) {
         return productEvaluateInfoService.selectEntryList(targetId).get(0);
     }
 }

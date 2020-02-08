@@ -52,4 +52,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     public ProductInfo getProductInfoByMessageId(Long id) {
         return productInfoDao.selectProductInfoByMessageId(id);
     }
+
+    @Override
+    public String getMainPicUrlById(Long id) {
+        return productInfoDao.selectMainPicUrlById(id);
+    }
 }

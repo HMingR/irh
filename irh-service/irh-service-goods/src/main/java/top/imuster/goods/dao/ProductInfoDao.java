@@ -38,4 +38,13 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: top.imuster.goods.api.pojo.ProductInfo
      **/
     ProductInfo selectProductInfoByMessageId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据商品id获得商品图片的uri
+     * @Date: 2020/2/7 16:50
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String selectMainPicUrlById(Long id);
 }

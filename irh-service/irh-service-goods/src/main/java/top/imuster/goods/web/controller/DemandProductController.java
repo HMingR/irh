@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -31,19 +32,13 @@ public class DemandProductController extends BaseController {
     @Resource
     ProductDemandInfoService productDemandInfoService;
 
-    @ApiOperation(value = "条件查询", httpMethod = "POST")
-    @PostMapping("/list")
-    public Message list(Page<ProductInfo> page){
-        return null;
-    }
-
     @ApiOperation(value = "发布需求", httpMethod = "PUT")
+    @NeedLogin
     @PutMapping
-    public Message add(HttpServletRequest request, @RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) throws Exception {
+    public Message add(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) {
         validData(bindingResult);
-        Long userId = getIdByToken(request);
+        Long userId = getCurrentUserIdFromCookie();
         productDemandInfo.setConsumerId(userId);
-        productDemandInfo.setState(2);
         int i = productDemandInfoService.insertEntry(productDemandInfo);
         if(i == 1){
             return Message.createBySuccess("发布成功");
@@ -59,18 +54,22 @@ public class DemandProductController extends BaseController {
     }
 
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
+    @NeedLogin
     @PostMapping
     public Message edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
         validData(bindingResult);
+        productDemandInfo.setConsumerId(getCurrentUserIdFromCookie());
         productDemandInfoService.updateByKey(productDemandInfo);
         return Message.createBySuccess("修改成功");
     }
 
     @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")
+    @NeedLogin
     @DeleteMapping("/{id}")
     public Message del(@PathVariable("id") Long id){
         ProductDemandInfo condition = new ProductDemandInfo();
         condition.setId(id);
+        condition.setConsumerId(getCurrentUserIdFromCookie());
         condition.setState(1);
         int i = productDemandInfoService.updateByKey(condition);
         if(i == 1){

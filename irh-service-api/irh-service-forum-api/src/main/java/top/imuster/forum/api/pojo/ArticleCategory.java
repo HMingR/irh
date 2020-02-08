@@ -1,5 +1,7 @@
 package top.imuster.forum.api.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
+@ApiModel("帖子分类实体")
 public class ArticleCategory extends BaseDomain {
 
 	private static final long serialVersionUID = 5839629083L;
@@ -17,12 +20,15 @@ public class ArticleCategory extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 文章分类表主键
+	@ApiModelProperty("文章分类表主键")
 	private Long id;
 
 	// 分类名称, max length: 255
+	@ApiModelProperty("分类名称")
 	private String name;
 
 	// 父分类id，0标识一级分类
+	@ApiModelProperty("父分类id，0标识一级分类")
 	private Long parentId;
 
 	//子节点

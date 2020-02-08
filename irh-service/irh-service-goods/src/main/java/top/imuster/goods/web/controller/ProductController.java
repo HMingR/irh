@@ -3,6 +3,7 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,10 +71,12 @@ public class ProductController extends BaseController {
     }
 
 
-    @ApiOperation(value = "条件分页查询商品列表", httpMethod = "POST")
+    @ApiOperation(value = "用户查看自己发布的商品", httpMethod = "POST")
     @PostMapping("/list")
-    public Message productList(Page<ProductInfo> page, ProductInfo productInfo) throws GoodsException{
-        Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
+    public Message productList(Page<ProductInfo> page) throws GoodsException{
+        ProductInfo searchCondition = page.getSearchCondition();
+        searchCondition.setConsumerId(getCurrentUserIdFromCookie());
+        Page<ProductInfo> productInfoPage = productInfoService.selectPage(searchCondition, page);
         return Message.createBySuccess(productInfoPage);
     }
 
@@ -85,10 +88,23 @@ public class ProductController extends BaseController {
         return Message.createBySuccess(productInfo);
     }
 
-    @ApiOperation(value = "修改商品信息", httpMethod = "POST")
-    @PostMapping("/edit")
-    public Message editProduct(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
+    @ApiOperation(value = "修改商品信息,采用表单的形式提交,表单中标签的name属性必须和实体类字段保持一致", httpMethod = "POST")
+    @PutMapping("/edit")
+    public Message editProduct(MultipartFile file ,@Validated(ValidateGroup.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
+        if(!file.isEmpty()){
+            String originalUri = productInfoService.getMainPicUrlById(productInfo.getId());
+            if(StringUtils.isNotBlank(originalUri)){
+                fileServiceFeignApi.deleteByName(originalUri);
+            }
+            int last = file.getOriginalFilename().length();
+            String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);
+            if(!types.contains(fileType)){
+                return Message.createByError("图片格式不正确,请更换图片格式");
+            }
+            String url = fileServiceFeignApi.upload(file).getText();
+            productInfo.setMainPicUrl(url);
+        }
         int i = productInfoService.updateByKey(productInfo);
         if(i != 0){
             return Message.createBySuccess();
@@ -107,6 +123,8 @@ public class ProductController extends BaseController {
     @DeleteMapping("/{id}")
     public Message delProduct(@PathVariable("id") Long id){
         ProductInfo productInfo = new ProductInfo();
+        Long userId = getCurrentUserIdFromCookie();
+        productInfo.setConsumerId(userId);
         productInfo.setId(id);
         productInfo.setState(1);
         int i = productInfoService.updateByKey(productInfo);

@@ -47,4 +47,13 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: top.imuster.goods.api.pojo.ProductInfo
      **/
     ProductInfo getProductInfoByMessageId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据商品id获得商品图片原来的uri
+     * @Date: 2020/2/7 16:49
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String getMainPicUrlById(Long id);
 }

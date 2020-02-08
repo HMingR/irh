@@ -17,8 +17,14 @@ import top.imuster.file.api.service.FileServiceFeignApi;
 public class FileServiceFeignApiHystrix implements FileServiceFeignApi {
 
     @Override
-    public Message upload(MultipartFile file) throws Exception {
+    public Message upload(MultipartFile file){
         log.error("FileServiceFeignApiHystrix---->远程调用fileService报错");
+        return null;
+    }
+
+    @Override
+    public Message deleteByName(String name) {
+        log.error("根据uri删除文件失败,文件名为{}",name);
         return null;
     }
 }

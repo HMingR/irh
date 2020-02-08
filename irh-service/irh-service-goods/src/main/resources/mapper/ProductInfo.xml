@@ -189,5 +189,11 @@
 		FROM product_info pi
 		WHERE pi.id = (SELECT product_id FROM product_message pm WHERE pm.id = #{id})
 	</select>
+
+	<select id="selectMainPicUrlById" resultType="string" parameterType="long">
+		<![CDATA[SELECT main_pic_url ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id}
+	</select>
 	
 </mapper>

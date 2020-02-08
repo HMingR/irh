@@ -1,6 +1,8 @@
 package top.imuster.forum.api.pojo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
+@ApiModel("文章/帖子表主键")
 public class ArticleInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 7095780754L;
@@ -18,27 +21,35 @@ public class ArticleInfo extends BaseDomain {
 		//默认无参构造方法
 	}
 	// 文章/帖子表主键
+	@ApiModelProperty("文章/帖子表主键")
 	private Long id;
 
 	// 标题, max length: 255
+	@ApiModelProperty("标题")
 	private String title;
 
 	// 文章/帖子分类id
+	@ApiModelProperty("文章/帖子分类id")
 	private Long articleCategory;
 
 	// 封面图片, max length: 255
+	@ApiModelProperty("封面图片")
 	private String mainPicture;
 
 	// 内容
+	@ApiModelProperty("内容")
 	private String content;
 
 	//浏览次数
+	@ApiModelProperty("浏览次数")
 	private Long browserTimes;
 
 	//发布者id
+	@ApiModelProperty("发布者id")
 	private Long userId;
 
 	//每个文章下的一级留言信息
+	@ApiModelProperty("每个文章下的一级留言信息")
 	private List<ArticleReview> childs;
 
 	// 1-无效  2-有效

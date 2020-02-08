@@ -75,31 +75,13 @@ public class EvaluateController extends BaseController {
     @ApiOperation("根据评论id删除自己的评价")
     @DeleteMapping("/{id}")
     public Message deleteEvaluateById(@PathVariable("id") Long id, HttpServletRequest request){
-        try{
-            //从请求头中得到token，然后解析得到其中的用户id
-            String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
-            Long userId = JwtTokenUtil.getUserIdFromToken(token);
-
-            ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
-            productEvaluateInfo.setId(id);
-            ProductEvaluateInfo evaluateInfo = productEvaluateInfoService.selectEntryList(productEvaluateInfo).get(0);
-            if(null == evaluateInfo){
-                return Message.createByError("没有找到该评价,请刷新后重试");
-            }
-            Long buyerId = evaluateInfo.getBuyerId();
-            if(buyerId != userId){
-                return Message.createByError("用户只能删除自己的评价，不能删除别人的评价");
-            }
-            productEvaluateInfo.setState(1);
-            int i = productEvaluateInfoService.updateByKey(productEvaluateInfo);
-            if(i != 1){
-                return Message.createByError("删除失败,请刷新后重试");
-            }
-            return Message.createBySuccess("删除成功");
-        }catch (Exception e){
-            logger.error("用户根据id删除评论失败,错误信息为{}",e.getMessage(), e);
-            throw new GoodsException("用户根据id删除评论失败");
-        }
+        Long userId = getCurrentUserIdFromCookie();
+        ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
+        productEvaluateInfo.setId(id);
+        productEvaluateInfo.setBuyerId(userId);
+        productEvaluateInfo.setState(1);
+        productEvaluateInfoService.updateByKey(productEvaluateInfo);
+        return Message.createBySuccess();
     }
 
     @ApiOperation("根据id查询评价")
@@ -120,11 +102,8 @@ public class EvaluateController extends BaseController {
     @GetMapping("/{type}/{customerId}")
     public Message listById(@PathVariable("customerId") Long id, @PathVariable("type") Integer type){
         ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
-        if(type == 1)
-            productEvaluateInfo.setBuyerId(id);
-        if(type == 2)
-            productEvaluateInfo.setSalerId(id);
-
+        if(type == 1) productEvaluateInfo.setBuyerId(id);
+        if(type == 2) productEvaluateInfo.setSalerId(id);
         productEvaluateInfo.setState(2);
         List<ProductEvaluateInfo> productEvaluateInfos = productEvaluateInfoService.selectEntryList(productEvaluateInfo);
         return Message.createBySuccess(productEvaluateInfos);
