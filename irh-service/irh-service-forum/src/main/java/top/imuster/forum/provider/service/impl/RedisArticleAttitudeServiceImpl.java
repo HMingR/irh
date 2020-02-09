@@ -90,4 +90,16 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
         }
         return list;
     }
+
+    @Override
+    public List<Map.Entry<Long, Long>> getAllCollectCountFromRedis() {
+        Cursor<Map.Entry<Long, Long>> cursor = redisTemplate.opsForHash().scan(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, ScanOptions.NONE);
+        List<Map.Entry<Long, Long>> list = new ArrayList<>();
+        while (cursor.hasNext()){
+            Map.Entry<Long, Long> map = cursor.next();
+            list.add(map);
+            redisTemplate.opsForHash().delete(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, map.getKey());
+        }
+        return list;
+    }
 }

@@ -73,4 +73,9 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     public List<ArticleReview> getUpTotalByIds(Long[] reviewIds) {
         return articleReviewDao.selectUpTotalByIds(reviewIds);
     }
+
+    @Override
+    public Long getUpTotal(Long id) {
+        return articleReviewDao.selectUpTotalById(id);
+    }
 }

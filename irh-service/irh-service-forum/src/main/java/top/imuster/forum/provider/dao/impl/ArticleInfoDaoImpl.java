@@ -18,6 +18,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String NAMESPACE = "top.imuster.forum.provider.dao.ArticleInfoDao.";
 	private final static String SELECT_LIST_BY_CONDITION = "selectListByCondition";
 	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
+	private final static String SELECT_UP_TOTAL_BY_ID = "selectUpTotalById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -31,5 +32,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public List<ArticleInfo> selectUpTotalByIds(Long[] ids) {
 		return this.selectList(getNameSpace(SELECT_UP_TOTAL_BY_IDS), ids);
+	}
+
+	@Override
+	public Long selectUpTotalById(Long id) {
+		return this.select(getNameSpace(SELECT_UP_TOTAL_BY_ID), id);
 	}
 }

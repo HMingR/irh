@@ -4,6 +4,7 @@ import top.imuster.forum.api.dto.UpCountDto;
 import top.imuster.forum.api.dto.UpDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: RedisArticleAttitudeService
@@ -74,6 +75,13 @@ public interface RedisArticleAttitudeService {
      **/
     List<UpCountDto> getAllUpCountFromRedis();
 
-
-
+    /**
+     * @Author hmr
+     * @Description 从reids中获得收藏信息总数
+     * @Date: 2020/2/9 11:22
+     * @param
+     * @reture: java.util.List<java.util.Map<java.lang.Long,java.lang.Long>>
+     *
+     * @return*/
+    List<Map.Entry<Long, Long>> getAllCollectCountFromRedis();
 }

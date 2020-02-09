@@ -57,4 +57,13 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
      **/
     List<ArticleReview> getUpTotalByIds(Long[] reviewIds);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/2/9 10:41
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long getUpTotal(Long id);
 }

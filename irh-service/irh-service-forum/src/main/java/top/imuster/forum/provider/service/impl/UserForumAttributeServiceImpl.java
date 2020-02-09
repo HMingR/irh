@@ -2,6 +2,7 @@ package top.imuster.forum.provider.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -92,6 +93,17 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
         });
 
     }
+
+    @Override
+    @Cacheable(value = "UpTotal",key = "#p2")
+    public Long getUpTotalByTypeAndId(Long id, Integer type, String upTotalKey) {
+        if(type == 1){
+            return articleInfoService.getUpTotal(id);
+        }else {
+            return articleReviewService.getUpTotal(id);
+        }
+    }
+
 
     /**
      * @Author hmr

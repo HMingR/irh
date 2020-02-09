@@ -18,6 +18,7 @@ public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> imple
 	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleReviewDao.";
 	private final static String SELECT_USER_ID_BY_REVIEW_ID = "selectUserIdByReviewId";
 	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
+	private final static String SELECT_UP_TOTAL_BY_ID = "selectUpTotalById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -31,5 +32,10 @@ public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> imple
 	@Override
 	public List<ArticleReview> selectUpTotalByIds(Long[] reviewIds) {
 		return selectList(getNameSpace(SELECT_UP_TOTAL_BY_IDS), reviewIds);
+	}
+
+	@Override
+	public Long selectUpTotalById(Long id) {
+		return this.select(getNameSpace(SELECT_UP_TOTAL_BY_ID), id);
 	}
 }

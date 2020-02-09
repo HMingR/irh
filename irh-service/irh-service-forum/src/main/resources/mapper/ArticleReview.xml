@@ -158,4 +158,10 @@
 			<![CDATA[#{id}]]>
 		</foreach>
 	</select>
+
+	<select id="selectUpTotalById" parameterType="long" resultType="long">
+		<![CDATA[SELECT up_total]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id}
+	</select>
 </mapper>

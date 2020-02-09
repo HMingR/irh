@@ -28,4 +28,16 @@ public interface UserForumAttributeService extends BaseService<UserForumAttribut
      * @reture: void
      **/
     void transUpCountFromRedis2DB();
+
+    /**
+     * @Author hmr
+     * @Description 根据id和type获得点赞总数
+     * @Date: 2020/2/9 10:34
+     * @param id
+     * @param type
+     * @param upTotalKey
+     * @reture: java.lang.Long
+     **/
+    Long getUpTotalByTypeAndId(Long id, Integer type, String upTotalKey);
+
 }

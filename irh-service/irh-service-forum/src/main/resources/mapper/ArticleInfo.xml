@@ -155,7 +155,7 @@
 	<!-- 其它SQL语句 -->
 
 	<select id="selectListByCondition" parameterType="articleInfo" resultType="top.imuster.forum.api.pojo.ArticleInfo">
-		<![CDATA[SELECT id, title, article_category AS articleCategory, browser_times AS browserTimes, create_time AS createTime]]>
+		<![CDATA[SELECT id, title, article_category AS articleCategory, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
@@ -168,6 +168,12 @@
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
+	</select>
+
+	<select id="selectUpTotalById" parameterType="long" resultType="long">
+		<![CDATA[SELECT up_total]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id}
 	</select>
 	
 </mapper>

@@ -32,4 +32,13 @@ public interface ArticleReviewDao extends BaseDao<ArticleReview, Long> {
      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
      **/
     List<ArticleReview> selectUpTotalByIds(Long[] reviewIds);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得点赞数
+     * @Date: 2020/2/9 10:42
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long selectUpTotalById(Long id);
 }

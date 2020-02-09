@@ -75,4 +75,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     public List<ArticleInfo> getUpTotalByIds(Long[] ids) {
         return articleInfoDao.selectUpTotalByIds(ids);
     }
+
+    @Override
+    public Long getUpTotal(Long id) {
+        return articleInfoDao.selectUpTotalById(id);
+    }
 }

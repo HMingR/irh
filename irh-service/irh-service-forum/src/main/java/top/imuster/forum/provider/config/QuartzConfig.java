@@ -4,7 +4,7 @@ package top.imuster.forum.provider.config;
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import top.imuster.forum.provider.component.UpTask;
+import top.imuster.forum.provider.component.UpAndCollectTask;
 
 
 /**
@@ -20,7 +20,7 @@ public class QuartzConfig {
 
     @Bean
     public JobDetail quartzDetail(){
-        return JobBuilder.newJob(UpTask.class).withIdentity(LIKE_TASK_IDENTITY).storeDurably().build();
+        return JobBuilder.newJob(UpAndCollectTask.class).withIdentity(LIKE_TASK_IDENTITY).storeDurably().build();
     }
 
     @Bean

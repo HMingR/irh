@@ -60,4 +60,13 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
      **/
     List<ArticleInfo> getUpTotalByIds(Long[] ids);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得点赞总数
+     * @Date: 2020/2/9 10:37
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long getUpTotal(Long id);
 }

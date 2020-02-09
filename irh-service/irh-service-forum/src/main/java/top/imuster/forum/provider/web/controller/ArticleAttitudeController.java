@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.forum.api.pojo.ArticleCollection;
-import top.imuster.forum.api.pojo.UserForumAttribute;
-import top.imuster.forum.provider.service.ArticleCollectionService;
+import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.forum.provider.service.RedisArticleAttitudeService;
 import top.imuster.forum.provider.service.UserForumAttributeService;
 
@@ -26,26 +24,53 @@ import javax.annotation.Resource;
 public class ArticleAttitudeController extends BaseController {
 
     @Resource
-    ArticleCollectionService articleCollectionService;
-
-    @Resource
     RedisArticleAttitudeService redisArticleAttitudeService;
 
+    @Resource
+    UserForumAttributeService userForumAttributeService;
+
+    /**
+     * @Author hmr
+     * @Description 点赞操作,id为点赞的对象，type为对象的类型(1-文章  2-评论)
+     * @Date: 2020/2/9 10:46
+     * @param id
+     * @param type
+     * @reture: void
+     **/
     @ApiOperation("点赞操作,id为点赞的对象，type为对象的类型(1-文章  2-评论)")
-    @GetMapping("/{id}/{type}")
-    public Message<String> upByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+    @GetMapping("/up/{id}/{type}")
+    public void upByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         redisArticleAttitudeService.saveUp2Redis(id, type, getCurrentUserIdFromCookie());
-        return Message.createBySuccess();
+        redisArticleAttitudeService.incrementUpCount(id, type);
     }
 
-    @ApiOperation("用户收藏")
-    @GetMapping("/collection/{id}")
-    public Message<String> collection(@PathVariable("id") Long id){
-        Long userId = getCurrentUserIdFromCookie();
-        ArticleCollection condition = new ArticleCollection();
-        condition.setArticleId(id);
-        condition.setUserId(userId);
-        articleCollectionService.insertEntry(condition);
-        return Message.createBySuccess();
+    /**
+     * @Author hmr
+     * @Description 取消点赞
+     * @Date: 2020/2/9 10:47
+     * @param id
+     * @param type
+     * @reture: void
+     **/
+    @ApiOperation("取消点赞")
+    @GetMapping("/cancel/{id}/{type}")
+    public void cancelUpByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+        redisArticleAttitudeService.saveUp2Redis(id, type, getCurrentUserIdFromCookie());
+        redisArticleAttitudeService.decrementUpCount(id, type);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据id和type获得点赞总数
+     * @Date: 2020/2/9 10:47
+     * @param id
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.Long>
+     **/
+    @ApiOperation("根据id和type获得点赞总数")
+    @GetMapping("/{id}/{type}")
+    public Message<Long> getUpTotalByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+        Long total = userForumAttributeService.getUpTotalByTypeAndId(id, type, RedisUtil.getUpTotalKey(id, type));
+        return Message.createBySuccess(total);
     }
 }

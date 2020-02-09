@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @ClassName: IrhForumApplication
@@ -14,6 +15,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"top.imuster.file"})
+@ComponentScan(basePackages = {"top.imuster.core",
+                               "top.imuster.forum"})
 public class IrhForumApplication {
     public static void main(String[] args) {
         SpringApplication.run(IrhForumApplication.class, args);
