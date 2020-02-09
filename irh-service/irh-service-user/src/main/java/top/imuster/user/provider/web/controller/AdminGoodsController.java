@@ -125,6 +125,13 @@ public class AdminGoodsController extends BaseController {
         return goodsCategoryServiceFeignApi.addCategory(productCategoryInfo);
     }
 
+    @ApiOperation(value = "修改分类信息", httpMethod = "PUT")
+    @PutMapping("/category")
+    public Message<String> editCategory(@RequestBody ProductCategoryInfo productCategoryInfo){
+        goodsCategoryServiceFeignApi.editCategory(productCategoryInfo);
+        return Message.createBySuccess();
+    }
+
     /**
      * @Author hmr
      * @Description 根据id获得商品分类信息

@@ -52,7 +52,7 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
     }
 
     @Override
-    @PostMapping("/category")
+    @PostMapping("/category/list")
     public Page<ArticleCategory> adminCategoryList(Page<ArticleCategory> page) {
         return articleCategoryService.selectPage(page.getSearchCondition(), page);
     }

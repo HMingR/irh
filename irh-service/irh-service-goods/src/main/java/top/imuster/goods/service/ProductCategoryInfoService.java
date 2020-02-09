@@ -1,7 +1,6 @@
 package top.imuster.goods.service;
 
 
-import org.springframework.web.bind.annotation.PathVariable;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.exception.GoodsException;

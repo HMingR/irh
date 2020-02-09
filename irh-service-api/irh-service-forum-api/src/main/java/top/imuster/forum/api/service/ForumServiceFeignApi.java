@@ -37,7 +37,7 @@ public interface ForumServiceFeignApi {
     @DeleteMapping("/category/{id}")
     boolean adminDeleteArticleCategory(@PathVariable("id") Long id);
 
-    @PostMapping("/category")
+    @PostMapping("/category/list")
     Page<ArticleCategory> adminCategoryList(@RequestBody Page<ArticleCategory> page);
 
     /**
