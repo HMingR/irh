@@ -3,6 +3,7 @@ package top.imuster.forum.provider.service.impl;
 import com.mchange.io.FileUtils;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Template;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import freemarker.template.Configuration;
