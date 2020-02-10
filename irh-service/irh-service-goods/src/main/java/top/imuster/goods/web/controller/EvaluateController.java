@@ -84,7 +84,7 @@ public class EvaluateController extends BaseController {
         return Message.createBySuccess();
     }
 
-    @ApiOperation("根据id查询评价")
+    @ApiOperation("根据id查询该评价的内容")
     @GetMapping("/{id}")
     public Message getEvaluateById(@PathVariable("id") Long id){
         ProductEvaluateInfo productEvaluateInfo = productEvaluateInfoService.selectEntryList(id).get(0);
@@ -99,8 +99,8 @@ public class EvaluateController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("根据用户的id查询对该用户的所有评价(1:查询自己 2:查询卖家被评论的记录)")
-    @GetMapping("/{type}/{customerId}")
-    public Message listById(@PathVariable("customerId") Long id, @PathVariable("type") Integer type){
+    @GetMapping("/{type}/{userId}")
+    public Message listById(@PathVariable("userId") Long id, @PathVariable("type") Integer type){
         ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
         if(type == 1) productEvaluateInfo.setBuyerId(id);
         if(type == 2) productEvaluateInfo.setSalerId(id);

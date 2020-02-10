@@ -48,6 +48,15 @@ public class ProductController extends BaseController {
     @Autowired
     FileServiceFeignApi fileServiceFeignApi;
 
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/2/10 16:07
+     * @param file
+     * @param productInfo
+     * @param bindingResult
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
     @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
     @PutMapping
     public Message insertProduct(@RequestParam("file") MultipartFile file, @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
@@ -71,6 +80,13 @@ public class ProductController extends BaseController {
     }
 
 
+    /**
+     * @Author hmr
+     * @Description 用户查看自己发布的商品
+     * @Date: 2020/2/10 16:08
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
     @ApiOperation(value = "用户查看自己发布的商品", httpMethod = "POST")
     @PostMapping("/list")
     public Message productList(Page<ProductInfo> page) throws GoodsException{

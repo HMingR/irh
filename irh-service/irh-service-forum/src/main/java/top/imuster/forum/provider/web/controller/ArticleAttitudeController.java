@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 
 /**
  * @ClassName: ArticleAttitudeController
- * @Description: 用户对于论坛中信息的态度  up  down
+ * @Description: 用户对于论坛中信息的态度  点赞功能
  * @author: hmr
  * @date: 2020/2/8 15:11
  */

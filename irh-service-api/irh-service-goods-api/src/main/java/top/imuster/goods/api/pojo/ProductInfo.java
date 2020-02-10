@@ -74,10 +74,14 @@ public class ProductInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "分类id不能为空")
 	private Long categoryId;
 
+	@ApiModelProperty("卖家买入该商品的时间")
+	private String buyingTime;
+
 	//更新分类时存放新的category
 	private Long newCategoryId;
 
 	//出售商品的人
+	@ApiModelProperty("出售商品的人")
 	private Long consumerId;
 
 	//state 1-无效 2-有效 3-锁定
@@ -98,6 +102,14 @@ public class ProductInfo extends BaseDomain {
 				", categoryId=" + categoryId +
 				", newCategoryId=" + newCategoryId +
 				'}';
+	}
+
+	public String getBuyingTime() {
+		return buyingTime;
+	}
+
+	public void setBuyingTime(String buyingTime) {
+		this.buyingTime = buyingTime;
 	}
 
 	public Long getConsumerId() {

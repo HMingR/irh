@@ -66,8 +66,8 @@ public class NeedLoginAspect {
 
         if(StringUtils.isBlank(accessToken)) throw new NeedLoginException("您暂时还没有登录,请登陆后重试");
 
-        Boolean hasKey = redisTemplate.hasKey(RedisUtil.getAccessToken(accessToken));
-        if(!hasKey) throw new NeedLoginException("您当前的会话已经超时,请重新登录");
+        /*Boolean hasKey = redisTemplate.hasKey(RedisUtil.getAccessToken(accessToken));
+        if(!hasKey) throw new NeedLoginException("您当前的会话已经超时,请重新登录");*/
     }
 
 }

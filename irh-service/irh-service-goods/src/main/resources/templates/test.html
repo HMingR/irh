@@ -103,10 +103,10 @@
     <!-- 商品内容区域 -->
     <div class="main" style="margin: 6px 0px;">
         <div style="overflow:hidden;height: 350px; width: 350px; background-color: #999;">
-            <img src="./images/shoe.jpg" alt="" style="width: 350px;height: 350px;">
+            <img th:src="@{http://39.105.0.169:8080/${mainPicUrl}}" alt="" style="width: 350px;height: 350px;">
         </div>
         <div class="text_description" style="width: 600px;">
-            <p>探巡 鞋子男潮流男鞋手工定制2019冬季新款加绒保暖高帮老爹鞋男时尚百搭韩版运动休闲鞋板鞋 A006-灰黑探巡 </p>
+            <p th:text="${productDesc}"></p>
             <p>服务支持: <a href="#">包邮</i> <a href="#">闪电退款</a> <a href="#">店家实名</a> <a href="#">平台担保</a></p>
             <p>交易方式: <a href="#">支持当面交易</a> <a href="#">支持包邮</a></p>
             <el-button @click="" style="margin-top: 30px;">立即购买 &raquo;</el-button>
@@ -120,21 +120,21 @@
             <el-tab-pane label="商品介绍" name="first">
                 <p>品牌: <span>匡威</span></p>
                 <el-row>
-                    <el-col :span="6">商品名称:<span th:text="${title}"></span></el-col>
+                    <el-col :span="6">商品名称:<span th:text="${productName}"></span></el-col>
                     <el-col :span="6">商品编号:<span th:text="${id}"></span></el-col>
                     <el-col :span="6">商品颜色:<span th:text="${title}"></span></el-col>
-                    <el-col :span="6">商品尺码:<span th:text="${title}"></span></el-col>
+                    <el-col :span="6">计量单位:<span th:text="${unit}"></span></el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">入手日期:<span th:text="${title}"></span></el-col>
-                    <el-col :span="6">新旧程度:<span th:text="${title}"></span></el-col>
+                    <el-col :span="6">新旧程度:<span th:text="${oldDegree}"></span></el-col>
                     <el-col></el-col>
                     <el-col></el-col>
                 </el-row>
                 <el-divider></el-divider>
                 <el-row>
                     <!-- 这个地方放图片文字介绍之类的 -->
-                    <img src="//img10.360buyimg.com/imgzone/jfs/t1/99628/26/7916/676796/5dff8da5Ea4a67663/2e4d65d342440c79.jpg" alt="" style="max-width: 1000px;">
+                    <img src="http://a4.att.hudong.com/21/09/01200000026352136359091694357.jpg" alt="" style="max-width: 1000px;">
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="卖家动态" name="second">
@@ -155,7 +155,7 @@
                 <el-card>
                     <el-row>
                         <el-col :span='1' style="line-height: 60px;">
-                            <img src="//misc.360buyimg.com/user/myjd-2015/css/i/peisong.jpg" alt="" style="width: 60px;">
+                            <img src="http://39.105.0.169:8080/group1/M00/00/00/rBgYGV5A-XyAcJ9UAADOBzjSeLM880.jpg" alt="" style="width: 60px;">
                         </el-col>
                         <el-col :span="2">
                             <span style="font-weight: 600; margin-left: 20px;">渣渣辉</span>
