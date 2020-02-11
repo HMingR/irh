@@ -54,6 +54,9 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("点赞总数")
 	private Long upTotal;
 
+	@ApiModelProperty("留言总数")
+	private Integer reviewTotal;
+
 	//每个文章下的一级留言信息
 	@ApiModelProperty("每个文章下的一级留言信息")
 	private List<ArticleReview> childs;
@@ -61,6 +64,14 @@ public class ArticleInfo extends BaseDomain {
 	// 1-无效  2-有效
 //	private Short state;
 
+
+	public Integer getReviewTotal() {
+		return reviewTotal;
+	}
+
+	public void setReviewTotal(Integer reviewTotal) {
+		this.reviewTotal = reviewTotal;
+	}
 
 	public Long getCollectTotal() {
 		return collectTotal;

@@ -43,9 +43,6 @@ public class GlobalConstant {
     //会员注册时发送的邮箱验证码
     public static final String REDIS_CUSTOMER_EMAIL_REGISTER = "irh:customer:email:register:";
 
-    //日志相关
-    public static String getErrorLog(String operation){
-        return operation + "失败,错误信息为{},实体信息为{}";
-    }
-
+    //forum模块中保存在redis中的文章简略信息的key
+    public static final String IRH_FORUM_ARTICLE = "article::info";
 }

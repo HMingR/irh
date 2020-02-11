@@ -123,5 +123,10 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectCollectByCondition" resultType="articleCollection" parameterType="articleCollection">
+		<![CDATA[SELECT id, article_id AS articleId]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
 	
 </mapper>

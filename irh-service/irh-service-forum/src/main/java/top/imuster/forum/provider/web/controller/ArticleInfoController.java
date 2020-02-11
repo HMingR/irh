@@ -97,7 +97,7 @@ public class ArticleInfoController extends BaseController {
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleInfo>>
      **/
-    @ApiOperation(("用户条件查看自己发布的帖子(列表,没有帖子的内容和图片),按照发布时间降序排列"))
+    @ApiOperation(("用户条件查看自己发布的帖子(列表,没有帖子的内容),按照发布时间降序排列"))
     @PostMapping("/list")
     @NeedLogin
     public Message<Page<ArticleInfo>> list(@RequestBody Page<ArticleInfo> page){
@@ -127,5 +127,19 @@ public class ArticleInfoController extends BaseController {
     public Message<ArticleInfo> getArticleInfoById(@PathVariable("id") Long id){
         ArticleInfo articleDetail = articleInfoService.getArticleDetailById(id);
         return Message.createBySuccess(articleDetail);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得文章的简略信息
+     * @Date: 2020/2/11 16:21
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.forum.api.pojo.ArticleInfo>
+     **/
+    @ApiOperation("根据id获得文章的简略信息(文章标题,图片url,留言总数,点赞总数)")
+    @GetMapping("/brief/{id}}")
+    public Message<ArticleInfo> getTitleAndUrl(@PathVariable("id") Long id){
+        ArticleInfo res = articleInfoService.getBriefById(id);
+        return Message.createBySuccess(res);
     }
 }

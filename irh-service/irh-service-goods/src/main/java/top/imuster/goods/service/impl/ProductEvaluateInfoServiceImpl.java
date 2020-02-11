@@ -31,7 +31,7 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     }
 
     @Override
-    public void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo) throws Exception {
+    public void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo){
         ProductEvaluateInfo evaluateInfo = new ProductEvaluateInfo();
         evaluateInfo.setBuyerId(order.getBuyerId());
         evaluateInfo.setProductId(order.getProductId());

@@ -2,11 +2,13 @@ package top.imuster.forum.provider.service.impl;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.forum.api.pojo.ArticleCollection;
@@ -93,5 +95,22 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
             articleInfo.setUpTotal(articleInfo.getUpTotal()+increTotal);
             articleInfoService.updateByKey(articleInfo);
         });
+    }
+
+    @Override
+    public Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page, Long userId) {
+        ArticleCollection searchCondition = page.getSearchCondition();
+        if(null == searchCondition){
+            searchCondition = new ArticleCollection();
+        }
+        //默认的排序顺序为按照时间降序排列
+        if(StringUtils.isBlank(searchCondition.getOrderField())){
+            searchCondition.setOrderField("create_time");
+            searchCondition.setOrderFieldType("DESC");
+        }
+        searchCondition.setUserId(userId);
+        List<ArticleCollection> res = articleCollectionDao.selectCollectByCondition(searchCondition);
+        page.setResult(res);
+        return Message.createBySuccess(page);
     }
 }

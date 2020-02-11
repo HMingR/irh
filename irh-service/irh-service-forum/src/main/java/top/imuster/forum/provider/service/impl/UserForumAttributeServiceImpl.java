@@ -1,11 +1,14 @@
 package top.imuster.forum.provider.service.impl;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.forum.api.dto.UpCountDto;
 import top.imuster.forum.api.dto.UpDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
@@ -102,6 +105,21 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
         }else {
             return articleReviewService.getUpTotal(id);
         }
+    }
+
+    @Override
+    public Message<Page<UserForumAttribute>> getUpList(Page<UserForumAttribute> page, Long userId) {
+        UserForumAttribute condition = page.getSearchCondition();
+        if(null == condition){
+            condition = new UserForumAttribute();
+        }
+        if(StringUtils.isBlank(condition.getOrderField())){
+            condition.setOrderField("create_time");
+            condition.setOrderFieldType("DESC");
+        }
+        List<UserForumAttribute> res = userForumAttributeDao.selectUpListByCondition(condition);
+        page.setResult(res);
+        return null;
     }
 
 

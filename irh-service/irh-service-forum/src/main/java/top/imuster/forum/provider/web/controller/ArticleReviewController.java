@@ -54,7 +54,7 @@ public class ArticleReviewController extends BaseController {
     @ApiOperation(value = "用户写留言", httpMethod = "POST")
     @NeedLogin
     @PostMapping("/write")
-    public Message writeReview(@Validated(ValidateGroup.addGroup.class) @RequestBody ArticleReview articleReview, BindingResult bindingResult){
+    public Message<String> writeReview(@Validated(ValidateGroup.addGroup.class) @RequestBody ArticleReview articleReview, BindingResult bindingResult){
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         articleReview.setUserId(userId);
@@ -72,7 +72,7 @@ public class ArticleReviewController extends BaseController {
     @ApiOperation(value = "用户根据评论id删除自己的评论", httpMethod = "DELETE")
     @NeedLogin
     @DeleteMapping("/{id}")
-    public Message deleteReview(@PathVariable("id") Long id){
+    public Message<String> deleteReview(@PathVariable("id") Long id){
         ArticleReview condition = new ArticleReview();
         condition.setId(id);
         condition.setState(1);

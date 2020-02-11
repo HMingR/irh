@@ -40,4 +40,13 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @reture: java.lang.Long
      **/
     Long selectUpTotalById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查询帖子的简略信息
+     * @Date: 2020/2/11 16:24
+     * @param id
+     * @reture: top.imuster.forum.api.pojo.ArticleInfo
+     **/
+    ArticleInfo selectBriefById(Long id);
 }

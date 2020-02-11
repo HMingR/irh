@@ -18,6 +18,7 @@
         <module>irh-service-user</module>
         <module>irh-service-messageAndSearch</module>
         <module>irh-service-forum</module>
+        <module>irh-service-life</module>
     </modules>
 
     <dependencies>

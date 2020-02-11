@@ -91,8 +91,4 @@ public interface BaseService<T,KEY extends Serializable> {
      * @return 记录数量;
      */
     Integer selectEntryListCount(T condition);
-
-
-//    List<T> selectEntryList(List<Long> keys);
-
 }

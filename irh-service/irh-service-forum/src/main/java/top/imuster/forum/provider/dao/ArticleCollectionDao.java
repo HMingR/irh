@@ -4,6 +4,8 @@ package top.imuster.forum.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.forum.api.pojo.ArticleCollection;
 
+import java.util.List;
+
 /**
  * ArticleCollectionDao 接口
  * @author 黄明人
@@ -11,5 +13,13 @@ import top.imuster.forum.api.pojo.ArticleCollection;
  */
 public interface ArticleCollectionDao extends BaseDao<ArticleCollection, Long> {
     //自定义扩展
+    /**
+     * @Author hmr
+     * @Description 查看收藏列表
+     * @Date: 2020/2/11 15:39
+     * @param searchCondition
+     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+     **/
+    List<ArticleCollection> selectCollectByCondition(ArticleCollection searchCondition);
 
 }

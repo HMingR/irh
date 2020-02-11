@@ -20,8 +20,8 @@ public class GoodsExceptionHandler extends GlobalExceptionHandler {
 
     @ExceptionHandler(GoodsException.class)
     public Message goodsExceptionHandler(GoodsException exception){
-        log.error("goods模块出现异常", exception.getMessage(), exception);
-        return Message.createByError();
+        log.error("goods模块出现异常{}", exception.getMessage(), exception);
+        return Message.createByError(exception.getMessage());
     }
 
 }

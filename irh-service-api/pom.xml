@@ -19,6 +19,7 @@
         <module>irh-service-messageAndSearch-api</module>
         <module>irh-service-security-api</module>
         <module>irh-service-forum-api</module>
+        <module>irh-service-life-api</module>
     </modules>
 
     <dependencies>

@@ -21,7 +21,7 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
      * @param productEvaluateInfo
      * @reture: void
      **/
-    void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo) throws Exception;
+    void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo);
 
     /**
      * @Author hmr

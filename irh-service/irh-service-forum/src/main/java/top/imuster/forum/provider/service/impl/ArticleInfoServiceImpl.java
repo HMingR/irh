@@ -2,7 +2,9 @@ package top.imuster.forum.provider.service.impl;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -79,5 +81,11 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public Long getUpTotal(Long id) {
         return articleInfoDao.selectUpTotalById(id);
+    }
+
+    @Override
+    @Cacheable(value = GlobalConstant.IRH_FORUM_ARTICLE, key = "#p0")
+    public ArticleInfo getBriefById(Long id) {
+        return articleInfoDao.selectBriefById(id);
     }
 }

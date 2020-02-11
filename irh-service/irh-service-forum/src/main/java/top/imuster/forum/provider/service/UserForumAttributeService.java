@@ -1,7 +1,9 @@
 package top.imuster.forum.provider.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.forum.api.pojo.UserForumAttribute;
 
 /**
@@ -40,4 +42,13 @@ public interface UserForumAttributeService extends BaseService<UserForumAttribut
      **/
     Long getUpTotalByTypeAndId(Long id, Integer type, String upTotalKey);
 
+    /**
+     * @Author hmr
+     * @Description 查看用户在forum模块的点赞记录
+     * @Date: 2020/2/11 15:49
+     * @param page
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.UserForumAttribute>>
+     **/
+    Message<Page<UserForumAttribute>> getUpList(Page<UserForumAttribute> page, Long userId);
 }

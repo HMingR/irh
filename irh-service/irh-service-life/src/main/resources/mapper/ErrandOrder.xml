@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imuster.life.provider.dao.ErrandOrderDao">
+
+	<!-- errand_order 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+            id,
+            order_code AS orderCode,
+            errand_id AS errandId,
+            holder_id AS holderId,
+            publisher_id AS publisherId,
+            pay_money AS payMoney,
+            create_time AS createTime,
+            finish_time AS finishTime,
+            update_time AS updateTime,
+            state 
+		]]>
+	</sql>
+
+	<!-- errand_order 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM errand_order]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+            <if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode}]]></if>
+            <if test="errandId != null and errandId != ''"><![CDATA[AND errand_id = #{errandId}]]></if>
+            <if test="holderId != null and holderId != ''"><![CDATA[AND holder_id = #{holderId}]]></if>
+            <if test="publisherId != null and publisherId != ''"><![CDATA[AND publisher_id = #{publisherId}]]></if>
+            <if test="payMoney != null and payMoney != ''"><![CDATA[AND pay_money = #{payMoney}]]></if>
+            <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="finishTime != null and finishTime != ''"><![CDATA[AND finish_time = #{finishTime}]]></if>
+            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="orderCode != null"><![CDATA[order_code = #{orderCode},]]></if>
+			<if test="errandId != null"><![CDATA[errand_id = #{errandId},]]></if>
+			<if test="holderId != null"><![CDATA[holder_id = #{holderId},]]></if>
+			<if test="publisherId != null"><![CDATA[publisher_id = #{publisherId},]]></if>
+			<if test="payMoney != null"><![CDATA[pay_money = #{payMoney},]]></if>
+			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+			<if test="finishTime != null"><![CDATA[finish_time = #{finishTime},]]></if>
+			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
+		</set>
+	</sql>
+
+	<!-- 插入app记录 -->
+	<insert id="insertEntry" parameterType="errandOrder" >
+		<![CDATA[
+			INSERT INTO errand_order
+				(
+                id, 
+                order_code, 
+                errand_id, 
+                holder_id, 
+                publisher_id, 
+                pay_money, 
+                create_time, 
+                finish_time, 
+                update_time, 
+                state 
+				)
+			VALUES
+				(
+                #{id}, 
+                #{orderCode}, 
+                #{errandId}, 
+                #{holderId}, 
+                #{publisherId}, 
+                #{payMoney}, 
+                #{createTime}, 
+                #{finishTime}, 
+                #{updateTime}, 
+                #{state} 
+				)
+		]]>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM errand_order WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<delete id="deleteByCondtion" parameterType="errandOrder" >
+		<![CDATA[DELETE FROM errand_order]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</delete>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="errandOrder" >
+		<![CDATA[UPDATE errand_order]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="errandOrder">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="errandOrder" resultType="errandOrder">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="errandOrder" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+</mapper>

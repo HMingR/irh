@@ -1,13 +1,12 @@
 package top.imuster.forum.provider.web.controller;
 
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.forum.api.pojo.UserForumAttribute;
 import top.imuster.forum.provider.service.RedisArticleAttitudeService;
 import top.imuster.forum.provider.service.UserForumAttributeService;
 
@@ -39,9 +38,10 @@ public class ArticleAttitudeController extends BaseController {
      **/
     @ApiOperation("点赞操作,id为点赞的对象，type为对象的类型(1-文章  2-评论)")
     @GetMapping("/up/{id}/{type}")
-    public void upByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+    public Message<String> upByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         redisArticleAttitudeService.saveUp2Redis(id, type, getCurrentUserIdFromCookie());
         redisArticleAttitudeService.incrementUpCount(id, type);
+        return Message.createBySuccess();
     }
 
     /**
@@ -49,14 +49,21 @@ public class ArticleAttitudeController extends BaseController {
      * @Description 取消点赞
      * @Date: 2020/2/9 10:47
      * @param id
-     * @param type
+     * @param type
      * @reture: void
      **/
     @ApiOperation("取消点赞")
     @GetMapping("/cancel/{id}/{type}")
-    public void cancelUpByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+    public Message<String> cancelUpByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         redisArticleAttitudeService.saveUp2Redis(id, type, getCurrentUserIdFromCookie());
         redisArticleAttitudeService.decrementUpCount(id, type);
+        return Message.createBySuccess();
+    }
+
+    @ApiOperation("查看自己在文章模块点赞的记录")
+    @PostMapping("/list")
+    public Message<Page<UserForumAttribute>> upList(@RequestBody Page<UserForumAttribute> page){
+        return userForumAttributeService.getUpList(page, getCurrentUserIdFromCookie());
     }
 
     /**

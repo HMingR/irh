@@ -1,9 +1,11 @@
 package top.imuster.forum.provider.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.forum.api.pojo.ArticleCollection;
+import top.imuster.forum.api.pojo.ArticleInfo;
 
 /**
  * ArticleCollectionService接口
@@ -39,4 +41,13 @@ public interface ArticleCollectionService extends BaseService<ArticleCollection,
      * @reture: void
      **/
     void transCollectCountFromRedis2Db();
+
+    /**
+     * @Author hmr
+     * @Description 用户查看自己的收藏列表
+     * @Date: 2020/2/11 15:37
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleInfo>>
+     **/
+    Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page, Long userId);
 }

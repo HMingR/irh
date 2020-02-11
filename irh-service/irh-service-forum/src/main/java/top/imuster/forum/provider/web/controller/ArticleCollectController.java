@@ -2,8 +2,11 @@ package top.imuster.forum.provider.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.forum.api.pojo.ArticleCollection;
+import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.provider.service.ArticleCollectionService;
 
 import javax.annotation.Resource;
@@ -40,5 +43,11 @@ public class ArticleCollectController extends BaseController {
     @DeleteMapping("/{id}")
     public Message<String> unCollect(@PathVariable("id") Long id){
         return articleCollectionService.unCollect(id);
+    }
+
+    @ApiOperation(("用户分页查看自己的收藏列表，不需要条件,按照点赞时间降序排列"))
+    @PostMapping
+    public Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page){
+        return articleCollectionService.collectList(page, getCurrentUserIdFromCookie());
     }
 }

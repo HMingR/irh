@@ -126,7 +126,12 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
-	
+
 	<!-- 其它SQL语句 -->
+	<select id="selectUpListByCondition" resultType="userForumAttribute" parameterType="userForumAttribute">
+		<![CDATA[SELECT id,user_id AS userId, target_id AS targetId, type, create_time AS createTime]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
 	
 </mapper>
