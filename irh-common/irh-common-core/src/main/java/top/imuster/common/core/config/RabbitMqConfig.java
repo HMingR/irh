@@ -62,6 +62,11 @@ public class RabbitMqConfig {
         return new Queue(MqTypeEnum.CENTER.getQueueName(), true);
     }
 
+    @Bean
+    public Queue errandQueue(){
+        return new Queue(MqTypeEnum.ERRAND.getQueueName(), true);
+    }
+
     @Bean(EXCHANGE_TOPICS_INFORM)
     public Exchange exchange(){
         return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(true).build();
@@ -80,6 +85,11 @@ public class RabbitMqConfig {
     @Bean
     public Binding centerQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
         return BindingBuilder.bind(centerQueue()).to(exchange).with(MqTypeEnum.CENTER.getRoutingKeyMatchRule()).noargs();
+    }
+
+    @Bean
+    public Binding errandQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
+        return BindingBuilder.bind(emailQueue()).to(exchange).with(MqTypeEnum.ERRAND.getRoutingKeyMatchRule()).noargs();
     }
 
 }

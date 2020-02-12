@@ -141,4 +141,10 @@
 		AND state != 1
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
 	</select>
+
+	<select id="selectStateById" parameterType="long" resultType="integer">
+		<![CDATA[SELECT state ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id}
+	</select>
 </mapper>

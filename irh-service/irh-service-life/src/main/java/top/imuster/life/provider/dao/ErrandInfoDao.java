@@ -22,4 +22,12 @@ public interface ErrandInfoDao extends BaseDao<ErrandInfo, Long> {
      **/
     List<ErrandInfo> selectList(ErrandInfo searchCondition);
 
+    /**
+     * @Author hmr
+     * @Description 根据id查看state
+     * @Date: 2020/2/12 11:21
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    Integer selectStateById(Long id);
 }

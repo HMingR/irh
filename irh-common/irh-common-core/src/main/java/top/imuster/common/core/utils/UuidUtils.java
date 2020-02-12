@@ -67,4 +67,9 @@ public class UuidUtils {
     protected static long timeGen() {
         return System.currentTimeMillis();
     }
+
+    public static void main(String[] args) {
+        long l = nextId();
+        System.out.println(l);
+    }
 }

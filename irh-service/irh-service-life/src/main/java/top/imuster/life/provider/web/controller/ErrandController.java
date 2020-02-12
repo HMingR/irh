@@ -50,17 +50,11 @@ public class ErrandController extends BaseController {
         return Message.createBySuccess();
     }
 
-    @ApiOperation("查看发布的跑腿服务")
+    @ApiOperation("查看自己发布的跑腿服务")
     @PostMapping("/list")
     @NeedLogin
     public Message<Page<ErrandInfo>> list(@RequestBody Page<ErrandInfo> page){
         Long userId = getCurrentUserIdFromCookie();
         return errandInfoService.getListByCondition(page, userId);
-    }
-
-    public static void main(String[] args) {
-        Long i = 1L;
-        System.out.println(i+1);
-
     }
 }

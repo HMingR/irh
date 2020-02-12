@@ -62,4 +62,15 @@ public class RedisUtil {
     public static String getUpTotalKey(Long targetId, Integer type){
         return new StringBuffer().append(targetId).append("::").append(type).toString();
     }
+
+    /**
+     * @Author hmr
+     * @Description 根据errandInfo的主键id生成rediskey
+     * @Date: 2020/2/12 11:35
+     * @param targetId
+     * @reture: java.lang.String
+     **/
+    public static String getErrandKey(Long targetId){
+        return new StringBuffer().append(GlobalConstant.IRH_LIFE_ERRAND_KEY).append(targetId).toString();
+    }
 }

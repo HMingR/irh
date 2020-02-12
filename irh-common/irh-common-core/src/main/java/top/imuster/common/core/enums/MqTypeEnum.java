@@ -10,20 +10,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  */
 public enum MqTypeEnum {
 
-    EMAIL("email", "info.1.email.1", "queue_inform_email", "info.#.email.#"),
-    DETAIL("detail", "info.2.detail.2", "queue_inform_detail","info.#.detail.#"),
-    CENTER("center", "info.3.center.3", "queue_inform_center", "info.#.center.#");
+    EMAIL("email", "info.1.email.1", "queue_inform_email", "info.#.email.#", "发送邮箱"),
+    DETAIL("detail", "info.2.detail.2", "queue_inform_detail","info.#.detail.#", "生成详情页"),
+    CENTER("center", "info.3.center.3", "queue_inform_center", "info.#.center.#", "消息中心"),
+    ERRAND("errand", "info.4.errand.4", "queue_info_errand", "info.#.errand.#", "life模块控制跑腿并发");
 
     String type;
     String routingKey;
     String queueName;
     String routingKeyMatchRule;
+    String desc;
 
-    MqTypeEnum(String type, String routingKey, String queueName, String routingKeyMatchRule) {
+    MqTypeEnum(String type, String routingKey, String queueName, String routingKeyMatchRule, String desc) {
         this.type = type;
         this.routingKey = routingKey;
         this.queueName = queueName;
         this.routingKeyMatchRule = routingKeyMatchRule;
+        this.desc = desc;
     }
 
     public String getRoutingKeyMatchRule() {

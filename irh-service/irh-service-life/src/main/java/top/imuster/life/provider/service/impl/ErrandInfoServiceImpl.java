@@ -44,4 +44,10 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         page.setResult(errandInfos);
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public boolean isAvailable(Long id) {
+        Integer state = errandInfoDao.selectStateById(id);
+        return state == 4;
+    }
 }

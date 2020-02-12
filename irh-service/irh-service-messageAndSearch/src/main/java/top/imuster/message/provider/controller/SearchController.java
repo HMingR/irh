@@ -1,5 +1,6 @@
 package top.imuster.message.provider.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +32,13 @@ public class SearchController {
     ForumSearchService forumSearchService;
 
 
+    @ApiOperation("使用ElasticSearch搜索商品,page为当前页码,size为页面大小")
     @GetMapping(value="/goods/list/{page}/{size}")
-    public Message<Page<ProductInfo>> list(@PathVariable("page") int page, @PathVariable("type")Integer type, @PathVariable("size") int size, GoodsSearchParam courseSearchParam) {
+    public Message<Page<ProductInfo>> list(@PathVariable("page") int page, @PathVariable("size") int size, GoodsSearchParam courseSearchParam) {
         return goodsSearchService.goodsList(page,size,courseSearchParam);
     }
 
+    @ApiOperation("使用ElasticSearch搜索文章")
     @GetMapping(value="/forum/list/{page}/{size}")
     public Message<Page<ArticleInfo>> forumList(@PathVariable("page") int page, @PathVariable("size") int size, ForumSearchParam forumSearchParam) {
         return forumSearchService.forumList(page,size,forumSearchParam);

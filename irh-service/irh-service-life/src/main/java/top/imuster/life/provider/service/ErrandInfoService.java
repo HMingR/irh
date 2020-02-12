@@ -22,4 +22,13 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: java.util.List<top.imuster.life.api.pojo.ErrandInfo>
      **/
     Message<Page<ErrandInfo>> getListByCondition(Page<ErrandInfo> page, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看当前跑腿是否还能接单
+     * @Date: 2020/2/12 11:19
+     * @param id
+     * @reture: boolean
+     **/
+    boolean isAvailable(Long id);
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements ErrandInfoDao {
 	private final static String NAMESPACE = "top.imuster.life.provider.dao.ErrandInfoDao.";
 	private final static String SELECT_LIST = "selectList";
+	private final static String SELECT_STATE_BY_ID = "selectStateById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -25,5 +26,10 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 	@Override
 	public List<ErrandInfo> selectList(ErrandInfo searchCondition) {
 		return this.selectList(getNameSpace(SELECT_LIST), searchCondition);
+	}
+
+	@Override
+	public Integer selectStateById(Long id) {
+		return null;
 	}
 }

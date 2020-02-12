@@ -45,4 +45,8 @@ public class GlobalConstant {
 
     //forum模块中保存在redis中的文章简略信息的key
     public static final String IRH_FORUM_ARTICLE = "article::info";
+
+    //life模块中跑腿服务接单成功之后将跑腿信息表的id存放在redis中
+    public static final String IRH_LIFE_ERRAND_MAP = "IRH_LIFE_ERRAND_MAP";
+    public static final String IRH_LIFE_ERRAND_KEY = "irh:life:errand:key:";
 }

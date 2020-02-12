@@ -35,6 +35,7 @@
             <if test="finishTime != null and finishTime != ''"><![CDATA[AND finish_time = #{finishTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="state == null or state == ''"><![CDATA[AND state != 2]]></if>
 		</where>
 	</sql>
 	
@@ -143,5 +144,11 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectOrderStateByCode" resultType="integer" parameterType="string">
+		<![CDATA[SELECT state]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE order_code = #{code}
+	</select>
 	
 </mapper>

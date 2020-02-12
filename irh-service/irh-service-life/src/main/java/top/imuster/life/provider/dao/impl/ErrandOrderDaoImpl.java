@@ -14,9 +14,15 @@ import top.imuster.life.provider.dao.ErrandOrderDao;
 @Repository("errandOrderDao")
 public class ErrandOrderDaoImpl extends BaseDaoImpl<ErrandOrder, Long> implements ErrandOrderDao {
 	private final static String NAMESPACE = "top.imuster.life.provider.dao.ErrandOrderDao.";
+	private final static String SELECT_ORDER_STATE_BY_CODE = "selectOrderStateByCode";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public Integer selectOrderStateByCode(String code) {
+		return this.select(getNameSpace(SELECT_ORDER_STATE_BY_CODE), code);
 	}
 }

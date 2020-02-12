@@ -39,7 +39,7 @@ public class ErrandOrder extends BaseDomain {
 	// 订单完成时间, max length: 20
 	private String finishTime;
 
-	// 1-取消订单  2-删除 3-未完成 4-已完成
+	// 1-取消订单  2-删除 3-未完成 4-已完成 5-下单失败
 //	private Short state;
 
 	public Long getId() {

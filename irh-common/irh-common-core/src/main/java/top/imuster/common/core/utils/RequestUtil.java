@@ -7,15 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.base.utils.CookieUtil;
-import top.imuster.common.core.dto.UserDto;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
 
 /**
  * @ClassName: RequestUtil

@@ -11,5 +11,13 @@ import top.imuster.life.api.pojo.ErrandOrder;
  */
 public interface ErrandOrderDao extends BaseDao<ErrandOrder, Long> {
     //自定义扩展
+    /**
+     * @Author hmr
+     * @Description 根据订单code查看订单状态
+     * @Date: 2020/2/12 11:51
+     * @param code
+     * @reture: java.lang.Integer
+     **/
+    Integer selectOrderStateByCode(String code);
 
 }
