@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.forum.provider.dao.ArticleInfoDao">
+<mapper namespace="top.imuster.life.provider.dao.ArticleInfoDao">
 
 	<!-- article_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
