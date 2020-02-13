@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleTag;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.service.ForumServiceFeignApi;
 
@@ -57,8 +57,8 @@ public class AdminForumController {
      **/
     @ApiOperation(value = "分页条件查询分类", httpMethod = "POST")
     @PostMapping("/category/list")
-    public Message<Page<ArticleCategory>> categoryList(@RequestBody Page<ArticleCategory> page){
-        Page<ArticleCategory> articleCategoryPage = forumServiceFeignApi.adminCategoryList(page);
+    public Message<Page<ArticleTag>> categoryList(@RequestBody Page<ArticleTag> page){
+        Page<ArticleTag> articleCategoryPage = forumServiceFeignApi.adminCategoryList(page);
         return Message.createBySuccess(articleCategoryPage);
     }
 
@@ -88,8 +88,8 @@ public class AdminForumController {
      **/
     @ApiOperation("根据id获得帖子分类信息")
     @GetMapping("/category/{id}")
-    public Message<ArticleCategory> getCategory(@PathVariable("id") Long id){
-        ArticleCategory category = forumServiceFeignApi.getCategoryInfoById(id);
+    public Message<ArticleTag> getCategory(@PathVariable("id") Long id){
+        ArticleTag category = forumServiceFeignApi.getCategoryInfoById(id);
         return Message.createBySuccess(category);
     }
 
@@ -97,13 +97,13 @@ public class AdminForumController {
      * @Author hmr
      * @Description 修改帖子分类信息
      * @Date: 2020/2/1 14:43
-     * @param articleCategory
+     * @param articleTag
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("修改帖子分类信息")
     @PutMapping("/category")
-    public Message<String> editCategory(@RequestBody ArticleCategory articleCategory){
-        boolean b = forumServiceFeignApi.editArticleCategory(articleCategory);
+    public Message<String> editCategory(@RequestBody ArticleTag articleTag){
+        boolean b = forumServiceFeignApi.editArticleCategory(articleTag);
         if(b){
             return Message.createBySuccess();
         }
@@ -119,7 +119,7 @@ public class AdminForumController {
      **/
     @ApiOperation("添加帖子分类")
     @PostMapping("/category")
-    public Message<String> addCategory(@RequestBody ArticleCategory category){
+    public Message<String> addCategory(@RequestBody ArticleTag category){
         boolean b = forumServiceFeignApi.addArticleCategory(category);
         if(b){
             return Message.createBySuccess();

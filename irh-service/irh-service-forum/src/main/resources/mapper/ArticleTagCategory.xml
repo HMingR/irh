@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.life.provider.dao.ArticleCategoryDao">
+<mapper namespace="top.imuster.user.api.pojo.dao.ArticleTagCategoryDao">
 
-	<!-- article_category 所有查询列 -->
+	<!-- article_tag_category 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
             name,
-            parent_id AS parentId,
             state,
             create_time AS createTime,
             update_time AS updateTime 
 		]]>
 	</sql>
 
-	<!-- article_category 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_category]]></sql>
+	<!-- article_tag_category 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_tag_category]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="name != null and name != ''"><![CDATA[AND name = #{name}]]></if>
-            <if test="parentId != null and parentId != ''"><![CDATA[AND parent_id = #{parentId}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
@@ -40,7 +38,6 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="name != null"><![CDATA[name = #{name},]]></if>
-			<if test="parentId != null"><![CDATA[parent_id = #{parentId},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
@@ -48,13 +45,12 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleCategory" >
+	<insert id="insertEntry" parameterType="articleTagCategory" >
 		<![CDATA[
-			INSERT INTO article_category
+			INSERT INTO article_tag_category
 				(
                 id, 
                 name, 
-                parent_id, 
                 state, 
                 create_time, 
                 update_time 
@@ -63,7 +59,6 @@
 				(
                 #{id}, 
                 #{name}, 
-                #{parentId}, 
                 #{state}, 
                 #{createTime}, 
                 #{updateTime} 
@@ -76,27 +71,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM article_category WHERE id IN]]>
+		<![CDATA[DELETE FROM article_tag_category WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="articleCategory" >
-		<![CDATA[DELETE FROM article_category]]>
+	<delete id="deleteByCondtion" parameterType="articleTagCategory" >
+		<![CDATA[DELETE FROM article_tag_category]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleCategory" >
-		<![CDATA[UPDATE article_category]]>
+	<update id="updateByKey" parameterType="articleTagCategory" >
+		<![CDATA[UPDATE article_tag_category]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleCategory">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleTagCategory">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -107,7 +102,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleCategory" resultType="articleCategory">
+	<select id="selectEntryList" parameterType="articleTagCategory" resultType="articleTagCategory">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -116,7 +111,7 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleCategory" resultType="int">
+	<select id="selectEntryListCount" parameterType="articleTagCategory" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>

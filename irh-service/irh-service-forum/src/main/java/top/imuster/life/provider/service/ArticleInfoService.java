@@ -78,4 +78,11 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: top.imuster.forum.api.pojo.ArticleInfo
      **/
     ArticleInfo getBriefById(Long id);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    List<ArticleInfo> hotTopicListByCategory(Long id);
 }

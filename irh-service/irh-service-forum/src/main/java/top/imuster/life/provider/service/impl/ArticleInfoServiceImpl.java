@@ -88,4 +88,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     public ArticleInfo getBriefById(Long id) {
         return articleInfoDao.selectBriefById(id);
     }
+
+    @Override
+    public List<ArticleInfo> hotTopicListByCategory(Long id) {
+        return null;
+    }
 }

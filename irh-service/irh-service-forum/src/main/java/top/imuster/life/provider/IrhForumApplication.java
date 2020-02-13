@@ -16,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"top.imuster.file"})
 @ComponentScan(basePackages = {"top.imuster.common.core",
-                               "top.imuster.forum"})
+                               "top.imuster.life"})
 public class IrhForumApplication {
     public static void main(String[] args) {
         SpringApplication.run(IrhForumApplication.class, args);

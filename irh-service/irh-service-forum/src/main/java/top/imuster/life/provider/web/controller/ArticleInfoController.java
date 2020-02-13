@@ -142,4 +142,11 @@ public class ArticleInfoController extends BaseController {
         ArticleInfo res = articleInfoService.getBriefById(id);
         return Message.createBySuccess(res);
     }
+
+    @ApiOperation("根据文章分类id获得点赞和浏览量最大的5个帖子id")
+    @GetMapping("/hot/{id}")
+    public Message<List<ArticleInfo>> hotTopicList(@PathVariable("id") Long id){
+        List<ArticleInfo> list = articleInfoService.hotTopicListByCategory(id);
+        return null;
+    }
 }

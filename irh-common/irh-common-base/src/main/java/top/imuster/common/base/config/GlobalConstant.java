@@ -49,4 +49,9 @@ public class GlobalConstant {
     //life模块中跑腿服务接单成功之后将跑腿信息表的id存放在redis中
     public static final String IRH_LIFE_ERRAND_MAP = "IRH_LIFE_ERRAND_MAP";
     public static final String IRH_LIFE_ERRAND_KEY = "irh:life:errand:key:";
+
+    //热搜
+    public static final String IRH_FORUM_HOT_TOPIC = "irh::forum::hot::topic";
+    public static final String IRH_DEMAND_HOT_TOPIC = "irh::demand::hot::topic";
+    public static final String IRH_ES_HOT_TOPIC = "irh::es::hot::topic";
 }

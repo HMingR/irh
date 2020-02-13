@@ -1,9 +1,7 @@
 package top.imuster.common.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.exception.GlobalException;
 
@@ -72,5 +70,17 @@ public class RedisUtil {
      **/
     public static String getErrandKey(Long targetId){
         return new StringBuffer().append(GlobalConstant.IRH_LIFE_ERRAND_KEY).append(targetId).toString();
+    }
+
+    /**
+     * 根据BrowserType获得redis中保存在Zset中的key
+     * @param browserType
+     * @return
+     */
+    public static String getHotTopicKey(BrowserType browserType){
+        if(browserType.getType() == 1) return GlobalConstant.IRH_ES_HOT_TOPIC;
+        if(browserType.getType() == 2) return GlobalConstant.IRH_DEMAND_HOT_TOPIC;
+        if(browserType.getType() == 3) return GlobalConstant.IRH_FORUM_HOT_TOPIC;
+        throw new GlobalException("传入的BrowserType有误");
     }
 }

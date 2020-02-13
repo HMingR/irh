@@ -1,17 +1,18 @@
 package top.imuster.life.provider.component;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.life.api.pojo.ErrandInfo;
-import top.imuster.life.api.pojo.ErrandOrder;
-import top.imuster.forum.provider.service.ErrandInfoService;
-import top.imuster.forum.provider.service.ErrandOrderService;
+import top.imuster.forum.api.pojo.ErrandInfo;
+import top.imuster.forum.api.pojo.ErrandOrder;
+import top.imuster.life.provider.service.ErrandInfoService;
+import top.imuster.life.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;

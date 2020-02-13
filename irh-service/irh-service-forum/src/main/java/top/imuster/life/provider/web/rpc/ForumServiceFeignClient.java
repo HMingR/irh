@@ -2,11 +2,11 @@ package top.imuster.life.provider.web.rpc;
 
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
-import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleTag;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ArticleReview;
 import top.imuster.forum.api.service.ForumServiceFeignApi;
-import top.imuster.life.provider.service.ArticleCategoryService;
+import top.imuster.life.provider.service.ArticleTagService;
 import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ArticleReviewService;
 
@@ -27,7 +27,7 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
     ArticleInfoService articleInfoService;
 
     @Resource
-    ArticleCategoryService articleCategoryService;
+    ArticleTagService articleTagService;
 
     @Resource
     ArticleReviewService articleReviewService;
@@ -44,36 +44,36 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
     @Override
     @DeleteMapping("/category/{id}")
     public boolean adminDeleteArticleCategory(@PathVariable("id") Long id) {
-        ArticleCategory condition = new ArticleCategory();
+        ArticleTag condition = new ArticleTag();
         condition.setId(id);
         condition.setState(1);
-        int i = articleCategoryService.updateByKey(condition);
+        int i = articleTagService.updateByKey(condition);
         return i == 1;
     }
 
     @Override
     @PostMapping("/category/list")
-    public Page<ArticleCategory> adminCategoryList(Page<ArticleCategory> page) {
-        return articleCategoryService.selectPage(page.getSearchCondition(), page);
+    public Page<ArticleTag> adminCategoryList(Page<ArticleTag> page) {
+        return articleTagService.selectPage(page.getSearchCondition(), page);
     }
 
     @Override
     @GetMapping("/category/{id}")
-    public ArticleCategory getCategoryInfoById(@PathVariable("id") Long id) {
-        return articleCategoryService.selectEntryList(id).get(0);
+    public ArticleTag getCategoryInfoById(@PathVariable("id") Long id) {
+        return articleTagService.selectEntryList(id).get(0);
     }
 
     @Override
     @PostMapping("/category")
-    public boolean addArticleCategory(@RequestBody ArticleCategory category) {
-        int i = articleCategoryService.insertEntry(category);
+    public boolean addArticleCategory(@RequestBody ArticleTag category) {
+        int i = articleTagService.insertEntry(category);
         return i == 1;
     }
 
     @Override
     @PutMapping("/category")
-    public boolean editArticleCategory(@RequestBody ArticleCategory category) {
-        int i = articleCategoryService.updateByKey(category);
+    public boolean editArticleCategory(@RequestBody ArticleTag category) {
+        int i = articleTagService.updateByKey(category);
         return i == 1;
     }
 

@@ -4,7 +4,7 @@ package top.imuster.forum.api.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
-import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleTag;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.service.hystrix.ForumServiceFeignHystrix;
 
@@ -38,7 +38,7 @@ public interface ForumServiceFeignApi {
     boolean adminDeleteArticleCategory(@PathVariable("id") Long id);
 
     @PostMapping("/category/list")
-    Page<ArticleCategory> adminCategoryList(@RequestBody Page<ArticleCategory> page);
+    Page<ArticleTag> adminCategoryList(@RequestBody Page<ArticleTag> page);
 
     /**
      * @Author hmr
@@ -48,7 +48,7 @@ public interface ForumServiceFeignApi {
      * @reture: top.imuster.forum.api.pojo.ArticleCategory
      **/
     @GetMapping("/category/{id}")
-    ArticleCategory getCategoryInfoById(@PathVariable("id") Long id);
+    ArticleTag getCategoryInfoById(@PathVariable("id") Long id);
 
     /**
      * @Author hmr
@@ -58,7 +58,7 @@ public interface ForumServiceFeignApi {
      * @reture: boolean
      **/
     @PutMapping("/category")
-    boolean addArticleCategory(@RequestBody ArticleCategory category);
+    boolean addArticleCategory(@RequestBody ArticleTag category);
 
     /**
      * @Author hmr
@@ -68,7 +68,7 @@ public interface ForumServiceFeignApi {
      * @reture: boolean
      **/
     @PutMapping("/category")
-    boolean editArticleCategory(@RequestBody ArticleCategory category);
+    boolean editArticleCategory(@RequestBody ArticleTag category);
 
     /**
      * @Author hmr

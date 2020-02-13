@@ -2,7 +2,7 @@ package top.imuster.life.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.forum.api.pojo.ArticleCategory;
+import top.imuster.forum.api.pojo.ArticleTag;
 
 import java.util.List;
 
@@ -11,15 +11,14 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
-public interface ArticleCategoryService extends BaseService<ArticleCategory, Long> {
+public interface ArticleTagService extends BaseService<ArticleTag, Long> {
 
     /**
      * @Author hmr
-     * @Description 获得分类树
+     * @Description 根据分类id获得标签
      * @Date: 2020/2/3 11:14
      * @param
      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleCategory>
      **/
-    List<ArticleCategory> getCategoryTree();
-
+    List<ArticleTag> getTagByCategoryId(Long id);
 }

@@ -1,13 +1,11 @@
 package top.imuster.user.api.pojo;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.user.api.enums.FeedbackEnum;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -51,6 +49,10 @@ public class ReportFeedbackInfo extends BaseDomain {
 	@ApiModelProperty("反馈备注")
 	private String remark;
 
+	//举报理由
+	@ApiModelProperty("举报理由")
+	private String reason;
+
 	//总数，用来统计
 	private Integer total;
 
@@ -70,6 +72,13 @@ public class ReportFeedbackInfo extends BaseDomain {
 				'}';
 	}
 
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	public Integer getType() {
 		return type;

@@ -9,7 +9,7 @@ package top.imuster.common.core.enums;
 public enum BrowserType {
     ES_SELL_PRODUCT(1, "es:product:browser:times:"),
     ES_DEMAND_PRODUCT(2, "demand:product:browser:times:"),
-    FORUM(3, "论坛帖子");
+    FORUM(3, "forum:article:browser:times");
     public Integer type;
     private String redisKeyHeader;
 

@@ -10,6 +10,7 @@
             type,
             target_id AS targetId,
             customer_id AS customerId,
+            reason,
             result,
             remark,
             create_time AS createTime,
@@ -33,6 +34,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="reason != null and reason != ''"><![CDATA[AND reason = #{reason}]]></if>
 		</where>
 	</sql>
 	
@@ -53,6 +55,7 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="reason != null"><![CDATA[reason = #{reason},]]></if>
 		</set>
 	</sql>
 
@@ -66,6 +69,7 @@
                 target_id, 
                 customer_id,
                 result,
+                reason,
                 remark,
                 create_time,
                 update_time, 
@@ -78,6 +82,7 @@
                 #{targetId}, 
                 #{customerId}, 
                 #{result},
+                #{reason}
                 #{remark},
                 #{createTime},
                 #{updateTime}, 
