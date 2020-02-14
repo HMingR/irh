@@ -4,6 +4,7 @@ package top.imuster.life.provider.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.forum.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
 	private final static String SELECT_UP_TOTAL_BY_ID = "selectUpTotalById";
 	private final static String SELECT_BRIEF_BY_ID = "selectBriefById";
+	private final static String SELECT_INFO_BY_TARGET_IDS = "selectInfoByTargetIds";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -43,5 +45,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public ArticleInfo selectBriefById(Long id) {
 		return this.select(getNameSpace(SELECT_BRIEF_BY_ID), id);
+	}
+
+	@Override
+	public List<ArticleInfo> selectInfoByTargetIds(Long[] longs) {
+		return this.selectList(getNameSpace(SELECT_INFO_BY_TARGET_IDS), longs);
 	}
 }

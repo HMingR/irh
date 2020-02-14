@@ -51,7 +51,13 @@ public class GlobalConstant {
     public static final String IRH_LIFE_ERRAND_KEY = "irh:life:errand:key:";
 
     //热搜
-    public static final String IRH_FORUM_HOT_TOPIC = "irh::forum::hot::topic";
-    public static final String IRH_DEMAND_HOT_TOPIC = "irh::demand::hot::topic";
-    public static final String IRH_ES_HOT_TOPIC = "irh::es::hot::topic";
+    public static final String IRH_FORUM_HOT_TOPIC_ZSET_KEY = "irh::forum::hot::topic";
+    public static final String IRH_DEMAND_HOT_TOPIC_ZSET_KEY = "irh::demand::hot::topic";
+    public static final String IRH_ES_HOT_TOPIC_ZSET_KEY = "irh::es::hot::topic";
+
+
+    //redis中的一般缓存
+    public static final String IRH_COMMON_CACHE_KEY = "irh::common::cache::key";     //一般内容的缓存
+    public static final String IRH_HOT_TOPIC_CACHE_KEY = "irh::hot::topic::cache::key";   //forum模块热搜的缓存
+
 }

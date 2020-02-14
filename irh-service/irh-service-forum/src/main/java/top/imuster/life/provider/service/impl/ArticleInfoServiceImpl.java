@@ -11,6 +11,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ArticleReview;
+import top.imuster.forum.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 import top.imuster.life.provider.exception.ForumException;
 import top.imuster.life.provider.service.ArticleInfoService;
@@ -84,7 +85,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_FORUM_ARTICLE, key = "#p0")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#p0")
     public ArticleInfo getBriefById(Long id) {
         return articleInfoDao.selectBriefById(id);
     }
@@ -92,5 +93,16 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public List<ArticleInfo> hotTopicListByCategory(Long id) {
         return null;
+    }
+
+    @Override
+    public List<ArticleInfo> selectInfoByTargetIds(Long[] longs) {
+        return articleInfoDao.selectInfoByTargetIds(longs);
+    }
+
+    @Override
+    @Cacheable(value = GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY, key = "#p0")
+    public ArticleInfo getBriefByHotTopicId(Long aLong) {
+        return this.getBriefById(aLong);
     }
 }

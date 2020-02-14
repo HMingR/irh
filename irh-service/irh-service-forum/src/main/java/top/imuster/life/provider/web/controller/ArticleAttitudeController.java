@@ -4,7 +4,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.HotTopicAnnotation;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.forum.api.pojo.UserForumAttribute;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
@@ -30,17 +32,32 @@ public class ArticleAttitudeController extends BaseController {
 
     /**
      * @Author hmr
-     * @Description 点赞操作,id为点赞的对象，type为对象的类型(1-文章  2-评论)
-     * @Date: 2020/2/9 10:46
+     * @Description 给文章点赞
+     * @Date: 2020/2/14 10:06
      * @param id
-     * @param type
-     * @reture: void
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @ApiOperation("点赞操作,id为点赞的对象，type为对象的类型(1-文章  2-评论)")
-    @GetMapping("/up/{id}/{type}")
-    public Message<String> upByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
-        redisArticleAttitudeService.saveUp2Redis(id, type, getCurrentUserIdFromCookie());
-        redisArticleAttitudeService.incrementUpCount(id, type);
+    @ApiOperation("给文章点赞")
+    @HotTopicAnnotation(browserType = BrowserType.FORUM)
+    @GetMapping("/up/1/{id}")
+    public Message<String> upArticleById(@PathVariable("id") Long id){
+        redisArticleAttitudeService.saveUp2Redis(id, 1, getCurrentUserIdFromCookie());
+        redisArticleAttitudeService.incrementUpCount(id, 1);
+        return Message.createBySuccess();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 给文章的评论点赞
+     * @Date: 2020/2/14 10:06
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @ApiOperation("给文章的评论点赞")
+    @GetMapping("/up/2/{id}")
+    public Message<String> upReviewById(@PathVariable("id") Long id){
+        redisArticleAttitudeService.saveUp2Redis(id, 2, getCurrentUserIdFromCookie());
+        redisArticleAttitudeService.incrementUpCount(id, 2);
         return Message.createBySuccess();
     }
 

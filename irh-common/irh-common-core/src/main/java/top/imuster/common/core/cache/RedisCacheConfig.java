@@ -8,8 +8,16 @@ import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import top.imuster.common.base.config.GlobalConstant;
+
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @ClassName: RedisCacheConfig
@@ -34,10 +42,26 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
         return new IgnoreExceptionCacheErrorHandler();
     }
 
-    //缓存管理器
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
-        RedisCacheManager cacheManager = RedisCacheManager.builder(factory).build();
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();  // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
+        config = config.entryTtl(Duration.ofMinutes(1))     // 设置缓存的默认过期时间，也是使用Duration设置
+                .disableCachingNullValues();     // 不缓存空值
+
+        // 设置一个初始化的缓存空间set集合
+        Set<String> cacheNames =  new HashSet<>();
+        cacheNames.add(GlobalConstant.IRH_COMMON_CACHE_KEY);
+        cacheNames.add(GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY);
+
+        // 对每个缓存空间应用不同的配置
+        Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
+        configMap.put(GlobalConstant.IRH_COMMON_CACHE_KEY, config);
+        configMap.put(GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY, config.entryTtl(Duration.ofMinutes(30L)));
+
+        RedisCacheManager cacheManager = RedisCacheManager.builder(factory)     // 使用自定义的缓存配置初始化一个cacheManager
+                .initialCacheNames(cacheNames)  // 注意这两句的调用顺序，一定要先调用该方法设置初始化的缓存名，再初始化相关的配置
+                .withInitialCacheConfigurations(configMap)
+                .build();
         return cacheManager;
     }
 

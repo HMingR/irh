@@ -2,7 +2,10 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ForumHotTopic;
+
+import java.util.List;
 
 /**
  * ForumHotTopicDao 接口
@@ -11,5 +14,31 @@ import top.imuster.forum.api.pojo.ForumHotTopic;
  */
 public interface ForumHotTopicDao extends BaseDao<ForumHotTopic, Long> {
     //自定义扩展
+    /**
+     * @Author hmr
+     * @Description 根据targetId从数据库中查找score
+     * @Date: 2020/2/14 11:17
+     * @param i
+     * @reture: java.lang.Integer
+     **/
+    Long selectScoreByTargetId(Long i);
 
+    /**
+     * @Author hmr
+     * @Description 根据目标id更新其score值
+     * @Date: 2020/2/14 11:59
+     * @param targetId
+     * @param score
+     * @reture: void
+     **/
+    void updateScoreByTargetId(ForumHotTopic condition);
+
+    /**
+     * @Author hmr
+     * @Description 获得score前topic的targetId和score
+     * @Date: 2020/2/14 12:40
+     * @param topic
+     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+     **/
+    List<ForumHotTopic> selectMaxScoreTop(int topic);
 }

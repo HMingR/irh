@@ -3,6 +3,7 @@ package top.imuster.life.provider.service;
 import top.imuster.forum.api.dto.UpCountDto;
 import top.imuster.forum.api.dto.UpDto;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,16 @@ public interface RedisArticleAttitudeService {
 
     /**
      * @Author hmr
+     * @Description 从redis中获得前topic的热搜
+     * @Date: 2020/2/14 11:06
+     * @param topic
+     * @reture: java.util.Set<java.lang.Long>
+     *
+     * @return*/
+    List<HashSet<Long>> getHotTopicFromRedis(Long topic);
+
+    /**
+     * @Author hmr
      * @Description 从reids中获得收藏信息总数
      * @Date: 2020/2/9 11:22
      * @param
@@ -84,4 +95,5 @@ public interface RedisArticleAttitudeService {
      *
      * @return*/
     List<Map.Entry<Long, Long>> getAllCollectCountFromRedis();
+
 }

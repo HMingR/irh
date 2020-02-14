@@ -5,6 +5,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.forum.api.pojo.ForumHotTopic;
 
 import java.util.List;
 
@@ -85,4 +86,22 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @return
      */
     List<ArticleInfo> hotTopicListByCategory(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据id所有信息
+     * @Date: 2020/2/14 12:33
+     * @param longs
+     * @reture: java.util.List<top.imuster.forum.api.pojo.ForumHotTopic>
+     **/
+    List<ArticleInfo> selectInfoByTargetIds(Long[] longs);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看简略信息    提供给热搜榜的
+     * @Date: 2020/2/14 15:16
+     * @param aLong
+     * @reture: top.imuster.forum.api.pojo.ArticleInfo
+     **/
+    ArticleInfo getBriefByHotTopicId(Long aLong);
 }

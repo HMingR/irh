@@ -24,6 +24,15 @@ public interface UserForumAttributeService extends BaseService<UserForumAttribut
 
     /**
      * @Author hmr
+     * @Description 将redis中的热搜储存到mysql中
+     * @Date: 2020/2/14 10:18
+     * @param
+     * @reture: void
+     **/
+    void transHotTopicFromRedis2DB(Long topic);
+
+    /**
+     * @Author hmr
      * @Description 将点赞的总数更新
      * @Date: 2020/2/8 19:36
      * @param

@@ -123,5 +123,22 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	
+	<select id="selectScoreByTargetId" parameterType="long" resultType="long">
+		<![CDATA[SELECT score ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE target_id = #{i} ]]>
+	</select>
+
+	<update id="updateScoreByTargetId" parameterType="forumHotTopic">
+		<![CDATA[UPDATE forum_hot_topic
+			SET score = #{score}
+			WHERE target_id = #{targetId}
+		]]>
+	</update>
+
+	<select id="selectMaxScoreTop" parameterType="int" resultType="forumHotTopic">
+		<![CDATA[SELECT target_id AS targetId, score ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE state != 1 ORDER BY score DESC LIMIT 0, #{topic}]]>
+	</select>
 </mapper>

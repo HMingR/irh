@@ -73,8 +73,8 @@
 		<![CDATA[
 			INSERT INTO article_info
 				(
-                id, 
-                title, 
+                id,
+                title,
                 article_category, 
                 main_picture, 
                 content, 
@@ -185,6 +185,15 @@
 		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
+	</select>
+
+	<select id="selectInfoByTargetIds" parameterType="java.lang.reflect.Array" resultType="articleInfo">
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, up_total AS upTotal]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE state != 1 AND  target_id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
 	</select>
 	
 </mapper>

@@ -78,9 +78,9 @@ public class RedisUtil {
      * @return
      */
     public static String getHotTopicKey(BrowserType browserType){
-        if(browserType.getType() == 1) return GlobalConstant.IRH_ES_HOT_TOPIC;
-        if(browserType.getType() == 2) return GlobalConstant.IRH_DEMAND_HOT_TOPIC;
-        if(browserType.getType() == 3) return GlobalConstant.IRH_FORUM_HOT_TOPIC;
+        if(browserType.getType() == 1) return GlobalConstant.IRH_ES_HOT_TOPIC_ZSET_KEY;
+        if(browserType.getType() == 2) return GlobalConstant.IRH_DEMAND_HOT_TOPIC_ZSET_KEY;
+        if(browserType.getType() == 3) return GlobalConstant.IRH_FORUM_HOT_TOPIC_ZSET_KEY;
         throw new GlobalException("传入的BrowserType有误");
     }
 }

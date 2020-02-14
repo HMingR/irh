@@ -6,15 +6,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.forum.api.dto.UpCountDto;
 import top.imuster.forum.api.dto.UpDto;
 import top.imuster.forum.api.enums.UpStateEnum;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName: RedisArticleAttitudeServiceImpl
@@ -89,6 +88,21 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
             redisTemplate.opsForHash().delete(GlobalConstant.IRH_USER_UP_MAP, key);
         }
         return list;
+    }
+
+    @Override
+    public List<HashSet<Long>> getHotTopicFromRedis(Long topic) {
+        ArrayList<HashSet<Long>> res = new ArrayList<>();
+        HashSet<Long> targetIds = (HashSet<Long>) redisTemplate.opsForZSet().reverseRange(RedisUtil.getHotTopicKey(BrowserType.FORUM), 0, topic - 1);
+        HashSet<Long> scores = new HashSet<>();
+        for (Long targetId : targetIds) {
+            Double score = redisTemplate.opsForZSet().score(RedisUtil.getHotTopicKey(BrowserType.FORUM), targetId);
+            scores.add(score.longValue());
+        }
+        res.add(targetIds);
+        res.add(scores);
+        return res;
+
     }
 
     @Override

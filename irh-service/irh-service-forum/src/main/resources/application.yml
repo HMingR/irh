@@ -7,7 +7,7 @@ mybatis:
 
 spring:
   redis:
-    database: @irh.redis.databaseIndex@
+    database: 1
     host: @irh.redis.host@
     port: 6379
     jedis:
@@ -49,4 +49,10 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
+
+
+hot:
+  topic:
+    total: 30   # 显示热搜数量
+    refreshTime: 30    #总热度榜刷新时间
 

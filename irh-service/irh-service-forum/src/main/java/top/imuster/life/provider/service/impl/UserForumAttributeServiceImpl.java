@@ -15,14 +15,10 @@ import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ArticleReview;
 import top.imuster.forum.api.pojo.UserForumAttribute;
 import top.imuster.life.provider.dao.UserForumAttributeDao;
-import top.imuster.life.provider.service.ArticleInfoService;
-import top.imuster.life.provider.service.ArticleReviewService;
-import top.imuster.life.provider.service.RedisArticleAttitudeService;
-import top.imuster.life.provider.service.UserForumAttributeService;
+import top.imuster.life.provider.service.*;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +41,10 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     @Resource
     ArticleInfoService articleInfoService;
 
+    @Resource
+    ForumHotTopicService forumHotTopicService;
+
+
     @Override
     public BaseDao<UserForumAttribute, Long> getDao() {
         return this.userForumAttributeDao;
@@ -64,6 +64,12 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
                 userForumAttributeDao.updateByKey(info);
             }
         });
+    }
+
+    @Override
+    public void transHotTopicFromRedis2DB(Long topic) {
+        List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis(topic);
+        forumHotTopicService.updateHotTopicFromReids2Redis(res);
     }
 
     @Override
@@ -143,7 +149,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
      * @Description 根据目标id和点赞人id查询点赞记录
      * @Date: 2020/2/8 19:42
      * @param targetId
-     * @param userId
+     * @param userId
      * @reture: top.imuster.forum.api.pojo.UserForumAttribute
      **/
     private UserForumAttribute getInfoByTargetIdAndUserId(Long targetId, Long userId){
