@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("articleReviewDao")
 public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> implements ArticleReviewDao {
-	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleReviewDao.";
+	private final static String NAMESPACE = "top.imuster.life.provider.dao.ArticleReviewDao.";
 	private final static String SELECT_USER_ID_BY_REVIEW_ID = "selectUserIdByReviewId";
 	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
 	private final static String SELECT_UP_TOTAL_BY_ID = "selectUpTotalById";

@@ -53,6 +53,8 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     @Override
     public void transUpFromRedis2DB() {
         List<UpDto> allUps = redisArticleAttitudeService.getAllUpFromRedis();
+        if (allUps == null || allUps.isEmpty()) return;
+
         allUps.stream().forEach(upDto -> {
             Long targetId = upDto.getTargetId();
             Long userId = upDto.getUserId();
@@ -69,12 +71,16 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     @Override
     public void transHotTopicFromRedis2DB(Long topic) {
         List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis(topic);
+        if(res == null || res.isEmpty()) return;
+
         forumHotTopicService.updateHotTopicFromReids2Redis(res);
     }
 
     @Override
     public void transUpCountFromRedis2DB() {
         List<UpCountDto> list = redisArticleAttitudeService.getAllUpCountFromRedis();
+        if(list == null || list.isEmpty()) return;
+
         Map<Integer, List<UpCountDto>> collect = list.stream().collect(Collectors.groupingBy(UpCountDto::getType));
 
         //文章

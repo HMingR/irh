@@ -83,4 +83,5 @@ public class RedisUtil {
         if(browserType.getType() == 3) return GlobalConstant.IRH_FORUM_HOT_TOPIC_ZSET_KEY;
         throw new GlobalException("传入的BrowserType有误");
     }
+
 }

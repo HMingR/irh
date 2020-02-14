@@ -39,8 +39,8 @@ public class QuartzConfig {
     @Bean
     public Trigger UpQuartzTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-//                .withIntervalInSeconds(10)  //设置时间周期单位秒
-                .withIntervalInMinutes(20)
+//                .withIntervalInMinutes(20)
+                .withIntervalInMinutes(1)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(UpQuartzDetail())
                 .withIdentity(UP_TASK_QUARTZ)
@@ -51,7 +51,8 @@ public class QuartzConfig {
     @Bean
     public Trigger HotTopicQuartzTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInMinutes(refreshTime)
+//                .withIntervalInMinutes(refreshTime)
+                .withIntervalInMinutes(1)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(HotTopicQuartzDetail())
                 .withIdentity(HOT_TOPIC_QUARTZ)

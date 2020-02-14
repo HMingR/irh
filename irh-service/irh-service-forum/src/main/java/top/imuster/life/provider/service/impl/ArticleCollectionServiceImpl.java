@@ -80,6 +80,8 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
     @Override
     public void transCollectCountFromRedis2Db() {
         List<Map.Entry<Long, Long>> allCollect = redisArticleAttitudeService.getAllCollectCountFromRedis();
+        if (allCollect == null || allCollect.isEmpty()) return;
+
         Long[] ids = new Long[allCollect.size()];
         HashMap<Long, Long> map = new HashMap<>();
         int index = 0;

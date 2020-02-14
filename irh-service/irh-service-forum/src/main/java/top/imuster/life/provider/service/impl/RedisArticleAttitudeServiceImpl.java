@@ -93,10 +93,13 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
     @Override
     public List<HashSet<Long>> getHotTopicFromRedis(Long topic) {
         ArrayList<HashSet<Long>> res = new ArrayList<>();
-        HashSet<Long> targetIds = (HashSet<Long>) redisTemplate.opsForZSet().reverseRange(RedisUtil.getHotTopicKey(BrowserType.FORUM), 0, topic - 1);
+        Set<String> set = redisTemplate.opsForZSet().reverseRange(RedisUtil.getHotTopicKey(BrowserType.FORUM), 0, topic - 1);
+        HashSet<Long> targetIds = new HashSet<>();
         HashSet<Long> scores = new HashSet<>();
-        for (Long targetId : targetIds) {
-            Double score = redisTemplate.opsForZSet().score(RedisUtil.getHotTopicKey(BrowserType.FORUM), targetId);
+        for (String s : set) {
+            long targetId = Long.parseLong(s);
+            targetIds.add(targetId);
+            Double score = redisTemplate.opsForZSet().score(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
             scores.add(score.longValue());
         }
         res.add(targetIds);

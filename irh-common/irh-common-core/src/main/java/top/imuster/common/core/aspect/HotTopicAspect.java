@@ -38,9 +38,9 @@ public class HotTopicAspect {
         BrowserType browserType = annotation.browserType();
         Long targetId = AspectUtil.getTargetId(joinPoint);
         String zSetKey = RedisUtil.getHotTopicKey(browserType);
-        String key = new StringBuffer().append(zSetKey).append("::").append(targetId).toString();
-        redisTemplate.expire(key, 35L, TimeUnit.MINUTES);
-        redisTemplate.opsForZSet().incrementScore(zSetKey, key, 1);
+        redisTemplate.expire(String.valueOf(targetId), 35L, TimeUnit.MINUTES);
+        Double aDouble = redisTemplate.opsForZSet().incrementScore(zSetKey, String.valueOf(targetId), 1);
+        System.out.println(aDouble);
     }
 
     /**

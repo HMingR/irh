@@ -60,7 +60,6 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Lon
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY)
     public Message<List<ForumHotTopic>> totalHotTopicList(int topic) {
         List<ForumHotTopic> list =forumHotTopicDao.selectMaxScoreTop(topic);
         list.stream().forEach(forumHotTopic -> {

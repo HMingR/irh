@@ -14,7 +14,7 @@
             state,
             create_time AS createTime,
             update_time AS updateTime,
-            first_class_id AS firstClassId，
+            first_class_id AS firstClassId,
             up_total AS upTotal
 		]]>
 	</sql>

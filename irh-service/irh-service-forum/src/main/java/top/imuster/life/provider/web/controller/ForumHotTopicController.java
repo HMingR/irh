@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/hot")
 public class ForumHotTopicController {
 
-    @Value("${hot.topic}")
+    @Value("${hot.topic.total}")
     private int topic;
 
     @Resource
