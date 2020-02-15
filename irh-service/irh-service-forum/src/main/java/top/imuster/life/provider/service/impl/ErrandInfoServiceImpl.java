@@ -48,6 +48,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     @Override
     public boolean isAvailable(Long id) {
         Integer state = errandInfoDao.selectStateById(id);
-        return state == 4;
+        if(state == null) return false;
+        return state.intValue() == 2;
     }
 }

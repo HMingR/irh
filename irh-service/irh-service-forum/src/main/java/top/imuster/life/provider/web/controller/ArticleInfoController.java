@@ -14,6 +14,7 @@ import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.file.api.service.FileServiceFeignApi;
+import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.life.provider.service.ArticleInfoService;
 
@@ -145,10 +146,19 @@ public class ArticleInfoController extends BaseController {
         return Message.createBySuccess(res);
     }
 
-    @ApiOperation("根据文章分类id获得点赞和浏览量最大的5个帖子id")
+    @ApiOperation("根据文章分类id获得点赞最多的5个帖子id,提供给主页的")
     @GetMapping("/hot/{id}")
     public Message<List<ArticleInfo>> hotTopicList(@PathVariable("id") Long id){
         List<ArticleInfo> list = articleInfoService.hotTopicListByCategory(id);
-        return null;
+        return Message.createBySuccess(list);
+    }
+
+    @ApiOperation("获得当前用户的获赞总数、收藏文章总数、文章被浏览总数")
+    @NeedLogin
+    @GetMapping("/user")
+    public Message<UserBriefDto> getUserForumBrief(){
+        Long userId = getCurrentUserIdFromCookie();
+        UserBriefDto userBriefDto = articleInfoService.getUserBriefByUserId(userId);
+        return Message.createBySuccess(userBriefDto);
     }
 }

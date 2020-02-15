@@ -30,6 +30,6 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 
 	@Override
 	public Integer selectStateById(Long id) {
-		return null;
+		return this.select(getNameSpace(SELECT_STATE_BY_ID), id);
 	}
 }

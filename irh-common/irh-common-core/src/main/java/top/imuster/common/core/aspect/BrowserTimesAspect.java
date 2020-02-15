@@ -9,11 +9,13 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.AspectUtil;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: BrowserTimesAspect
@@ -39,7 +41,8 @@ public class BrowserTimesAspect  {
         if(browserTimesAnnotation.isPresent()){
             BrowserType browserType = annotation.browserType();
             Long targetId = AspectUtil.getTargetId(joinPoint);
-            redisTemplate.opsForValue().increment(browserType.getRedisKeyHeader()+ String.valueOf(targetId), 1);
+            redisTemplate.expire(String.valueOf(targetId), 30L, TimeUnit.MINUTES);
+            redisTemplate.opsForHash().increment(browserType.getRedisKeyHeader(), String.valueOf(targetId), 1);
         }
     }
 

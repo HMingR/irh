@@ -5,6 +5,7 @@ import org.quartz.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import top.imuster.life.provider.component.BrowserTimesTask;
 import top.imuster.life.provider.component.HotTopicTask;
 import top.imuster.life.provider.component.UpAndCollectTask;
 
@@ -21,10 +22,11 @@ public class QuartzConfig {
     @Value("${hot.topic.refreshTime}")
     private int refreshTime;  //热搜总榜的更新周期
 
-
     private static final String UP_TASK_QUARTZ = "LikeTaskQuartz";
 
     private static final String HOT_TOPIC_QUARTZ = "hotTopicQuartz";
+
+    private static final String BROWSER_TIMES_QUARTZ = "browserTimesQuartz";
 
     @Bean
     public JobDetail UpQuartzDetail(){
@@ -37,10 +39,15 @@ public class QuartzConfig {
     }
 
     @Bean
+    public JobDetail browserTimesQuartzDetail(){
+        return JobBuilder.newJob(BrowserTimesTask.class).withIdentity(BROWSER_TIMES_QUARTZ).storeDurably().build();
+    }
+
+    @Bean
     public Trigger UpQuartzTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-//                .withIntervalInMinutes(20)
-                .withIntervalInMinutes(1)
+                .withIntervalInMinutes(20)
+//                .withIntervalInMinutes(1)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(UpQuartzDetail())
                 .withIdentity(UP_TASK_QUARTZ)
@@ -51,11 +58,23 @@ public class QuartzConfig {
     @Bean
     public Trigger HotTopicQuartzTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-//                .withIntervalInMinutes(refreshTime)
-                .withIntervalInMinutes(1)
+                .withIntervalInMinutes(refreshTime)
+//                .withIntervalInMinutes(1)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(HotTopicQuartzDetail())
                 .withIdentity(HOT_TOPIC_QUARTZ)
+                .withSchedule(scheduleBuilder)
+                .build();
+    }
+
+    @Bean
+    public Trigger BrowserTimesQuartzTrigger(){
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+                .withIntervalInMinutes(10)
+//                .withIntervalInMinutes(1)
+                .repeatForever();
+        return TriggerBuilder.newTrigger().forJob(HotTopicQuartzDetail())
+                .withIdentity(BROWSER_TIMES_QUARTZ)
                 .withSchedule(scheduleBuilder)
                 .build();
     }

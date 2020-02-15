@@ -8,17 +8,22 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ArticleReview;
 import top.imuster.forum.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 import top.imuster.life.provider.exception.ForumException;
+import top.imuster.life.provider.service.ArticleCollectionService;
 import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ArticleInfoService 实现类
@@ -34,6 +39,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Resource
     private ArticleReviewService articleReviewService;
+
+    @Resource
+    private ArticleCollectionService articleCollectionService;
 
     @Override
     public BaseDao<ArticleInfo, Long> getDao() {
@@ -91,8 +99,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#p0+'::top::five'")
     public List<ArticleInfo> hotTopicListByCategory(Long id) {
-        return null;
+        return articleInfoDao.selectUpTop5ByCategoryId(id);
     }
 
     @Override
@@ -104,5 +113,35 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Cacheable(value = GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY, key = "#p0")
     public ArticleInfo getBriefByHotTopicId(Long aLong) {
         return this.getBriefById(aLong);
+    }
+
+    @Override
+    public UserBriefDto getUserBriefByUserId(Long userId) {
+        Long collectTotal = articleCollectionService.getCollectTotalByUserId(userId);
+        UserBriefDto userBriefDto = articleInfoDao.selectUserBriefTotalById(userId);
+        if(userBriefDto == null) userBriefDto = new UserBriefDto();
+        userBriefDto.setCollectTotal(collectTotal);
+        return userBriefDto;
+    }
+
+    @Override
+    public void updateBrowserTimesFromRedis2Redis(List<BrowserTimesDto> res) {
+        if(res == null) return;
+        HashSet<Long> targetIds = new HashSet<>();
+        HashSet<Long> times = new HashSet<>();
+        res.stream().forEach(browserTimesDto -> {
+            Long targetId = browserTimesDto.getTargetId();
+            Long total = browserTimesDto.getTotal();
+            targetIds.add(targetId);
+            times.add(total);
+        });
+
+        Long[] ids = targetIds.toArray(new Long[targetIds.size()]);
+        Long[] totals = times.toArray(new Long[times.size()]);
+        for (int i = 0; i < ids.length; i++) {
+            //todo
+            List<Map<Long, Long>> browserTimesMapById = articleInfoDao.getBrowserTimesMapById(ids[i]);
+
+        }
     }
 }

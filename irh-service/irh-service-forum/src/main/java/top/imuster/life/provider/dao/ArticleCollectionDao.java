@@ -22,4 +22,12 @@ public interface ArticleCollectionDao extends BaseDao<ArticleCollection, Long> {
      **/
     List<ArticleCollection> selectCollectByCondition(ArticleCollection searchCondition);
 
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得该用户收藏了多少文章
+     * @Date: 2020/2/15 15:39
+     * @param userId
+     * @reture: java.lang.Long
+     **/
+    Long selectTotalByUserId(Long userId);
 }

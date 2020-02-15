@@ -17,6 +17,7 @@ import java.util.List;
 public class ArticleCollectionDaoImpl extends BaseDaoImpl<ArticleCollection, Long> implements ArticleCollectionDao {
 	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleCollectionDao.";
 	private final static String SELECT_COLLECT_BY_CONDITION = "selectCollectByCondition";
+	private final static String SELECT_TOTAL_BY_USER_ID = "selectTotalByUserId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -25,5 +26,10 @@ public class ArticleCollectionDaoImpl extends BaseDaoImpl<ArticleCollection, Lon
 	@Override
 	public List<ArticleCollection> selectCollectByCondition(ArticleCollection searchCondition) {
 		return this.selectList(getNameSpace(SELECT_COLLECT_BY_CONDITION), searchCondition);
+	}
+
+	@Override
+	public Long selectTotalByUserId(Long userId) {
+		return this.select(getNameSpace(SELECT_TOTAL_BY_USER_ID), userId);
 	}
 }

@@ -2,10 +2,11 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ArticleInfoDao 接口
@@ -59,4 +60,26 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @reture: java.util.List<top.imuster.forum.api.pojo.ForumHotTopic>
      **/
     List<ArticleInfo> selectInfoByTargetIds(Long[] longs);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户文章的点赞总数
+     * @Date: 2020/2/15 15:43
+     * @param userId
+     * @reture: java.lang.Long
+     *
+     * @return*/
+    UserBriefDto selectUserBriefTotalById(Long userId);
+
+     /**
+      * @Author hmr
+      * @Description 根据分类id获得该分类下点赞数最大的5个
+      * @Date: 2020/2/15 16:01
+      * @param id
+      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+      **/
+    List<ArticleInfo> selectUpTop5ByCategoryId(Long id);
+
+
+    List<Map<Long, Long>> getBrowserTimesMapById(Long targetId);
 }

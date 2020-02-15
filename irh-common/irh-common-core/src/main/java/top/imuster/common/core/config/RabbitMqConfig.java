@@ -89,7 +89,7 @@ public class RabbitMqConfig {
 
     @Bean
     public Binding errandQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
-        return BindingBuilder.bind(emailQueue()).to(exchange).with(MqTypeEnum.ERRAND.getRoutingKeyMatchRule()).noargs();
+        return BindingBuilder.bind(errandQueue()).to(exchange).with(MqTypeEnum.ERRAND.getRoutingKeyMatchRule()).noargs();
     }
 
 }

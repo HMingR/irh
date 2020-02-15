@@ -195,5 +195,23 @@
 			<![CDATA[#{id}]]>
 		</foreach>
 	</select>
+
+	<select id="selectUserBriefTotalById" parameterType="top.imuster.forum.api.dto.UserBriefDto" resultType="long">
+		<![CDATA[SELECT SUM(up_total) AS upTotal, SUM(collect_total) AS collectTotal, SUM(browser_times) AS browserTotal]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE user_id = #{userId}
+	</select>
+
+	<select id="selectUpTop5ByCategoryId" resultType="articleInfo" parameterType="long">
+		<![CDATA[SELECT id, title ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE article_category = #{id} ORDER BY up_total DESC LIMIT 0, 5
+	</select>
+
+	<select id="getBrowserTimesMapById" parameterType="long" resultType="java.util.HashMap">
+		<![CDATA[SELECT id, browser_times ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{targetId}
+	</select>
 	
 </mapper>

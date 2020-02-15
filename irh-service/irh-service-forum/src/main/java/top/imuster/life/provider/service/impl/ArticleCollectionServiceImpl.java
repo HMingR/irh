@@ -115,4 +115,9 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
         page.setResult(res);
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public Long getCollectTotalByUserId(Long userId) {
+        return articleCollectionDao.selectTotalByUserId(userId);
+    }
 }

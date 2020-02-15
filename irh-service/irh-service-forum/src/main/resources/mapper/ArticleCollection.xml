@@ -128,5 +128,11 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
-	
+
+
+	<select id="selectTotalByUserId" resultType="long" parameterType="long">
+		<![CDATA[SELECT COUNT(1)]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ WHERE user_id = #{userId} AND state != 1 ]]>
+	</select>
 </mapper>

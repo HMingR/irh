@@ -47,8 +47,8 @@ public class GlobalConstant {
     public static final String IRH_FORUM_ARTICLE = "article::info";
 
     //life模块中跑腿服务接单成功之后将跑腿信息表的id存放在redis中
-    public static final String IRH_LIFE_ERRAND_MAP = "IRH_LIFE_ERRAND_MAP";
-    public static final String IRH_LIFE_ERRAND_KEY = "irh:life:errand:key:";
+    public static final String IRH_LIFE_ERRAND_MAP = "irh::life:errand::map";
+    public static final String IRH_LIFE_ERRAND_KEY = "irh::life::errand::key::";
 
     //热搜
     public static final String IRH_FORUM_HOT_TOPIC_ZSET_KEY = "irh::forum::hot::topic";
@@ -59,5 +59,8 @@ public class GlobalConstant {
     //redis中的一般缓存
     public static final String IRH_COMMON_CACHE_KEY = "irh::common::cache::key";     //一般内容的缓存
     public static final String IRH_HOT_TOPIC_CACHE_KEY = "irh::hot::topic::cache::key";   //forum模块热搜的缓存
+
+    //redis中保存浏览次数的hash表的key
+    public static final String IRH_FORUM_BROWSER_TIMES_MAP = "irh::forum::browser::times::map";
 
 }

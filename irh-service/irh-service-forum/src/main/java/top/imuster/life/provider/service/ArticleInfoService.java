@@ -3,7 +3,9 @@ package top.imuster.life.provider.service;
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.forum.api.pojo.ForumHotTopic;
 
@@ -104,4 +106,22 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: top.imuster.forum.api.pojo.ArticleInfo
      **/
     ArticleInfo getBriefByHotTopicId(Long aLong);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户的文章总数，获赞总数、收藏总数
+     * @Date: 2020/2/15 15:34
+     * @param userId
+     * @reture: top.imuster.forum.api.dto.UserBriefDto
+     **/
+    UserBriefDto getUserBriefByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 更新浏览次数
+     * @Date: 2020/2/15 17:35
+     * @param res
+     * @reture: void
+     **/
+    void updateBrowserTimesFromRedis2Redis(List<BrowserTimesDto> res);
 }

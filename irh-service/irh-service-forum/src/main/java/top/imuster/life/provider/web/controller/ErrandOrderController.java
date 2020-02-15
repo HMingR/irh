@@ -37,7 +37,7 @@ public class ErrandOrderController extends BaseController {
     @ApiOperation("接单，需要轮询操作")
     @GetMapping("/{id}")
     public Message<String> orderReceive(@PathVariable("id") Long id) throws JsonProcessingException {
-        String s = errandOrderService.receiveOrder(id, getCurrentUserIdFromCookie());
+        String s = errandOrderService.receiveOrder(id, 5L);
         return Message.createBySuccess(s);
     }
 

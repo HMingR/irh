@@ -49,4 +49,13 @@ public interface ArticleCollectionService extends BaseService<ArticleCollection,
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleInfo>>
      **/
     Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id统计该用户收藏的文章总数
+     * @Date: 2020/2/15 15:37
+     * @param userId
+     * @reture: java.lang.Long
+     **/
+    Long getCollectTotalByUserId(Long userId);
 }

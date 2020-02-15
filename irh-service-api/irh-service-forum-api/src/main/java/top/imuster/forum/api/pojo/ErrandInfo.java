@@ -44,7 +44,7 @@ public class ErrandInfo extends BaseDomain {
 	private String money;
 
 
-	// 1-删除 2-已完成 3-已接单 4-未接单
+	// 1-删除 2-有效 3-无效
 //	private Short state;
 
 
