@@ -29,6 +29,12 @@ public class ArticleTag extends BaseDomain {
 	@ApiModelProperty("分类id")
 	private Long categoryId;
 
+	public ArticleTag(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+
+
 	// 1-无效  2-有效
 //	private Short state;
 

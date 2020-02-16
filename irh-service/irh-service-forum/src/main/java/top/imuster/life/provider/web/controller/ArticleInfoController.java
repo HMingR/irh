@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserTimesAnnotation;
-import top.imuster.common.core.annotation.HotTopicAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
@@ -105,7 +104,7 @@ public class ArticleInfoController extends BaseController {
     public Message<Page<ArticleInfo>> list(@RequestBody Page<ArticleInfo> page){
         ArticleInfo condition = page.getSearchCondition();
         if(condition == null){
-            condition = new ArticleInfo();
+            page.setSearchCondition(new ArticleInfo());
         }
         condition.setUserId(getCurrentUserIdFromCookie());
         condition.setOrderField("create_time");
@@ -125,8 +124,7 @@ public class ArticleInfoController extends BaseController {
      **/
     @ApiOperation("根据id查看帖子的所有信息")
     @GetMapping("/{id}")
-    @HotTopicAnnotation(browserType = BrowserType.FORUM)
-    @BrowserTimesAnnotation(browserType = BrowserType.FORUM)
+    @BrowserTimesAnnotation(browserType = BrowserType.FORUM, value = "#p0")
     public Message<ArticleInfo> getArticleInfoById(@PathVariable("id") Long id){
         ArticleInfo articleDetail = articleInfoService.getArticleDetailById(id);
         return Message.createBySuccess(articleDetail);

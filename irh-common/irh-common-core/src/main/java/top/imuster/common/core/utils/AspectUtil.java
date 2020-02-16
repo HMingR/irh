@@ -40,10 +40,8 @@ public class AspectUtil {
             for (Annotation annotation : paramAnn){
                 if(annotation.annotationType().equals(PathVariable.class)){
                     Parameter parameter = parameters[i];
-                    System.out.println(parameter.getType().toString());
                     if(parameter.getType().toString().contains("java.lang.Long")){
                         result = (Long) params[i];
-                        System.out.println("结果为" + result);
                         return result;
                     }
                 }

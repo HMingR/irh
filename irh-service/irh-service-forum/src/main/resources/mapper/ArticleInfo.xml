@@ -208,10 +208,33 @@
 		WHERE article_category = #{id} ORDER BY up_total DESC LIMIT 0, 5
 	</select>
 
-	<select id="getBrowserTimesMapById" parameterType="long" resultType="java.util.HashMap">
+	<resultMap id="consumerMap" type="java.util.Map">
+		<result property="key" column="id"></result>
+		<result property="value" column="browser_times"></result>
+	</resultMap>
+	
+	<select id="selectBrowserTimesByIds" parameterType="long" resultType="java.util.Map">
 		<![CDATA[SELECT id, browser_times ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE id = #{targetId}
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
 	</select>
+
+	<update id="updateBrowserTimesByCondition" parameterType="java.util.List">
+        update article_info
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="browser_times = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.browserTimes}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+	</update>
 	
 </mapper>

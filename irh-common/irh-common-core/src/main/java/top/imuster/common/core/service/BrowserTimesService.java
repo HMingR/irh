@@ -33,11 +33,13 @@ public abstract class BrowserTimesService {
         while (cursor.hasNext()){
             Map.Entry<Object, Object> map = cursor.next();
 
-            Long key = (Long)map.getKey();
-            BrowserTimesDto dto = new BrowserTimesDto(key, (Long) map.getValue(), type);
+            Long key = Long.parseLong((String) map.getKey());
+            BrowserTimesDto dto = new BrowserTimesDto(key, Long.parseLong(String.valueOf(map.getValue())), type);
             list.add(dto);
             //从Redis中删除这条记录
-            redisTemplate.opsForHash().delete(type.getRedisKeyHeader(), key);
+//            redisTemplate.delete(type.getRedisKeyHeader());
+            Long delete = redisTemplate.opsForHash().delete(type.getRedisKeyHeader(), String.valueOf(key));
+            System.out.println("删除的key为"+ key + "---" + delete);
         }
         return list;
     }

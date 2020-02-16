@@ -1,6 +1,5 @@
 package top.imuster.common.core.aspect;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -9,20 +8,15 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.core.annotation.NeedLogin;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.NeedLoginException;
-import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
 
 
 /**

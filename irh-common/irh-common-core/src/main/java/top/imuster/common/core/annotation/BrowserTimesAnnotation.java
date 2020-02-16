@@ -13,6 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Inherited
 public @interface BrowserTimesAnnotation {
     /**
      * @Author hmr
@@ -22,4 +23,31 @@ public @interface BrowserTimesAnnotation {
      * @reture: top.imuster.common.core.enums.BrowserType
      **/
     BrowserType browserType();
+
+    /**
+     * @Author hmr
+     * @Description targetId
+     * @Date: 2020/2/16 15:54
+     * @param
+     * @reture: java.lang.String
+     **/
+    String value() default "";
+
+    /**
+     * @Author hmr
+     * @Description 是否禁用浏览记录统计功能
+     * @Date: 2020/2/16 15:54
+     * @param
+     * @reture: boolean
+     **/
+    boolean disableBrowserTimes() default false;
+
+    /**
+     * @Author hmr
+     * @Description 禁用热搜功能
+     * @Date: 2020/2/16 15:55
+     * @param
+     * @reture: boolean
+     **/
+    boolean disableHotTopic() default false;
 }

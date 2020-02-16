@@ -70,10 +70,10 @@ public class QuartzConfig {
     @Bean
     public Trigger BrowserTimesQuartzTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInMinutes(10)
+                .withIntervalInMinutes(1)
 //                .withIntervalInMinutes(1)
                 .repeatForever();
-        return TriggerBuilder.newTrigger().forJob(HotTopicQuartzDetail())
+        return TriggerBuilder.newTrigger().forJob(browserTimesQuartzDetail())
                 .withIdentity(BROWSER_TIMES_QUARTZ)
                 .withSchedule(scheduleBuilder)
                 .build();

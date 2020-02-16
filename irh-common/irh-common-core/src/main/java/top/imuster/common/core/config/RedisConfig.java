@@ -52,11 +52,19 @@ public class RedisConfig {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
 
+        redisTemplate.setConnectionFactory(connectionFactory);
+        // 配置默认的序列化器
+        redisTemplate.setDefaultSerializer(getGenericJackson2JsonRedisSerializer());
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        // 设置 Key 的默认序列化机制
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+
         // 使用Jackson2JsonRedisSerialize 替换默认序列化
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer =
                 new Jackson2JsonRedisSerializer(Object.class);
 
-        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        /*jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
         // 设置value的序列化规则和 key的序列化规则
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -66,7 +74,7 @@ public class RedisConfig {
 
         redisTemplate.setDefaultSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setEnableDefaultSerializer(true);
-        redisTemplate.afterPropertiesSet();
+        redisTemplate.afterPropertiesSet();*/
         return redisTemplate;
     }
 }

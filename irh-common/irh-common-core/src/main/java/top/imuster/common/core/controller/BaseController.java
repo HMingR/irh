@@ -84,7 +84,7 @@ public class BaseController {
      **/
     protected Long getCurrentUserIdFromCookie(){
         UserDto currentUser = getCurrentUserFromCookie();
-        if(currentUser == null){
+        if(currentUser == null || currentUser.getUserId() == null){
             throw new GlobalException("用户身份过期,请重新登录");
         }
         return currentUser.getUserId();

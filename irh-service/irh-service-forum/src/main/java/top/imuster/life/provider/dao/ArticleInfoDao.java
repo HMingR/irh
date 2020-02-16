@@ -1,10 +1,13 @@
 package top.imuster.life.provider.dao;
 
 
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +83,22 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
       **/
     List<ArticleInfo> selectUpTop5ByCategoryId(Long id);
 
+    /**
+     * @Author hmr
+     * @Description hmr
+     * @Date: 2020/2/16 10:27
+     * @param ids
+     * @reture: java.util.Map<java.lang.Long,java.lang.Long>
+     **/
+    @MapKey("id")
+    Map<Long, Long> selectBrowserTimesByIds(Long[] ids);
 
-    List<Map<Long, Long>> getBrowserTimesMapById(Long targetId);
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/2/16 10:38
+     * @param list
+     * @reture: void
+     **/
+    void updateBrowserTimesByCondition(@Param("list") List<ArticleInfo> list);
 }

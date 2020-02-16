@@ -32,7 +32,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.mysql.url>
+                <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>123456</irh.mysql.password>
                 <irh.redis.host>192.168.2.128</irh.redis.host>
@@ -74,7 +74,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <irh.musql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true</irh.musql.url>
+                <irh.musql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.musql.url>
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>197877346hmr</irh.mysql.password>
                 <irh.redis.host>39.105.0.169</irh.redis.host>

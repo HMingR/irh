@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.HotTopicAnnotation;
+import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
@@ -38,7 +38,7 @@ public class ArticleAttitudeController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("给文章点赞")
-    @HotTopicAnnotation(browserType = BrowserType.FORUM)
+    @BrowserTimesAnnotation(browserType = BrowserType.FORUM, disableBrowserTimes = true, value = "#p0")
     @GetMapping("/up/1/{id}")
     public Message<String> upArticleById(@PathVariable("id") Long id){
         redisArticleAttitudeService.saveUp2Redis(id, 1, getCurrentUserIdFromCookie());

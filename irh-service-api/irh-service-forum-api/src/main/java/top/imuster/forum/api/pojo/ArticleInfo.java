@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,9 +62,30 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("每个文章下的一级留言信息")
 	private List<ArticleReview> childs;
 
+	private List<ArticleTag> tagList;
+
+	@ApiModelProperty("给文章添加的标签")
+	private String tagIds;
+
 	// 1-无效  2-有效
 //	private Short state;
 
+
+	public List<ArticleTag> getTagList() {
+		return tagList;
+	}
+
+	public void setTagList(List<ArticleTag> tagList) {
+		this.tagList = tagList;
+	}
+
+	public String getTagIds() {
+		return tagIds;
+	}
+
+	public void setTagIds(String tagIds) {
+		this.tagIds = tagIds;
+	}
 
 	public Integer getReviewTotal() {
 		return reviewTotal;

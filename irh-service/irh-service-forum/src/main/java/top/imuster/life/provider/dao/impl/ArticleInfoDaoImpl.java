@@ -7,6 +7,8 @@ import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,8 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_INFO_BY_TARGET_IDS = "selectInfoByTargetIds";
 	private final static String SELECT_USER_UP_TOTAL_BY_ID = "selectUserBriefTotalById";
 	private final static String SELECT_UP_TOTAL_TOP_5 = "selectUpTop5ByCategoryId";
-	private final static String GET_BROWSER_TIMES_MAP_BY_ID = "getBrowserTimesMapById";
+	private final static String SELECT_BROWSER_TIMES_BY_IDS = "selectBrowserTimesByIds";
+	private final static String SELECT_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -67,7 +70,19 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	}
 
 	@Override
-	public List<Map<Long, Long>> getBrowserTimesMapById(Long targetId) {
-		return this.selectList(getNameSpace(GET_BROWSER_TIMES_MAP_BY_ID), targetId);
+	public Map<Long, Long> selectBrowserTimesByIds(Long[] ids) {
+		HashMap<Long, Long> res = new HashMap<>();
+		List<Map<Long, Long>> objects = this.selectList(getNameSpace(SELECT_BROWSER_TIMES_BY_IDS), ids);
+		objects.stream().forEach(longLongMap -> {
+			Long browserTimes = Long.parseLong(longLongMap.get("browser_times") + "");
+			Long id = Long.parseLong(longLongMap.get("id") + "");
+			res.put(id, browserTimes);
+		});
+		return res;
+	}
+
+	@Override
+	public void updateBrowserTimesByCondition(List<ArticleInfo> update) {
+		this.update(getNameSpace(SELECT_BROWSER_TIMES_BY_CONDITION), update);
 	}
 }
