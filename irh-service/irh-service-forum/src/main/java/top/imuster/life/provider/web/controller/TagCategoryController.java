@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.forum.api.pojo.ArticleTag;
 import top.imuster.forum.api.pojo.ArticleTagCategory;
 import top.imuster.life.provider.service.ArticleTagCategoryService;
 

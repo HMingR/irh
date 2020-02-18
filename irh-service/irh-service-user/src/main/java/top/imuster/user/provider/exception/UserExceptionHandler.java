@@ -12,7 +12,7 @@ import top.imuster.common.core.exception.GlobalExceptionHandler;
  * @author: hmr
  * @date: 2019/12/19 20:14
  */
-@RestControllerAdvice(basePackages = {"top.imuster.user"})
+@RestControllerAdvice(basePackages = {"top.imuster"})
 @Slf4j
 public class UserExceptionHandler extends GlobalExceptionHandler {
 

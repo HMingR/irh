@@ -61,6 +61,8 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
         articleReview.setState(2);
         articleReview.setOrderField("create_time");
         articleReview.setOrderFieldType("DESC");
+        articleReview.setFirstClassId(0l);
+        articleReview.setParentId(0l);
         return articleReviewDao.selectEntryList(articleReview);
     }
 

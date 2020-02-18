@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.wrapper.Message;
 
 import javax.validation.*;
@@ -40,7 +41,7 @@ public class GlobalExceptionHandler {
                         .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .collect(Collectors.joining());
         logger.error("错误信息为{}", message);
-        return Message.createByError(message);
+        return Message.createByCustom(MessageCode.ILLEGAL_ARGUMENT_CODE);
     }
 
     //处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是javax.validation.ConstraintViolationException
@@ -49,7 +50,7 @@ public class GlobalExceptionHandler {
     public Message constraintViolationExceptionHandler(ConstraintViolationException e) {
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
         logger.error("错误信息为{}", message);
-        return Message.createByError(message);
+        return Message.createByCustom(MessageCode.ILLEGAL_ARGUMENT_CODE);
     }
 
     @ExceptionHandler(BindException.class)
@@ -71,7 +72,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NeedLoginException.class)
     @ResponseBody
     public Message needLoginExceptionHandler(NeedLoginException exception){
-        return Message.createByError("当前暂时未登录,请登陆后重试");
+        return Message.createByCustom(MessageCode.UNAUTHORIZED);
     }
 
     /**

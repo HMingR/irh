@@ -29,14 +29,24 @@ public class ArticleTag extends BaseDomain {
 	@ApiModelProperty("分类id")
 	private Long categoryId;
 
+	@ApiModelProperty("用户是否拥有该标签 0-为拥有 1-拥有")
+	private Integer available;
+
 	public ArticleTag(Long categoryId) {
 		this.categoryId = categoryId;
 	}
 
-
-
 	// 1-无效  2-有效
 //	private Short state;
+
+
+	public Integer getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(Integer available) {
+		this.available = available;
+	}
 
 	public Long getId() {
 		return this.id;
