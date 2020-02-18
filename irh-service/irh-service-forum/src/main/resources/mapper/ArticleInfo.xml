@@ -236,5 +236,11 @@
             #{item.id,jdbcType=BIGINT}
         </foreach>
 	</update>
-	
+
+	<select id="selectBriefByHotTopicId" resultType="top.imuster.forum.api.pojo.ForumHotTopic" parameterType="long">
+		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE state != 1 AND id = #{aLong}]]>
+	</select>
+
 </mapper>

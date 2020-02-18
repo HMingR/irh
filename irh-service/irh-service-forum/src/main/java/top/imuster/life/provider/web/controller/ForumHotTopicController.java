@@ -37,7 +37,7 @@ public class ForumHotTopicController {
 
     @ApiOperation("实时总榜")
     @GetMapping
-    public Message<List<ArticleInfo>> currentHotTopicList(){
+    public Message<List<ForumHotTopic>> currentHotTopicList(){
         return forumHotTopicService.currentHotTopicList(topic);
     }
 }

@@ -105,7 +105,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @param aLong
      * @reture: top.imuster.forum.api.pojo.ArticleInfo
      **/
-    ArticleInfo getBriefByHotTopicId(Long aLong);
+    ForumHotTopic getBriefByHotTopicId(Long aLong);
 
     /**
      * @Author hmr

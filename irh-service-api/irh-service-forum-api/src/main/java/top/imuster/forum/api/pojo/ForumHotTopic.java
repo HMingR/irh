@@ -28,15 +28,25 @@ public class ForumHotTopic extends BaseDomain {
 	private Long targetId;
 
 	// redis中存储的score
-	@ApiModelProperty("redis中存储的score")
+	@ApiModelProperty("redis中存储的score,即热度")
 	private Long score;
 
 	@ApiModelProperty("目标文章的标题")
 	private String targetTitle;
 
+	private Long browserTimes;
+
 	// 1-有效  2-无效
 //	private Short state;
 
+
+	public Long getBrowserTimes() {
+		return browserTimes;
+	}
+
+	public void setBrowserTimes(Long browserTimes) {
+		this.browserTimes = browserTimes;
+	}
 
 	public String getTargetTitle() {
 		return targetTitle;

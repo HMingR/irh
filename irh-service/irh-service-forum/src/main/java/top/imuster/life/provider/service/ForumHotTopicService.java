@@ -41,5 +41,5 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopic, Long> {
      * @param topic
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleInfo>>
      **/
-    Message<List<ArticleInfo>> currentHotTopicList(int topic);
+    Message<List<ForumHotTopic>> currentHotTopicList(int topic);
 }

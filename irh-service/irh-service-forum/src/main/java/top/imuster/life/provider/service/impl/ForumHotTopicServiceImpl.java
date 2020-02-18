@@ -64,20 +64,24 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Lon
         List<ForumHotTopic> list =forumHotTopicDao.selectMaxScoreTop(topic);
         list.stream().forEach(forumHotTopic -> {
             Long targetId = forumHotTopic.getTargetId();
-            ArticleInfo briefById = articleInfoService.getBriefByHotTopicId(targetId);
-            forumHotTopic.setTargetTitle(briefById.getTitle());
+            ForumHotTopic brief = articleInfoService.getBriefByHotTopicId(targetId);
+            forumHotTopic.setTargetTitle(brief.getTargetTitle());
         });
         return Message.createBySuccess(list);
     }
 
     @Override
-    public Message<List<ArticleInfo>> currentHotTopicList(int topic) {
+    public Message<List<ForumHotTopic>> currentHotTopicList(int topic) {
         List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis((long)topic);
+        if(res == null || res.isEmpty()) {
+            //当redis中没有的时候，则显示总榜的数据
+            return this.totalHotTopicList(topic);
+        }
         Long[] longs = res.get(0).toArray(new Long[res.get(0).size()]);
-        List<ArticleInfo> resList = new ArrayList<>();
+        List<ForumHotTopic> resList = new ArrayList<>();
         for (int i = 0; i < longs.length; i++) {
-            ArticleInfo briefById =articleInfoService.getBriefByHotTopicId(longs[i]);
-            resList.add(briefById);
+            ForumHotTopic brief = articleInfoService.getBriefByHotTopicId(longs[i]);
+            resList.add(brief);
         }
         return Message.createBySuccess(resList);
     }

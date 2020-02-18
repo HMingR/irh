@@ -1,10 +1,12 @@
 package top.imuster.life.provider.dao.impl;
 
 
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.forum.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_UP_TOTAL_TOP_5 = "selectUpTop5ByCategoryId";
 	private final static String SELECT_BROWSER_TIMES_BY_IDS = "selectBrowserTimesByIds";
 	private final static String SELECT_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
+	private final static String SELECT_BRIEF_BY_HOT_TOPIC_ID = "selectBriefByHotTopicId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -84,5 +87,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public void updateBrowserTimesByCondition(List<ArticleInfo> update) {
 		this.update(getNameSpace(SELECT_BROWSER_TIMES_BY_CONDITION), update);
+	}
+
+	@Override
+	public ForumHotTopic selectBriefByHotTopicId(Long aLong) {
+		return this.select(getNameSpace(SELECT_BRIEF_BY_HOT_TOPIC_ID), aLong);
 	}
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.forum.api.dto.UserBriefDto;
 import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.forum.api.pojo.ForumHotTopic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,4 +102,13 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @reture: void
      **/
     void updateBrowserTimesByCondition(@Param("list") List<ArticleInfo> list);
+
+    /**
+     * @Author hmr
+     * @Description 根据redis中的热搜id获得文章信息，并直接封装成一个ForumHotTopic对象
+     * @Date: 2020/2/17 12:00
+     * @param aLong
+     * @reture: top.imuster.forum.api.pojo.ForumHotTopic
+     **/
+    ForumHotTopic selectBriefByHotTopicId(Long aLong);
 }

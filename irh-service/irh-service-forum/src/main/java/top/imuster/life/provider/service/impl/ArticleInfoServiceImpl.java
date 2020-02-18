@@ -135,8 +135,8 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     @Cacheable(value = GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY, key = "#p0")
-    public ArticleInfo getBriefByHotTopicId(Long aLong) {
-        return this.getBriefById(aLong);
+    public ForumHotTopic getBriefByHotTopicId(Long aLong) {
+        return articleInfoDao.selectBriefByHotTopicId(aLong);
     }
 
     @Override
