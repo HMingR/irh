@@ -26,9 +26,10 @@ import org.springframework.web.context.request.RequestContextListener;
                                     "top.imuster.forum.api.service",
                                     "top.imuster.file.api.service"})
 @ComponentScan(basePackages = {
+        "top.imuster.user",
         "top.imuster.auth",
         "top.imuster.common.core",
-        "top.imuster.user.provider"})
+        "top.imuster.*.api.service.hystrix"})
 public class UserProviderApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserProviderApplication.class, args);

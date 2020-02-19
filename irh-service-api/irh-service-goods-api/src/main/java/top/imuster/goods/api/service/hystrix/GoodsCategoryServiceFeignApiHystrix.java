@@ -1,6 +1,8 @@
 package top.imuster.goods.api.service.hystrix;
 
+import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.service.GoodsCategoryServiceFeignApi;
@@ -14,8 +16,9 @@ import java.util.List;
  * @date: 2020/2/7 17:08
  */
 @Slf4j
-public class GoodsCategoryServiceFeignApiHystrix implements GoodsCategoryServiceFeignApi {
-    @Override
+@Component
+public class GoodsCategoryServiceFeignApiHystrix implements FallbackFactory<GoodsCategoryServiceFeignApi> {
+    /*@Override
     public List<ProductCategoryInfo> adminCategoryTree() {
         log.error("远程调用goods模块生成分类树失败");
         return null;
@@ -42,6 +45,11 @@ public class GoodsCategoryServiceFeignApiHystrix implements GoodsCategoryService
     @Override
     public Message editCategory(ProductCategoryInfo productCategoryInfo) {
         log.error("远程调用goods模块修改分类信息失败");
+        return null;
+    }*/
+
+    @Override
+    public GoodsCategoryServiceFeignApi create(Throwable throwable) {
         return null;
     }
 }

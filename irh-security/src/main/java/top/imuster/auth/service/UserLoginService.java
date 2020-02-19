@@ -18,7 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
-import top.imuster.auth.exception.SecurityException;
+import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
@@ -102,7 +102,7 @@ public class UserLoginService {
         Long expire = redisTemplate.getExpire(key);
         if(expire < 0){
             log.error("用户登录的时候存储令牌到redis中失败");
-            throw new SecurityException("令牌存储失败,请稍后重试");
+            throw new CustomSecurityException("令牌存储失败,请稍后重试");
         }
     }
 
@@ -134,7 +134,7 @@ public class UserLoginService {
         String obj = (String) redisTemplate.opsForValue().get(key);
         AuthToken authToken = new ObjectMapper().readValue(obj, AuthToken.class);
         if(authToken == null){
-            throw new SecurityException("登录超时,请重新登录");
+            throw new CustomSecurityException("登录超时,请重新登录");
         }
         return authToken;
     }
@@ -182,13 +182,9 @@ public class UserLoginService {
             //解析spring security返回的错误信息
             if(resultMap!=null && resultMap.get("error_description")!=null){
                 String error_description = (String) resultMap.get("error_description");
-                if(error_description.indexOf("UserDetailsService returned null")>=0){
-                    throw new SecurityException("账号不存在,请检查后重试");
-                }else if(error_description.indexOf("坏的凭证")>=0){
-                    throw new SecurityException("账号或密码错误");
-                }
+                throw new CustomSecurityException(error_description);
             }
-            throw new SecurityException("用户名或密码错误");
+            throw new CustomSecurityException("用户名或密码错误");
         }
         AuthToken authToken = new AuthToken();
         authToken.setAccessToken((String) resultMap.get("jti"));//用户身份令牌

@@ -18,7 +18,7 @@ import java.util.List;
  * @author: hmr
  * @date: 2020/1/27 16:33
  */
-@FeignClient(name = "user-service", path = "/user/feign", fallback = UserServiceFeignHystrix.class)
+@FeignClient(name = "user-service", path = "/user/feign", fallbackFactory = UserServiceFeignHystrix.class)
 public interface UserServiceFeignApi {
 
     @GetMapping("/login/{email}")

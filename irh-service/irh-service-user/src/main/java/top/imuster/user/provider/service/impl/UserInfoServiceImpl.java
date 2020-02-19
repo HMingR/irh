@@ -51,12 +51,6 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         UserInfo condition = new UserInfo();
         condition.setEmail(email);
         UserInfo userInfo = userInfoDao.selectUserRoleByCondition(condition);
-        if(userInfo == null) {
-            throw new UserException("用户名或者密码错误");
-        }
-        if(userInfo.getState() == null || userInfo.getState() <= 20){
-            throw new UserException("该账号已被冻结,请联系管理员");
-        }
         return userInfo;
     }
 

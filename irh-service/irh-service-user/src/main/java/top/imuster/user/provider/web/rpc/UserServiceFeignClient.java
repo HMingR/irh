@@ -5,6 +5,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
+import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.RoleInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 

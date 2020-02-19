@@ -1,5 +1,6 @@
 package top.imuster.goods.api.service.hystrix;
 
+import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
@@ -20,8 +21,8 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class GoodsServiceFeignApiHystrix implements GoodsServiceFeignApi {
-    @Override
+public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsServiceFeignApi> {
+/*@Override
     public Message<Page<ProductInfo>> list(Page<ProductInfo> page) {
         log.error("二手商品查询列表服务降级");
         return Message.createByError("当前网络繁忙,请稍后再试");
@@ -71,6 +72,11 @@ public class GoodsServiceFeignApiHystrix implements GoodsServiceFeignApi {
 
     @Override
     public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(Long targetId) {
+        return null;
+    }*/
+    @Override
+    public GoodsServiceFeignApi create(Throwable throwable) {
+        log.error("出现异常");
         return null;
     }
 }

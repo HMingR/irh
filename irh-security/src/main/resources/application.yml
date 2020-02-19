@@ -55,6 +55,11 @@ eureka:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
+hot:
+  topic:
+    total: 30   # 显示热搜数量
+    refreshTime: 30    #总热度榜刷新时间
+
 logging:
   level:
     top.imuster.auth: debug
@@ -69,6 +74,8 @@ ribbon:
   OkToRetryOnAllOperations: false  #对所有操作请求都进行重试，如果是get则可以，如果是post，put等操作没有实现幂等的情况下是很危险的,所以设置为false
   ConnectTimeout: 5000  #请求连接的超时时间
   ReadTimeout: 6000 #请求处理的超时时间
+
+
 
 secure:
   ignored:

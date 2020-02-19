@@ -16,7 +16,7 @@ import java.util.List;
  * @author: hmr
  * @date: 2020/2/7 14:56
  */
-@FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign/category",fallback = GoodsCategoryServiceFeignApiHystrix.class)
+@FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign/category",fallbackFactory = GoodsCategoryServiceFeignApiHystrix.class)
 public interface GoodsCategoryServiceFeignApi {
     /**
      * @Author hmr

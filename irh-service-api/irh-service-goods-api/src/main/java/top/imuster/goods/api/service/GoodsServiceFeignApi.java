@@ -15,7 +15,7 @@ import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
  * @author: hmr
  * @date: 2019/12/26 20:34
  */
-@FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign",fallback = GoodsServiceFeignApiHystrix.class)
+@FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign",fallbackFactory = GoodsServiceFeignApiHystrix.class)
 public interface GoodsServiceFeignApi {
 
     /**

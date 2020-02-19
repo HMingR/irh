@@ -46,10 +46,18 @@ mybatis:
   mapper-locations: mapper/*
   type-aliases-package: top.imuster.user.api.pojo  #别名扫描
 
+feign:
+  hystrix:
+    enabled: true
 
 logging:
   level:
     top.imuster.user: debug
+
+hot:
+  topic:
+    total: 30   # 显示热搜数量
+    refreshTime: 30    #总热度榜刷新时间
 
 enable:
   needLogin: false
