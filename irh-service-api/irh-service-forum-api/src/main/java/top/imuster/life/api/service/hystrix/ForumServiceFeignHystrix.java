@@ -1,11 +1,11 @@
-package top.imuster.forum.api.service.hystrix;
+package top.imuster.life.api.service.hystrix;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
-import top.imuster.forum.api.pojo.ArticleTag;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.service.ForumServiceFeignApi;
+import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.service.ForumServiceFeignApi;
 
 /**
  * @ClassName: ForumServiceFeignHystrix

@@ -1,4 +1,4 @@
-package top.imuster.forum.api.pojo;
+package top.imuster.life.api.pojo;
 
 
 import top.imuster.common.base.domain.BaseDomain;

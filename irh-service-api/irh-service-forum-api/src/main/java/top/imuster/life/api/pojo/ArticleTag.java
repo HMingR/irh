@@ -1,4 +1,4 @@
-package top.imuster.forum.api.pojo;
+package top.imuster.life.api.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

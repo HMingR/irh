@@ -1,11 +1,10 @@
-package top.imuster.forum.api.pojo;
+package top.imuster.life.api.pojo;
 
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

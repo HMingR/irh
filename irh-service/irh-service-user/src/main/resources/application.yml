@@ -2,13 +2,44 @@ server:
   port: 8085
 
 spring:
+  application:
+    name: user-service
   profiles:
-    active: prod
+    active: dev
 
+mybatis:
+  mapper-locations: mapper/*
+  type-aliases-package: top.imuster.user.api.pojo  #别名扫描
 
+feign:
+  hystrix:
+    enabled: true
+hot:
+  topic:
+    total: 0   # 显示热搜数量
+    refreshTime: 0    #总热度榜刷新时间
 
-
-
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /actuator/**
+      - /druid/**
+      - /admin/login
+      - /admin/register
+      - /customer/login
+      - /customer/register
+      - /error
+      - /user/feign/login/
+      - /user/feign/roleAndAuth
 
 
 

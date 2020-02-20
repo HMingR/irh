@@ -1,7 +1,7 @@
 package top.imuster.life.provider.service;
 
-import top.imuster.forum.api.dto.UpCountDto;
-import top.imuster.forum.api.dto.UpDto;
+import top.imuster.life.api.dto.UpCountDto;
+import top.imuster.life.api.dto.UpDto;
 
 import java.util.HashSet;
 import java.util.List;
@@ -62,7 +62,7 @@ public interface RedisArticleAttitudeService {
      * @Description 从redis中获得所有的点赞记录
      * @Date: 2020/2/8 17:43
      * @param
-     * @reture: java.util.List<top.imuster.forum.api.dto.UpDto>
+     * @reture: java.util.List<UpDto>
      **/
     List<UpDto> getAllUpFromRedis();
 
@@ -72,7 +72,7 @@ public interface RedisArticleAttitudeService {
      * @Description 从redis中获得点赞总数
      * @Date: 2020/2/8 19:50
      * @param
-     * @reture: java.util.List<top.imuster.forum.api.dto.UpCountDto>
+     * @reture: java.util.List<UpCountDto>
      **/
     List<UpCountDto> getAllUpCountFromRedis();
 

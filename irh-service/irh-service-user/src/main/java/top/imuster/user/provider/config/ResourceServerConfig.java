@@ -37,7 +37,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     IgnoreUrlsConfig ignoreUrlsConfig;
 
     //公钥
-    private static final String PUBLIC_KEY = "classpath:publickey.txt";
+    private static final String PUBLIC_KEY = "classpath:/publickey.txt";
 
     //定义JwtTokenStore，使用jwt令牌
     @Bean

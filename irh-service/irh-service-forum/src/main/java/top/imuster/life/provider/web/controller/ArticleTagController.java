@@ -1,16 +1,14 @@
 package top.imuster.life.provider.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.forum.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.Resource;

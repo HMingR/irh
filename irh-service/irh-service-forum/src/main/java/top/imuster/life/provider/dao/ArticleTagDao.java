@@ -2,7 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.forum.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTag;
 
 /**
  * ArticleCategoryDao 接口

@@ -2,8 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopic;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public interface ForumHotTopicDao extends BaseDao<ForumHotTopic, Long> {
      * @Description 获得score前topic的targetId和score
      * @Date: 2020/2/14 12:40
      * @param topic
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+     * @reture: java.util.List<ArticleInfo>
      **/
     List<ForumHotTopic> selectMaxScoreTop(int topic);
 }

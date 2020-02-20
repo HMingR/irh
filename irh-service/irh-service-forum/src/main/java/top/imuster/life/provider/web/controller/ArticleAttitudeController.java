@@ -8,7 +8,7 @@ import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.forum.api.pojo.UserForumAttribute;
+import top.imuster.life.api.pojo.UserForumAttribute;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
 import top.imuster.life.provider.service.UserForumAttributeService;
 

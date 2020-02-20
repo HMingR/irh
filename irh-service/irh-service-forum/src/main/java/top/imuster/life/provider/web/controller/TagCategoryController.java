@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.file.api.service.FileServiceFeignApi;
-import top.imuster.forum.api.pojo.ArticleTag;
-import top.imuster.forum.api.pojo.ArticleTagCategory;
+import top.imuster.life.api.pojo.ArticleTagCategory;
 import top.imuster.life.provider.service.ArticleTagCategoryService;
 
 import javax.annotation.Resource;

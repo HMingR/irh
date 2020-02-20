@@ -2,7 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.forum.api.pojo.UserForumAttribute;
+import top.imuster.life.api.pojo.UserForumAttribute;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface UserForumAttributeDao extends BaseDao<UserForumAttribute, Long>
      * @Description 根据条件查询点赞记录
      * @Date: 2020/2/11 15:51
      * @param condition
-     * @reture: java.util.List<top.imuster.forum.api.pojo.UserForumAttribute>
+     * @reture: java.util.List<UserForumAttribute>
      **/
     List<UserForumAttribute> selectUpListByCondition(UserForumAttribute condition);
 }

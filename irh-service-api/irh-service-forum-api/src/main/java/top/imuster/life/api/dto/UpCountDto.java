@@ -1,4 +1,4 @@
-package top.imuster.forum.api.dto;
+package top.imuster.life.api.dto;
 
 import java.io.Serializable;
 

@@ -4,7 +4,7 @@ package top.imuster.life.provider.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.forum.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReview;
 import top.imuster.life.provider.dao.ArticleReviewDao;
 import top.imuster.life.provider.service.ArticleReviewService;
 

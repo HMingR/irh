@@ -1,6 +1,6 @@
-package top.imuster.forum.api.dto;
+package top.imuster.life.api.dto;
 
-import top.imuster.forum.api.enums.UpStateEnum;
+import top.imuster.life.api.enums.UpStateEnum;
 
 import java.io.Serializable;
 

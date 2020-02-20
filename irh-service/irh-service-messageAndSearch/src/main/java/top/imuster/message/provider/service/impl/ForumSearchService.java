@@ -16,8 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.message.dto.ForumSearchParam;
 
 import java.io.IOException;

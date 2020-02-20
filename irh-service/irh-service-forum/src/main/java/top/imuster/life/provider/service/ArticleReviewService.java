@@ -2,7 +2,7 @@ package top.imuster.life.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.forum.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReview;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Description 根据文章的id获得该文章下所有的一级留言
      * @Date: 2020/2/2 11:05
      * @param id
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
+     * @reture: java.util.List<ArticleReview>
      **/
     List<ArticleReview> getFirstClassReviewInfoById(Long id);
 
@@ -27,7 +27,7 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Description 根据一级留言的id获得其下所有的回复或留言
      * @Date: 2020/2/2 11:20
      * @param id
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
+     * @reture: java.util.List<ArticleReview>
      **/
     List<ArticleReview> reviewDetails(Long id);
 
@@ -36,7 +36,7 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Description 用户查看自己的留言记录
      * @Date: 2020/2/3 11:02
      * @param userId
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
+     * @reture: java.util.List<ArticleReview>
      **/
     List<ArticleReview> list(Long userId);
 
@@ -54,7 +54,7 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Description
      * @Date: 2020/2/8 20:41
      * @param reviewIds
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleReview>
+     * @reture: java.util.List<ArticleReview>
      **/
     List<ArticleReview> getUpTotalByIds(Long[] reviewIds);
 

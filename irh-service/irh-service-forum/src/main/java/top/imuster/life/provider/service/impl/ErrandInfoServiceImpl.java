@@ -7,7 +7,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ErrandInfo;
+import top.imuster.life.api.pojo.ErrandInfo;
 import top.imuster.life.provider.dao.ErrandInfoDao;
 import top.imuster.life.provider.service.ErrandInfoService;
 

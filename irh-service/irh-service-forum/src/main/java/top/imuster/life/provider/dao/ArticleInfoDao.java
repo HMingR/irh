@@ -4,11 +4,10 @@ package top.imuster.life.provider.dao;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.forum.api.dto.UserBriefDto;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
+import top.imuster.life.api.dto.UserBriefDto;
+import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.pojo.ForumHotTopic;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description selectListByCondition
      * @Date: 2020/2/1 19:45
      * @param articleInfo
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+     * @reture: java.util.List<ArticleInfo>
      **/
     List<ArticleInfo> selectListByCondition(ArticleInfo articleInfo);
 
@@ -34,7 +33,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description 根据id查询点赞数
      * @Date: 2020/2/8 20:36
      * @param ids
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+     * @reture: java.util.List<ArticleInfo>
      **/
     List<ArticleInfo> selectUpTotalByIds(Long[] ids);
 
@@ -52,7 +51,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description 根据id查询帖子的简略信息
      * @Date: 2020/2/11 16:24
      * @param id
-     * @reture: top.imuster.forum.api.pojo.ArticleInfo
+     * @reture: ArticleInfo
      **/
     ArticleInfo selectBriefById(Long id);
 
@@ -61,7 +60,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description
      * @Date: 2020/2/14 12:33
      * @param longs
-     * @reture: java.util.List<top.imuster.forum.api.pojo.ForumHotTopic>
+     * @reture: java.util.List<ForumHotTopic>
      **/
     List<ArticleInfo> selectInfoByTargetIds(Long[] longs);
 
@@ -80,7 +79,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
       * @Description 根据分类id获得该分类下点赞数最大的5个
       * @Date: 2020/2/15 16:01
       * @param id
-      * @reture: java.util.List<top.imuster.forum.api.pojo.ArticleInfo>
+      * @reture: java.util.List<ArticleInfo>
       **/
     List<ArticleInfo> selectUpTop5ByCategoryId(Long id);
 
@@ -108,7 +107,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description 根据redis中的热搜id获得文章信息，并直接封装成一个ForumHotTopic对象
      * @Date: 2020/2/17 12:00
      * @param aLong
-     * @reture: top.imuster.forum.api.pojo.ForumHotTopic
+     * @reture: ForumHotTopic
      **/
     ForumHotTopic selectBriefByHotTopicId(Long aLong);
 }

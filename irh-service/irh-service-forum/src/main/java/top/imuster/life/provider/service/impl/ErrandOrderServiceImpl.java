@@ -15,7 +15,7 @@ import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.UuidUtils;
-import top.imuster.forum.api.pojo.ErrandOrder;
+import top.imuster.life.api.pojo.ErrandOrder;
 import top.imuster.life.provider.dao.ErrandOrderDao;
 import top.imuster.life.provider.exception.ForumException;
 import top.imuster.life.provider.service.ErrandOrderService;

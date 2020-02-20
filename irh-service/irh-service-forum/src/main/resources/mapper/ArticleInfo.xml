@@ -159,7 +159,7 @@
 	
 	<!-- 其它SQL语句 -->
 
-	<select id="selectListByCondition" parameterType="articleInfo" resultType="top.imuster.forum.api.pojo.ArticleInfo">
+	<select id="selectListByCondition" parameterType="articleInfo" resultType="top.imuster.life.api.pojo.ArticleInfo">
 		<![CDATA[SELECT id, title, article_category AS articleTag, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, main_picture AS mainPicture]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
@@ -196,7 +196,7 @@
 		</foreach>
 	</select>
 
-	<select id="selectUserBriefTotalById" parameterType="top.imuster.forum.api.dto.UserBriefDto" resultType="long">
+	<select id="selectUserBriefTotalById" parameterType="top.imuster.life.api.dto.UserBriefDto" resultType="long">
 		<![CDATA[SELECT SUM(up_total) AS upTotal, SUM(collect_total) AS collectTotal, SUM(browser_times) AS browserTotal]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE user_id = #{userId}
@@ -237,7 +237,7 @@
         </foreach>
 	</update>
 
-	<select id="selectBriefByHotTopicId" resultType="top.imuster.forum.api.pojo.ForumHotTopic" parameterType="long">
+	<select id="selectBriefByHotTopicId" resultType="top.imuster.life.api.pojo.ForumHotTopic" parameterType="long">
 		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state != 1 AND id = #{aLong}]]>

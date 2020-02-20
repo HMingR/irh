@@ -1,4 +1,4 @@
-package top.imuster.forum.api.pojo;
+package top.imuster.life.api.pojo;
 
 
 import io.swagger.annotations.ApiModel;
@@ -7,7 +7,6 @@ import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**

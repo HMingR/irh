@@ -2,7 +2,7 @@ package top.imuster.life.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.forum.api.pojo.ArticleTagCategory;
+import top.imuster.life.api.pojo.ArticleTagCategory;
 
 /**
  * ArticleTagCategoryService接口

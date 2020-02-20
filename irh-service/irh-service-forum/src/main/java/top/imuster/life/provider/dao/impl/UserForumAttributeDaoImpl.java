@@ -3,7 +3,7 @@ package top.imuster.life.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.forum.api.pojo.UserForumAttribute;
+import top.imuster.life.api.pojo.UserForumAttribute;
 import top.imuster.life.provider.dao.UserForumAttributeDao;
 
 import java.util.List;

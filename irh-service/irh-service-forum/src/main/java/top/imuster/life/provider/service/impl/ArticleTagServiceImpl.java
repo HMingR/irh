@@ -4,11 +4,8 @@ package top.imuster.life.provider.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleTag;
-import top.imuster.forum.api.pojo.ArticleTagRel;
+import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.provider.dao.ArticleTagDao;
-import top.imuster.life.provider.service.ArticleTagRelService;
 import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.Resource;

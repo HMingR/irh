@@ -9,7 +9,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.forum.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReview;
 import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
@@ -34,7 +34,7 @@ public class ArticleReviewController extends BaseController {
      * @Description 根据一级留言id获得其对应的所有留言或回复
      * @Date: 2020/2/3 10:39
      * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleReview>>
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReview>>
      **/
     @ApiOperation(value = "根据一级留言id获得其对应的所有留言或回复", httpMethod = "GET")
     @GetMapping("/{id}")
@@ -86,7 +86,7 @@ public class ArticleReviewController extends BaseController {
      * @Description 用户查看自己的留言记录
      * @Date: 2020/2/3 11:04
      * @param
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleReview>>
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReview>>
      **/
     @ApiOperation(value = "用户查看自己的留言记录,按照时间降序排列", httpMethod = "GET")
     @NeedLogin

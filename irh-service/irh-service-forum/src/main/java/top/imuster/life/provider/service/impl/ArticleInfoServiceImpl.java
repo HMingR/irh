@@ -14,10 +14,9 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
-import top.imuster.forum.api.dto.UserBriefDto;
-import top.imuster.forum.api.pojo.*;
+import top.imuster.life.api.dto.UserBriefDto;
+import top.imuster.life.api.pojo.*;
 import top.imuster.life.provider.dao.ArticleInfoDao;
-import top.imuster.life.provider.exception.ForumException;
 import top.imuster.life.provider.service.*;
 
 import javax.annotation.Resource;

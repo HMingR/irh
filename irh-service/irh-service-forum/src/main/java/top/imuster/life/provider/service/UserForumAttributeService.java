@@ -4,7 +4,7 @@ package top.imuster.life.provider.service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.UserForumAttribute;
+import top.imuster.life.api.pojo.UserForumAttribute;
 
 /**
  * UserForumAttributeService接口
@@ -57,7 +57,7 @@ public interface UserForumAttributeService extends BaseService<UserForumAttribut
      * @Date: 2020/2/11 15:49
      * @param page
      * @param currentUserIdFromCookie
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.UserForumAttribute>>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<UserForumAttribute>>
      **/
     Message<Page<UserForumAttribute>> getUpList(Page<UserForumAttribute> page, Long userId);
 }

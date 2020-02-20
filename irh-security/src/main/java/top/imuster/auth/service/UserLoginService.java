@@ -3,8 +3,11 @@ package top.imuster.auth.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -28,6 +31,9 @@ import top.imuster.security.api.bo.SecurityUserDto;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -59,6 +65,9 @@ public class UserLoginService {
 
     @Autowired
     GenerateSendMessageService generateSendMessageService;
+
+    @Autowired
+    DiscoveryClient discoveryClient;
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -150,7 +159,18 @@ public class UserLoginService {
      * @reture: top.imuster.security.api.bo.AuthToken
      **/
     private AuthToken applyToken(String loginName, String password, String clientId, String clientSecret){
-        String authUrl =  "http://localhost:10000/oauth/token";
+        List<String> services = discoveryClient.getServices();
+        URI uri = null;
+        for (String service : services) {
+            if(service.equalsIgnoreCase("security-service")){
+                ServiceInstance serviceInstance1 = discoveryClient.getInstances(service).get(0);
+                uri = serviceInstance1.getUri();
+            }
+        }
+        if(StringUtils.isBlank(String.valueOf(uri))){
+            throw new CustomSecurityException("认证服务器已经停止工作,请稍后重试或联系管理员");
+        }
+        String url = new StringBuilder().append(uri).append("/oauth/token").toString();
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         String httpBasic = getHttpBasic(clientId, clientSecret);
         header.add("Authorization",httpBasic);
@@ -173,7 +193,7 @@ public class UserLoginService {
             }
         });
 
-        ResponseEntity<Map> exchange = restTemplate.exchange(authUrl, HttpMethod.POST, httpEntity, Map.class);
+        ResponseEntity<Map> exchange = restTemplate.exchange(url, HttpMethod.POST, httpEntity, Map.class);
 
         //申请令牌信息
         Map resultMap = exchange.getBody();

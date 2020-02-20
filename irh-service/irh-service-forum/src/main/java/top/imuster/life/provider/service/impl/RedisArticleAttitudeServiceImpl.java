@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.forum.api.dto.UpCountDto;
-import top.imuster.forum.api.dto.UpDto;
-import top.imuster.forum.api.enums.UpStateEnum;
+import top.imuster.life.api.dto.UpCountDto;
+import top.imuster.life.api.dto.UpDto;
+import top.imuster.life.api.enums.UpStateEnum;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
 
 import java.util.*;

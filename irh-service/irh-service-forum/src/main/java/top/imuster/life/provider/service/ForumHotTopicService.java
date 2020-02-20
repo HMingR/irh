@@ -3,8 +3,7 @@ package top.imuster.life.provider.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopic;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +29,7 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopic, Long> {
      * @Description 累计热度榜
      * @Date: 2020/2/14 12:21
      * @param
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleInfo>>
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleInfo>>
      **/
     Message<List<ForumHotTopic>> totalHotTopicList(int topic);
 
@@ -39,7 +38,7 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopic, Long> {
      * @Description 实时热度榜
      * @Date: 2020/2/14 12:24
      * @param topic
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleInfo>>
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleInfo>>
      **/
     Message<List<ForumHotTopic>> currentHotTopicList(int topic);
 }

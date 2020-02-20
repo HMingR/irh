@@ -1,12 +1,12 @@
-package top.imuster.forum.api.service;
+package top.imuster.life.api.service;
 
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
-import top.imuster.forum.api.pojo.ArticleTag;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.service.hystrix.ForumServiceFeignHystrix;
+import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.service.hystrix.ForumServiceFeignHystrix;
 
 /**
  * @ClassName: ForumServiceFeignApi
@@ -85,7 +85,7 @@ public interface ForumServiceFeignApi {
      * @Description 管理员分页查看帖子信息,不显示内容
      * @Date: 2020/2/6 15:05
      * @param page
-     * @reture: top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleInfo>
+     * @reture: top.imuster.common.base.domain.Page<ArticleInfo>
      **/
     @PostMapping("/article/list")
     Page<ArticleInfo> adminGetArticleList(@RequestBody Page<ArticleInfo> page);

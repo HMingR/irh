@@ -1,14 +1,11 @@
 package top.imuster.life.provider.service.impl;
 
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ForumHotTopicDao;
 import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ForumHotTopicService;

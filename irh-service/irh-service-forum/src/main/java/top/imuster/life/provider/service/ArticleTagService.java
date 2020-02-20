@@ -2,8 +2,7 @@ package top.imuster.life.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTag;
 
 import java.util.List;
 

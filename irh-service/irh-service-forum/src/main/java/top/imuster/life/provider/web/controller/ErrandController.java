@@ -8,7 +8,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.forum.api.pojo.ErrandInfo;
+import top.imuster.life.api.pojo.ErrandInfo;
 import top.imuster.life.provider.service.ErrandInfoService;
 
 import javax.annotation.Resource;

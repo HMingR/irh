@@ -1,6 +1,6 @@
 package top.imuster.life.provider.service;
 
-import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.life.api.pojo.ArticleInfo;
 
 /**
  * @ClassName: ReWriteArticleDetailPage

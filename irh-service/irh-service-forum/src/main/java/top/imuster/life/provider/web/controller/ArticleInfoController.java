@@ -13,8 +13,8 @@ import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.file.api.service.FileServiceFeignApi;
-import top.imuster.forum.api.dto.UserBriefDto;
-import top.imuster.forum.api.pojo.ArticleInfo;
+import top.imuster.life.api.dto.UserBriefDto;
+import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.provider.service.ArticleInfoService;
 
 import javax.annotation.PostConstruct;
@@ -96,7 +96,7 @@ public class ArticleInfoController extends BaseController {
      * @Description 用户查看自己发布的帖子,按照发布时间降序排列
      * @Date: 2020/2/1 19:40
      * @param page
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.forum.api.pojo.ArticleInfo>>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<ArticleInfo>>
      **/
     @ApiOperation(("用户条件查看自己发布的帖子(列表,没有帖子的内容),按照发布时间降序排列"))
     @PostMapping("/list")
@@ -120,7 +120,7 @@ public class ArticleInfoController extends BaseController {
      * @Description 根据id查看帖子的详细信息(包括一级留言)，
      * @Date: 2020/2/2 10:56
      * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.forum.api.pojo.ArticleInfo>
+     * @reture: top.imuster.common.base.wrapper.Message<ArticleInfo>
      **/
     @ApiOperation("根据id查看帖子的所有信息")
     @GetMapping("/{id}")
@@ -135,7 +135,7 @@ public class ArticleInfoController extends BaseController {
      * @Description 根据id获得文章的简略信息
      * @Date: 2020/2/11 16:21
      * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.forum.api.pojo.ArticleInfo>
+     * @reture: top.imuster.common.base.wrapper.Message<ArticleInfo>
      **/
     @ApiOperation("根据id获得文章的简略信息(文章标题,图片url,留言总数,点赞总数)")
     @GetMapping("/brief/{id}}")

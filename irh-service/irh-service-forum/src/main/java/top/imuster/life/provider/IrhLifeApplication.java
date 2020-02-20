@@ -18,8 +18,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"top.imuster.common.core",
                                "top.imuster.life",
                                 "top.imuster.file.api.service.hystrix"})
-public class IrhForumApplication {
+public class IrhLifeApplication {
     public static void main(String[] args) {
-        SpringApplication.run(IrhForumApplication.class, args);
+        SpringApplication.run(IrhLifeApplication.class, args);
     }
 }

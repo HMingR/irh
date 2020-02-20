@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.service.ForumHotTopicService;
 
 import javax.annotation.Resource;

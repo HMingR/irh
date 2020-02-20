@@ -9,11 +9,11 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.forum.api.dto.UpCountDto;
-import top.imuster.forum.api.dto.UpDto;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ArticleReview;
-import top.imuster.forum.api.pojo.UserForumAttribute;
+import top.imuster.life.api.dto.UpCountDto;
+import top.imuster.life.api.dto.UpDto;
+import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.UserForumAttribute;
 import top.imuster.life.provider.dao.UserForumAttributeDao;
 import top.imuster.life.provider.service.*;
 
@@ -156,7 +156,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
      * @Date: 2020/2/8 19:42
      * @param targetId
      * @param userId
-     * @reture: top.imuster.forum.api.pojo.UserForumAttribute
+     * @reture: UserForumAttribute
      **/
     private UserForumAttribute getInfoByTargetIdAndUserId(Long targetId, Long userId){
         UserForumAttribute condition = new UserForumAttribute();

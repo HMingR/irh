@@ -12,7 +12,7 @@ import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
-import top.imuster.forum.api.service.ForumServiceFeignApi;
+import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.user.api.enums.FeedbackEnum;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;

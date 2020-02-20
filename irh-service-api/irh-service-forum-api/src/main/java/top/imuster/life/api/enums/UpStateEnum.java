@@ -1,4 +1,4 @@
-package top.imuster.forum.api.enums;
+package top.imuster.life.api.enums;
 
 /**
  * @ClassName: UpStateEnum

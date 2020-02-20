@@ -59,8 +59,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new CustomSecurityException("用户名或者密码错误");
         }
         if(userInfo.getState() == null || userInfo.getState() <= 20){
-            CustomSecurityException customSecurityException = new CustomSecurityException("该账号已被冻结,请联系管理员");
-            throw customSecurityException;
+            throw new CustomSecurityException("该账号已被冻结,请联系管理员");
         }
         log.info("查询到的用户信息为{}", userInfo);
         List<String> roleName = userServiceFeignApi.getRoleByUserName(username);

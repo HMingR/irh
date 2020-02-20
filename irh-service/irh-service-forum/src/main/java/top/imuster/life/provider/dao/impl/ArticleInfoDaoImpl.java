@@ -1,15 +1,13 @@
 package top.imuster.life.provider.dao.impl;
 
 
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.forum.api.dto.UserBriefDto;
-import top.imuster.forum.api.pojo.ArticleInfo;
-import top.imuster.forum.api.pojo.ForumHotTopic;
+import top.imuster.life.api.dto.UserBriefDto;
+import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

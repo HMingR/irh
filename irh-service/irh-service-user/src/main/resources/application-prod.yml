@@ -1,9 +1,4 @@
-server:
-  port: 8085
-
 spring:
-  profiles:
-    active: dev
   redis:
     database: 0
     host: 39.105.0.169
@@ -14,9 +9,6 @@ spring:
         max-idle: 10
         max-wait: -1
     timeout: 1000
-
-  application:
-    name: user-service
 
   datasource:
       druid:
@@ -43,47 +35,13 @@ eureka:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
-mybatis:
-  mapper-locations: mapper/*
-  type-aliases-package: top.imuster.user.api.pojo  #别名扫描
-
-feign:
-  hystrix:
-    enabled: true
-
 logging:
   level:
-    top.imuster.user: debug
-
-hot:
-  topic:
-    total: 30   # 显示热搜数量
-    refreshTime: 30    #总热度榜刷新时间
+    top.imuster.user: info
 
 enable:
-  needLogin: false
+  needLogin: true
 
-secure:
-  ignored:
-    urls: #安全路径白名单
-      - /swagger-ui.html
-      - /swagger-resources/**
-      - /swagger/**
-      - /**/v2/api-docs
-      - /**/*.js
-      - /**/*.css
-      - /**/*.png
-      - /**/*.ico
-      - /webjars/springfox-swagger-ui/**
-      - /actuator/**
-      - /druid/**
-      - /admin/login
-      - /admin/register
-      - /customer/login
-      - /customer/register
-      - /error
-      - /user/feign/login/
-      - /user/feign/roleAndAuth
 
 
 

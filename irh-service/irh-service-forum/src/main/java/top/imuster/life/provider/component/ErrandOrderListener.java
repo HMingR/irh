@@ -9,8 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.forum.api.pojo.ErrandInfo;
-import top.imuster.forum.api.pojo.ErrandOrder;
+import top.imuster.life.api.pojo.ErrandInfo;
+import top.imuster.life.api.pojo.ErrandOrder;
 import top.imuster.life.provider.service.ErrandInfoService;
 import top.imuster.life.provider.service.ErrandOrderService;
 
