@@ -1,4 +1,0 @@
-hot:
-  topic:
-    total: 30   # 显示热搜数量
-    refreshTime: 30    #总热度榜刷新时间

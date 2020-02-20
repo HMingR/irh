@@ -11,19 +11,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Component;
-import sun.rmi.runtime.Log;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.annotation.LogAnnotation;
 import top.imuster.common.core.dto.OperationLogDto;
-import top.imuster.common.core.dto.UserDto;
-import top.imuster.common.core.utils.CusThreadLocal;
 import top.imuster.common.core.utils.RequestUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
 import java.util.Date;
 
 /**

@@ -14,7 +14,7 @@ import top.imuster.forum.api.service.hystrix.ForumServiceFeignHystrix;
  * @author: hmr
  * @date: 2020/2/1 12:07
  */
-@FeignClient(value = "forum-service", path = "/forum/feign", fallback = ForumServiceFeignHystrix.class, fallbackFactory = Exception.class)
+@FeignClient(value = "forum-service", path = "/forum/feign", fallback = ForumServiceFeignHystrix.class)
 public interface ForumServiceFeignApi {
 
     /**

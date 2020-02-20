@@ -12,8 +12,8 @@ import top.imuster.file.api.service.FileServiceFeignApi;
  * @author: hmr
  * @date: 2020/1/10 20:33
  */
-@Component
 @Slf4j
+@Component
 public class FileServiceFeignApiHystrix implements FileServiceFeignApi {
 
     @Override
@@ -26,5 +26,11 @@ public class FileServiceFeignApiHystrix implements FileServiceFeignApi {
     public Message deleteByName(String name) {
         log.error("根据uri删除文件失败,文件名为{}",name);
         return null;
+    }
+
+    @Override
+    public String test() {
+        log.error("测试失败");
+        return "测试失败";
     }
 }

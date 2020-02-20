@@ -21,7 +21,9 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableFeignClients(basePackages = "top.imuster.user.api.service")
 @EnableDiscoveryClient
-@ComponentScan(basePackages = {"top.imuster.common", "top.imuster.auth"})
+@ComponentScan(basePackages = {"top.imuster.common",
+                                "top.imuster.auth",
+                                "top.imuster.user.api.service.hystrix"})
 public class IrhSecurityApplication {
 
     public static void main(String[] args) {

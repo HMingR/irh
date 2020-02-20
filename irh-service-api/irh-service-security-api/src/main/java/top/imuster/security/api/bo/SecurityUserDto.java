@@ -7,6 +7,7 @@ import top.imuster.common.core.dto.UserDto;
 @ApiModel("用户登录成功返回的对象")
 public class SecurityUserDto extends UserDto {
 
+    private static final long serialVersionUID = 6428662142527424158L;
     //用户昵称
     @ApiModelProperty("用户昵称")
     private String nickname;

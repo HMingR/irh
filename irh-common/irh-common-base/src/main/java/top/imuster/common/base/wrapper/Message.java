@@ -26,9 +26,10 @@ public class Message<T> implements Serializable {
     //状态码
     private Integer code;
 
-    private Message(){
+    public Message(){
         super();
     }
+
 
     public String getText() {
         return text;

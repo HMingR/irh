@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class UserDetails extends User {
 
+    private static final long serialVersionUID = -8277104383134312469L;
+
     UserDto userInfo;
 
     List<RoleInfo> roleInfos;

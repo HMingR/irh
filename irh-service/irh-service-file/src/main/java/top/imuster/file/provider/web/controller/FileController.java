@@ -74,6 +74,11 @@ public class FileController extends BaseController implements FileServiceFeignAp
         }
     }
 
+    @Override
+    @GetMapping("/test")
+    public String test() {
+        throw new FileException();
+    }
 
 
 }

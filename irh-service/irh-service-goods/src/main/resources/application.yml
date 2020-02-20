@@ -50,4 +50,6 @@ enable:
   needLogin: false
 
 
-
+feign:    # 启动hystrix
+  hystrix:
+    enabled: true

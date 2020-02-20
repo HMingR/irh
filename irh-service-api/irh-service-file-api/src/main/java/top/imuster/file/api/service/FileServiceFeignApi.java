@@ -1,10 +1,7 @@
 package top.imuster.file.api.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.file.api.service.hystrix.FileServiceFeignApiHystrix;
@@ -28,7 +25,17 @@ public interface FileServiceFeignApi {
     @PostMapping
     Message upload(@RequestParam("file") MultipartFile file);
 
+    /**
+     * @Author hmr
+     * @Description 根据文件名称删除指定文件
+     * @Date: 2020/2/20 10:18
+     * @param name
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
     @DeleteMapping("/{name}")
     Message deleteByName(@PathVariable("name") String name);
+
+    @GetMapping("/test")
+    String test();
 
 }

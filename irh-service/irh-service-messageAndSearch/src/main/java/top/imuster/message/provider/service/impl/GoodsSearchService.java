@@ -97,7 +97,7 @@ public class GoodsSearchService {
 
         searchRequest.source(searchSourceBuilder);
 
-        Message<Page<ProductInfo>> queryResult = new Message<>();
+        Message<Page<ProductInfo>> queryResult = new Message<Page<ProductInfo>>();
         Page<ProductInfo> productInfoPage = new Page<>();
         List<ProductInfo> list = productInfoPage.getResult();
         try {

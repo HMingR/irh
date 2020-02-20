@@ -1,5 +1,6 @@
 package top.imuster.user.provider.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import top.imuster.common.core.interceptor.FeignClientInterceptor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
@@ -28,13 +30,14 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)//激活方法上的PreAuthorize注解
+@Slf4j
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
     IgnoreUrlsConfig ignoreUrlsConfig;
 
     //公钥
-    private static final String PUBLIC_KEY = "publickey.txt";
+    private static final String PUBLIC_KEY = "classpath:publickey.txt";
 
     //定义JwtTokenStore，使用jwt令牌
     @Bean
@@ -55,13 +58,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      * @return 公钥 Key
      */
     private String getPubKey() {
-        Resource resource = new ClassPathResource(PUBLIC_KEY);
+        InputStream inputStream =  getClass().getClassLoader().getResourceAsStream(PUBLIC_KEY);
+
+//        Resource resource = new ClassPathResource(PUBLIC_KEY);
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(resource.getInputStream());
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader br = new BufferedReader(inputStreamReader);
             return br.lines().collect(Collectors.joining("\n"));
-        } catch (IOException ioe) {
-            return null;
+        } catch (Exception ioe) {
+            log.error("---------------------> load publickey.txt error");
+            return "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgaVB+OnTTnhG8/plZ2dihsA6KXnL3BuDTByPlIbCw6dz7aB2PU+/YsdQKig8HWQFq/cNpUkWBU0+d2VQwTQp/9uqdp9nK3VMSzzHkcZkFTpOK51tzFqmvP6CH2FWkVh/bJo+vfkm32XFY9L6C+NYKGJdC7FpcBIs3132d+lbRbOp4j/6keq8BaqNWwbOU+2I/UeAGA7GlHp1FSe/0e4OT/t62jwqVLXQhkTSYhcoSaal+zAr3kVveQnLXqhAeQe1n0WnhSodQpLeKrU49mqt0ciz6oXxTsZglsh/RbCv76/5tpAAxSu+N92G7P+pvlxuLo+wku6Q7IsFhR0IIS12KwIDAQAB-----END PUBLIC KEY-----";
         }
     }
 

@@ -86,38 +86,44 @@
 
 
     <build>
-        <finalName>springboot-swagger</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork>
-                    <addResources>true</addResources>
+                    <classifier>execute</classifier>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+            </executions>
             </plugin>
+        </plugins>
 
             <!--此插件生成ASCIIDOC-->
-            <plugin>
+            <!--<plugin>
                 <groupId>io.github.swagger2markup</groupId>
                 <artifactId>swagger2markup-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <configuration>
-                    <!--此处端口一定要是当前项目启动所用的端口-->
+                    &lt;!&ndash;此处端口一定要是当前项目启动所用的端口&ndash;&gt;
                     <swaggerInput>http://localhost:8085/v2/api-docs</swaggerInput>
                     <outputDir>src/docs/asciidoc/generated</outputDir>
                     <config>
-                        <!-- 除了ASCIIDOC之外，还有MARKDOWN和CONFLUENCE_MARKUP可选 -->
+                        &lt;!&ndash; 除了ASCIIDOC之外，还有MARKDOWN和CONFLUENCE_MARKUP可选 &ndash;&gt;
                         <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
                     </config>
                 </configuration>
             </plugin>
-            <!--此插件生成HTML和PDF-->
+            &lt;!&ndash;此插件生成HTML和PDF&ndash;&gt;
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>1.5.3</version>
-                <!-- Include Asciidoctor PDF for pdf generation -->
+                &lt;!&ndash; Include Asciidoctor PDF for pdf generation &ndash;&gt;
                 <dependencies>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
@@ -130,7 +136,7 @@
                         <version>1.7.24</version>
                     </dependency>
                 </dependencies>
-                <!-- Configure generic document generation settings -->
+                &lt;!&ndash; Configure generic document generation settings &ndash;&gt;
                 <configuration>
                     <sourceDirectory>src/docs/asciidoc/generated</sourceDirectory>
                     <sourceHighlighter>coderay</sourceHighlighter>
@@ -138,8 +144,8 @@
                         <toc>left</toc>
                     </attributes>
                 </configuration>
-                <!-- Since each execution can only handle one backend, run
-                     separate executions for each desired output type -->
+                &lt;!&ndash; Since each execution can only handle one backend, run
+                     separate executions for each desired output type &ndash;&gt;
                 <executions>
                     <execution>
                         <id>output-html</id>
@@ -168,7 +174,7 @@
         </plugins>
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                &lt;!&ndash;This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.&ndash;&gt;
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -202,7 +208,7 @@
                     </configuration>
                 </plugin>
             </plugins>
-        </pluginManagement>
+        </pluginManagement>-->
     </build>
 
 

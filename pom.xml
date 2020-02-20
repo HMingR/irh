@@ -32,10 +32,10 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.mysql.url>
+                <irh.mysql.url>jdbc:mysql://39.105.0.169:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
-                <irh.mysql.password>123456</irh.mysql.password>
-                <irh.redis.host>192.168.2.128</irh.redis.host>
+                <irh.mysql.password>197877346hmr</irh.mysql.password>
+                <irh.redis.host>39.105.0.169</irh.redis.host>
                 <irh.redis.password></irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
                 <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
@@ -43,7 +43,6 @@
                 <irh.rabbitmq.username>admin</irh.rabbitmq.username>
                 <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
                 <irh.elasticsearch.host>localhost:9200</irh.elasticsearch.host>
-                <irh.eureka.host>http://39.105.0.169:10086/eureka</irh.eureka.host>
             </properties>
         </profile>
 
@@ -63,10 +62,9 @@
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>
                 <irh.rabbitmq.username>admin</irh.rabbitmq.username>
                 <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
-                <irh.eureka.host>localhost:10086/eureka</irh.eureka.host>
+                <irh.elasticsearch.host>localhost:9200</irh.elasticsearch.host>
             </properties>
         </profile>
-
 
         <profile>
             <id>online</id>
@@ -74,20 +72,18 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <irh.musql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.musql.url>
+                <irh.mysql.url>jdbc:mysql://39.105.0.169:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>197877346hmr</irh.mysql.password>
                 <irh.redis.host>39.105.0.169</irh.redis.host>
-                <irh.redis.password>197877346h</irh.redis.password>
+                <irh.redis.password></irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
                 <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>
                 <irh.rabbitmq.username>admin</irh.rabbitmq.username>
                 <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
-                <irh.eureka.host>localhost:10086/eureka</irh.eureka.host>
+                <irh.elasticsearch.host>localhost:9200</irh.elasticsearch.host>
             </properties>
-
-
         </profile>
     </profiles>
 
@@ -96,7 +92,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Finchley.SR2</spring-cloud.version>
+        <spring-cloud.version>Finchley.SR4</spring-cloud.version>
         <mybatis.starter.version>1.3.2</mybatis.starter.version>
         <mapper.starter.version>2.0.2</mapper.starter.version>
         <mysql.version>5.1.32</mysql.version>
@@ -310,6 +306,18 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <plugins>
+            <!-- JDK版本 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+
+
 
 </project>
