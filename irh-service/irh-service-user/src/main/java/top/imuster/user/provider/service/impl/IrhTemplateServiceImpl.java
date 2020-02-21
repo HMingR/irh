@@ -1,4 +1,4 @@
-package top.imuster.user.provider.service;
+package top.imuster.user.provider.service.impl;
 
 
 import org.springframework.stereotype.Service;
@@ -7,6 +7,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.user.api.pojo.IrhTemplate;
 import top.imuster.user.provider.dao.IrhTemplateDao;
 import top.imuster.user.provider.exception.UserException;
+import top.imuster.user.provider.service.IrhTemplateService;
 
 import javax.annotation.Resource;
 

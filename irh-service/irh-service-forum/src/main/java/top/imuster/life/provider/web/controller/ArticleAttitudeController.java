@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserTimesAnnotation;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
@@ -54,6 +55,7 @@ public class ArticleAttitudeController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("给文章的评论点赞")
+    @NeedLogin
     @GetMapping("/up/2/{id}")
     public Message<String> upReviewById(@PathVariable("id") Long id){
         redisArticleAttitudeService.saveUp2Redis(id, 2, getCurrentUserIdFromCookie());
@@ -70,6 +72,7 @@ public class ArticleAttitudeController extends BaseController {
      * @reture: void
      **/
     @ApiOperation("取消点赞")
+    @NeedLogin
     @GetMapping("/cancel/{id}/{type}")
     public Message<String> cancelUpByType(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         redisArticleAttitudeService.saveUp2Redis(id, type, getCurrentUserIdFromCookie());

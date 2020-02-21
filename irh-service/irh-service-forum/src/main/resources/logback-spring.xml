@@ -4,7 +4,7 @@
 
     <!--日志存放路径,windows会将日志存放到当前磁盘 c:/opt/applog/myApp/log/myApp.log -->
     <!--日志存放路径,Linux会将日志存放到当前磁盘 /opt/applog/myApp/log/myApp.log -->
-    <property scope="context" name="APP_NAME" value="myApp"/>
+    <property scope="context" name="APP_NAME" value="forum"/>
     <property scope="context" name="LOG_FILE_PATH" value="/opt/applog/${APP_NAME}/log" />
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
