@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -123,6 +124,12 @@ public class GlobalExceptionHandler {
     public Message httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException exception){
         logger.error("请求方式错误{}",exception.getMessage());
         return Message.createByError("非法的请求方式");
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public Message<String> InternalAuthenticationServiceExceptionHandler(InternalAuthenticationServiceException exception){
+        logger.error("微服务之间调用出现问题{}", exception.getMessage());
+        return Message.createByError("服务器刚启动,请刷新后重试");
     }
 
     /**

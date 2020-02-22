@@ -9,6 +9,7 @@ spring:
         max-idle: 10
         max-wait: -1
     timeout: 1000
+    password: irh_aliyun_redis
 
   datasource:
       druid:
@@ -23,7 +24,7 @@ spring:
         validation-query: select '1' from dual      # 测试连接
   rabbitmq:
     host: "@irh.rabbitmq.host@"
-    port: "@irh.rabbitmq.port@"
+    port: 5672
     username: "@irh.rabbitmq.username@"
     password: "@irh.rabbitmq.password@"
 

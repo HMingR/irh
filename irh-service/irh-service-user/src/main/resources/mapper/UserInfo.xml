@@ -26,7 +26,8 @@
             state,
             update_time AS updateTime,
             create_time AS createTime,
-            portrait
+            portrait,
+            type
 		]]>
 	</sql>
 
@@ -57,6 +58,7 @@
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if> 
             <if test="portrait != null and portrait != ''"><![CDATA[AND portrait = #{portrait}]]></if>
+            <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
 		</where>
 	</sql>
 	
@@ -89,6 +91,7 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="portrait != null"><![CDATA[portrait = #{portrait},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
 		</set>
 	</sql>
 
@@ -117,7 +120,8 @@
                 state, 
                 update_time, 
                 create_time,
-                portrait
+                portrait,
+                type
 				)
 			VALUES
 				(
@@ -141,7 +145,8 @@
                 #{state}, 
                 #{updateTime}, 
                 #{createTime},
-                #{portrait}
+                #{portrait},
+                #{type}
 				)
 		]]>
 	</insert>

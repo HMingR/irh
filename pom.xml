@@ -36,7 +36,7 @@
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>123456</irh.mysql.password>
                 <irh.redis.host>39.105.0.169</irh.redis.host>
-                <irh.redis.password></irh.redis.password>
+                <irh.redis.password>irh_aliyun_redis</irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
                 <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>
@@ -56,7 +56,7 @@
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>197877346hmr</irh.mysql.password>
                 <irh.redis.host>localhost</irh.redis.host>
-                <irh.redis.password></irh.redis.password>
+                <irh.redis.password>irh_aliyun_redis</irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
                 <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>
@@ -76,7 +76,7 @@
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>197877346hmr</irh.mysql.password>
                 <irh.redis.host>39.105.0.169</irh.redis.host>
-                <irh.redis.password></irh.redis.password>
+                <irh.redis.password>irh_aliyun_redis</irh.redis.password>
                 <irh.redis.databaseIndex>0</irh.redis.databaseIndex>
                 <irh.rabbitmq.host>39.105.0.169</irh.rabbitmq.host>
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>

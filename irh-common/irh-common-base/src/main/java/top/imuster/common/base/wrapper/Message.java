@@ -102,7 +102,7 @@ public class Message<T> implements Serializable {
     }
 
     public static <T> Message<T> createBySuccess(T data){
-        return new Message<>(MessageCode.SUCCESS.getCode(), data);
+        return new Message<>(MessageCode.SUCCESS.getCode(),  MessageCode.SUCCESS.getText(), data);
     }
 
     public static <T> Message<T> createBySuccess(String text, T data){

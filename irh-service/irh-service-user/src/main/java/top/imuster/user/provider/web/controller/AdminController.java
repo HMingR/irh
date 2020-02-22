@@ -76,7 +76,7 @@ public class AdminController extends BaseController {
         if(null == userInfo){
             return Message.createByError("未找到对应的用户信息，请刷新后重试");
         }
-        return Message.createBySuccess(condition);
+        return Message.createBySuccess(userInfo);
     }
 
 

@@ -104,6 +104,12 @@ public class UserLoginController extends BaseController {
         return Message.createBySuccess();
     }
 
+    @GetMapping
+    public Message test(){
+        System.out.println("security");
+        return Message.createBySuccess("security");
+    }
+
     /**
      * @Author hmr
      * @Description 将用户申请到的令牌保存到cookie中

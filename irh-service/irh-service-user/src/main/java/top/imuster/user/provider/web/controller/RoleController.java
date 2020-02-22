@@ -28,7 +28,7 @@ import java.util.List;
  * @date: 2019/12/18 10:13
  */
 @RestController
-@RequestMapping("admin/role")
+@RequestMapping("/admin/role")
 @Api("RoleController角色控制器")
 public class RoleController extends BaseController {
 

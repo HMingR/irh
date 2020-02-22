@@ -9,7 +9,7 @@ spring:
         max-idle: 10
         max-wait: -1
     timeout: 1000
-    password: '@irh.redis.password@'
+    password: irh_aliyun_redis
 
   datasource:
     druid:

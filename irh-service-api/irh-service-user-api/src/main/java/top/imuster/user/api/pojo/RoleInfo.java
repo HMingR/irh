@@ -40,8 +40,7 @@ public class RoleInfo extends BaseDomain {
 	// private Short state;
 
 	// 创建人姓名
-	@ApiModelProperty("创建人姓名")
-	@NotBlank(groups = ValidateGroup.addGroup.class)
+	@ApiModelProperty("创建人id")
 	private String createManagement;
 
 	//角色对应的权限

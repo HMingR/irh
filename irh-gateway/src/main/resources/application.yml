@@ -9,12 +9,13 @@ eureka:
       defaultZone: http://localhost:10086/eureka
     registry-fetch-interval-seconds: 5           # 设置拉取服务的间隔时间
 zuul:
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis: 60000
   prefix: /api      # 配置前缀
   routes:
     user-service: /user/**    # 路由到用户微服务
     goods-service: /goods/**    # 路由到商品的微服务
     order-service: /order/**   #路由到订单微服务
+    security-service: /security/**  #路由到认证中心微服务
   sensitive-headers:          # zuul网关会屏蔽掉请求头中的一些敏感信息，设置成空可以覆盖默认配置，即不屏蔽任何消息
-
-
-
