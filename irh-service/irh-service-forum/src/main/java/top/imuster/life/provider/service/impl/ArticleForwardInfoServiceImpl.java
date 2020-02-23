@@ -1,15 +1,24 @@
 package top.imuster.life.provider.service.impl;
 
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.pojo.ArticleForwardInfo;
 import top.imuster.life.provider.dao.ArticleForwardInfoDao;
 import top.imuster.life.provider.service.ArticleForwardInfoService;
+import top.imuster.life.provider.service.ArticleInfoService;
+import top.imuster.life.provider.service.RedisArticleAttitudeService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ArticleForwardInfoService 实现类
@@ -21,6 +30,18 @@ public class ArticleForwardInfoServiceImpl extends BaseServiceImpl<ArticleForwar
 
     @Resource
     private ArticleForwardInfoDao articleForwardInfoDao;
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Resource
+    RedisArticleAttitudeService redisArticleAttitudeService;
+
+    @Resource
+    ArticleInfoService articleInfoService;
+
+    @Autowired
+    SqlSessionTemplate sqlSessionTemplate;
 
     @Override
     public BaseDao<ArticleForwardInfo, Long> getDao() {
@@ -43,6 +64,13 @@ public class ArticleForwardInfoServiceImpl extends BaseServiceImpl<ArticleForwar
     @Override
     public Message<String> forward(ArticleForwardInfo articleForwardInfo) {
         articleForwardInfoDao.insertEntry(articleForwardInfo);
+        redisTemplate.opsForHash().increment(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, articleForwardInfo.getId(), 1);
         return Message.createBySuccess("转发成功");
+    }
+
+    @Override
+    public void transForwardTimesFromRedis2DB() {
+        List<ForwardDto> res = redisArticleAttitudeService.getAllForwardCountFromRedis();
+        articleInfoService.updateForwardTimesFromRedis2DB(res);
     }
 }

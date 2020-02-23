@@ -3,6 +3,7 @@ package top.imuster.life.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopic;
@@ -30,6 +31,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_BROWSER_TIMES_BY_IDS = "selectBrowserTimesByIds";
 	private final static String SELECT_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
 	private final static String SELECT_BRIEF_BY_HOT_TOPIC_ID = "selectBriefByHotTopicId";
+	private final static String UPDATE_FORARDR_TIMES_BY_CONDITION = "updateForwardTimesByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -85,6 +87,11 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public void updateBrowserTimesByCondition(List<ArticleInfo> update) {
 		this.update(getNameSpace(SELECT_BROWSER_TIMES_BY_CONDITION), update);
+	}
+
+	@Override
+	public void updateForwardTimesByCondition(List<ForwardDto> res) {
+		this.insert(getNameSpace(UPDATE_FORARDR_TIMES_BY_CONDITION), res);
 	}
 
 	@Override

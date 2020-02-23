@@ -98,7 +98,7 @@
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="userInfo" >
 		<![CDATA[
-			INSERT INTO consumer_info
+			INSERT INTO user_info
 				(
                 id, 
                 age, 

@@ -3,6 +3,7 @@ package top.imuster.life.provider.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopic;
 
 import java.util.HashSet;
@@ -40,5 +41,5 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopic, Long> {
      * @param topic
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleInfo>>
      **/
-    Message<List<ForumHotTopic>> currentHotTopicList(int topic);
+    Message<List<ArticleInfo>> currentHotTopicList(int topic);
 }

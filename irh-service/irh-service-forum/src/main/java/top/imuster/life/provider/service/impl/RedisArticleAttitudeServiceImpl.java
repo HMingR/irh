@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UpCountDto;
 import top.imuster.life.api.dto.UpDto;
 import top.imuster.life.api.enums.UpStateEnum;
@@ -89,6 +90,22 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
         }
         return list;
     }
+
+    @Override
+    public List<ForwardDto> getAllForwardCountFromRedis() {
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, ScanOptions.NONE);
+        List<ForwardDto> list = new ArrayList<>();
+        while (cursor.hasNext()){
+            Map.Entry<Object, Object> map = cursor.next();
+            Long key = (Long)map.getKey();
+            ForwardDto dto = new ForwardDto(key, (Long) map.getValue());
+            list.add(dto);
+            //从Redis中删除这条记录
+            redisTemplate.opsForHash().delete(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, key);
+        }
+        return list;
+    }
+
 
     @Override
     public List<HashSet<Long>> getHotTopicFromRedis(Long topic) {

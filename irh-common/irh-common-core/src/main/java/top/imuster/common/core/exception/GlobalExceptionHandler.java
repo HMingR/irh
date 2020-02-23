@@ -7,15 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.wrapper.Message;
 
@@ -126,11 +123,6 @@ public class GlobalExceptionHandler {
         return Message.createByError("非法的请求方式");
     }
 
-    @ExceptionHandler(InternalAuthenticationServiceException.class)
-    public Message<String> InternalAuthenticationServiceExceptionHandler(InternalAuthenticationServiceException exception){
-        logger.error("微服务之间调用出现问题{}", exception.getMessage());
-        return Message.createByError("服务器刚启动,请刷新后重试");
-    }
 
     /**
      * @Description: 配置校验规则，当有很多数据需要校验的时候，一个出现问题，则停止校验，直接抛出异常

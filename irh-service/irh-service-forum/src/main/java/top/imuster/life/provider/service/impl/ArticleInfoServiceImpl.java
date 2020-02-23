@@ -14,6 +14,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.*;
 import top.imuster.life.provider.dao.ArticleInfoDao;
@@ -181,5 +182,10 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
             }
             articleInfoDao.updateBrowserTimesByCondition(update);
         }
+    }
+
+    @Override
+    public void updateForwardTimesFromRedis2DB(List<ForwardDto> res) {
+        articleInfoDao.updateForwardTimesByCondition(res);
     }
 }

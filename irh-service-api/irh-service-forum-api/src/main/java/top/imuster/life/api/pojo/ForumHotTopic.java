@@ -34,11 +34,65 @@ public class ForumHotTopic extends BaseDomain {
 	@ApiModelProperty("目标文章的标题")
 	private String targetTitle;
 
+	@ApiModelProperty("转发次数")
+	private Long forwardTimes;
+
 	private Long browserTimes;
+
+	@ApiModelProperty("留言总数")
+	private Long reviewTotal;
+
+	@ApiModelProperty("点赞次数")
+	private Long upTotal;
+
+	@ApiModelProperty("主图url")
+	private String mainPicUrl;
+
+	@ApiModelProperty("作者id")
+	private Long userId;
 
 	// 1-有效  2-无效
 //	private Short state;
 
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getReviewTotal() {
+		return reviewTotal;
+	}
+
+	public void setReviewTotal(Long reviewTotal) {
+		this.reviewTotal = reviewTotal;
+	}
+
+	public Long getUpTotal() {
+		return upTotal;
+	}
+
+	public void setUpTotal(Long upTotal) {
+		this.upTotal = upTotal;
+	}
+
+	public Long getForwardTimes() {
+		return forwardTimes;
+	}
+
+	public void setForwardTimes(Long forwardTimes) {
+		this.forwardTimes = forwardTimes;
+	}
+
+	public String getMainPicUrl() {
+		return mainPicUrl;
+	}
+
+	public void setMainPicUrl(String mainPicUrl) {
+		this.mainPicUrl = mainPicUrl;
+	}
 
 	public Long getBrowserTimes() {
 		return browserTimes;

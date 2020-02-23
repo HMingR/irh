@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ForumHotTopicDao;
 import top.imuster.life.provider.service.ArticleInfoService;
@@ -13,6 +14,7 @@ import top.imuster.life.provider.service.RedisArticleAttitudeService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -59,28 +61,33 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Lon
     @Override
     public Message<List<ForumHotTopic>> totalHotTopicList(int topic) {
         List<ForumHotTopic> list =forumHotTopicDao.selectMaxScoreTop(topic);
+        ArrayList<ForumHotTopic> res = new ArrayList<>(list.size());
         list.stream().forEach(forumHotTopic -> {
             Long targetId = forumHotTopic.getTargetId();
             ForumHotTopic brief = articleInfoService.getBriefByHotTopicId(targetId);
-            forumHotTopic.setTargetTitle(brief.getTargetTitle());
+            res.add(brief);
         });
-        return Message.createBySuccess(list);
+        return Message.createBySuccess(res);
     }
 
     @Override
-    public Message<List<ForumHotTopic>> currentHotTopicList(int topic) {
+    public Message<List<ArticleInfo>> currentHotTopicList(int topic) {
         List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis((long)topic);
         if(res == null || res.isEmpty()) {
-            //当redis中没有的时候，则显示总榜的数据
-            return this.totalHotTopicList(topic);
+            return null;
         }
         Long[] longs = res.get(0).toArray(new Long[res.get(0).size()]);
-        List<ForumHotTopic> resList = new ArrayList<>();
-        for (int i = 0; i < longs.length; i++) {
-            ForumHotTopic brief = articleInfoService.getBriefByHotTopicId(longs[i]);
-            resList.add(brief);
+        final Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
+        HashMap<Long, Long> scoreMap = new HashMap<>();
+        for (int i = 0; i < scores.length; i++) {
+            scoreMap.put(scores[i], scores[i]);
         }
-        return Message.createBySuccess(resList);
+        List<ArticleInfo> articleInfos = articleInfoService.selectInfoByTargetIds(longs);
+        articleInfos.stream().forEach(articleInfo -> {
+            Long aLong = scoreMap.get(articleInfo.getId());
+            articleInfo.setScore(aLong);
+        });
+        return Message.createBySuccess(articleInfos);
     }
 
 

@@ -116,6 +116,8 @@ public class RoleController extends BaseController {
     @PutMapping
     public Message<String> insertRole(@ApiParam("RoleInfo实体类") @Validated(ValidateGroup.addGroup.class) @RequestBody RoleInfo roleInfo, BindingResult bindingResult){
         validData(bindingResult);
+        Long userId = getCurrentUserIdFromCookie();
+        roleInfo.setCreateManagement(userId);
         roleInfoService.insertEntry(roleInfo);
         return Message.createBySuccess();
     }

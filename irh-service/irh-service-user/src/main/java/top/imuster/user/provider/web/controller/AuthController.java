@@ -35,6 +35,9 @@ public class AuthController extends BaseController {
     @ApiOperation(httpMethod = "POST", value = "分页查询权限列表")
     @PostMapping("/list")
     public Message<Page<AuthInfo>> authList(Page<AuthInfo> page){
+        if(page.getSearchCondition() == null){
+            page.setSearchCondition(new AuthInfo());
+        }
         Page<AuthInfo> authInfoPage = authInfoService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(authInfoPage);
     }

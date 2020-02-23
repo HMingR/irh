@@ -5,6 +5,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopic;
@@ -91,7 +92,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据id所有信息
+     * @Description 根据id一部分信息
      * @Date: 2020/2/14 12:33
      * @param longs
      * @reture: java.util.List<ForumHotTopic>
@@ -124,4 +125,14 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: void
      **/
     void updateBrowserTimesFromRedis2Redis(List<BrowserTimesDto> res);
+
+    /**
+     * @Author hmr
+     * @Description 将redis中储存的转发记录转存到db
+     * @Date: 2020/2/23 19:35
+     * @param res
+     * @reture: void
+     **/
+    void updateForwardTimesFromRedis2DB(List<ForwardDto> res);
+
 }

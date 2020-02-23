@@ -18,7 +18,8 @@
             browser_times AS browserTimes,
             collect_total AS collectTotal,
             up_total AS upTotal,
-            review_total AS reviewTotal
+            review_total AS reviewTotal,
+            forward_times AS forwardTimes
 		]]>
 	</sql>
 
@@ -34,6 +35,7 @@
             <if test="mainPicture != null and mainPicture != ''"><![CDATA[AND main_picture = #{mainPicture}]]></if>
             <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="state == null or state == ''"><![CDATA[AND state != -1]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
@@ -41,6 +43,7 @@
             <if test="collectTotal != null and collectTotal != ''"><![CDATA[AND collect_total = #{collectTotal}]]></if>
             <if test="upTotal != null and upTotal != ''"><![CDATA[AND up_total = #{upTotal}]]></if>
             <if test="reviewTotal != null and reviewTotal != ''"><![CDATA[AND review_total = #{reviewTotal}]]></if>
+            <if test="forwardTimes != null and forwardTimes != ''"><![CDATA[AND forward_times = #{forwardTimes}]]></if>
 		</where>
 	</sql>
 	
@@ -65,6 +68,7 @@
 			<if test="collectTotal != null"><![CDATA[collect_total = #{collectTotal},]]></if>
 			<if test="upTotal != null"><![CDATA[up_total = #{upTotal},]]></if>
 			<if test="reviewTotal != null"><![CDATA[review_total = #{reviewTotal},]]></if>
+			<if test="forwardTimes != null"><![CDATA[forward_times = #{forwardTimes},]]></if>
 		</set>
 	</sql>
 
@@ -106,7 +110,6 @@
 		]]>
 	</insert>
 	
-	<!-- 返回插入的编号,在事务开启状态下有效 -->
 	<select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
 
 	<!-- 删除记录,主键IN(array) -->
@@ -182,7 +185,7 @@
 	</select>
 
 	<select id="selectBriefById" parameterType="long" resultType="articleInfo">
-		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture]]>
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>
@@ -208,11 +211,6 @@
 		WHERE article_category = #{id} ORDER BY up_total DESC LIMIT 0, 5
 	</select>
 
-	<resultMap id="consumerMap" type="java.util.Map">
-		<result property="key" column="id"></result>
-		<result property="value" column="browser_times"></result>
-	</resultMap>
-	
 	<select id="selectBrowserTimesByIds" parameterType="long" resultType="java.util.Map">
 		<![CDATA[SELECT id, browser_times ]]>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -238,9 +236,24 @@
 	</update>
 
 	<select id="selectBriefByHotTopicId" resultType="top.imuster.life.api.pojo.ForumHotTopic" parameterType="long">
-		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime ]]>
+		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime, main_picture AS mainPicUrl, froward_times AS forwardTimes, up_total AS upTotal, forward_times AS forwardTimes, user_id AS userId  ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state != 1 AND id = #{aLong}]]>
 	</select>
+
+	<update id="updateForwardTimesByCondition" parameterType="list">
+		update article_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="forward_times = case" suffix="end,">
+				<foreach collection="list" item="item" index="index">
+					when id = #{item.id} then #{item.times}
+				</foreach>
+			</trim>
+		</trim>
+		where id in
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+			#{item.id,jdbcType=BIGINT}
+		</foreach>
+	</update>
 
 </mapper>

@@ -33,4 +33,13 @@ public interface ArticleForwardInfoService extends BaseService<ArticleForwardInf
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> forward(ArticleForwardInfo articleForwardInfo);
+
+    /**
+     * @Author hmr
+     * @Description 将文章转发次数从redis更新到db
+     * @Date: 2020/2/23 17:18
+     * @param
+     * @reture: void
+     **/
+    void transForwardTimesFromRedis2DB();
 }

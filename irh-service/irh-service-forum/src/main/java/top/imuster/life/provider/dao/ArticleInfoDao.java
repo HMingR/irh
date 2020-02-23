@@ -4,6 +4,7 @@ package top.imuster.life.provider.dao;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopic;
@@ -103,6 +104,15 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
     void updateBrowserTimesByCondition(@Param("list") List<ArticleInfo> list);
 
     /**
+     * @Author hmr
+     * @Description 批量
+     * @Date: 2020/2/23 19:28
+     * @param res
+     * @reture: void
+     **/
+    void updateForwardTimesByCondition(@Param("list") List<ForwardDto> res);
+
+   /**
      * @Author hmr
      * @Description 根据redis中的热搜id获得文章信息，并直接封装成一个ForumHotTopic对象
      * @Date: 2020/2/17 12:00

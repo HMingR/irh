@@ -63,4 +63,7 @@ public class GlobalConstant {
     //redis中保存浏览次数的hash表的key
     public static final String IRH_FORUM_BROWSER_TIMES_MAP = "irh::forum::browser::times::map";
 
+    //redis中记录文章转发次数
+    public static final String IRH_FORUM_FORWARD_TIMES_MAP = "irh::forum::forward::times::map";
+
 }

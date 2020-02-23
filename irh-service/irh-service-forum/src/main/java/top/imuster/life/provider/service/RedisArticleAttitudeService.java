@@ -1,5 +1,6 @@
 package top.imuster.life.provider.service;
 
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UpCountDto;
 import top.imuster.life.api.dto.UpDto;
 
@@ -78,6 +79,15 @@ public interface RedisArticleAttitudeService {
 
     /**
      * @Author hmr
+     * @Description 从redis中获得转发总数
+     * @Date: 2020/2/23 17:24
+     * @param
+     * @reture: java.util.List<top.imuster.life.api.dto.ForwardDto>
+     **/
+    List<ForwardDto> getAllForwardCountFromRedis();
+
+    /**
+     * @Author hmr
      * @Description 从redis中获得前topic的热搜
      * @Date: 2020/2/14 11:06
      * @param topic
@@ -95,5 +105,7 @@ public interface RedisArticleAttitudeService {
      *
      * @return*/
     List<Map.Entry<Long, Long>> getAllCollectCountFromRedis();
+
+
 
 }

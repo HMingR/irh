@@ -41,7 +41,7 @@ public class RoleInfo extends BaseDomain {
 
 	// 创建人姓名
 	@ApiModelProperty("创建人id")
-	private String createManagement;
+	private Long createManagement;
 
 	//角色对应的权限
 	private List<AuthInfo> authInfoList;
@@ -76,11 +76,12 @@ public class RoleInfo extends BaseDomain {
     public void setRoleDesc(String roleDesc) {
 		this.roleDesc = roleDesc;
 	}
-	
-	public String getCreateManagement() {
-		return this.createManagement;
+
+	public Long getCreateManagement() {
+		return createManagement;
 	}
-    public void setCreateManagement(String createManagementId) {
+
+	public void setCreateManagement(Long createManagement) {
 		this.createManagement = createManagement;
 	}
 

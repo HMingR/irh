@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.service.ForumHotTopicService;
 
@@ -36,7 +37,7 @@ public class ForumHotTopicController {
 
     @ApiOperation("实时总榜")
     @GetMapping
-    public Message<List<ForumHotTopic>> currentHotTopicList(){
+    public Message<List<ArticleInfo>> currentHotTopicList(){
         return forumHotTopicService.currentHotTopicList(topic);
     }
 }

@@ -3,7 +3,7 @@ server:
 
 
 mybatis:
-  mapper-locations: mapper/*
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: top.imuster.life.api.pojo
 
 spring:

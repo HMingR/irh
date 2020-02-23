@@ -66,9 +66,19 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("给文章添加的标签")
 	private String tagIds;
 
+	private Long score;
+
 	// 1-无效  2-有效
 //	private Short state;
 
+
+	public Long getScore() {
+		return score;
+	}
+
+	public void setScore(Long score) {
+		this.score = score;
+	}
 
 	public List<ArticleTag> getTagList() {
 		return tagList;

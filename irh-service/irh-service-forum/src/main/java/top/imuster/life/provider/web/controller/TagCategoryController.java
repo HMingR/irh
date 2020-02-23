@@ -35,10 +35,4 @@ public class TagCategoryController {
         List<ArticleTagCategory> res = articleTagCategoryService.selectEntryList(condition);
         return Message.createBySuccess(res);
     }
-
-    @GetMapping("/test")
-    public Message<String> test(){
-        String test = fileServiceFeignApi.test();
-        return Message.createBySuccess(test);
-    }
 }

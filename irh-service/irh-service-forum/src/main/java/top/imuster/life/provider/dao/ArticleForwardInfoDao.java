@@ -1,7 +1,10 @@
 package top.imuster.life.provider.dao;
 
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.pojo.ArticleForwardInfo;
+
+import java.util.List;
 
 /**
  * ArticleForwardInfoDao 接口
@@ -10,5 +13,4 @@ import top.imuster.life.api.pojo.ArticleForwardInfo;
  */
 public interface ArticleForwardInfoDao extends BaseDao<ArticleForwardInfo, Long> {
     //自定义扩展
-
 }
