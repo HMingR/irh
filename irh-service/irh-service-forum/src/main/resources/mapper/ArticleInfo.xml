@@ -246,13 +246,13 @@
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="forward_times = case" suffix="end,">
 				<foreach collection="list" item="item" index="index">
-					when id = #{item.id} then #{item.times}
+					when id = #{item.targetId} then forward_times + #{item.times}
 				</foreach>
 			</trim>
 		</trim>
 		where id in
 		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-			#{item.id,jdbcType=BIGINT}
+			#{item.targetId,jdbcType=BIGINT}
 		</foreach>
 	</update>
 

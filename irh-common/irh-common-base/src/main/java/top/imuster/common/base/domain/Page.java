@@ -1,5 +1,7 @@
 package top.imuster.common.base.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -32,17 +34,17 @@ public class Page<T> {
 	@ApiModelProperty("分页条件查询时的条件")
 	private T searchCondition;
 
-	@ApiModelProperty("单位")
-	private String unit = "条";   //单位
+	public List<T> getData() {
+		return data;
+	}
 
-	@ApiModelProperty("拓展信息")
-	private String extInfo;      //扩展信息
+	public void setData(List<T> data) {
+		this.data = data;
+	}
 
 	public Page() {
 		// 默认构造器
 	}
-
-
 
 	public Page(int currentPage) {
 		this.currentPage = currentPage;
@@ -57,6 +59,7 @@ public class Page<T> {
 	 * 获取开始索引
 	 * @return
 	 */
+	@JsonIgnore
 	public int getStartIndex() {
 		return (getCurrentPage() - 1) * this.pageSize;
 	}
@@ -65,6 +68,7 @@ public class Page<T> {
 	 * 获取结束索引
 	 * @return
 	 */
+	@JsonIgnore
 	public int getEndIndex() {
 		return getCurrentPage() * this.pageSize;
 	}
@@ -73,6 +77,7 @@ public class Page<T> {
 	 * 是否第一页
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean isFirstPage() {
 		return getCurrentPage() <= 1;
 	}
@@ -81,6 +86,7 @@ public class Page<T> {
 	 * 是否末页
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean isLastPage() {
 		return getCurrentPage() >= getPageCount();
 	}
@@ -89,6 +95,7 @@ public class Page<T> {
 	 * 获取下一页页码
 	 * @return
 	 */
+	@JsonIgnore
 	public int getNextPage() {
 		if (isLastPage()) {
 			return getCurrentPage();
@@ -100,6 +107,7 @@ public class Page<T> {
 	 * 获取上一页页码
 	 * @return
 	 */
+	@JsonIgnore
 	public int getPreviousPage() {
 		if (isFirstPage()) {
 			return 1;
@@ -122,6 +130,7 @@ public class Page<T> {
 	 * 取得总页数
 	 * @return
 	 */
+	@JsonIgnore
 	public int getPageCount() {
 		if (totalCount % pageSize == 0) {
 			return totalCount / pageSize;
@@ -162,6 +171,7 @@ public class Page<T> {
 	 * 该页是否有下一页.
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean hasNextPage() {
 		return getCurrentPage() < getPageCount();
 	}
@@ -170,24 +180,9 @@ public class Page<T> {
 	 * 该页是否有上一页.
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean hasPreviousPage() {
 		return getCurrentPage() > 1;
-	}
-
-	/**
-	 * 获取数据集
-	 * @return
-	 */
-	public List<T> getResult() {
-		return data;
-	}
-
-	/**
-	 * 设置数据集
-	 * @param data
-	 */
-	public void setResult(List<T> data) {
-		this.data = data;
 	}
 
 	/**
@@ -198,18 +193,6 @@ public class Page<T> {
 		this.totalCount = totalCount;
 	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-	public String getUnit() {
-		return unit;
-	}
-	public void setExtInfo(String extInfo) {
-		this.extInfo = extInfo;
-	}
-	public String getExtInfo() {
-		return extInfo;
-	}
 	public T getSearchCondition() {
 		return searchCondition;
 	}

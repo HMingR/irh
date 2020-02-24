@@ -111,7 +111,7 @@ public class ArticleInfoController extends BaseController {
         condition.setOrderFieldType("DESC");
         condition.setState(2);
         List<ArticleInfo> list = articleInfoService.list(page);
-        page.setResult(list);
+        page.setData(list);
         return Message.createBySuccess(page);
     }
 

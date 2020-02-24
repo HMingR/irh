@@ -60,8 +60,10 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
             Long userId = upDto.getUserId();
             UserForumAttribute info = getInfoByTargetIdAndUserId(targetId, userId);
             if(info == null){
+                //如果没有记录，则标识是第一次点赞，插入记录
                 save2Db(upDto);
             }else{
+                //如果有，则更新为相反的状态
                 info.setState(upDto.getState());
                 userForumAttributeDao.updateByKey(info);
             }
@@ -72,7 +74,6 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     public void transHotTopicFromRedis2DB(Long topic) {
         List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis(topic);
         if(res == null || res.isEmpty()) return;
-
         forumHotTopicService.updateHotTopicFromReids2Redis(res);
     }
 
@@ -85,6 +86,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
 
         //文章
         List<UpCountDto> article = collect.get(1);
+        //获得所有的id
         Long[] articleIds = (Long[])article.stream().map(UpCountDto::getTargetId).toArray();
         List<ArticleInfo> articleInfos = articleInfoService.getUpTotalByIds(articleIds);
 
@@ -130,8 +132,19 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
             condition.setOrderFieldType("DESC");
         }
         List<UserForumAttribute> res = userForumAttributeDao.selectUpListByCondition(condition);
-        page.setResult(res);
+        page.setData(res);
         return null;
+    }
+
+    @Override
+    public Message<Integer> getStateByTargetId(Integer type, Long id, Long userId) {
+        UserForumAttribute condition = new UserForumAttribute();
+        condition.setTargetId(id);
+        condition.setType(type);
+        condition.setUserId(userId);
+        List<UserForumAttribute> userForumAttributes = userForumAttributeDao.selectEntryList(condition);
+        if(userForumAttributes == null || userForumAttributes.isEmpty() || userForumAttributes.get(0).getState() == 1) return Message.createBySuccess(1);
+        return Message.createBySuccess(2);
     }
 
 

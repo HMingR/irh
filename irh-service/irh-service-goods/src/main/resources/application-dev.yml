@@ -44,3 +44,8 @@ logging:
 
 enable:
   needLogin: false
+
+hot:
+  topic:
+    total: 0   # 显示热搜数量
+    refreshTime: 0    #总热度榜刷新时间

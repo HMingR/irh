@@ -60,4 +60,15 @@ public interface UserForumAttributeService extends BaseService<UserForumAttribut
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<UserForumAttribute>>
      **/
     Message<Page<UserForumAttribute>> getUpList(Page<UserForumAttribute> page, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看是否点赞  1-为点赞   2-点赞
+     * @Date: 2020/2/24 11:53
+     * @param type 1-文章   2-评论
+     * @param id 目标id
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
+     **/
+    Message<Integer> getStateByTargetId(Integer type, Long id, Long userId);
 }

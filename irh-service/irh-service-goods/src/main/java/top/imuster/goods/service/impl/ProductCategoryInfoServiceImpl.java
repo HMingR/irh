@@ -7,8 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
-import top.imuster.common.core.enums.BrowserType;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.pojo.ProductCategoryRel;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -46,12 +45,12 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     }
 
     @Override
-    public List<ProductCategoryInfo> getCategoryTree() throws GoodsException {
+    public Message<List<ProductCategoryInfo>> getCategoryTree() throws GoodsException {
         try{
             ProductCategoryInfo condition = new ProductCategoryInfo();
             condition.setState(2);
             List<ProductCategoryInfo> allCategory = productCategoryInfoDao.selectEntryList(condition);
-            return generateTree(allCategory);
+            return Message.createBySuccess(generateTree(allCategory));
         }catch (Exception e){
             throw new GoodsException("获得商品分类数据失败");
         }

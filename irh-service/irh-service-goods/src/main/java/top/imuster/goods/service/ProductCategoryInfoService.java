@@ -2,6 +2,7 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.exception.GoodsException;
 
@@ -20,8 +21,9 @@ public interface ProductCategoryInfoService extends BaseService<ProductCategoryI
      * @Date: 2019/12/22 12:13
      * @param
      * @reture: java.util.List<top.imuster.goods.api.pojo.ProductCategoryInfo>
-     **/
-    List<ProductCategoryInfo> getCategoryTree() throws GoodsException;
+     *
+     * @return*/
+    Message<List<ProductCategoryInfo>> getCategoryTree() throws GoodsException;
 
     /**
      * @Description: 通过id删除分类,并且删除该分类下所有的子节点，并且被标识为该分类的所有商品的分类上升为被删除的父节点

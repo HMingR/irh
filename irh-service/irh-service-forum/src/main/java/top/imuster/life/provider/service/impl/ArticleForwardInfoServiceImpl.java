@@ -71,6 +71,7 @@ public class ArticleForwardInfoServiceImpl extends BaseServiceImpl<ArticleForwar
     @Override
     public void transForwardTimesFromRedis2DB() {
         List<ForwardDto> res = redisArticleAttitudeService.getAllForwardCountFromRedis();
+        if(res == null || res.isEmpty()) return;
         articleInfoService.updateForwardTimesFromRedis2DB(res);
     }
 }

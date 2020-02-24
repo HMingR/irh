@@ -46,13 +46,13 @@ public class InterestTagInfoServiceImpl extends BaseServiceImpl<InterestTagInfo,
         InterestTagInfo condition = page.getSearchCondition();
         condition.setState(2);
         Page<InterestTagInfo> interestTagInfoPage = this.selectPage(condition, page);
-        List<InterestTagInfo> interestTagInfos = interestTagInfoPage.getResult();
+        List<InterestTagInfo> interestTagInfos = interestTagInfoPage.getData();
         interestTagInfos.stream().forEach(interestTagInfo -> {
             Long count = userInterestTagRelService.getTagCountByTagId(interestTagInfo.getId());
             interestTagInfo.setTotal(count);
         });
         List<InterestTagInfo> collect = interestTagInfos.stream().sorted(Comparator.comparingLong(InterestTagInfo::getTotal).reversed()).collect(Collectors.toList());
-        page.setResult(collect);
+        page.setData(collect);
         return page;
     }
 

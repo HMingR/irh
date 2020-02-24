@@ -95,7 +95,7 @@ public class ForumSearchService {
 
         Message<Page<ArticleInfo>> queryResult = new Message<Page<ArticleInfo>>();
         Page<ArticleInfo> productInfoPage = new Page<>();
-        List<ArticleInfo> list = productInfoPage.getResult();
+        List<ArticleInfo> list = productInfoPage.getData();
         try {
             //执行搜索
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest);

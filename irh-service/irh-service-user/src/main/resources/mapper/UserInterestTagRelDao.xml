@@ -83,7 +83,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="userInterestTagRel" >
+	<delete id="deleteByCondition" parameterType="userInterestTagRel" >
 		<![CDATA[DELETE FROM consumer_interest_tag_rel]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

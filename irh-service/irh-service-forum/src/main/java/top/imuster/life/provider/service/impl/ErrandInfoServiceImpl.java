@@ -41,7 +41,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         }
         List<ErrandInfo> errandInfos = errandInfoDao.selectList(page.getSearchCondition());
         page.setTotalCount(errandInfoDao.selectEntryListCount(page.getSearchCondition()));
-        page.setResult(errandInfos);
+        page.setData(errandInfos);
         return Message.createBySuccess(page);
     }
 

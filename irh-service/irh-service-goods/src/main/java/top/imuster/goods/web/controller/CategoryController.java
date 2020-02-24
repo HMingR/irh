@@ -32,7 +32,7 @@ public class CategoryController extends BaseController {
 
     @ApiOperation(value = "获得分类的树形结构数据", httpMethod = "GET")
     @GetMapping("/tree")
-    public List<ProductCategoryInfo> adminCategoryTree() {
+    public Message<List<ProductCategoryInfo>> adminCategoryTree() {
         return productCategoryInfoService.getCategoryTree();
     }
 }

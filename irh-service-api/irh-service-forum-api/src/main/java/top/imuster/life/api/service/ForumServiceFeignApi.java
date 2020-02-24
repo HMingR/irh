@@ -2,8 +2,10 @@ package top.imuster.life.api.service;
 
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.service.hystrix.ForumServiceFeignHystrix;
@@ -14,7 +16,7 @@ import top.imuster.life.api.service.hystrix.ForumServiceFeignHystrix;
  * @author: hmr
  * @date: 2020/2/1 12:07
  */
-@FeignClient(value = "forum-service", path = "/forum/feign", fallback = ForumServiceFeignHystrix.class)
+@FeignClient(value = "forum-service", path = "/forum/feign", fallbackFactory = ForumServiceFeignHystrix.class)
 public interface ForumServiceFeignApi {
 
     /**
@@ -38,7 +40,7 @@ public interface ForumServiceFeignApi {
     boolean adminDeleteArticleCategory(@PathVariable("id") Long id);
 
     @PostMapping("/category/list")
-    Page<ArticleTag> adminCategoryList(@RequestBody Page<ArticleTag> page);
+    Message<Page<ArticleTag>> adminCategoryList(@RequestBody Page<ArticleTag> page);
 
     /**
      * @Author hmr

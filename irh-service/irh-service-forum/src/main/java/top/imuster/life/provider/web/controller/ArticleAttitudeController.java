@@ -100,4 +100,24 @@ public class ArticleAttitudeController extends BaseController {
         Long total = userForumAttributeService.getUpTotalByTypeAndId(id, type, RedisUtil.getUpTotalKey(id, type));
         return Message.createBySuccess(total);
     }
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看是否点赞了该目标
+     * @Date: 2020/2/24 12:03
+     * @param type
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
+     **/
+    @ApiOperation("根据id查看是否点赞了该目标   1-未点赞  2-点赞")
+    @GetMapping("/state/{type}/{id}")
+    public Message<Integer> getUpStateByTargetId(@PathVariable("type") Integer type, @PathVariable("id") Long id){
+        Long userId;
+        try{
+            userId = getCurrentUserIdFromCookie();
+        }catch (Exception e){
+            return Message.createBySuccess(1);
+        }
+        return userForumAttributeService.getStateByTargetId(type, id, userId);
+    }
 }

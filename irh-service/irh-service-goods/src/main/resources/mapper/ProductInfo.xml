@@ -45,6 +45,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="state == null or state = ''"><![CDATA[AND state != 1]]></if>
             <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>
             <if test="buyingTime != null and buyingTime != ''"><![CDATA[AND buying_time = #{buyingTime}]]></if>
 		</where>

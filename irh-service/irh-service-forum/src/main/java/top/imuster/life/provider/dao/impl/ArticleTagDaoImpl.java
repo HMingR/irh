@@ -13,7 +13,7 @@ import top.imuster.life.provider.dao.ArticleTagDao;
  */
 @Repository("articleTagDao")
 public class ArticleTagDaoImpl extends BaseDaoImpl<ArticleTag, Long> implements ArticleTagDao {
-	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleCategoryDao.";
+	private final static String NAMESPACE = "top.imuster.life.provider.dao.ArticleTagDao.";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {

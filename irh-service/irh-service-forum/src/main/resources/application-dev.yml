@@ -52,5 +52,10 @@ hot:
     refreshTime: 30    #总热度榜刷新时间
 
 batch:
-  size: 100   #批量处理点赞收藏的大小
+  size: 500   #批量处理点赞收藏的大小
+
+task:
+  browserTimes: 1
+  upTotal: 10
+
 

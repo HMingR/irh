@@ -18,4 +18,5 @@ zuul:
     goods-service: /goods/**    # 路由到商品的微服务
     order-service: /order/**   #路由到订单微服务
     security-service: /security/**  #路由到认证中心微服务
+    forum-service: /life/**    #路由到生活微服务
   sensitive-headers:          # zuul网关会屏蔽掉请求头中的一些敏感信息，设置成空可以覆盖默认配置，即不屏蔽任何消息

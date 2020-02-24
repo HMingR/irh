@@ -112,7 +112,7 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
         }
         searchCondition.setUserId(userId);
         List<ArticleCollection> res = articleCollectionDao.selectCollectByCondition(searchCondition);
-        page.setResult(res);
+        page.setData(res);
         return Message.createBySuccess(page);
     }
 

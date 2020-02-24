@@ -159,7 +159,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         Integer count = selectEntryListCount(condition);
         page.setTotalCount(count);
         List<ReportFeedbackInfo> reportFeedbackInfos = reportFeedbackInfoDao.selectStatisticsByCondition(condition);
-        page.setResult(reportFeedbackInfos);
+        page.setData(reportFeedbackInfos);
         return page;
     }
 }

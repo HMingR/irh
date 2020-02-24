@@ -24,9 +24,10 @@ public interface GoodsCategoryServiceFeignApi {
      * @Date: 2020/2/7 14:53
      * @param
      * @reture: void
-     **/
+     *
+     * @return*/
     @GetMapping("/category")
-    List<ProductCategoryInfo> adminCategoryTree();
+    Message<List<ProductCategoryInfo>> adminCategoryTree();
 
     /**
      * @Description: 添加分类

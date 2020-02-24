@@ -44,10 +44,10 @@ public class ApiGenerate {
                 .withoutInlineSchema()
                 .build();
 
-        Swagger2MarkupConverter.from(new URL("http://localhost:8085/v2/api-docs"))
+        Swagger2MarkupConverter.from(new URL("http://localhost:20200/v2/api-docs"))
                 .withConfig(config)
                 .build()
-                .toFolder(Paths.get("./docs/markdown/user"));
+                .toFolder(Paths.get("./docs/markdown/life"));
     }
 
     /**
@@ -79,7 +79,7 @@ public class ApiGenerate {
                 .withOutputLanguage(Language.ZH).withPathsGroupedBy(GroupBy.TAGS).withGeneratedExamples()
                 .withoutInlineSchema().build();
 
-        Swagger2MarkupConverter.from(new URL("http://localhost:8085/v2/api-docs")).withConfig(config)
+        Swagger2MarkupConverter.from(new URL("http://localhost:20200/v2/api-docs")).withConfig(config)
                 .build().toFolder(Paths.get("src/docs/asciidoc/generated"));
     }
 

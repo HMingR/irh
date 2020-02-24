@@ -99,7 +99,7 @@ public class GoodsSearchService {
 
         Message<Page<ProductInfo>> queryResult = new Message<Page<ProductInfo>>();
         Page<ProductInfo> productInfoPage = new Page<>();
-        List<ProductInfo> list = productInfoPage.getResult();
+        List<ProductInfo> list = productInfoPage.getData();
         try {
             //执行搜索
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest);

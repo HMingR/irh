@@ -18,7 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
                                     "top.imuster.file.api.service"})
 @ComponentScan(basePackages = {
         "top.imuster.common.core",
-        "top.imuster.goods"})
+        "top.imuster"})
 public class GoodsProviderApplication {
 
     public static void main(String[] args) {

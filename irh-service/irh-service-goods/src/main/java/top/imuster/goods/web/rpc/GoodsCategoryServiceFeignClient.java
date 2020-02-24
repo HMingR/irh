@@ -2,12 +2,9 @@ package top.imuster.goods.web.rpc;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.service.GoodsCategoryServiceFeignApi;
 import top.imuster.goods.exception.GoodsException;
@@ -81,8 +78,8 @@ public class GoodsCategoryServiceFeignClient extends BaseController implements G
 
     @Override
     @ApiOperation(value = "管理员获得分类的树形结构数据", httpMethod = "GET")
-    @GetMapping("/tree")
-    public List<ProductCategoryInfo> adminCategoryTree() {
+    @GetMapping("/category")
+    public Message<List<ProductCategoryInfo>> adminCategoryTree() {
         return productCategoryInfoService.getCategoryTree();
     }
 }

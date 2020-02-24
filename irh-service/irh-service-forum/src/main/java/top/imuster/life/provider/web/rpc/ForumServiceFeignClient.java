@@ -2,6 +2,7 @@ package top.imuster.life.provider.web.rpc;
 
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ArticleReview;
@@ -53,8 +54,9 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
 
     @Override
     @PostMapping("/category/list")
-    public Page<ArticleTag> adminCategoryList(Page<ArticleTag> page) {
-        return articleTagService.selectPage(page.getSearchCondition(), page);
+    public Message<Page<ArticleTag>> adminCategoryList(@RequestBody Page<ArticleTag> page) {
+        Page<ArticleTag> articleTagPage = articleTagService.selectPage(page.getSearchCondition(), page);
+        return Message.createBySuccess(articleTagPage);
     }
 
     @Override
@@ -89,13 +91,13 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
 
     @Override
     @PostMapping("/article/list")
-    public Page<ArticleInfo> adminGetArticleList(Page<ArticleInfo> page) {
+    public Page<ArticleInfo> adminGetArticleList(@RequestBody Page<ArticleInfo> page) {
         ArticleInfo searchCondition = page.getSearchCondition();
         searchCondition.setState(2);
         searchCondition.setOrderField("create_time");
         searchCondition.setOrderFieldType("DESC");
         List<ArticleInfo> list = articleInfoService.list(page);
-        page.setResult(list);
+        page.setData(list);
         return page;
     }
 

@@ -106,8 +106,7 @@ public class AdminGoodsController extends BaseController {
     @ApiOperation("获得商城中商品分类的树形结构")
     @GetMapping("/category")
     public Message<List<ProductCategoryInfo>> tree(){
-        List<ProductCategoryInfo> categoryInfos = goodsCategoryServiceFeignApi.adminCategoryTree();
-        return Message.createBySuccess(categoryInfos);
+        return goodsCategoryServiceFeignApi.adminCategoryTree();
     }
 
     /**

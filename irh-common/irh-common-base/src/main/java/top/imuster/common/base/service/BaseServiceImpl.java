@@ -91,7 +91,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 			return page;
 		}
 		page.setTotalCount(size);
-		page.setResult(this.selectEntryList(condition));
+		page.setData(this.selectEntryList(condition));
 		return page;
 	}
 
