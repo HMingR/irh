@@ -21,6 +21,7 @@ import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 
 /**
  * UserInfoService 实现类
@@ -128,5 +129,18 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     @Cacheable(key = "#p0")
     public String getUserNameById(Long id) {
         return userInfoDao.selectUserNameById(id);
+    }
+
+    @Override
+    public long getUserTotalByCreateTime(String s) {
+        return userInfoDao.selectUserTotalByCreateTime(s);
+    }
+
+    @Override
+    public long getIncrementUserByTime(String start, String end) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("startTime", start);
+        params.put("endTime", end);
+        return userInfoDao.selectIncrementUserByTime(params);
     }
 }

@@ -6,6 +6,8 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.provider.dao.UserInfoDao;
 
+import java.util.Map;
+
 /**
  * UserInfoDao 实现类
  * @author 黄明人
@@ -18,6 +20,8 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	private final static String SELECT_EMAIL_BY_ID = "selectEmailById";
 	private final static String SELECT_USER_ROLE_BY_CONDITION = "selectUserRoleByCondition";
 	private final static String SELECT_USERNAME_BY_ID = "selectUserNameById";
+	private final static String SELECT_USER_TOTAL_BY_CREATE_TIME = "selectUserTotalByCreateTime";
+	private final static String SELECT_INCREMENT_USER_BY_TIME = "selectIncrementUserByTime";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -42,4 +46,15 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	public String selectUserNameById(Long id) {
 		return this.select(getNameSpace(SELECT_USERNAME_BY_ID), id);
 	}
+
+	@Override
+	public long selectUserTotalByCreateTime(String s) {
+		return this.select(getNameSpace(SELECT_USER_TOTAL_BY_CREATE_TIME), s);
+	}
+
+	@Override
+	public long selectIncrementUserByTime(Map<String, String> param) {
+		return this.select(getNameSpace(SELECT_INCREMENT_USER_BY_TIME), param);
+	}
+
 }

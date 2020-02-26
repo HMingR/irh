@@ -4,6 +4,8 @@ package top.imuster.user.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.UserInfo;
 
+import java.util.Map;
+
 /**
  * UserInfoDao 接口
  * @author 黄明人
@@ -40,4 +42,23 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @reture: java.lang.String
      **/
     String selectUserNameById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据时间获得该时间之前注册的人
+     * @Date: 2020/2/26 11:29
+     * @param s
+     * @reture: long
+     **/
+    long selectUserTotalByCreateTime(String s);
+
+    /**
+     * @Author hmr
+     * @Description 获得一个时间范围内用户注册量
+     * @Date: 2020/2/26 11:37
+     * @param start
+     * @param end
+     * @reture: long
+     **/
+    long selectIncrementUserByTime(Map<String, String> param);
 }

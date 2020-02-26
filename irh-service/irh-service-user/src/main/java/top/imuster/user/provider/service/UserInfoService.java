@@ -69,4 +69,23 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: java.lang.String
      **/
     String getUserNameById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据创建时间获得在该时间之前注册的用户数量
+     * @Date: 2020/2/26 11:26
+     * @param s
+     * @reture: long
+     **/
+    long getUserTotalByCreateTime(String s);
+
+    /**
+     * @Author hmr
+     * @Description 获得一个时间区域内的用户注册数量
+     * @Date: 2020/2/26 11:36
+     * @param start
+     * @param end
+     * @reture: long
+     **/
+    long getIncrementUserByTime(String start, String end);
 }

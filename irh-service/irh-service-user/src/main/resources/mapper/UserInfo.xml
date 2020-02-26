@@ -251,4 +251,19 @@
 		WHERE id = #{id}
 	</select>
 
+
+	<select id="selectUserTotalByCreateTime" parameterType="string" resultType="long">
+		<![CDATA[SELECT COUNT(1)]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE create_time <= #{s}]]>
+
+	</select>
+
+	<select id="selectIncrementUserByTime" parameterType="map" resultType="long">
+		<![CDATA[SELECT COUNT(1)]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE create_time >= #{startTime} AND create_time <= #{endTime}]]>
+
+	</select>
+
 </mapper>

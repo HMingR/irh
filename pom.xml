@@ -121,13 +121,11 @@
                 <version>${okHttp.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>com.netflix.feign</groupId>
                 <artifactId>feign-okhttp</artifactId>
                 <version>${feign-okhttp.version}</version>
             </dependency>
-
 
             <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-json -->
             <dependency>
@@ -293,6 +291,25 @@
                 <groupId>com.google.zxing</groupId>
                 <artifactId>core</artifactId>
                 <version>3.3.0</version>
+            </dependency>
+
+            <!--获得系统cpu、内存所需要的jar-->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>3.12.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>5.2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna-platform</artifactId>
+                <version>5.2.0</version>
             </dependency>
 
         </dependencies>
