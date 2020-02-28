@@ -9,6 +9,7 @@ import top.imuster.life.provider.dao.ArticleTagRelDao;
 import top.imuster.life.provider.service.ArticleTagRelService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * ArticleTagRelService 实现类
@@ -24,5 +25,15 @@ public class ArticleTagRelServiceImpl extends BaseServiceImpl<ArticleTagRel, Lon
     @Override
     public BaseDao<ArticleTagRel, Long> getDao() {
         return this.articleTagRelDao;
+    }
+
+    @Override
+    public String getArticleTagsById(Long id) {
+        List<String> names = articleTagRelDao.selectTagNameByArticleId(id);
+        StringBuilder res = new StringBuilder();
+        for (String name : names) {
+            res.append(name);
+        }
+        return res.toString();
     }
 }

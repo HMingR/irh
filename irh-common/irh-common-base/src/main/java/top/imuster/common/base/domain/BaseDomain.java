@@ -23,6 +23,26 @@ public class BaseDomain extends BaseQuery implements Serializable {
     @ApiModelProperty("状态")
     private Integer state;
 
+    private String searchStartTime;
+
+    private String searchEndTime;
+
+    public String getSearchStartTime() {
+        return searchStartTime;
+    }
+
+    public void setSearchStartTime(String searchStartTime) {
+        this.searchStartTime = searchStartTime;
+    }
+
+    public String getSearchEndTime() {
+        return searchEndTime;
+    }
+
+    public void setSearchEndTime(String searchEndTime) {
+        this.searchEndTime = searchEndTime;
+    }
+
     public Integer getState() {
         return state;
     }

@@ -43,11 +43,7 @@ public class UserSystemServiceImpl implements UserSystemService {
                 String start = DateUtils.getTheDateOfStartTime(weekDayStartTime.get(i), "yyyy-MM-dd");
                 String end = DateUtils.getTheDateOfEndTime(weekDayStartTime.get(i), "yyyy-MM-dd");
                 long increment = userInfoService.getIncrementUserByTime(start, end);
-                if(i == 0){
-                    userTotal = userInfoService.getUserTotalByCreateTime(start);
-                }else {
-                    userTotal += increment;
-                }
+                userTotal = userInfoService.getUserTotalByCreateTime(start);
                 userTotals.add(userTotal);
                 increments.add(increment);
             }
@@ -75,9 +71,7 @@ public class UserSystemServiceImpl implements UserSystemService {
             for (int j = 0; j < days.size() - 1;) {
                 String start = days.get(j);
                 String end = days.get(m - 1);
-                if(j == 0){
-                    userTotal = userInfoService.getUserTotalByCreateTime(start);
-                }
+                userTotal = userInfoService.getUserTotalByCreateTime(start);
                 if(m > days.size() - 7){
                     m = days.size();
                     j += 7;
@@ -88,7 +82,7 @@ public class UserSystemServiceImpl implements UserSystemService {
                 abscissaUnit.add(new StringBuffer().append(start).toString());
                 long increment = userInfoService.getIncrementUserByTime(start, end);
                 increments.add(increment);
-                userTotals.add(userTotal + increment);
+                userTotals.add(userTotal);
             }
             userTrendDto.setUnit("周");
         }else if(type == 4){
@@ -96,7 +90,6 @@ public class UserSystemServiceImpl implements UserSystemService {
             String startTime = DateUtils.getPastDate(365);
             String endTime = DateUtils.getPreMonth(startTime);
             boolean flag = true;
-            int index = 0;
             while (flag){
                 //当目前的月份和搜索的时间的结束时间相同时，则再循环一次就可以退出循环
                 if(DateUtils.getPreMonth(DateUtils.getMinMonthDate(DateUtils.now())).equalsIgnoreCase(endTime)){
@@ -104,13 +97,10 @@ public class UserSystemServiceImpl implements UserSystemService {
                     endTime = DateUtils.now();
                     flag = false;
                 }
-                if(index == 0){
-                    userTotal = userInfoService.getUserTotalByCreateTime(startTime);
-                    index++;
-                }
+                userTotal = userInfoService.getUserTotalByCreateTime(startTime);
                 long increment = userInfoService.getIncrementUserByTime(startTime, endTime);
                 increments.add(increment);
-                userTotals.add(userTotal + increment);
+                userTotals.add(userTotal);
                 startTime = endTime;
                 endTime = DateUtils.getPreMonth(endTime);
                 abscissaUnit.add(new StringBuilder().append(startTime.substring(0, 7)).append("月").toString());
@@ -120,7 +110,7 @@ public class UserSystemServiceImpl implements UserSystemService {
         userTrendDto.setUserTotals(userTotals);
         userTrendDto.setIncrements(increments);
         userTrendDto.setAbscissaUnit(abscissaUnit);
-        userTrendDto.setMax(userTotal + 7);//加7就是为了前端显示好看，没有其他作用
+        userTrendDto.setMax(userTotal + 7);                 //加7就是为了前端显示好看，没有其他作用
         userTrendDto.setInterval((int)userTotal / 15 + 1);
         return Message.createBySuccess(userTrendDto);
     }

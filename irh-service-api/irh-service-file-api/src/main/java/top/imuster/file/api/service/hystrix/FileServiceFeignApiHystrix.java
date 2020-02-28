@@ -1,5 +1,6 @@
 package top.imuster.file.api.service.hystrix;
 
+import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,23 +15,23 @@ import top.imuster.file.api.service.FileServiceFeignApi;
  */
 @Slf4j
 @Component
-public class FileServiceFeignApiHystrix implements FileServiceFeignApi {
+public class FileServiceFeignApiHystrix implements FallbackFactory<FileServiceFeignApi> {
 
     @Override
-    public Message upload(MultipartFile file){
-        log.error("FileServiceFeignApiHystrix---->远程调用fileService报错");
-        return null;
-    }
+    public FileServiceFeignApi create(Throwable throwable) {
+        log.error("FileServiceFeignApiHystrix---->远程调用该模块出现异常,错误信息为{}", throwable.getMessage());
+        return new FileServiceFeignApi() {
+            @Override
+            public String upload(MultipartFile file){
+                //todo 上传失败之后需要给一个默认的url
+                log.error("FileServiceFeignApiHystrix---->上传文件失败");
+                return null;
+            }
 
-    @Override
-    public Message deleteByName(String name) {
-        log.error("根据uri删除文件失败,文件名为{}",name);
-        return null;
-    }
-
-    @Override
-    public String test() {
-        log.error("测试失败");
-        return "测试失败";
+            @Override
+            public void deleteByName(String name) {
+                log.error("FileServiceFeignApiHystrix---->根据uri删除文件失败,文件名为{}",name);
+            }
+        };
     }
 }

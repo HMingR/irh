@@ -22,14 +22,17 @@
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
-            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="roleName != null and roleName != ''"><![CDATA[AND role_name = #{roleName}]]></if>
+            <if test="id != null and id != ''"><![CDATA[AND id like "%"#{id}"%"]]></if>
+            <if test="roleName != null and roleName != ''"><![CDATA[AND role_name like "%"#{roleName}"%"]]></if>
             <if test="roleDesc != null and roleDesc != ''"><![CDATA[AND role_desc = #{roleDesc}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="createManagement != null and createManagement != ''"><![CDATA[AND create_management = #{createManagement Id}]]></if>
+			<if test="searchStartTime != null and searchStartTime != ''"><![CDATA[AND create_time >= #{searchStartTime}]]></if>
+			<if test="searchEndTime != null and searchEndTime != ''"><![CDATA[AND create_time <= #{searchEndTime}]]></if>
+
 		</where>
 	</sql>
 	

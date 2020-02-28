@@ -69,7 +69,7 @@ public class ProductController extends BaseController {
             if(!types.contains(fileType)){
                 return Message.createByError("图片格式不正确,请更换图片格式");
             }
-            String url = fileServiceFeignApi.upload(file).getText();
+            String url = fileServiceFeignApi.upload(file);
             productInfo.setMainPicUrl(url);
         }
         productInfoService.insertEntry(productInfo);
@@ -118,7 +118,7 @@ public class ProductController extends BaseController {
             if(!types.contains(fileType)){
                 return Message.createByError("图片格式不正确,请更换图片格式");
             }
-            String url = fileServiceFeignApi.upload(file).getText();
+            String url = fileServiceFeignApi.upload(file);
             productInfo.setMainPicUrl(url);
         }
         int i = productInfoService.updateByKey(productInfo);

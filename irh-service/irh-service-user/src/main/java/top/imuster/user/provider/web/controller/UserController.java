@@ -96,7 +96,7 @@ public class UserController extends BaseController {
             if(!types.contains(fileType)){
                 return Message.createByError("图片格式不正确,请更换图片格式");
             }
-            String url = fileServiceFeignApi.upload(file).getText();
+            String url = fileServiceFeignApi.upload(file);
             userInfo.setPortrait(url);
         }
         userInfoService.updateByKey(userInfo);

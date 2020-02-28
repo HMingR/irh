@@ -1,6 +1,5 @@
 package top.imuster.user.provider.web.controller;
 
-import cn.hutool.core.io.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;

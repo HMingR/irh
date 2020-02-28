@@ -43,7 +43,7 @@ public class AdminReportController extends BaseController {
 
     @ApiOperation("高级查询,统计被举报的目标的总次数或被举报人的总次数(当要查询被举报目标的总次数或者举报人举报次数时，将其中的targetId或者customerId置为-1即可)")
     @PostMapping("/statisic")
-    public Message<Page<ReportFeedbackInfo>> statistics(@ApiParam @RequestBody Page<ReportFeedbackInfo> page){
+    public Message<Page<ReportFeedbackInfo>> statistics(Page<ReportFeedbackInfo> page){
         Page<ReportFeedbackInfo> statistic = reportFeedbackInfoService.statistic(page);
         return Message.createBySuccess(statistic);
     }

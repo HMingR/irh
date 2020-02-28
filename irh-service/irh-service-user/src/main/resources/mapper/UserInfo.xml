@@ -37,28 +37,31 @@
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
-            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+            <if test="id != null and id != ''"><![CDATA[AND id like "%"#{id}"%"]]></if>
             <if test="age != null and age != ''"><![CDATA[AND age = #{age}]]></if>
             <if test="email != null and email != ''"><![CDATA[AND email = #{email}]]></if>
             <if test="password != null and password != ''"><![CDATA[AND password = #{password}]]></if>
             <if test="alipayNum != null and alipayNum != ''"><![CDATA[AND alipay_num = #{alipayNum}]]></if>
-            <if test="nickname != null and nickname != ''"><![CDATA[AND nickname = #{nickname}]]></if>
+            <if test="nickname != null and nickname != ''"><![CDATA[AND nickname like "%"#{nickname}"%"]]></if>
             <if test="qq != null and qq != ''"><![CDATA[AND qq = #{qq}]]></if>
             <if test="gender != null and gender != ''"><![CDATA[AND gender = #{gender}]]></if>
             <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
             <if test="buildingNum != null and buildingNum != ''"><![CDATA[AND building_num = #{buildingNum}]]></if>
             <if test="buildingStorey != null and buildingStorey != ''"><![CDATA[AND building_storey = #{buildingStorey}]]></if>
             <if test="dormNum != null and dormNum != ''"><![CDATA[AND dorm_num = #{dormNum}]]></if>
-            <if test="realName != null and realName != ''"><![CDATA[AND real_name = #{realName}]]></if>
+            <if test="realName != null and realName != ''"><![CDATA[AND real_name like "%"#{realName}"%"]]></if>
             <if test="certificateNum != null and certificateNum != ''"><![CDATA[AND certificate_num = #{certificateNum}]]></if>
             <if test="schoolName != null and schoolName != ''"><![CDATA[AND school_name = #{schoolName}]]></if>
             <if test="academyName != null and academyName != ''"><![CDATA[AND academy_name = #{academyName}]]></if>
             <if test="majorName != null and majorName != ''"><![CDATA[AND major_name = #{majorName}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="state == null or state == ''"><![CDATA[AND state != 10]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if> 
             <if test="portrait != null and portrait != ''"><![CDATA[AND portrait = #{portrait}]]></if>
             <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
+            <if test="searchStartTime != null and searchStartTime != ''"><![CDATA[AND create_time >= #{searchStartTime}]]></if>
+            <if test="searchEndTime != null and searchEndTime != ''"><![CDATA[AND create_time <= #{searchEndTime}]]></if>
 		</where>
 	</sql>
 	

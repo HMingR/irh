@@ -31,7 +31,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
      **/
     @Override
     @PostMapping
-    public Message upload(@RequestParam(value = "file")MultipartFile file) {
+    public String upload(@RequestParam(value = "file")MultipartFile file) {
         try{
             //封装文件信息
             FastDFSFile fastDFSFile = new FastDFSFile(
@@ -45,8 +45,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
 
             //拼接访问地址 url = http://39.105.0.169:8080/group1/M00/00/00/hjdfhjhfjs3278yf47.jpg
             //String url = "http://39.105.0.169:8080/" + uploads[0] + "/" + uploads[1];
-            String url = uploads[0] + "/" + uploads[1];
-            return Message.createBySuccess(url);
+            return uploads[0] + "/" + uploads[1];
         }catch (Exception e){
             logger.error("上传文件失败",e.getMessage(),e);
             throw new FileException("文件上传失败");
@@ -62,23 +61,15 @@ public class FileController extends BaseController implements FileServiceFeignAp
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @Override
-    public Message deleteByName(String uri) {
-        try{
-            int index = uri.lastIndexOf("/");
-            String groupName = uri.substring(0, index);
-            String fileName = uri.substring(index + 1, uri.length());
+    public void deleteByName(String uri){
+        int index = uri.lastIndexOf("/");
+        String groupName = uri.substring(0, index);
+        String fileName = uri.substring(index + 1, uri.length());
+        try {
             FastDFSUtil.deleteFile(groupName, fileName);
-            return Message.createBySuccess();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new FileException(e.getMessage());
         }
     }
-
-    @Override
-    @GetMapping("/test")
-    public String test() {
-        throw new FileException();
-    }
-
 
 }

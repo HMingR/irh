@@ -108,5 +108,16 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<select id="selectTagNameByArticleId" parameterType="long" resultType="string">
+		<![CDATA[
+  			SELECT
+  			at.name
+			FROM
+				article_tag_rel AS atr
+				LEFT JOIN ( SELECT `name`, id FROM article_tag WHERE state != 1) AS at ON at.id = atr.tag_id
+			WHERE
+				atr.article_id = #{id}
+  		]]>
+	</select>
 	
 </mapper>

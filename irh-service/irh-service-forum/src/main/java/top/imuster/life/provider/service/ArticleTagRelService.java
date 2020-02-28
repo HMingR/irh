@@ -11,4 +11,12 @@ import top.imuster.life.api.pojo.ArticleTagRel;
  */
 public interface ArticleTagRelService extends BaseService<ArticleTagRel, Long> {
 
+    /**
+     * @Author hmr
+     * @Description 根据文章id获得文章的标签名称
+     * @Date: 2020/2/28 10:03
+     * @param id 文章id
+     * @reture: java.lang.String 文章的
+     **/
+    String getArticleTagsById(Long id);
 }

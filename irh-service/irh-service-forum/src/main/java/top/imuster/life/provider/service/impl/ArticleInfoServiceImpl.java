@@ -119,7 +119,10 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#p0")
     public ArticleInfo getBriefById(Long id) {
-        return articleInfoDao.selectBriefById(id);
+        ArticleInfo articleInfo = articleInfoDao.selectBriefById(id);
+        String tags = articleTagRelService.getArticleTagsById(id);
+        articleInfo.setTagIds(tags);
+        return articleInfo;
     }
 
     @Override

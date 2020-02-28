@@ -12,7 +12,7 @@ import top.imuster.file.api.service.hystrix.FileServiceFeignApiHystrix;
  * @author: hmr
  * @date: 2020/1/10 20:16
  */
-@FeignClient(value = "file-service", path = "/file", fallback = FileServiceFeignApiHystrix.class)
+@FeignClient(value = "file-service", path = "/file", fallbackFactory = FileServiceFeignApiHystrix.class)
 public interface FileServiceFeignApi {
 
     /**
@@ -23,7 +23,7 @@ public interface FileServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message 上传成功
      **/
     @PostMapping
-    Message upload(@RequestParam("file") MultipartFile file);
+    String upload(@RequestParam("file") MultipartFile file);
 
     /**
      * @Author hmr
@@ -33,9 +33,5 @@ public interface FileServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @DeleteMapping("/{name}")
-    Message deleteByName(@PathVariable("name") String name);
-
-    @GetMapping("/test")
-    String test();
-
+    void deleteByName(@PathVariable("name") String name);
 }

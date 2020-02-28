@@ -13,6 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.base.utils.CookieUtil;
@@ -60,6 +61,7 @@ public class UserLoginController extends BaseController {
     }
 
     @ApiOperation("在用户需要访问受保护的信息时，需要调用该接口获得jwt")
+    @NeedLogin
     @GetMapping("jwt")
     public Message<AuthToken> getUserJwt() throws IOException {
         String accessToken = getAccessTokenFromCookie();
@@ -73,6 +75,7 @@ public class UserLoginController extends BaseController {
 
 
     @ApiOperation("用户退出登录")
+    @NeedLogin
     @GetMapping("logout")
     public Message<String> logout(){
         String accessToken = getAccessTokenFromCookie();

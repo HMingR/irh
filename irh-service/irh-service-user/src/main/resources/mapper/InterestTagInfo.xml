@@ -22,12 +22,14 @@
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="tagName != null and tagName != ''"><![CDATA[AND tag_name = #{tagName}]]></if>
+            <if test="tagName != null and tagName != ''"><![CDATA[AND tag_name like "%"#{tagName}"%"]]></if>
             <if test="managerId != null and managerId != ''"><![CDATA[AND manager_id = #{managerId}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
+			<if test="searchStartTime != null and searchStartTime != ''"><![CDATA[AND create_time >= #{searchStartTime}]]></if>
+			<if test="searchEndTime != null and searchEndTime != ''"><![CDATA[AND create_time <= #{searchEndTime}]]></if>
 		</where>
 	</sql>
 	
