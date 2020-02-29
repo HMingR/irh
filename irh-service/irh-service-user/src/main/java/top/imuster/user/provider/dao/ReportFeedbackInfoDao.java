@@ -13,6 +13,14 @@ import java.util.List;
  */
 public interface ReportFeedbackInfoDao extends BaseDao<ReportFeedbackInfo, Long> {
     //自定义扩展
-    List<ReportFeedbackInfo> selectStatisticsByCondition(ReportFeedbackInfo condition);
+    List<ReportFeedbackInfo> selectListByCondition(ReportFeedbackInfo condition);
 
+    /**
+     * @Author hmr
+     * @Description 处理举报
+     * @Date: 2020/2/29 15:17
+     * @param param
+     * @reture: void
+     **/
+    void updateByTargetId(ReportFeedbackInfo condition);
 }

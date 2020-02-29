@@ -8,7 +8,6 @@
 		<![CDATA[
             id,
             saler_id AS salerId,
-            saler_ nickname AS salerNickname,
             buyer_id AS buyerId,
             product_id AS productId,
             payment_money AS paymentMoney,
@@ -19,7 +18,7 @@
             create_time AS createTime,
             finish_time AS finishTime,
             update_time AS updateTime,
-            order_code AS orderCode
+            order_code AS orderCode,
             state 
 		]]>
 	</sql>
@@ -32,7 +31,6 @@
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="salerId != null and salerId != ''"><![CDATA[AND saler_id = #{salerId}]]></if>
-            <if test="salerNickname != null and salerNickname != ''"><![CDATA[AND saler_ nickname = #{salerNickname}]]></if>
             <if test="buyerId != null and buyerId != ''"><![CDATA[AND buyer_id = #{buyerId}]]></if>
             <if test="productId != null and productId != ''"><![CDATA[AND product_id = #{productId}]]></if>
             <if test="paymentMoney != null and paymentMoney != ''"><![CDATA[AND payment_money = #{paymentMoney}]]></if>
@@ -58,7 +56,6 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="salerId != null"><![CDATA[saler_id = #{salerId},]]></if>
-			<if test="salerNickname != null"><![CDATA[saler_ nickname = #{salerNickname},]]></if>
 			<if test="buyerId != null"><![CDATA[buyer_id = #{buyerId},]]></if>
 			<if test="productId != null"><![CDATA[product_id = #{productId},]]></if>
 			<if test="paymentMoney != null"><![CDATA[payment_money = #{paymentMoney},]]></if>
@@ -71,7 +68,6 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode},]]></if>
-
 		</set>
 	</sql>
 
@@ -82,8 +78,7 @@
 				(
                 id, 
                 saler_id, 
-                saler_ nickname, 
-                buyer_id, 
+                buyer_id,
                 product_id, 
                 payment_money, 
                 order_remark, 
@@ -100,8 +95,7 @@
 				(
                 #{id}, 
                 #{salerId}, 
-                #{salerNickname}, 
-                #{buyerId}, 
+                #{buyerId},
                 #{productId}, 
                 #{paymentMoney}, 
                 #{orderRemark}, 
@@ -183,7 +177,6 @@
 				(
                 id,
                 saler_id,
-                saler_ nickname,
                 buyer_id,
                 product_id,
                 payment_money,
@@ -201,7 +194,6 @@
 				(
                 #{id},
                 #{salerId},
-                #{salerNickname},
                 #{buyerId},
                 #{productId},
                 #{paymentMoney},

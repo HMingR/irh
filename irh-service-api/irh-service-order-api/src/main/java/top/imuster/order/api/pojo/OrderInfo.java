@@ -37,10 +37,6 @@ public class OrderInfo extends BaseDomain {
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "卖家的id不能为空")
 	private Long salerId;
 
-	// 卖家的用户名, max length: 255
-	@ApiModelProperty("卖家的用户名")
-	private String salerNickname;
-
 	// 会员表的id
 	@ApiModelProperty("会员表的id")
 	@NotEmpty(groups = ValidateGroup.queryGroup.class, message = "会员的id不能为空")
@@ -102,13 +98,6 @@ public class OrderInfo extends BaseDomain {
 	}
     public void setSalerId(Long salerId) {
 		this.salerId = salerId;
-	}
-	
-	public String getSalerNickname() {
-		return this.salerNickname;
-	}
-    public void setSalerNickname(String salerNickname) {
-		this.salerNickname = salerNickname;
 	}
 	
 	public Long getBuyerId() {

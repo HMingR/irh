@@ -2,6 +2,7 @@ package top.imuster.user.provider.service;
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 
 /**
@@ -23,11 +24,22 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
 
     /**
      * @Author hmr
-     * @Description 高级分页条件查询
-     * @Date: 2020/1/16 11:53
+     * @Description 查询举报记录
+     * @Date: 2020/2/29 14:52
      * @param page
-     * @reture: java.util.List<top.imuster.user.api.pojo.ReportFeedbackInfo>
-     *
-     * @return*/
-    Page<ReportFeedbackInfo> statistic(Page<ReportFeedbackInfo> page);
+     * @reture: top.imuster.common.base.domain.Page<top.imuster.user.api.pojo.ReportFeedbackInfo>
+     **/
+    Page<ReportFeedbackInfo> list(Page<ReportFeedbackInfo> page);
+
+    /**
+     * @Author hmr
+     * @Description 根据举报对象的id处理请求
+     * @Date: 2020/2/29 15:13
+     * @param targetId
+     * @param result
+     * @param remark
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> processReportByTargetId(Long targetId, Integer result, String remark, Long userId);
 }

@@ -24,7 +24,7 @@
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="topic != null and topic != ''"><![CDATA[AND topic = #{topic}]]></if>
+            <if test="topic != null and topic != ''"><![CDATA[AND topic like "%"#{topic}"%"]]></if>
             <if test="categoryId != null and categoryId != ''"><![CDATA[AND category_id = #{categoryId}]]></if>
             <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
             <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>

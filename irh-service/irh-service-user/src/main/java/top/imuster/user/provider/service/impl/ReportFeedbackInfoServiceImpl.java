@@ -8,22 +8,22 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
-import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
+import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.user.api.enums.FeedbackEnum;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.provider.dao.ReportFeedbackInfoDao;
 import top.imuster.user.provider.exception.UserException;
-import top.imuster.user.provider.service.UserInfoService;
 import top.imuster.user.provider.service.ReportFeedbackInfoService;
+import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ReportFeedbackInfoService 实现类
@@ -59,7 +59,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     }
 
     @Override
-    public void processReport(ReportFeedbackInfo condition, Long userId) throws Exception {
+    public void processReport(ReportFeedbackInfo condition, Long userId){
         reportFeedbackInfoDao.updateByKey(condition);
         if(condition.getResult() == 1){
             return;
@@ -152,14 +152,27 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     }
 
     @Override
-    public Page<ReportFeedbackInfo> statistic(Page<ReportFeedbackInfo> page) {
+    public Page<ReportFeedbackInfo> list(Page<ReportFeedbackInfo> page) {
+        if(page.getSearchCondition() == null){
+            page.setSearchCondition(new ReportFeedbackInfo());
+        }
         ReportFeedbackInfo condition = page.getSearchCondition();
-        condition.setEndIndex(page.getEndIndex());
-        condition.setStartIndex(page.getStartIndex());
-        Integer count = selectEntryListCount(condition);
+        Integer count = reportFeedbackInfoDao.selectEntryListCount(condition);
         page.setTotalCount(count);
-        List<ReportFeedbackInfo> reportFeedbackInfos = reportFeedbackInfoDao.selectStatisticsByCondition(condition);
-        page.setData(reportFeedbackInfos);
-        return page;
+        condition.setStartIndex(page.getStartIndex());
+        condition.setEndIndex(page.getEndIndex());
+        reportFeedbackInfoDao.selectListByCondition(condition);
+        return null;
+    }
+
+    @Override
+    public Message<String> processReportByTargetId(Long targetId, Integer result, String remark, Long userId) {
+        ReportFeedbackInfo condition = new ReportFeedbackInfo();
+        condition.setTargetId(targetId);
+        condition.setResult(result);
+        condition.setRemark(remark);
+        condition.setProcessId(userId);
+        reportFeedbackInfoDao.updateByTargetId(condition);
+        return Message.createBySuccess();
     }
 }

@@ -41,7 +41,7 @@ public class ReportFeedbackInfo extends BaseDomain {
 	private Long customerId;
 
 	//处理结果  1-举报失败 2-处理中  3-举报成功
-	@ApiModelProperty("处理结果 1-举报失败 2-处理中 3-警告 4-冻结账号 5-删除相关内容")
+	@ApiModelProperty("处理结果 1-举报失败 2-处理中 3-警告并删除相关内容 4-冻结账号")
 	@NotEmpty(groups = ValidateGroup.processGroup.class, message = "处理结果不能为空")
 	private Integer result;
 
@@ -53,23 +53,22 @@ public class ReportFeedbackInfo extends BaseDomain {
 	@ApiModelProperty("举报理由")
 	private String reason;
 
+	@ApiModelProperty("处理人")
+	private Long processId;
+
 	//总数，用来统计
 	private Integer total;
 
 	// 1-无效 2-有效
 	//private Integer state
 
-	@Override
-	public String toString() {
-		return "ReportFeedbackInfo{" +
-				"id=" + id +
-				", type=" + type +
-				", targetId=" + targetId +
-				", customerId=" + customerId +
-				", result=" + result +
-				", remark='" + remark + '\'' +
-				", total=" + total +
-				'}';
+
+	public Long getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(Long processId) {
+		this.processId = processId;
 	}
 
 	public String getReason() {

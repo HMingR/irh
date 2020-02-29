@@ -34,6 +34,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="reason != null and reason != ''"><![CDATA[AND reason = #{reason}]]></if>
 		</where>
 	</sql>
@@ -144,21 +145,29 @@
 	
 	<!-- 其它SQL语句 -->
 
-	<!--按照条件统计-->
-	<select id="selectStatisticsByCondition" parameterType="reportFeedbackInfo" resultType="reportFeedbackInfo">
-		<![CDATA[SELECT id, COUNT(1) AS total, ]]>
-		<if test="targetId != null and targetId != -1"><![CDATA[target_id AS targetId ]]></if>
-		<if test="customerId != null and customerId != -1"><![CDATA[customer_id AS consumerId]]></if>
-		<if test="customerId == -1"><![CDATA[customer_id AS consumerId ]]></if>
-		<if test="targetId == -1 and customerId == -1"><![CDATA[ , ]]></if>
-		<if test="targetId == -1"><![CDATA[target_id AS targetId]]></if>
-		<include refid="QUERY_FROM_TABLE"/>
-		<include refid="QUERY_WHERE_CLAUSE"/>
-		<![CDATA[ GROUP BY ]]>
-		<if test="targetId != null || targetId == -1"><![CDATA[target_id ]]></if>
-		<if test="targetId == -1 and customerId == -1"><![CDATA[ , ]]></if>
-		<if test="customerId != null || customerId == -1"><![CDATA[customer_id ]]></if>
-		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	<select id="selectListByCondition" parameterType="reportFeedbackInfo" resultType="reportFeedbackInfo">
+		<![CDATA[
+		SELECT
+			COUNT(1) AS total, target_id AS targetId, type
+		FROM
+			report_feedback_info
+		WHERE
+			type = #{type}
+		GROUP BY
+			target_id
+		ORDER BY
+			total DESC
+		LIMIT #{startIndex}, #{pageSize}
+	]]>
 	</select>
+
+	<update id="updateByTargetId" parameterType="reportFeedbackInfo">
+		<![CDATA[
+			UPDATE report_feedback_info
+			SET result = #{result}, remark = #{remark}, process_id = #{processId}
+			WHERE
+				target_id = #{targetId}
+		 ]]>
+	</update>
 	
 </mapper>

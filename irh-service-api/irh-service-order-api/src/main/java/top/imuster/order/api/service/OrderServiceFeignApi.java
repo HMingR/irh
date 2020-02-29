@@ -19,7 +19,7 @@ import java.util.List;
  * @date: 2019/12/27 15:28
  */
 
-@FeignClient(value = "order-service", path = "/feign/order", fallback = OrderServiceFeignApiHystrix.class)
+@FeignClient(value = "goods-service", path = "/feign/order", fallbackFactory = OrderServiceFeignApiHystrix.class)
 public interface OrderServiceFeignApi {
 
     /**

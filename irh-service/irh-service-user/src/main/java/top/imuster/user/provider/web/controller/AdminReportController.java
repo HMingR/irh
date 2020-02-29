@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -35,17 +36,9 @@ public class AdminReportController extends BaseController {
      **/
     @ApiOperation(value = "管理员分页条件查询用户举报反馈",httpMethod = "POST")
     @PostMapping
-    public Message<Page<ReportFeedbackInfo>> reportFeedbackList(@ApiParam Page<ReportFeedbackInfo> page){
-        ReportFeedbackInfo searchCondition = page.getSearchCondition();
-        Page<ReportFeedbackInfo> feedbackInfoPage = reportFeedbackInfoService.selectPage(searchCondition, page);
-        return Message.createBySuccess(feedbackInfoPage);
-    }
-
-    @ApiOperation("高级查询,统计被举报的目标的总次数或被举报人的总次数(当要查询被举报目标的总次数或者举报人举报次数时，将其中的targetId或者customerId置为-1即可)")
-    @PostMapping("/statisic")
-    public Message<Page<ReportFeedbackInfo>> statistics(Page<ReportFeedbackInfo> page){
-        Page<ReportFeedbackInfo> statistic = reportFeedbackInfoService.statistic(page);
-        return Message.createBySuccess(statistic);
+    public Message<Page<ReportFeedbackInfo>> reportFeedbackList(@ApiParam @RequestBody Page<ReportFeedbackInfo> page){
+        Page<ReportFeedbackInfo> list = reportFeedbackInfoService.list(page);
+        return Message.createBySuccess(list);
     }
 
     /**
@@ -96,5 +89,12 @@ public class AdminReportController extends BaseController {
         Long userId = getCurrentUserIdFromCookie();
         reportFeedbackInfoService.processReport(reportFeedbackInfo, userId);
         return Message.createBySuccess("处理成功");
+    }
+
+    @GetMapping("/process/{targetId}/{result}/{remark}")
+    @NeedLogin
+    public Message<String> processByTargetId(@PathVariable("targetId")Long targetId, @PathVariable("result") Integer result, @PathVariable("remark")String remark){
+        Long userId = getCurrentUserIdFromCookie();
+        return reportFeedbackInfoService.processReportByTargetId(targetId, result, remark, userId);
     }
 }

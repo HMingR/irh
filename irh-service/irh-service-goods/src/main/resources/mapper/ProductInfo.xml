@@ -32,7 +32,7 @@
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="productName != null and productName != ''"><![CDATA[AND product_name = #{productName}]]></if>
+            <if test="productName != null and productName != ''"><![CDATA[AND product_name like "%"#{productName}"%"]]></if>
             <if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[AND main_pic_url = #{mainPicUrl}]]></if>
             <if test="unit != null and unit != ''"><![CDATA[AND unit = #{unit}]]></if>
             <if test="originalPrice != null and originalPrice != ''"><![CDATA[AND original_price = #{originalPrice}]]></if>

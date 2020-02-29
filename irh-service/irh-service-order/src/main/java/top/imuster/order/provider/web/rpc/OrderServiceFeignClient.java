@@ -20,7 +20,7 @@ import java.util.List;
  * @date: 2019/12/27 15:33
  */
 @RestController
-@RequestMapping("/")
+@RequestMapping("/feign/order")
 @Slf4j
 public class OrderServiceFeignClient implements OrderServiceFeignApi {
 
@@ -28,18 +28,17 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     OrderInfoService orderInfoService;
 
     @Override
-    @GetMapping("/feign/order/{orderId}")
+    @GetMapping("/{orderId}")
     public OrderInfo getOrderById(@PathVariable("orderId") Long orderId) {
         OrderInfo orderInfo = orderInfoService.selectEntryList(orderId).get(0);
         return orderInfo;
     }
 
     @Override
-    public Message<Page<OrderInfo>> orderList(Page<OrderInfo> page) {
+    @PostMapping
+    public Message<Page<OrderInfo>> orderList(@RequestBody Page<OrderInfo> page) {
         OrderInfo condition = page.getSearchCondition();
-        condition.setState(2);
         Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(condition, page);
         return Message.createBySuccess(orderInfoPage);
-
     }
 }

@@ -1,5 +1,6 @@
 package top.imuster.order.api.service.hystrix;
 
+import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
@@ -17,17 +18,23 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class OrderServiceFeignApiHystrix implements OrderServiceFeignApi {
+public class OrderServiceFeignApiHystrix implements FallbackFactory<OrderServiceFeignApi> {
 
     @Override
-    public OrderInfo getOrderById(Long orderId) {
-        log.error("OrderServiceFeignApiHystrix--> 根据订单的id条件查询订单信息服务失败");
-        return null;
-    }
+    public OrderServiceFeignApi create(Throwable throwable) {
+        log.error("OrderServiceFeignApiHystrix--->错误信息为{}",throwable.getMessage(), throwable);
+        return new OrderServiceFeignApi() {
+            @Override
+            public OrderInfo getOrderById(Long orderId) {
+                log.error("OrderServiceFeignApiHystrix--> 根据订单的id条件查询订单信息服务失败");
+                return null;
+            }
 
-    @Override
-    public Message<Page<OrderInfo>> orderList(Page<OrderInfo> page) {
-        log.error("OrderServiceFeignApiHystrix--> 分页条件查询订单服务失败");
-        return null;
+            @Override
+            public Message<Page<OrderInfo>> orderList(Page<OrderInfo> page) {
+                log.error("OrderServiceFeignApiHystrix--> 分页条件查询订单服务失败");
+                return null;
+            }
+        };
     }
 }
