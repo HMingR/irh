@@ -22,8 +22,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.exception.CustomSecurityException;
+import top.imuster.common.core.dto.Send2MQ;
+import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.enums.SendMessageTemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.security.api.bo.AuthToken;
@@ -116,20 +119,18 @@ public class UserLoginService {
     }
 
     public void getCode(String email){
-        SendMessageDto sendMessageDto = new SendMessageDto();
+        SendEmailDto emailDto = new SendEmailDto();
         String code = UUID.randomUUID().toString().substring(0, 4);
-        sendMessageDto.setUnit(TimeUnit.MINUTES);
-        sendMessageDto.setExpiration(10L);
-        sendMessageDto.setValue(code);
-        sendMessageDto.setType(MqTypeEnum.EMAIL);
-        sendMessageDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
-        sendMessageDto.setTopic("注册");
-        String body = new StringBuilder().append("欢迎注册,本次注册的验证码是").append(code).append(",该验证码有效期为10分钟").toString();
-        sendMessageDto.setBody(body);
-        generateSendMessageService.sendToMqAndReids(sendMessageDto);
+        emailDto.setEmail(email);
+        emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+        emailDto.setContent(code);
+        emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+        emailDto.setTemplateEnum(SendMessageTemplateEnum.USER_REGISTER);
+        emailDto.setExpiration(20L);
+        emailDto.setUnit(TimeUnit.MINUTES);
+        emailDto.setType(MqTypeEnum.EMAIL);
+        generateSendMessageService.sendRegistEmail(emailDto);
     }
-
-
 
     /**
      * @Author hmr
@@ -232,5 +233,4 @@ public class UserLoginService {
         byte[] encode = Base64Utils.encode(string.getBytes());
         return "Basic "+new String(encode);
     }
-
 }

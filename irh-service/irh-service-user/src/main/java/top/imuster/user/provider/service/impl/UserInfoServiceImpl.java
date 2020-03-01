@@ -128,7 +128,11 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     @Override
     @Cacheable(key = "#p0")
     public String getUserNameById(Long id) {
-        return userInfoDao.selectUserNameById(id);
+        String s = userInfoDao.selectUserNameById(id);
+        if(StringUtils.isBlank(s)){
+            s = String.valueOf(id);
+        }
+        return s;
     }
 
     @Override

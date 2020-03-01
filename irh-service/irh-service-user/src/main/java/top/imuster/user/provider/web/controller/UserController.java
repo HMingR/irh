@@ -65,7 +65,7 @@ public class UserController extends BaseController {
      * @param bindingResult
      * @return top.imuster.common.base.wrapper.Message 
      **/
-    @ApiOperation(value = "用户在注册(修改信息)前需要校验各种参数(用户名、邮箱、手机号等)必须唯一",httpMethod = "POST")
+    @ApiOperation(value = "修改信息前需要校验各种参数(用户名、邮箱、手机号等)必须唯一",httpMethod = "POST")
     @PostMapping("/check")
     public Message<String> checkValid(@ApiParam("CheckValidDto实体类") @RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
         validData(bindingResult);

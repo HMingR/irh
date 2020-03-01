@@ -19,6 +19,7 @@ public class ReportFeedbackInfoDaoImpl extends BaseDaoImpl<ReportFeedbackInfo, L
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.ReportFeedbackInfoDao.";
 	private final static String SELECT_LIST_BY_CONDITION = "selectListByCondition";
 	private final static String UPDATE_BY_TARGET_ID = "updateByTargetId";
+	private final static String SELECT_ALL_REPORT_BY_TARGETID = "selectAllReportByTargetId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -32,5 +33,10 @@ public class ReportFeedbackInfoDaoImpl extends BaseDaoImpl<ReportFeedbackInfo, L
 	@Override
 	public void updateByTargetId(ReportFeedbackInfo condition) {
 		 this.update(getNameSpace(UPDATE_BY_TARGET_ID), condition);
+	}
+
+	@Override
+	public List<ReportFeedbackInfo> selectAllReportByTargetId(Long targetId) {
+		return this.selectList(getNameSpace(SELECT_ALL_REPORT_BY_TARGETID), targetId);
 	}
 }

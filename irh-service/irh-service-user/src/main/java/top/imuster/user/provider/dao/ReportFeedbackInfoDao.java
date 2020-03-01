@@ -23,4 +23,13 @@ public interface ReportFeedbackInfoDao extends BaseDao<ReportFeedbackInfo, Long>
      * @reture: void
      **/
     void updateByTargetId(ReportFeedbackInfo condition);
+
+    /**
+     * @Author hmr
+     * @Description 根据targetId获得所有关于该id的举报信息
+     * @Date: 2020/3/1 11:19
+     * @param targetId
+     * @reture: java.util.List<top.imuster.user.api.pojo.ReportFeedbackInfo>
+     **/
+    List<ReportFeedbackInfo> selectAllReportByTargetId(Long targetId);
 }

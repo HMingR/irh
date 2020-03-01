@@ -148,11 +148,13 @@
 	<select id="selectListByCondition" parameterType="reportFeedbackInfo" resultType="reportFeedbackInfo">
 		<![CDATA[
 		SELECT
-			COUNT(1) AS total, target_id AS targetId, type
+			COUNT(1) AS total, target_id AS targetId, type, id
 		FROM
 			report_feedback_info
 		WHERE
 			type = #{type}
+			AND result = 2
+			AND state = 2
 		GROUP BY
 			target_id
 		ORDER BY
@@ -169,5 +171,11 @@
 				target_id = #{targetId}
 		 ]]>
 	</update>
+
+	<select id="selectAllReportByTargetId" parameterType="long" resultType="reportFeedbackInfo">
+		<![CDATA[SELECT customer_id AS customerId, target_id AS targetId, create_time AS createTime, reason]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ WHERE target_id = #{targetId} AND result = 2 AND state = 2 ]]>
+	</select>
 	
 </mapper>

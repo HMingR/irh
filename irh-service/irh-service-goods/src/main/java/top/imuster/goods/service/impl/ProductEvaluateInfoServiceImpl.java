@@ -4,7 +4,6 @@ package top.imuster.goods.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.core.annotation.MqGenerate;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
@@ -42,7 +41,6 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     }
 
     @Override
-    @MqGenerate
     public void generateSendMessage(SendMessageDto sendMessageDto) {
         sendMessageDto.setBody("我对您发布的商品进行了评价,快来看看吧");
         sendMessageDto.setType(MqTypeEnum.EMAIL);

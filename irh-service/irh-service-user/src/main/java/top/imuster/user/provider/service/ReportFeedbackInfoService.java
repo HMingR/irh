@@ -5,6 +5,8 @@ import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 
+import java.util.List;
+
 /**
  * ReportFeedbackInfoService接口
  * @author 黄明人
@@ -42,4 +44,12 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> processReportByTargetId(Long targetId, Integer result, String remark, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 根据type和targetId获得所有举报该内容的举报信息
+     * @Date: 2020/3/1 10:32
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId);
 }

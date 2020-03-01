@@ -24,6 +24,7 @@ import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ReportFeedbackInfoService 实现类
@@ -74,7 +75,8 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             target.setType(MqTypeEnum.CENTER);
             target.setTopic("警告");
             target.setBody("您在irh中发布的" + FeedbackEnum.getNameByType(info.getType()) + "被人举报，经过核实举报属实。如果再次发现类似情况，您的账号将被冻结");
-            generateSendMessageService.sendToMq(target);
+            //todo
+//            generateSendMessageService.sendToMq(target);
         }else if(condition.getResult() == 5){
             ArrayList<SendMessageDto> sendMessageDtos = new ArrayList<>();
             SendMessageDto customerMessage = new SendMessageDto();
@@ -91,7 +93,8 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             target.setType(MqTypeEnum.EMAIL);
             sendMessageDtos.add(customerMessage);
             sendMessageDtos.add(target);
-            generateSendMessageService.senManyToMq(sendMessageDtos);
+            //todo
+//            generateSendMessageService.senManyToMq(sendMessageDtos);
         }
         deleteByCondition(info, userId);
     }
@@ -161,8 +164,9 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         page.setTotalCount(count);
         condition.setStartIndex(page.getStartIndex());
         condition.setEndIndex(page.getEndIndex());
-        reportFeedbackInfoDao.selectListByCondition(condition);
-        return null;
+        List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectListByCondition(condition);
+        page.setData(res);
+        return page;
     }
 
     @Override
@@ -174,5 +178,11 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         condition.setProcessId(userId);
         reportFeedbackInfoDao.updateByTargetId(condition);
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId) {
+        List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectAllReportByTargetId(targetId);
+        return Message.createBySuccess(res);
     }
 }
