@@ -22,11 +22,11 @@ public interface ProductMessageDao extends BaseDao<ProductMessage, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据父id获得父id对应的消息的发送者的email
+     * @Description 根据父id获得父id对应的消息的发送者的id
      * @Date: 2020/1/21 11:21
      * @param parentId
      * @reture: java.lang.String
      **/
-    String selectProductEmailByMessageParentId(Long parentId);
+    Long selectSalerIdByMessageParentId(Long parentId);
 
 }

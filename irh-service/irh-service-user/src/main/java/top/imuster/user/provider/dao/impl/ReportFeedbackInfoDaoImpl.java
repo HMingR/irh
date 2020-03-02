@@ -36,7 +36,7 @@ public class ReportFeedbackInfoDaoImpl extends BaseDaoImpl<ReportFeedbackInfo, L
 	}
 
 	@Override
-	public List<ReportFeedbackInfo> selectAllReportByTargetId(Long targetId) {
-		return this.selectList(getNameSpace(SELECT_ALL_REPORT_BY_TARGETID), targetId);
+	public List<ReportFeedbackInfo> selectAllReportByTargetId(HashMap<String, String> params) {
+		return this.selectList(getNameSpace(SELECT_ALL_REPORT_BY_TARGETID), params);
 	}
 }

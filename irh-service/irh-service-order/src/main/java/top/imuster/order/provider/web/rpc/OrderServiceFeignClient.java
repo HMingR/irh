@@ -5,6 +5,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.order.provider.exception.OrderException;
@@ -40,5 +41,17 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
         OrderInfo condition = page.getSearchCondition();
         Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(condition, page);
         return Message.createBySuccess(orderInfoPage);
+    }
+
+    @Override
+    @GetMapping("/trend/amount/{type}")
+    public Message<OrderTrendDto> getOrderAmountTrend(@PathVariable("type") Integer type) {
+        return orderInfoService.getOrderAmountTrend(type);
+    }
+
+    @Override
+    @GetMapping("/trend/total/{type}")
+    public Message<OrderTrendDto> getOrderTotalTrend(@PathVariable("type") Integer type) {
+        return orderInfoService.getOrderTotalTrend(type);
     }
 }

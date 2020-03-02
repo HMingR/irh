@@ -12,6 +12,7 @@ import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.dto.Send2MQ;
 import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.exception.GlobalException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,10 +35,6 @@ public class GenerateSendMessageService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Bean
-    public ObjectMapper objectMapper(){
-        return new ObjectMapper();
-    }
 
     /**
      * @Author hmr
@@ -73,6 +70,10 @@ public class GenerateSendMessageService {
     private void send2Mq(Send2MQ sendMessage){
         try {
             MqTypeEnum type = sendMessage.getType();
+            if(type == null){
+                log.error("发送的邮件类型为空,发送的信息为{}", sendMessage);
+                throw new GlobalException("服务器内部异常");
+            }
             String body = objectMapper.writeValueAsString(sendMessage);
             rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM,  type.getRoutingKey(), body);
         } catch (JsonProcessingException e) {

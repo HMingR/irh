@@ -60,5 +60,5 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @param end
      * @reture: long
      **/
-    long selectIncrementUserByTime(Map<String, String> param);
+    Long selectIncrementUserByTime(Map<String, String> param);
 }

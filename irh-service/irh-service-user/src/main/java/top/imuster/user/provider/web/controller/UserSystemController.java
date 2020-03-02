@@ -27,7 +27,7 @@ public class UserSystemController {
         return null;
     }
 
-    @ApiOperation("搜索一个时间段内的用户注册数量趋势 1-最近一周  2-一个月 3-三个月 4-半年 5-一年")
+    @ApiOperation("搜索一个时间段内的用户注册数量趋势 1-最近一周  2-一个月 3-半年 4-一年")
     @GetMapping("/userTrend/{type}")
     public Message<UserTrendDto> userTrend(@PathVariable("type") Integer type){
         return userSystemService.userTrend(type);

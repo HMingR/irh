@@ -1,6 +1,6 @@
 package top.imuster.common.core.dto;
 
-import top.imuster.common.core.enums.SendMessageTemplateEnum;
+import top.imuster.common.core.enums.TemplateEnum;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +46,7 @@ public class SendEmailDto extends Send2MQ implements Serializable {
     }
 
     //邮件的模板
-    private SendMessageTemplateEnum templateEnum;
+    private TemplateEnum templateEnum;
 
     public Long getExpiration() {
         return expiration;
@@ -64,11 +64,11 @@ public class SendEmailDto extends Send2MQ implements Serializable {
         this.unit = unit;
     }
 
-    public SendMessageTemplateEnum getTemplateEnum() {
+    public TemplateEnum getTemplateEnum() {
         return templateEnum;
     }
 
-    public void setTemplateEnum(SendMessageTemplateEnum templateEnum) {
+    public void setTemplateEnum(TemplateEnum templateEnum) {
         this.templateEnum = templateEnum;
     }
 

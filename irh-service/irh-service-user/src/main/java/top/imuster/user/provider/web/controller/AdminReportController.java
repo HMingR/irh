@@ -42,9 +42,9 @@ public class AdminReportController extends BaseController {
     }
 
     @ApiOperation("根据targetId获得所有举报的信息")
-    @GetMapping("/detail/{targetId}")
-    public Message<List<ReportFeedbackInfo>> getReportDetailByTargetId(@PathVariable("targetId") Long targetId){
-        return reportFeedbackInfoService.getDetailsByTargetId(targetId);
+    @GetMapping("/detail/{targetId}/{type}")
+    public Message<List<ReportFeedbackInfo>> getReportDetailByTargetId(@PathVariable("targetId") Long targetId, @PathVariable("type") Integer type){
+        return reportFeedbackInfoService.getDetailsByTargetId(targetId, type);
     }
 
     /**

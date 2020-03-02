@@ -47,7 +47,6 @@ public class RedisConfig {
      * 如果没指定TypeReference则会报错java.util.LinkedHashMap cannot be cast。
      */
     @Bean
-    @Scope
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);

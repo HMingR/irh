@@ -4,6 +4,7 @@ package top.imuster.user.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,5 +32,5 @@ public interface ReportFeedbackInfoDao extends BaseDao<ReportFeedbackInfo, Long>
      * @param targetId
      * @reture: java.util.List<top.imuster.user.api.pojo.ReportFeedbackInfo>
      **/
-    List<ReportFeedbackInfo> selectAllReportByTargetId(Long targetId);
+    List<ReportFeedbackInfo> selectAllReportByTargetId(HashMap<String, String> params);
 }

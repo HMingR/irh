@@ -241,7 +241,7 @@
 	</update>
 
 	<select id="selectBriefByHotTopicId" resultType="top.imuster.life.api.pojo.ForumHotTopic" parameterType="long">
-		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime, main_picture AS mainPicUrl, froward_times AS forwardTimes, up_total AS upTotal, forward_times AS forwardTimes, user_id AS userId  ]]>
+		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime, main_picture AS mainPicUrl, up_total AS upTotal, forward_times AS forwardTimes, user_id AS userId  ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state != 1 AND id = #{aLong}]]>
 	</select>

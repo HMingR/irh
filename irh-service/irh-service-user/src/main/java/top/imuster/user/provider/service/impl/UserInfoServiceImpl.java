@@ -141,7 +141,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
-    public long getIncrementUserByTime(String start, String end) {
+    public Long getIncrementUserByTime(String start, String end) {
         HashMap<String, String> params = new HashMap<>();
         params.put("startTime", start);
         params.put("endTime", end);

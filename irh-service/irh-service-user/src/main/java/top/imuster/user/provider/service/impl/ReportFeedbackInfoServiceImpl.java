@@ -9,7 +9,8 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.dto.SendEmailDto;
+import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
@@ -24,6 +25,7 @@ import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,37 +68,60 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             return;
         }
         ReportFeedbackInfo info = reportFeedbackInfoService.selectEntryList(condition.getId()).get(0);
-        SendMessageDto target = new SendMessageDto();
-        target.setSourceId(-1L);
-        target.setSendDate(DateUtils.current());
-        String sendToId = getSendToId(info.getType(), info.getTargetId());
-        target.setSendTo(sendToId);
-        if(condition.getResult() == 3 || condition.getResult() == 4){
+        SendUserCenterDto target = new SendUserCenterDto();
+        target.setDate(DateUtils.now());
+        Long sendToId = getSendToId(info.getType(), info.getTargetId());
+        target.setToId(sendToId);
+        if(condition.getResult() == 3){
+            //警告并删除相关内容
             target.setType(MqTypeEnum.CENTER);
-            target.setTopic("警告");
-            target.setBody("您在irh中发布的" + FeedbackEnum.getNameByType(info.getType()) + "被人举报，经过核实举报属实。如果再次发现类似情况，您的账号将被冻结");
-            //todo
-//            generateSendMessageService.sendToMq(target);
-        }else if(condition.getResult() == 5){
-            ArrayList<SendMessageDto> sendMessageDtos = new ArrayList<>();
-            SendMessageDto customerMessage = new SendMessageDto();
-            customerMessage.setSourceId(-1L);
-            customerMessage.setSendDate(DateUtils.current());
-            customerMessage.setType(MqTypeEnum.CENTER);
-            customerMessage.setBody("您于" + info.getCreateTime() + "举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
+            target.setContent("您在irh中发布的" + FeedbackEnum.getNameByType(info.getType()) + "被人举报，经过核实举报属实。如果再次发现类似情况，您的账号将被冻结");
+        }else if(condition.getResult() == 4){
+            //冻结账号
+
+            //将结果反馈给举报人
+            List<Long> reporterIds = getReporterIdByTargetId(condition.getTargetId(), condition.getType());
+            SendUserCenterDto temp = new SendUserCenterDto();
+            temp.setContent("您举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
+            temp.setDate(DateUtils.now());
+            temp.setType(MqTypeEnum.CENTER);
+            for (Long reporterId : reporterIds) {
+                temp.setToId(reporterId);
+                generateSendMessageService.sendToMq(temp);
+            }
+
+            //给被封的人发邮件
+            SendEmailDto customer = new SendEmailDto();
+            customer.setDate(DateUtils.now());
+            customer.setType(MqTypeEnum.EMAIL);
             String emailById = userInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
                 log.info("根据id{}查询会员email失败",info.getCustomerId());
             }
-            customerMessage.setSendTo(emailById);
-            target.setBody("由于您多次违反irh平台的相关规定或多次被用户举报并核实，您的账号已经被冻结。请联系管理员取消冻结");
-            target.setType(MqTypeEnum.EMAIL);
-            sendMessageDtos.add(customerMessage);
-            sendMessageDtos.add(target);
-            //todo
-//            generateSendMessageService.senManyToMq(sendMessageDtos);
+            customer.setContent("由于您多次违反irh平台的相关规定或多次被用户举报并核实，您的账号已经被冻结。请联系管理员取消冻结");
+            customer.setEmail(emailById);
+            generateSendMessageService.sendToMq(customer);
         }
         deleteByCondition(info, userId);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据被举报对象的id获得所有举报该对象的用户id
+     * @Date: 2020/3/2 12:03
+     * @param id
+     * @reture: java.util.List<java.lang.Long>
+     **/
+    public List<Long> getReporterIdByTargetId(Long id, Integer type){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("targetId", String.valueOf(id));
+        params.put("type", String.valueOf(type));
+        List<ReportFeedbackInfo> resInfo = reportFeedbackInfoDao.selectAllReportByTargetId(params);
+        ArrayList<Long> ids = new ArrayList<>(resInfo.size());
+        resInfo.stream().forEach(reportFeedbackInfo -> {
+            ids.add(reportFeedbackInfo.getCustomerId());
+        });
+        return ids;
     }
 
     /**
@@ -134,13 +159,13 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
 
     /**
      * @Author hmr
-     * @Description 根据不同的type获得不同的被举报信息的发布者的email
+     * @Description 根据不同的type获得不同的被举报信息的发布者的id
      * @Date: 2020/1/17 10:43
      * @param type 1-商品举报 2-留言举报 3-评价举报 4-帖子举报 5-帖子留言举报
      * @param targetId
      * @reture: java.lang.String 会员email
      **/
-    private String getSendToId(Integer type, Long targetId){
+    private Long getSendToId(Integer type, Long targetId){
         Long consumerId;
         if(type <= 3){
             consumerId = goodsServiceFeignApi.getConsumerIdByType(targetId, type);
@@ -151,7 +176,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             log.info("没有在{}表中找到id为{}的信息",type, targetId);
             throw new UserException("操作失败,请刷新后重试或联系管理员");
         }
-        return userInfoService.getEmailById(consumerId);
+        return consumerId;
     }
 
     @Override
@@ -181,8 +206,11 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     }
 
     @Override
-    public Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId) {
-        List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectAllReportByTargetId(targetId);
+    public Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId, Integer type) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("targetId", String.valueOf(targetId));
+        params.put("type", String.valueOf(type));
+        List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectAllReportByTargetId(params);
         return Message.createBySuccess(res);
     }
 }

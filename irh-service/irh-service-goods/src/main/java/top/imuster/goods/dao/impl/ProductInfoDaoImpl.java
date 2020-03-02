@@ -15,7 +15,7 @@ import top.imuster.goods.dao.ProductInfoDao;
 public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implements ProductInfoDao {
 	private final static String NAMESPACE = "top.imuster.goods.dao.ProductInfoDao.";
 	private final static String UPDATE_PRODUCT_CATEGORY_BY_CONDITION= "updateProductCategoryByCondition";
-	private final static String SELECT_SALER_EMAIL_BY_PRODUCT_ID = "selectSalerEmailByProductId";
+	private final static String SELECT_SALER_ID_BY_PRODUCT_ID = "selectSalerIdByProductId";
 	private final static String SELECT_PRODUCT_INFO_BY_MESSAGE_ID = "selectProductInfoByMessageId";
 	private final static String SELECT_MAIN_PIC_URL_BY_ID = "selectMainPicUrlById";
 	//返回本DAO命名空间,并添加statement
@@ -29,8 +29,8 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	}
 
 	@Override
-	public String selectSalerEmailByProductId(Long id) {
-		return this.select(getNameSpace(SELECT_SALER_EMAIL_BY_PRODUCT_ID), id);
+	public Long selectSalerIdByProductId(Long id) {
+		return this.select(getNameSpace(SELECT_SALER_ID_BY_PRODUCT_ID), id);
 	}
 
 	@Override

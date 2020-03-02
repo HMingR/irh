@@ -87,5 +87,5 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @param end
      * @reture: long
      **/
-    long getIncrementUserByTime(String start, String end);
+    Long getIncrementUserByTime(String start, String end);
 }

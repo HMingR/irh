@@ -23,12 +23,12 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
 
    /**
     * @Author hmr
-    * @Description 根据id查询卖家email
+    * @Description 根据id查询卖家id
     * @Date: 2020/1/21 10:47
     * @param id
     * @reture: java.lang.String
     **/
-    String selectSalerEmailByProductId(Long id);
+   Long selectSalerIdByProductId(Long id);
 
     /**
      * @Author hmr

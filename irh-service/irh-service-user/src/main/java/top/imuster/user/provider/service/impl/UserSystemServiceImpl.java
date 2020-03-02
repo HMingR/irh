@@ -30,7 +30,7 @@ public class UserSystemServiceImpl implements UserSystemService {
         List<Long> increments = new ArrayList<>();
         List<Long> userTotals = new ArrayList<>();
         List<String> abscissaUnit = new ArrayList<>();
-        long userTotal = 0;
+        Long userTotal = 0L;
         if(type == 1){
             //获得一周的开始时间和结束时间
             ArrayList<String> weekStartTimeAndEndTime = DateUtils.getWeekStartTimeAndEndTime();
@@ -42,7 +42,7 @@ public class UserSystemServiceImpl implements UserSystemService {
             for (int i = 0; i < weekDayStartTime.size(); i++) {
                 String start = DateUtils.getTheDateOfStartTime(weekDayStartTime.get(i), "yyyy-MM-dd");
                 String end = DateUtils.getTheDateOfEndTime(weekDayStartTime.get(i), "yyyy-MM-dd");
-                long increment = userInfoService.getIncrementUserByTime(start, end);
+                Long increment = userInfoService.getIncrementUserByTime(start, end);
                 userTotal = userInfoService.getUserTotalByCreateTime(start);
                 userTotals.add(userTotal);
                 increments.add(increment);
@@ -79,7 +79,7 @@ public class UserSystemServiceImpl implements UserSystemService {
                     j += 7;
                     m = j + 7;
                 }
-                abscissaUnit.add(new StringBuffer().append(start).toString());
+                abscissaUnit.add(start);
                 long increment = userInfoService.getIncrementUserByTime(start, end);
                 increments.add(increment);
                 userTotals.add(userTotal);
@@ -111,7 +111,7 @@ public class UserSystemServiceImpl implements UserSystemService {
         userTrendDto.setIncrements(increments);
         userTrendDto.setAbscissaUnit(abscissaUnit);
         userTrendDto.setMax(userTotal + 7);                 //加7就是为了前端显示好看，没有其他作用
-        userTrendDto.setInterval((int)userTotal / 15 + 1);
+        userTrendDto.setInterval(userTotal.intValue() / 15 + 1);
         return Message.createBySuccess(userTrendDto);
     }
 }

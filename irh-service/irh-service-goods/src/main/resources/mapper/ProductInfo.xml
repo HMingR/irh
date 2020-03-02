@@ -182,11 +182,10 @@
 		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
 	</update>
 
-	<select id="selectSalerEmailByProductId" parameterType="long" resultType="string">
-		SELECT ci.email
-		FROM product_info pi, consumer_info ci
-		WHERE pi.id = #{id}
-		AND pi.consumer_id = ci.id
+	<select id="selectSalerIdByProductId" parameterType="long" resultType="long">
+		SELECT consumer_id
+		FROM product_info
+		WHERE id = #{id}
 	</select>
 
 	<select id="selectProductInfoByMessageId" parameterType="long" resultType="productInfo">

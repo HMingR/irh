@@ -9,6 +9,7 @@ import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 
@@ -49,6 +50,18 @@ public class AdminOrderController extends BaseController {
     public Message<OrderInfo> getOrderById(@ApiParam("订单id") @PathVariable("id") Long id){
         OrderInfo order = orderServiceFeignApi.getOrderById(id);
         return Message.createBySuccess(order);
+    }
+
+    @ApiOperation("订单总金额趋势图")
+    @GetMapping("/amount/trend/{type}")
+    public Message<OrderTrendDto> orderAmountTrend(@PathVariable("type") Integer type){
+        return orderServiceFeignApi.getOrderAmountTrend(type);
+    }
+
+    @ApiOperation("订单数量趋势图")
+    @GetMapping("/total/trend/{type}")
+    public Message<OrderTrendDto> orderTotalTrend(@PathVariable("type") Integer type){
+        return orderServiceFeignApi.getOrderTotalTrend(type);
     }
 
 }

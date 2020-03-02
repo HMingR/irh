@@ -160,10 +160,10 @@
 		]]>
 	</insert>
 
-	<select id="selectProductEmailByMessageParentId" parameterType="long" resultType="string">
-		SELECT ci.email
-		FROM consumer_info ci, product_message pm
-		WHERE pm.parent_id = #{parentId} and pm.consumer_id = ci.id
+	<select id="selectSalerIdByMessageParentId" parameterType="long" resultType="long">
+		SELECT consumer_id
+		FROM product_message
+		WHERE id = #{parentId}
 	</select>
 
 	

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductMessage;
@@ -54,47 +55,27 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessage, L
     }
 
     @Override
-    public void generateSendMessage(ProductMessage productMessage) throws Exception{
-        Long messageId = productMessageDao.insertReturnId(productMessage);
-        SendMessageDto sendToSaler = new SendMessageDto();
+    public void generateSendMessage(ProductMessage productMessage){
+        Long writer = productMessage.getConsumerId();  //写留言的人
+        Long messageId = productMessageDao.insertReturnId(productMessage);  //插入留言后返回的id
+        SendUserCenterDto sendToSaler = new SendUserCenterDto();
         sendToSaler.setType(MqTypeEnum.CENTER);
-        sendToSaler.setTopic("商品留言");
-        String salerEmail = productInfoService.getConsumerEmailById(productMessage.getProductId());
-        sendToSaler.setSourceId(productMessage.getConsumerId());
-        sendToSaler.setBody("有人对你的商品进行了留言:" + productMessage.getContent());
-        sendToSaler.setSendTo(salerEmail);
-        sendToSaler.setTargetIdAndNewsId(messageId, 20);
-        if(productMessage.getParentId() != 0){
-            SendMessageDto sendToParentId = new SendMessageDto();
-            sendToParentId.setType(MqTypeEnum.CENTER);
-            sendToParentId.setTopic("商品留言");
-            String email = productMessageDao.selectProductEmailByMessageParentId(productMessage.getParentId());
-            sendToParentId.setBody("有人对你的留言进行了回复:" + productMessage.getContent());
-            sendToParentId.setSendTo(email);
-            sendToParentId.setSourceId(productMessage.getConsumerId());
-            sendToParentId.setTargetIdAndNewsId(messageId, 20);
-            generateSendMessageService.sendToMq(sendToParentId);
+        if(productMessage.getParentId() == 0){
+            Long salerId = productInfoService.getConsumerIdById(productMessage.getProductId());
+            sendToSaler.setFromId(writer);
+            sendToSaler.setToId(salerId);
+            if(salerId.equals(writer)) return;   //卖家评论自己
+            sendToSaler.setContent("有人对你的商品进行了留言:" + productMessage.getContent());
+            sendToSaler.setResourceId(messageId);
+        } else {
+            long toId = productMessageDao.selectSalerIdByMessageParentId(productMessage.getParentId());
+            sendToSaler.setContent("有人对你的留言进行了回复:" + productMessage.getContent());
+            if(writer.equals(toId)) return;  //楼主评论自己
+            sendToSaler.setToId(toId);
+            sendToSaler.setFromId(writer);
+            sendToSaler.setResourceId(messageId);
         }
         generateSendMessageService.sendToMq(sendToSaler);
-    }
-
-    public static void main(String[] args) throws Exception {
-        Class<?> aClass = Class.forName("top.imuster.goods.service.impl.ProductMessageServiceImpl");
-        Method test = aClass.getMethod("test", List.class);
-        Parameter[] parameters = test.getParameters();
-
-        for(Parameter p : parameters){
-            Type t = p.getParameterizedType();
-            ParameterizedType pt = (ParameterizedType) t;
-            Class actualTypeArgument = (Class)pt.getActualTypeArguments()[0];
-            if(actualTypeArgument.isAssignableFrom(SendMessageDto.class)){
-                System.out.println("asdf");
-                System.out.println(actualTypeArgument.getName());
-                System.out.println("asdfaasdf" + p.getName());
-                System.out.println("值为" + actualTypeArgument);
-            }
-            System.out.println(actualTypeArgument);
-        }
     }
 
     private List<ProductMessage> generateTree(List<ProductMessage> list){
@@ -121,4 +102,5 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessage, L
         }
         return parent;
     }
+
 }

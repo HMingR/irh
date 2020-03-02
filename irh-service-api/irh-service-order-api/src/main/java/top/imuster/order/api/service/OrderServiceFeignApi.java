@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.hystrix.OrderServiceFeignApiHystrix;
 
@@ -41,4 +42,24 @@ public interface OrderServiceFeignApi {
      **/
     @PostMapping
     Message<Page<OrderInfo>> orderList(@RequestBody Page<OrderInfo> page);
+
+    /**
+     * @Author hmr
+     * @Description 获得订单总金额趋势图
+     * @Date: 2020/3/2 15:43
+     * @param type 1-最近一周  2-一个月   3-半年  4-一年
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.dto.OrderTrendDto>
+     **/
+    @GetMapping("/trend/amount/{type}")
+    Message<OrderTrendDto> getOrderAmountTrend(@PathVariable("type") Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 获得订单数量趋势图
+     * @Date: 2020/3/2 16:53
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.dto.OrderTrendDto>
+     **/
+    @GetMapping("/trend/total/{type}")
+    Message<OrderTrendDto> getOrderTotalTrend(@PathVariable("type") Integer type);
 }

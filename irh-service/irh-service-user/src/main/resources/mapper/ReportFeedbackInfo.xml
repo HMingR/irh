@@ -172,10 +172,10 @@
 		 ]]>
 	</update>
 
-	<select id="selectAllReportByTargetId" parameterType="long" resultType="reportFeedbackInfo">
+	<select id="selectAllReportByTargetId" parameterType="map" resultType="reportFeedbackInfo">
 		<![CDATA[SELECT customer_id AS customerId, target_id AS targetId, create_time AS createTime, reason]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[ WHERE target_id = #{targetId} AND result = 2 AND state = 2 ]]>
+		<![CDATA[ WHERE target_id = #{targetId} AND type = #{type} AND result = 2 AND state = 2 ]]>
 	</select>
 	
 </mapper>

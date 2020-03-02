@@ -18,7 +18,7 @@ import top.imuster.goods.dao.ProductMessageDao;
 public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessage, Long> implements ProductMessageDao {
 	private final static String NAMESPACE = "top.imuster.goods.dao.ProductMessageDao.";
 	private final static String INSERT_RETURN_ID = "insertReturnId";
-	private final static String SELECT_PRODUCT_EMAIL_BY_MESSAGE_PARENT_ID = "selectProductEmailByMessageParentId";
+	private final static String SELECT_PRODUCT_EMAIL_BY_MESSAGE_PARENT_ID = "selectSalerIdByMessageParentId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -30,7 +30,7 @@ public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessage, Long> imp
 	}
 
 	@Override
-	public String selectProductEmailByMessageParentId(Long parentId) {
+	public Long selectSalerIdByMessageParentId(Long parentId) {
 		return this.select(getNameSpace(SELECT_PRODUCT_EMAIL_BY_MESSAGE_PARENT_ID), parentId);
 	}
 }

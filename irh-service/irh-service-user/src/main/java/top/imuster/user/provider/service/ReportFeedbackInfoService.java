@@ -47,9 +47,9 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
 
     /**
      * @Author hmr
-     * @Description 根据type和targetId获得所有举报该内容的举报信息
+     * @Description targetId获得所有举报该内容的举报信息
      * @Date: 2020/3/1 10:32
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId);
+    Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId, Integer type);
 }

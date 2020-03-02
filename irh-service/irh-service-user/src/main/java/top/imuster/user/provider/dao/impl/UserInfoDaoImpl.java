@@ -53,7 +53,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	}
 
 	@Override
-	public long selectIncrementUserByTime(Map<String, String> param) {
+	public Long selectIncrementUserByTime(Map<String, String> param) {
 		return this.select(getNameSpace(SELECT_INCREMENT_USER_BY_TIME), param);
 	}
 

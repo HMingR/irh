@@ -2,7 +2,7 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.pojo.OrderInfo;
 
@@ -27,8 +27,10 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
      * @Author hmr
      * @Description 发送消息
      * @Date: 2020/1/15 12:39
-     * @param sendMessageDto
      * @reture: void
-     **/
-    void generateSendMessage(SendMessageDto sendMessageDto);
+     *
+     * @param orderId
+     * @param productEvaluateInfo
+     * @return*/
+    Message<String> generateSendMessage(Long orderId, ProductEvaluateInfo productEvaluateInfo);
 }

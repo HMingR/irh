@@ -72,11 +72,7 @@ public class ProductController extends BaseController {
             String url = fileServiceFeignApi.upload(file);
             productInfo.setMainPicUrl(url);
         }
-        productInfoService.insertEntry(productInfo);
-        SendMessageDto sendMessageDto = new SendMessageDto();
-        sendMessageDto.setBody(new ObjectMapper().writeValueAsString(productInfo));
-        productInfoService.generateDetailPage(sendMessageDto);
-        return Message.createBySuccess("发布商品成功");
+        return productInfoService.releaseProduct(productInfo);
     }
 
 

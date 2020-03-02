@@ -209,5 +209,29 @@
 				)
 		]]>
 	</insert>
-	
+
+	<select id="selectAmountIncrementTotal" resultType="long" parameterType="map">
+		<![CDATA[
+ 			SELECT SUM(payment_money) FROM
+ 			order_info
+ 			WHERE create_time > #{start} AND create_time < #{end} AND state >= 30
+ 		 ]]>
+	</select>
+
+	<select id="selectOrderAmountTotalByCreateTime" resultType="long" parameterType="string">
+		<![CDATA[
+ 			SELECT SUM(payment_money) FROM
+ 			order_info
+ 			WHERE create_time < #{s} AND state >=30
+ 		 ]]>
+	</select>
+
+	<select id="selectOrderTotalByCreateTime" parameterType="string" resultType="long">
+		<![CDATA[
+ 			SELECT COUNT(1) FROM
+ 			order_info
+ 			WHERE create_time > #{start} AND create_time < #{end} AND state >= 30
+ 		 ]]>
+	</select>
+
 </mapper>

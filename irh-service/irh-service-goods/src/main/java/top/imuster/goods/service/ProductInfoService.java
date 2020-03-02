@@ -2,6 +2,7 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
@@ -37,7 +38,7 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @param id
      * @reture: java.lang.Long
      **/
-    String getConsumerEmailById(Long id);
+    Long getConsumerIdById(Long id);
 
     /**
      * @Author hmr
@@ -56,4 +57,13 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: java.lang.String
      **/
     String getMainPicUrlById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 发布商品
+     * @Date: 2020/3/2 11:28
+     * @param productInfo
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    Message<String> releaseProduct(ProductInfo productInfo);
 }

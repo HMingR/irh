@@ -2,6 +2,8 @@ package top.imuster.order.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 
@@ -30,4 +32,22 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: top.imuster.order.api.pojo.OrderInfo
      **/
     OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId) throws Exception;
+
+    /**
+     * @Author hmr
+     * @Description 获得订单总金额的趋势图
+     * @Date: 2020/3/2 15:45
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.dto.OrderTrendDto>
+     **/
+    Message<OrderTrendDto> getOrderAmountTrend(Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 获得订单数量趋势
+     * @Date: 2020/3/2 16:54
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.dto.OrderTrendDto>
+     **/
+    Message<OrderTrendDto> getOrderTotalTrend(Integer type);
 }

@@ -3,11 +3,16 @@ package top.imuster.goods.service.impl;
 
 
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendDetailPageDto;
 import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.enums.TemplateEnum;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
@@ -24,6 +29,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
     @Resource
     private ProductInfoDao productInfoDao;
+
+    @Resource
+    private GenerateSendMessageService generateSendMessageService;
 
 
     @Override
@@ -42,8 +50,8 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public String getConsumerEmailById(Long id) {
-        return productInfoDao.selectSalerEmailByProductId(id);
+    public Long getConsumerIdById(Long id) {
+        return productInfoDao.selectSalerIdByProductId(id);
     }
 
     @Override
@@ -54,5 +62,16 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public String getMainPicUrlById(Long id) {
         return productInfoDao.selectMainPicUrlById(id);
+    }
+
+    @Override
+    public Message<String> releaseProduct(ProductInfo productInfo) {
+        productInfoDao.insertEntry(productInfo);
+        SendDetailPageDto sendMessage = new SendDetailPageDto();
+        sendMessage.setEntry(productInfo);
+        sendMessage.setTemplateEnum(TemplateEnum.PRODUCT_TEMPLATE);
+        sendMessage.setType(MqTypeEnum.DETAIL);
+        generateSendMessageService.sendToMq(sendMessage);
+        return Message.createBySuccess();
     }
 }
