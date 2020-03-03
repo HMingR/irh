@@ -66,8 +66,12 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("给文章添加的标签")
 	private String tagIds;
 
-	@ApiModelProperty("文章标签的名字")
-	private String tagNames;
+	private Long forwardTimes;
+
+	private List<String> tagNames;
+
+//	@ApiModelProperty("文章标签的名字")
+//	private String tagNames;
 
 	@ApiModelProperty("文章详情页url")
 	private String detailPage;
@@ -78,76 +82,44 @@ public class ArticleInfo extends BaseDomain {
 //	private Short state;
 
 
-	public String getTagNames() {
-		return tagNames;
+	public Long getId() {
+		return id;
 	}
 
-	public void setTagNames(String tagNames) {
-		this.tagNames = tagNames;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public String getDetailPage() {
-		return detailPage;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setDetailPage(String detailPage) {
-		this.detailPage = detailPage;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public Long getScore() {
-		return score;
+	public Long getArticleCategory() {
+		return articleCategory;
 	}
 
-	public void setScore(Long score) {
-		this.score = score;
+	public void setArticleCategory(Long articleCategory) {
+		this.articleCategory = articleCategory;
 	}
 
-	public List<ArticleTag> getTagList() {
-		return tagList;
+	public String getMainPicture() {
+		return mainPicture;
 	}
 
-	public void setTagList(List<ArticleTag> tagList) {
-		this.tagList = tagList;
+	public void setMainPicture(String mainPicture) {
+		this.mainPicture = mainPicture;
 	}
 
-	public String getTagIds() {
-		return tagIds;
+	public String getContent() {
+		return content;
 	}
 
-	public void setTagIds(String tagIds) {
-		this.tagIds = tagIds;
-	}
-
-	public Integer getReviewTotal() {
-		return reviewTotal;
-	}
-
-	public void setReviewTotal(Integer reviewTotal) {
-		this.reviewTotal = reviewTotal;
-	}
-
-	public Long getCollectTotal() {
-		return collectTotal;
-	}
-
-	public void setCollectTotal(Long collectTotal) {
-		this.collectTotal = collectTotal;
-	}
-
-	public Long getUpTotal() {
-		return upTotal;
-	}
-
-	public void setUpTotal(Long upTotal) {
-		this.upTotal = upTotal;
-	}
-
-	public List<ArticleReview> getChilds() {
-		return childs;
-	}
-
-	public void setChilds(List<ArticleReview> childs) {
-		this.childs = childs;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Long getBrowserTimes() {
@@ -166,39 +138,83 @@ public class ArticleInfo extends BaseDomain {
 		this.userId = userId;
 	}
 
-	public Long getId() {
-		return this.id;
+	public Long getCollectTotal() {
+		return collectTotal;
 	}
-    public void setId(Long id) {
-		this.id = id;
+
+	public void setCollectTotal(Long collectTotal) {
+		this.collectTotal = collectTotal;
 	}
-	
-	public String getTitle() {
-		return this.title;
+
+	public Long getUpTotal() {
+		return upTotal;
 	}
-    public void setTitle(String title) {
-		this.title = title;
+
+	public void setUpTotal(Long upTotal) {
+		this.upTotal = upTotal;
 	}
-	
-	public Long getArticleCategory() {
-		return this.articleCategory;
+
+	public Integer getReviewTotal() {
+		return reviewTotal;
 	}
-    public void setArticleCategory(Long articleCategory) {
-		this.articleCategory = articleCategory;
+
+	public void setReviewTotal(Integer reviewTotal) {
+		this.reviewTotal = reviewTotal;
 	}
-	
-	public String getMainPicture() {
-		return this.mainPicture;
+
+	public List<ArticleReview> getChilds() {
+		return childs;
 	}
-    public void setMainPicture(String mainPicture) {
-		this.mainPicture = mainPicture;
+
+	public void setChilds(List<ArticleReview> childs) {
+		this.childs = childs;
 	}
-	
-	public String getContent() {
-		return this.content;
+
+	public List<ArticleTag> getTagList() {
+		return tagList;
 	}
-    public void setContent(String content) {
-		this.content = content;
+
+	public void setTagList(List<ArticleTag> tagList) {
+		this.tagList = tagList;
 	}
-	
+
+	public String getTagIds() {
+		return tagIds;
+	}
+
+	public void setTagIds(String tagIds) {
+		this.tagIds = tagIds;
+	}
+
+	public Long getForwardTimes() {
+		return forwardTimes;
+	}
+
+	public void setForwardTimes(Long forwardTimes) {
+		this.forwardTimes = forwardTimes;
+	}
+
+	public List<String> getTagNames() {
+		return tagNames;
+	}
+
+	public void setTagNames(List<String> tagNames) {
+		this.tagNames = tagNames;
+	}
+
+	public String getDetailPage() {
+		return detailPage;
+	}
+
+	public void setDetailPage(String detailPage) {
+		this.detailPage = detailPage;
+	}
+
+	public Long getScore() {
+		return score;
+	}
+
+	public void setScore(Long score) {
+		this.score = score;
+	}
 }

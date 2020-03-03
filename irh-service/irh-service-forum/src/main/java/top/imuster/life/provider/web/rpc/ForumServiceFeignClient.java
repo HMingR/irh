@@ -35,11 +35,12 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
 
     @Override
     @DeleteMapping("{id}")
-    public boolean adminDeleteArticle(@PathVariable("id") Long id) {
+    public Message<String>  adminDeleteArticle(@PathVariable("id") Long id) {
         ArticleInfo articleInfo = new ArticleInfo();
         articleInfo.setId(id);
-        int i = articleInfoService.deleteByCondtion(articleInfo);
-        return i == 1;
+        articleInfo.setState(1);
+        articleInfoService.updateByKey(articleInfo);
+        return Message.createBySuccess();
     }
 
     @Override
@@ -91,14 +92,14 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
 
     @Override
     @PostMapping("/article/list")
-    public Page<ArticleInfo> adminGetArticleList(@RequestBody Page<ArticleInfo> page) {
+    public Message<Page<ArticleInfo>> adminGetArticleList(@RequestBody Page<ArticleInfo> page) {
         ArticleInfo searchCondition = page.getSearchCondition();
         searchCondition.setState(2);
         searchCondition.setOrderField("create_time");
         searchCondition.setOrderFieldType("DESC");
         List<ArticleInfo> list = articleInfoService.list(page);
         page.setData(list);
-        return page;
+        return Message.createBySuccess(page);
     }
 
     @Override

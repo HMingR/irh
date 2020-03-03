@@ -28,12 +28,8 @@ public class ArticleTagRelServiceImpl extends BaseServiceImpl<ArticleTagRel, Lon
     }
 
     @Override
-    public String getArticleTagsById(Long id) {
+    public List<String> getArticleTagsById(Long id) {
         List<String> names = articleTagRelDao.selectTagNameByArticleId(id);
-        StringBuilder res = new StringBuilder();
-        for (String name : names) {
-            res.append(name);
-        }
-        return res.toString();
+        return names;
     }
 }

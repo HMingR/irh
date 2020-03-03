@@ -4,7 +4,6 @@ package top.imuster.goods.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,11 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserTimesAnnotation;
-import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.file.api.service.FileServiceFeignApi;
@@ -25,7 +23,6 @@ import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

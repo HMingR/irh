@@ -2,7 +2,7 @@ package top.imuster.message.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.message.pojo.NewsInfo;
 
 /**
@@ -19,5 +19,5 @@ public interface NewsInfoService extends BaseService<NewsInfo, Long> {
      * @param sendMessageDto
      * @reture: void
      **/
-    void writeFromMq(SendMessageDto sendMessageDto);
+    void writeFromMq(SendUserCenterDto sendMessageDto);
 }

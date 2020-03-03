@@ -1,15 +1,11 @@
 package top.imuster.goods.service.impl;
 
 
-
-
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendDetailPageDto;
-import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
@@ -45,8 +41,10 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public void generateDetailPage(SendMessageDto sendMessageDto) {
-        sendMessageDto.setType(MqTypeEnum.DETAIL);
+    public void generateDetailPage(ProductInfo productInfo) {
+        //todo 生成商品详情页
+        SendDetailPageDto sendDetailPageDto = new SendDetailPageDto();
+
     }
 
     @Override

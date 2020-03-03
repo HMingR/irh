@@ -88,7 +88,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="userRoleRel" >
+	<delete id="deleteByCondition" parameterType="userRoleRel" >
 		<![CDATA[DELETE FROM management_role_rel]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

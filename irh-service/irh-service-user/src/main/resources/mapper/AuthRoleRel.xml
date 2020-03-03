@@ -17,7 +17,7 @@
 
 	<!-- auth_role_rel 查询列来源表-->
 	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM auth_role_rel]]></sql>
-	
+
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
@@ -83,7 +83,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="authRoleRel" >
+	<delete id="deleteByCondition" parameterType="authRoleRel" >
 		<![CDATA[DELETE FROM auth_role_rel]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

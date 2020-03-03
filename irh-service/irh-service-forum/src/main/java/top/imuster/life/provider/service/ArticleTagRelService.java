@@ -4,6 +4,8 @@ package top.imuster.life.provider.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.life.api.pojo.ArticleTagRel;
 
+import java.util.List;
+
 /**
  * ArticleTagRelService接口
  * @author 黄明人
@@ -18,5 +20,5 @@ public interface ArticleTagRelService extends BaseService<ArticleTagRel, Long> {
      * @param id 文章id
      * @reture: java.lang.String 文章的
      **/
-    String getArticleTagsById(Long id);
+    List<String> getArticleTagsById(Long id);
 }

@@ -30,13 +30,7 @@ public class AdminForumController {
     @ApiOperation(value = "管理员分页查看文章信息，没有文章内容", httpMethod = "POST")
     @PostMapping("/article")
     public Message<Page<ArticleInfo>> articleList(@RequestBody Page<ArticleInfo> page){
-        Page<ArticleInfo> articleInfoPage = null;
-        try{
-            articleInfoPage = forumServiceFeignApi.adminGetArticleList(page);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return Message.createBySuccess(articleInfoPage);
+        return forumServiceFeignApi.adminGetArticleList(page);
     }
 
     /**
@@ -49,11 +43,7 @@ public class AdminForumController {
     @ApiOperation("根据id删除帖子信息")
     @DeleteMapping("/{id}")
     public Message<String> deleteArticleInfoById(@PathVariable("id") Long id){
-        boolean b = forumServiceFeignApi.adminDeleteArticle(id);
-        if(b) {
-            return Message.createBySuccess();
-        }
-        return Message.createByError("删除失败,请刷新后重试或联系管理员");
+        return forumServiceFeignApi.adminDeleteArticle(id);
     }
 
     /**

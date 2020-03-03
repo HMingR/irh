@@ -94,7 +94,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="errandInfo" >
+	<delete id="deleteByCondition" parameterType="errandInfo" >
 		<![CDATA[DELETE FROM errand_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

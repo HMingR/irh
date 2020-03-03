@@ -166,7 +166,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="userInfo" >
+	<delete id="deleteByCondition" parameterType="userInfo" >
 		<![CDATA[DELETE FROM user_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

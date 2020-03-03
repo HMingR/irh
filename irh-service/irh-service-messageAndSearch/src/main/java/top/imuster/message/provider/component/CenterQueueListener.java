@@ -3,7 +3,7 @@ package top.imuster.message.provider.component;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import top.imuster.common.core.dto.SendMessageDto;
+import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.message.provider.service.NewsInfoService;
 
 import javax.annotation.Resource;
@@ -26,7 +26,7 @@ public class CenterQueueListener {
 
     @RabbitListener(queues = QUEUE_NAME)
     private void listener(String msg) throws IOException {
-        SendMessageDto sendMessageDto = objectMapper.readValue(msg, SendMessageDto.class);
+        SendUserCenterDto sendMessageDto = objectMapper.readValue(msg, SendUserCenterDto.class);
         newsInfoService.writeFromMq(sendMessageDto);
     }
 

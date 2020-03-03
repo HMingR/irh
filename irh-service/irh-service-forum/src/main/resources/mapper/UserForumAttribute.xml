@@ -88,7 +88,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="userForumAttribute" >
+	<delete id="deleteByCondition" parameterType="userForumAttribute" >
 		<![CDATA[DELETE FROM user_forum_attribute]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

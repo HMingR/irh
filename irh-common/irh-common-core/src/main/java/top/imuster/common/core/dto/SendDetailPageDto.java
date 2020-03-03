@@ -1,6 +1,7 @@
 package top.imuster.common.core.dto;
 
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.enums.TemplateEnum;
 
 import java.io.Serializable;
@@ -17,6 +18,10 @@ public class SendDetailPageDto extends Send2MQ implements Serializable {
     private BaseDomain entry;
 
     private TemplateEnum templateEnum;
+
+    public SendDetailPageDto() {
+        this.setType(MqTypeEnum.DETAIL);
+    }
 
     public BaseDomain getEntry() {
         return entry;

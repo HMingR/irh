@@ -27,7 +27,7 @@ public interface ForumServiceFeignApi {
      * @reture: boolean
      **/
     @DeleteMapping("/{id}")
-    boolean adminDeleteArticle(@PathVariable("id") Long id);
+    Message<String> adminDeleteArticle(@PathVariable("id") Long id);
 
     /**
      * @Author hmr
@@ -90,7 +90,7 @@ public interface ForumServiceFeignApi {
      * @reture: top.imuster.common.base.domain.Page<ArticleInfo>
      **/
     @PostMapping("/article/list")
-    Page<ArticleInfo> adminGetArticleList(@RequestBody Page<ArticleInfo> page);
+    Message<Page<ArticleInfo>> adminGetArticleList(@RequestBody Page<ArticleInfo> page);
 
     /**
      * @Author hmr

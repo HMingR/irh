@@ -104,7 +104,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="reportFeedbackInfo" >
+	<delete id="deleteByCondition" parameterType="reportFeedbackInfo" >
 		<![CDATA[DELETE FROM report_feedback_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

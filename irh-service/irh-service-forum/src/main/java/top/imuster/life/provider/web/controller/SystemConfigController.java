@@ -1,5 +1,6 @@
 package top.imuster.life.provider.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.sun.management.OperatingSystemMXBean;
  */
 @RestController
 @RequestMapping("/system")
+@Api
 public class SystemConfigController {
 
 

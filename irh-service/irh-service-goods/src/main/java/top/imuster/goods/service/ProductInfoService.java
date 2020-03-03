@@ -3,7 +3,6 @@ package top.imuster.goods.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
 /**
@@ -29,7 +28,7 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @param sendMessageDto
      * @reture: void
      **/
-    void generateDetailPage(SendMessageDto sendMessageDto);
+    void generateDetailPage(ProductInfo productInfo);
 
     /**
      * @Author hmr

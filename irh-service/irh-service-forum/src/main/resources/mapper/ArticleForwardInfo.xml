@@ -88,7 +88,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="articleForwardInfo" >
+	<delete id="deleteByCondition" parameterType="articleForwardInfo" >
 		<![CDATA[DELETE FROM article_forward_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

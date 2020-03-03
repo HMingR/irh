@@ -26,9 +26,9 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
         throwable.printStackTrace();
         return new ForumServiceFeignApi() {
             @Override
-            public boolean adminDeleteArticle(Long id) {
+            public Message<String> adminDeleteArticle(Long id) {
                 log.error("管理员根据id删除帖子失败,帖子id为{}", id);
-                return false;
+                return null;
             }
 
             @Override
@@ -68,7 +68,7 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
             }
 
             @Override
-            public Page<ArticleInfo> adminGetArticleList(Page<ArticleInfo> page) {
+            public Message<Page<ArticleInfo>> adminGetArticleList(Page<ArticleInfo> page) {
                 log.error("管理员分页条件查询帖子信息失败,page对象为{}", page);
                 return null;
             }

@@ -103,7 +103,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="articleReview" >
+	<delete id="deleteByCondition" parameterType="articleReview" >
 		<![CDATA[DELETE FROM article_review]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

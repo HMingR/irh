@@ -83,7 +83,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="articleCollection" >
+	<delete id="deleteByCondition" parameterType="articleCollection" >
 		<![CDATA[DELETE FROM article_collection]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

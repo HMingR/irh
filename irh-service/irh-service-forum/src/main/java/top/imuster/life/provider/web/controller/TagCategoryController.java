@@ -1,5 +1,6 @@
 package top.imuster.life.provider.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import top.imuster.life.provider.service.ArticleTagCategoryService;
 import javax.annotation.Resource;
 import java.util.List;
 
+@Api
 @RestController
 @RequestMapping("/forum/category")
 public class TagCategoryController {

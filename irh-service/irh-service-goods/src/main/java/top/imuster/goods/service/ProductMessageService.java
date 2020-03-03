@@ -2,8 +2,6 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.common.core.dto.SendMessageDto;
-import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessage;
 
 import java.util.List;

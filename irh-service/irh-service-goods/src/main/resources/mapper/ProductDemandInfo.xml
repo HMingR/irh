@@ -93,7 +93,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="productDemandInfo" >
+	<delete id="deleteByCondition" parameterType="productDemandInfo" >
 		<![CDATA[DELETE FROM product_demand_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

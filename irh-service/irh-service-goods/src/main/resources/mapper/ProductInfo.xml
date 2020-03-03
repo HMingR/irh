@@ -134,7 +134,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="productInfo" >
+	<delete id="deleteByCondition" parameterType="productInfo" >
 		<![CDATA[DELETE FROM product_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

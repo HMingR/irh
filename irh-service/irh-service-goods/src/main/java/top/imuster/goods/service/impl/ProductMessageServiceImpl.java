@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
-import top.imuster.common.core.dto.SendMessageDto;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
@@ -15,10 +14,6 @@ import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 

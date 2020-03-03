@@ -93,7 +93,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="irhTemplate" >
+	<delete id="deleteByCondition" parameterType="irhTemplate" >
 		<![CDATA[DELETE FROM irh_template]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

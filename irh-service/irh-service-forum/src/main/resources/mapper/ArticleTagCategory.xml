@@ -78,7 +78,7 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondtion" parameterType="articleTagCategory" >
+	<delete id="deleteByCondition" parameterType="articleTagCategory" >
 		<![CDATA[DELETE FROM article_tag_category]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>

@@ -1,5 +1,6 @@
 package top.imuster.life.provider.web.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/forum")
+@Api
 public class ArticleAttitudeController extends BaseController {
 
     @Resource
