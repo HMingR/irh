@@ -1,4 +1,4 @@
-package top.imuster.life.provider.service.impl;
+package top.imuster.order.provider.service.impl;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,10 +15,10 @@ import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.UuidUtils;
-import top.imuster.life.api.pojo.ErrandOrder;
-import top.imuster.life.provider.dao.ErrandOrderDao;
-import top.imuster.life.provider.exception.ForumException;
-import top.imuster.life.provider.service.ErrandOrderService;
+import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.provider.dao.ErrandOrderDao;
+import top.imuster.order.provider.exception.OrderException;
+import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
 
@@ -94,6 +94,6 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrder, Long> i
      **/
     private void checkFromRedisById(Long id){
         Boolean flag = redisTemplate.opsForHash().hasKey(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(id));
-        if(flag) throw new ForumException("下单失败,该订单已经被抢走了");
+        if(flag) throw new OrderException("下单失败,该订单已经被抢走了");
     }
 }

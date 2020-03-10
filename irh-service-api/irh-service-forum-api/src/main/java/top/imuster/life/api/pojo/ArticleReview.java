@@ -60,9 +60,20 @@ public class ArticleReview extends BaseDomain {
 	//每个留言下的回复数
 	private List<ArticleReview> childs;
 
+	//父id的作者名
+	private Long parentWriterId;
+
 	// 1-无效 2-有效
 //	private Short state;
 
+
+	public Long getParentWriterId() {
+		return parentWriterId;
+	}
+
+	public void setParentWriterId(Long parentWriterId) {
+		this.parentWriterId = parentWriterId;
+	}
 
 	public Long getUpTotal() {
 		return upTotal;

@@ -1,4 +1,4 @@
-package top.imuster.life.provider.component;
+package top.imuster.order.provider.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,10 +9,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.life.api.pojo.ErrandInfo;
-import top.imuster.life.api.pojo.ErrandOrder;
-import top.imuster.life.provider.service.ErrandInfoService;
-import top.imuster.life.provider.service.ErrandOrderService;
+import top.imuster.life.api.service.ForumServiceFeignApi;
+import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -30,8 +29,8 @@ public class ErrandOrderListener {
     @Resource
     ErrandOrderService errandOrderService;
 
-    @Resource
-    ErrandInfoService errandInfoService;
+    @Autowired
+    ForumServiceFeignApi forumServiceFeignApi;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -41,7 +40,7 @@ public class ErrandOrderListener {
         try{
             ErrandOrder order = new ObjectMapper().readValue(msg, ErrandOrder.class);
             Long errandId = order.getErrandId();
-            boolean available = errandInfoService.isAvailable(errandId);
+            boolean available = forumServiceFeignApi.errandIsAvailable(errandId);
             redisTemplate.expire(String.valueOf(order.getOrderCode()), 1, TimeUnit.MINUTES);
             if(!available){
                 //当需要将订单存入数据库的时候，如果当前跑腿已经被人抢走了，则将结果存放在redis中，并结束当前方法
@@ -53,13 +52,9 @@ public class ErrandOrderListener {
             order.setState(3);
             int i = errandOrderService.insertEntry(order);
             if(i == 1){
-                ErrandInfo errandInfo = new ErrandInfo();
-                errandInfo.setId(errandId);
-                errandInfo.setState(3);
-                int flag = errandInfoService.updateByKey(errandInfo);
-
+                forumServiceFeignApi.updateErrandInfoById(errandId);
                 //当更新成功之后将errandInfo的id存储到redis中，并设置过期时间
-                if(flag == 1) redisTemplate.opsForHash().put(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(errandId), errandId);
+                redisTemplate.opsForHash().put(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(errandId), errandId);
                 redisTemplate.expire(RedisUtil.getErrandKey(errandId), 1, TimeUnit.MINUTES);
             }
         }catch (Exception e){

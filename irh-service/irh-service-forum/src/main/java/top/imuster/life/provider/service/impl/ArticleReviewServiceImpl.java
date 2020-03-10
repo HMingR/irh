@@ -10,6 +10,8 @@ import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * ArticleReviewService 实现类
@@ -51,7 +53,20 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
         ArticleReview articleReview = new ArticleReview();
         articleReview.setState(2);
         articleReview.setFirstClassId(id);
-        return articleReviewDao.selectEntryList(articleReview);
+        List<ArticleReview> res = articleReviewDao.selectEntryList(articleReview);
+
+        //将回复转换成一个map，这个map里面key为parentId，value为用户id
+        Map<Long, Long> collect = res.stream().collect(Collectors.toMap(ArticleReview::getId, ArticleReview::getUserId));
+        res.stream().forEach(condition -> {
+            Long parentId = condition.getParentId();
+            if(parentId != null){
+                Long userId = collect.get(parentId);
+                if(userId != null){
+                    condition.setParentWriterId(userId);
+                }
+            }
+        });
+        return res;
     }
 
     @Override

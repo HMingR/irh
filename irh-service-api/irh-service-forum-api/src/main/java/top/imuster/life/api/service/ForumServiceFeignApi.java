@@ -102,4 +102,23 @@ public interface ForumServiceFeignApi {
      **/
     @GetMapping("/consumer/{targetId}/{type}")
     Long getUserIdByType(@PathVariable("targetId") Long targetId, @PathVariable("type") Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 根据更新errandInfo的信息
+     * @Date: 2020/3/7 15:37
+     * @param id
+     * @reture: void
+     **/
+    @GetMapping("/errand/{id}")
+    void updateErrandInfoById(@PathVariable("id") Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看errand是否可以被下单
+     * @Date: 2020/3/7 15:42
+     * @param errandId
+     * @reture: boolean
+     **/
+    boolean errandIsAvailable(Long errandId);
 }

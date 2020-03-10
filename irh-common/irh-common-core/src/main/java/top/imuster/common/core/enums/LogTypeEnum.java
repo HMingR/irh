@@ -28,16 +28,8 @@ public enum LogTypeEnum {
         return type;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public static String getName(Integer type) {

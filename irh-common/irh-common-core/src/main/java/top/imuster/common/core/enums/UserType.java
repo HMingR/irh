@@ -24,16 +24,8 @@ public enum UserType{
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public static UserType getUserTypeById(Integer type){

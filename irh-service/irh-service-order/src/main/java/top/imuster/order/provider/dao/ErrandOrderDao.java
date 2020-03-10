@@ -1,8 +1,8 @@
-package top.imuster.life.provider.dao;
+package top.imuster.order.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.life.api.pojo.ErrandOrder;
+import top.imuster.order.api.pojo.ErrandOrder;
 
 /**
  * ErrandOrderDao 接口

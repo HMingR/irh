@@ -1,10 +1,10 @@
-package top.imuster.life.provider.service;
+package top.imuster.order.provider.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ErrandOrder;
+import top.imuster.order.api.pojo.ErrandOrder;
 
 /**
  * ErrandOrderService接口

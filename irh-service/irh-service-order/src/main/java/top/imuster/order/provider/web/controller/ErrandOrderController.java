@@ -1,4 +1,4 @@
-package top.imuster.life.provider.web.controller;
+package top.imuster.order.provider.web.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,8 +10,8 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.life.api.pojo.ErrandOrder;
-import top.imuster.life.provider.service.ErrandOrderService;
+import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
 
@@ -74,7 +74,7 @@ public class ErrandOrderController extends BaseController {
      * @Description 根据id查看订单详情
      * @Date: 2020/2/12 11:58
      * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.life.api.pojo.ErrandOrder>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ErrandOrder>
      **/
     @ApiOperation("根据id查看订单详情")
     @GetMapping("/detail/{id}")

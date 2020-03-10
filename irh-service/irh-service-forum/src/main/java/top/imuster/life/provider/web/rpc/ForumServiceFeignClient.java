@@ -6,10 +6,12 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ErrandInfo;
 import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.life.provider.service.ArticleTagService;
 import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ArticleReviewService;
+import top.imuster.life.provider.service.ErrandInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,6 +34,9 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
 
     @Resource
     ArticleReviewService articleReviewService;
+
+    @Resource
+    ErrandInfoService errandInfoService;
 
     @Override
     @DeleteMapping("{id}")
@@ -112,5 +117,19 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
             userId = articleReviewService.getUserIdByArticleReviewId(targetId);
         }
         return userId;
+    }
+
+    @Override
+    @GetMapping("/errand/{id}")
+    public void updateErrandInfoById(@PathVariable("id") Long id) {
+        ErrandInfo errandInfo = new ErrandInfo();
+        errandInfo.setId(id);
+        errandInfo.setState(3);
+        errandInfoService.updateByKey(errandInfo);
+    }
+
+    @Override
+    public boolean errandIsAvailable(Long errandId) {
+        return errandInfoService.isAvailable(errandId);
     }
 }

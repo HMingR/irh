@@ -22,15 +22,7 @@ public enum BrowserType {
         return type;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
     public String getRedisKeyHeader() {
         return redisKeyHeader;
-    }
-
-    public void setRedisKeyHeader(String redisKeyHeader) {
-        this.redisKeyHeader = redisKeyHeader;
     }
 }

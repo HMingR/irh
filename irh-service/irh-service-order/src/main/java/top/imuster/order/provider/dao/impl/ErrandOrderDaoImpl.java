@@ -1,10 +1,10 @@
-package top.imuster.life.provider.dao.impl;
+package top.imuster.order.provider.dao.impl;
 
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.life.api.pojo.ErrandOrder;
-import top.imuster.life.provider.dao.ErrandOrderDao;
+import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.provider.dao.ErrandOrderDao;
 
 /**
  * ErrandOrderDao 实现类

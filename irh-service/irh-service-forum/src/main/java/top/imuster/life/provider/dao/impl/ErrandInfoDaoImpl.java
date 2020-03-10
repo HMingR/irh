@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("errandInfoDao")
 public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements ErrandInfoDao {
-	private final static String NAMESPACE = "top.imuster.life.provider.dao.ErrandInfoDao.";
+	private final static String NAMESPACE = "top.imuster.order.provider.dao.ErrandInfoDao.";
 	private final static String SELECT_LIST = "selectList";
 	private final static String SELECT_STATE_BY_ID = "selectStateById";
 	//返回本DAO命名空间,并添加statement

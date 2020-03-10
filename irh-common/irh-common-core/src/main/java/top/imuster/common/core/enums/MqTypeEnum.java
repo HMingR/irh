@@ -33,24 +33,12 @@ public enum MqTypeEnum {
         return routingKeyMatchRule;
     }
 
-    public void setRoutingKeyMatchRule(String routingKeyMatchRule) {
-        this.routingKeyMatchRule = routingKeyMatchRule;
-    }
-
     public String getQueueName() {
         return queueName;
     }
 
-    public void setQueueName(String queueName) {
-        this.queueName = queueName;
-    }
-
     public String getRoutingKey() {
         return routingKey;
-    }
-
-    public void setRoutingKey(String routingKey) {
-        this.routingKey = routingKey;
     }
 
     public String getType() {
