@@ -1,11 +1,9 @@
 package top.imuster.file.provider.web.controller;
 
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.base.wrapper.Message;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.file.provider.exception.FileException;
 import top.imuster.file.provider.file.FastDFSFile;
@@ -39,7 +37,6 @@ public class FileController extends BaseController implements FileServiceFeignAp
                     file.getBytes(),              //文件的字节数组
                     org.springframework.util.StringUtils.getFilenameExtension(file.getOriginalFilename())    //获取文件拓展名
             );
-
             //调用FastDFSUtil工具类将文件上传到FastDFS中
             String[] uploads = FastDFSUtil.upload(fastDFSFile);
 
@@ -47,7 +44,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
             //String url = "http://39.105.0.169:8080/" + uploads[0] + "/" + uploads[1];
             return uploads[0] + "/" + uploads[1];
         }catch (Exception e){
-            logger.error("上传文件失败",e.getMessage(),e);
+            logger.error("上传文件失败{}",e.getMessage(),e);
             throw new FileException("文件上传失败");
         }
 

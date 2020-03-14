@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  * @date: 2020/2/11 20:14
  */
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/order/errand")
 @Api
 public class ErrandOrderController extends BaseController {
 
@@ -37,9 +37,10 @@ public class ErrandOrderController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("接单，需要轮询操作")
+    @NeedLogin
     @GetMapping("/{id}")
     public Message<String> orderReceive(@PathVariable("id") Long id) throws JsonProcessingException {
-        String s = errandOrderService.receiveOrder(id, 5L);
+        String s = errandOrderService.receiveOrder(id, getCurrentUserIdFromCookie());
         return Message.createBySuccess(s);
     }
 

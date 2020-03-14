@@ -10,7 +10,7 @@ public enum MessageCode {
     SUCCESS(200, "操作成功"),
     ERROR(500, "服务器错误"),
     FORBID(401, "禁止访问"),
-    ILLEGAL_ARGUMENT_CODE(100, "非法参数"),
+    ILLEGAL_ARGUMENT_CODE(406, "非法参数"),
     UNAUTHORIZED(402, "暂未登录或token已经过期,请重新登录");
     private Integer code;
     private String text;

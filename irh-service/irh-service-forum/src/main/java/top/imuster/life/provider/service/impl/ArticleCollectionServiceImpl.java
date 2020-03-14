@@ -120,4 +120,13 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
     public Long getCollectTotalByUserId(Long userId) {
         return articleCollectionDao.selectTotalByUserId(userId);
     }
+
+    @Override
+    public Message<Integer> getCollectStateByTargetId(Long id, Long userId) {
+        ArticleCollection condition = new ArticleCollection();
+        condition.setArticleId(id);
+        condition.setUserId(userId);
+        Integer count = articleCollectionDao.selectEntryListCount(condition);
+        return count == 0 ? Message.createBySuccess(0):Message.createBySuccess(1);
+    }
 }

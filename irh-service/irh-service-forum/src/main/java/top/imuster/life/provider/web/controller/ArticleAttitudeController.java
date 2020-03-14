@@ -40,14 +40,14 @@ public class ArticleAttitudeController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @ApiOperation("给文章点赞")
+    /*@ApiOperation("给文章点赞")
     @BrowserTimesAnnotation(browserType = BrowserType.FORUM, disableBrowserTimes = true, value = "#p0")
     @GetMapping("/up/1/{id}")
     public Message<String> upArticleById(@PathVariable("id") Long id){
         redisArticleAttitudeService.saveUp2Redis(id, 1, getCurrentUserIdFromCookie());
         redisArticleAttitudeService.incrementUpCount(id, 1);
         return Message.createBySuccess();
-    }
+    }*/
 
     /**
      * @Author hmr
@@ -56,12 +56,28 @@ public class ArticleAttitudeController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @ApiOperation("给文章的评论点赞")
+    /*@ApiOperation("给文章的评论点赞")
     @NeedLogin
     @GetMapping("/up/2/{id}")
     public Message<String> upReviewById(@PathVariable("id") Long id){
         redisArticleAttitudeService.saveUp2Redis(id, 2, getCurrentUserIdFromCookie());
         redisArticleAttitudeService.incrementUpCount(id, 2);
+        return Message.createBySuccess();
+    }*/
+
+    /**
+     * @Author hmr
+     * @Description 在论坛模块中的点赞操作
+     * @Date: 2020/3/14 10:48
+     * @param type 1-文章   2-评论
+     * @param targetId 点赞对象id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @ApiOperation("给文章模块点赞  type取值 1-文章  2-评论")
+    @GetMapping("/up/{type}/{id}")
+    public Message<String> up(@PathVariable("type") Integer type, @PathVariable("id") Long targetId){
+        redisArticleAttitudeService.saveUp2Redis(targetId, type, getCurrentUserIdFromCookie());
+        redisArticleAttitudeService.incrementUpCount(targetId, type);
         return Message.createBySuccess();
     }
 

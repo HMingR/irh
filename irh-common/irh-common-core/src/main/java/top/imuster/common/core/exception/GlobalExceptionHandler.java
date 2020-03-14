@@ -63,8 +63,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Message validationExceptionHandler(ValidationException exception){
         String message = exception.getMessage();
-        logger.error("错误信息为{}", message);
-        return Message.createByError(message);
+        return Message.createByCustom(MessageCode.ILLEGAL_ARGUMENT_CODE, message);
     }
 
     @ExceptionHandler(NeedLoginException.class)

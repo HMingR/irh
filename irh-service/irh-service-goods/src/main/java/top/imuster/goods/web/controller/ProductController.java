@@ -50,8 +50,8 @@ public class ProductController extends BaseController {
      * @Description
      * @Date: 2020/2/10 16:07
      * @param file
-     * @param productInfo
-     * @param bindingResult
+     * @param productInfo
+     * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")

@@ -22,12 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName: OrderController
- * @Description: 订单控制器
+ * @Description: 二手商品订单控制器
  * @author: lpf
  * @date: 2019/12/18 18:03
  */
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/order/es")
 @Api("订单控制器")
 public class OrderController extends BaseController{
 

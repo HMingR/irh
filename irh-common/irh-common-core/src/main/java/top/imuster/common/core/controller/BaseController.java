@@ -1,8 +1,6 @@
 package top.imuster.common.core.controller;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.dto.UserDto;
@@ -70,7 +67,7 @@ public class BaseController {
         String accessToken = getAccessTokenFromCookie();
         UserDto userDto = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
         if(userDto == null){
-            throw new RuntimeException("用户身份货过期,请重新登录后再操作");
+            throw new GlobalException("用户身份货过期,请重新登录后再操作");
         }
         return userDto;
     }

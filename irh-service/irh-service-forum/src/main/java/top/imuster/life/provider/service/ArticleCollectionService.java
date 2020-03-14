@@ -58,4 +58,14 @@ public interface ArticleCollectionService extends BaseService<ArticleCollection,
      * @reture: java.lang.Long
      **/
     Long getCollectTotalByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 查看当前用户是否收藏了文章
+     * @Date: 2020/3/14 10:52
+     * @param id
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
+     **/
+    Message<Integer> getCollectStateByTargetId(Long id, Long userId);
 }
