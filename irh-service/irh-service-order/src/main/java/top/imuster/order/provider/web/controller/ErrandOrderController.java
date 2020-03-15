@@ -44,16 +44,16 @@ public class ErrandOrderController extends BaseController {
         return Message.createBySuccess(s);
     }
 
-    @ApiOperation("根据id删除订单")
-    @DeleteMapping("/{id}")
-    public Message<String> delete(@PathVariable("id") Long id){
+    @ApiOperation("根据id删除订单, type标识 5-删除发布的(作为卖家) 6-删除接单(作为买家)")
+    @DeleteMapping("/{type}/{id}")
+    public Message<String> delete(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         Long userId = getCurrentUserIdFromCookie();
-        return errandOrderService.delete(id, userId);
+        return errandOrderService.delete(id, userId, type);
     }
 
-    @ApiOperation("查看订单，type(1-查看别人接收自己发布的跑腿  2-自己接的跑腿订单)")
-    @PostMapping("/{type}")
-    public Message<Page<ErrandOrder>> list(@RequestBody Page<ErrandOrder> page, @PathVariable("type") Integer type){
+    @ApiOperation("查看订单，type(1-查看别人接收自己发布的跑腿  2-自己接的跑腿订单)  state取值:3-未完成  4-已完成")
+    @PostMapping("/{type}/{state}")
+    public Message<Page<ErrandOrder>> list(@RequestBody Page<ErrandOrder> page, @PathVariable("type") Integer type, @PathVariable("state") Integer state){
         ErrandOrder searchCondition = page.getSearchCondition();
         if(searchCondition == null){
             page.setSearchCondition(new ErrandOrder());
@@ -62,6 +62,7 @@ public class ErrandOrderController extends BaseController {
             searchCondition.setOrderField("create_time");
             searchCondition.setOrderFieldType("DESC");
         }
+        searchCondition.setState(state);
         Long userId = getCurrentUserIdFromCookie();
         if(type == 1) searchCondition.setPublisherId(userId);
         if(type == 2) searchCondition.setHolderId(userId);

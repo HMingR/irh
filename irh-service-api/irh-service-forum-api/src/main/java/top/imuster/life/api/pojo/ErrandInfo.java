@@ -44,20 +44,8 @@ public class ErrandInfo extends BaseDomain {
 	private String money;
 
 
-	// 1-删除 2-有效 3-无效
+	// 1-删除 2-有效 3-已被接单
 //	private Short state;
-
-
-	@Override
-	public String toString() {
-		return "ErrandInfo{" +
-				"id=" + id +
-				", publisherId=" + publisherId +
-				", content='" + content + '\'' +
-				", requirement='" + requirement + '\'' +
-				", money='" + money + '\'' +
-				'}';
-	}
 
 	public Long getId() {
 		return this.id;

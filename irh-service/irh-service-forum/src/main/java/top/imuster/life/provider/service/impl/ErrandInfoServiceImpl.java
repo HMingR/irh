@@ -1,6 +1,7 @@
 package top.imuster.life.provider.service.impl;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
@@ -20,6 +21,7 @@ import java.util.List;
  * @since 2020-02-11 17:49:35
  */
 @Service("errandInfoService")
+@Slf4j
 public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> implements ErrandInfoService {
 
     @Resource
@@ -50,5 +52,21 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         Integer state = errandInfoDao.selectStateById(id);
         if(state == null) return false;
         return state.intValue() == 2;
+    }
+
+    @Override
+    public Message<String> deleteErrandById(Long id, Long userId) {
+        ErrandInfo errandInfo = errandInfoDao.selectEntryList(id).get(0);
+        if(errandInfo != null){
+            Integer state = errandInfo.getState();
+            if(state == 3) return Message.createByError("删除失败,该任务已被领取");
+            if(!errandInfo.getPublisherId().equals(userId)){
+                log.error("{}的用户恶意删除他人的跑腿信息", userId);
+                return Message.createByError("不能删除其他人发布的跑腿,如果多次违规操作,将会冻结账号");
+            }
+            errandInfo.setState(1);
+            errandInfoDao.updateByKey(errandInfo);
+        }
+        return Message.createByError("删除失败,请刷新后重试");
     }
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8091
+  port: 60600
 spring:
   application:
     name: file-service

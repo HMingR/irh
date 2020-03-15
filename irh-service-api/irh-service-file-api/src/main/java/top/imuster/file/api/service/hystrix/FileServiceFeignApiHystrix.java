@@ -22,7 +22,7 @@ public class FileServiceFeignApiHystrix implements FallbackFactory<FileServiceFe
         log.error("FileServiceFeignApiHystrix---->远程调用该模块出现异常,错误信息为{}", throwable.getMessage());
         return new FileServiceFeignApi() {
             @Override
-            public String upload(MultipartFile file){
+            public Message<String> upload(MultipartFile file){
                 //todo 上传失败之后需要给一个默认的url
                 log.error("FileServiceFeignApiHystrix---->上传文件失败");
                 return null;

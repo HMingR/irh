@@ -43,6 +43,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @Description 根据帖子id获得帖子的详细信息
      * @Date: 2020/2/2 10:57
      * @param id
+     * @param userId 当前用户
      * @reture: ArticleInfo
      **/
     ArticleInfo getArticleDetailById(Long id);

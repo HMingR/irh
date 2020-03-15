@@ -16,12 +16,21 @@ import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
-import top.imuster.life.api.pojo.*;
+import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTagRel;
+import top.imuster.life.api.pojo.ForumHotTopic;
 import top.imuster.life.provider.dao.ArticleInfoDao;
-import top.imuster.life.provider.service.*;
+import top.imuster.life.provider.service.ArticleCollectionService;
+import top.imuster.life.provider.service.ArticleInfoService;
+import top.imuster.life.provider.service.ArticleTagRelService;
+import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ArticleInfoService 实现类
@@ -43,9 +52,6 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Resource
     ArticleTagRelService articleTagRelService;
-
-    @Resource
-    private ArticleReviewService articleReviewService;
 
     @Resource
     private ArticleCollectionService articleCollectionService;
@@ -80,9 +86,6 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public ArticleInfo getArticleDetailById(Long id) {
         ArticleInfo result = articleInfoDao.selectEntryList(id).get(0);
-        //获得一级留言信息和其对应的回复总数
-        List<ArticleReview> review = articleReviewService.getFirstClassReviewInfoById(id);
-        result.setChilds(review);
 
         ArticleTagRel condition = new ArticleTagRel();
         condition.setArticleId(id);

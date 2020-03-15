@@ -3,29 +3,20 @@ package top.imuster.user.provider.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import top.imuster.common.core.annotation.LogAnnotation;
-import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.enums.LogTypeEnum;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.user.api.dto.CheckValidDto;
-import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
-import top.imuster.user.provider.service.UserInfoService;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.provider.service.ReportFeedbackInfoService;
+import top.imuster.user.provider.service.UserInfoService;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @ClassName: CustomerController
@@ -38,24 +29,11 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
-    private List<String> types;
-
     @Resource
     ReportFeedbackInfoService reportFeedbackInfoService;
 
     @Resource
     UserInfoService userInfoService;
-
-    @Autowired
-    FileServiceFeignApi fileServiceFeignApi;
-
-    @PostConstruct
-    private void createTypes(){
-        types = new ArrayList<>();
-        types.add("jpg");
-        types.add("png");
-        types.add("bmp");
-    }
 
     /**
      * @Description 用户在注册的时候需要校验各种参数
@@ -86,19 +64,8 @@ public class UserController extends BaseController {
      **/
     @PostMapping("/edit")
     @ApiOperation(value = "修改会员的个人信息(先校验一些信息是否存在),以表单的形式上传,不是用json,其中表单中各个标签的按钮name必须和实体类保持一致", httpMethod = "POST")
-    public Message<String> editInfo(@ApiParam("上传的头像,前端按钮的name属性必须为file") @RequestParam("file") MultipartFile file, @ApiParam("ConsumerInfo实体类") @Validated(ValidateGroup.editGroup.class) UserInfo userInfo, BindingResult bindingResult) throws Exception{
+    public Message<String> editInfo(@ApiParam("ConsumerInfo实体类") @Validated(ValidateGroup.editGroup.class) UserInfo userInfo, BindingResult bindingResult) throws Exception{
         validData(bindingResult);
-
-        //头像不为空
-        if(!file.isEmpty()){
-            int last = file.getOriginalFilename().length();
-            String fileType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), last);
-            if(!types.contains(fileType)){
-                return Message.createByError("图片格式不正确,请更换图片格式");
-            }
-            String url = fileServiceFeignApi.upload(file);
-            userInfo.setPortrait(url);
-        }
         userInfoService.updateByKey(userInfo);
         return Message.createBySuccess();
     }

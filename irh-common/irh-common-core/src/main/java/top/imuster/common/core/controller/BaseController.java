@@ -50,7 +50,7 @@ public class BaseController {
      * @param request
      * @reture: java.lang.Long
      **/
-    protected Long getIdByToken(HttpServletRequest request)throws Exception{
+    protected Long getIdByToken(HttpServletRequest request){
         String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
         return JwtTokenUtil.getUserIdFromToken(token);
     }
@@ -85,7 +85,26 @@ public class BaseController {
             throw new GlobalException("用户身份过期,请重新登录");
         }
         return currentUser.getUserId();
-
+    }
+    /**
+     * @Author hmr
+     * @Description 获得当前用户的id，如果require为true则必须登录，反之如果没查到则返回null
+     * @Date: 2020/3/15 9:21
+     * @param require
+     * @reture: java.lang.Long
+     **/
+    protected Long getCurrentUserIdFromCookie(boolean require){
+        Long userId;
+        if(require){
+            return getCurrentUserIdFromCookie();
+        }else{
+            try{
+                userId = getCurrentUserIdFromCookie();
+            }catch (GlobalException e){
+                return null;
+            }
+            return userId;
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
@@ -36,12 +37,17 @@ public class ArticleReviewController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReview>>
      **/
-    @ApiOperation(value = "根据一级留言id获得其对应的所有留言或回复", httpMethod = "GET")
-    @GetMapping("/{id}")
-    public Message<List<ArticleReview>> reviewDetails(@PathVariable("id") Long id){
-        List<ArticleReview> articleReviews = articleReviewService.reviewDetails(id);
+    @ApiOperation(value = "根据一级留言id获得其对应的所有留言或回复", httpMethod = "POST")
+    @PostMapping("/child")
+    public Message<List<ArticleReview>> reviewDetails(@RequestBody Page<ArticleReview> page){
+        if(page.getSearchCondition() == null){
+            page.setSearchCondition(new ArticleReview());
+        }
+        Long userId = getCurrentUserIdFromCookie();
+        List<ArticleReview> articleReviews = articleReviewService.reviewDetails(page, userId);
         return Message.createBySuccess(articleReviews);
     }
+
 
     /**
      * @Author hmr
@@ -62,6 +68,25 @@ public class ArticleReviewController extends BaseController {
         return Message.createBySuccess();
     }
 
+
+    /**
+     * @Author hmr
+     * @Description 根据文章id分页查询一级留言
+     * @Date: 2020/3/15 10:26
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReview>>
+     **/
+    @ApiOperation("根据文章id分页查询一级留言")
+    @PostMapping
+    public Message<Page<ArticleReview>> getArticleReviewByPage(@RequestBody Page<ArticleReview> page){
+        if(page.getSearchCondition() == null){
+            page.setSearchCondition(new ArticleReview());
+        }
+        Long userId = getCurrentUserIdFromCookie(false);
+        return articleReviewService.selectFirstClassReviewListByArticleId(page, userId);
+    }
+
+
     /**
      * @Author hmr
      * @Description 用户根据评论id删除评论
@@ -81,6 +106,7 @@ public class ArticleReviewController extends BaseController {
         return Message.createBySuccess();
     }
 
+
     /**
      * @Author hmr
      * @Description 用户查看自己的留言记录
@@ -96,7 +122,5 @@ public class ArticleReviewController extends BaseController {
         List<ArticleReview> list = articleReviewService.list(userId);
         return Message.createBySuccess(list);
     }
-
-
 
 }

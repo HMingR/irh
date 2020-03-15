@@ -2,23 +2,19 @@ package top.imuster.order.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.core.annotation.NeedLogin;
-import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
-import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName: OrderController
@@ -29,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/order/es")
 @Api("订单控制器")
-public class OrderController extends BaseController{
+public class GoodsOrderController extends BaseController{
 
     @Resource
     OrderInfoService orderInfoService;
@@ -43,9 +39,9 @@ public class OrderController extends BaseController{
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("生成订单")
-    @PostMapping("/generateOrder")
+    @PostMapping("/create")
     @NeedLogin
-    public Message<OrderInfo> generateOrder(@RequestBody ProductOrderDto productOrderDto, HttpServletRequest request) throws Exception {
+    public Message<OrderInfo> createOrder(@RequestBody ProductOrderDto productOrderDto) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
         OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, userId);
         return Message.createBySuccess(order);

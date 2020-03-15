@@ -41,12 +41,8 @@ public class ErrandController extends BaseController {
     @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> delete(@PathVariable("id") Long id){
-        Long userId = getCurrentUserIdFromCookie();
-        ErrandInfo condition = new ErrandInfo();
-        condition.setId(id);
-        condition.setPublisherId(userId);
-        errandInfoService.updateByKey(condition);
-        return Message.createBySuccess();
+        return errandInfoService.deleteErrandById(id, getCurrentUserIdFromCookie());
+
     }
 
     @ApiOperation("查看自己发布的跑腿服务")

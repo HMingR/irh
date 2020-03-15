@@ -49,7 +49,7 @@ public class ErrandOrder extends BaseDomain {
 	@ApiModelProperty("订单完成时间")
 	private String finishTime;
 
-	// 1-取消订单  2-删除 3-未完成 4-已完成 5-下单失败
+	// 1-取消订单  2-删除  3-未完成 4-已完成 5-下单失败  6-发布者删除  7-接单者删除
 //	private Short state;
 
 	public Long getId() {

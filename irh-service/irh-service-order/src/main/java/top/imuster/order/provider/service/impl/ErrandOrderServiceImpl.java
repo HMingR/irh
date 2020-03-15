@@ -3,6 +3,7 @@ package top.imuster.order.provider.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,6 +29,7 @@ import javax.annotation.Resource;
  * @since 2020-02-11 17:49:36
  */
 @Service("errandOrderService")
+@Slf4j
 public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrder, Long> implements ErrandOrderService {
 
     @Resource
@@ -45,12 +47,23 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrder, Long> i
     }
 
     @Override
-    public Message<String> delete(Long id, Long userId) {
+    public Message<String> delete(Long id, Long userId, Integer type) {
         ErrandOrder errandOrder = errandOrderDao.selectEntryList(id).get(0);
-        if(errandOrder.getState() == 3){
-            return Message.createByError("当前订单还没有完成,请等待订单完成之后再删除");
+        if(errandOrder.getState() == 3) return Message.createByError("当前订单还没有完成,请等待订单完成之后再删除");
+
+        //判断当前用户有没有权限删除
+        if(type == 5){
+            if(!errandOrder.getPublisherId().equals(userId)){
+                log.error("id为{}的用户试图删除不是自己的跑腿订单", userId);
+                return Message.createByError("非法操作,删除不属于自己的订单失败,多次执行该操作账号将被冻结");
+            }
+        }else if(type == 6){
+            if(!errandOrder.getHolderId().equals(userId)){
+                log.error("id为{}的用户试图删除不是自己的跑腿订单", userId);
+                return Message.createByError("非法操作,删除不属于自己的订单失败,多次执行该操作账号将被冻结");
+            }
         }
-        errandOrder.setState(2);
+        errandOrder.setState(type);
         errandOrderDao.updateByKey(errandOrder);
         return Message.createBySuccess();
     }

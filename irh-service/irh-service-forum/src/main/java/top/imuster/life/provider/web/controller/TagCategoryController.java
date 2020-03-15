@@ -2,12 +2,10 @@ package top.imuster.life.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.life.api.pojo.ArticleTagCategory;
 import top.imuster.life.provider.service.ArticleTagCategoryService;
 
@@ -18,9 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/forum/category")
 public class TagCategoryController {
-
-    @Autowired
-    FileServiceFeignApi fileServiceFeignApi;
 
     @Resource
     ArticleTagCategoryService articleTagCategoryService;

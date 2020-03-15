@@ -5,10 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.life.api.pojo.UserForumAttribute;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
@@ -130,10 +128,8 @@ public class ArticleAttitudeController extends BaseController {
     @ApiOperation("根据id查看是否点赞了该目标   1-未点赞  2-点赞")
     @GetMapping("/state/{type}/{id}")
     public Message<Integer> getUpStateByTargetId(@PathVariable("type") Integer type, @PathVariable("id") Long id){
-        Long userId;
-        try{
-            userId = getCurrentUserIdFromCookie();
-        }catch (Exception e){
+        Long userId = getCurrentUserIdFromCookie(false);
+        if(userId == null){
             return Message.createBySuccess(1);
         }
         return userForumAttributeService.getStateByTargetId(type, id, userId);

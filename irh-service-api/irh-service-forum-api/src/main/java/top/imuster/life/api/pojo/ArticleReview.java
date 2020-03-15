@@ -60,12 +60,25 @@ public class ArticleReview extends BaseDomain {
 	//每个留言下的回复数
 	private List<ArticleReview> childs;
 
-	//父id的作者名
+	//父id的作者id
+	@ApiModelProperty("父id的作者id")
 	private Long parentWriterId;
+
+	//当前用户是否点赞
+	@ApiModelProperty("当前用户是否点赞   1-为点赞  2-点赞")
+	private Integer upState;
 
 	// 1-无效 2-有效
 //	private Short state;
 
+
+	public Integer getUpState() {
+		return upState;
+	}
+
+	public void setUpState(Integer upState) {
+		this.upState = upState;
+	}
 
 	public Long getParentWriterId() {
 		return parentWriterId;

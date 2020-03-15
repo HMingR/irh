@@ -30,4 +30,14 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: boolean
      **/
     boolean isAvailable(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 用户删除自己发布的跑腿
+     * @Date: 2020/3/15 15:49
+     * @param id
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteErrandById(Long id, Long currentUserIdFromCookie);
 }

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -85,24 +84,6 @@ public class ProductInfo extends BaseDomain {
 	private Long consumerId;
 
 	//state 1-无效 2-有效 3-锁定
-
-	@Override
-	public String toString() {
-		return "ProductInfo{" +
-				"id=" + id +
-				", productName='" + productName + '\'' +
-				", mainPicUrl='" + mainPicUrl + '\'' +
-				", unit='" + unit + '\'' +
-				", originalPrice='" + originalPrice + '\'' +
-				", salePrice='" + salePrice + '\'' +
-				", oldDegree=" + oldDegree +
-				", productDesc='" + productDesc + '\'' +
-				", productDetailsPage='" + productDetailsPage + '\'' +
-				", tradeType=" + tradeType +
-				", categoryId=" + categoryId +
-				", newCategoryId=" + newCategoryId +
-				'}';
-	}
 
 	public String getBuyingTime() {
 		return buyingTime;

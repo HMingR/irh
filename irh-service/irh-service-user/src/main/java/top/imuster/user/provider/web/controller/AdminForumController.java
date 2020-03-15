@@ -3,15 +3,12 @@ package top.imuster.user.provider.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.api.service.ForumServiceFeignApi;
-
-import javax.annotation.Resource;
 
 /**
  * @ClassName: AdminForumController

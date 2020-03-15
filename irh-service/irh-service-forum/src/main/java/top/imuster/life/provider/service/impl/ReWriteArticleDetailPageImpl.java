@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.provider.service.ReWriteArticleDetailPage;
 
@@ -25,9 +24,6 @@ public class ReWriteArticleDetailPageImpl implements ReWriteArticleDetailPage {
 
     @Autowired
     TemplateEngine templateEngine;
-
-    @Autowired
-    FileServiceFeignApi fileServiceFeignApi;
 
     @Override
     public void createHtml(ArticleInfo articleInfo) {

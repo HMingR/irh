@@ -21,9 +21,10 @@ public interface FileServiceFeignApi {
      * @Date: 2020/1/10 20:17
      * @param file
      * @reture: top.imuster.common.base.wrapper.Message 上传成功
-     **/
+     *
+     * @return*/
     @PostMapping
-    String upload(@RequestParam("file") MultipartFile file);
+    Message<String> upload(@RequestParam("file") MultipartFile file);
 
     /**
      * @Author hmr

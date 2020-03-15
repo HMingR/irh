@@ -94,6 +94,7 @@ public class AlipayController extends BaseController {
             logger.error("支付宝验证回调异常",e);
         }
         alipayService.aliCallBack(params);
+        //todo 通知卖家
         return Message.createBySuccess("支付成功,已提醒卖家");
     }
 

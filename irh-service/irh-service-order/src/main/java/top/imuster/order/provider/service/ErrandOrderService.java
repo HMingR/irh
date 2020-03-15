@@ -19,10 +19,11 @@ public interface ErrandOrderService extends BaseService<ErrandOrder, Long> {
      * @Date: 2020/2/12 10:09
      * @param id 订单编号
      * @param userId 当前登录者
+     * @param type
      * @reture: void
      *
      * @return*/
-    Message<String> delete(Long id, Long userId);
+    Message<String> delete(Long id, Long userId, Integer type);
 
     /**
      * @Author hmr

@@ -4,7 +4,9 @@ package top.imuster.life.api.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -26,10 +28,12 @@ public class ArticleInfo extends BaseDomain {
 
 	// 标题, max length: 255
 	@ApiModelProperty("标题")
+	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "标题不能为空")
 	private String title;
 
 	// 文章/帖子分类id
 	@ApiModelProperty("文章/帖子分类id")
+	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "分类不能为空")
 	private Long articleCategory;
 
 	// 封面图片, max length: 255
@@ -38,6 +42,7 @@ public class ArticleInfo extends BaseDomain {
 
 	// 内容
 	@ApiModelProperty("内容")
+	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "内容不能为空")
 	private String content;
 
 	//浏览次数

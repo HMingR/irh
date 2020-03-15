@@ -1,7 +1,9 @@
 package top.imuster.life.provider.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleReview;
 
 import java.util.List;
@@ -15,21 +17,13 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据文章的id获得该文章下所有的一级留言
-     * @Date: 2020/2/2 11:05
-     * @param id
-     * @reture: java.util.List<ArticleReview>
-     **/
-    List<ArticleReview> getFirstClassReviewInfoById(Long id);
-
-    /**
-     * @Author hmr
      * @Description 根据一级留言的id获得其下所有的回复或留言
      * @Date: 2020/2/2 11:20
-     * @param id
+     * @param page
+     * @param userId
      * @reture: java.util.List<ArticleReview>
      **/
-    List<ArticleReview> reviewDetails(Long id);
+    List<ArticleReview> reviewDetails(Page<ArticleReview> page, Long userId);
 
     /**
      * @Author hmr
@@ -66,4 +60,14 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @reture: java.lang.Long
      **/
     Long getUpTotal(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据文章id分页查询一级留言的信息
+     * @Date: 2020/3/15 9:53
+     * @param page
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReview>>
+     **/
+    Message<Page<ArticleReview>> selectFirstClassReviewListByArticleId(Page<ArticleReview> page, Long userId);
 }
