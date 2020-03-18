@@ -1,5 +1,5 @@
 server:
-  port: 10010
+  port: 80800
 spring:
   application:
     name: irh-gateway

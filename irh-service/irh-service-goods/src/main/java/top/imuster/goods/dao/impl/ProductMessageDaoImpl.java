@@ -2,11 +2,9 @@
 package top.imuster.goods.dao.impl;
 
 
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.goods.api.pojo.ProductMessage;
+import top.imuster.goods.api.pojo.ProductMessageInfo;
 import top.imuster.goods.dao.ProductMessageDao;
 
 /**
@@ -15,7 +13,7 @@ import top.imuster.goods.dao.ProductMessageDao;
  * @since 2019-11-24 16:31:58
  */
 @Repository("productMessageDao")
-public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessage, Long> implements ProductMessageDao {
+public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessageInfo, Long> implements ProductMessageDao {
 	private final static String NAMESPACE = "top.imuster.goods.dao.ProductMessageDao.";
 	private final static String INSERT_RETURN_ID = "insertReturnId";
 	private final static String SELECT_PRODUCT_EMAIL_BY_MESSAGE_PARENT_ID = "selectSalerIdByMessageParentId";
@@ -25,8 +23,8 @@ public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessage, Long> imp
 	}
 
 	@Override
-	public Long insertReturnId(ProductMessage productMessage) {
-		return Long.parseLong(String.valueOf(this.insert(getNameSpace(INSERT_RETURN_ID), productMessage)));
+	public Long insertReturnId(ProductMessageInfo productMessageInfo) {
+		return Long.parseLong(String.valueOf(this.insert(getNameSpace(INSERT_RETURN_ID), productMessageInfo)));
 	}
 
 	@Override

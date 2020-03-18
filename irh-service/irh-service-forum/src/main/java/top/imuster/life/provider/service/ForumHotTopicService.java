@@ -4,7 +4,7 @@ package top.imuster.life.provider.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-02-13 21:12:30
  */
-public interface ForumHotTopicService extends BaseService<ForumHotTopic, Long> {
+public interface ForumHotTopicService extends BaseService<ForumHotTopicInfo, Long> {
 
     /**
      * @Author hmr
@@ -32,7 +32,7 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopic, Long> {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleInfo>>
      **/
-    Message<List<ForumHotTopic>> totalHotTopicList(int topic);
+    Message<List<ForumHotTopicInfo>> totalHotTopicList(int topic);
 
     /**
      * @Author hmr

@@ -2,23 +2,23 @@ package top.imuster.goods.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.goods.api.pojo.ProductMessage;
+import top.imuster.goods.api.pojo.ProductMessageInfo;
 
 /**
  * ProductMessageDao 接口
  * @author 黄明人
  * @since 2019-11-24 16:31:58
  */
-public interface ProductMessageDao extends BaseDao<ProductMessage, Long> {
+public interface ProductMessageDao extends BaseDao<ProductMessageInfo, Long> {
     //自定义扩展
     /**
      * @Author hmr
      * @Description 插入信息，返回生成的id
      * @Date: 2020/1/21 10:54
-     * @param productMessage
+     * @param productMessageInfo
      * @reture: java.lang.Long
      **/
-    Long insertReturnId(ProductMessage productMessage);
+    Long insertReturnId(ProductMessageInfo productMessageInfo);
 
     /**
      * @Author hmr

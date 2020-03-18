@@ -3,7 +3,6 @@ package top.imuster.life.api.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -12,11 +11,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-02-13 21:12:30
  */
 @ApiModel("文章热搜表")
-public class ForumHotTopic extends BaseDomain {
+public class ForumHotTopicInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 4870108998L;
 
-	public ForumHotTopic() {
+	public ForumHotTopicInfo() {
 		//默认无参构造方法
 	}
 	// 文章模块热搜表

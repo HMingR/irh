@@ -11,11 +11,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-02-11 17:49:36
  */
 @ApiModel("跑腿订单实体类")
-public class ErrandOrder extends BaseDomain {
+public class ErrandOrderInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 11790645230L;
 
-	public ErrandOrder() {
+	public ErrandOrderInfo() {
 		//默认无参构造方法
 	}
 	// 跑腿订单表主键

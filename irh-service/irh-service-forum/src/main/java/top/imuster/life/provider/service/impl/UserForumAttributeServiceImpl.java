@@ -13,7 +13,7 @@ import top.imuster.life.api.dto.UpCountDto;
 import top.imuster.life.api.dto.UpDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ArticleReview;
-import top.imuster.life.api.pojo.UserForumAttribute;
+import top.imuster.life.api.pojo.UserForumAttributeInfo;
 import top.imuster.life.provider.dao.UserForumAttributeDao;
 import top.imuster.life.provider.service.*;
 
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @since 2020-02-08 15:27:10
  */
 @Service("userForumAttributeService")
-public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttribute, Long> implements UserForumAttributeService {
+public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttributeInfo, Long> implements UserForumAttributeService {
 
     @Resource
     private UserForumAttributeDao userForumAttributeDao;
@@ -46,7 +46,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
 
 
     @Override
-    public BaseDao<UserForumAttribute, Long> getDao() {
+    public BaseDao<UserForumAttributeInfo, Long> getDao() {
         return this.userForumAttributeDao;
     }
 
@@ -58,7 +58,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
         allUps.stream().forEach(upDto -> {
             Long targetId = upDto.getTargetId();
             Long userId = upDto.getUserId();
-            UserForumAttribute info = getInfoByTargetIdAndUserId(targetId, userId);
+            UserForumAttributeInfo info = getInfoByTargetIdAndUserId(targetId, userId);
             if(info == null){
                 //如果没有记录，则标识是第一次点赞，插入记录
                 save2Db(upDto);
@@ -122,28 +122,28 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     }
 
     @Override
-    public Message<Page<UserForumAttribute>> getUpList(Page<UserForumAttribute> page, Long userId) {
-        UserForumAttribute condition = page.getSearchCondition();
+    public Message<Page<UserForumAttributeInfo>> getUpList(Page<UserForumAttributeInfo> page, Long userId) {
+        UserForumAttributeInfo condition = page.getSearchCondition();
         if(null == condition){
-            condition = new UserForumAttribute();
+            condition = new UserForumAttributeInfo();
         }
         if(StringUtils.isBlank(condition.getOrderField())){
             condition.setOrderField("create_time");
             condition.setOrderFieldType("DESC");
         }
-        List<UserForumAttribute> res = userForumAttributeDao.selectUpListByCondition(condition);
+        List<UserForumAttributeInfo> res = userForumAttributeDao.selectUpListByCondition(condition);
         page.setData(res);
         return null;
     }
 
     @Override
     public Message<Integer> getStateByTargetId(Integer type, Long id, Long userId) {
-        UserForumAttribute condition = new UserForumAttribute();
+        UserForumAttributeInfo condition = new UserForumAttributeInfo();
         condition.setTargetId(id);
         condition.setType(type);
         condition.setUserId(userId);
-        List<UserForumAttribute> userForumAttributes = userForumAttributeDao.selectEntryList(condition);
-        if(userForumAttributes == null || userForumAttributes.isEmpty() || userForumAttributes.get(0).getState() == 1) return Message.createBySuccess(1);
+        List<UserForumAttributeInfo> userForumAttributeInfos = userForumAttributeDao.selectEntryList(condition);
+        if(userForumAttributeInfos == null || userForumAttributeInfos.isEmpty() || userForumAttributeInfos.get(0).getState() == 1) return Message.createBySuccess(1);
         return Message.createBySuccess(2);
     }
 
@@ -156,7 +156,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
      * @reture: void
      **/
     private void save2Db(UpDto upDto){
-        UserForumAttribute condition = new UserForumAttribute();
+        UserForumAttributeInfo condition = new UserForumAttributeInfo();
         condition.setTargetId(upDto.getTargetId());
         condition.setUserId(upDto.getUserId());
         condition.setType(upDto.getType());
@@ -169,10 +169,10 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
      * @Date: 2020/2/8 19:42
      * @param targetId
      * @param userId
-     * @reture: UserForumAttribute
+     * @reture: UserForumAttributeInfo
      **/
-    private UserForumAttribute getInfoByTargetIdAndUserId(Long targetId, Long userId){
-        UserForumAttribute condition = new UserForumAttribute();
+    private UserForumAttributeInfo getInfoByTargetIdAndUserId(Long targetId, Long userId){
+        UserForumAttributeInfo condition = new UserForumAttributeInfo();
         condition.setUserId(userId);
         condition.setTargetId(targetId);
         return userForumAttributeDao.selectEntryList(condition).get(0);

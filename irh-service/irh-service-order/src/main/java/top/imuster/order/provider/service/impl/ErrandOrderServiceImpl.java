@@ -16,7 +16,7 @@ import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.UuidUtils;
-import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.dao.ErrandOrderDao;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.ErrandOrderService;
@@ -30,7 +30,7 @@ import javax.annotation.Resource;
  */
 @Service("errandOrderService")
 @Slf4j
-public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrder, Long> implements ErrandOrderService {
+public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Long> implements ErrandOrderService {
 
     @Resource
     private ErrandOrderDao errandOrderDao;
@@ -42,41 +42,41 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrder, Long> i
     RedisTemplate redisTemplate;
 
     @Override
-    public BaseDao<ErrandOrder, Long> getDao() {
+    public BaseDao<ErrandOrderInfo, Long> getDao() {
         return this.errandOrderDao;
     }
 
     @Override
     public Message<String> delete(Long id, Long userId, Integer type) {
-        ErrandOrder errandOrder = errandOrderDao.selectEntryList(id).get(0);
-        if(errandOrder.getState() == 3) return Message.createByError("当前订单还没有完成,请等待订单完成之后再删除");
+        ErrandOrderInfo errandOrderInfo = errandOrderDao.selectEntryList(id).get(0);
+        if(errandOrderInfo.getState() == 3) return Message.createByError("当前订单还没有完成,请等待订单完成之后再删除");
 
         //判断当前用户有没有权限删除
         if(type == 5){
-            if(!errandOrder.getPublisherId().equals(userId)){
+            if(!errandOrderInfo.getPublisherId().equals(userId)){
                 log.error("id为{}的用户试图删除不是自己的跑腿订单", userId);
                 return Message.createByError("非法操作,删除不属于自己的订单失败,多次执行该操作账号将被冻结");
             }
         }else if(type == 6){
-            if(!errandOrder.getHolderId().equals(userId)){
+            if(!errandOrderInfo.getHolderId().equals(userId)){
                 log.error("id为{}的用户试图删除不是自己的跑腿订单", userId);
                 return Message.createByError("非法操作,删除不属于自己的订单失败,多次执行该操作账号将被冻结");
             }
         }
-        errandOrder.setState(type);
-        errandOrderDao.updateByKey(errandOrder);
+        errandOrderInfo.setState(type);
+        errandOrderDao.updateByKey(errandOrderInfo);
         return Message.createBySuccess();
     }
 
     @Override
     public String receiveOrder(Long id, Long userId) throws JsonProcessingException {
         checkFromRedisById(id);
-        ErrandOrder errandOrder = new ErrandOrder();
+        ErrandOrderInfo errandOrderInfo = new ErrandOrderInfo();
         String orderCode = String.valueOf(UuidUtils.nextId());
-        errandOrder.setHolderId(userId);
-        errandOrder.setErrandId(id);
-        errandOrder.setOrderCode(orderCode);
-        String value = new ObjectMapper().writeValueAsString(errandOrder);
+        errandOrderInfo.setHolderId(userId);
+        errandOrderInfo.setErrandId(id);
+        errandOrderInfo.setOrderCode(orderCode);
+        String value = new ObjectMapper().writeValueAsString(errandOrderInfo);
         rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, MqTypeEnum.ERRAND.getRoutingKey(), value);
         return orderCode;
     }

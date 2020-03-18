@@ -4,14 +4,14 @@ package top.imuster.order.provider.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.api.pojo.ErrandOrderInfo;
 
 /**
  * ErrandOrderService接口
  * @author 黄明人
  * @since 2020-02-11 17:49:36
  */
-public interface ErrandOrderService extends BaseService<ErrandOrder, Long> {
+public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
 
     /**
      * @Author hmr

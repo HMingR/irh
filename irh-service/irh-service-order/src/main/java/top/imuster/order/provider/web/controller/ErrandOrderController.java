@@ -10,7 +10,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
@@ -53,10 +53,10 @@ public class ErrandOrderController extends BaseController {
 
     @ApiOperation("查看订单，type(1-查看别人接收自己发布的跑腿  2-自己接的跑腿订单)  state取值:3-未完成  4-已完成")
     @PostMapping("/{type}/{state}")
-    public Message<Page<ErrandOrder>> list(@RequestBody Page<ErrandOrder> page, @PathVariable("type") Integer type, @PathVariable("state") Integer state){
-        ErrandOrder searchCondition = page.getSearchCondition();
+    public Message<Page<ErrandOrderInfo>> list(@RequestBody Page<ErrandOrderInfo> page, @PathVariable("type") Integer type, @PathVariable("state") Integer state){
+        ErrandOrderInfo searchCondition = page.getSearchCondition();
         if(searchCondition == null){
-            page.setSearchCondition(new ErrandOrder());
+            page.setSearchCondition(new ErrandOrderInfo());
         }
         if(StringUtils.isBlank(searchCondition.getOrderField())){
             searchCondition.setOrderField("create_time");
@@ -67,7 +67,7 @@ public class ErrandOrderController extends BaseController {
         if(type == 1) searchCondition.setPublisherId(userId);
         if(type == 2) searchCondition.setHolderId(userId);
         page.setSearchCondition(searchCondition);
-        Page<ErrandOrder> errandOrderPage = errandOrderService.selectPage(searchCondition, page);
+        Page<ErrandOrderInfo> errandOrderPage = errandOrderService.selectPage(searchCondition, page);
         return Message.createBySuccess(errandOrderPage);
     }
 
@@ -76,13 +76,13 @@ public class ErrandOrderController extends BaseController {
      * @Description 根据id查看订单详情
      * @Date: 2020/2/12 11:58
      * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ErrandOrder>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ErrandOrderInfo>
      **/
     @ApiOperation("根据id查看订单详情")
     @GetMapping("/detail/{id}")
-    public Message<ErrandOrder> getOrderById(@PathVariable("id") Long id){
-        ErrandOrder errandOrder = errandOrderService.selectEntryList(id).get(0);
-        return Message.createBySuccess(errandOrder);
+    public Message<ErrandOrderInfo> getOrderById(@PathVariable("id") Long id){
+        ErrandOrderInfo errandOrderInfo = errandOrderService.selectEntryList(id).get(0);
+        return Message.createBySuccess(errandOrderInfo);
     }
 
     /**
@@ -110,13 +110,13 @@ public class ErrandOrderController extends BaseController {
     @GetMapping("/finish/{id}")
     public Message<String> finishOrder(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();
-        ErrandOrder errandOrder = errandOrderService.selectEntryList(id).get(0);
-        if(!errandOrder.getPublisherId().equals(userId)){
+        ErrandOrderInfo errandOrderInfo = errandOrderService.selectEntryList(id).get(0);
+        if(!errandOrderInfo.getPublisherId().equals(userId)){
             logger.error("订单的发布者和当前用户不一致,订单id为{},当前用户id为{}",id, userId);
             return Message.createByError("非法操作,恶意篡改登录信息,如非恶意请重新登录");
         }
-        errandOrder.setState(4);
-        errandOrderService.updateByKey(errandOrder);
+        errandOrderInfo.setState(4);
+        errandOrderService.updateByKey(errandOrderInfo);
         return Message.createBySuccess();
     }
 }

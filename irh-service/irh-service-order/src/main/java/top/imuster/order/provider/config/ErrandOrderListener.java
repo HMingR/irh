@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.life.api.service.ForumServiceFeignApi;
-import top.imuster.order.api.pojo.ErrandOrder;
+import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
@@ -38,7 +38,7 @@ public class ErrandOrderListener {
     @RabbitListener(queues = "queue_info_errand")
     public void generateOrder(String msg){
         try{
-            ErrandOrder order = new ObjectMapper().readValue(msg, ErrandOrder.class);
+            ErrandOrderInfo order = new ObjectMapper().readValue(msg, ErrandOrderInfo.class);
             Long errandId = order.getErrandId();
             boolean available = forumServiceFeignApi.errandIsAvailable(errandId);
             redisTemplate.expire(String.valueOf(order.getOrderCode()), 1, TimeUnit.MINUTES);

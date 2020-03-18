@@ -49,7 +49,7 @@ public class ArticleInfoController extends BaseController {
     @ApiOperation("用户发布帖子")
     @NeedLogin
     @PostMapping
-    public Message<String> releaseArticle(@RequestBody @Validated(ValidateGroup.addGroup.class) ArticleInfo articleInfo, BindingResult bindingResult) throws Exception {
+    public Message<String> releaseArticle(@RequestBody @Validated(ValidateGroup.addGroup.class) ArticleInfo articleInfo, BindingResult bindingResult) {
         validData(bindingResult);
         UserDto currentUser = getCurrentUserFromCookie();
         articleInfoService.release(currentUser, articleInfo);
@@ -85,15 +85,7 @@ public class ArticleInfoController extends BaseController {
     @PostMapping("/list")
     @NeedLogin
     public Message<Page<ArticleInfo>> list(@RequestBody Page<ArticleInfo> page){
-        ArticleInfo condition = page.getSearchCondition();
-        if(condition == null){
-            page.setSearchCondition(new ArticleInfo());
-        }
-        condition.setUserId(getCurrentUserIdFromCookie());
-        condition.setOrderField("create_time");
-        condition.setOrderFieldType("DESC");
-        condition.setState(2);
-        List<ArticleInfo> list = articleInfoService.list(page);
+        List<ArticleInfo> list = articleInfoService.list(page, getCurrentUserIdFromCookie());
         page.setData(list);
         return Message.createBySuccess(page);
     }

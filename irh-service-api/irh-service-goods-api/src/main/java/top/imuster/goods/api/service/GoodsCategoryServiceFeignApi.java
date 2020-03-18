@@ -1,6 +1,5 @@
 package top.imuster.goods.api.service;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
@@ -37,7 +36,7 @@ public interface GoodsCategoryServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PutMapping
-    Message addCategory(@RequestBody ProductCategoryInfo productCategoryInfo);
+    Message<String> addCategory(@RequestBody ProductCategoryInfo productCategoryInfo);
 
 
     /**
@@ -48,7 +47,7 @@ public interface GoodsCategoryServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @DeleteMapping("/{id}")
-    Message delCategory(@PathVariable("id") Long id);
+    Message<String> delCategory(@PathVariable("id") Long id);
 
     /**
      * @Description: 根据id查询
@@ -58,9 +57,15 @@ public interface GoodsCategoryServiceFeignApi {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @GetMapping("/{id}")
-    Message getInfoById(@PathVariable("id") Long id);
+    Message<ProductCategoryInfo> getInfoById(@PathVariable("id") Long id);
 
-    @ApiOperation(value = "修改分类信息", httpMethod = "POST")
+    /**
+     * @Author hmr
+     * @Description 修改分类信息
+     * @Date: 2020/3/16 10:48
+     * @param productCategoryInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
     @PostMapping("/edit")
-    Message editCategory(@RequestBody ProductCategoryInfo productCategoryInfo);
+    Message<String> editCategory(@RequestBody ProductCategoryInfo productCategoryInfo);
 }

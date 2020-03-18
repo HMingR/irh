@@ -51,7 +51,7 @@ public class RedisUtil {
 
     /**
      * @Author hmr
-     * @Description 获得在redis中存储的评论或留言的总数
+     * @Description 获得在redis中存储的评论或留言的总数的key
      * @Date: 2020/2/8 18:42
      * @param targetId
      * @param type

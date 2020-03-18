@@ -36,7 +36,7 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据帖子回复id获得发布者id
+     * @Description 根据留言id获得留言者的id
      * @Date: 2020/2/5 10:43
      * @param targetId
      * @reture: java.lang.Long

@@ -36,7 +36,7 @@ public class GoodsCategoryServiceFeignClient extends BaseController implements G
      **/
     @ApiOperation(value = "添加分类", httpMethod = "PUT")
     @PutMapping
-    public Message addCategory(@RequestBody ProductCategoryInfo productCategoryInfo) throws GoodsException {
+    public Message<String> addCategory(@RequestBody ProductCategoryInfo productCategoryInfo) throws GoodsException {
         productCategoryInfoService.insertEntry(productCategoryInfo);
         return Message.createBySuccess();
     }
@@ -50,7 +50,7 @@ public class GoodsCategoryServiceFeignClient extends BaseController implements G
      **/
     @ApiOperation(value = "删除商品分类,再删除分类的时候需要提示用户会更新所有该分类下的商品分类为其父节点", httpMethod = "DELETE")
     @DeleteMapping("/{id}")
-    public Message delCategory(@PathVariable("id") Long id) throws GoodsException{
+    public Message<String> delCategory(@PathVariable("id") Long id) throws GoodsException{
         Integer integer = productCategoryInfoService.delCategoryById(id);
         return Message.createBySuccess("删除成功,更新了" + integer + "个商品的分类");
     }
@@ -64,14 +64,14 @@ public class GoodsCategoryServiceFeignClient extends BaseController implements G
      **/
     @ApiOperation(value = "根据id查询", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message getInfoById(@PathVariable("id") Long id){
+    public Message<ProductCategoryInfo> getInfoById(@PathVariable("id") Long id){
         ProductCategoryInfo productCategoryInfo = productCategoryInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(productCategoryInfo);
     }
 
     @ApiOperation(value = "修改分类信息", httpMethod = "POST")
     @PostMapping("/edit")
-    public Message editCategory(@RequestBody ProductCategoryInfo productCategoryInfo) throws GoodsException {
+    public Message<String> editCategory(@RequestBody ProductCategoryInfo productCategoryInfo) throws GoodsException {
         productCategoryInfoService.updateByKey(productCategoryInfo);
         return Message.createBySuccess("更新成功");
     }

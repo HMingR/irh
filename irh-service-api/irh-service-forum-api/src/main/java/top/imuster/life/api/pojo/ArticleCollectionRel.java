@@ -11,11 +11,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-02-08 15:27:10
  */
 @ApiModel("文章收藏表")
-public class ArticleCollection extends BaseDomain {
+public class ArticleCollectionRel extends BaseDomain {
 
 	private static final long serialVersionUID = 5594240318L;
 
-	public ArticleCollection() {
+	public ArticleCollectionRel() {
 		//默认无参构造方法
 	}
 	// 用户收藏表主键

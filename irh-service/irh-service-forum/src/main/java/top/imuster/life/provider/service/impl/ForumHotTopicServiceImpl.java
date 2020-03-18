@@ -6,7 +6,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ForumHotTopicDao;
 import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ForumHotTopicService;
@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2020-02-13 21:12:30
  */
 @Service("forumHotTopicService")
-public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Long> implements ForumHotTopicService {
+public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo, Long> implements ForumHotTopicService {
     @Resource
     private ForumHotTopicDao forumHotTopicDao;
 
@@ -35,7 +35,7 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Lon
     RedisArticleAttitudeService redisArticleAttitudeService;
 
     @Override
-    public BaseDao<ForumHotTopic, Long> getDao() {
+    public BaseDao<ForumHotTopicInfo, Long> getDao() {
         return this.forumHotTopicDao;
     }
 
@@ -43,7 +43,7 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Lon
     public void updateHotTopicFromReids2Redis(List<HashSet<Long>> res) {
         Long[] targetIds = res.get(0).toArray(new Long[res.get(0).size()]);
         Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
-        ForumHotTopic condition = new ForumHotTopic();
+        ForumHotTopicInfo condition = new ForumHotTopicInfo();
         for (int i = 0; i < targetIds.length; i++) {
             Long score = forumHotTopicDao.selectScoreByTargetId(targetIds[i]);
             condition.setTargetId(targetIds[i]);
@@ -59,12 +59,12 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopic, Lon
     }
 
     @Override
-    public Message<List<ForumHotTopic>> totalHotTopicList(int topic) {
-        List<ForumHotTopic> list =forumHotTopicDao.selectMaxScoreTop(topic);
-        ArrayList<ForumHotTopic> res = new ArrayList<>(list.size());
+    public Message<List<ForumHotTopicInfo>> totalHotTopicList(int topic) {
+        List<ForumHotTopicInfo> list =forumHotTopicDao.selectMaxScoreTop(topic);
+        ArrayList<ForumHotTopicInfo> res = new ArrayList<>(list.size());
         list.stream().forEach(forumHotTopic -> {
             Long targetId = forumHotTopic.getTargetId();
-            ForumHotTopic brief = articleInfoService.getBriefByHotTopicId(targetId);
+            ForumHotTopicInfo brief = articleInfoService.getBriefByHotTopicId(targetId);
             res.add(brief);
         });
         return Message.createBySuccess(res);

@@ -2,7 +2,7 @@ package top.imuster.goods.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.goods.api.pojo.ProductMessage;
+import top.imuster.goods.api.pojo.ProductMessageInfo;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2019-11-26 10:46:26
  */
-public interface ProductMessageService extends BaseService<ProductMessage, Long> {
+public interface ProductMessageService extends BaseService<ProductMessageInfo, Long> {
 
     /**
      * @Description: 根据id生成某个商品的留言树
@@ -20,7 +20,7 @@ public interface ProductMessageService extends BaseService<ProductMessage, Long>
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    List<ProductMessage> generateMessageTree(Long id);
+    List<ProductMessageInfo> generateMessageTree(Long id);
 
     /**
      * @Author hmr
@@ -30,7 +30,7 @@ public interface ProductMessageService extends BaseService<ProductMessage, Long>
      * @param parentId 如果parentId是0，则给卖家发送消息；如果不是，则给卖家和parentId对应的会员发送消息
      * @reture: void
      **/
-    void generateSendMessage(ProductMessage productMessage) throws Exception;
+    void generateSendMessage(ProductMessageInfo productMessageInfo) throws Exception;
 
 
 }

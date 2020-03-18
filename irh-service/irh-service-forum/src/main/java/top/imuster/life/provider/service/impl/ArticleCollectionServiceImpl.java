@@ -11,7 +11,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleCollection;
+import top.imuster.life.api.pojo.ArticleCollectionRel;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.provider.dao.ArticleCollectionDao;
 import top.imuster.life.provider.service.ArticleCollectionService;
@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @Service("articleCollectionService")
 @Slf4j
-public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollection, Long> implements ArticleCollectionService {
+public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollectionRel, Long> implements ArticleCollectionService {
 
     @Resource
     private ArticleCollectionDao articleCollectionDao;
@@ -45,13 +45,13 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
     RedisArticleAttitudeService redisArticleAttitudeService;
 
     @Override
-    public BaseDao<ArticleCollection, Long> getDao() {
+    public BaseDao<ArticleCollectionRel, Long> getDao() {
         return this.articleCollectionDao;
     }
 
     @Override
     public Message<String> collect(Long userId, Long id) {
-        ArticleCollection condition = new ArticleCollection();
+        ArticleCollectionRel condition = new ArticleCollectionRel();
         condition.setUserId(userId);
         condition.setArticleId(id);
         int i = articleCollectionDao.insertEntry(condition);
@@ -65,7 +65,7 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
 
     @Override
     public Message<String> unCollect(Long id) {
-        ArticleCollection condition = new ArticleCollection();
+        ArticleCollectionRel condition = new ArticleCollectionRel();
         condition.setId(id);
         condition.setState(1);
         int i = articleCollectionDao.updateByKey(condition);
@@ -100,10 +100,10 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
     }
 
     @Override
-    public Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page, Long userId) {
-        ArticleCollection searchCondition = page.getSearchCondition();
+    public Message<Page<ArticleCollectionRel>> collectList(Page<ArticleCollectionRel> page, Long userId) {
+        ArticleCollectionRel searchCondition = page.getSearchCondition();
         if(null == searchCondition){
-            searchCondition = new ArticleCollection();
+            searchCondition = new ArticleCollectionRel();
         }
         //默认的排序顺序为按照时间降序排列
         if(StringUtils.isBlank(searchCondition.getOrderField())){
@@ -111,7 +111,7 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
             searchCondition.setOrderFieldType("DESC");
         }
         searchCondition.setUserId(userId);
-        List<ArticleCollection> res = articleCollectionDao.selectCollectByCondition(searchCondition);
+        List<ArticleCollectionRel> res = articleCollectionDao.selectCollectByCondition(searchCondition);
         page.setData(res);
         return Message.createBySuccess(page);
     }
@@ -123,10 +123,11 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
 
     @Override
     public Message<Integer> getCollectStateByTargetId(Long id, Long userId) {
-        ArticleCollection condition = new ArticleCollection();
+        if(userId == null) return Message.createBySuccess(1);
+        ArticleCollectionRel condition = new ArticleCollectionRel();
         condition.setArticleId(id);
         condition.setUserId(userId);
         Integer count = articleCollectionDao.selectEntryListCount(condition);
-        return count == 0 ? Message.createBySuccess(0):Message.createBySuccess(1);
+        return count == 0 ? Message.createBySuccess(1):Message.createBySuccess(2);
     }
 }

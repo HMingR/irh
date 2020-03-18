@@ -46,7 +46,7 @@ public class ArticleTagController extends BaseController {
     }
 
     @ApiOperation(value = "获得所有的标签", httpMethod = "GET")
-    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:alltag:'")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:alltag'")
     @GetMapping
     public Message<List<ArticleTag>> getAllTag(){
         ArticleTag articleTag = new ArticleTag();
@@ -56,7 +56,7 @@ public class ArticleTagController extends BaseController {
     }
 
     @ApiOperation("根据id获得标签的名字")
-    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:tag:'+#p0")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum::tag::name::'+#p0")
     @GetMapping("/name/{id}")
     public Message<String> getTagNameById(@PathVariable("id") Long id){
         String name = articleTagService.selectEntryList(id).get(0).getName();

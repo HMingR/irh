@@ -102,7 +102,7 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
         searchCondition.setState(2);
         searchCondition.setOrderField("create_time");
         searchCondition.setOrderFieldType("DESC");
-        List<ArticleInfo> list = articleInfoService.list(page);
+        List<ArticleInfo> list = articleInfoService.list(page, getCurrentUserIdFromCookie());
         page.setData(list);
         return Message.createBySuccess(page);
     }

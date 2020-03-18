@@ -8,11 +8,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2020-02-08 15:27:10
  */
-public class UserForumAttribute extends BaseDomain {
+public class UserForumAttributeInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 6844631641L;
 
-	public UserForumAttribute() {
+	public UserForumAttributeInfo() {
 		//默认无参构造方法
 	}
 	// 用户论坛点赞表主键

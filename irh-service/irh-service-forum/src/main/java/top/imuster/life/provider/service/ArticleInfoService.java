@@ -8,7 +8,7 @@ import top.imuster.common.core.dto.UserDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 
 import java.util.List;
 
@@ -34,9 +34,10 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @Description 用户查看自己发布的帖子，不包括帖子的内容
      * @Date: 2020/2/1 19:44
      * @param page
+     * @param userId
      * @reture: java.util.List<ArticleInfo>
      **/
-    List<ArticleInfo> list(Page<ArticleInfo> page);
+    List<ArticleInfo> list(Page<ArticleInfo> page, Long userId);
 
     /**
      * @Author hmr
@@ -96,7 +97,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @Description 根据id一部分信息
      * @Date: 2020/2/14 12:33
      * @param longs
-     * @reture: java.util.List<ForumHotTopic>
+     * @reture: java.util.List<ForumHotTopicInfo>
      **/
     List<ArticleInfo> selectInfoByTargetIds(Long[] longs);
 
@@ -107,7 +108,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @param aLong
      * @reture: ArticleInfo
      **/
-    ForumHotTopic getBriefByHotTopicId(Long aLong);
+    ForumHotTopicInfo getBriefByHotTopicId(Long aLong);
 
     /**
      * @Author hmr

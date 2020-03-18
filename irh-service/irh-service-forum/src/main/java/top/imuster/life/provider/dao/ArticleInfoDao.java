@@ -7,7 +7,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -61,7 +61,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description
      * @Date: 2020/2/14 12:33
      * @param longs
-     * @reture: java.util.List<ForumHotTopic>
+     * @reture: java.util.List<ForumHotTopicInfo>
      **/
     List<ArticleInfo> selectInfoByTargetIds(Long[] longs);
 
@@ -117,7 +117,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description 根据redis中的热搜id获得文章信息，并直接封装成一个ForumHotTopic对象
      * @Date: 2020/2/17 12:00
      * @param aLong
-     * @reture: ForumHotTopic
+     * @reture: ForumHotTopicInfo
      **/
-    ForumHotTopic selectBriefByHotTopicId(Long aLong);
+    ForumHotTopicInfo selectBriefByHotTopicId(Long aLong);
 }

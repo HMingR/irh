@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.goods.api.pojo.ProductMessage;
-import top.imuster.goods.exception.GoodsException;
+import top.imuster.goods.api.pojo.ProductMessageInfo;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
@@ -41,19 +40,19 @@ public class ProductMessageController extends BaseController {
     @ApiOperation("根据商品的id查询商品的留言信息(树形结构)")
     @GetMapping("/{goodsId}")
     //todo 不能一次性全都查出来
-    public Message<List<ProductMessage>> list(@PathVariable("goodsId") Long id){
-        List<ProductMessage> messageTree = productMessageService.generateMessageTree(id);
+    public Message<List<ProductMessageInfo>> list(@PathVariable("goodsId") Long id){
+        List<ProductMessageInfo> messageTree = productMessageService.generateMessageTree(id);
         return Message.createBySuccess(messageTree);
     }
 
     @ApiOperation("根据商品id和留言父id写留言信息(如果是新的留言,则parentId写成0)")
     @PostMapping("/write")
-    public Message<String> writeMessage(@ApiParam("在写留言信息的时候，留言的商品id、parentId、内容不能为空") @Validated(ValidateGroup.addGroup.class) @RequestBody ProductMessage productMessage,
+    public Message<String> writeMessage(@ApiParam("在写留言信息的时候，留言的商品id、parentId、内容不能为空") @Validated(ValidateGroup.addGroup.class) @RequestBody ProductMessageInfo productMessageInfo,
                                 BindingResult bindingResult) throws Exception{
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
-        productMessage.setConsumerId(userId);
-        productMessageService.generateSendMessage(productMessage);
+        productMessageInfo.setConsumerId(userId);
+        productMessageService.generateSendMessage(productMessageInfo);
         return Message.createBySuccess("留言成功");
     }
 
@@ -61,7 +60,7 @@ public class ProductMessageController extends BaseController {
     @DeleteMapping("/{id}")
     public Message<String> deleteMsg(@ApiParam("留言的id") @PathVariable("id") Long id, HttpServletRequest request){
         Long userId = getCurrentUserIdFromCookie();
-        ProductMessage condition = new ProductMessage();
+        ProductMessageInfo condition = new ProductMessageInfo();
         condition.setConsumerId(userId);
         condition.setId(id);
         condition.setState(1);

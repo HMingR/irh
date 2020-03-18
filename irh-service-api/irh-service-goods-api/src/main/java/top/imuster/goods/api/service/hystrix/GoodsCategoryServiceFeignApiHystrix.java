@@ -11,45 +11,46 @@ import java.util.List;
 
 /**
  * @ClassName: GoodsCategoryServiceFeignApiHystrix
- * @Description: TODO
+ * @Description: GoodsCategoryServiceFeignApiHystrix
  * @author: hmr
  * @date: 2020/2/7 17:08
  */
 @Slf4j
 @Component
 public class GoodsCategoryServiceFeignApiHystrix implements FallbackFactory<GoodsCategoryServiceFeignApi> {
-    /*@Override
-    public List<ProductCategoryInfo> adminCategoryTree() {
-        log.error("远程调用goods模块生成分类树失败");
-        return null;
-    }
-
-    @Override
-    public Message addCategory(ProductCategoryInfo productCategoryInfo) {
-        log.error("远程调用goods模块添加分类失败,分类信息为{}", productCategoryInfo);
-        return null;
-    }
-
-    @Override
-    public Message delCategory(Long id) {
-        log.error("远程调用goods模块根据id删除分类失败,id为{}", id);
-        return null;
-    }
-
-    @Override
-    public Message getInfoById(Long id) {
-        log.error("远程调用goods模块根据id获得分类信息失败,id为{}", id);
-        return null;
-    }
-
-    @Override
-    public Message editCategory(ProductCategoryInfo productCategoryInfo) {
-        log.error("远程调用goods模块修改分类信息失败");
-        return null;
-    }*/
 
     @Override
     public GoodsCategoryServiceFeignApi create(Throwable throwable) {
-        return null;
+        return new GoodsCategoryServiceFeignApi() {
+            @Override
+            public Message<List<ProductCategoryInfo>> adminCategoryTree() {
+                log.error("远程调用goods模块生成分类树失败");
+                return null;
+            }
+
+            @Override
+            public Message<String> addCategory(ProductCategoryInfo productCategoryInfo) {
+                log.error("远程调用goods模块添加分类失败,分类信息为{}", productCategoryInfo);
+                return null;
+            }
+
+            @Override
+            public Message<String> delCategory(Long id) {
+                log.error("远程调用goods模块根据id删除分类失败,id为{}", id);
+                return null;
+            }
+
+            @Override
+            public Message<ProductCategoryInfo> getInfoById(Long id) {
+                log.error("远程调用goods模块根据id获得分类信息失败,id为{}", id);
+                return null;
+            }
+
+            @Override
+            public Message<String> editCategory(ProductCategoryInfo productCategoryInfo) {
+                log.error("远程调用goods模块修改分类信息失败");
+                return null;
+            }
+        };
     }
 }

@@ -6,7 +6,7 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 
 import java.util.HashMap;
@@ -95,7 +95,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	}
 
 	@Override
-	public ForumHotTopic selectBriefByHotTopicId(Long aLong) {
+	public ForumHotTopicInfo selectBriefByHotTopicId(Long aLong) {
 		return this.select(getNameSpace(SELECT_BRIEF_BY_HOT_TOPIC_ID), aLong);
 	}
 }

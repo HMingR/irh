@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.goods.dao.ProductMessageDao">
+<mapper namespace="top.imuster.life.provider.dao.ForumHotTopicDao">
 
-	<!-- product_message 所有查询列 -->
+	<!-- forum_hot_topic_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
-            product_id AS productId,
-            consumer_id AS consumerId,
-            parent_id AS parentId,
-            content,
+            target_id AS targetId,
+            score,
             create_time AS createTime,
             update_time AS updateTime,
             state 
 		]]>
 	</sql>
 
-	<!-- product_message 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM product_message]]></sql>
+	<!-- forum_hot_topic_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM forum_hot_topic_info]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="productId != null and productId != ''"><![CDATA[AND product_id = #{productId}]]></if>
-            <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>
-            <if test="parentId != null and parentId != ''"><![CDATA[AND parent_id = #{parentId}]]></if>
-            <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
+            <if test="targetId != null and targetId != ''"><![CDATA[AND target_id = #{targetId}]]></if>
+            <if test="score != null and score != ''"><![CDATA[AND score = #{score}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
@@ -43,10 +39,8 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="productId != null"><![CDATA[product_id = #{productId},]]></if>
-			<if test="consumerId != null"><![CDATA[consumer_id = #{consumerId},]]></if>
-			<if test="parentId != null"><![CDATA[parent_id = #{parentId},]]></if>
-			<if test="content != null"><![CDATA[content = #{content},]]></if>
+			<if test="targetId != null"><![CDATA[target_id = #{targetId},]]></if>
+			<if test="score != null"><![CDATA[score = #{score},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
@@ -54,15 +48,13 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="productMessage" >
+	<insert id="insertEntry" parameterType="forumHotTopicInfo" >
 		<![CDATA[
-			INSERT INTO product_message
+			INSERT INTO forum_hot_topic_info
 				(
                 id, 
-                product_id, 
-                consumer_id, 
-                parent_id, 
-                content, 
+                target_id, 
+                score, 
                 create_time, 
                 update_time, 
                 state 
@@ -70,10 +62,8 @@
 			VALUES
 				(
                 #{id}, 
-                #{productId}, 
-                #{consumerId}, 
-                #{parentId}, 
-                #{content}, 
+                #{targetId}, 
+                #{score}, 
                 #{createTime}, 
                 #{updateTime}, 
                 #{state} 
@@ -86,27 +76,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM product_message WHERE id IN]]>
+		<![CDATA[DELETE FROM forum_hot_topic_info WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="productMessage" >
-		<![CDATA[DELETE FROM product_message]]>
+	<delete id="deleteByCondition" parameterType="forumHotTopicInfo" >
+		<![CDATA[DELETE FROM forum_hot_topic_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="productMessage" >
-		<![CDATA[UPDATE product_message]]>
+	<update id="updateByKey" parameterType="forumHotTopicInfo" >
+		<![CDATA[UPDATE forum_hot_topic_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="productMessage">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="forumHotTopicInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -117,7 +107,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="productMessage" resultType="productMessage">
+	<select id="selectEntryList" parameterType="forumHotTopicInfo" resultType="forumHotTopicInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -126,45 +116,29 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="productMessage" resultType="int">
+	<select id="selectEntryListCount" parameterType="forumHotTopicInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	<insert id="insertReturnId" parameterType="productMessage" useGeneratedKeys="true" keyProperty="id">
-		<![CDATA[
-			INSERT INTO product_message
-				(
-                id,
-                product_id,
-                consumer_id,
-                parent_id,
-                content,
-                create_time,
-                update_time,
-                state
-				)
-			VALUES
-				(
-                #{id},
-                #{productId},
-                #{consumerId},
-                #{parentId},
-                #{content},
-                #{createTime},
-                #{updateTime},
-                #{state}
-				)
-		]]>
-	</insert>
-
-	<select id="selectSalerIdByMessageParentId" parameterType="long" resultType="long">
-		SELECT consumer_id
-		FROM product_message
-		WHERE id = #{parentId}
+	<select id="selectScoreByTargetId" parameterType="long" resultType="long">
+		<![CDATA[SELECT score ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE target_id = #{i} ]]>
 	</select>
 
-	
+	<update id="updateScoreByTargetId" parameterType="forumHotTopicInfo">
+		<![CDATA[UPDATE forum_hot_topic_info
+			SET score = #{score}
+			WHERE target_id = #{targetId}
+		]]>
+	</update>
+
+	<select id="selectMaxScoreTop" parameterType="int" resultType="forumHotTopicInfo">
+		<![CDATA[SELECT target_id AS targetId, score ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE state != 1 ORDER BY score DESC LIMIT 0, #{topic}]]>
+	</select>
 </mapper>

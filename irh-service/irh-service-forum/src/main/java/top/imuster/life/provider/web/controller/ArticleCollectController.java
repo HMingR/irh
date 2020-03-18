@@ -5,9 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.life.api.pojo.ArticleCollection;
+import top.imuster.life.api.pojo.ArticleCollectionRel;
 import top.imuster.life.provider.service.ArticleCollectionService;
 
 import javax.annotation.Resource;
@@ -49,14 +48,13 @@ public class ArticleCollectController extends BaseController {
 
     @ApiOperation(("用户分页查看自己的收藏列表，不需要条件,按照点赞时间降序排列"))
     @PostMapping
-    public Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page){
+    public Message<Page<ArticleCollectionRel>> collectList(Page<ArticleCollectionRel> page){
         return articleCollectionService.collectList(page, getCurrentUserIdFromCookie());
     }
 
-    @ApiOperation("查看当前用户是否点赞了该文章")
-    @NeedLogin
+    @ApiOperation("查看当前用户是否收藏该文章")
     @GetMapping("/state/{id}")
     public Message<Integer> collectState(@PathVariable("id") Long id){
-        return articleCollectionService.getCollectStateByTargetId(id, getCurrentUserIdFromCookie());
+        return articleCollectionService.getCollectStateByTargetId(id, getCurrentUserIdFromCookie(false));
     }
 }

@@ -3,7 +3,7 @@ package top.imuster.life.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.life.api.pojo.ArticleCollection;
+import top.imuster.life.api.pojo.ArticleCollectionRel;
 import top.imuster.life.provider.dao.ArticleCollectionDao;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2020-02-08 15:27:10
  */
 @Repository("articleCollectionDao")
-public class ArticleCollectionDaoImpl extends BaseDaoImpl<ArticleCollection, Long> implements ArticleCollectionDao {
+public class ArticleCollectionDaoImpl extends BaseDaoImpl<ArticleCollectionRel, Long> implements ArticleCollectionDao {
 	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleCollectionDao.";
 	private final static String SELECT_COLLECT_BY_CONDITION = "selectCollectByCondition";
 	private final static String SELECT_TOTAL_BY_USER_ID = "selectTotalByUserId";
@@ -24,7 +24,7 @@ public class ArticleCollectionDaoImpl extends BaseDaoImpl<ArticleCollection, Lon
 	}
 
 	@Override
-	public List<ArticleCollection> selectCollectByCondition(ArticleCollection searchCondition) {
+	public List<ArticleCollectionRel> selectCollectByCondition(ArticleCollectionRel searchCondition) {
 		return this.selectList(getNameSpace(SELECT_COLLECT_BY_CONDITION), searchCondition);
 	}
 

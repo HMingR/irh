@@ -1,6 +1,5 @@
 package top.imuster.life.provider.service.impl;
 
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ArticleForwardInfoService 实现类
@@ -39,9 +38,6 @@ public class ArticleForwardInfoServiceImpl extends BaseServiceImpl<ArticleForwar
 
     @Resource
     ArticleInfoService articleInfoService;
-
-    @Autowired
-    SqlSessionTemplate sqlSessionTemplate;
 
     @Override
     public BaseDao<ArticleForwardInfo, Long> getDao() {
@@ -65,6 +61,7 @@ public class ArticleForwardInfoServiceImpl extends BaseServiceImpl<ArticleForwar
     public Message<String> forward(ArticleForwardInfo articleForwardInfo) {
         articleForwardInfoDao.insertEntry(articleForwardInfo);
         redisTemplate.opsForHash().increment(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, articleForwardInfo.getId(), 1);
+        redisTemplate.expire(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, 21, TimeUnit.MINUTES);
         return Message.createBySuccess("转发成功");
     }
 

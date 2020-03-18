@@ -4,14 +4,14 @@ package top.imuster.life.provider.service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleCollection;
+import top.imuster.life.api.pojo.ArticleCollectionRel;
 
 /**
  * ArticleCollectionService接口
  * @author 黄明人
  * @since 2020-02-08 15:27:10
  */
-public interface ArticleCollectionService extends BaseService<ArticleCollection, Long> {
+public interface ArticleCollectionService extends BaseService<ArticleCollectionRel, Long> {
 
     /**
      * @Author hmr
@@ -48,7 +48,7 @@ public interface ArticleCollectionService extends BaseService<ArticleCollection,
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<ArticleInfo>>
      **/
-    Message<Page<ArticleCollection>> collectList(Page<ArticleCollection> page, Long userId);
+    Message<Page<ArticleCollectionRel>> collectList(Page<ArticleCollectionRel> page, Long userId);
 
     /**
      * @Author hmr

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.service.ForumHotTopicService;
 
 import javax.annotation.Resource;
@@ -33,7 +33,7 @@ public class ForumHotTopicController {
 
     @ApiOperation("累计总榜")
     @GetMapping("/total")
-    public Message<List<ForumHotTopic>> totalHotTopicList(){
+    public Message<List<ForumHotTopicInfo>> totalHotTopicList(){
         return forumHotTopicService.totalHotTopicList(topic);
     }
 

@@ -2,7 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-02-13 21:12:30
  */
-public interface ForumHotTopicDao extends BaseDao<ForumHotTopic, Long> {
+public interface ForumHotTopicDao extends BaseDao<ForumHotTopicInfo, Long> {
     //自定义扩展
     /**
      * @Author hmr
@@ -30,7 +30,7 @@ public interface ForumHotTopicDao extends BaseDao<ForumHotTopic, Long> {
      * @param score
      * @reture: void
      **/
-    void updateScoreByTargetId(ForumHotTopic condition);
+    void updateScoreByTargetId(ForumHotTopicInfo condition);
 
     /**
      * @Author hmr
@@ -39,5 +39,5 @@ public interface ForumHotTopicDao extends BaseDao<ForumHotTopic, Long> {
      * @param topic
      * @reture: java.util.List<ArticleInfo>
      **/
-    List<ForumHotTopic> selectMaxScoreTop(int topic);
+    List<ForumHotTopicInfo> selectMaxScoreTop(int topic);
 }

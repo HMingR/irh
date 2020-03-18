@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
@@ -29,7 +29,6 @@ import java.util.HashMap;
  * @since 2019-11-26 10:46:26
  */
 @Service("userInfoService")
-@CacheConfig(cacheNames = "user")
 @Slf4j
 public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> implements UserInfoService {
 
@@ -126,7 +125,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
-    @Cacheable(key = "#p0")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'user::' + #p0")
     public String getUserNameById(Long id) {
         String s = userInfoDao.selectUserNameById(id);
         if(StringUtils.isBlank(s)){

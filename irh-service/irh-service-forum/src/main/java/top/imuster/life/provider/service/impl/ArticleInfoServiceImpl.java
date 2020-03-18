@@ -19,7 +19,7 @@ import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ArticleTag;
 import top.imuster.life.api.pojo.ArticleTagRel;
-import top.imuster.life.api.pojo.ForumHotTopic;
+import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 import top.imuster.life.provider.service.ArticleCollectionService;
 import top.imuster.life.provider.service.ArticleInfoService;
@@ -42,7 +42,7 @@ import java.util.Map;
 public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> implements ArticleInfoService {
 
     @Value("${batch.size}")
-    private int batchSize = 100;   //批量处理浏览记录的大小
+    private int batchSize;   //批量处理浏览记录的大小
 
     @Resource
     private ArticleInfoDao articleInfoDao;
@@ -79,7 +79,15 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    public List<ArticleInfo> list(Page<ArticleInfo> page) {
+    public List<ArticleInfo> list(Page<ArticleInfo> page, Long userId) {
+        ArticleInfo condition = page.getSearchCondition();
+        if(condition == null){
+            page.setSearchCondition(new ArticleInfo());
+        }
+        condition.setUserId(userId);
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
+        condition.setState(2);
         return articleInfoDao.selectListByCondition(page.getSearchCondition());
     }
 
@@ -120,7 +128,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#p0")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'article::brief::' + #p0")
     public ArticleInfo getBriefById(Long id) {
         ArticleInfo articleInfo = articleInfoDao.selectBriefById(id);
         List<String> tagNames = articleTagRelService.getArticleTagsById(id);
@@ -141,7 +149,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     @Cacheable(value = GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY, key = "#p0")
-    public ForumHotTopic getBriefByHotTopicId(Long aLong) {
+    public ForumHotTopicInfo getBriefByHotTopicId(Long aLong) {
         return articleInfoDao.selectBriefByHotTopicId(aLong);
     }
 

@@ -34,7 +34,6 @@ public class UpAndCollectTask extends QuartzJobBean {
         userForumAttributeService.transUpFromRedis2DB();
         //将点赞总数更新到各个具体的表中
         userForumAttributeService.transUpCountFromRedis2DB();
-
         //将收藏记录更新到文章表
         articleCollectionService.transCollectCountFromRedis2Db();
         log.info("点赞和收藏的定时任务处理完成,完成的时间为{}", DateUtils.now());

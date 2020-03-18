@@ -15,11 +15,11 @@ import java.util.List;
  * @since 2019-11-24 16:31:58
  */
 @ApiModel("商品留言实体类")
-public class ProductMessage extends BaseDomain {
+public class ProductMessageInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 9834628784L;
 
-	public ProductMessage() {
+	public ProductMessageInfo() {
 		//默认无参构造方法
 	}
 	// 商品留言表主键
@@ -49,13 +49,13 @@ public class ProductMessage extends BaseDomain {
 	//private Short state;
 
 	@ApiModelProperty("当前留言下的子节点")
-	private List<ProductMessage> childs;
+	private List<ProductMessageInfo> childs;
 
-	public List<ProductMessage> getChilds() {
+	public List<ProductMessageInfo> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(List<ProductMessage> childs) {
+	public void setChilds(List<ProductMessageInfo> childs) {
 		this.childs = childs;
 	}
 

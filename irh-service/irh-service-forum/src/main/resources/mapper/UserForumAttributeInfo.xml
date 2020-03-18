@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.user.api.pojo.dao.ArticleTagCategoryDao">
+<mapper namespace="top.imuster.life.provider.dao.UserForumAttributeDao">
 
-	<!-- article_tag_category 所有查询列 -->
+	<!-- user_forum_attribute_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
-            name,
-            state,
+            user_id AS userId,
+            target_id AS targetId,
+            type,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            state 
 		]]>
 	</sql>
 
-	<!-- article_tag_category 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_tag_category]]></sql>
+	<!-- user_forum_attribute_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM user_forum_attribute_info]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="name != null and name != ''"><![CDATA[AND name = #{name}]]></if>
-            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
+            <if test="targetId != null and targetId != ''"><![CDATA[AND target_id = #{targetId}]]></if>
+            <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
-            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
 		</where>
 	</sql>
 	
@@ -37,31 +41,37 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="name != null"><![CDATA[name = #{name},]]></if>
-			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
+			<if test="targetId != null"><![CDATA[target_id = #{targetId},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
 		</set>
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleTagCategory" >
+	<insert id="insertEntry" parameterType="userForumAttributeInfo" >
 		<![CDATA[
-			INSERT INTO article_tag_category
+			INSERT INTO user_forum_attribute_info
 				(
                 id, 
-                name, 
-                state, 
+                user_id, 
+                target_id, 
+                type, 
                 create_time, 
-                update_time 
+                update_time, 
+                state 
 				)
 			VALUES
 				(
                 #{id}, 
-                #{name}, 
-                #{state}, 
+                #{userId}, 
+                #{targetId}, 
+                #{type}, 
                 #{createTime}, 
-                #{updateTime} 
+                #{updateTime}, 
+                #{state} 
 				)
 		]]>
 	</insert>
@@ -71,27 +81,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM article_tag_category WHERE id IN]]>
+		<![CDATA[DELETE FROM user_forum_attribute_info WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="articleTagCategory" >
-		<![CDATA[DELETE FROM article_tag_category]]>
+	<delete id="deleteByCondition" parameterType="userForumAttributeInfo" >
+		<![CDATA[DELETE FROM user_forum_attribute_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleTagCategory" >
-		<![CDATA[UPDATE article_tag_category]]>
+	<update id="updateByKey" parameterType="userForumAttributeInfo" >
+		<![CDATA[UPDATE user_forum_attribute_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleTagCategory">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="userForumAttributeInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -102,7 +112,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleTagCategory" resultType="articleTagCategory">
+	<select id="selectEntryList" parameterType="userForumAttributeInfo" resultType="userForumAttributeInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -111,12 +121,17 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleTagCategory" resultType="int">
+	<select id="selectEntryListCount" parameterType="userForumAttributeInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
-	
+
 	<!-- 其它SQL语句 -->
+	<select id="selectUpListByCondition" resultType="userForumAttributeInfo" parameterType="userForumAttributeInfo">
+		<![CDATA[SELECT id,user_id AS userId, target_id AS targetId, type, create_time AS createTime]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
 	
 </mapper>

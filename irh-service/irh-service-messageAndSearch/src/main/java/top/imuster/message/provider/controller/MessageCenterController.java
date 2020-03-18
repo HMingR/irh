@@ -76,7 +76,7 @@ public class MessageCenterController extends BaseController {
 
     @ApiOperation("根据消息的类型获得定位到消息的具体位置,根据不同的type有不同的响实体类信息")
     @GetMapping("/{newsType}/{targetId}")
-    public Message newsDetail(@ApiParam("消息类型 10-订单(响应OrderInfo)  20-商品留言(ProductMessage)  30-商品评价(ProductEvaluate)") @PathVariable("newsType")Long newsType, @PathVariable("targetId")Long targetId){
+    public Message newsDetail(@ApiParam("消息类型 10-订单(响应OrderInfo)  20-商品留言(ProductMessageInfo)  30-商品评价(ProductEvaluate)") @PathVariable("newsType")Long newsType, @PathVariable("targetId")Long targetId){
         if(newsType == 10){
             OrderInfo orderById = orderServiceFeignApi.getOrderById(targetId);
             return Message.createBySuccess(orderById);

@@ -4,10 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.api.pojo.ProductMessage;
+import top.imuster.goods.api.pojo.ProductMessageInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductEvaluateInfoService;
@@ -15,7 +14,6 @@ import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: GoodsServiceFeignClient
@@ -97,7 +95,7 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @Override
     @DeleteMapping("/es/pm/{id}")
     public boolean deleteProductMessageById(@PathVariable("id") Long id) {
-        ProductMessage condition = new ProductMessage();
+        ProductMessageInfo condition = new ProductMessageInfo();
         condition.setId(id);
         condition.setState(1);
         int i = productMessageService.updateByKey(condition);
@@ -125,8 +123,8 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
             ProductInfo productInfo = productInfoService.selectEntryList(id).get(0);
             return productInfo.getConsumerId();
         } else if(type == 2){
-            ProductMessage productMessage = productMessageService.selectEntryList(id).get(0);
-            return productMessage.getConsumerId();
+            ProductMessageInfo productMessageInfo = productMessageService.selectEntryList(id).get(0);
+            return productMessageInfo.getConsumerId();
         }else if(type == 3){
             ProductEvaluateInfo productEvaluateInfo = productEvaluateInfoService.selectEntryList(id).get(0);
             return productEvaluateInfo.getBuyerId();

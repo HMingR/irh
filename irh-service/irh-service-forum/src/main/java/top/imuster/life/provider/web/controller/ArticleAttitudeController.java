@@ -8,7 +8,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.life.api.pojo.UserForumAttribute;
+import top.imuster.life.api.pojo.UserForumAttributeInfo;
 import top.imuster.life.provider.service.RedisArticleAttitudeService;
 import top.imuster.life.provider.service.UserForumAttributeService;
 
@@ -98,7 +98,7 @@ public class ArticleAttitudeController extends BaseController {
 
     @ApiOperation("查看自己在文章模块点赞的记录")
     @PostMapping("/list")
-    public Message<Page<UserForumAttribute>> upList(@RequestBody Page<UserForumAttribute> page){
+    public Message<Page<UserForumAttributeInfo>> upList(@RequestBody Page<UserForumAttributeInfo> page){
         return userForumAttributeService.getUpList(page, getCurrentUserIdFromCookie());
     }
 
@@ -125,7 +125,7 @@ public class ArticleAttitudeController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
      **/
-    @ApiOperation("根据id查看是否点赞了该目标   1-未点赞  2-点赞")
+    @ApiOperation("根据id查看是否点赞了该目标1-未点赞  2-点赞")
     @GetMapping("/state/{type}/{id}")
     public Message<Integer> getUpStateByTargetId(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie(false);

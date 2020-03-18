@@ -2,7 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.life.api.pojo.ArticleCollection;
+import top.imuster.life.api.pojo.ArticleCollectionRel;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-02-08 15:27:10
  */
-public interface ArticleCollectionDao extends BaseDao<ArticleCollection, Long> {
+public interface ArticleCollectionDao extends BaseDao<ArticleCollectionRel, Long> {
     //自定义扩展
     /**
      * @Author hmr
@@ -20,7 +20,7 @@ public interface ArticleCollectionDao extends BaseDao<ArticleCollection, Long> {
      * @param searchCondition
      * @reture: java.util.List<ArticleInfo>
      **/
-    List<ArticleCollection> selectCollectByCondition(ArticleCollection searchCondition);
+    List<ArticleCollectionRel> selectCollectByCondition(ArticleCollectionRel searchCondition);
 
     /**
      * @Author hmr
