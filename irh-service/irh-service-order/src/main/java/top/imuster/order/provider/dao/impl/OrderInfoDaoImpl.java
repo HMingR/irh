@@ -21,6 +21,7 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	private final static String SELECT_AMOUNT_INCREMENT_TOTAL = "selectAmountIncrementTotal";
 	private final static String SELECT_ORDER_AMOUNT_TOTAL_BY_CREATE_TIME = "selectOrderAmountTotalByCreateTime";
 	private final static String SELECT_ORDER_TOTAL_BY_CREATE_TIME = "selectOrderTotalByCreateTime";
+	private final static String SELECT_ORDER_CODE_VERSION_BY_CODE = "selectOrderVersionByCode";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -49,5 +50,10 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	@Override
 	public long selectOrderTotalByCreateTime(String s) {
 		return this.select(getNameSpace(SELECT_ORDER_TOTAL_BY_CREATE_TIME), s);
+	}
+
+	@Override
+	public Integer selectOrderVersionByCode(String orderCode) {
+		return this.select(getNameSpace(SELECT_ORDER_CODE_VERSION_BY_CODE), orderCode);
 	}
 }

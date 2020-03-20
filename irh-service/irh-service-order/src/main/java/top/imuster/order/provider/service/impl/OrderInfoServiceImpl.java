@@ -8,7 +8,6 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.utils.TrendUtil;
-import top.imuster.common.core.utils.UuidUtils;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.dto.OrderTrendDto;
@@ -50,9 +49,12 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
-    public OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId) throws Exception {
+    public OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId){
         ProductInfo productInfo = productOrderDto.getProductInfo();
         OrderInfo orderInfo = productOrderDto.getOrderInfo();
+        if(orderInfo.getOrderCode() == null){
+            throw new OrderException("错误的订单信息,请刷新页面重新提交订单");
+        }
         boolean b = checkProduct(productInfo.getId());
         if(!b){
             throw new OrderException("该商品已经不存在,请刷新后重试");
@@ -60,8 +62,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         orderInfo.setProductId(productInfo.getId());
         orderInfo.setPaymentMoney(productInfo.getSalePrice());
         orderInfo.setSalerId(productInfo.getConsumerId());
-        String orderCode = String.valueOf(UuidUtils.nextId());
-        orderInfo.setOrderCode(orderCode);
         orderInfo.setBuyerId(userId);
         orderInfo.setState(40);
         orderInfo.setTradeType(orderInfo.getTradeType());
@@ -84,6 +84,18 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     public Message<OrderTrendDto> getOrderTotalTrend(Integer type) {
         OrderTrendDto result = getResult(type, 2);
         return Message.createBySuccess(result);
+    }
+
+    @Override
+    public Message<String> editOrderInfo(OrderInfo orderInfo) {
+        String orderCode = orderInfo.getOrderCode();
+        Integer version = orderInfoDao.selectOrderVersionByCode(orderCode);
+        if(!version.equals(orderInfo.getOrderVersion())){
+            return Message.createByError("修改订单失败,当前订单已经被其他人修改,请刷新后重新提交");
+        }
+        orderInfo.setOrderVersion(++version);
+        orderInfoDao.updateByKey(orderInfo);
+        return Message.createBySuccess();
     }
 
     /**

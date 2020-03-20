@@ -9,6 +9,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.utils.UuidUtils;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
@@ -39,13 +40,20 @@ public class GoodsOrderController extends BaseController{
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("生成订单")
-    @PostMapping("/create")
+    @PutMapping("/create")
     @NeedLogin
     public Message<OrderInfo> createOrder(@RequestBody ProductOrderDto productOrderDto) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
         OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, userId);
         return Message.createBySuccess(order);
     }
+
+    @ApiOperation("进入生成订单页面的时候返回一个订单号,用来防止用户重复提交订单,前端提交时必须带上")
+    @GetMapping("/code")
+    public Message<String> generateOrderCode(){
+        return Message.createBySuccess(String.valueOf(UuidUtils.nextId()));
+    }
+
 
     /**
      * @Description: 条件查询会员自己的订单
@@ -94,5 +102,10 @@ public class GoodsOrderController extends BaseController{
     public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id){
         OrderInfo orderInfo = orderInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(orderInfo);
+    }
+
+    @PostMapping("/edit")
+    public Message<String> editOrder(@RequestBody OrderInfo orderInfo){
+        return orderInfoService.editOrderInfo(orderInfo);
     }
 }

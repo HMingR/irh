@@ -73,10 +73,20 @@ public class OrderInfo extends BaseDomain {
 	@ApiModelProperty("交易完成时间,用户确定收货的时间")
 	private Date finishTime;
 
+	@ApiModelProperty("订单版本，默认为1，当修改订单的时候会将版本号加1")
+	private Integer orderVersion;
+
 	// 10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功
 	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
 	//private Short state;
 
+	public Integer getOrderVersion() {
+		return orderVersion;
+	}
+
+	public void setOrderVersion(Integer orderVersion) {
+		this.orderVersion = orderVersion;
+	}
 
 	public String getOrderCode() {
 		return orderCode;

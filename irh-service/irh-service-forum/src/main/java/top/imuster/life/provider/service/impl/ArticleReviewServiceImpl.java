@@ -76,8 +76,8 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
         articleReview.setState(2);
         articleReview.setOrderField("create_time");
         articleReview.setOrderFieldType("DESC");
-        articleReview.setFirstClassId(0l);
-        articleReview.setParentId(0l);
+        articleReview.setFirstClassId(0L);
+        articleReview.setParentId(0L);
         return articleReviewDao.selectEntryList(articleReview);
     }
 
@@ -97,9 +97,10 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     }
 
     @Override
-    public Message<Page<ArticleReview>> selectFirstClassReviewListByArticleId(Page<ArticleReview> page,final Long userId) {
+    public Message<Page<ArticleReview>> selectFirstClassReviewListByArticleId(Page<ArticleReview> page, final Long userId) {
         ArticleReview searchCondition = page.getSearchCondition();
         searchCondition.setFirstClassId(0L);
+        searchCondition.setParentId(0L);
         searchCondition.setState(2);
         Page<ArticleReview> res = this.selectPage(page.getSearchCondition(), page);
 

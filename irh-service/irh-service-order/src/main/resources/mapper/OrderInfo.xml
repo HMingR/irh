@@ -234,4 +234,12 @@
  		 ]]>
 	</select>
 
+	<select id="selectOrderVersionByCode" parameterType="string" resultType="integer">
+		<![CDATA[
+ 			SELECT order_version FROM
+ 			order_info
+ 			WHERE order_code = #{orderCode}
+ 		 ]]>
+	</select>
+
 </mapper>

@@ -31,7 +31,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @param token
      * @reture: top.imuster.order.api.pojo.OrderInfo
      **/
-    OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId) throws Exception;
+    OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId);
 
     /**
      * @Author hmr
@@ -50,4 +50,13 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.dto.OrderTrendDto>
      **/
     Message<OrderTrendDto> getOrderTotalTrend(Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 修改订单
+     * @Date: 2020/3/20 10:42
+     * @param orderInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> editOrderInfo(OrderInfo orderInfo);
 }

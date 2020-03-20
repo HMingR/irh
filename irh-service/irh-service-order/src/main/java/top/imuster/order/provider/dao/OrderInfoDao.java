@@ -59,4 +59,13 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      * @reture: long
      **/
     long selectOrderTotalByCreateTime(String s);
+
+    /**
+     * @Author hmr
+     * @Description 根据订单编号获得订单的版本信息
+     * @Date: 2020/3/20 10:43
+     * @param orderCode
+     * @reture: java.lang.Integer
+     **/
+    Integer selectOrderVersionByCode(String orderCode);
 }
