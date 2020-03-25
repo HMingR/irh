@@ -3,6 +3,7 @@ package top.imuster.life.provider.service;
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.life.api.dto.ForwardDto;
@@ -137,4 +138,12 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      **/
     void updateForwardTimesFromRedis2DB(List<ForwardDto> res);
 
+    /**
+     * @Author hmr
+     * @Description 根据用户选择的兴趣爱好获得文章列表
+     * @Date: 2020/3/25 14:16
+     * @param categoryId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.life.api.pojo.ArticleInfo>
+     **/
+    Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Long pageSize, Long currentPage) ;
 }

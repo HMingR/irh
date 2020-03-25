@@ -134,4 +134,10 @@ public class ArticleInfoController extends BaseController {
         UserBriefDto userBriefDto = articleInfoService.getUserBriefByUserId(userId);
         return Message.createBySuccess(userBriefDto);
     }
+
+    @ApiOperation("根据文章分类id获得该分类下的文章,按照点赞和发布时间排序")
+    @GetMapping("/brief/category/{pageSize}/{currentPage}/{categoryId}")
+    public Message<List<ArticleInfo>> getArticleBriefByCategoryId(@PathVariable Long categoryId, @PathVariable("pageSize") Long pageSize, @PathVariable("currentPage") Long currentPage ){
+        return articleInfoService.getBriefByCategoryId(categoryId, pageSize, currentPage);
+    }
 }

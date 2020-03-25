@@ -21,4 +21,15 @@ public interface ArticleTagRelService extends BaseService<ArticleTagRel, Long> {
      * @reture: java.lang.String 文章的
      **/
     List<String> getArticleTagsById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据标签集合查找文章
+     * @Date: 2020/3/25 14:33
+     * @param tagIds
+     * @param pageSize
+     * @param currentPage
+     * @reture: java.util.List<java.lang.Long>
+     **/
+    List<Long> selectArticleIdsByIds(List<Long> tagIds, Long pageSize, Long currentPage);
 }

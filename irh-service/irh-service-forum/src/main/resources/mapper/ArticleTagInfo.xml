@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.imuster.life.provider.dao.ArticleTagDao">
 
-	<!-- article_category 所有查询列 -->
+	<!-- article_tag_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
@@ -15,8 +15,8 @@
 		]]>
 	</sql>
 
-	<!-- article_category 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_tag]]></sql>
+	<!-- article_tag_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_tag_info]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
@@ -48,9 +48,9 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleTag" >
+	<insert id="insertEntry" parameterType="articleTagInfo" >
 		<![CDATA[
-			INSERT INTO article_category
+			INSERT INTO article_tag_info
 				(
                 id, 
                 name, 
@@ -76,27 +76,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM article_category WHERE id IN]]>
+		<![CDATA[DELETE FROM article_tag_info WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="articleTag" >
-		<![CDATA[DELETE FROM article_category]]>
+	<delete id="deleteByCondition" parameterType="articleTagInfo" >
+		<![CDATA[DELETE FROM article_tag_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleTag" >
-		<![CDATA[UPDATE article_category]]>
+	<update id="updateByKey" parameterType="articleTagInfo" >
+		<![CDATA[UPDATE article_tag_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleTag">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleTagInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -107,7 +107,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleTag" resultType="articleTag">
+	<select id="selectEntryList" parameterType="articleTagInfo" resultType="articleTagInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -116,12 +116,18 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleTag" resultType="int">
+	<select id="selectEntryListCount" parameterType="articleTagInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectTagIdByCategory" parameterType="long" resultType="long">
+		<![CDATA[SELECT id ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
+	</select>
 	
 </mapper>

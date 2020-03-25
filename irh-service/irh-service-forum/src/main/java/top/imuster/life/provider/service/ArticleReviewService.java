@@ -4,7 +4,7 @@ package top.imuster.life.provider.service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
-public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
+public interface ArticleReviewService extends BaseService<ArticleReviewInfo, Long> {
 
     /**
      * @Author hmr
@@ -21,18 +21,18 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Date: 2020/2/2 11:20
      * @param page
      * @param userId
-     * @reture: java.util.List<ArticleReview>
+     * @reture: java.util.List<ArticleReviewInfo>
      **/
-    List<ArticleReview> reviewDetails(Page<ArticleReview> page, Long userId);
+    List<ArticleReviewInfo> reviewDetails(Page<ArticleReviewInfo> page, Long userId);
 
     /**
      * @Author hmr
      * @Description 用户查看自己的留言记录
      * @Date: 2020/2/3 11:02
      * @param userId
-     * @reture: java.util.List<ArticleReview>
+     * @reture: java.util.List<ArticleReviewInfo>
      **/
-    List<ArticleReview> list(Long userId);
+    List<ArticleReviewInfo> list(Long userId);
 
     /**
      * @Author hmr
@@ -48,9 +48,9 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Description
      * @Date: 2020/2/8 20:41
      * @param reviewIds
-     * @reture: java.util.List<ArticleReview>
+     * @reture: java.util.List<ArticleReviewInfo>
      **/
-    List<ArticleReview> getUpTotalByIds(Long[] reviewIds);
+    List<ArticleReviewInfo> getUpTotalByIds(Long[] reviewIds);
 
     /**
      * @Author hmr
@@ -67,7 +67,7 @@ public interface ArticleReviewService extends BaseService<ArticleReview, Long> {
      * @Date: 2020/3/15 9:53
      * @param page
      * @param userId
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReview>>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReviewInfo>>
      **/
-    Message<Page<ArticleReview>> selectFirstClassReviewListByArticleId(Page<ArticleReview> page, Long userId);
+    Message<Page<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Page<ArticleReviewInfo> page, Long userId);
 }

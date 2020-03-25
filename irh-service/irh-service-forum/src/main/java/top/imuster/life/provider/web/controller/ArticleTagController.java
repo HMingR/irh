@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.Resource;
@@ -40,19 +40,19 @@ public class ArticleTagController extends BaseController {
     @ApiOperation(value = "根据分类id获得标签", httpMethod = "GET")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:tag:byCategory:'+#p0")
     @GetMapping("/list/{id}")
-    public Message<List<ArticleTag>> getListById(@PathVariable("id") Long id){
-        List<ArticleTag> tag = articleTagService.getTagByCategoryId(id);
+    public Message<List<ArticleTagInfo>> getListById(@PathVariable("id") Long id){
+        List<ArticleTagInfo> tag = articleTagService.getTagByCategoryId(id);
         return Message.createBySuccess(tag);
     }
 
     @ApiOperation(value = "获得所有的标签", httpMethod = "GET")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:alltag'")
     @GetMapping
-    public Message<List<ArticleTag>> getAllTag(){
-        ArticleTag articleTag = new ArticleTag();
-        articleTag.setState(2);
-        List<ArticleTag> articleTags = articleTagService.selectEntryList(articleTag);
-        return Message.createBySuccess(articleTags);
+    public Message<List<ArticleTagInfo>> getAllTag(){
+        ArticleTagInfo articleTagInfo = new ArticleTagInfo();
+        articleTagInfo.setState(2);
+        List<ArticleTagInfo> articleTagInfos = articleTagService.selectEntryList(articleTagInfo);
+        return Message.createBySuccess(articleTagInfos);
     }
 
     @ApiOperation("根据id获得标签的名字")

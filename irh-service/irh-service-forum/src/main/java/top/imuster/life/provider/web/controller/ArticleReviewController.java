@@ -10,7 +10,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
@@ -35,17 +35,17 @@ public class ArticleReviewController extends BaseController {
      * @Description 根据一级留言id获得其对应的所有留言或回复
      * @Date: 2020/2/3 10:39
      * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReview>>
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReviewInfo>>
      **/
     @ApiOperation(value = "根据一级留言id获得其对应的所有留言或回复", httpMethod = "POST")
     @PostMapping("/child")
-    public Message<List<ArticleReview>> reviewDetails(@RequestBody Page<ArticleReview> page){
+    public Message<List<ArticleReviewInfo>> reviewDetails(@RequestBody Page<ArticleReviewInfo> page){
         if(page.getSearchCondition() == null){
-            page.setSearchCondition(new ArticleReview());
+            page.setSearchCondition(new ArticleReviewInfo());
         }
         Long userId = getCurrentUserIdFromCookie();
-        List<ArticleReview> articleReviews = articleReviewService.reviewDetails(page, userId);
-        return Message.createBySuccess(articleReviews);
+        List<ArticleReviewInfo> articleReviewInfos = articleReviewService.reviewDetails(page, userId);
+        return Message.createBySuccess(articleReviewInfos);
     }
 
 
@@ -53,18 +53,18 @@ public class ArticleReviewController extends BaseController {
      * @Author hmr
      * @Description 用户写留言
      * @Date: 2020/2/3 10:49
-     * @param articleReview
+     * @param articleReviewInfo
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "用户写留言", httpMethod = "POST")
     @NeedLogin
     @PostMapping("/write")
-    public Message<String> writeReview(@Validated(ValidateGroup.addGroup.class) @RequestBody ArticleReview articleReview, BindingResult bindingResult){
+    public Message<String> writeReview(@Validated(ValidateGroup.addGroup.class) @RequestBody ArticleReviewInfo articleReviewInfo, BindingResult bindingResult){
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
-        articleReview.setUserId(userId);
-        articleReviewService.insertEntry(articleReview);
+        articleReviewInfo.setUserId(userId);
+        articleReviewService.insertEntry(articleReviewInfo);
         return Message.createBySuccess();
     }
 
@@ -74,13 +74,13 @@ public class ArticleReviewController extends BaseController {
      * @Description 根据文章id分页查询一级留言
      * @Date: 2020/3/15 10:26
      * @param page
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReview>>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReviewInfo>>
      **/
     @ApiOperation("根据文章id分页查询一级留言")
     @PostMapping
-    public Message<Page<ArticleReview>> getArticleReviewByPage(@RequestBody Page<ArticleReview> page){
+    public Message<Page<ArticleReviewInfo>> getArticleReviewByPage(@RequestBody Page<ArticleReviewInfo> page){
         if(page.getSearchCondition() == null){
-            page.setSearchCondition(new ArticleReview());
+            page.setSearchCondition(new ArticleReviewInfo());
         }
         Long userId = getCurrentUserIdFromCookie(false);
         return articleReviewService.selectFirstClassReviewListByArticleId(page, userId);
@@ -98,7 +98,7 @@ public class ArticleReviewController extends BaseController {
     @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> deleteReview(@PathVariable("id") Long id){
-        ArticleReview condition = new ArticleReview();
+        ArticleReviewInfo condition = new ArticleReviewInfo();
         condition.setId(id);
         condition.setState(1);
         condition.setUserId(getCurrentUserIdFromCookie());
@@ -112,14 +112,14 @@ public class ArticleReviewController extends BaseController {
      * @Description 用户查看自己的留言记录
      * @Date: 2020/2/3 11:04
      * @param
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReview>>
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReviewInfo>>
      **/
     @ApiOperation(value = "用户查看自己的留言记录,按照时间降序排列", httpMethod = "GET")
     @NeedLogin
     @GetMapping("/list")
-    public Message<List<ArticleReview>> list(){
+    public Message<List<ArticleReviewInfo>> list(){
         Long userId = getCurrentUserIdFromCookie();
-        List<ArticleReview> list = articleReviewService.list(userId);
+        List<ArticleReviewInfo> list = articleReviewService.list(userId);
         return Message.createBySuccess(list);
     }
 

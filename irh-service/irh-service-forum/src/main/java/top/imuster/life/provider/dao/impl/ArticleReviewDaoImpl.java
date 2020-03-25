@@ -3,7 +3,7 @@ package top.imuster.life.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.provider.dao.ArticleReviewDao;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2020-01-30 15:25:20
  */
 @Repository("articleReviewDao")
-public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> implements ArticleReviewDao {
+public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReviewInfo, Long> implements ArticleReviewDao {
 	private final static String NAMESPACE = "top.imuster.life.provider.dao.ArticleReviewDao.";
 	private final static String SELECT_USER_ID_BY_REVIEW_ID = "selectUserIdByReviewId";
 	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
@@ -30,7 +30,7 @@ public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReview, Long> imple
 	}
 
 	@Override
-	public List<ArticleReview> selectUpTotalByIds(Long[] reviewIds) {
+	public List<ArticleReviewInfo> selectUpTotalByIds(Long[] reviewIds) {
 		return selectList(getNameSpace(SELECT_UP_TOTAL_BY_IDS), reviewIds);
 	}
 

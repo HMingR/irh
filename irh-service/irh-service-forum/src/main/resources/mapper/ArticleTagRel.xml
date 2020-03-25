@@ -119,5 +119,19 @@
 				atr.article_id = #{id}
   		]]>
 	</select>
+
+	<select id="selectArticleIdByPageAndTagIds" parameterType="articleTagRel" resultType="long">
+		<![CDATA[
+  			SELECT
+  				article_id
+			FROM
+				article_tag_rel
+			WHERE tag_id IN
+  		]]>
+		<foreach collection="tagIds" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+		<![CDATA[LIMIT #{startIndex}, #{pageSize}]]>
+	</select>
 	
 </mapper>

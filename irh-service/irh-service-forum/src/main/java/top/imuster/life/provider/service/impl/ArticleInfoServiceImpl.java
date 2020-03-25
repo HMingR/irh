@@ -12,12 +12,13 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.api.pojo.ArticleTagRel;
 import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
@@ -68,12 +69,12 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         String tagIds = articleInfo.getTagIds();
         if (StringUtils.isNotBlank(tagIds)){
             String[] split = tagIds.split(",");
-            ArrayList<ArticleTag> articleTags = new ArrayList<>();
+            ArrayList<ArticleTagInfo> articleTagInfos = new ArrayList<>();
             for (int i = 0; i < split.length; i++) {
                 long tagId = Long.parseLong(split[i]);
-                articleTags.add(new ArticleTag(tagId));
+                articleTagInfos.add(new ArticleTagInfo(tagId));
             }
-            articleTagService.insertEntry(articleTags.toArray(new ArticleTag[articleTags.size()]));
+            articleTagService.insertEntry(articleTagInfos.toArray(new ArticleTagInfo[articleTagInfos.size()]));
         }
         articleInfoDao.insertEntry(articleInfo);
     }
@@ -102,8 +103,8 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         //获得文章的标签
         if (result.getTagList() == null) result.setTagList(new ArrayList<>());
         articleTagRels.stream().forEach(articleTagRel -> {
-            ArticleTag articleTag = articleTagService.selectEntryList(articleTagRel.getTagId()).get(0);
-            result.getTagList().add(articleTag);
+            ArticleTagInfo articleTagInfo = articleTagService.selectEntryList(articleTagRel.getTagId()).get(0);
+            result.getTagList().add(articleTagInfo);
         });
         return result;
     }
@@ -201,5 +202,18 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public void updateForwardTimesFromRedis2DB(List<ForwardDto> res) {
         articleInfoDao.updateForwardTimesByCondition(res);
+    }
+
+    @Override
+    public Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Long pageSize, Long currentPage) {
+        //根据分类获得该分类下的标签
+        List<Long> tagIds = articleTagService.getTagByCategoryId(categoryId);
+
+        //根据标签分页查询文章id
+        List<Long> articleIds =  articleTagRelService.selectArticleIdsByIds(tagIds, pageSize, currentPage);
+
+        //根据文章id获得文章的简略信息
+        List<ArticleInfo> articleInfoList = articleInfoDao.selectArticleBriefByTagIds(articleIds);
+        return Message.createBySuccess(articleInfoList);
     }
 }

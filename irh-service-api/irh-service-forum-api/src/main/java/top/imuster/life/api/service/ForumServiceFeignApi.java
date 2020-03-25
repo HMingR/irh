@@ -2,11 +2,10 @@ package top.imuster.life.api.service;
 
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.service.hystrix.ForumServiceFeignHystrix;
 
@@ -40,7 +39,7 @@ public interface ForumServiceFeignApi {
     boolean adminDeleteArticleCategory(@PathVariable("id") Long id);
 
     @PostMapping("/category/list")
-    Message<Page<ArticleTag>> adminCategoryList(@RequestBody Page<ArticleTag> page);
+    Message<Page<ArticleTagInfo>> adminCategoryList(@RequestBody Page<ArticleTagInfo> page);
 
     /**
      * @Author hmr
@@ -50,7 +49,7 @@ public interface ForumServiceFeignApi {
      * @reture: top.imuster.forum.api.pojo.ArticleCategory
      **/
     @GetMapping("/category/{id}")
-    ArticleTag getCategoryInfoById(@PathVariable("id") Long id);
+    ArticleTagInfo getCategoryInfoById(@PathVariable("id") Long id);
 
     /**
      * @Author hmr
@@ -60,7 +59,7 @@ public interface ForumServiceFeignApi {
      * @reture: boolean
      **/
     @PutMapping("/category")
-    boolean addArticleCategory(@RequestBody ArticleTag category);
+    boolean addArticleCategory(@RequestBody ArticleTagInfo category);
 
     /**
      * @Author hmr
@@ -70,7 +69,7 @@ public interface ForumServiceFeignApi {
      * @reture: boolean
      **/
     @PutMapping("/category")
-    boolean editArticleCategory(@RequestBody ArticleTag category);
+    boolean editArticleCategory(@RequestBody ArticleTagInfo category);
 
     /**
      * @Author hmr

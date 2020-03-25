@@ -15,11 +15,11 @@ import java.util.List;
  * @since 2020-01-30 15:25:20
  */
 @ApiModel("文章评论实体类")
-public class ArticleReview extends BaseDomain {
+public class ArticleReviewInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 8957837652L;
 
-	public ArticleReview() {
+	public ArticleReviewInfo() {
 		//默认无参构造方法
 	}
 	// 文章评论表主键
@@ -58,7 +58,7 @@ public class ArticleReview extends BaseDomain {
 	private Long upTotal;
 
 	//每个留言下的回复数
-	private List<ArticleReview> childs;
+	private List<ArticleReviewInfo> childs;
 
 	//父id的作者id
 	@ApiModelProperty("父id的作者id")
@@ -112,11 +112,11 @@ public class ArticleReview extends BaseDomain {
 		this.childTotalCount = childTotalCount;
 	}
 
-	public List<ArticleReview> getChilds() {
+	public List<ArticleReviewInfo> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(List<ArticleReview> childs) {
+	public void setChilds(List<ArticleReviewInfo> childs) {
 		this.childs = childs;
 	}
 

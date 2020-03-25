@@ -3,9 +3,10 @@ package top.imuster.life.provider.web.rpc;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleTag;
+import top.imuster.common.core.controller.BaseController;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
+import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ArticleReview;
 import top.imuster.life.api.pojo.ErrandInfo;
 import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.life.provider.service.ArticleTagService;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/forum/feign")
-public class ForumServiceFeignClient implements ForumServiceFeignApi {
+public class ForumServiceFeignClient extends BaseController implements ForumServiceFeignApi {
 
     @Resource
     ArticleInfoService articleInfoService;
@@ -51,7 +52,7 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
     @Override
     @DeleteMapping("/category/{id}")
     public boolean adminDeleteArticleCategory(@PathVariable("id") Long id) {
-        ArticleTag condition = new ArticleTag();
+        ArticleTagInfo condition = new ArticleTagInfo();
         condition.setId(id);
         condition.setState(1);
         int i = articleTagService.updateByKey(condition);
@@ -60,27 +61,27 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
 
     @Override
     @PostMapping("/category/list")
-    public Message<Page<ArticleTag>> adminCategoryList(@RequestBody Page<ArticleTag> page) {
-        Page<ArticleTag> articleTagPage = articleTagService.selectPage(page.getSearchCondition(), page);
+    public Message<Page<ArticleTagInfo>> adminCategoryList(@RequestBody Page<ArticleTagInfo> page) {
+        Page<ArticleTagInfo> articleTagPage = articleTagService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(articleTagPage);
     }
 
     @Override
     @GetMapping("/category/{id}")
-    public ArticleTag getCategoryInfoById(@PathVariable("id") Long id) {
+    public ArticleTagInfo getCategoryInfoById(@PathVariable("id") Long id) {
         return articleTagService.selectEntryList(id).get(0);
     }
 
     @Override
     @PostMapping("/category")
-    public boolean addArticleCategory(@RequestBody ArticleTag category) {
+    public boolean addArticleCategory(@RequestBody ArticleTagInfo category) {
         int i = articleTagService.insertEntry(category);
         return i == 1;
     }
 
     @Override
     @PutMapping("/category")
-    public boolean editArticleCategory(@RequestBody ArticleTag category) {
+    public boolean editArticleCategory(@RequestBody ArticleTagInfo category) {
         int i = articleTagService.updateByKey(category);
         return i == 1;
     }
@@ -88,10 +89,10 @@ public class ForumServiceFeignClient implements ForumServiceFeignApi {
     @Override
     @DeleteMapping("/review/{id}")
     public boolean adminDeleteArticleReview(@PathVariable("id") Long id) {
-        ArticleReview articleReview = new ArticleReview();
-        articleReview.setId(id);
-        articleReview.setState(1);
-        articleReviewService.updateByKey(articleReview);
+        ArticleReviewInfo articleReviewInfo = new ArticleReviewInfo();
+        articleReviewInfo.setId(id);
+        articleReviewInfo.setState(1);
+        articleReviewService.updateByKey(articleReviewInfo);
         return false;
     }
 

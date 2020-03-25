@@ -2,7 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
-public interface ArticleReviewDao extends BaseDao<ArticleReview, Long> {
+public interface ArticleReviewDao extends BaseDao<ArticleReviewInfo, Long> {
     //自定义扩展
 
     /**
@@ -29,9 +29,9 @@ public interface ArticleReviewDao extends BaseDao<ArticleReview, Long> {
      * @Description
      * @Date: 2020/2/8 20:42
      * @param reviewIds
-     * @reture: java.util.List<ArticleReview>
+     * @reture: java.util.List<ArticleReviewInfo>
      **/
-    List<ArticleReview> selectUpTotalByIds(Long[] reviewIds);
+    List<ArticleReviewInfo> selectUpTotalByIds(Long[] reviewIds);
 
     /**
      * @Author hmr

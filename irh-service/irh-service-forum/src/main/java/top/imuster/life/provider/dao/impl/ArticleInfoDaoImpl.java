@@ -32,6 +32,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
 	private final static String SELECT_BRIEF_BY_HOT_TOPIC_ID = "selectBriefByHotTopicId";
 	private final static String UPDATE_FORARDR_TIMES_BY_CONDITION = "updateForwardTimesByCondition";
+	private final static String SELECT_ARTICLE_BRIEF_BY_TAGIDS = "selectArticleBriefByTagIds";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -97,5 +98,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public ForumHotTopicInfo selectBriefByHotTopicId(Long aLong) {
 		return this.select(getNameSpace(SELECT_BRIEF_BY_HOT_TOPIC_ID), aLong);
+	}
+
+	@Override
+	public List<ArticleInfo> selectArticleBriefByTagIds(List<Long> tagIds) {
+		return this.selectList(getNameSpace(SELECT_ARTICLE_BRIEF_BY_TAGIDS), tagIds);
 	}
 }

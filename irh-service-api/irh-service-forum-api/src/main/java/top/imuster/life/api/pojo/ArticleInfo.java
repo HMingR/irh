@@ -64,9 +64,9 @@ public class ArticleInfo extends BaseDomain {
 
 	//每个文章下的一级留言信息
 	@ApiModelProperty("每个文章下的一级留言信息")
-	private List<ArticleReview> childs;
+	private List<ArticleReviewInfo> childs;
 
-	private List<ArticleTag> tagList;
+	private List<ArticleTagInfo> tagList;
 
 	@ApiModelProperty("给文章添加的标签")
 	private String tagIds;
@@ -167,19 +167,19 @@ public class ArticleInfo extends BaseDomain {
 		this.reviewTotal = reviewTotal;
 	}
 
-	public List<ArticleReview> getChilds() {
+	public List<ArticleReviewInfo> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(List<ArticleReview> childs) {
+	public void setChilds(List<ArticleReviewInfo> childs) {
 		this.childs = childs;
 	}
 
-	public List<ArticleTag> getTagList() {
+	public List<ArticleTagInfo> getTagList() {
 		return tagList;
 	}
 
-	public void setTagList(List<ArticleTag> tagList) {
+	public void setTagList(List<ArticleTagInfo> tagList) {
 		this.tagList = tagList;
 	}
 

@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.imuster.life.provider.dao.ArticleReviewDao">
 
-	<!-- article_review 所有查询列 -->
+	<!-- article_review_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
@@ -19,8 +19,8 @@
 		]]>
 	</sql>
 
-	<!-- article_review 查询列来源表-->
-	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_review]]></sql>
+	<!-- article_review_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM article_review_info]]></sql>
 	
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
@@ -60,9 +60,9 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleReview" >
+	<insert id="insertEntry" parameterType="articleReviewInfo" >
 		<![CDATA[
-			INSERT INTO article_review
+			INSERT INTO article_review_info
 				(
                 id, 
                 article_id, 
@@ -96,27 +96,27 @@
 
 	<!-- 删除记录,主键IN(array) -->
 	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
-		<![CDATA[DELETE FROM article_review WHERE id IN]]>
+		<![CDATA[DELETE FROM article_review_info WHERE id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>
 		</foreach>
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="articleReview" >
-		<![CDATA[DELETE FROM article_review]]>
+	<delete id="deleteByCondition" parameterType="articleReviewInfo" >
+		<![CDATA[DELETE FROM article_review_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleReview" >
-		<![CDATA[UPDATE article_review]]>
+	<update id="updateByKey" parameterType="articleReviewInfo" >
+		<![CDATA[UPDATE article_review_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleReview">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleReviewInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -127,7 +127,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleReview" resultType="articleReview">
+	<select id="selectEntryList" parameterType="articleReviewInfo" resultType="articleReviewInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -136,7 +136,7 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleReview" resultType="int">
+	<select id="selectEntryListCount" parameterType="articleReviewInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
@@ -150,7 +150,7 @@
 		<![CDATA[WHERE id = #{targetId}]]>
 	</select>
 
-	<select id="selectUpTotalByIds" parameterType="java.lang.reflect.Array" resultType="articleReview">
+	<select id="selectUpTotalByIds" parameterType="java.lang.reflect.Array" resultType="articleReviewInfo">
 		SELECT up_total AS upTotal, id
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE id IN]]>

@@ -234,7 +234,7 @@
                 </foreach>
             </trim>
         </trim>
-        where id in
+        WHERE id in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id,jdbcType=BIGINT}
         </foreach>
@@ -260,5 +260,15 @@
 			#{item.targetId,jdbcType=BIGINT}
 		</foreach>
 	</update>
+
+	<select id="selectArticleBriefByTagIds" parameterType="list" resultType="top.imuster.life.api.pojo.ArticleInfo">
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="ids" item="index" open="(" close=")" separator=",">
+			#{index}
+		</foreach>
+		<![CDATA[ORDER BY create_time, browser_times DESC]]>
+	</select>
 
 </mapper>

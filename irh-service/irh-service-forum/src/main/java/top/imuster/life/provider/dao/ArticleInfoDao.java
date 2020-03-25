@@ -120,4 +120,13 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @reture: ForumHotTopicInfo
      **/
     ForumHotTopicInfo selectBriefByHotTopicId(Long aLong);
+
+    /**
+     * @Author hmr
+     * @Description 根据给定的标签id
+     * @Date: 2020/3/25 14:30
+     * @param tagIds
+     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleInfo>
+     **/
+    List<ArticleInfo> selectArticleBriefByTagIds(@Param("ids") List<Long> ids);
 }

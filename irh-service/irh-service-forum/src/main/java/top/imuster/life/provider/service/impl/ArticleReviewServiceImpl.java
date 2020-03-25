@@ -6,7 +6,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.provider.dao.ArticleReviewDao;
 import top.imuster.life.provider.service.ArticleReviewService;
 import top.imuster.life.provider.service.UserForumAttributeService;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @since 2020-01-30 15:25:20
  */
 @Service("articleReviewService")
-public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Long> implements ArticleReviewService {
+public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo, Long> implements ArticleReviewService {
 
     @Resource
     private ArticleReviewDao articleReviewDao;
@@ -32,23 +32,23 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     UserForumAttributeService userForumAttributeService;
 
     @Override
-    public BaseDao<ArticleReview, Long> getDao() {
+    public BaseDao<ArticleReviewInfo, Long> getDao() {
         return this.articleReviewDao;
     }
 
     @Override
-    public List<ArticleReview> reviewDetails(Page<ArticleReview> page, Long userId) {
-        ArticleReview searchCondition = page.getSearchCondition();
+    public List<ArticleReviewInfo> reviewDetails(Page<ArticleReviewInfo> page, Long userId) {
+        ArticleReviewInfo searchCondition = page.getSearchCondition();
         searchCondition.setState(2);
 
         //按照降序排列
         searchCondition.setOrderField("create_time");
         searchCondition.setOrderFieldType("ASC");
-        Page<ArticleReview> articleReviewPage = this.selectPage(searchCondition, page);
-        List<ArticleReview> res = articleReviewPage.getData();
+        Page<ArticleReviewInfo> articleReviewPage = this.selectPage(searchCondition, page);
+        List<ArticleReviewInfo> res = articleReviewPage.getData();
 
         //将回复转换成一个map，这个map里面key为parentId，value为用户id
-        Map<Long, Long> collect = res.stream().collect(Collectors.toMap(ArticleReview::getId, ArticleReview::getUserId));
+        Map<Long, Long> collect = res.stream().collect(Collectors.toMap(ArticleReviewInfo::getId, ArticleReviewInfo::getUserId));
         res.stream().forEach(condition -> {
 
             //如果userId不为空的话则显示出当前用户是否点赞了该留言
@@ -70,15 +70,15 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     }
 
     @Override
-    public List<ArticleReview> list(Long userId) {
-        ArticleReview articleReview = new ArticleReview();
-        articleReview.setUserId(userId);
-        articleReview.setState(2);
-        articleReview.setOrderField("create_time");
-        articleReview.setOrderFieldType("DESC");
-        articleReview.setFirstClassId(0L);
-        articleReview.setParentId(0L);
-        return articleReviewDao.selectEntryList(articleReview);
+    public List<ArticleReviewInfo> list(Long userId) {
+        ArticleReviewInfo articleReviewInfo = new ArticleReviewInfo();
+        articleReviewInfo.setUserId(userId);
+        articleReviewInfo.setState(2);
+        articleReviewInfo.setOrderField("create_time");
+        articleReviewInfo.setOrderFieldType("DESC");
+        articleReviewInfo.setFirstClassId(0L);
+        articleReviewInfo.setParentId(0L);
+        return articleReviewDao.selectEntryList(articleReviewInfo);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     }
 
     @Override
-    public List<ArticleReview> getUpTotalByIds(Long[] reviewIds) {
+    public List<ArticleReviewInfo> getUpTotalByIds(Long[] reviewIds) {
         return articleReviewDao.selectUpTotalByIds(reviewIds);
     }
 
@@ -97,17 +97,17 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
     }
 
     @Override
-    public Message<Page<ArticleReview>> selectFirstClassReviewListByArticleId(Page<ArticleReview> page, final Long userId) {
-        ArticleReview searchCondition = page.getSearchCondition();
+    public Message<Page<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Page<ArticleReviewInfo> page, final Long userId) {
+        ArticleReviewInfo searchCondition = page.getSearchCondition();
         searchCondition.setFirstClassId(0L);
         searchCondition.setParentId(0L);
         searchCondition.setState(2);
-        Page<ArticleReview> res = this.selectPage(page.getSearchCondition(), page);
+        Page<ArticleReviewInfo> res = this.selectPage(page.getSearchCondition(), page);
 
         final Long articleId = page.getSearchCondition().getArticleId();
-        List<ArticleReview> data = res.getData();
+        List<ArticleReviewInfo> data = res.getData();
 
-        ArticleReview review = new ArticleReview();
+        ArticleReviewInfo review = new ArticleReviewInfo();
         review.setState(2);
         data.stream().forEach(articleReview -> {
             //获得一级留言下的所有回复数量
@@ -121,7 +121,7 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReview, Lon
         });
 
         //按照点赞多少进行降序排列
-        List<ArticleReview> collect = data.stream().sorted(Comparator.comparingLong(ArticleReview::getUpTotal).reversed()).collect(Collectors.toList());
+        List<ArticleReviewInfo> collect = data.stream().sorted(Comparator.comparingLong(ArticleReviewInfo::getUpTotal).reversed()).collect(Collectors.toList());
         page.setData(collect);
         return Message.createBySuccess(res);
     }

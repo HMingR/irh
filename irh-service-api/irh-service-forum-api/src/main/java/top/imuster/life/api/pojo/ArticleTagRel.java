@@ -2,6 +2,8 @@ package top.imuster.life.api.pojo;
 
 import top.imuster.common.base.domain.BaseDomain;
 
+import java.util.List;
+
 /**
  * 
  * @author 黄明人
@@ -22,6 +24,21 @@ public class ArticleTagRel extends BaseDomain {
 
 	// 文章id
 	private Long articleId;
+
+	//查询条件用
+	private List<Long> tagIds;
+
+	public ArticleTagRel(List<Long> tagIds){
+		this.tagIds = tagIds;
+	}
+
+	public List<Long> getTagIds() {
+		return tagIds;
+	}
+
+	public void setTagIds(List<Long> tagIds) {
+		this.tagIds = tagIds;
+	}
 
 	public Long getId() {
 		return this.id;

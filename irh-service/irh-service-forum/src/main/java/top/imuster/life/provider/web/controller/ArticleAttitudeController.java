@@ -63,6 +63,7 @@ public class ArticleAttitudeController extends BaseController {
         return Message.createBySuccess();
     }*/
 
+
     /**
      * @Author hmr
      * @Description 在论坛模块中的点赞操作
@@ -78,6 +79,7 @@ public class ArticleAttitudeController extends BaseController {
         redisArticleAttitudeService.incrementUpCount(targetId, type);
         return Message.createBySuccess();
     }
+
 
     /**
      * @Author hmr
@@ -96,11 +98,20 @@ public class ArticleAttitudeController extends BaseController {
         return Message.createBySuccess();
     }
 
+
+    /**
+     * @Author hmr
+     * @Description TODO
+     * @Date: 2020/3/24 10:12
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.UserForumAttributeInfo>>
+     **/
     @ApiOperation("查看自己在文章模块点赞的记录")
     @PostMapping("/list")
     public Message<Page<UserForumAttributeInfo>> upList(@RequestBody Page<UserForumAttributeInfo> page){
         return userForumAttributeService.getUpList(page, getCurrentUserIdFromCookie());
     }
+
 
     /**
      * @Author hmr
@@ -116,6 +127,7 @@ public class ArticleAttitudeController extends BaseController {
         Long total = userForumAttributeService.getUpTotalByTypeAndId(id, type, RedisUtil.getUpTotalKey(id, type));
         return Message.createBySuccess(total);
     }
+
 
     /**
      * @Author hmr

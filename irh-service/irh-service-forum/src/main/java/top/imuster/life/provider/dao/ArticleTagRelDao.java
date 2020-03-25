@@ -22,4 +22,13 @@ public interface ArticleTagRelDao extends BaseDao<ArticleTagRel, Long> {
      **/
     List<String> selectTagNameByArticleId(Long id);
 
+    /**
+     * @Author hmr
+     * @Description 根据tagids分页查询文章id
+     * @Date: 2020/3/25 14:48
+     * @param articleTagRel
+     * @reture: java.util.List<java.lang.Long>
+     **/
+    List<Long> selectArticleIdByPageAndTagIds(ArticleTagRel articleTagRel);
+
 }

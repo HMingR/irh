@@ -12,7 +12,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.dto.UpCountDto;
 import top.imuster.life.api.dto.UpDto;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ArticleReview;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.api.pojo.UserForumAttributeInfo;
 import top.imuster.life.provider.dao.UserForumAttributeDao;
 import top.imuster.life.provider.service.*;
@@ -93,7 +93,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
         // 评论
         List<UpCountDto> review = collect.get(2);
         Long[] reviewIds = (Long[]) review.stream().map(UpCountDto::getTargetId).toArray();
-        List<ArticleReview> articleReviews = articleReviewService.getUpTotalByIds(reviewIds);
+        List<ArticleReviewInfo> articleReviewInfos = articleReviewService.getUpTotalByIds(reviewIds);
 
         list.stream().forEach(upCountDto -> {
             Long count = upCountDto.getCount();
@@ -103,7 +103,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
                 info.setUpTotal(info.getUpTotal() + count);
                 articleInfoService.updateByKey(info);
             }else {
-                ArticleReview info = articleReviews.stream().filter(articleReview -> articleReview.getId().equals(targetId)).findFirst().orElse(null);
+                ArticleReviewInfo info = articleReviewInfos.stream().filter(articleReview -> articleReview.getId().equals(targetId)).findFirst().orElse(null);
                 info.setUpTotal(info.getUpTotal() + count);
                 articleReviewService.updateByKey(info);
             }
