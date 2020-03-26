@@ -70,7 +70,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description 根据用户id获得用户文章的点赞总数
      * @Date: 2020/2/15 15:43
      * @param userId
-     * @reture: java.lang.Long
+     * @reture: java.lang.LongF
      *
      * @return*/
     UserBriefDto selectUserBriefTotalById(Long userId);

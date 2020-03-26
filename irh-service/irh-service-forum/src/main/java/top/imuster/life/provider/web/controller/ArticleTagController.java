@@ -40,9 +40,9 @@ public class ArticleTagController extends BaseController {
     @ApiOperation(value = "根据分类id获得标签", httpMethod = "GET")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:tag:byCategory:'+#p0")
     @GetMapping("/list/{id}")
-    public Message<List<ArticleTagInfo>> getListById(@PathVariable("id") Long id){
-        List<ArticleTagInfo> tag = articleTagService.getTagByCategoryId(id);
-        return Message.createBySuccess(tag);
+    public Message<List<Long>> getListById(@PathVariable("id") Long id){
+        List<Long> tagByCategoryId = articleTagService.getTagByCategoryId(id);
+        return Message.createBySuccess(tagByCategoryId);
     }
 
     @ApiOperation(value = "获得所有的标签", httpMethod = "GET")

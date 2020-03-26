@@ -100,7 +100,7 @@ public class BaseController {
         }else{
             try{
                 userId = getCurrentUserIdFromCookie();
-            }catch (GlobalException e){
+            }catch (Exception e){
                 return null;
             }
             return userId;

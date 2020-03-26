@@ -29,8 +29,9 @@ public class FileServiceFeignApiHystrix implements FallbackFactory<FileServiceFe
             }
 
             @Override
-            public void deleteByName(String name) {
+            public Message<String> deleteByName(String name) {
                 log.error("FileServiceFeignApiHystrix---->根据uri删除文件失败,文件名为{}",name);
+                return Message.createByError();
             }
         };
     }

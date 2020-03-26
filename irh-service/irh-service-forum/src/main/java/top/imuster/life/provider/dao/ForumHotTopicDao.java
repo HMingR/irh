@@ -5,6 +5,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.life.api.pojo.ForumHotTopicInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ForumHotTopicDao 接口
@@ -39,5 +40,5 @@ public interface ForumHotTopicDao extends BaseDao<ForumHotTopicInfo, Long> {
      * @param topic
      * @reture: java.util.List<ArticleInfo>
      **/
-    List<ForumHotTopicInfo> selectMaxScoreTop(int topic);
+    List<ForumHotTopicInfo> selectMaxScoreTop(Map<String, Long> params);
 }

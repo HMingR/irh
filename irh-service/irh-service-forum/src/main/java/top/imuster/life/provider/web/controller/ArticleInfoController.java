@@ -113,7 +113,7 @@ public class ArticleInfoController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<ArticleInfo>
      **/
     @ApiOperation("根据id获得文章的简略信息(文章标题,图片url,留言总数,点赞总数)")
-    @GetMapping("/brief/{id}}")
+    @GetMapping("/brief/{id}")
     public Message<ArticleInfo> getTitleAndUrl(@PathVariable("id") Long id){
         ArticleInfo res = articleInfoService.getBriefById(id);
         return Message.createBySuccess(res);
@@ -127,10 +127,12 @@ public class ArticleInfoController extends BaseController {
     }
 
     @ApiOperation("获得当前用户的获赞总数、收藏文章总数、文章被浏览总数")
-    @NeedLogin
     @GetMapping("/user")
     public Message<UserBriefDto> getUserForumBrief(){
-        Long userId = getCurrentUserIdFromCookie();
+        Long userId = getCurrentUserIdFromCookie(false);
+        if(userId == null){
+            return Message.createBySuccess();
+        }
         UserBriefDto userBriefDto = articleInfoService.getUserBriefByUserId(userId);
         return Message.createBySuccess(userBriefDto);
     }

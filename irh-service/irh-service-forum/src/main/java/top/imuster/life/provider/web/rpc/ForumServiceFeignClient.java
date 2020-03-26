@@ -130,7 +130,8 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
     }
 
     @Override
-    public boolean errandIsAvailable(Long errandId) {
+    @GetMapping("/errand/avail/{errandId}")
+    public boolean errandIsAvailable(@PathVariable("errandId") Long errandId) {
         return errandInfoService.isAvailable(errandId);
     }
 }

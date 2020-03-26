@@ -31,6 +31,6 @@ public interface AuthRoleRelDao extends BaseDao<AuthRoleRel, Long> {
      * @Date: 2020/2/4 15:30
      * @reture: void
      **/
-    void deleteByCondition(AuthRoleRel condition);
+    void delete(AuthRoleRel condition);
 
 }

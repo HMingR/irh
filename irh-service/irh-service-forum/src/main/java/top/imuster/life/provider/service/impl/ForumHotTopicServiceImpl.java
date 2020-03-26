@@ -40,7 +40,7 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
     }
 
     @Override
-    public void updateHotTopicFromReids2Redis(List<HashSet<Long>> res) {
+    public void updateHotTopicFromRedis2DB(List<HashSet<Long>> res) {
         Long[] targetIds = res.get(0).toArray(new Long[res.get(0).size()]);
         Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
         ForumHotTopicInfo condition = new ForumHotTopicInfo();
@@ -59,13 +59,22 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
     }
 
     @Override
-    public Message<List<ForumHotTopicInfo>> totalHotTopicList(int topic) {
-        List<ForumHotTopicInfo> list =forumHotTopicDao.selectMaxScoreTop(topic);
+    public Message<List<ForumHotTopicInfo>> totalHotTopicList(Long pageSize, Long currentPage) {
+        HashMap<String, Long> params = new HashMap<>();
+        params.put("startIndex", (currentPage - 1) * pageSize);
+        params.put("pageSize", pageSize);
+        List<ForumHotTopicInfo> list =forumHotTopicDao.selectMaxScoreTop(params);
         ArrayList<ForumHotTopicInfo> res = new ArrayList<>(list.size());
+        if(list.isEmpty()){
+            return Message.createBySuccess();
+        }
         list.stream().forEach(forumHotTopic -> {
             Long targetId = forumHotTopic.getTargetId();
-            ForumHotTopicInfo brief = articleInfoService.getBriefByHotTopicId(targetId);
-            res.add(brief);
+            if(targetId != null){
+                ForumHotTopicInfo brief = articleInfoService.getBriefByHotTopicId(targetId);
+                brief.setScore(forumHotTopic.getScore());
+                res.add(brief);
+            }
         });
         return Message.createBySuccess(res);
     }
@@ -79,8 +88,12 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
         Long[] longs = res.get(0).toArray(new Long[res.get(0).size()]);
         final Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
         HashMap<Long, Long> scoreMap = new HashMap<>();
-        for (int i = 0; i < scores.length; i++) {
-            scoreMap.put(scores[i], scores[i]);
+        if(longs.length == 0 || scores.length == 0){
+            //todo 当没有热搜的时候应该放历史热搜
+            return Message.createBySuccess();
+        }
+        for (Long i : scores){
+            scoreMap.put(i, i);
         }
         List<ArticleInfo> articleInfos = articleInfoService.selectInfoByTargetIds(longs);
         articleInfos.stream().forEach(articleInfo -> {

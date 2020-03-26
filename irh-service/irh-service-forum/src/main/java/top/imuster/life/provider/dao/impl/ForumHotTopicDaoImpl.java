@@ -7,6 +7,7 @@ import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ForumHotTopicDao;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ForumHotTopicDao 实现类
@@ -35,8 +36,8 @@ public class ForumHotTopicDaoImpl extends BaseDaoImpl<ForumHotTopicInfo, Long> i
 	}
 
 	@Override
-	public List<ForumHotTopicInfo> selectMaxScoreTop(int topic) {
-		return this.selectList(getNameSpace(SELECT_MAX_SCORE_TOP), topic);
+	public List<ForumHotTopicInfo> selectMaxScoreTop(Map<String, Long> params) {
+		return this.selectList(getNameSpace(SELECT_MAX_SCORE_TOP), params);
 	}
 
 }

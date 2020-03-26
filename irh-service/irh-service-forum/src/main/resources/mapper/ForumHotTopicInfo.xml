@@ -136,9 +136,9 @@
 		]]>
 	</update>
 
-	<select id="selectMaxScoreTop" parameterType="int" resultType="forumHotTopicInfo">
+	<select id="selectMaxScoreTop" parameterType="map" resultType="top.imuster.life.api.pojo.ForumHotTopicInfo">
 		<![CDATA[SELECT target_id AS targetId, score ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE state != 1 ORDER BY score DESC LIMIT 0, #{topic}]]>
+		<![CDATA[WHERE state != 1 ORDER BY score DESC LIMIT #{startIndex}, #{pageSize}]]>
 	</select>
 </mapper>

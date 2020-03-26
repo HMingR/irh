@@ -56,19 +56,24 @@ public class FileController extends BaseController implements FileServiceFeignAp
      * @Author hmr
      * @Description 删除文件
      * @Date: 2020/2/7 16:39
-     * @param uri
+     * @param fileUri
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @Override
-    public void deleteByName(String uri){
-        int index = uri.lastIndexOf("/");
-        String groupName = uri.substring(0, index);
-        String fileName = uri.substring(index + 1, uri.length());
+    @DeleteMapping
+    public Message<String> deleteByName(@RequestParam("fileUri") String fileUri){
+        int index = fileUri.indexOf("/");
+        String groupName = fileUri.substring(0, index);
+        String fileName = fileUri.substring(index + 1, fileUri.length());
         try {
             FastDFSUtil.deleteFile(groupName, fileName);
         } catch (Exception e) {
-            throw new FileException(e.getMessage());
+            e.printStackTrace();
+//            throw new FileException(e.getMessage());
         }
+        return Message.createBySuccess();
     }
+
+
 
 }

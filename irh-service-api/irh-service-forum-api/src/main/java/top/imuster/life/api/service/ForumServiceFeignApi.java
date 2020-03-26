@@ -119,5 +119,6 @@ public interface ForumServiceFeignApi {
      * @param errandId
      * @reture: boolean
      **/
-    boolean errandIsAvailable(Long errandId);
+    @GetMapping("/errand/avail/{errandId}")
+    boolean errandIsAvailable(@PathVariable("errandId") Long errandId);
 }

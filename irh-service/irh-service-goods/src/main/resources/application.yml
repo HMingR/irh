@@ -1,5 +1,5 @@
 server:
-  port: 40400
+  port: 10400
 
 mybatis:
   mapper-locations: /mapper/*

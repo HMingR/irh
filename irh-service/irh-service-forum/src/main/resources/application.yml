@@ -1,5 +1,5 @@
 server:
-  port: 30300
+  port: 10300
 
 
 mybatis:

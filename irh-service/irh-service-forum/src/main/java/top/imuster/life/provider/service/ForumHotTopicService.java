@@ -23,7 +23,7 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopicInfo, Lon
      * @param ids
      * @reture: void
      **/
-    void updateHotTopicFromReids2Redis(List<HashSet<Long>> res);
+    void updateHotTopicFromRedis2DB(List<HashSet<Long>> res);
 
     /**
      * @Author hmr
@@ -32,7 +32,7 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopicInfo, Lon
      * @param
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleInfo>>
      **/
-    Message<List<ForumHotTopicInfo>> totalHotTopicList(int topic);
+    Message<List<ForumHotTopicInfo>> totalHotTopicList(Long pageSize, Long currentPage);
 
     /**
      * @Author hmr

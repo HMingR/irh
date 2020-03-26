@@ -59,7 +59,7 @@ public class AuthRoleRelServiceImpl extends BaseServiceImpl<AuthRoleRel, Long> i
         if(!x.isEmpty()){
             for (Long authId : x) {
                 condition.setAuthId(authId);
-                authRoleRelDao.deleteByCondition(condition);
+                authRoleRelDao.delete(condition);
             }
         }
         if(!y.isEmpty()){

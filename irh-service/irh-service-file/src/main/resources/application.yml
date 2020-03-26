@@ -1,5 +1,5 @@
 server:
-  port: 60600
+  port: 10600
 spring:
   application:
     name: file-service
@@ -21,7 +21,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://39.105.0.169:10086/eureka   # 注册到eureka注册中心
+      defaultZone: http://localhost:10086/eureka   # 注册到eureka注册中心
   instance:
     lease-renewal-interval-in-seconds: 5      # 心跳时间
     lease-expiration-duration-in-seconds: 15  # 过期时间

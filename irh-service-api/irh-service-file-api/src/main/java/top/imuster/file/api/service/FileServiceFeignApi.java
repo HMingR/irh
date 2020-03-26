@@ -33,6 +33,6 @@ public interface FileServiceFeignApi {
      * @param name
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @DeleteMapping("/{name}")
-    void deleteByName(@PathVariable("name") String name);
+    @DeleteMapping
+    Message<String> deleteByName(@RequestBody String fileUri);
 }

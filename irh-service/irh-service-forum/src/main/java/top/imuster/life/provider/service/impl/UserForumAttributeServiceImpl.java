@@ -74,7 +74,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     public void transHotTopicFromRedis2DB(Long topic) {
         List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis(topic);
         if(res == null || res.isEmpty()) return;
-        forumHotTopicService.updateHotTopicFromReids2Redis(res);
+        forumHotTopicService.updateHotTopicFromRedis2DB(res);
     }
 
     @Override

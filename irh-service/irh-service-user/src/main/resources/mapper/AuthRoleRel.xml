@@ -136,7 +136,7 @@
 		ORDER BY ai.id
 	</select>
 
-	<delete id="deleteByCondition" parameterType="authInfo">
+	<delete id="delete" parameterType="authInfo">
 		<![CDATA[DELETE]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
