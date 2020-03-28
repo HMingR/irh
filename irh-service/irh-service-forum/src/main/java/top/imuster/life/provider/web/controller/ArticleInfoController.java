@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
@@ -99,7 +99,7 @@ public class ArticleInfoController extends BaseController {
      **/
     @ApiOperation("根据id查看帖子的所有信息")
     @GetMapping("/{id}")
-    @BrowserTimesAnnotation(browserType = BrowserType.FORUM, value = "#p0")
+    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "#p0")
     public Message<ArticleInfo> getArticleInfoById(@PathVariable("id") Long id){
         ArticleInfo articleDetail = articleInfoService.getArticleDetailById(id);
         return Message.createBySuccess(articleDetail);

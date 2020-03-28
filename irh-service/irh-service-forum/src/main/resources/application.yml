@@ -28,3 +28,8 @@ logging:
   level:
     top.imuster: debug
 
+
+browse:   # redis中存储的浏览记录
+  record:
+    size: 30    #存储的链表大小
+    expire: 180 #过期时间    单位为 天

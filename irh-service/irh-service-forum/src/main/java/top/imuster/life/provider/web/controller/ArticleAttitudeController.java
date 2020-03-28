@@ -39,7 +39,7 @@ public class ArticleAttitudeController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     /*@ApiOperation("给文章点赞")
-    @BrowserTimesAnnotation(browserType = BrowserType.FORUM, disableBrowserTimes = true, value = "#p0")
+    @BrowserAnnotation(browserType = BrowserType.FORUM, disableBrowserTimes = true, value = "#p0")
     @GetMapping("/up/1/{id}")
     public Message<String> upArticleById(@PathVariable("id") Long id){
         redisArticleAttitudeService.saveUp2Redis(id, 1, getCurrentUserIdFromCookie());

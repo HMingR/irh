@@ -81,11 +81,23 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("文章详情页url")
 	private String detailPage;
 
+	//热搜指数
 	private Long score;
+
+	//浏览时间(浏览记录用)
+	private String browseDate;
 
 	// 1-无效  2-有效
 //	private Short state;
 
+
+	public String getBrowseDate() {
+		return browseDate;
+	}
+
+	public void setBrowseDate(String browseDate) {
+		this.browseDate = browseDate;
+	}
 
 	public Long getId() {
 		return id;

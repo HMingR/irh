@@ -5,7 +5,7 @@ import top.imuster.common.core.enums.BrowserType;
 import java.lang.annotation.*;
 
 /**
- * @ClassName: BrowserTimesAnnotation
+ * @ClassName: BrowserAnnotation
  * @Description: 需要向redis中发送浏览次数的注解，使用该注解需要在形参中使用@PathValidate注解，查询的id为Long型
  * @author: hmr
  * @date: 2020/1/23 17:21
@@ -13,8 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Inherited
-public @interface BrowserTimesAnnotation {
+public @interface BrowserAnnotation {
     /**
      * @Author hmr
      * @Description 浏览对象的类型
@@ -50,4 +49,6 @@ public @interface BrowserTimesAnnotation {
      * @reture: boolean
      **/
     boolean disableHotTopic() default false;
+
+    boolean disableBrowseRecord() default false;
 }

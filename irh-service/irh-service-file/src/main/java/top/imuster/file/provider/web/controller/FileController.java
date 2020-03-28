@@ -74,6 +74,16 @@ public class FileController extends BaseController implements FileServiceFeignAp
         return Message.createBySuccess();
     }
 
+    public static void main(String[] args) {
+        //group1/M00/00/00/rBgYGV59beKADA0oACJ00ODYrwE595.jpg
+        try {
+            FastDFSUtil.deleteFile("group1", "M00/00/00/rBgYGV59beKADA0oACJ00ODYrwE595.jpg");
+        } catch (Exception e) {
+            e.printStackTrace();
+//            throw new FileException(e.getMessage());
+        }
+    }
+
 
 
 }

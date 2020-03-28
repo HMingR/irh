@@ -67,4 +67,8 @@ public class GlobalConstant {
     //redis中记录文章转发次数
     public static final String IRH_FORUM_FORWARD_TIMES_MAP = "irh::forum::forward::times::map";
 
+
+    //redis中记录用户浏览历史
+    public static final String IRH_BROWSE_RECORD_LIST = "irh::browse::record::list::";
+
 }

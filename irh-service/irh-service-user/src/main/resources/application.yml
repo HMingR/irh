@@ -19,6 +19,12 @@ hot:
     total: 0   # 显示热搜数量
     refreshTime: 0    #总热度榜刷新时间
 
+aliyun:                   #阿里云实名认证配置
+  realNameAuth:
+    host: http://dm-51.data.aliyun.com
+    path: /rest/160601/ocr/ocr_idcard.json
+    appCode: 00840a9616a643ee8d98e323d938ef5f  #500次调用
+
 secure:
   ignored:
     urls: #安全路径白名单

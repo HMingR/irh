@@ -84,4 +84,18 @@ public class RedisUtil {
         throw new GlobalException("传入的BrowserType有误");
     }
 
+    /**
+     * @Author hmr
+     * @Description 根据浏览类型和用户id生成存储浏览历史的redis key
+     * @Date: 2020/3/28 9:54
+     * @param browserType
+     * @param userId
+     * @reture: java.lang.String
+     **/
+    public static String getBrowseRecordKey(BrowserType browserType, Long userId){
+        if(browserType.getType() == 1) return new StringBuilder().append(GlobalConstant.IRH_BROWSE_RECORD_LIST).append("1::").append(userId).toString();
+        if(browserType.getType() == 3) return new StringBuilder().append(GlobalConstant.IRH_BROWSE_RECORD_LIST).append("3::").append(userId).toString();
+        throw new GlobalException("参数错误");
+    }
+
 }

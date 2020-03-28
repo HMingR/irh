@@ -1,4 +1,4 @@
-package top.imuster.auth.service;
+package top.imuster.auth.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

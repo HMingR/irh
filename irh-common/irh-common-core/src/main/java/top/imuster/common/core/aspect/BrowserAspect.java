@@ -1,5 +1,6 @@
 package top.imuster.common.core.aspect;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -13,14 +14,15 @@ import org.springframework.context.expression.AnnotatedElementKey;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.stereotype.Component;
-import top.imuster.common.base.config.GlobalConstant;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.config.ExpressionEvaluator;
+import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.AspectUtil;
+import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.RedisUtil;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,29 +34,38 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 @Aspect
-public class BrowserTimesAspect  {
+public class BrowserAspect extends BaseController {
 
-    @Value("${hot.topic.refreshTime}")
+    @Value("${hot.topic.refreshTime:0}")
     private Long refreshTime;
+
+    @Value("${browse.record.size:0}")
+    private int browseRecordSize;
+
+    @Value("${browse.record.expire:0}")
+    private int browseRecordExpire;
 
     @Autowired
     RedisTemplate redisTemplate;
 
-    @Pointcut("@annotation(top.imuster.common.core.annotation.BrowserTimesAnnotation)")
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Pointcut("@annotation(top.imuster.common.core.annotation.BrowserAnnotation)")
     public void pointCut(){}
 
     private ExpressionEvaluator<String> evaluator = new ExpressionEvaluator<>();
 
     @After("pointCut()")
     public void after(JoinPoint joinPoint){
-        BrowserTimesAnnotation annotation = getAnnotation(joinPoint);
+        BrowserAnnotation annotation = getAnnotation(joinPoint);
         Long targetId = null;
         if(StringUtils.isNotBlank(annotation.value())) targetId = getTargetId(joinPoint);
         if(targetId == null || StringUtils.isBlank(annotation.value()))  targetId = AspectUtil.getTargetId(joinPoint);
         BrowserType browserType = annotation.browserType();
         boolean disableBrowserTimes = annotation.disableBrowserTimes();
         boolean disableHotTopic = annotation.disableHotTopic();
-
+        boolean disableBrowseRecord = annotation.disableBrowseRecord();
         //处理浏览记录
         if(!disableBrowserTimes){
             redisTemplate.opsForHash().increment(browserType.getRedisKeyHeader(), String.valueOf(targetId), 1);
@@ -67,6 +78,25 @@ public class BrowserTimesAspect  {
             redisTemplate.opsForZSet().incrementScore(zSetKey, String.valueOf(targetId), 1);
             redisTemplate.expire(zSetKey, refreshTime, TimeUnit.MINUTES);
         }
+
+        if(disableBrowseRecord) return;
+
+        Long userId = getCurrentUserIdFromCookie(false);
+        if(userId == null) return;
+        BrowseRecordDto recordDto = new BrowseRecordDto();
+        recordDto.setCreateTime(DateUtils.now());
+        recordDto.setTargetId(targetId);
+
+        String recordKey = RedisUtil.getBrowseRecordKey(browserType, userId);
+        try{
+            redisTemplate.opsForList().leftPush(recordKey, objectMapper.writeValueAsString(recordDto));
+        }catch (Exception e){
+            log.error("将浏览记录序列化失败");
+        }
+        redisTemplate.expire(recordKey, 180, TimeUnit.DAYS);
+        Long size = redisTemplate.opsForList().size(recordKey);
+        if(size > 30) redisTemplate.opsForList().rightPop(recordKey);
+
     }
 
     /**
@@ -74,17 +104,17 @@ public class BrowserTimesAspect  {
      * @Description 从方法中获得参数信息
      * @Date: 2020/1/26 16:12
      * @param joinPoint
-     * @reture: top.imuster.common.core.annotation.BrowserTimesAnnotation
+     * @reture: top.imuster.common.core.annotation.BrowserAnnotation
      **/
-    private BrowserTimesAnnotation getAnnotation(JoinPoint joinPoint){
+    private BrowserAnnotation getAnnotation(JoinPoint joinPoint){
         MethodSignature signature = (MethodSignature)joinPoint.getSignature();
-        return signature.getMethod().getAnnotation(BrowserTimesAnnotation.class);
+        return signature.getMethod().getAnnotation(BrowserAnnotation.class);
     }
 
     private Long getTargetId(JoinPoint joinPoint) {
         String condition = "";
         try{
-            BrowserTimesAnnotation handler = getAnnotation(joinPoint);
+            BrowserAnnotation handler = getAnnotation(joinPoint);
             if (joinPoint.getArgs() == null) {
                 return null;
             }

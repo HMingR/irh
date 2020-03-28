@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowserTimesAnnotation;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
@@ -37,7 +37,7 @@ public class ArticleForwardController extends BaseController {
 
     @ApiOperation("转发")
     @NeedLogin
-    @BrowserTimesAnnotation(browserType = BrowserType.FORUM, value = "p0.id")
+    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "p0.id")
     @PostMapping
     public Message<String> forward(@RequestBody ArticleForwardInfo articleForwardInfo){
         Long userId = getCurrentUserIdFromCookie();
