@@ -37,12 +37,15 @@ public class ArticleTagController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleCategory>>
      **/
+    //  forum/tag
     @ApiOperation(value = "根据分类id获得标签", httpMethod = "GET")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:tag:byCategory:'+#p0")
-    @GetMapping("/list/{id}")
-    public Message<List<Long>> getListById(@PathVariable("id") Long id){
-        List<Long> tagByCategoryId = articleTagService.getTagByCategoryId(id);
-        return Message.createBySuccess(tagByCategoryId);
+    @GetMapping("/list/{ids}")
+    public Message<List<Long>> getListById(@PathVariable("ids") String id){
+        //List<Long> tagByCategoryId = articleTagService.getTagByCategoryId(id);
+        //return Message.createBySuccess(tagByCategoryId);
+        //todo ids
+        return null;
     }
 
     @ApiOperation(value = "获得所有的标签", httpMethod = "GET")

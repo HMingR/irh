@@ -7,6 +7,10 @@ spring:
   profiles:
     active: dev
 
+mybatis:
+  mapper-locations: mapper/*
+  type-aliases-package: top.imuster.security.pojo
+
 auth:
   tokenValiditySeconds: 1200  #token存储到redis的过期时间
   clientId: irhWebApp
@@ -32,6 +36,17 @@ logging:
 management:
   security:
     enabled: false
+
+baidu:    # 调用百度AI的accessToken
+  accessToken: 24.d3d15caaab162df7a0405664a9ae7091.2592000.1587978125.282335-19129665    # access token
+  templateSign: 86a4cc9321bfc4fa106ba2a6d374ce56    # 识别一卡通的模板id
+  bdRecogniseUrl: https://aip.baidubce.com/rest/2.0/solution/v1/iocr/recognise
+
+aliyun:
+  realNameAuth:
+    host: http://dm-51.data.aliyun.com
+    path: /rest/160601/ocr/ocr_idcard.json
+    appCode: 00840a9616a643ee8d98e323d938ef5f
 
 ribbon:
   MaxAutoRetries: 2 #最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试，如果eureka中找不到服务则直接走断路器

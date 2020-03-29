@@ -50,5 +50,12 @@ public @interface BrowserAnnotation {
      **/
     boolean disableHotTopic() default false;
 
-    boolean disableBrowseRecord() default false;
+    /**
+     * @Author hmr
+     * @Description 是否禁用浏览记录功能，默认关闭
+     * @Date: 2020/3/29 10:31
+     * @param
+     * @reture: boolean
+     **/
+    boolean disableBrowseRecord() default true;
 }

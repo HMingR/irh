@@ -129,5 +129,11 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE tag_id = #{id}
 	</select>
+
+	<select id="selectTagByUserId" parameterType="long" resultType="long">
+		<![CDATA[SELECT tag_id]]>
+		<include refid="QUERY_FROM_TABLE"></include>
+		<![CDATA[WHERE consumer_id = #{userId}]]>
+	</select>
 	
 </mapper>

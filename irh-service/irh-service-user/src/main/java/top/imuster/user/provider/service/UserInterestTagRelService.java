@@ -4,6 +4,8 @@ package top.imuster.user.provider.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.user.api.pojo.UserInterestTagRel;
 
+import java.util.List;
+
 /**
  * ConsumerInterestTagRelService接口
  * @author 黄明人
@@ -19,4 +21,13 @@ public interface UserInterestTagRelService extends BaseService<UserInterestTagRe
      * @reture: void
      **/
     Long getTagCountByTagId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户关注的tag id
+     * @Date: 2020/3/28 16:13
+     * @param userId
+     * @reture: java.util.List<java.lang.Long>
+     **/
+    List<Long> getUserTagByUserId(Long userId);
 }

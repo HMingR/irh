@@ -3,6 +3,7 @@ package top.imuster.user.provider.service;
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.InterestTagInfo;
 
 import java.util.List;
@@ -40,4 +41,13 @@ public interface InterestTagInfoService extends BaseService<InterestTagInfo, Lon
      * @reture: java.lang.String
      **/
     String getTagNameById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户选择的标签
+     * @Date: 2020/3/28 16:07
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.user.api.pojo.InterestTagInfo>>
+     **/
+    Message<List<Long>> getUserTagByUserId(Long userId);
 }

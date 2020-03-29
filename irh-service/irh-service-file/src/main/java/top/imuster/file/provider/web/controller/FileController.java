@@ -1,6 +1,7 @@
 package top.imuster.file.provider.web.controller;
 
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.wrapper.Message;
@@ -30,8 +31,8 @@ public class FileController extends BaseController implements FileServiceFeignAp
      *
      * @return*/
     @Override
-    @PostMapping
-    public Message<String> upload(@RequestParam(value = "file")MultipartFile file) {
+    @PostMapping(produces = { MediaType.APPLICATION_JSON_UTF8_VALUE },consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Message<String> upload(@RequestPart("file") MultipartFile file) {
         try{
             //封装文件信息
             FastDFSFile fastDFSFile = new FastDFSFile(

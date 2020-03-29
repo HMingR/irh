@@ -4,6 +4,8 @@ package top.imuster.user.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.UserInterestTagRel;
 
+import java.util.List;
+
 /**
  * UserInterestTagRelDao 接口
  * @author 黄明人
@@ -20,4 +22,12 @@ public interface UserInterestTagRelDao extends BaseDao<UserInterestTagRel, Long>
      **/
     Long selectTagCountByTagId(Long id);
 
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/3/28 16:14
+     * @param userId
+     * @reture: java.util.List<java.lang.Long>
+     **/
+    List<Long> selectTagByUserId(Long userId);
 }

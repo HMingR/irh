@@ -9,6 +9,7 @@ import top.imuster.user.provider.dao.UserInterestTagRelDao;
 import top.imuster.user.provider.service.UserInterestTagRelService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * UserInterestTagRelService 实现类
@@ -29,5 +30,10 @@ public class UserInterestTagRelServiceImpl extends BaseServiceImpl<UserInterestT
     @Override
     public Long getTagCountByTagId(Long id) {
         return userInterestTagRelDao.selectTagCountByTagId(id);
+    }
+
+    @Override
+    public List<Long> getUserTagByUserId(Long userId) {
+        return userInterestTagRelDao.selectTagByUserId(userId);
     }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.user.api.pojo.InterestTagInfo;
 import top.imuster.user.provider.service.InterestTagInfoService;
@@ -114,5 +115,13 @@ public class AdminInterestTagController extends BaseController {
     public Message<String> deleteById(@PathVariable("id") Long id){
         interestTagInfoService.deleteById(id);
         return Message.createBySuccess();
+    }
+
+    @ApiOperation("根据用户id获得用户关注的兴趣标签id列表")
+    @GetMapping("/owner")
+    @NeedLogin
+    public Message<List<Long>> getUserTag(){
+        Long userId = getCurrentUserIdFromCookie();
+        return interestTagInfoService.getUserTagByUserId(userId);
     }
 }

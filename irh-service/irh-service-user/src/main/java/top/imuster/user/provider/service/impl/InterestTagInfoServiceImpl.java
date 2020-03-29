@@ -6,10 +6,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.InterestTagInfo;
 import top.imuster.user.api.pojo.UserInterestTagRel;
 import top.imuster.user.provider.dao.InterestTagInfoDao;
@@ -73,5 +73,11 @@ public class InterestTagInfoServiceImpl extends BaseServiceImpl<InterestTagInfo,
     @Cacheable(key = "#p0")
     public String getTagNameById(Long id) {
         return interestTagInfoDao.selectTagNameById(id);
+    }
+
+    @Override
+    public Message<List<Long>> getUserTagByUserId(Long userId) {
+        List<Long> tagIds = userInterestTagRelService.getUserTagByUserId(userId);
+        return Message.createBySuccess(tagIds);
     }
 }
