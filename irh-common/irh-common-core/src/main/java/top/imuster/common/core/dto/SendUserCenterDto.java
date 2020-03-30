@@ -1,5 +1,7 @@
 package top.imuster.common.core.dto;
 
+import top.imuster.common.core.enums.MqTypeEnum;
+
 import java.io.Serializable;
 
 /**
@@ -25,6 +27,10 @@ public class SendUserCenterDto extends Send2MQ  implements Serializable {
 
     //留言表中的id
     private Long resourceId;
+
+    public SendUserCenterDto(){
+        this.setType(MqTypeEnum.CENTER);
+    }
 
     public Long getResourceId() {
         return resourceId;

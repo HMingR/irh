@@ -29,9 +29,9 @@ public class UserAuthenticationController extends BaseController {
     @ApiOperation("身份证实名认证,需要上传身份证到本地服务器之后返回一个图片的uri")
     @NeedLogin
     @PostMapping("/identityCard")
-    public Message<String> realNameAuthen(@RequestParam("picUri") String picUri, @RequestParam("realName") String inputName){
+    public Message<String> realNameAuthen(@RequestParam("file") MultipartFile file, @RequestParam("realName") String inputName){
         Long userId = getCurrentUserIdFromCookie();
-        return userAuthenServiceImpl.realNameAuthentication(userId, picUri, inputName);
+        return userAuthenServiceImpl.realNameAuthentication(userId, file, inputName);
     }
 
     @ApiOperation("一卡通实名认证")

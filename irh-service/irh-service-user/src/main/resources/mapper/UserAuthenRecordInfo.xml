@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.auth.dao.UserAuthenRecordInfoDao">
+<mapper namespace="top.imuster.user.provider.dao.UserAuthenRecordInfoDao">
 
 	<!-- user_authen_record_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -27,6 +27,7 @@
             <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
             <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
 		</where>

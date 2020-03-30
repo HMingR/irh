@@ -32,7 +32,7 @@ public interface UserAuthenService {
      * @param inputName 输入的名字
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> realNameAuthentication(Long userId, String picUri, String inputName);
+    Message<String> realNameAuthentication(Long userId, MultipartFile file, String inputName);
 
 
 }

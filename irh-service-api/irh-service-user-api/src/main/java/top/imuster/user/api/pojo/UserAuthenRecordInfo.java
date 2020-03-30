@@ -1,4 +1,4 @@
-package top.imuster.security.pojo;
+package top.imuster.user.api.pojo;
 
 
 import top.imuster.common.base.domain.BaseDomain;

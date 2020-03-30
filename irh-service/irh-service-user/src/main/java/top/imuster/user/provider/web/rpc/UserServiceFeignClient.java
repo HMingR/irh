@@ -5,7 +5,6 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
-import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.RoleInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 
@@ -50,5 +49,15 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     @PostMapping("/register")
     public Message<String> register(@RequestBody UserInfo userInfo,@PathVariable("code") String code) {
         return userInfoService.register(userInfo, code);
+    }
+
+    @Override
+    @GetMapping("/{userId}/{state}")
+    public Message<String> updateUserState(@PathVariable("userId") Long userId, @PathVariable("state") Integer state) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
+        userInfo.setState(state);
+        userInfoService.updateByKey(userInfo);
+        return Message.createBySuccess();
     }
 }

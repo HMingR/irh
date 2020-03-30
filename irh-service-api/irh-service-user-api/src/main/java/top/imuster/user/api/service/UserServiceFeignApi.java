@@ -47,4 +47,14 @@ public interface UserServiceFeignApi {
      **/
     @PostMapping("/register/{code}")
     Message<String> register(@RequestBody UserInfo userInfo,@PathVariable("code") String code);
+
+    /**
+     * @Author hmr
+     * @Description 更新用户的状态
+     * @Date: 2020/3/29 16:21
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @GetMapping("/{userId}/{state}")
+    Message<String> updateUserState(@PathVariable("userId") Long userId, @PathVariable("state") Integer state);
 }

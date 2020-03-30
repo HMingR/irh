@@ -2,24 +2,25 @@ package top.imuster.auth.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import top.imuster.auth.service.UserAuthenRecordInfoService;
+import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.auth.service.UserAuthenService;
 import top.imuster.auth.utils.Base64Util;
 import top.imuster.auth.utils.HttpUtil;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendAuthenRecordDto;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.file.api.service.FileServiceFeignApi;
-import top.imuster.security.pojo.UserAuthenRecordInfo;
+import top.imuster.user.api.service.UserServiceFeignApi;
 
-import javax.annotation.Resource;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,29 +54,29 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     private String bdRecogniseUrl;
 
     @Autowired
+    private GenerateSendMessageService generateSendMessageService;
+
+    @Autowired
     FileServiceFeignApi fileServiceFeignApi;
 
-    @Resource
-    UserAuthenRecordInfoService userAuthenRecordInfoService;
+    @Autowired
+    UserServiceFeignApi userServiceFeignApi;
 
-    public Message<String> realNameAuthentication(Long userId, String picUri, String inputName) {
-        boolean res = generate(picUri, inputName);
+    public Message<String> realNameAuthentication(Long userId, MultipartFile file, String inputName) {
+        boolean res = generate(file, inputName);
         if(!res){
-            saveAuthen2DB(picUri, inputName, userId);
-            UserAuthenRecordInfo condition = new UserAuthenRecordInfo();
-            condition.setUserId(userId);
-            condition.setInputName(inputName);
-            condition.setPicuri(picUri);
-            condition.setType(2);
-            userAuthenRecordInfoService.insertEntry(condition);
+            Message<String> upload = fileServiceFeignApi.upload(file);
+            String fileUri = upload.getText();
+            saveAuthen2DB(fileUri, inputName, userId);
+            userServiceFeignApi.updateUserState(userId, 50);
         }else{
             //删除服务器上的身份证照片
-            fileServiceFeignApi.deleteByName(picUri);
+            userServiceFeignApi.updateUserState(userId, 40);
         }
         return Message.createBySuccess();
     }
 
-    private boolean generate(String picUri, String inputName){
+    private boolean generate(MultipartFile file, String inputName){
         //请根据线上文档修改configure字段
         JSONObject configObj = new JSONObject();
         configObj.put("side", "face");
@@ -84,17 +85,16 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         String method = "POST";
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "APPCODE " + appCode);
-
         Map<String, String> querys = new HashMap<>();
 
         // 拼装请求body的json字符串
         JSONObject requestObj = new JSONObject();
         try {
-           /* requestObj.put("image", imgBase64);
+            requestObj.put("image", Base64.encodeBase64(file.getBytes()));
             if(config_str.length() > 0) {
                 requestObj.put("configure", config_str);
-            }*/
-        } catch (JSONException e) {
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         String bodys = requestObj.toString();
@@ -122,20 +122,6 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     }
 
 
-    /*
-     * 获取参数的json对象
-     */
-    private static JSONObject getParam(int type, String dataValue) {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("dataType", type);
-            obj.put("dataValue", dataValue);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return obj;
-    }
-
     public Message<String> oneCardSolution(MultipartFile file, String inputName, Long userId, String inputCardNo) throws Exception {
         if(file.isEmpty()) return Message.createByError("文件为空");
         byte[] bytes = file.getBytes();
@@ -146,7 +132,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         Integer errorCode = (Integer) out.get("error_code");
         if(errorCode != 0){
             //验证失败
-            saveAuthen2DB(file, inputName, inputCardNo, userId);
+            saveAuthen2DB(file, inputName, userId);
             return Message.createBySuccess("图片验证失败,AI无法识别图片中的信息,您可以选择等待管理员审核或者重新上传清晰的图片");
         }
         String data = out.getString("data");
@@ -161,7 +147,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         }
         String name = resMap.get("name");
         if(!name.equals(inputName)){
-            saveAuthen2DB(file, inputName, inputCardNo, userId);
+            saveAuthen2DB(file, inputName, userId);
             return Message.createByError(new StringBuilder().append("图片验证失败,AI识别的姓名为").append(name).append(",请检查输入或者更换清晰的图片").toString());
         }
         return Message.createBySuccess();
@@ -170,25 +156,20 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     /**
      * @Author hmr
      * @Description 使用AI认证失败之后将信息保存到数据库，通过人工识别
-     * @Date: 2020/3/29 11:17
-     * @param picUri
+     * @Date: 2020/3/29 15:45
+     * @param file
      * @param inputName
-     * @param inputCardNo
      * @param userId
      * @reture: void
      **/
-    private void saveAuthen2DB(MultipartFile file, String inputName, String inputCardNo, Long userId){
+    private void saveAuthen2DB(MultipartFile file, String inputName, Long userId){
         Message<String> upload = fileServiceFeignApi.upload(file);
         if(upload.getCode() != 200){
             log.error("上传用户认证的一卡通图片到服务器失败");
+            throw new CustomSecurityException();
         }
         String fileUri = upload.getText();
-        UserAuthenRecordInfo condition = new UserAuthenRecordInfo();
-        condition.setUserId(userId);
-        condition.setPicuri(fileUri);
-        condition.setInputCardNo(inputCardNo);
-        condition.setInputName(inputName);
-        userAuthenRecordInfoService.insertEntry(condition);
+        saveAuthen2DB(fileUri, inputName, userId);
     }
 
     /**
@@ -197,18 +178,14 @@ public class UserAuthenServiceImpl implements UserAuthenService {
      * @Date: 2020/3/29 11:22
      * @param picUri
      * @param inputName
-     * @param inputCardNo
      * @param userId
      * @reture: void
      **/
     private void saveAuthen2DB(String picUri, String inputName, Long userId){
-        UserAuthenRecordInfo condition = new UserAuthenRecordInfo();
-        condition.setUserId(userId);
-        condition.setPicuri(picUri);
+        SendAuthenRecordDto condition = new SendAuthenRecordDto();
         condition.setInputName(inputName);
-        userAuthenRecordInfoService.insertEntry(condition);
+        condition.setPicUri(picUri);
+        condition.setUserId(userId);
+        generateSendMessageService.sendToMq(condition);
     }
-
-
-
 }

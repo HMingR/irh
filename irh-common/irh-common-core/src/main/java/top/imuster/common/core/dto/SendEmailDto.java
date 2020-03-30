@@ -1,5 +1,6 @@
 package top.imuster.common.core.dto;
 
+import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.enums.TemplateEnum;
 
 import java.io.Serializable;
@@ -31,6 +32,10 @@ public class SendEmailDto extends Send2MQ implements Serializable {
 
     //过期时间单位
     private TimeUnit unit;
+
+    public SendEmailDto(){
+        this.setType(MqTypeEnum.EMAIL);
+    }
 
     @Override
     public String toString() {

@@ -53,6 +53,9 @@ public class RabbitMqConfig {
     }
 
     @Bean
+    public Queue authenRecordQueue(){return new Queue(MqTypeEnum.AUTHEN_RECORD.getQueueName(), true); }
+
+    @Bean
     public Queue smsQueue(){
         return new Queue(MqTypeEnum.DETAIL.getQueueName(), true);
     }
@@ -90,6 +93,11 @@ public class RabbitMqConfig {
     @Bean
     public Binding errandQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
         return BindingBuilder.bind(errandQueue()).to(exchange).with(MqTypeEnum.ERRAND.getRoutingKeyMatchRule()).noargs();
+    }
+
+    @Bean
+    public Binding authenRecordQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
+        return BindingBuilder.bind(authenRecordQueue()).to(exchange).with(MqTypeEnum.AUTHEN_RECORD.getRoutingKeyMatchRule()).noargs();
     }
 
 }

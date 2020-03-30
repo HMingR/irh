@@ -46,6 +46,11 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
                 log.error("用户注册失败,用户信息为{}", userInfo);
                 return Message.createByError("注册失败");
             }
+
+            @Override
+            public Message<String> updateUserState(Long userId, Integer state) {
+                return null;
+            }
         };
     }
 }
