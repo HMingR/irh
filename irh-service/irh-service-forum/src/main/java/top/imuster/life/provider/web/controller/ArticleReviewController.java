@@ -116,11 +116,10 @@ public class ArticleReviewController extends BaseController {
      **/
     @ApiOperation(value = "用户查看自己的留言记录,按照时间降序排列", httpMethod = "GET")
     @NeedLogin
-    @GetMapping("/list")
-    public Message<List<ArticleReviewInfo>> list(){
+    @GetMapping("/list/{pageSize}/{currentPage}")
+    public Message<Page<ArticleReviewInfo>> list(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         Long userId = getCurrentUserIdFromCookie();
-        List<ArticleReviewInfo> list = articleReviewService.list(userId);
-        return Message.createBySuccess(list);
+        return articleReviewService.list(userId, pageSize, currentPage);
     }
 
 }

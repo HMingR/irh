@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -27,6 +28,9 @@ import java.util.Map;
  * @date: 2019/12/1 10:36
  */
 public class BaseController {
+
+    @Value("${enable.needLogin}")
+    private boolean enable;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -80,6 +84,7 @@ public class BaseController {
      * @reture: java.lang.Long
      **/
     protected Long getCurrentUserIdFromCookie(){
+        if(!enable) return 5L;
         UserDto currentUser = getCurrentUserFromCookie();
         if(currentUser == null || currentUser.getUserId() == null){
             throw new GlobalException("用户身份过期,请重新登录");

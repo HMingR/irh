@@ -45,16 +45,22 @@ public class ArticleForwardInfoServiceImpl extends BaseServiceImpl<ArticleForwar
     }
 
     @Override
-    public Message<Page<ArticleForwardInfo>> getPageByUserId(Long currentUserIdFromCookie, Integer currentPage) {
+    public Message<Page<ArticleForwardInfo>> getPageByUserId(Long currentUserIdFromCookie, Integer pageSize, Integer currentPage) {
         Page<ArticleForwardInfo> page = new Page<>();
         page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
         ArticleForwardInfo condition = new ArticleForwardInfo();
         condition.setState(2);
         condition.setOrderField("create_time");
         condition.setOrderFieldType("DESC");
+        condition.setStartIndex((currentPage - 1) * pageSize);
+        condition.setEndIndex(pageSize);
         page.setSearchCondition(condition);
-        Page<ArticleForwardInfo> res = this.selectPage(condition, page);
-        return Message.createBySuccess(res);
+
+        page.setTotalCount(articleForwardInfoDao.selectEntryListCount(condition));
+        List<ArticleForwardInfo> forwardInfos = articleForwardInfoDao.selectEntryList(condition);
+        page.setData(forwardInfos);
+        return Message.createBySuccess(page);
     }
 
     @Override

@@ -35,7 +35,7 @@
 	<!-- 智能排序与分页 -->
 	<sql id="QUERY_ORDER_LIMIT_CONDTION">
 		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
-		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and endIndex != null and endIndex &gt; 0"><![CDATA[LIMIT #{startIndex}, #{endIndex}]]></if>
 	</sql>
 
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->

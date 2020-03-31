@@ -123,8 +123,8 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	<select id="selectCollectByCondition" resultType="articleCollectionRel" parameterType="articleCollectionRel">
-		<![CDATA[SELECT id, article_id AS articleId]]>
+	<select id="selectCollectByCondition" resultType="top.imuster.life.api.pojo.ArticleCollectionRel" parameterType="articleCollectionRel">
+		<![CDATA[SELECT id, article_id AS articleId, user_id AS userId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>

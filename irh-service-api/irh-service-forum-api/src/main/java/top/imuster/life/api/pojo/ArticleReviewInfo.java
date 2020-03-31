@@ -68,9 +68,19 @@ public class ArticleReviewInfo extends BaseDomain {
 	@ApiModelProperty("当前用户是否点赞   1-为点赞  2-点赞")
 	private Integer upState;
 
+	//写文章的人的id
+	private String artcileWriterName;
+
 	// 1-无效 2-有效
 //	private Short state;
 
+	public String getWriterName() {
+		return artcileWriterName;
+	}
+
+	public void setWriterName(String artcileWriterName) {
+		this.artcileWriterName = artcileWriterName;
+	}
 
 	public Integer getUpState() {
 		return upState;

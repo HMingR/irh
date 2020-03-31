@@ -70,7 +70,7 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
     }
 
     @Override
-    public List<ArticleReviewInfo> list(Long userId) {
+    public Message<Page<ArticleReviewInfo>> list(Long userId, Integer pageSize, Integer currentPage) {
         ArticleReviewInfo articleReviewInfo = new ArticleReviewInfo();
         articleReviewInfo.setUserId(userId);
         articleReviewInfo.setState(2);
@@ -78,7 +78,12 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
         articleReviewInfo.setOrderFieldType("DESC");
         articleReviewInfo.setFirstClassId(0L);
         articleReviewInfo.setParentId(0L);
-        return articleReviewDao.selectEntryList(articleReviewInfo);
+        Page<ArticleReviewInfo> page = new Page<>();
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
+        page.setSearchCondition(articleReviewInfo);
+        page = this.selectPage(articleReviewInfo, page);
+        return Message.createBySuccess(page);
     }
 
     @Override

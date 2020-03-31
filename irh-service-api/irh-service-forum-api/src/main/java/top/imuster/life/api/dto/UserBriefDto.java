@@ -34,6 +34,18 @@ public class UserBriefDto implements Serializable {
     @ApiModelProperty("文章被浏览的总次数")
     private Long browserTotal;
 
+    @ApiModelProperty("留言总数")
+    private Long reviewTotal;
+
+
+    public Long getReviewTotal() {
+        return reviewTotal;
+    }
+
+    public void setReviewTotal(Long reviewTotal) {
+        this.reviewTotal = reviewTotal;
+    }
+
     public Long getUserId() {
         return userId;
     }

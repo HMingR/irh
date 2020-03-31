@@ -204,10 +204,17 @@
 		</foreach>
 	</select>
 
-	<select id="selectUserBriefTotalById" parameterType="top.imuster.life.api.dto.UserBriefDto" resultType="long">
-		<![CDATA[SELECT SUM(up_total) AS upTotal, SUM(collect_total) AS collectTotal, SUM(browser_times) AS browserTotal]]>
+	<select id="selectUserBriefTotalById" parameterType="long" resultType="top.imuster.life.api.dto.UserBriefDto">
+		<![CDATA[
+		SELECT
+			COUNT(1) AS articleTotal,
+			SUM( up_total ) AS upTotal,
+			SUM( collect_total ) AS collectTotal,
+			SUM( browser_times ) AS browserTotal,
+			SUM(review_total) AS reviewTotal
+		]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE user_id = #{userId}
+		WHERE user_id = #{userId} AND state != 1
 	</select>
 
 	<select id="selectUpTop5ByCategoryId" resultType="articleInfo" parameterType="long">

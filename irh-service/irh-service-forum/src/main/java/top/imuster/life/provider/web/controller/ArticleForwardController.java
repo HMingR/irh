@@ -30,9 +30,9 @@ public class ArticleForwardController extends BaseController {
 
     @ApiOperation("查看自己的转发记录")
     @NeedLogin
-    @GetMapping("/list/{currentPage}")
-    public Message<Page<ArticleForwardInfo>> list(@PathVariable("currentPage") Integer currentPage){
-        return articleForwardInfoService.getPageByUserId(getCurrentUserIdFromCookie(), currentPage);
+    @GetMapping("/list/{pageSize}/{currentPage}")
+    public Message<Page<ArticleForwardInfo>> list(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return articleForwardInfoService.getPageByUserId(getCurrentUserIdFromCookie(), pageSize, currentPage);
     }
 
     @ApiOperation("转发")
@@ -52,7 +52,7 @@ public class ArticleForwardController extends BaseController {
         ArticleForwardInfo articleForwardInfo = new ArticleForwardInfo();
         articleForwardInfo.setUserId(getCurrentUserIdFromCookie());
         articleForwardInfo.setId(id);
-        articleForwardInfo.setState(2);
+        articleForwardInfo.setState(1);
         articleForwardInfoService.updateByKey(articleForwardInfo);
         return Message.createBySuccess();
     }

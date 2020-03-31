@@ -30,9 +30,11 @@ public interface ArticleReviewService extends BaseService<ArticleReviewInfo, Lon
      * @Description 用户查看自己的留言记录
      * @Date: 2020/2/3 11:02
      * @param userId
+     * @param pageSize
+     * @param currentPage
      * @reture: java.util.List<ArticleReviewInfo>
-     **/
-    List<ArticleReviewInfo> list(Long userId);
+     * @return*/
+    Message<Page<ArticleReviewInfo>> list(Long userId, Integer pageSize, Integer currentPage);
 
     /**
      * @Author hmr

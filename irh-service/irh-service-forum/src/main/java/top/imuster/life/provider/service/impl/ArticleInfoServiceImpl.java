@@ -81,14 +81,16 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     public List<ArticleInfo> list(Page<ArticleInfo> page, Long userId) {
-        ArticleInfo condition = page.getSearchCondition();
-        if(condition == null){
+        ArticleInfo searchCondition = page.getSearchCondition();
+        if(searchCondition == null){
             page.setSearchCondition(new ArticleInfo());
         }
-        condition.setUserId(userId);
-        condition.setOrderField("create_time");
-        condition.setOrderFieldType("DESC");
-        condition.setState(2);
+        searchCondition = page.getSearchCondition();
+        searchCondition.setUserId(userId);
+        searchCondition.setOrderField("create_time");
+        searchCondition.setOrderFieldType("DESC");
+        searchCondition.setState(2);
+        page.setTotalCount(articleInfoDao.selectEntryListCount(searchCondition));
         return articleInfoDao.selectListByCondition(page.getSearchCondition());
     }
 

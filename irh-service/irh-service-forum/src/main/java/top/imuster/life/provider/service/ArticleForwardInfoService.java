@@ -18,10 +18,11 @@ public interface ArticleForwardInfoService extends BaseService<ArticleForwardInf
      * @Description 查看当前用户的转发记录
      * @Date: 2020/2/21 17:30
      * @param currentUserIdFromCookie
+     * @param pageSize
      * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleForwardInfo>>
      **/
-    Message<Page<ArticleForwardInfo>> getPageByUserId(Long currentUserIdFromCookie, Integer currentPage);
+    Message<Page<ArticleForwardInfo>> getPageByUserId(Long currentUserIdFromCookie, Integer pageSize, Integer currentPage);
 
     /**
      * @Author hmr

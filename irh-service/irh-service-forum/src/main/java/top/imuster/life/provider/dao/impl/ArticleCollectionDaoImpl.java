@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("articleCollectionDao")
 public class ArticleCollectionDaoImpl extends BaseDaoImpl<ArticleCollectionRel, Long> implements ArticleCollectionDao {
-	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.ArticleCollectionDao.";
+	private final static String NAMESPACE = "top.imuster.life.provider.dao.ArticleCollectionDao.";
 	private final static String SELECT_COLLECT_BY_CONDITION = "selectCollectByCondition";
 	private final static String SELECT_TOTAL_BY_USER_ID = "selectTotalByUserId";
 	//返回本DAO命名空间,并添加statement
