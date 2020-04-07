@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.dto.CheckValidDto;
@@ -54,6 +55,15 @@ public class UserController extends BaseController {
         return Message.createByError(checkValidDto.getType().getTypeName() + "已经存在");
     }
 
+    @ApiOperation("获得个人信息")
+    @GetMapping("/detail")
+    @NeedLogin
+    public Message<UserInfo> getUserInfoById(){
+        UserInfo userInfo = userInfoService.selectEntryList(getCurrentUserIdFromCookie()).get(0);
+        userInfo.setPassword("");
+        return Message.createBySuccess(userInfo);
+    }
+
     /**
      * @Description: 修改会员的个人信息
      * @Author: hmr
@@ -95,6 +105,14 @@ public class UserController extends BaseController {
     @GetMapping("/{id}")
     public Message<String> getUserNameById(@PathVariable("id") Long id){
         return Message.createBySuccess(userInfoService.getUserNameById(id));
+    }
+
+    @ApiOperation("查看用户账号的状态")
+    @GetMapping("/state")
+    @NeedLogin
+    public Message<Long> getUserState(){
+        Long userId = getCurrentUserIdFromCookie();
+        return userInfoService.getUserStateById(userId);
     }
 
         //todo

@@ -266,7 +266,12 @@
 		<![CDATA[SELECT COUNT(1)]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE create_time >= #{startTime} AND create_time <= #{endTime}]]>
+	</select>
 
+	<select id="selectUserStateById" parameterType="long" resultType="long">
+		<![CDATA[SELECT state]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id = #{userId}]]>
 	</select>
 
 </mapper>

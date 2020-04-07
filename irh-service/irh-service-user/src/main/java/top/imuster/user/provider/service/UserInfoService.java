@@ -86,4 +86,13 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: long
      **/
     Long getIncrementUserByTime(String start, String end);
+
+    /**
+     * @Author hmr
+     * @Description 查看用户账号状态
+     * @Date: 2020/4/6 19:50
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<Long> getUserStateById(Long userId);
 }

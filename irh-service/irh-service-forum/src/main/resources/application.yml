@@ -1,6 +1,15 @@
 server:
   port: 10300
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude:
+  endpoint:
+    health:
+      show-details: always
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

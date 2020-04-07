@@ -61,4 +61,13 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @reture: long
      **/
     Long selectIncrementUserByTime(Map<String, String> param);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户的状态
+     * @Date: 2020/4/6 19:51
+     * @param userId
+     * @reture: java.lang.Long
+     **/
+    Long selectUserStateById(Long userId);
 }

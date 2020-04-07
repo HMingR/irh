@@ -146,4 +146,9 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         params.put("endTime", end);
         return userInfoDao.selectIncrementUserByTime(params);
     }
+
+    @Override
+    public Message<Long> getUserStateById(Long userId) {
+        return Message.createBySuccess(userInfoDao.selectUserStateById(userId));
+    }
 }
