@@ -10,7 +10,7 @@ eureka:
     registry-fetch-interval-seconds: 5           # 设置拉取服务的间隔时间
 zuul:
   host:
-    connect-timeout-millis: 15000
+    connect-timeout-millis: 60000
     socket-timeout-millis: 60000
   prefix: /api      # 配置前缀
   routes:

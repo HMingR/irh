@@ -31,11 +31,6 @@ public class ArticleInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "标题不能为空")
 	private String title;
 
-	// 文章/帖子分类id
-	@ApiModelProperty("文章/帖子分类id")
-	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "分类不能为空")
-	private Long articleCategory;
-
 	// 封面图片, max length: 255
 	@ApiModelProperty("封面图片")
 	private String mainPicture;
@@ -113,14 +108,6 @@ public class ArticleInfo extends BaseDomain {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public Long getArticleCategory() {
-		return articleCategory;
-	}
-
-	public void setArticleCategory(Long articleCategory) {
-		this.articleCategory = articleCategory;
 	}
 
 	public String getMainPicture() {

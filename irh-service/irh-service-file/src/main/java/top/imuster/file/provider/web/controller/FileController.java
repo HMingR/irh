@@ -33,6 +33,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
     @Override
     @PostMapping(produces = { MediaType.APPLICATION_JSON_UTF8_VALUE },consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Message<String> upload(@RequestPart("file") MultipartFile file) {
+         logger.info("----->上传文件");
         try{
             //封装文件信息
             FastDFSFile fastDFSFile = new FastDFSFile(

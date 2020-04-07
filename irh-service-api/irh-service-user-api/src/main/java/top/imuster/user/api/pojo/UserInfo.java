@@ -99,7 +99,7 @@ public class UserInfo extends BaseDomain {
 	@ApiModelProperty("用户头像地址")
 	private String portrait;
 
-	// 10:注销 20:锁定 30:审核中 40:审核通过 50:认证失败
+	// 10:注销 20:锁定 25:未实名 30:审核中 40:审核通过 50:认证失败
 	//state
 
 	private List<RoleInfo> roleList;

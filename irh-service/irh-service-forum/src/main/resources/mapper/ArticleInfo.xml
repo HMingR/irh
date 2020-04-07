@@ -8,7 +8,6 @@
 		<![CDATA[
             id,
             title,
-            article_category AS articleCategory,
             main_picture AS mainPicture,
             content,
             state,
@@ -32,7 +31,6 @@
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="title != null and title != ''"><![CDATA[AND title = #{title}]]></if>
-            <if test="articleCategory != null and articleCategory != ''"><![CDATA[AND article_category = #{articleCategory}]]></if>
             <if test="mainPicture != null and mainPicture != ''"><![CDATA[AND main_picture = #{mainPicture}]]></if>
             <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
@@ -59,7 +57,6 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="title != null"><![CDATA[title = #{title},]]></if>
-			<if test="articleCategory != null"><![CDATA[article_category = #{articleCategory},]]></if>
 			<if test="mainPicture != null"><![CDATA[main_picture = #{mainPicture},]]></if>
 			<if test="content != null"><![CDATA[content = #{content},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
@@ -82,8 +79,7 @@
 				(
                 id,
                 title,
-                article_category, 
-                main_picture, 
+                main_picture,
                 content, 
                 state, 
                 create_time, 
@@ -99,8 +95,7 @@
 				(
                 #{id}, 
                 #{title}, 
-                #{articleCategory},
-                #{mainPicture}, 
+                #{mainPicture},
                 #{content}, 
                 #{state}, 
                 #{createTime}, 
@@ -168,7 +163,7 @@
 	<!-- 其它SQL语句 -->
 
 	<select id="selectListByCondition" parameterType="articleInfo" resultType="top.imuster.life.api.pojo.ArticleInfo">
-		<![CDATA[SELECT id, title, article_category AS articleCategory, review_total AS reviewTotal, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes]]>
+		<![CDATA[SELECT id, title, review_total AS reviewTotal, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
@@ -216,6 +211,7 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE user_id = #{userId} AND state != 1
 	</select>
+
 
 	<select id="selectUpTop5ByCategoryId" resultType="articleInfo" parameterType="long">
 		<![CDATA[SELECT id, title ]]>

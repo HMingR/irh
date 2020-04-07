@@ -5,7 +5,6 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
@@ -28,7 +27,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @param articleInfo
      * @reture: void
      **/
-    void release(UserDto currentUser, ArticleInfo articleInfo);
+    void release(Long userId, ArticleInfo articleInfo);
 
     /**
      * @Author hmr

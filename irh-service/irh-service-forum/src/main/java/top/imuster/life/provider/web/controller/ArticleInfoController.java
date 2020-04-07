@@ -51,8 +51,8 @@ public class ArticleInfoController extends BaseController {
     @PostMapping
     public Message<String> releaseArticle(@RequestBody @Validated(ValidateGroup.addGroup.class) ArticleInfo articleInfo, BindingResult bindingResult) {
         validData(bindingResult);
-        UserDto currentUser = getCurrentUserFromCookie();
-        articleInfoService.release(currentUser, articleInfo);
+        Long userId = getCurrentUserIdFromCookie();
+        articleInfoService.release(userId, articleInfo);
         return Message.createBySuccess();
     }
 

@@ -14,7 +14,6 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
@@ -64,8 +63,8 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void release(UserDto currentUser, ArticleInfo articleInfo) {
-        articleInfo.setUserId(currentUser.getUserId());
+    public void release(Long userId, ArticleInfo articleInfo) {
+        articleInfo.setUserId(userId);
         String tagIds = articleInfo.getTagIds();
         if (StringUtils.isNotBlank(tagIds)){
             String[] split = tagIds.split(",");
