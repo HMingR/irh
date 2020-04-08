@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("userForumAttributeDao")
 public class UserForumAttributeDaoImpl extends BaseDaoImpl<UserForumAttributeInfo, Long> implements UserForumAttributeDao {
-	private final static String NAMESPACE = "top.imuster.user.api.pojo.dao.UserForumAttributeDao.";
+	private final static String NAMESPACE = "top.imuster.life.provider.dao.UserForumAttributeDao.";
 	private final static String SELECT_UP_LIST_BY_CONDITION = "selectUpListByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {

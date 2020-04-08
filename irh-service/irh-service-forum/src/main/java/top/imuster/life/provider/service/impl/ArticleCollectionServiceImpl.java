@@ -54,13 +54,9 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
         ArticleCollectionRel condition = new ArticleCollectionRel();
         condition.setUserId(userId);
         condition.setArticleId(id);
-        int i = articleCollectionDao.insertEntry(condition);
-        if(i == 1){
-            redisTemplate.opsForHash().increment(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, id, 1);
-            return Message.createBySuccess();
-        }
-        log.error("在向db存储用户收藏的信息时，返回值为0,插入的信息为{}", condition);
-        return Message.createByError("系统繁忙,收藏失败,请稍后重试");
+        articleCollectionDao.insertEntry(condition);
+        redisTemplate.opsForHash().increment(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, id, 1);
+        return Message.createBySuccess();
     }
 
     @Override

@@ -1,19 +1,24 @@
 package top.imuster.life.provider.service.impl;
 
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
+import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
@@ -26,11 +31,10 @@ import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ArticleTagRelService;
 import top.imuster.life.provider.service.ArticleTagService;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * ArticleInfoService 实现类
@@ -53,8 +57,23 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Resource
     ArticleTagRelService articleTagRelService;
 
+    @Autowired
+    FileServiceFeignApi fileServiceFeignApi;
+
     @Resource
     private ArticleCollectionService articleCollectionService;
+
+    private static final String templateLocation = "static/article.ftl";
+
+    @Autowired
+    private Configuration configuration;
+    
+    private Template template;
+    
+    @PostConstruct
+    public void createTemplate() throws IOException {
+        template = configuration.getTemplate(templateLocation, "UTF-8");
+    }
 
     @Override
     public BaseDao<ArticleInfo, Long> getDao() {
@@ -63,7 +82,13 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void release(Long userId, ArticleInfo articleInfo) {
+    public void release(Long userId, ArticleInfo articleInfo) throws Exception {
+        Message<String> msg = createStaticPage(articleInfo.getContent());
+        if(msg.getCode() == 200){
+            //已经生成详情页,所以文章内容就不保存到DB中了
+            articleInfo.setDetailPage(msg.getText());
+            articleInfo.setContent("");
+        }
         articleInfo.setUserId(userId);
         String tagIds = articleInfo.getTagIds();
         if (StringUtils.isNotBlank(tagIds)){
@@ -76,6 +101,20 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
             articleTagService.insertEntry(articleTagInfos.toArray(new ArticleTagInfo[articleTagInfos.size()]));
         }
         articleInfoDao.insertEntry(articleInfo);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据前端用户提交的文章内容生成静态页面并保存到FASTDFS中，返回地址
+     * @Date: 2020/4/8 8:30
+     * @param context
+     * @reture: java.lang.String
+     **/
+    public Message<String> createStaticPage(String context) throws Exception {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("context", context);
+        byte[] bytes = FreeMarkerTemplateUtils.processTemplateIntoString(template, param).getBytes();
+        return fileServiceFeignApi.uploadByBytes(bytes);
     }
 
     @Override
@@ -216,5 +255,10 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         //根据文章id获得文章的简略信息
         List<ArticleInfo> articleInfoList = articleInfoDao.selectArticleBriefByTagIds(articleIds);
         return Message.createBySuccess(articleInfoList);
+    }
+
+    @Override
+    public Long getUserRank(Long userId) {
+        return articleInfoDao.selectUserRankById(userId);
     }
 }

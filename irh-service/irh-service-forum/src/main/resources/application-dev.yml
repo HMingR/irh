@@ -1,13 +1,13 @@
 spring:
   redis:
-    database: 1
+    database: 0
     host: @irh.redis.host@
     port: 6379
     jedis:
       pool:
         max-active: 30
         max-idle: 10
-        max-wait: -1
+        max-wait: 5000
     timeout: 1000
     password: @irh.redis.password@
 
@@ -59,3 +59,10 @@ task:
   upTotal: 10
 
 
+hystrix:
+  command:
+    default:  #default全局有效，service id指定应用有效
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000 #断路器超时时间，默认1000ms

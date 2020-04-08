@@ -11,7 +11,6 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.file.api.service.FileServiceFeignApi;
@@ -49,7 +48,7 @@ public class ArticleInfoController extends BaseController {
     @ApiOperation("用户发布帖子")
     @NeedLogin
     @PostMapping
-    public Message<String> releaseArticle(@RequestBody @Validated(ValidateGroup.addGroup.class) ArticleInfo articleInfo, BindingResult bindingResult) {
+    public Message<String> releaseArticle(@RequestBody @Validated(ValidateGroup.addGroup.class) ArticleInfo articleInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         articleInfoService.release(userId, articleInfo);
@@ -134,6 +133,7 @@ public class ArticleInfoController extends BaseController {
             return Message.createBySuccess();
         }
         UserBriefDto userBriefDto = articleInfoService.getUserBriefByUserId(userId);
+        //Long rank = articleInfoService.getUserRank(userId);
         return Message.createBySuccess(userBriefDto);
     }
 

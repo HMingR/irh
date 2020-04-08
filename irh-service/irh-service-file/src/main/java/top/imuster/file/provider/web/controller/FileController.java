@@ -11,6 +11,8 @@ import top.imuster.file.provider.exception.FileException;
 import top.imuster.file.provider.file.FastDFSFile;
 import top.imuster.file.provider.utils.FastDFSUtil;
 
+import java.util.UUID;
+
 /**
  * @Description: 文件上传代码实现
  * @Author: lpf
@@ -33,7 +35,6 @@ public class FileController extends BaseController implements FileServiceFeignAp
     @Override
     @PostMapping(produces = { MediaType.APPLICATION_JSON_UTF8_VALUE },consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Message<String> upload(@RequestPart("file") MultipartFile file) {
-         logger.info("----->上传文件");
         try{
             //封装文件信息
             FastDFSFile fastDFSFile = new FastDFSFile(
@@ -76,16 +77,15 @@ public class FileController extends BaseController implements FileServiceFeignAp
         return Message.createBySuccess();
     }
 
-    public static void main(String[] args) {
-        //group1/M00/00/00/rBgYGV59beKADA0oACJ00ODYrwE595.jpg
-        try {
-            FastDFSUtil.deleteFile("group1", "M00/00/00/rBgYGV59beKADA0oACJ00ODYrwE595.jpg");
-        } catch (Exception e) {
-            e.printStackTrace();
-//            throw new FileException(e.getMessage());
-        }
+    @Override
+    @PostMapping("/bytes")
+    public Message<String> uploadByBytes(@RequestParam byte[] bytes) throws Exception {
+        //封装文件信息
+        String s = UUID.randomUUID().toString().substring(0, 4);
+        String fileName = new StringBuffer().append(s).append(".html").toString();
+        FastDFSFile fastDFSFile = new FastDFSFile(fileName, bytes, org.springframework.util.StringUtils.getFilenameExtension(fileName));
+        //调用FastDFSUtil工具类将文件上传到FastDFS中
+        String[] uploads = FastDFSUtil.upload(fastDFSFile);
+        return Message.createBySuccess(uploads[0] + "/" + uploads[1]);
     }
-
-
-
 }

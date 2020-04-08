@@ -27,7 +27,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @param articleInfo
      * @reture: void
      **/
-    void release(Long userId, ArticleInfo articleInfo);
+    void release(Long userId, ArticleInfo articleInfo) throws Exception;
 
     /**
      * @Author hmr
@@ -145,4 +145,13 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.life.api.pojo.ArticleInfo>
      **/
     Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Long pageSize, Long currentPage) ;
+
+    /**
+     * @Author hmr
+     * @Description 根据用户发布文章获得的点赞，收藏，转发数量获得用户排名
+     * @Date: 2020/4/8 17:44
+     * @param userId
+     * @reture: java.lang.Long
+     **/
+    Long getUserRank(Long userId);
 }

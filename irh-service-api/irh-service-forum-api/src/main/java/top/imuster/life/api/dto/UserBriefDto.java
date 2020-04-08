@@ -37,6 +37,16 @@ public class UserBriefDto implements Serializable {
     @ApiModelProperty("留言总数")
     private Long reviewTotal;
 
+    @ApiModelProperty("排名")
+    private Long ranking;
+
+    public Long getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Long ranking) {
+        this.ranking = ranking;
+    }
 
     public Long getReviewTotal() {
         return reviewTotal;

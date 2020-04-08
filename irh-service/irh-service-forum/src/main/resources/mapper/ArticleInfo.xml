@@ -274,4 +274,9 @@
 		<![CDATA[ORDER BY create_time, browser_times DESC]]>
 	</select>
 
+	<select id="selectUserRankById" parameterType="long" resultType="long">
+		<![CDATA[SELECT COUNT(1) FROM article_info WHERE  ]]>
+
+	</select>
+
 </mapper>

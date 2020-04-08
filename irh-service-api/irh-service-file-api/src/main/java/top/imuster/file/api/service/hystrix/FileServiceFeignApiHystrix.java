@@ -33,6 +33,13 @@ public class FileServiceFeignApiHystrix implements FallbackFactory<FileServiceFe
                 log.error("FileServiceFeignApiHystrix---->根据uri删除文件失败,文件名为{}",name);
                 return Message.createByError();
             }
+
+            @Override
+            public Message<String> uploadByBytes(byte[] bytes) throws Exception {
+                return null;
+            }
+
+
         };
     }
 }

@@ -72,8 +72,10 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
             Long targetId = forumHotTopic.getTargetId();
             if(targetId != null){
                 ForumHotTopicInfo brief = articleInfoService.getBriefByHotTopicId(targetId);
-                brief.setScore(forumHotTopic.getScore());
-                res.add(brief);
+                if(brief != null){
+                    brief.setScore(forumHotTopic.getScore());
+                    res.add(brief);
+                }
             }
         });
         return Message.createBySuccess(res);

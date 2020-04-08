@@ -33,6 +33,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_BRIEF_BY_HOT_TOPIC_ID = "selectBriefByHotTopicId";
 	private final static String UPDATE_FORARDR_TIMES_BY_CONDITION = "updateForwardTimesByCondition";
 	private final static String SELECT_ARTICLE_BRIEF_BY_TAGIDS = "selectArticleBriefByTagIds";
+	private final static String SELECT_USER_RANK_BY_ID = "selectUserRankById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -77,6 +78,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	public Map<Long, Long> selectBrowserTimesByIds(Long[] ids) {
 		HashMap<Long, Long> res = new HashMap<>();
 		List<Map<Long, Long>> objects = this.selectList(getNameSpace(SELECT_BROWSER_TIMES_BY_IDS), ids);
+		System.out.println(objects);
 		objects.stream().forEach(longLongMap -> {
 			Long browserTimes = Long.parseLong(longLongMap.get("browser_times") + "");
 			Long id = Long.parseLong(longLongMap.get("id") + "");
@@ -103,5 +105,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public List<ArticleInfo> selectArticleBriefByTagIds(List<Long> tagIds) {
 		return this.selectList(getNameSpace(SELECT_ARTICLE_BRIEF_BY_TAGIDS), tagIds);
+	}
+
+	@Override
+	public Long selectUserRankById(Long userId) {
+		return this.select(getNameSpace(SELECT_USER_RANK_BY_ID), userId);
 	}
 }
