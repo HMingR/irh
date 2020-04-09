@@ -23,4 +23,12 @@ public interface ArticleTagDao extends BaseDao<ArticleTagInfo, Long> {
      **/
     List<Long> selectTagIdByCategory(Long categoryId);
 
+    /**
+     * @Author hmr
+     * @Description 根据分类id获得标签信息
+     * @Date: 2020/4/9 9:30
+     * @param sids
+     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleTagInfo>
+     **/
+    List<ArticleTagInfo> selectTagInfoByCategoryIds(List<String> list);
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class ArticleTagDaoImpl extends BaseDaoImpl<ArticleTagInfo, Long> implements ArticleTagDao {
 	private final static String NAMESPACE = "top.imuster.life.provider.dao.ArticleTagDao.";
 	private final static String SELECT_TAG_ID_BY_CONDITION = "selectTagIdByCategory";
+	private final static String SELECT_TAG_INFO_BY_CATEGORY_IDS = "selectTagInfoByCategoryIds";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -25,5 +26,10 @@ public class ArticleTagDaoImpl extends BaseDaoImpl<ArticleTagInfo, Long> impleme
 	@Override
 	public List<Long> selectTagIdByCategory(Long categoryId) {
 		return this.selectList(getNameSpace(SELECT_TAG_ID_BY_CONDITION), categoryId);
+	}
+
+	@Override
+	public List<ArticleTagInfo> selectTagInfoByCategoryIds(List<String> list) {
+		return this.selectList(getNameSpace(SELECT_TAG_INFO_BY_CATEGORY_IDS), list);
 	}
 }

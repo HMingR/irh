@@ -129,5 +129,15 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
 	</select>
+
+	<select id="selectTagInfoByCategoryIds" resultType="top.imuster.life.api.pojo.ArticleTagInfo" parameterType="java.lang.reflect.Array">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ WHERE category_id IN ]]>
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
 	
 </mapper>

@@ -21,7 +21,6 @@ public class UserInfo extends BaseDomain {
 
 	// 自动生成的id
 	@ApiModelProperty("会员表的主键")
-	@NotEmpty(groups = ValidateGroup.editGroup.class, message = "修改的参数错误")
 	private Long id;
 
 	// 年龄

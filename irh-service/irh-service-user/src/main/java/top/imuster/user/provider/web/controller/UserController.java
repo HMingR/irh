@@ -74,7 +74,7 @@ public class UserController extends BaseController {
      **/
     @PostMapping("/edit")
     @ApiOperation(value = "修改会员的个人信息(先校验一些信息是否存在),以表单的形式上传,不是用json,其中表单中各个标签的按钮name必须和实体类保持一致", httpMethod = "POST")
-    public Message<String> editInfo(@ApiParam("ConsumerInfo实体类") @Validated(ValidateGroup.editGroup.class) UserInfo userInfo, BindingResult bindingResult) throws Exception{
+    public Message<String> editInfo(@ApiParam("ConsumerInfo实体类") @Validated(ValidateGroup.editGroup.class) @RequestBody UserInfo userInfo, BindingResult bindingResult) throws Exception{
         validData(bindingResult);
         userInfoService.updateByKey(userInfo);
         return Message.createBySuccess();
@@ -115,9 +115,15 @@ public class UserController extends BaseController {
         return userInfoService.getUserStateById(userId);
     }
 
-        //todo
-    public Message<String> editInterestTag(){
-
-        return null;
+    @ApiOperation("更新用户头像")
+    @NeedLogin
+    @PostMapping("/portrait")
+    public Message<String> updateUserPortrait(@RequestBody String picUrl){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(getCurrentUserIdFromCookie());
+        userInfo.setPortrait(picUrl);
+        userInfoService.updateByKey(userInfo);
+        return Message.createBySuccess();
     }
+
 }

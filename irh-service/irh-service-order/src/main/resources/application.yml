@@ -6,6 +6,8 @@ mybatis:
   type-aliases-package: top.imuster.order.api.pojo   #别名扫描
 
 spring:
+  profiles:
+    active: dev
   datasource:
     druid:
       driver-class-name: com.mysql.jdbc.Driver

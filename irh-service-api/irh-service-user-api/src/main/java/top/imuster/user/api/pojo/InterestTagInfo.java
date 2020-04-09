@@ -39,6 +39,17 @@ public class InterestTagInfo extends BaseDomain {
 	@ApiModelProperty("被该标签标记的总数")
 	private Long total;
 
+	@ApiModelProperty("用户是否拥有该标签")
+	private Integer available;
+
+	public Integer getAvaliable() {
+		return available;
+	}
+
+	public void setAvaliable(Integer available) {
+		this.available = available;
+	}
+
 	// 状态:1-无效 2-有效
 	//private Short state;
 

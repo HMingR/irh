@@ -80,4 +80,36 @@ public class InterestTagInfoServiceImpl extends BaseServiceImpl<InterestTagInfo,
         List<Long> tagIds = userInterestTagRelService.getUserTagByUserId(userId);
         return Message.createBySuccess(tagIds);
     }
+
+    @Override
+    public List<InterestTagInfo> userTaglist(Long userId) {
+        List<InterestTagInfo> res = selectEntryList(new InterestTagInfo());
+        if(userId == null) return res;
+        Message<List<Long>> msg = this.getUserTagByUserId(userId);
+        if(msg.getCode() != 200) return res;
+
+        //用户关注的兴趣爱好id
+        List<Long> tagIds = msg.getData();
+        res.stream().forEach(interestTagInfo -> {
+            Long id = interestTagInfo.getId();
+            if(tagIds.contains(id)){
+                interestTagInfo.setAvaliable(1);
+            }
+        });
+
+        return res;
+    }
+
+    @Override
+    public Message<String> follow(Integer type, Long tagId, Long userId) {
+        UserInterestTagRel condition = new UserInterestTagRel();
+        condition.setTagId(tagId);
+        condition.setConsumerId(userId);
+        if(type == 1){
+            userInterestTagRelService.deleteByCondtion(condition);
+        }else{
+            userInterestTagRelService.insertEntry(condition);
+        }
+        return Message.createBySuccess();
+    }
 }

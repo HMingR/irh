@@ -4,12 +4,14 @@ package top.imuster.life.provider.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.provider.dao.ArticleTagDao;
 import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +39,14 @@ public class ArticleTagServiceImpl extends BaseServiceImpl<ArticleTagInfo, Long>
         List<ArticleTagInfo> articleTagInfos = articleTagDao.selectEntryList(condition);
         ArrayList<Long> list = (ArrayList<Long>) articleTagInfos.stream().map(ArticleTagInfo::getId).collect(Collectors.toList());
         return list;
+    }
+
+    @Override
+    public Message<List<ArticleTagInfo>> getTagByCategoryIds(String ids) {
+        String[] sids = ids.split(",");
+        List<String> categoryIds = Arrays.asList(sids);
+        List<ArticleTagInfo> list = articleTagDao.selectTagInfoByCategoryIds(categoryIds);
+        return Message.createBySuccess(list);
     }
 
 }

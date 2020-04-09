@@ -50,4 +50,24 @@ public interface InterestTagInfoService extends BaseService<InterestTagInfo, Lon
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.user.api.pojo.InterestTagInfo>>
      **/
     Message<List<Long>> getUserTagByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 用户获得所有的标签，并且判断本人是否关注
+     * @Date: 2020/4/9 15:46
+     * @param userId
+     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleTagInfo>
+     **/
+    List<InterestTagInfo> userTaglist(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 用户关注和取消关注
+     * @Date: 2020/4/9 16:39
+     * @param type 1-取消 2-关注
+     * @param tagId
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> follow(Integer type, Long tagId, Long currentUserIdFromCookie);
 }

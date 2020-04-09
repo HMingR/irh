@@ -55,7 +55,7 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
         condition.setUserId(userId);
         condition.setArticleId(id);
         articleCollectionDao.insertEntry(condition);
-        redisTemplate.opsForHash().increment(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, id, 1);
+        redisTemplate.opsForHash().increment(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, String.valueOf(id), 1);
         return Message.createBySuccess();
     }
 
@@ -65,12 +65,8 @@ public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollect
         condition.setId(id);
         condition.setState(1);
         int i = articleCollectionDao.updateByKey(condition);
-        if(i == 1){
-            redisTemplate.opsForHash().increment(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, id, -1);
-            return Message.createBySuccess();
-        }
-        log.error("用户取消收藏失败,更新返回值为0,更新的主键id为{}", id);
-        return Message.createByError("系统繁忙,取消收藏失败,请稍后重试");
+        redisTemplate.opsForHash().increment(GlobalConstant.IRH_ARTICLE_COLLECT_MAP, String.valueOf(id), -1);
+        return Message.createBySuccess();
     }
 
     @Override

@@ -1,0 +1,14 @@
+enable:
+  needLogin: false
+
+hot:
+  topic:
+    total: 10   # 显示热搜数量
+    refreshTime: 30    #总热度榜刷新时间
+
+batch:
+  size: 500   #批量处理点赞收藏的大小
+
+task:
+  browserTimes: 1
+  upTotal: 10

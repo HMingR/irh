@@ -37,10 +37,8 @@ public class AdminInterestTagController extends BaseController {
     @ApiOperation(value = "查询所有的兴趣标签,用户选择兴趣标签,提供给用户的", httpMethod = "GET")
     @GetMapping
     public Message<List<InterestTagInfo>> list(){
-        InterestTagInfo condition = new InterestTagInfo();
-        condition.setState(2);
-        List<InterestTagInfo> interestTagInfos = interestTagInfoService.selectEntryList(condition);
-        return Message.createBySuccess(interestTagInfos);
+        List<InterestTagInfo> res = interestTagInfoService.userTaglist(getCurrentUserIdFromCookie(false));
+        return Message.createBySuccess(res);
     }
 
     /**
@@ -123,5 +121,11 @@ public class AdminInterestTagController extends BaseController {
     public Message<List<Long>> getUserTag(){
         Long userId = getCurrentUserIdFromCookie();
         return interestTagInfoService.getUserTagByUserId(userId);
+    }
+
+    @ApiOperation("关注和取消关注 type:1-取消关注   2-关注")
+    @GetMapping("/follow/{type}/{id}")
+    public Message<String> follow(@PathVariable("type") Integer type, @PathVariable("id") Long tagId){
+        return interestTagInfoService.follow(type, tagId, getCurrentUserIdFromCookie());
     }
 }
