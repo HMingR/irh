@@ -2,6 +2,7 @@ package top.imuster.user.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.user.api.pojo.UserInfo;
 
 import java.util.Map;
@@ -64,10 +65,10 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据用户id获得用户的状态
-     * @Date: 2020/4/6 19:51
+     * @Description 通过id获得用户的简略信息
+     * @Date: 2020/4/10 16:32
      * @param userId
-     * @reture: java.lang.Long
+     * @reture: top.imuster.common.core.dto.UserDto
      **/
-    Long selectUserStateById(Long userId);
+    UserDto selectUserDtoById(Long userId);
 }

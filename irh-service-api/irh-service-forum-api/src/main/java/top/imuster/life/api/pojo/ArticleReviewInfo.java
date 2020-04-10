@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class ArticleReviewInfo extends BaseDomain {
 
 	// 文章编号id
 	@ApiModelProperty("文章编号id")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "文章id不能为空")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "文章id不能为空")
 	private Long articleId;
 
 	// 用户id
@@ -37,12 +37,12 @@ public class ArticleReviewInfo extends BaseDomain {
 
 	// 回复消息的id，0表示是新的留言的时候
 	@ApiModelProperty("回复消息的id，0表示是新的留言的时候")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "回复消息的id不能为空")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "回复消息的id不能为空")
 	private Long parentId;
 
 	// 内容, max length: 2048
 	@ApiModelProperty("内容")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "内容不能为空")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "内容不能为空")
 	private String content;
 
 	//一级留言下的回复总数
@@ -51,7 +51,7 @@ public class ArticleReviewInfo extends BaseDomain {
 
 	//一级留言的id,也就是顶级parent_id,当parent_id为0时该值也为0,当parent_id不为0时,则该值为回复树的顶层回复id
 	@ApiModelProperty("一级留言的id,也就是顶级parent_id,当parent_id为0时该值也为0,当parent_id不为0时,则该值为回复树的顶层回复id")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "一级留言的id不能为空")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "一级留言的id不能为空")
 	private Long firstClassId;
 
 	@ApiModelProperty("点赞总数")

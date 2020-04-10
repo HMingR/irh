@@ -4,8 +4,6 @@ package top.imuster.common.core.dto;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.enums.UserType;
 
-import java.util.Date;
-
 /**
  * @ClassName: UserDto
  * @Description: 所有用户的公共属性的实体类
@@ -31,6 +29,10 @@ public class UserDto extends BaseDomain {
     private UserType userType;
 
     public UserDto() {
+    }
+
+    public UserDto(Long userId){
+        this.userId = userId;
     }
 
     public UserDto(Long userId, String loginName, String nickname, String pic, Integer userType) {
@@ -61,8 +63,8 @@ public class UserDto extends BaseDomain {
         return userType;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    public void setUserType(Integer code) {
+        setUserTypeById(code);
     }
 
     public String getNickname() {

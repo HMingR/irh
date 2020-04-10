@@ -1,5 +1,6 @@
 package top.imuster.life.provider.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,6 +24,7 @@ import java.util.*;
  * @date: 2020/2/8 17:26
  */
 @Service("redisArticleAttitudeService")
+@Slf4j
 public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeService {
     @Autowired
     RedisTemplate redisTemplate;
@@ -81,9 +83,9 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
         List<UpCountDto> list = new ArrayList<>();
         while (cursor.hasNext()){
             Map.Entry<Object, Object> map = cursor.next();
-
+            log.info("--->map中的信息为key:{}, value:{}", map.getKey(), map.getValue());
             String key = (String)map.getKey();
-            UpCountDto dto = new UpCountDto(key, (Long) map.getValue());
+            UpCountDto dto = new UpCountDto(key, (long) map.getValue());
             list.add(dto);
             //从Redis中删除这条记录
             redisTemplate.opsForHash().delete(GlobalConstant.IRH_USER_UP_MAP, key);
@@ -98,7 +100,7 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
         while (cursor.hasNext()){
             Map.Entry<Object, Object> map = cursor.next();
             Long key = (Long)map.getKey();
-            ForwardDto dto = new ForwardDto(key, (Long) map.getValue());
+            ForwardDto dto = new ForwardDto(key, Long.parseLong(String.valueOf(map.getValue())));
             list.add(dto);
             //从Redis中删除这条记录
             redisTemplate.opsForHash().delete(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, key);

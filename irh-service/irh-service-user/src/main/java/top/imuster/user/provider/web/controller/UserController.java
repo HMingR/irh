@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
@@ -101,18 +102,18 @@ public class UserController extends BaseController {
         return Message.createBySuccess("反馈成功,我们会尽快处理");
     }
 
-    @ApiOperation(value = "根据用户id获得用户昵称", httpMethod = "GET")
+    @ApiOperation(value = "根据用户id获得用户基本信息", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message<String> getUserNameById(@PathVariable("id") Long id){
-        return Message.createBySuccess(userInfoService.getUserNameById(id));
+    public Message<UserDto> getUserNameById(@PathVariable("id") Long id){
+        return userInfoService.getUserDtoByUserId(id);
     }
 
     @ApiOperation("查看用户账号的状态")
     @GetMapping("/state")
     @NeedLogin
     public Message<Long> getUserState(){
-        Long userId = getCurrentUserIdFromCookie();
-        return userInfoService.getUserStateById(userId);
+        UserDto userInfo = getCurrentUserFromCookie();
+        return Message.createBySuccess(userInfo.getUserId());
     }
 
     @ApiOperation("更新用户头像")

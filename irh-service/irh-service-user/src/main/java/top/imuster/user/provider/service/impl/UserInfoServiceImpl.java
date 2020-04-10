@@ -11,6 +11,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.user.api.dto.CheckValidDto;
@@ -148,7 +149,13 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
-    public Message<Long> getUserStateById(Long userId) {
-        return Message.createBySuccess(userInfoDao.selectUserStateById(userId));
+    public Message<UserDto> getUserDtoByUserId(Long userId) {
+        UserDto userDto = userInfoDao.selectUserDtoById(userId);
+
+        //没有找到,则直接返回用户id
+        if(userDto == null) return Message.createBySuccess(new UserDto(userId));
+        //此处把text设置成用户的昵称是为了适配前端
+        return Message.createBySuccess(userDto.getNickname(), userDto);
     }
+
 }

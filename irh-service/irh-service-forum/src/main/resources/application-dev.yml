@@ -16,7 +16,7 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
       username: "@irh.mysql.username@"
       password: "@irh.mysql.password@"
-      url: "@irh.mysql.url@"
+      url: jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
       initial-size: 20     # 初始化大小
       max-active: 50      # 连接池中最大的活动数
       max-wait: 30000                             # 最大连接等待时间
@@ -33,14 +33,16 @@ spring:
       # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
       spring.datasource.filters: stat,wall,log4j
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis = 5000
+
       # 合并多个DruidDataSource的监控数据
-      #useGlobalDataSourceStat: true
+      useGlobalDataSourceStat: true
   rabbitmq:
     host: "@irh.rabbitmq.host@"
     port: "@irh.rabbitmq.port@"
     username: "@irh.rabbitmq.username@"
     password: "@irh.rabbitmq.password@"
+
 
 
 enable:
@@ -55,9 +57,12 @@ batch:
   size: 500   #批量处理点赞收藏的大小
 
 task:
-  browserTimes: 1
-  upTotal: 10
+  browserTimes: 30
+  upTotal: 30
 
+article:
+  rank:
+    total: 100
 
 hystrix:
   command:

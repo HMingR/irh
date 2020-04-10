@@ -148,10 +148,11 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据用户发布文章获得的点赞，收藏，转发数量获得用户排名
+     * @Description 获得论坛模块排名
      * @Date: 2020/4/8 17:44
      * @param userId
      * @reture: java.lang.Long
      **/
-    Long getUserRank(Long userId);
+    List<Long> getUserArticleRank();
+
 }

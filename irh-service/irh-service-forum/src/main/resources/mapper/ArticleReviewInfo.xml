@@ -164,4 +164,11 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>
+
+	<select id="selectFirstClassReviewByArticleId" parameterType="articleReviewInfo" resultType="articleReviewInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[ WHERE first_class_id = 0 AND parent_id = 0 AND article_id = #{articleId} AND state != 1 LIMIT #{startIndex}, #{endIndex}]]>
+	</select>
 </mapper>

@@ -3,6 +3,7 @@ package top.imuster.user.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.provider.dao.UserInfoDao;
 
@@ -23,6 +24,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	private final static String SELECT_USER_TOTAL_BY_CREATE_TIME = "selectUserTotalByCreateTime";
 	private final static String SELECT_INCREMENT_USER_BY_TIME = "selectIncrementUserByTime";
 	private final static String SELECT_USER_STATE_BY_ID = "selectUserStateById";
+	private final static String SELECT_USER_DTO_BY_ID = "selectUserDtoById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -59,8 +61,8 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	}
 
 	@Override
-	public Long selectUserStateById(Long userId) {
-		return this.select(getNameSpace(SELECT_USER_STATE_BY_ID), userId);
+	public UserDto selectUserDtoById(Long userId) {
+		return this.select(getNameSpace(SELECT_USER_DTO_BY_ID), userId);
 	}
 
 }

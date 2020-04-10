@@ -132,10 +132,10 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据用户发布文章获得的点赞，收藏，转发数量获得用户排名
+     * @Description 根据用户发布文章获得的点赞，收藏，转发数量获得排名
      * @Date: 2020/4/8 17:46
      * @param userId
      * @reture: java.lang.Long
      **/
-    Long selectUserRankById(Long userId);
+    List<Long> selectUserArticleRank(Long total);
 }

@@ -7,10 +7,12 @@ package top.imuster.common.core.enums;
  * @date: 2020/1/29 14:56
  */
 public enum UserType{
+    //10:普通会员 20:服务人员  30:校园组织 40:校园社团 50:管理员
     CUSTOMER(10, "普通会员"),
-    SELLER(20, "卖家"),
-    ORGANIZATION(30, "组织社团"),
-    MANAGEMENT(40, "管理员");
+    SELLER(20, "服务人员"),
+    ORGANIZATION(30, "校园组织"),
+    ASSOCIATION(40, "校园社团"),
+    MANAGEMENT(50, "管理员");
 
     Integer type;
     String name;

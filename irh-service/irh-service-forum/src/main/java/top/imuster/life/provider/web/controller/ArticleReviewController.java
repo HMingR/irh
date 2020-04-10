@@ -77,13 +77,10 @@ public class ArticleReviewController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReviewInfo>>
      **/
     @ApiOperation("根据文章id分页查询一级留言")
-    @PostMapping
-    public Message<Page<ArticleReviewInfo>> getArticleReviewByPage(@RequestBody Page<ArticleReviewInfo> page){
-        if(page.getSearchCondition() == null){
-            page.setSearchCondition(new ArticleReviewInfo());
-        }
+    @GetMapping("/firstClass/{pageSize}/{currentPage}/{articleId}")
+    public Message<List<ArticleReviewInfo>> getArticleReviewByPage(@PathVariable("articleId") Long articleId, @PathVariable("currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize){
         Long userId = getCurrentUserIdFromCookie(false);
-        return articleReviewService.selectFirstClassReviewListByArticleId(page, userId);
+        return articleReviewService.selectFirstClassReviewListByArticleId(articleId, currentPage, pageSize, userId);
     }
 
 

@@ -8,10 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.life.api.dto.UserBriefDto;
@@ -98,10 +96,11 @@ public class ArticleInfoController extends BaseController {
      **/
     @ApiOperation("根据id查看帖子的所有信息")
     @GetMapping("/{id}")
-    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "#p0")
-    public Message<ArticleInfo> getArticleInfoById(@PathVariable("id") Long id){
+    //@BrowserAnnotation(browserType = BrowserType.FORUM, value = "#p0")
+    public Message<ArticleInfo> getArticleInfoById(@PathVariable("id") Long id) {
         ArticleInfo articleDetail = articleInfoService.getArticleDetailById(id);
         return Message.createBySuccess(articleDetail);
+        //return Message.createBySuccess(articleDetail);
     }
 
     /**
@@ -125,7 +124,7 @@ public class ArticleInfoController extends BaseController {
         return Message.createBySuccess(list);
     }
 
-    @ApiOperation("获得当前用户的获赞总数、收藏文章总数、文章被浏览总数")
+    @ApiOperation("获得用户的获赞总数、收藏文章总数、文章被浏览总数")
     @GetMapping("/user")
     public Message<UserBriefDto> getUserForumBrief(){
         Long userId = getCurrentUserIdFromCookie(false);
@@ -133,8 +132,17 @@ public class ArticleInfoController extends BaseController {
             return Message.createBySuccess();
         }
         UserBriefDto userBriefDto = articleInfoService.getUserBriefByUserId(userId);
-        //Long rank = articleInfoService.getUserRank(userId);
+        List<Long> userArticleRank = articleInfoService.getUserArticleRank();
+        int i = userArticleRank.indexOf(userId);
+        userBriefDto.setRanking(i == -1 ? "暂未上榜":String.valueOf(i));
         return Message.createBySuccess(userBriefDto);
+    }
+
+    @ApiOperation("获得论坛模块的用户排名")
+    @GetMapping("/rank")
+    public Message<List<Long>> getArticleRank(){
+        List<Long> userId = articleInfoService.getUserArticleRank();
+        return Message.createBySuccess(userId);
     }
 
     @ApiOperation("根据文章分类id获得该分类下的文章,按照点赞和发布时间排序")

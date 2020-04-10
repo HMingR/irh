@@ -102,15 +102,12 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
     }
 
     @Override
-    public Message<Page<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Page<ArticleReviewInfo> page, final Long userId) {
-        ArticleReviewInfo searchCondition = page.getSearchCondition();
-        searchCondition.setFirstClassId(0L);
-        searchCondition.setParentId(0L);
-        searchCondition.setState(2);
-        Page<ArticleReviewInfo> res = this.selectPage(page.getSearchCondition(), page);
-
-        final Long articleId = page.getSearchCondition().getArticleId();
-        List<ArticleReviewInfo> data = res.getData();
+    public Message<List<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Long articleId, Integer currentPage, Integer pageSize, Long userId) {
+        ArticleReviewInfo searchCondition = new ArticleReviewInfo();
+        searchCondition.setStartIndex((currentPage-1) * pageSize);
+        searchCondition.setEndIndex(pageSize);
+        searchCondition.setArticleId(articleId);
+        List<ArticleReviewInfo> data = articleReviewDao.selectFirstClassReviewByArticleId(searchCondition);
 
         ArticleReviewInfo review = new ArticleReviewInfo();
         review.setState(2);
@@ -124,10 +121,8 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
                 articleReview.setUpState(state.getData());
             }
         });
-
         //按照点赞多少进行降序排列
         List<ArticleReviewInfo> collect = data.stream().sorted(Comparator.comparingLong(ArticleReviewInfo::getUpTotal).reversed()).collect(Collectors.toList());
-        page.setData(collect);
-        return Message.createBySuccess(res);
+        return Message.createBySuccess(collect);
     }
 }

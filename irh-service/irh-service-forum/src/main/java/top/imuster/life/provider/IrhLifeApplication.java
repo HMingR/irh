@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @ClassName: IrhForumApplication
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"top.imuster.common",
                                "top.imuster.life",
                                 "top.imuster.file.api.service.hystrix"})
+@EnableTransactionManagement
 public class IrhLifeApplication {
     public static void main(String[] args) {
         SpringApplication.run(IrhLifeApplication.class, args);

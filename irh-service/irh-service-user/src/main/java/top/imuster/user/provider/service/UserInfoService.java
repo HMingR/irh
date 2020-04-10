@@ -3,6 +3,7 @@ package top.imuster.user.provider.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.UserDto;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.UserInfo;
 
@@ -89,10 +90,10 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 查看用户账号状态
-     * @Date: 2020/4/6 19:50
+     * @Description 根据id获得用户的简略信息
+     * @Date: 2020/4/10 16:31
      * @param userId
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.core.dto.UserDto>
      **/
-    Message<Long> getUserStateById(Long userId);
+    Message<UserDto> getUserDtoByUserId(Long userId);
 }

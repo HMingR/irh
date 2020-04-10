@@ -38,13 +38,13 @@ public class UserBriefDto implements Serializable {
     private Long reviewTotal;
 
     @ApiModelProperty("排名")
-    private Long ranking;
+    private String ranking;
 
-    public Long getRanking() {
+    public String getRanking() {
         return ranking;
     }
 
-    public void setRanking(Long ranking) {
+    public void setRanking(String ranking) {
         this.ranking = ranking;
     }
 

@@ -46,3 +46,7 @@ hot:
 batch:
   size: 100   #批量处理点赞收藏的大小
 
+
+article:
+  rank:
+    total: 100

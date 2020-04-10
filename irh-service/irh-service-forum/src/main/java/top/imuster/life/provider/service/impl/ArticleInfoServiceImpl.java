@@ -4,6 +4,7 @@ package top.imuster.life.provider.service.impl;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,6 @@ import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ArticleTagInfo;
-import top.imuster.life.api.pojo.ArticleTagRel;
 import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
 import top.imuster.life.provider.service.ArticleCollectionService;
@@ -69,6 +69,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     private Configuration configuration;
     
     private Template template;
+
+    @Value("${article.rank.total}")
+    private Long rankTotal;
     
     @PostConstruct
     public void createTemplate() throws IOException {
@@ -135,17 +138,13 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public ArticleInfo getArticleDetailById(Long id) {
         ArticleInfo result = articleInfoDao.selectEntryList(id).get(0);
-
-        ArticleTagRel condition = new ArticleTagRel();
-        condition.setArticleId(id);
-        List<ArticleTagRel> articleTagRels = articleTagRelService.selectEntryList(condition);
-
-        //获得文章的标签
-        if (result.getTagList() == null) result.setTagList(new ArrayList<>());
-        articleTagRels.stream().forEach(articleTagRel -> {
-            ArticleTagInfo articleTagInfo = articleTagService.selectEntryList(articleTagRel.getTagId()).get(0);
-            result.getTagList().add(articleTagInfo);
-        });
+        String tagIds = result.getTagIds();
+        if(StringUtils.isNotEmpty(tagIds)){
+            String[] split = tagIds.split(",");
+            Long[] longIds = (Long[])ConvertUtils.convert(split, Long.class);
+            List<ArticleTagInfo> articleTagInfos = articleTagService.selectEntryList(longIds);
+            result.setTagList(articleTagInfos);
+        }
         return result;
     }
 
@@ -258,7 +257,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    public Long getUserRank(Long userId) {
-        return articleInfoDao.selectUserRankById(userId);
+    public List<Long> getUserArticleRank() {
+        return articleInfoDao.selectUserArticleRank(rankTotal);
     }
 }

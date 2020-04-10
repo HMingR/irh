@@ -86,6 +86,22 @@ public class ArticleInfo extends BaseDomain {
 //	private Short state;
 
 
+	public List<ArticleReviewInfo> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(List<ArticleReviewInfo> childs) {
+		this.childs = childs;
+	}
+
+	public List<ArticleTagInfo> getTagList() {
+		return tagList;
+	}
+
+	public void setTagList(List<ArticleTagInfo> tagList) {
+		this.tagList = tagList;
+	}
+
 	public String getBrowseDate() {
 		return browseDate;
 	}
@@ -164,22 +180,6 @@ public class ArticleInfo extends BaseDomain {
 
 	public void setReviewTotal(Integer reviewTotal) {
 		this.reviewTotal = reviewTotal;
-	}
-
-	public List<ArticleReviewInfo> getChilds() {
-		return childs;
-	}
-
-	public void setChilds(List<ArticleReviewInfo> childs) {
-		this.childs = childs;
-	}
-
-	public List<ArticleTagInfo> getTagList() {
-		return tagList;
-	}
-
-	public void setTagList(List<ArticleTagInfo> tagList) {
-		this.tagList = tagList;
 	}
 
 	public String getTagIds() {

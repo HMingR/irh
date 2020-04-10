@@ -268,8 +268,8 @@
 		<![CDATA[WHERE create_time >= #{startTime} AND create_time <= #{endTime}]]>
 	</select>
 
-	<select id="selectUserStateById" parameterType="long" resultType="long">
-		<![CDATA[SELECT state]]>
+	<select id="selectUserDtoById" parameterType="long" resultType="top.imuster.common.core.dto.UserDto">
+		<![CDATA[SELECT id AS userId, nickname AS nickname, portrait AS pic, state, type AS userType]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE id = #{userId}]]>
 	</select>
