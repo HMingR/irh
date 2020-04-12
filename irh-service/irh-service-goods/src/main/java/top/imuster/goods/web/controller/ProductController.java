@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -48,12 +49,26 @@ public class ProductController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
+    @NeedLogin
     @PutMapping
     public Message insertProduct(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         productInfo.setConsumerId(userId);
         return productInfoService.releaseProduct(productInfo);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得商品详情页
+     * @Date: 2020/4/12 20:04
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @GetMapping("/detail/{id}")
+    public Message<String> getDetailById(@PathVariable("id") Long id){
+        String pageUrl = productInfoService.getDetailPageUrlById(id);
+        return Message.createBySuccess(pageUrl);
     }
 
 
@@ -64,13 +79,12 @@ public class ProductController extends BaseController {
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "用户查看自己发布的商品", httpMethod = "POST")
-    @PostMapping("/list")
-    public Message productList(Page<ProductInfo> page) throws GoodsException{
-        ProductInfo searchCondition = page.getSearchCondition();
-        searchCondition.setConsumerId(getCurrentUserIdFromCookie());
-        Page<ProductInfo> productInfoPage = productInfoService.selectPage(searchCondition, page);
-        return Message.createBySuccess(productInfoPage);
+    @ApiOperation(value = "用户查看自己发布的商品", httpMethod = "GET")
+    @NeedLogin
+    @GetMapping("/list/{pageSize}/{currentPage}")
+    public Message<Page<ProductInfo>> productList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
+        Long userId = getCurrentUserIdFromCookie();
+        return productInfoService.list(userId, pageSize, currentPage);
     }
 
 

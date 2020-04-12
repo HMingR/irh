@@ -13,7 +13,8 @@
             content,
             create_time AS createTime,
             update_time AS updateTime,
-            state 
+            state,
+            first_class_id AS firstClassId
 		]]>
 	</sql>
 
@@ -31,6 +32,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="firstClassId != null and firstClassId != ''"><![CDATA[AND first_class_id = #{firstClassId}]]></if>
 		</where>
 	</sql>
 	
@@ -50,35 +52,16 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="firstClassId != null"><![CDATA[first_class_id = #{firstClassId},]]></if>
 		</set>
 	</sql>
 
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="productMessageInfo" >
-		<![CDATA[
-			INSERT INTO product_message_info
-				(
-                id, 
-                product_id, 
-                consumer_id, 
-                parent_id, 
-                content, 
-                create_time, 
-                update_time, 
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{productId}, 
-                #{consumerId}, 
-                #{parentId}, 
-                #{content}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
-				)
-		]]>
+		<![CDATA[ INSERT INTO product_message_info ]]>
+		<include refid="key"></include>
+		VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -131,33 +114,41 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[AND product_id ,]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id ,]]></if>
+			<if test="parentId != null and parentId != ''"><![CDATA[AND parent_id,]]></if>
+			<if test="content != null and content != ''"><![CDATA[AND content,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[create_time,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time,]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state = #{state},]]></if>
+			<if test="firstClassId != null and firstClassId != ''"><![CDATA[ first_class_id,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id}, ]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[ #{productId}, ]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[ #{consumerId}, ]]></if>
+			<if test="parentId != null and parentId != ''"><![CDATA[#{parentId}, ]]></if>
+			<if test="content != null and content != ''"><![CDATA[ #{content}, ]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime}, ]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime}, ]]></if>
+			<if test="state != null and state != ''"><![CDATA[ #{state}, ]]></if>
+			<if test="firstClassId != null and firstClassId != ''"><![CDATA[#{firstClassId}, ]]></if>
+		</trim>
+	</sql>
 	
 	<!-- 其它SQL语句 -->
 	<insert id="insertReturnId" parameterType="productMessageInfo" useGeneratedKeys="true" keyProperty="id">
-		<![CDATA[
-			INSERT INTO product_message_info
-				(
-                id,
-                product_id,
-                consumer_id,
-                parent_id,
-                content,
-                create_time,
-                update_time,
-                state
-				)
-			VALUES
-				(
-                #{id},
-                #{productId},
-                #{consumerId},
-                #{parentId},
-                #{content},
-                #{createTime},
-                #{updateTime},
-                #{state}
-				)
-		]]>
+		<![CDATA[ INSERT INTO product_message_info ]]>
+		<include refid="key"></include>
+		VALUES
+		<include refid="value"></include>
 	</insert>
 
 	<select id="selectSalerIdByMessageParentId" parameterType="long" resultType="long">

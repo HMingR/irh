@@ -3,10 +3,10 @@ package top.imuster.goods.service.impl;
 
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendDetailPageDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -41,13 +41,6 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public void generateDetailPage(ProductInfo productInfo) {
-        //todo 生成商品详情页
-        SendDetailPageDto sendDetailPageDto = new SendDetailPageDto();
-
-    }
-
-    @Override
     public Long getConsumerIdById(Long id) {
         return productInfoDao.selectSalerIdByProductId(id);
     }
@@ -58,18 +51,28 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public String getMainPicUrlById(Long id) {
-        return productInfoDao.selectMainPicUrlById(id);
+    public String getDetailPageUrlById(Long id) {
+        return productInfoDao.selectDetailPageUrlById(id);
     }
 
     @Override
     public Message<String> releaseProduct(ProductInfo productInfo) {
-        productInfoDao.insertEntry(productInfo);
+        Long id = productInfoDao.insertInfoReturnId(productInfo);
         SendDetailPageDto sendMessage = new SendDetailPageDto();
-        sendMessage.setEntry(productInfo);
+        productInfo.setId(id);
+        sendMessage.setObject(productInfo);
         sendMessage.setTemplateEnum(TemplateEnum.PRODUCT_TEMPLATE);
-        sendMessage.setType(MqTypeEnum.DETAIL);
         generateSendMessageService.sendToMq(sendMessage);
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage) {
+        Page<ProductInfo> infoPage = new Page<>();
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setConsumerId(userId);
+        productInfo.setState(2);
+        infoPage = this.selectPage(productInfo, infoPage);
+        return Message.createBySuccess(infoPage);
     }
 }

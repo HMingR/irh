@@ -17,7 +17,8 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String UPDATE_PRODUCT_CATEGORY_BY_CONDITION= "updateProductCategoryByCondition";
 	private final static String SELECT_SALER_ID_BY_PRODUCT_ID = "selectSalerIdByProductId";
 	private final static String SELECT_PRODUCT_INFO_BY_MESSAGE_ID = "selectProductInfoByMessageId";
-	private final static String SELECT_MAIN_PIC_URL_BY_ID = "selectMainPicUrlById";
+	private final static String SELECT_DETAIL_PAGE_BY_ID = "selectDetailPageUrlById";
+	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -39,7 +40,12 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	}
 
 	@Override
-	public String selectMainPicUrlById(Long id) {
-		return this.select(getNameSpace(SELECT_MAIN_PIC_URL_BY_ID), id);
+	public String selectDetailPageUrlById(Long id) {
+		return this.select(getNameSpace(SELECT_DETAIL_PAGE_BY_ID), id);
+	}
+
+	@Override
+	public Long insertInfoReturnId(ProductInfo condition) {
+		return (long) this.insert(getNameSpace(INSERT_INFO_RETURN_ID), condition);
 	}
 }

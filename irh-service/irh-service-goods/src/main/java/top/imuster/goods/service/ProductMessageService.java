@@ -1,10 +1,10 @@
 package top.imuster.goods.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductMessageInfo;
-
-import java.util.List;
 
 /**
  * ProductMessageService接口
@@ -19,8 +19,9 @@ public interface ProductMessageService extends BaseService<ProductMessageInfo, L
      * @Date: 2020/1/9 15:23
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    List<ProductMessageInfo> generateMessageTree(Long id);
+     *
+     * @return*/
+    Message<Page<ProductMessageInfo>> getMessagePage(ProductMessageInfo id);
 
     /**
      * @Author hmr

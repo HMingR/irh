@@ -1,6 +1,7 @@
 package top.imuster.goods.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -21,14 +22,6 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      **/
     Integer updateProductCategoryByCondition(ProductInfo productInfo);
 
-    /**
-     * @Author hmr
-     * @Description 向消息队列中发送消息，生成商品详情页
-     * @Date: 2020/1/16 10:40
-     * @param sendMessageDto
-     * @reture: void
-     **/
-    void generateDetailPage(ProductInfo productInfo);
 
     /**
      * @Author hmr
@@ -55,7 +48,7 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @param id
      * @reture: java.lang.String
      **/
-    String getMainPicUrlById(Long id);
+    String getDetailPageUrlById(Long id);
 
     /**
      * @Author hmr
@@ -65,4 +58,15 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     Message<String> releaseProduct(ProductInfo productInfo);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/4/12 19:44
+     * @param userId
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage);
 }

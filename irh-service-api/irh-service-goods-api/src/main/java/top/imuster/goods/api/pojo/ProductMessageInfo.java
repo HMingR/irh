@@ -6,8 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
-import javax.validation.constraints.NotBlank;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -28,7 +27,7 @@ public class ProductMessageInfo extends BaseDomain {
 
 	// 商品id
 	@ApiModelProperty("商品id")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "参数错误")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "参数错误")
 	private Long productId;
 
 	// 用户编号
@@ -37,26 +36,24 @@ public class ProductMessageInfo extends BaseDomain {
 
 	// 回复消息的id，0表示是新的留言的时候
 	@ApiModelProperty("回复消息的id，0表示是新的留言的时候")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "参数错误")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "参数错误")
 	private Long parentId;
 
 	// 内容, max length: 1000
 	@ApiModelProperty("内容")
-	@NotBlank(groups = ValidateGroup.addGroup.class, message = "参数错误")
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "参数错误")
 	private String content;
 
+	private Long firstClassId;
 	// 1-无效 2-有效
 	//private Short state;
 
-	@ApiModelProperty("当前留言下的子节点")
-	private List<ProductMessageInfo> childs;
-
-	public List<ProductMessageInfo> getChilds() {
-		return childs;
+	public Long getFirstClassId() {
+		return firstClassId;
 	}
 
-	public void setChilds(List<ProductMessageInfo> childs) {
-		this.childs = childs;
+	public void setFirstClassId(Long firstClassId) {
+		this.firstClassId = firstClassId;
 	}
 
 	public Long getId() {

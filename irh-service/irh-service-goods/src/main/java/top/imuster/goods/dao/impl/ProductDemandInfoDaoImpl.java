@@ -14,6 +14,7 @@ import top.imuster.goods.dao.ProductDemandInfoDao;
 @Repository("productDemandInfoDao")
 public class ProductDemandInfoDaoImpl extends BaseDaoImpl<ProductDemandInfo, Long> implements ProductDemandInfoDao {
 	private final static String NAMESPACE = "top.imuster.goods.dao.ProductDemandInfoDao.";
+	private final static String SELECT_LIST = "selectList";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {

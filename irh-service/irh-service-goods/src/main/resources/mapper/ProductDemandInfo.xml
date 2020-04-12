@@ -13,7 +13,8 @@
             consumer_id AS consumerId,
             create_time AS createTime,
             update_time AS updateTime,
-            state 
+            state,
+            main_pic AS mainPic
 		]]>
 	</sql>
 
@@ -31,6 +32,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="mainPic != null and mainPic != ''"><![CDATA[AND main_pic = #{mainPic}]]></if>
 		</where>
 	</sql>
 	
@@ -50,35 +52,46 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="mainPic != null"><![CDATA[main_pic = #{mainPic},]]></if>
 		</set>
+	</sql>
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id, ]]></if>
+			<if test="topic != null and topic != ''"><![CDATA[ topic, ]]></if>
+			<if test="categoryId != null and categoryId != ''"><![CDATA[ categoryId, ]]></if>
+			<if test="content != null and content != ''"><![CDATA[ content, ]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[ consumer_id, ]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[create_time,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[update_time, ]]></if>
+			<if test="state != null and state != ''"><![CDATA[state,]]></if>
+			<if test="mainPic != null and mainPic != ''"><![CDATA[ main_pic,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id},]]></if>
+			<if test="topic != null and topic != ''"><![CDATA[#{topic}, ]]></if>
+			<if test="categoryId != null and categoryId != ''"><![CDATA[ #{categoryId},]]></if>
+			<if test="content != null and content != ''"><![CDATA[  #{content},]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[  #{consumerId},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  #{createTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  #{updateTime},]]></if>
+			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
+			<if test="mainPic != null and mainPic != ''"><![CDATA[  #{mainPic},]]></if>
+		</trim>
 	</sql>
 
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="productDemandInfo" >
 		<![CDATA[
 			INSERT INTO product_demand_info
-				(
-                id, 
-                topic, 
-                category_id, 
-                content, 
-                consumer_id, 
-                create_time, 
-                update_time, 
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{topic}, 
-                #{categoryId}, 
-                #{content}, 
-                #{consumerId}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
-				)
 		]]>
+		<include refid="key"></include>
+		VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -133,5 +146,4 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	
 </mapper>

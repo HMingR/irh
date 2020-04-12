@@ -78,48 +78,53 @@
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id , ]]></if>
+			<if test="productName != null and productName != ''"><![CDATA[ product_name , ]]></if>
+			<if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[ main_pic_url,  ]]></if>
+			<if test="unit != null and unit != ''"><![CDATA[ unit,  ]]></if>
+			<if test="originalPrice != null and originalPrice != ''"><![CDATA[ original_price, ]]></if>
+			<if test="salePrice != null and salePrice != ''"><![CDATA[ sale_price, ]]></if>
+			<if test="oldDegree != null and oldDegree != ''"><![CDATA[ old_degree, ]]></if>
+			<if test="productDesc != null and productDesc != ''"><![CDATA[ product_desc,  ]]></if>
+			<if test="productDetailsPage != null and productDetailsPage != ''"><![CDATA[ product_details_page , ]]></if>
+			<if test="tradeType != null and tradeType != ''"><![CDATA[ trade_type, ]]></if>
+			<if test="categoryId != null and categoryId != ''"><![CDATA[ category_id, ]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ create_time, ]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time, ]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[ consumer_id, ]]></if>
+			<if test="buyingTime != null and buyingTime != ''"><![CDATA[ buying_time, ]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="," suffix="," suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id} ,]]></if>
+			<if test="productName != null and productName != ''"><![CDATA[ #{productName},]]></if>
+			<if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[ #{mainPicUrl},]]></if>
+			<if test="unit != null and unit != ''"><![CDATA[#{unit},]]></if>
+			<if test="originalPrice != null and originalPrice != ''"><![CDATA[#{originalPrice},]]></if>
+			<if test="salePrice != null and salePrice != ''"><![CDATA[#{salePrice},]]></if>
+			<if test="oldDegree != null and oldDegree != ''"><![CDATA[#{oldDegree},]]></if>
+			<if test="productDesc != null and productDesc != ''"><![CDATA[#{productDesc},]]></if>
+			<if test="productDetailsPage != null and productDetailsPage != ''"><![CDATA[#{productDetailsPage},]]></if>
+			<if test="tradeType != null and tradeType != ''"><![CDATA[#{tradeType},]]></if>
+			<if test="categoryId != null and categoryId != ''"><![CDATA[#{categoryId},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[#{createTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[#{updateTime},]]></if>
+			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[ #{consumerId},]]></if>
+			<if test="buyingTime != null and buyingTime != ''"><![CDATA[ #{buyingTime},]]></if>
+		</trim>
+	</sql>
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="productInfo" >
-		<![CDATA[
-			INSERT INTO product_info
-				(
-                id, 
-                product_name, 
-                main_pic_url, 
-                unit, 
-                original_price, 
-                sale_price, 
-                old_degree, 
-                product_desc,
-                product_details_page, 
-                trade_type, 
-                category_id, 
-                create_time, 
-                update_time,
-                state,
-                consumer_id,
-                buying_time
-				)
-			VALUES
-				(
-                #{id}, 
-                #{productName}, 
-                #{mainPicUrl}, 
-                #{unit}, 
-                #{originalPrice}, 
-                #{salePrice}, 
-                #{oldDegree}, 
-                #{productDesc},
-                #{productDetailsPage}, 
-                #{tradeType}, 
-                #{categoryId}, 
-                #{createTime}, 
-                #{updateTime} 
-                #{state},
-                #{consumerId},
-                #{buyingTime}
-				)
-		]]>
+		<![CDATA[INSERT INTO product_info]]>
+		<include refid="key"></include>
+		VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -195,10 +200,18 @@
 		WHERE pi.id = (SELECT product_id FROM product_message pm WHERE pm.id = #{id})
 	</select>
 
-	<select id="selectMainPicUrlById" resultType="string" parameterType="long">
-		<![CDATA[SELECT main_pic_url ]]>
+	<select id="selectDetailPageUrlById" resultType="string" parameterType="long">
+		<![CDATA[SELECT product_details_page ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>
+
+	<insert id="insertInfoReturnId" parameterType="productInfo" useGeneratedKeys="true">
+		<![CDATA[INSERT INTO product_info]]>
+		<include refid="key"></include>
+		VALUES
+		<include refid="value"></include>
+	</insert>
+
 	
 </mapper>

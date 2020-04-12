@@ -6,17 +6,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.core.annotation.NeedLogin;
-import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
-import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.ProductDemandInfoService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName: DemandProductController
@@ -44,6 +42,14 @@ public class DemandProductController extends BaseController {
             return Message.createBySuccess("发布成功");
         }
         return Message.createByError("发布失败");
+    }
+
+    @ApiOperation("分页查看发布的需求")
+    @NeedLogin
+    @GetMapping("/list/{pageSize}/{currentPage}")
+    public Message<Page<ProductDemandInfo>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        Long userId = getCurrentUserIdFromCookie();
+        return productDemandInfoService.list(userId, pageSize, currentPage);
     }
 
     @ApiOperation(value = "根据id查询", httpMethod = "GET")

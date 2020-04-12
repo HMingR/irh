@@ -11,5 +11,4 @@ import top.imuster.goods.api.pojo.ProductDemandInfo;
  */
 public interface ProductDemandInfoDao extends BaseDao<ProductDemandInfo, Long> {
     //自定义扩展
-
 }

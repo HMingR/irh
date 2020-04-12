@@ -4,7 +4,9 @@ package top.imuster.goods.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
@@ -14,8 +16,6 @@ import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ProductMessageService 实现类
@@ -40,13 +40,14 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
     }
 
     @Override
-    public List<ProductMessageInfo> generateMessageTree(Long id) {
-        ProductMessageInfo condition = new ProductMessageInfo();
-        condition.setState(2);
-        condition.setProductId(id);
-        List<ProductMessageInfo> allMessage = productMessageDao.selectEntryList(condition);
-        List<ProductMessageInfo> tree = generateTree(allMessage);
-        return tree;
+    public Message<Page<ProductMessageInfo>> getMessagePage(ProductMessageInfo condition) {
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
+        Page<ProductMessageInfo> page = new Page<>();
+        page.setPageSize(condition.getPageSize());
+        page.setCurrentPage(condition.getPageSize());
+        Page<ProductMessageInfo> infoPage = this.selectPage(condition, page);
+        return Message.createBySuccess(infoPage);
     }
 
     @Override
@@ -71,31 +72,6 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
             sendToSaler.setResourceId(messageId);
         }
         generateSendMessageService.sendToMq(sendToSaler);
-    }
-
-    private List<ProductMessageInfo> generateTree(List<ProductMessageInfo> list){
-        List<ProductMessageInfo> result = new ArrayList<>();
-        // 1、获取第一级节点
-        for (ProductMessageInfo productMessageInfo : list) {
-            if(0 == productMessageInfo.getParentId()) {
-                result.add(productMessageInfo);
-            }
-        }
-        // 2、递归获取子节点
-        for (ProductMessageInfo parent : result) {
-            parent = recursiveTree(parent, list);
-        }
-        return result;
-    }
-
-    private ProductMessageInfo recursiveTree(ProductMessageInfo parent, List<ProductMessageInfo> list) {
-        for (ProductMessageInfo productMessageInfo : list) {
-            if(parent.getId() == productMessageInfo.getParentId()) {
-                productMessageInfo = recursiveTree(productMessageInfo, list);
-                parent.getChilds().add(productMessageInfo);
-            }
-        }
-        return parent;
     }
 
 }
