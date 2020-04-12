@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleTagInfo;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.service.ForumServiceFeignApi;
 
@@ -38,25 +38,25 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
             }
 
             @Override
-            public Message<Page<ArticleTagInfo>> adminCategoryList(Page<ArticleTagInfo> page) {
+            public Message<Page<ArticleCategoryInfo>> adminCategoryList(Page<ArticleCategoryInfo> page) {
                 log.error("管理员分页条件查询帖子分类失败,page对象为{}",page);
                 return null;
             }
 
             @Override
-            public ArticleTagInfo getCategoryInfoById(Long id) {
+            public ArticleCategoryInfo getCategoryInfoById(Long id) {
                 log.error("管理员根据id获得帖子分类信息失败,帖子分类id为{}", id);
                 return null;
             }
 
             @Override
-            public boolean addArticleCategory(ArticleTagInfo category) {
+            public boolean addArticleCategory(ArticleCategoryInfo category) {
                 log.error("管理员新增帖子分类失败,新增帖子信息为{}", category);
                 return false;
             }
 
             @Override
-            public boolean editArticleCategory(ArticleTagInfo category) {
+            public boolean editArticleCategory(ArticleCategoryInfo category) {
                 log.error("管理员根据id提交修改帖子分类信息失败,帖子分类信息为{}", category);
                 return false;
             }

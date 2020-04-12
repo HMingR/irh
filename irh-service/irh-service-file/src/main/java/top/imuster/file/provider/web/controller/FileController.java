@@ -11,6 +11,7 @@ import top.imuster.file.provider.exception.FileException;
 import top.imuster.file.provider.file.FastDFSFile;
 import top.imuster.file.provider.utils.FastDFSUtil;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -43,10 +44,12 @@ public class FileController extends BaseController implements FileServiceFeignAp
                     org.springframework.util.StringUtils.getFilenameExtension(file.getOriginalFilename())    //获取文件拓展名
             );
             //调用FastDFSUtil工具类将文件上传到FastDFS中
+            logger.info("开始上传,时间{}", new Date());
             String[] uploads = FastDFSUtil.upload(fastDFSFile);
 
             //拼接访问地址 url = http://39.105.0.169:8080/group1/M00/00/00/hjdfhjhfjs3278yf47.jpg
             //String url = "http://39.105.0.169:8080/" + uploads[0] + "/" + uploads[1];
+            logger.info("上传成功,{}，时间{}", uploads[0] + "/" + uploads[1], new Date());
             return Message.createBySuccess(uploads[0] + "/" + uploads[1]);
         }catch (Exception e){
             logger.error("上传文件失败{}",e.getMessage(),e);

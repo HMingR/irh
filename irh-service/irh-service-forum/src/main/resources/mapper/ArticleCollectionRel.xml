@@ -48,28 +48,31 @@
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim suffixOverrides=",">
+			<if test="articleId != null and articleId != ''">article_id, </if>
+			<if test="userId != null and userId != ''">user_id, </if>
+			<if test="createTime != null and createTime != ''">create_time, </if>
+			<if test="updateTime != null and updateTime != ''">update_time, </if>
+			<if test="state != null and state != ''">state, </if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim suffixOverrides=",">
+			<if test="articleId != null and articleId != ''">#{articleId},</if>
+			<if test="userId != null and userId != ''"> #{userId},</if>
+			<if test="createTime != null and createTime != ''"> #{createTime},</if>
+			<if test="updateTime != null and updateTime != ''"> #{updateTime},</if>
+			<if test="state != null and state != ''"> #{state} </if>
+		</trim>
+	</sql>
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="articleCollectionRel" >
-		<![CDATA[
-			INSERT INTO article_collection_rel
-				(
-                id, 
-                article_id, 
-                user_id, 
-                create_time, 
-                update_time, 
-                state 
-				)
+		<![CDATA[ INSERT INTO article_collection_rel ]]>
+				(<include refid="key"></include>)
 			VALUES
-				(
-                #{id}, 
-                #{articleId}, 
-                #{userId}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
-				)
-		]]>
+				(<include refid="value"></include>)
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

@@ -48,7 +48,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleTagInfo" >
+	<insert id="insertEntry" parameterType="articleCategoryInfo" >
 		<![CDATA[
 			INSERT INTO article_tag_info
 				(
@@ -83,20 +83,20 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="articleTagInfo" >
+	<delete id="deleteByCondition" parameterType="articleCategoryInfo" >
 		<![CDATA[DELETE FROM article_tag_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleTagInfo" >
+	<update id="updateByKey" parameterType="articleCategoryInfo" >
 		<![CDATA[UPDATE article_tag_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleTagInfo">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleCategoryInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -107,7 +107,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleTagInfo" resultType="articleTagInfo">
+	<select id="selectEntryList" parameterType="articleCategoryInfo" resultType="articleCategoryInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -116,7 +116,7 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleTagInfo" resultType="int">
+	<select id="selectEntryListCount" parameterType="articleCategoryInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
@@ -130,7 +130,7 @@
 		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
 	</select>
 
-	<select id="selectTagInfoByCategoryIds" resultType="top.imuster.life.api.pojo.ArticleTagInfo" parameterType="java.lang.reflect.Array">
+	<select id="selectTagInfoByCategoryIds" resultType="top.imuster.life.api.pojo.ArticleCategoryInfo" parameterType="java.lang.reflect.Array">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>

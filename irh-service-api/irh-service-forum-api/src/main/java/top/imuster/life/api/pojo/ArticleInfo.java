@@ -61,17 +61,12 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("每个文章下的一级留言信息")
 	private List<ArticleReviewInfo> childs;
 
-	private List<ArticleTagInfo> tagList;
+	private List<ArticleCategoryInfo> tagList;
 
 	@ApiModelProperty("给文章添加的标签")
-	private String tagIds;
+	private String tagNames;
 
 	private Long forwardTimes;
-
-	private List<String> tagNames;
-
-//	@ApiModelProperty("文章标签的名字")
-//	private String tagNames;
 
 	@ApiModelProperty("文章详情页url")
 	private String detailPage;
@@ -82,33 +77,12 @@ public class ArticleInfo extends BaseDomain {
 	//浏览时间(浏览记录用)
 	private String browseDate;
 
-	// 1-无效  2-有效
+	private List<String> categoryNames;
+
+	private List<Long> categoryIds;
+
+	// 1-无效  2-有效 3-发布中  4-草稿箱中
 //	private Short state;
-
-
-	public List<ArticleReviewInfo> getChilds() {
-		return childs;
-	}
-
-	public void setChilds(List<ArticleReviewInfo> childs) {
-		this.childs = childs;
-	}
-
-	public List<ArticleTagInfo> getTagList() {
-		return tagList;
-	}
-
-	public void setTagList(List<ArticleTagInfo> tagList) {
-		this.tagList = tagList;
-	}
-
-	public String getBrowseDate() {
-		return browseDate;
-	}
-
-	public void setBrowseDate(String browseDate) {
-		this.browseDate = browseDate;
-	}
 
 	public Long getId() {
 		return id;
@@ -182,12 +156,28 @@ public class ArticleInfo extends BaseDomain {
 		this.reviewTotal = reviewTotal;
 	}
 
-	public String getTagIds() {
-		return tagIds;
+	public List<ArticleReviewInfo> getChilds() {
+		return childs;
 	}
 
-	public void setTagIds(String tagIds) {
-		this.tagIds = tagIds;
+	public void setChilds(List<ArticleReviewInfo> childs) {
+		this.childs = childs;
+	}
+
+	public List<ArticleCategoryInfo> getTagList() {
+		return tagList;
+	}
+
+	public void setTagList(List<ArticleCategoryInfo> tagList) {
+		this.tagList = tagList;
+	}
+
+	public String getTagNames() {
+		return tagNames;
+	}
+
+	public void setTagNames(String tagNames) {
+		this.tagNames = tagNames;
 	}
 
 	public Long getForwardTimes() {
@@ -196,14 +186,6 @@ public class ArticleInfo extends BaseDomain {
 
 	public void setForwardTimes(Long forwardTimes) {
 		this.forwardTimes = forwardTimes;
-	}
-
-	public List<String> getTagNames() {
-		return tagNames;
-	}
-
-	public void setTagNames(List<String> tagNames) {
-		this.tagNames = tagNames;
 	}
 
 	public String getDetailPage() {
@@ -220,5 +202,29 @@ public class ArticleInfo extends BaseDomain {
 
 	public void setScore(Long score) {
 		this.score = score;
+	}
+
+	public String getBrowseDate() {
+		return browseDate;
+	}
+
+	public void setBrowseDate(String browseDate) {
+		this.browseDate = browseDate;
+	}
+
+	public List<String> getCategoryNames() {
+		return categoryNames;
+	}
+
+	public void setCategoryNames(List<String> categoryNames) {
+		this.categoryNames = categoryNames;
+	}
+
+	public List<Long> getCategoryIds() {
+		return categoryIds;
+	}
+
+	public void setCategoryIds(List<Long> categoryIds) {
+		this.categoryIds = categoryIds;
 	}
 }

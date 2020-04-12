@@ -44,7 +44,7 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
         Long[] targetIds = res.get(0).toArray(new Long[res.get(0).size()]);
         Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
         ForumHotTopicInfo condition = new ForumHotTopicInfo();
-        for (int i = 0; i < targetIds.length; i++) {
+        for (int i = 0; i < scores.length; i++) {
             Long score = forumHotTopicDao.selectScoreByTargetId(targetIds[i]);
             condition.setTargetId(targetIds[i]);
             if(score == null || score == 0){

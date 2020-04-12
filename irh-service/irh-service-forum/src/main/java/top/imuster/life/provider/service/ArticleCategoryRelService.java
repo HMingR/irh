@@ -2,7 +2,7 @@ package top.imuster.life.provider.service;
 
 
 import top.imuster.common.base.service.BaseService;
-import top.imuster.life.api.pojo.ArticleTagRel;
+import top.imuster.life.api.pojo.ArticleCategoryRel;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-02-16 16:19:34
  */
-public interface ArticleTagRelService extends BaseService<ArticleTagRel, Long> {
+public interface ArticleCategoryRelService extends BaseService<ArticleCategoryRel, Long> {
 
     /**
      * @Author hmr
@@ -24,12 +24,13 @@ public interface ArticleTagRelService extends BaseService<ArticleTagRel, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据标签集合查找文章
+     * @Description 根据分类id集合查找文章
      * @Date: 2020/3/25 14:33
      * @param tagIds
      * @param pageSize
      * @param currentPage
      * @reture: java.util.List<java.lang.Long>
      **/
-    List<Long> selectArticleIdsByIds(List<Long> tagIds, Long pageSize, Long currentPage);
+    List<Long> selectArticleIdsByIds(List<Long> categoryIds, Long pageSize, Long currentPage);
+
 }

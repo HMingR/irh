@@ -2,16 +2,16 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.life.api.pojo.ArticleTagRel;
+import top.imuster.life.api.pojo.ArticleCategoryRel;
 
 import java.util.List;
 
 /**
- * ArticleTagRelDao 接口
+ * ArticleCategoryRelDao 接口
  * @author 黄明人
  * @since 2020-02-16 16:19:34
  */
-public interface ArticleTagRelDao extends BaseDao<ArticleTagRel, Long> {
+public interface ArticleCategoryRelDao extends BaseDao<ArticleCategoryRel, Long> {
     //自定义扩展
     /**
      * @Author hmr
@@ -26,9 +26,9 @@ public interface ArticleTagRelDao extends BaseDao<ArticleTagRel, Long> {
      * @Author hmr
      * @Description 根据tagids分页查询文章id
      * @Date: 2020/3/25 14:48
-     * @param articleTagRel
+     * @param articleCategoryRel
      * @reture: java.util.List<java.lang.Long>
      **/
-    List<Long> selectArticleIdByPageAndTagIds(ArticleTagRel articleTagRel);
+    List<Long> selectArticleIdByPageAndTagIds(ArticleCategoryRel articleCategoryRel);
 
 }

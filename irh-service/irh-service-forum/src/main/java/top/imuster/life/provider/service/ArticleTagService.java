@@ -3,7 +3,7 @@ package top.imuster.life.provider.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleTagInfo;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
-public interface ArticleTagService extends BaseService<ArticleTagInfo, Long> {
+public interface ArticleTagService extends BaseService<ArticleCategoryInfo, Long> {
 
     /**
      * @Author hmr
@@ -30,5 +30,5 @@ public interface ArticleTagService extends BaseService<ArticleTagInfo, Long> {
      * @param ids
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.Long>>
      **/
-    Message<List<ArticleTagInfo>> getTagByCategoryIds(String ids);
+    Message<List<ArticleCategoryInfo>> getTagByCategoryIds(String ids);
 }

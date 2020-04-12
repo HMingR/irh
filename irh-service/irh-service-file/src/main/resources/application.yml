@@ -1,12 +1,15 @@
 server:
   port: 10600
+  tomcat:
+    max-http-post-size: 4048576
+    max-http-header-size: 4048576
 spring:
   application:
     name: file-service
   servlet:
     multipart:
-      max-file-size: 10MB    #最大文件大小
-      max-request-size: 10MB #请求数据大小
+      max-file-size: 100MB    #最大文件大小
+      max-request-size: 100MB #请求数据大小
   datasource:
       druid:
         driver-class-name: com.mysql.jdbc.Driver

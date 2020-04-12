@@ -2,7 +2,7 @@ package top.imuster.life.provider.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.life.api.pojo.ArticleTagInfo;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-01-30 15:25:20
  */
-public interface ArticleTagDao extends BaseDao<ArticleTagInfo, Long> {
+public interface ArticleTagDao extends BaseDao<ArticleCategoryInfo, Long> {
     //自定义扩展
 
     /**
@@ -28,7 +28,7 @@ public interface ArticleTagDao extends BaseDao<ArticleTagInfo, Long> {
      * @Description 根据分类id获得标签信息
      * @Date: 2020/4/9 9:30
      * @param sids
-     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleTagInfo>
+     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleCategoryInfo>
      **/
-    List<ArticleTagInfo> selectTagInfoByCategoryIds(List<String> list);
+    List<ArticleCategoryInfo> selectTagInfoByCategoryIds(List<String> list);
 }

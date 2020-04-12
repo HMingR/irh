@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleTagInfo;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 import top.imuster.life.provider.dao.ArticleTagDao;
 import top.imuster.life.provider.service.ArticleTagService;
 
@@ -21,31 +21,31 @@ import java.util.stream.Collectors;
  * @since 2020-01-30 15:25:20
  */
 @Service("articleTagService")
-public class ArticleTagServiceImpl extends BaseServiceImpl<ArticleTagInfo, Long> implements ArticleTagService {
+public class ArticleTagServiceImpl extends BaseServiceImpl<ArticleCategoryInfo, Long> implements ArticleTagService {
 
     @Resource
     private ArticleTagDao articleTagDao;
 
     @Override
-    public BaseDao<ArticleTagInfo, Long> getDao() {
+    public BaseDao<ArticleCategoryInfo, Long> getDao() {
         return this.articleTagDao;
     }
 
     @Override
     public List<Long> getTagByCategoryId(Long id) {
-        ArticleTagInfo condition = new ArticleTagInfo();
+        ArticleCategoryInfo condition = new ArticleCategoryInfo();
         condition.setState(2);
         condition.setCategoryId(id);
-        List<ArticleTagInfo> articleTagInfos = articleTagDao.selectEntryList(condition);
-        ArrayList<Long> list = (ArrayList<Long>) articleTagInfos.stream().map(ArticleTagInfo::getId).collect(Collectors.toList());
+        List<ArticleCategoryInfo> articleCategoryInfos = articleTagDao.selectEntryList(condition);
+        ArrayList<Long> list = (ArrayList<Long>) articleCategoryInfos.stream().map(ArticleCategoryInfo::getId).collect(Collectors.toList());
         return list;
     }
 
     @Override
-    public Message<List<ArticleTagInfo>> getTagByCategoryIds(String ids) {
+    public Message<List<ArticleCategoryInfo>> getTagByCategoryIds(String ids) {
         String[] sids = ids.split(",");
         List<String> categoryIds = Arrays.asList(sids);
-        List<ArticleTagInfo> list = articleTagDao.selectTagInfoByCategoryIds(categoryIds);
+        List<ArticleCategoryInfo> list = articleTagDao.selectTagInfoByCategoryIds(categoryIds);
         return Message.createBySuccess(list);
     }
 

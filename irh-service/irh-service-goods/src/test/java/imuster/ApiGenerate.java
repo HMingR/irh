@@ -20,13 +20,14 @@ import java.nio.file.Paths;
  * @date: 2020/1/9 10:51
  */
 public class ApiGenerate {
-    public static void main(String[] args) {
-        try{
-            generateMd();
-            //generateCf();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws MalformedURLException {
+        // 输出Ascii格式
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withMarkupLanguage(MarkupLanguage.ASCIIDOC)
+                .withOutputLanguage(Language.ZH).withPathsGroupedBy(GroupBy.TAGS).withGeneratedExamples()
+                .withoutInlineSchema().build();
+
+        Swagger2MarkupConverter.from(new URL("http://localhost:10400/v2/api-docs")).withConfig(config)
+                .build().toFolder(Paths.get("src/docs/asciidoc/generated"));
     }
 
     /**
@@ -45,7 +46,7 @@ public class ApiGenerate {
                 .withoutInlineSchema()
                 .build();
 
-        Swagger2MarkupConverter.from(new URL("http://localhost:8081/v2/api-docs"))
+        Swagger2MarkupConverter.from(new URL("http://localhost:10400/v2/api-docs"))
                 .withConfig(config)
                 .build()
                 .toFolder(Paths.get("./docs/markdown/goods"));

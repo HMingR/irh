@@ -9,6 +9,7 @@ import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopicInfo;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -135,7 +136,18 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @Description 根据用户发布文章获得的点赞，收藏，转发数量获得排名
      * @Date: 2020/4/8 17:46
      * @param userId
+     * @param total
      * @reture: java.lang.Long
      **/
-    List<Long> selectUserArticleRank(Long total);
+    List<Long> selectUserArticleRank(HashMap<String, Integer> total);
+
+    /**
+     * @Author hmr
+     * @Description 插入文章信息
+     * @Date: 2020/4/12 9:59
+     * @param articleInfo
+     * @reture: java.lang.Long
+     **/
+    Long insertArticle(ArticleInfo articleInfo);
+
 }

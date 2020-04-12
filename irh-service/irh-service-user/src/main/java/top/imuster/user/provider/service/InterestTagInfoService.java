@@ -56,7 +56,7 @@ public interface InterestTagInfoService extends BaseService<InterestTagInfo, Lon
      * @Description 用户获得所有的标签，并且判断本人是否关注
      * @Date: 2020/4/9 15:46
      * @param userId
-     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleTagInfo>
+     * @reture: java.util.List<top.imuster.life.api.pojo.ArticleCategoryInfo>
      **/
     List<InterestTagInfo> userTaglist(Long userId);
 

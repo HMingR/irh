@@ -151,8 +151,10 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @Description 获得论坛模块排名
      * @Date: 2020/4/8 17:44
      * @param userId
+     * @param pageSize
+     * @param currentPage
      * @reture: java.lang.Long
      **/
-    List<Long> getUserArticleRank();
+    List<Long> getUserArticleRank(Integer pageSize, Integer currentPage);
 
 }

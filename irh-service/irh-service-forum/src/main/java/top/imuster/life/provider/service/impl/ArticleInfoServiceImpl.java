@@ -5,30 +5,31 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
-import top.imuster.file.api.service.FileServiceFeignApi;
+import top.imuster.common.core.dto.SendDetailPageDto;
+import top.imuster.common.core.enums.TemplateEnum;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
+import top.imuster.life.api.pojo.ArticleCategoryRel;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
+import top.imuster.life.provider.service.ArticleCategoryRelService;
 import top.imuster.life.provider.service.ArticleCollectionService;
 import top.imuster.life.provider.service.ArticleInfoService;
-import top.imuster.life.provider.service.ArticleTagRelService;
 import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.PostConstruct;
@@ -55,10 +56,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     ArticleTagService articleTagService;
 
     @Resource
-    ArticleTagRelService articleTagRelService;
-
-    @Autowired
-    FileServiceFeignApi fileServiceFeignApi;
+    ArticleCategoryRelService articleCategoryRelService;
 
     @Resource
     private ArticleCollectionService articleCollectionService;
@@ -70,9 +68,13 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     
     private Template template;
 
+    //文章模块的排名总数
     @Value("${article.rank.total}")
     private Long rankTotal;
-    
+
+    @Resource
+    GenerateSendMessageService generateSendMessageService;
+
     @PostConstruct
     public void createTemplate() throws IOException {
         template = configuration.getTemplate(templateLocation, "UTF-8");
@@ -85,25 +87,18 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void release(Long userId, ArticleInfo articleInfo) throws Exception {
-        Message<String> msg = createStaticPage(articleInfo.getContent());
-        if(msg.getCode() == 200){
-            //已经生成详情页,所以文章内容就不保存到DB中了
-            articleInfo.setDetailPage(msg.getText());
-            articleInfo.setContent("");
-        }
+    public void release(Long userId, ArticleInfo articleInfo) {
+        articleInfo.setState(3);
         articleInfo.setUserId(userId);
-        String tagIds = articleInfo.getTagIds();
-        if (StringUtils.isNotBlank(tagIds)){
-            String[] split = tagIds.split(",");
-            ArrayList<ArticleTagInfo> articleTagInfos = new ArrayList<>();
-            for (int i = 0; i < split.length; i++) {
-                long tagId = Long.parseLong(split[i]);
-                articleTagInfos.add(new ArticleTagInfo(tagId));
-            }
-            articleTagService.insertEntry(articleTagInfos.toArray(new ArticleTagInfo[articleTagInfos.size()]));
+        List<Long> categoryIds = articleInfo.getCategoryIds();
+        Long articleId = articleInfoDao.insertArticle(articleInfo);
+        ArticleCategoryRel categoryRel = new ArticleCategoryRel();
+        categoryRel.setArticleId(articleId);
+        for (Long categoryId : categoryIds){
+            categoryRel.setCategoryId(categoryId);
+            articleCategoryRelService.insertEntry(categoryRel);
         }
-        articleInfoDao.insertEntry(articleInfo);
+        createStaticPage(articleInfo.getContent(), articleId);
     }
 
     /**
@@ -113,11 +108,12 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
      * @param context
      * @reture: java.lang.String
      **/
-    public Message<String> createStaticPage(String context) throws Exception {
-        HashMap<String, String> param = new HashMap<>();
-        param.put("context", context);
-        byte[] bytes = FreeMarkerTemplateUtils.processTemplateIntoString(template, param).getBytes();
-        return fileServiceFeignApi.uploadByBytes(bytes);
+    private void createStaticPage(String context, Long articleId){
+        SendDetailPageDto detailPageDto = new SendDetailPageDto();
+        detailPageDto.setTemplateEnum(TemplateEnum.ARTICLE_TEMPLATE);
+        detailPageDto.setEntry(context);
+        detailPageDto.setTargetId(articleId);
+        generateSendMessageService.sendToMq(detailPageDto);
     }
 
     @Override
@@ -138,12 +134,11 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public ArticleInfo getArticleDetailById(Long id) {
         ArticleInfo result = articleInfoDao.selectEntryList(id).get(0);
-        String tagIds = result.getTagIds();
-        if(StringUtils.isNotEmpty(tagIds)){
-            String[] split = tagIds.split(",");
-            Long[] longIds = (Long[])ConvertUtils.convert(split, Long.class);
-            List<ArticleTagInfo> articleTagInfos = articleTagService.selectEntryList(longIds);
-            result.setTagList(articleTagInfos);
+        List<Long> categoryIds = result.getCategoryIds();
+        if(categoryIds != null && !categoryIds.isEmpty()){
+            Long[] longIds = (Long[])ConvertUtils.convert(categoryIds, Long.class);
+            List<ArticleCategoryInfo> articleCategoryInfos = articleTagService.selectEntryList(longIds);
+            result.setTagList(articleCategoryInfos);
         }
         return result;
     }
@@ -171,8 +166,8 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'article::brief::' + #p0")
     public ArticleInfo getBriefById(Long id) {
         ArticleInfo articleInfo = articleInfoDao.selectBriefById(id);
-        List<String> tagNames = articleTagRelService.getArticleTagsById(id);
-        articleInfo.setTagNames(tagNames);
+        List<String> categoryNames = articleCategoryRelService.getArticleTagsById(id);
+        articleInfo.setCategoryNames(categoryNames);
         return articleInfo;
     }
 
@@ -249,7 +244,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         List<Long> tagIds = articleTagService.getTagByCategoryId(categoryId);
 
         //根据标签分页查询文章id
-        List<Long> articleIds =  articleTagRelService.selectArticleIdsByIds(tagIds, pageSize, currentPage);
+        List<Long> articleIds =  articleCategoryRelService.selectArticleIdsByIds(tagIds, pageSize, currentPage);
 
         //根据文章id获得文章的简略信息
         List<ArticleInfo> articleInfoList = articleInfoDao.selectArticleBriefByTagIds(articleIds);
@@ -257,7 +252,10 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    public List<Long> getUserArticleRank() {
-        return articleInfoDao.selectUserArticleRank(rankTotal);
+    public List<Long> getUserArticleRank(Integer pageSize, Integer currentPage) {
+        HashMap<String, Integer> param = new HashMap<>();
+        param.put("pageSize", pageSize);
+        param.put("startIndex", (currentPage - 1) * pageSize);
+        return articleInfoDao.selectUserArticleRank(param);
     }
 }

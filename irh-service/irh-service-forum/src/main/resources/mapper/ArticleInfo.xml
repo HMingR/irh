@@ -20,7 +20,7 @@
             review_total AS reviewTotal,
             forward_times AS forwardTimes,
             detail_page AS detailPage,
-            tag_ids AS tagIds
+            tag_names AS tagNames
 		]]>
 	</sql>
 
@@ -45,7 +45,7 @@
             <if test="reviewTotal != null and reviewTotal != ''"><![CDATA[AND review_total = #{reviewTotal}]]></if>
             <if test="forwardTimes != null and forwardTimes != ''"><![CDATA[AND forward_times = #{forwardTimes}]]></if>
             <if test="detailPage != null and detailPage != ''"><![CDATA[AND detail_page = #{detailPage}]]></if>
-            <if test="tagIds != null and tagIds != ''"><![CDATA[AND tag_ids = #{tagIds}]]></if>
+            <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
 		</where>
 	</sql>
 	
@@ -70,49 +70,54 @@
 			<if test="upTotal != null"><![CDATA[up_total = #{upTotal},]]></if>
 			<if test="reviewTotal != null"><![CDATA[review_total = #{reviewTotal},]]></if>
 			<if test="forwardTimes != null"><![CDATA[forward_times = #{forwardTimes},]]></if>
-			<if test="tagIds != null"><![CDATA[tag_ids = #{tagIds},]]></if>
+			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
 			<if test="detailPage != null"><![CDATA[detail_page = #{detailPage},]]></if>
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="("  suffix=")" suffixOverrides=",">
+			<if test="title != null and title != ''">title, </if>
+			<if test="mainPicture != null and mainPicture != ''">main_picture, </if>
+			<if test="content != null and content != ''">content, </if>
+			<if test="state != null and state != ''">state, </if>
+			<if test="createTime != null and createTime != ''">create_time, </if>
+			<if test="updateTime != null and updateTime != ''">update_time, </if>
+			<if test="browserTimes != null and browserTimes != ''">browser_times, </if>
+			<if test="upTotal != null and upTotal != ''">up_total, </if>
+			<if test="collectTotal != null and collectTotal != ''">collect_total, </if>
+			<if test="reviewTotal != null and reviewTotal != ''">review_total, </if>
+			<if test="detailPage != null and detailPage != ''">detail_page, </if>
+			<if test="tagNames != null and tagNames != ''">tag_names, </if>
+			<if test="userId != null and userId != ''">user_id, </if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="title != null and title != ''">#{title}, </if>
+			<if test="mainPicture != null and mainPicture != ''">#{mainPicture}, </if>
+			<if test="content != null and content != ''">#{content}, </if>
+			<if test="state != null and state != ''">#{state}, </if>
+			<if test="createTime != null and createTime != ''">#{createTime}, </if>
+			<if test="updateTime != null and updateTime != ''">#{updateTime}, </if>
+			<if test="browserTimes != null and browserTimes != ''">#{browserTimes}, </if>
+			<if test="upTotal != null and upTotal != ''">#{upTotal}, </if>
+			<if test="collectTotal != null and collectTotal != ''">#{collectTotal}, </if>
+			<if test="reviewTotal != null and reviewTotal != ''">#{reviewTotal}, </if>
+			<if test="detailPage != null and detailPage != ''">#{detailPage}, </if>
+			<if test="tagNames != null and tagNames != ''">#{tagNames}, </if>
+			<if test="userId != null and userId != ''">#{userId}, </if>
+		</trim>
+
+	</sql>
+
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleInfo" >
-		<![CDATA[
-			INSERT INTO article_info
-				(
-                id,
-                title,
-                main_picture,
-                content, 
-                state, 
-                create_time, 
-                update_time,
-                user_id,
-                browser_times,
-                up_total,
-                collect_total,
-                review_total,
-                detail_page,
-                tag_ids
-				)
-			VALUES
-				(
-                #{id}, 
-                #{title}, 
-                #{mainPicture},
-                #{content}, 
-                #{state}, 
-                #{createTime}, 
-                #{updateTime},
-                #{userId},
-                #{browserTimes},
-                #{upTotal},
-                #{collectTotal},
-                #{reviewTotal},
-                #{detailPage},
-                #{tagIds}
-				)
-		]]>
+	<insert id="insertEntry" parameterType="articleInfo" useGeneratedKeys="true" >
+		<![CDATA[ INSERT INTO article_info]]>
+		<include refid="key"></include>
+		<![CDATA[ VALUES ]]>
+		<include refid="value"></include>
 	</insert>
 	
 	<select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
@@ -279,7 +284,7 @@
 		<![CDATA[ORDER BY create_time, browser_times DESC]]>
 	</select>
 
-	<select id="selectUserArticleRank" parameterType="long" resultType="java.lang.Long">
+	<select id="selectUserArticleRank" parameterType="map" resultType="java.lang.Long">
 		<![CDATA[
 			SELECT
 				user_id AS userId,
@@ -291,9 +296,15 @@
 			GROUP BY
 				user_id
 			ORDER BY rank DESC
-			LIMIT 0, #{total}
+			LIMIT #{startIndex}, #{pageSize}
 		 ]]>
-
 	</select>
+
+	<insert id="insertArticle" useGeneratedKeys="true">
+		<![CDATA[ INSERT INTO article_info]]>
+		<include refid="key"></include>
+		<![CDATA[ VALUES ]]>
+		<include refid="value"></include>
+	</insert>
 
 </mapper>

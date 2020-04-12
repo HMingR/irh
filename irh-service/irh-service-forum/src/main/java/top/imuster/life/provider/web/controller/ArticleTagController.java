@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.life.api.pojo.ArticleTagInfo;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.Resource;
@@ -39,7 +39,7 @@ public class ArticleTagController extends BaseController {
      **/
     @ApiOperation(value = "根据分类id获得标签", httpMethod = "GET")
     @GetMapping("/list/{ids}")
-    public Message<List<ArticleTagInfo>> getListById(@PathVariable("ids") String ids){
+    public Message<List<ArticleCategoryInfo>> getListById(@PathVariable("ids") String ids){
         return articleTagService.getTagByCategoryIds(ids);
     }
 
@@ -47,18 +47,21 @@ public class ArticleTagController extends BaseController {
     @ApiOperation(value = "获得所有的标签", httpMethod = "GET")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:alltag'")
     @GetMapping
-    public Message<List<ArticleTagInfo>> getAllTag(){
-        ArticleTagInfo articleTagInfo = new ArticleTagInfo();
-        articleTagInfo.setState(2);
-        List<ArticleTagInfo> articleTagInfos = articleTagService.selectEntryList(articleTagInfo);
-        return Message.createBySuccess(articleTagInfos);
+    public Message<List<ArticleCategoryInfo>> getAllTag(){
+        ArticleCategoryInfo articleCategoryInfo = new ArticleCategoryInfo();
+        articleCategoryInfo.setState(2);
+        List<ArticleCategoryInfo> articleCategoryInfos = articleTagService.selectEntryList(articleCategoryInfo);
+        return Message.createBySuccess(articleCategoryInfos);
     }
 
     @ApiOperation("根据id获得标签的名字")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum::tag::name::'+#p0")
     @GetMapping("/name/{id}")
     public Message<String> getTagNameById(@PathVariable("id") Long id){
-        String name = articleTagService.selectEntryList(id).get(0).getName();
-        return Message.createBySuccess(name);
+        List<ArticleCategoryInfo> articleCategoryInfos = articleTagService.selectEntryList(id);
+        if(articleCategoryInfos.isEmpty()){
+            return Message.createBySuccess(String.valueOf(id));
+        }
+        return Message.createBySuccess(articleCategoryInfos.get(0).getName());
     }
 }

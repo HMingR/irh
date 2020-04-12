@@ -10,6 +10,8 @@ public enum TemplateEnum {
 
     USER_REGISTER("用户注册-发送验证码", "email/UserRegister.ftl"),
 
+    ARTICLE_TEMPLATE("论坛模块文章详情页", "static/article.ftl"),
+
     //todo 商品详情页还没有
     PRODUCT_TEMPLATE("商品详情页", "");
 

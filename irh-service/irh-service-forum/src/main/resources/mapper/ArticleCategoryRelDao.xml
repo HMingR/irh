@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.life.provider.dao.ArticleTagRelDao">
+<mapper namespace="top.imuster.life.provider.dao.ArticleCategoryRelDao">
 
 	<!-- article_tag_rel 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
-            tag_id AS tagId,
+            category_id AS categoryId,
             article_id AS articleId 
 		]]>
 	</sql>
@@ -19,7 +19,7 @@
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="tagId != null and tagId != ''"><![CDATA[AND tag_id = #{tagId}]]></if>
+            <if test="categoryId != null and categoryId != ''"><![CDATA[AND category_id = #{categoryId}]]></if>
             <if test="articleId != null and articleId != ''"><![CDATA[AND article_id = #{articleId}]]></if> 
 		</where>
 	</sql>
@@ -33,24 +33,24 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="tagId != null"><![CDATA[tag_id = #{tagId},]]></if>
+			<if test="categoryId != null"><![CDATA[category_id = #{categoryId},]]></if>
 			<if test="articleId != null"><![CDATA[article_id = #{articleId},]]></if>
 		</set>
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="articleTagRel" >
+	<insert id="insertEntry" parameterType="articleCategoryRel" >
 		<![CDATA[
 			INSERT INTO article_tag_rel
 				(
                 id, 
-                tag_id, 
+                category_id,
                 article_id 
 				)
 			VALUES
 				(
                 #{id}, 
-                #{tagId}, 
+                #{categoryId},
                 #{articleId} 
 				)
 		]]>
@@ -68,20 +68,20 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="articleTagRel" >
+	<delete id="deleteByCondition" parameterType="articleCategoryRel" >
 		<![CDATA[DELETE FROM article_tag_rel]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="articleTagRel" >
+	<update id="updateByKey" parameterType="articleCategoryRel" >
 		<![CDATA[UPDATE article_tag_rel]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleTagRel">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="articleCategoryRel">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -92,7 +92,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="articleTagRel" resultType="articleTagRel">
+	<select id="selectEntryList" parameterType="articleCategoryRel" resultType="articleCategoryRel">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -101,7 +101,7 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="articleTagRel" resultType="int">
+	<select id="selectEntryListCount" parameterType="articleCategoryRel" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
@@ -114,19 +114,19 @@
   			at.name
 			FROM
 				article_tag_rel AS atr
-				LEFT JOIN ( SELECT `name`, id FROM article_tag_info WHERE state != 1) AS at ON at.id = atr.tag_id
+				LEFT JOIN ( SELECT `name`, id FROM article_tag_info WHERE state != 1) AS at ON at.id = atr.category_id
 			WHERE
 				atr.article_id = #{id}
   		]]>
 	</select>
 
-	<select id="selectArticleIdByPageAndTagIds" parameterType="articleTagRel" resultType="long">
+	<select id="selectArticleIdByPageAndTagIds" parameterType="articleCategoryRel" resultType="long">
 		<![CDATA[
   			SELECT
   				article_id
 			FROM
 				article_tag_rel
-			WHERE tag_id IN
+			WHERE category_id IN
   		]]>
 		<foreach collection="tagIds" item="id" open="(" separator="," close=")">
 			<![CDATA[#{id}]]>

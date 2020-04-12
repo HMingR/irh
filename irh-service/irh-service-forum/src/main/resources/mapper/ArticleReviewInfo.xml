@@ -59,36 +59,40 @@
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="articleId != null and articleId != ''"><![CDATA[ article_id, ]]></if>
+			<if test="userId != null and userId != ''"><![CDATA[ user_id, ]]></if>
+			<if test="parentId != null and parentId != ''"><![CDATA[ parent_id, ]]></if>
+			<if test="content != null and content != ''"><![CDATA[ content, ]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state, ]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ create_time, ]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time, ]]></if>
+			<if test="firstClassId != null and firstClassId != ''"><![CDATA[ first_class_id, ]]></if>
+			<if test="upTotal != null and upTotal != ''"><![CDATA[ up_total, ]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffixOverrides="," suffix=")">
+			<if test="articleId != null and articleId != ''"><![CDATA[ #{articleId},]]></if>
+			<if test="userId != null and userId != ''"><![CDATA[ #{userId},]]></if>
+			<if test="parentId != null and parentId != ''"><![CDATA[ #{parentId},]]></if>
+			<if test="content != null and content != ''"><![CDATA[ #{content},]]></if>
+			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
+			<if test="firstClassId != null and firstClassId != ''"><![CDATA[ #{firstClassId},]]></if>
+			<if test="upTotal != null and upTotal != ''"><![CDATA[  #{upTotal},]]></if>
+		</trim>
+	</sql>
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="articleReviewInfo" >
-		<![CDATA[
-			INSERT INTO article_review_info
-				(
-                id, 
-                article_id, 
-                user_id, 
-                parent_id, 
-                content, 
-                state, 
-                create_time, 
-                update_time,
-                first_class_id,
-                up_total
-				)
+		<![CDATA[ INSERT INTO article_review_info ]]>
+		<include refid="key"></include>
 			VALUES
-				(
-                #{id}, 
-                #{articleId}, 
-                #{userId}, 
-                #{parentId}, 
-                #{content}, 
-                #{state}, 
-                #{createTime}, 
-                #{updateTime},
-                #{firstClassId},
-                #{upTotal}
-				)
-		]]>
+		<include refid="value"></include>
+
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

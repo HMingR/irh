@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 import top.imuster.life.api.pojo.ArticleReviewInfo;
-import top.imuster.life.api.pojo.ArticleTagInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ErrandInfo;
 import top.imuster.life.api.service.ForumServiceFeignApi;
@@ -52,7 +52,7 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
     @Override
     @DeleteMapping("/category/{id}")
     public boolean adminDeleteArticleCategory(@PathVariable("id") Long id) {
-        ArticleTagInfo condition = new ArticleTagInfo();
+        ArticleCategoryInfo condition = new ArticleCategoryInfo();
         condition.setId(id);
         condition.setState(1);
         int i = articleTagService.updateByKey(condition);
@@ -61,27 +61,27 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
 
     @Override
     @PostMapping("/category/list")
-    public Message<Page<ArticleTagInfo>> adminCategoryList(@RequestBody Page<ArticleTagInfo> page) {
-        Page<ArticleTagInfo> articleTagPage = articleTagService.selectPage(page.getSearchCondition(), page);
+    public Message<Page<ArticleCategoryInfo>> adminCategoryList(@RequestBody Page<ArticleCategoryInfo> page) {
+        Page<ArticleCategoryInfo> articleTagPage = articleTagService.selectPage(page.getSearchCondition(), page);
         return Message.createBySuccess(articleTagPage);
     }
 
     @Override
     @GetMapping("/category/{id}")
-    public ArticleTagInfo getCategoryInfoById(@PathVariable("id") Long id) {
+    public ArticleCategoryInfo getCategoryInfoById(@PathVariable("id") Long id) {
         return articleTagService.selectEntryList(id).get(0);
     }
 
     @Override
     @PostMapping("/category")
-    public boolean addArticleCategory(@RequestBody ArticleTagInfo category) {
+    public boolean addArticleCategory(@RequestBody ArticleCategoryInfo category) {
         int i = articleTagService.insertEntry(category);
         return i == 1;
     }
 
     @Override
     @PutMapping("/category")
-    public boolean editArticleCategory(@RequestBody ArticleTagInfo category) {
+    public boolean editArticleCategory(@RequestBody ArticleCategoryInfo category) {
         int i = articleTagService.updateByKey(category);
         return i == 1;
     }

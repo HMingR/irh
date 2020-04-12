@@ -28,7 +28,17 @@ public class UserDto extends BaseDomain {
     //用户类型
     private UserType userType;
 
+    private String academyName;
+
     public UserDto() {
+    }
+
+    public String getAcademyName() {
+        return academyName;
+    }
+
+    public void setAcademyName(String academyName) {
+        this.academyName = academyName;
     }
 
     public UserDto(Long userId){

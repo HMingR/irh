@@ -3,7 +3,7 @@ package top.imuster.life.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.life.api.pojo.ArticleTagInfo;
+import top.imuster.life.api.pojo.ArticleCategoryInfo;
 import top.imuster.life.provider.dao.ArticleTagDao;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2020-01-30 15:25:20
  */
 @Repository("articleTagDao")
-public class ArticleTagDaoImpl extends BaseDaoImpl<ArticleTagInfo, Long> implements ArticleTagDao {
+public class ArticleTagDaoImpl extends BaseDaoImpl<ArticleCategoryInfo, Long> implements ArticleTagDao {
 	private final static String NAMESPACE = "top.imuster.life.provider.dao.ArticleTagDao.";
 	private final static String SELECT_TAG_ID_BY_CONDITION = "selectTagIdByCategory";
 	private final static String SELECT_TAG_INFO_BY_CATEGORY_IDS = "selectTagInfoByCategoryIds";
@@ -29,7 +29,7 @@ public class ArticleTagDaoImpl extends BaseDaoImpl<ArticleTagInfo, Long> impleme
 	}
 
 	@Override
-	public List<ArticleTagInfo> selectTagInfoByCategoryIds(List<String> list) {
+	public List<ArticleCategoryInfo> selectTagInfoByCategoryIds(List<String> list) {
 		return this.selectList(getNameSpace(SELECT_TAG_INFO_BY_CATEGORY_IDS), list);
 	}
 }

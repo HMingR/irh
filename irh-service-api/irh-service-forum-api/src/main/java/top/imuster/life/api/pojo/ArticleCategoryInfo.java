@@ -10,11 +10,11 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-01-30 15:25:20
  */
 @ApiModel("帖子分类实体")
-public class ArticleTagInfo extends BaseDomain {
+public class ArticleCategoryInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 5839629083L;
 
-	public ArticleTagInfo() {
+	public ArticleCategoryInfo() {
 		//默认无参构造方法
 	}
 	// 文章分类表主键
@@ -32,7 +32,7 @@ public class ArticleTagInfo extends BaseDomain {
 	@ApiModelProperty("用户是否拥有该标签 0-为拥有 1-拥有")
 	private Integer available;
 
-	public ArticleTagInfo(Long categoryId) {
+	public ArticleCategoryInfo(Long categoryId) {
 		this.categoryId = categoryId;
 	}
 

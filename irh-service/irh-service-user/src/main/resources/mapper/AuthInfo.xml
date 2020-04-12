@@ -56,32 +56,73 @@
 		</set>
 	</sql>
 
+
+	<sql id="key">
+		<trim suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				id,
+			</if>
+			<if test="parent_id!=null and parent_id!=''">
+				parent_id,
+			</if>
+			<if test="auth_name!=null and auth_name!=''">
+				auth_name,
+			</if>
+			<if test="authDesc!=null and authDesc!=''">
+				auth_desc,
+			</if>
+			<if test="createTime!=null and createTime!=''">
+				create_time,
+			</if>
+			<if test="updateTime!=null and updateTime!=''">
+				update_time,
+			</if>
+			<if test="state!=null and state!=''">
+				state,
+			</if>
+			<if test="httpMethod!=null and httpMethod!=''">
+				http_method,
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 对应的插入字段的值 -->
+	<sql id="values">
+		<trim suffixOverrides=",">
+			<if test="id!=null and id!=''">
+				#{id},
+			</if>
+			<if test="parent_id!=null and parent_id!=''">
+				#{parent_id},
+			</if>
+			<if test="auth_name!=null and auth_name!=''">
+				#{auth_name},
+			</if>
+			<if test="authDesc!=null and authDesc!=''">
+				#{authDesc},
+			</if>
+			<if test="createTime!=null and createTime!=''">
+				#{createTime},
+			</if>
+			<if test="updateTime!=null and updateTime!=''">
+				#{updateTime},
+			</if>
+			<if test="state!=null and state!=''">
+				#{state},
+			</if>
+			<if test="httpMethod!=null and httpMethod!=''">
+				#{httpMethod},
+			</if>
+		</trim>
+	</sql>
+
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="authInfo" >
-		<![CDATA[
-			INSERT INTO auth_info
-				(
-                id, 
-                parent_id, 
-                auth_name, 
-                auth_desc, 
-                create_time, 
-                update_time, 
-                state,
-                http_method
-				)
-			VALUES
-				(
-                #{id}, 
-                #{parentId}, 
-                #{authName}, 
-                #{authDesc}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state},
-                #{httpMethod}
-				)
-		]]>
+		<![CDATA[ INSERT INTO ]]>
+		<include refid="QUERY_FROM_TABLE"></include>
+		(<include refid="key"></include>)
+		<![CDATA[ VALUES ]]>
+		(<include refid="values"></include>)
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
