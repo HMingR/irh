@@ -112,14 +112,6 @@ public class ProductInfo extends BaseDomain {
 		this.browserTimes = browserTimes;
 	}
 
-	public String getBuyingTime() {
-		return buyingTime;
-	}
-
-	public void setBuyingTime(String buyingTime) {
-		this.buyingTime = buyingTime;
-	}
-
 	public Long getConsumerId() {
 		return consumerId;
 	}

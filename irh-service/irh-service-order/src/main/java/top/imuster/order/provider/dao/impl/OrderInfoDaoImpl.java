@@ -7,6 +7,7 @@ import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.dao.OrderInfoDao;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * OrderInfoDao 实现类
@@ -22,6 +23,8 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	private final static String SELECT_ORDER_AMOUNT_TOTAL_BY_CREATE_TIME = "selectOrderAmountTotalByCreateTime";
 	private final static String SELECT_ORDER_TOTAL_BY_CREATE_TIME = "selectOrderTotalByCreateTime";
 	private final static String SELECT_ORDER_CODE_VERSION_BY_CODE = "selectOrderVersionByCode";
+	private final static String SELECT_ORDER_LIST_COUNT_BY_USER_ID = "selectOrderListCountByUserId";
+	private final static String SELECT_ORDER_LIST_BY_USER_ID= "selectOrderListByUserId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -55,5 +58,15 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	@Override
 	public Integer selectOrderVersionByCode(String orderCode) {
 		return this.select(getNameSpace(SELECT_ORDER_CODE_VERSION_BY_CODE), orderCode);
+	}
+
+	@Override
+	public Integer selectOrderListCountByUserId(OrderInfo orderInfo) {
+		return this.select(getNameSpace(SELECT_ORDER_LIST_COUNT_BY_USER_ID), orderInfo);
+	}
+
+	@Override
+	public List<OrderInfo> selectOrderListByUserId(OrderInfo orderInfo) {
+		return this.selectList(getNameSpace(SELECT_ORDER_LIST_BY_USER_ID), orderInfo);
 	}
 }

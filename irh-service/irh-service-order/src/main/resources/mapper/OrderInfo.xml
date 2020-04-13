@@ -8,6 +8,7 @@
 		<![CDATA[
             id,
             saler_id AS salerId,
+            saler_nickname AS salerNickname,
             buyer_id AS buyerId,
             product_id AS productId,
             payment_money AS paymentMoney,
@@ -43,6 +44,7 @@
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
             <if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode}]]></if>
+            <if test="salerNickname != null and salerNickname != ''"><![CDATA[AND saler_nickname = #{salerNickname}]]></if>
 		</where>
 	</sql>
 	
@@ -68,6 +70,7 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode},]]></if>
+			<if test="salerNickname != null and salerNickname != ''"><![CDATA[AND saler_nickname = #{salerNickname},]]></if>
 		</set>
 	</sql>
 
@@ -240,6 +243,31 @@
  			order_info
  			WHERE order_code = #{orderCode}
  		 ]]>
+	</select>
+
+	<select id="selectOrderListCountByUserId" parameterType="orderInfo" resultType="integer">
+		SELECT COUNT(1)
+		FROM order_info
+		WHERE
+		<if test="buyerId != null and buyerId != ''">
+			buyer_id = #{buyerId} AND state != 30
+		</if>
+		<if test="salerId != null and salerId != ''">
+			saler_id = #{salerId,jdbcType=BIGINT} AND state != 35
+		</if>
+	</select>
+
+	<select id="selectOrderListByUserId" parameterType="orderInfo" resultType="orderInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE
+		<if test="buyerId != null and buyerId != ''">
+			buyer_id = #{buyerId} AND state != 30
+		</if>
+		<if test="salerId != null and salerId != ''">
+			saler_id = #{salerId,jdbcType=BIGINT} AND state != 35
+		</if>
 	</select>
 
 </mapper>

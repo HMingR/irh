@@ -37,6 +37,8 @@ public class OrderInfo extends BaseDomain {
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "卖家的id不能为空")
 	private Long salerId;
 
+	private String salerNickname;
+
 	// 会员表的id
 	@ApiModelProperty("会员表的id")
 	@NotEmpty(groups = ValidateGroup.queryGroup.class, message = "会员的id不能为空")
@@ -76,9 +78,19 @@ public class OrderInfo extends BaseDomain {
 	@ApiModelProperty("订单版本，默认为1，当修改订单的时候会将版本号加1")
 	private Integer orderVersion;
 
-	// 10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功
+	public String getSalerNickname() {
+		return salerNickname;
+	}
+
+	public void setSalerNickname(String salerNickname) {
+		this.salerNickname = salerNickname;
+	}
+
+	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功
 	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
 	//private Short state;
+
+
 
 	public Integer getOrderVersion() {
 		return orderVersion;

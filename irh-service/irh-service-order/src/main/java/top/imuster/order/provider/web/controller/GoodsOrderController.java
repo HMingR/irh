@@ -2,15 +2,12 @@ package top.imuster.order.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.utils.UuidUtils;
-import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.service.OrderInfoService;
@@ -64,15 +61,11 @@ public class GoodsOrderController extends BaseController{
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("条件分页查询会员自己的订单，按照时间降序排序")
-    @PostMapping
+    @GetMapping("/list/{type}/{pageSize}/{currentPage}")
     @NeedLogin
-    public Message<Page<OrderInfo>> orderList(@RequestBody @Validated(value = ValidateGroup.queryGroup.class)Page<OrderInfo> page, BindingResult bindingResult){
-        validData(bindingResult);
-        OrderInfo condition = page.getSearchCondition();
-        condition.setOrderField("create_time");
-        condition.setOrderFieldType("DESC");
-        Page<OrderInfo> orderInfoPage = orderInfoService.selectPage(condition, page);
-        return Message.createBySuccess(orderInfoPage);
+    public Message<Page<OrderInfo>> orderList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        Long userId = getCurrentUserIdFromCookie();
+        return orderInfoService.list(pageSize, currentPage, userId, type);
     }
 
     /**
@@ -89,10 +82,7 @@ public class GoodsOrderController extends BaseController{
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setId(orderId);
         orderInfo.setState(30);
-        int i = orderInfoService.updateByKey(orderInfo);
-        if(i == 0){
-            return Message.createByError("删除订单失败,没有找到当前订单,请刷新后重试");
-        }
+        orderInfoService.updateByKey(orderInfo);
         return Message.createBySuccess();
     }
 
@@ -104,8 +94,9 @@ public class GoodsOrderController extends BaseController{
         return Message.createBySuccess(orderInfo);
     }
 
-    @PostMapping("/edit")
-    public Message<String> editOrder(@RequestBody OrderInfo orderInfo){
-        return orderInfoService.editOrderInfo(orderInfo);
+    @GetMapping("/finish/{orderId}")
+    @NeedLogin
+    public Message<String> finish(@PathVariable("orderId") Long orderId){
+        return orderInfoService.finishOrder(orderId, getCurrentUserIdFromCookie());
     }
 }

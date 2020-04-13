@@ -5,6 +5,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.order.api.pojo.OrderInfo;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * OrderInfoDao 接口
@@ -68,4 +69,22 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer selectOrderVersionByCode(String orderCode);
+
+    /**
+     * @Author hmr
+     * @Description 用户查看订单的时候计算属于他的订单的数量
+     * @Date: 2020/4/13 14:52
+     * @param orderInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer selectOrderListCountByUserId(OrderInfo orderInfo);
+
+    /**
+     * @Author hmr
+     * @Description 用户查看订单的时候计算属于他的订单
+     * @Date: 2020/4/13 15:01
+     * @param orderInfo
+     * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    List<OrderInfo> selectOrderListByUserId(OrderInfo orderInfo);
 }

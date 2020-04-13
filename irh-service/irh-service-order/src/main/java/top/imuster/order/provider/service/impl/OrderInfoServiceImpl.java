@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.utils.TrendUtil;
@@ -86,14 +87,42 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         return Message.createBySuccess(result);
     }
 
+
     @Override
-    public Message<String> editOrderInfo(OrderInfo orderInfo) {
-        String orderCode = orderInfo.getOrderCode();
-        Integer version = orderInfoDao.selectOrderVersionByCode(orderCode);
-        if(!version.equals(orderInfo.getOrderVersion())){
-            return Message.createByError("修改订单失败,当前订单已经被其他人修改,请刷新后重新提交");
+    public Message<Page<OrderInfo>> list(Integer pageSize, Integer currentPage, Long userId, Integer type) {
+        Page<OrderInfo> page = new Page<>();
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setStartIndex((currentPage < 1 ? 1 : currentPage - 1) * pageSize);
+        if(type == 1){
+            //买家
+            orderInfo.setState(30);
+            orderInfo.setBuyerId(userId);
+        }else{
+            //卖家
+            orderInfo.setState(35);
+            orderInfo.setSalerId(userId);
         }
-        orderInfo.setOrderVersion(++version);
+        Integer count = orderInfoDao.selectOrderListCountByUserId(orderInfo);
+        List<OrderInfo> list = orderInfoDao.selectOrderListByUserId(orderInfo);
+        page.setTotalCount(count);
+        page.setData(list);
+        return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Message<String> finishOrder(Long orderId, Long userId) {
+        List<OrderInfo> orderInfos = this.selectEntryList(orderId);
+        if(orderInfos == null || orderInfos.isEmpty()){
+            return Message.createBySuccess("该订单不存在,请刷新后重试");
+        }
+        OrderInfo orderInfo = orderInfos.get(0);
+        if(!orderInfo.getBuyerId().equals(userId)){
+            log.info("----->编号为{}的用户试图又该不属于自己的订单状态,订单编号为{}",userId, orderInfo.getId());
+            return Message.createByError("修改的订单不是本人的,属于非法操作,您当前的操作已经被记录");
+        }
+        orderInfo = new OrderInfo();
+        orderInfo.setId(orderId);
+        orderInfo.setState(50);
         orderInfoDao.updateByKey(orderInfo);
         return Message.createBySuccess();
     }

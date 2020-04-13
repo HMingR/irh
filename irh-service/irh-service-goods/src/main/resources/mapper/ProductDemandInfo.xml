@@ -14,7 +14,9 @@
             create_time AS createTime,
             update_time AS updateTime,
             state,
-            main_pic AS mainPic
+            main_pic AS mainPic,
+            tag_names AS tagNames,
+            browser_times AS browserTimes
 		]]>
 	</sql>
 
@@ -33,6 +35,8 @@
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
             <if test="mainPic != null and mainPic != ''"><![CDATA[AND main_pic = #{mainPic}]]></if>
+            <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
+            <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
 		</where>
 	</sql>
 	
@@ -53,6 +57,8 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="mainPic != null"><![CDATA[main_pic = #{mainPic},]]></if>
+			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
+			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
 		</set>
 	</sql>
 
@@ -67,6 +73,7 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[update_time, ]]></if>
 			<if test="state != null and state != ''"><![CDATA[state,]]></if>
 			<if test="mainPic != null and mainPic != ''"><![CDATA[ main_pic,]]></if>
+			<if test="tagNames != null and tagNames != ''"><![CDATA[ tag_names,]]></if>
 		</trim>
 	</sql>
 
@@ -81,6 +88,7 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[  #{updateTime},]]></if>
 			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
 			<if test="mainPic != null and mainPic != ''"><![CDATA[  #{mainPic},]]></if>
+			<if test="tagNames != null and tagNames != ''"><![CDATA[  #{tagNames},]]></if>
 		</trim>
 	</sql>
 

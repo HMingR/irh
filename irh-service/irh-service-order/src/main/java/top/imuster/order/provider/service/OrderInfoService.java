@@ -1,6 +1,7 @@
 package top.imuster.order.provider.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.dto.OrderTrendDto;
@@ -53,10 +54,23 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 修改订单
-     * @Date: 2020/3/20 10:42
-     * @param orderInfo
+     * @Description
+     * @Date: 2020/4/13 14:39
+     * @param pageSize
+     * @param currentPage
+     * @param userId
+     * @param type   1-userId作为买家   2-userId作为卖家
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.OrderInfo>>
+     **/
+    Message<Page<OrderInfo>> list(Integer pageSize, Integer currentPage, Long userId, Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 完成订单
+     * @Date: 2020/4/13 16:21
+     * @param orderId
+     * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> editOrderInfo(OrderInfo orderInfo);
+    Message<String> finishOrder(Long orderId, Long userId);
 }

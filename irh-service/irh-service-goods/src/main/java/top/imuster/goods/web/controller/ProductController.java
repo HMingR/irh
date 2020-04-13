@@ -4,7 +4,6 @@ package top.imuster.goods.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ import java.util.List;
  * @date: 2019/12/1 14:53
  */
 @Api("二手商品controller")
-@Controller
+@RestController
 @RequestMapping("/goods/es")
 public class ProductController extends BaseController {
 

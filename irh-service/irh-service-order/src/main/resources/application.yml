@@ -32,3 +32,5 @@ eureka:
 debug:
   true
 
+logging:
+  config: classpath:logback-spring.xml

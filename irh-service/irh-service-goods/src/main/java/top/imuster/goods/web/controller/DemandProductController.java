@@ -72,15 +72,12 @@ public class DemandProductController extends BaseController {
     @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")
     @NeedLogin
     @DeleteMapping("/{id}")
-    public Message del(@PathVariable("id") Long id){
+    public Message delete(@PathVariable("id") Long id){
         ProductDemandInfo condition = new ProductDemandInfo();
         condition.setId(id);
         condition.setConsumerId(getCurrentUserIdFromCookie());
         condition.setState(1);
-        int i = productDemandInfoService.updateByKey(condition);
-        if(i == 1){
-            return Message.createBySuccess("删除成功");
-        }
-        return Message.createByError("删除失败");
+        productDemandInfoService.updateByKey(condition);
+        return Message.createBySuccess();
     }
 }
