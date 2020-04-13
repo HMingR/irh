@@ -43,12 +43,12 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据商品id获得商品图片原来的uri
+     * @Description 根据商品id获得商品的简略信息
      * @Date: 2020/2/7 16:49
      * @param id
      * @reture: java.lang.String
      **/
-    String getDetailPageUrlById(Long id);
+    Message<ProductInfo> getProductBriefInfoById(Long id);
 
     /**
      * @Author hmr

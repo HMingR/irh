@@ -7,7 +7,7 @@
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
-            product_name AS productName,
+            title AS title,
             main_pic_url AS mainPicUrl,
             unit,
             original_price AS originalPrice,
@@ -21,7 +21,7 @@
             update_time AS updateTime,
             state AS state,
             consumer_id AS consumerId,
-            buying_time AS buyingTime
+            browser_times AS browserTimes
 		]]>
 	</sql>
 
@@ -32,7 +32,7 @@
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-            <if test="productName != null and productName != ''"><![CDATA[AND product_name like "%"#{productName}"%"]]></if>
+            <if test="title != null and title != ''"><![CDATA[AND title like "%"#{title}"%"]]></if>
             <if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[AND main_pic_url = #{mainPicUrl}]]></if>
             <if test="unit != null and unit != ''"><![CDATA[AND unit = #{unit}]]></if>
             <if test="originalPrice != null and originalPrice != ''"><![CDATA[AND original_price = #{originalPrice}]]></if>
@@ -47,7 +47,7 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="state == null or state = ''"><![CDATA[AND state != 1]]></if>
             <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>
-            <if test="buyingTime != null and buyingTime != ''"><![CDATA[AND buying_time = #{buyingTime}]]></if>
+            <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
 		</where>
 	</sql>
 	
@@ -60,7 +60,7 @@
 	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
-			<if test="productName != null"><![CDATA[product_name = #{productName},]]></if>
+			<if test="title != null"><![CDATA[title = #{title},]]></if>
 			<if test="mainPicUrl != null"><![CDATA[main_pic_url = #{mainPicUrl},]]></if>
 			<if test="unit != null"><![CDATA[unit = #{unit},]]></if>
 			<if test="originalPrice != null"><![CDATA[original_price = #{originalPrice},]]></if>
@@ -74,14 +74,14 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="consumerId != null"><![CDATA[consumer_id = #{consumerId},]]></if>
-			<if test="buyingTime != null"><![CDATA[buying_time = #{buyingTime},]]></if>
+			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
 		</set>
 	</sql>
 
 	<sql id="key">
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null and id != ''"><![CDATA[ id , ]]></if>
-			<if test="productName != null and productName != ''"><![CDATA[ product_name , ]]></if>
+			<if test="title != null and title != ''"><![CDATA[ title , ]]></if>
 			<if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[ main_pic_url,  ]]></if>
 			<if test="unit != null and unit != ''"><![CDATA[ unit,  ]]></if>
 			<if test="originalPrice != null and originalPrice != ''"><![CDATA[ original_price, ]]></if>
@@ -95,14 +95,14 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time, ]]></if>
 			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
 			<if test="consumerId != null and consumerId != ''"><![CDATA[ consumer_id, ]]></if>
-			<if test="buyingTime != null and buyingTime != ''"><![CDATA[ buying_time, ]]></if>
+			<if test="browserTimes != null and browserTimes != ''"><![CDATA[ browser_times, ]]></if>
 		</trim>
 	</sql>
 
 	<sql id="value">
 		<trim prefix="," suffix="," suffixOverrides=",">
 			<if test="id != null and id != ''"><![CDATA[ #{id} ,]]></if>
-			<if test="productName != null and productName != ''"><![CDATA[ #{productName},]]></if>
+			<if test="title != null and title != ''"><![CDATA[ #{title},]]></if>
 			<if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[ #{mainPicUrl},]]></if>
 			<if test="unit != null and unit != ''"><![CDATA[#{unit},]]></if>
 			<if test="originalPrice != null and originalPrice != ''"><![CDATA[#{originalPrice},]]></if>
@@ -116,7 +116,7 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[#{updateTime},]]></if>
 			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
 			<if test="consumerId != null and consumerId != ''"><![CDATA[ #{consumerId},]]></if>
-			<if test="buyingTime != null and buyingTime != ''"><![CDATA[ #{buyingTime},]]></if>
+			<if test="browserTimes != null and browserTimes != ''"><![CDATA[ #{browserTimes},]]></if>
 		</trim>
 	</sql>
 	<!-- 插入app记录 -->
@@ -200,10 +200,20 @@
 		WHERE pi.id = (SELECT product_id FROM product_message pm WHERE pm.id = #{id})
 	</select>
 
-	<select id="selectDetailPageUrlById" resultType="string" parameterType="long">
-		<![CDATA[SELECT product_details_page ]]>
+	<select id="selectProductBriefInfoById" resultType="top.imuster.goods.api.pojo.ProductInfo" parameterType="productInfo">
+		<![CDATA[SELECT
+					id,
+					product_details_page AS productDetailsPage,
+					main_pic_url AS mainPicUrl,
+					original_price AS originalPrice,
+					sale_price AS salePrice,
+					title,
+					tag_names AS tagNames,
+					browser_times AS browserTimes,
+					trade_type AS tradeType,
+					consumer_id AS consumerId ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE id = #{id}
+		WHERE id = #{id} AND state = 2
 	</select>
 
 	<insert id="insertInfoReturnId" parameterType="productInfo" useGeneratedKeys="true">

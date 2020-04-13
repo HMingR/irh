@@ -41,12 +41,12 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据商品id获得商品图片的uri
+     * @Description 根据商品id获得商品的简略信息
      * @Date: 2020/2/7 16:50
      * @param id
      * @reture: java.lang.String
      **/
-    String selectDetailPageUrlById(Long id);
+    ProductInfo selectProductBriefInfoById(Long id);
 
     /**
      * @Author hmr

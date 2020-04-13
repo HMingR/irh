@@ -29,7 +29,7 @@ public class ProductInfo extends BaseDomain {
 	// 商品名称, max length: 255
 	@ApiModelProperty("商品名称")
 	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品名称不能为空")
-	private String productName;
+	private String title;
 
 	// 商品主图url
 	@ApiModelProperty("商品主图url")
@@ -73,9 +73,6 @@ public class ProductInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "分类id不能为空")
 	private Long categoryId;
 
-	@ApiModelProperty("卖家买入该商品的时间")
-	private String buyingTime;
-
 	//更新分类时存放新的category
 	private Long newCategoryId;
 
@@ -83,7 +80,37 @@ public class ProductInfo extends BaseDomain {
 	@ApiModelProperty("出售商品的人")
 	private Long consumerId;
 
+	@ApiModelProperty("浏览次数")
+	private Long browserTimes;
+
+	private String tagNames;
+
 	//state 1-无效 2-有效 3-锁定
+
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTagNames() {
+		return tagNames;
+	}
+
+	public void setTagNames(String tagNames) {
+		this.tagNames = tagNames;
+	}
+
+	public Long getBrowserTimes() {
+		return browserTimes;
+	}
+
+	public void setBrowserTimes(Long browserTimes) {
+		this.browserTimes = browserTimes;
+	}
 
 	public String getBuyingTime() {
 		return buyingTime;
@@ -124,13 +151,6 @@ public class ProductInfo extends BaseDomain {
 		this.categoryId = categoryId;
 	}
 
-	public String getProductName() {
-		return this.productName;
-	}
-    public void setProductName(String productName) {
-		this.productName = productName;
-	}
-	
 	public String getMainPicUrl() {
 		return this.mainPicUrl;
 	}

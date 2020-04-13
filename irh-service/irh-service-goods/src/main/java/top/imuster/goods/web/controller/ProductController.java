@@ -51,7 +51,7 @@ public class ProductController extends BaseController {
     @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
     @NeedLogin
     @PutMapping
-    public Message insertProduct(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
+    public Message<String> insertProduct(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         productInfo.setConsumerId(userId);
@@ -60,15 +60,14 @@ public class ProductController extends BaseController {
 
     /**
      * @Author hmr
-     * @Description 根据id获得商品详情页
+     * @Description 根据id获得商品的简略信息
      * @Date: 2020/4/12 20:04
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @GetMapping("/detail/{id}")
-    public Message<String> getDetailById(@PathVariable("id") Long id){
-        String pageUrl = productInfoService.getDetailPageUrlById(id);
-        return Message.createBySuccess(pageUrl);
+    @GetMapping("/brief/{id}")
+    public Message<ProductInfo> getDetailById(@PathVariable("id") Long id){
+        return productInfoService.getProductBriefInfoById(id);
     }
 
 
@@ -95,10 +94,10 @@ public class ProductController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation(value = "根据id获得商品信息", httpMethod = "GET")
+    @ApiOperation(value = "根据id获得商品的所有信息", httpMethod = "GET")
     @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT)
     @GetMapping("/{id}")
-    public Message getProductById(@PathVariable("id")Long id){
+    public Message<ProductInfo> getProductById(@PathVariable("id")Long id){
         ProductInfo productInfo = productInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(productInfo);
     }

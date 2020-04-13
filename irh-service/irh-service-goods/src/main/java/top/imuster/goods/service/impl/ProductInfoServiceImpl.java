@@ -51,8 +51,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public String getDetailPageUrlById(Long id) {
-        return productInfoDao.selectDetailPageUrlById(id);
+    public Message<ProductInfo> getProductBriefInfoById(Long id) {
+        ProductInfo productInfo = productInfoDao.selectProductBriefInfoById(id);
+        return Message.createBySuccess(productInfo);
     }
 
     @Override

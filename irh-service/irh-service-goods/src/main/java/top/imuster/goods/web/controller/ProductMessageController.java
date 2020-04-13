@@ -32,7 +32,7 @@ public class ProductMessageController extends BaseController {
     ProductMessageService productMessageService;
 
     /**
-     * @Description: 根据商品的id查询商品的留言信息(树形结构)
+     * @Description: 根据商品的id查询商品的留言信息
      * @Author: hmr
      * @Date: 2020/1/9 15:43
      * @param id
@@ -54,7 +54,7 @@ public class ProductMessageController extends BaseController {
         return productMessageService.getMessagePage(condition);
     }
 
-    @ApiOperation("根据商品id和留言父id写留言信息(如果是新的留言,则parentId写成0)")
+    @ApiOperation("根据商品id和留言父id写留言信息")
     @NeedLogin
     @PostMapping("/write")
     public Message<String> writeMessage(@ApiParam("在写留言信息的时候，留言的商品id、parentId、内容不能为空") @Validated(ValidateGroup.addGroup.class) @RequestBody ProductMessageInfo productMessageInfo,
@@ -63,7 +63,7 @@ public class ProductMessageController extends BaseController {
         Long userId = getCurrentUserIdFromCookie();
         productMessageInfo.setConsumerId(userId);
         productMessageService.generateSendMessage(productMessageInfo);
-        return Message.createBySuccess("留言成功");
+        return Message.createBySuccess();
     }
 
     @ApiOperation("根据留言id删除自己的留言信息")
