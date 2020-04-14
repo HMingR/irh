@@ -119,7 +119,7 @@ public class GoodsSearchService {
 
                 //取出name
                 String productName = (String) sourceAsMap.get("product_name");
-                info.setProductName(productName);
+                info.setTitle(productName);
 
                 //图片
                 String pic = (String) sourceAsMap.get("main_pic_url");
