@@ -57,7 +57,6 @@
 
 
     <build>
-        <!--此插件生成ASCIIDOC-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

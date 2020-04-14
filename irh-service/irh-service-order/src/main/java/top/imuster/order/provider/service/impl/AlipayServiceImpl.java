@@ -67,8 +67,7 @@ public class AlipayServiceImpl implements AlipayService {
 
         monitorService = new AlipayMonitorServiceImpl.ClientBuilder()
                 .setGatewayUrl("http://mcloudmonitor.com/gateway.do").setCharset("GBK")
-                .setFormat("json").build();
-    }
+                .setFormat("json").build();    }
 
 
     @Override
