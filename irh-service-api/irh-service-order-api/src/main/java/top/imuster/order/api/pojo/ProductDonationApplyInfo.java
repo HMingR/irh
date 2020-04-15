@@ -61,6 +61,16 @@ public class ProductDonationApplyInfo extends BaseDomain {
 	// 审核备注, max length: 255
 	private String remark;
 
+	private Long grantUser;
+
+	public Long getGrantUser() {
+		return grantUser;
+	}
+
+	public void setGrantUser(Long grantUser) {
+		this.grantUser = grantUser;
+	}
+
 	public String getApproveUser() {
 		return approveUser;
 	}

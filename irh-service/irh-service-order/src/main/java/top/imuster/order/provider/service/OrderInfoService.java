@@ -8,6 +8,8 @@ import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 
+import java.util.List;
+
 /**
  * OrderInfoService接口
  * @author 黄明人
@@ -73,4 +75,22 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> finishOrder(Long orderId, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 获得所有选择捐赠的订单的订单id、订单金额、订单版本
+     * @Date: 2020/4/15 9:33
+     * @param
+     * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    List<OrderInfo> getAllDonationOrderInfo();
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得订单的版本信息
+     * @Date: 2020/4/15 16:15
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    Integer getOrderVersionById(Long id);
 }

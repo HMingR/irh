@@ -270,4 +270,19 @@
 		</if>
 	</select>
 
+	<select id="selectAllDonationOrder" resultType="orderInfo">
+		<![CDATA[SELECT id, payment_money AS paymentMoney, order_version AS orderVersion]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE
+		trade_type = 30 AND state = 50
+	</select>
+
+	<select id="selectOrderVersionById" parameterType="long" resultType="integer">
+		<![CDATA[
+ 			SELECT order_version FROM
+ 			order_info
+ 			WHERE id = #{id}
+ 		 ]]>
+	</select>
+
 </mapper>

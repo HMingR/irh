@@ -8,6 +8,8 @@ package top.imuster.common.base.config;
  */
 public class GlobalConstant {
 
+
+
     private GlobalConstant(){}
 
     public static final String USER_TOKEN_DTO = "userTokenDto";         //在本地线程map中的key
@@ -70,5 +72,9 @@ public class GlobalConstant {
 
     //redis中记录用户浏览历史
     public static final String IRH_BROWSE_RECORD_LIST = "irh::browse::record::list::";
+
+
+    //根据慈善基金申请id把自动生成的订单id保存到redis里面
+    public static final String IRH_ORDER_DONATION = "irh::order::donation::";
 
 }

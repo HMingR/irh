@@ -3,7 +3,6 @@ package top.imuster.order.api.service.hystrix;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.order.api.dto.DonationApproveDto;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.api.service.DonationApplyServiceFeignApi;
 
@@ -24,7 +23,17 @@ public class DonationApplyServiceFeignApHystrix implements FallbackFactory<Donat
             }
 
             @Override
-            public Message<String> approve(Long id, DonationApproveDto approveDto) {
+            public Message<String> approve(ProductDonationApplyInfo approveInfo) {
+                return null;
+            }
+
+            @Override
+            public Message<String> grantMoney(Long applyId, Long operatorId) {
+                return null;
+            }
+
+            @Override
+            public Message<String> determineGrant(Long applyId, Long operatorId) {
                 return null;
             }
         };

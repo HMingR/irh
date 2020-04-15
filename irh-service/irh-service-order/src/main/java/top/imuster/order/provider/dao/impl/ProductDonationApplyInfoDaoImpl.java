@@ -14,9 +14,15 @@ import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
 @Repository("productDonationApplyInfoDao")
 public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonationApplyInfo, Long> implements ProductDonationApplyInfoDao {
 	private final static String NAMESPACE = "top.imuster.order.provider.dao.ProductDonationApplyInfoDao.";
+	private final static String SELECT_AVAILABLE_APPLY_BY_ID = "selectAvailableApplyById";
 	
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public ProductDonationApplyInfo selectAvailableApplyById(Long id) {
+		return this.select(getNameSpace(SELECT_AVAILABLE_APPLY_BY_ID), id);
 	}
 }

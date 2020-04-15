@@ -25,6 +25,8 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	private final static String SELECT_ORDER_CODE_VERSION_BY_CODE = "selectOrderVersionByCode";
 	private final static String SELECT_ORDER_LIST_COUNT_BY_USER_ID = "selectOrderListCountByUserId";
 	private final static String SELECT_ORDER_LIST_BY_USER_ID= "selectOrderListByUserId";
+	private final static String SELECT_ALL_DONATION_ORDER = "selectAllDonationOrder";
+	private final static String SELECT_ORDER_VERSION_BY_ID = "selectOrderVersionById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -68,5 +70,15 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	@Override
 	public List<OrderInfo> selectOrderListByUserId(OrderInfo orderInfo) {
 		return this.selectList(getNameSpace(SELECT_ORDER_LIST_BY_USER_ID), orderInfo);
+	}
+
+	@Override
+	public List<OrderInfo> selectAllDonationOrder() {
+		return this.selectList(getNameSpace(SELECT_ALL_DONATION_ORDER), null);
+	}
+
+	@Override
+	public Integer selectOrderVersionById(Long id) {
+		return this.select(getNameSpace(SELECT_ORDER_VERSION_BY_ID), id);
 	}
 }

@@ -98,4 +98,14 @@ public class RedisUtil {
         throw new GlobalException("参数错误");
     }
 
+    /**
+     * @Author hmr
+     * @Description 根据慈善基金申请id把自动生成的订单id保存到redis里面，该方法生成key
+     * @Date: 2020/4/15 15:42
+     * @param valueOf
+     * @reture: java.lang.Object
+     **/
+    public static String getDonationApplyCode(String applyId) {
+        return new StringBuffer().append(GlobalConstant.IRH_ORDER_DONATION).append(applyId).toString();
+    }
 }

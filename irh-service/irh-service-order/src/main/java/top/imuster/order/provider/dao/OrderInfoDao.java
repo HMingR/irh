@@ -63,7 +63,7 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据订单编号获得订单的版本信息
+     * @Description 根据订单code获得订单的版本信息
      * @Date: 2020/3/20 10:43
      * @param orderCode
      * @reture: java.lang.Integer
@@ -87,4 +87,22 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
      **/
     List<OrderInfo> selectOrderListByUserId(OrderInfo orderInfo);
+
+    /**
+     * @Author hmr
+     * @Description 获得所有选择捐赠的订单的订单id、订单金额、订单版本
+     * @Date: 2020/4/15 9:34
+     * @param
+     * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    List<OrderInfo> selectAllDonationOrder();
+
+    /**
+     * @Author hmr
+     * @Description 根据订单id获得订单的版本信息
+     * @Date: 2020/4/15 16:16
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    Integer selectOrderVersionById(Long id);
 }

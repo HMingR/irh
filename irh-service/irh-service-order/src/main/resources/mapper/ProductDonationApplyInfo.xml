@@ -175,5 +175,11 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectAvailableApplyById" parameterType="long" resultType="productDonationApplyInfo">
+		<![CDATA[SELECT id, alipay_num AS alipayNum, apply_amount AS applyAmount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id} AND state = 4
+	</select>
 	
 </mapper>

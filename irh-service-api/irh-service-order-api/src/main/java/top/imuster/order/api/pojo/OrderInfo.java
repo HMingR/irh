@@ -54,6 +54,9 @@ public class OrderInfo extends BaseDomain {
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "支付金额不能为空")
 	private String paymentMoney;
 
+	//paymentMoney
+	private double money;
+
 	// 订单备注, max length: 1000
 	@ApiModelProperty("订单备注, max length: 1000")
 	@NotNull(groups = ValidateGroup.prePayment.class, message = "订单编号不能为空")
@@ -86,7 +89,15 @@ public class OrderInfo extends BaseDomain {
 		this.salerNickname = salerNickname;
 	}
 
-	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
+	}
+
+	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
 	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
 	//private Short state;
 

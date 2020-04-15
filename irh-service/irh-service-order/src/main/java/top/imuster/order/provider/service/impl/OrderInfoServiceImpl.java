@@ -127,6 +127,16 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         return Message.createBySuccess();
     }
 
+    @Override
+    public List<OrderInfo> getAllDonationOrderInfo() {
+        return orderInfoDao.selectAllDonationOrder();
+    }
+
+    @Override
+    public Integer getOrderVersionById(Long id) {
+        return orderInfoDao.selectOrderVersionById(id);
+    }
+
     /**
      * @Author hmr
      * @Description 根据type和clazz获得结果
