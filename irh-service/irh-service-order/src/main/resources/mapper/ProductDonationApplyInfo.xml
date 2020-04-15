@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imuster.order.provider.dao.ProductDonationApplyInfoDao">
+
+	<!-- product_donation_apply_info 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+            id,
+            apply_user_id AS applyUserId,
+            alipay_num AS alipayNum,
+            apply_amount AS applyAmount,
+            payment_amount AS paymentAmount,
+            reason,
+            witness_name AS witnessName,
+            witness_phone AS witnessPhone,
+            reason_pic_url AS reasonPicUrl,
+            feedback,
+            feedback_pic_url AS feedbackPicUrl,
+            state,
+            remark,
+            create_time AS createTime,
+            update_time AS updateTime 
+		]]>
+	</sql>
+
+	<!-- product_donation_apply_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM product_donation_apply_info]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+            <if test="applyUserId != null and applyUserId != ''"><![CDATA[AND apply_user_id = #{applyUserId}]]></if>
+            <if test="alipayNum != null and alipayNum != ''"><![CDATA[AND alipay_num = #{alipayNum}]]></if>
+            <if test="applyAmount != null and applyAmount != ''"><![CDATA[AND apply_amount = #{applyAmount}]]></if>
+            <if test="paymentAmount != null and paymentAmount != ''"><![CDATA[AND payment_amount = #{paymentAmount}]]></if>
+            <if test="reason != null and reason != ''"><![CDATA[AND reason = #{reason}]]></if>
+            <if test="witnessName != null and witnessName != ''"><![CDATA[AND witness_name = #{witnessName}]]></if>
+            <if test="witnessPhone != null and witnessPhone != ''"><![CDATA[AND witness_phone = #{witnessPhone}]]></if>
+            <if test="reasonPicUrl != null and reasonPicUrl != ''"><![CDATA[AND reason_pic_url = #{reasonPicUrl}]]></if>
+            <if test="feedback != null and feedback != ''"><![CDATA[AND feedback = #{feedback}]]></if>
+            <if test="feedbackPicUrl != null and feedbackPicUrl != ''"><![CDATA[AND feedback_pic_url = #{feedbackPicUrl}]]></if>
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="remark != null and remark != ''"><![CDATA[AND remark = #{remark}]]></if>
+            <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="applyUserId != null"><![CDATA[apply_user_id = #{applyUserId},]]></if>
+			<if test="alipayNum != null"><![CDATA[alipay_num = #{alipayNum},]]></if>
+			<if test="applyAmount != null"><![CDATA[apply_amount = #{applyAmount},]]></if>
+			<if test="paymentAmount != null"><![CDATA[payment_amount = #{paymentAmount},]]></if>
+			<if test="reason != null"><![CDATA[reason = #{reason},]]></if>
+			<if test="witnessName != null"><![CDATA[witness_name = #{witnessName},]]></if>
+			<if test="witnessPhone != null"><![CDATA[witness_phone = #{witnessPhone},]]></if>
+			<if test="reasonPicUrl != null"><![CDATA[reason_pic_url = #{reasonPicUrl},]]></if>
+			<if test="feedback != null"><![CDATA[feedback = #{feedback},]]></if>
+			<if test="feedbackPicUrl != null"><![CDATA[feedback_pic_url = #{feedbackPicUrl},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="remark != null"><![CDATA[remark = #{remark},]]></if>
+			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+		</set>
+	</sql>
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[id , ]]></if>
+			<if test="applyUserId != null and applyUserId != ''"><![CDATA[ apply_user_id , ]]></if>
+			<if test="alipayNum != null and alipayNum != ''"><![CDATA[  alipay_num  , ]]></if>
+			<if test="applyAmount != null and applyAmount != ''"><![CDATA[  apply_amount  , ]]></if>
+			<if test="paymentAmount != null and paymentAmount != ''"><![CDATA[  payment_amount  , ]]></if>
+			<if test="reason != null and reason != ''"><![CDATA[  reason  , ]]></if>
+			<if test="witnessName != null and witnessName != ''"><![CDATA[  witness_name  , ]]></if>
+			<if test="witnessPhone != null and witnessPhone != ''"><![CDATA[  witness_phone  , ]]></if>
+			<if test="reasonPicUrl != null and reasonPicUrl != ''"><![CDATA[  reason_pic_url  , ]]></if>
+			<if test="feedback != null and feedback != ''"><![CDATA[  feedback  , ]]></if>
+			<if test="feedbackPicUrl != null and feedbackPicUrl != ''"><![CDATA[  feedback_pic_url , ]]></if>
+			<if test="state != null and state != ''"><![CDATA[  state  , ]]></if>
+			<if test="remark != null and remark != ''"><![CDATA[  remark  , ]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  create_time  , ]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time , ]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id}, ]]></if>
+			<if test="applyUserId != null and applyUserId != ''"><![CDATA[  #{applyUserId}, ]]></if>
+			<if test="alipayNum != null and alipayNum != ''"><![CDATA[ #{alipayNum}, ]]></if>
+			<if test="applyAmount != null and applyAmount != ''"><![CDATA[ #{applyAmount}, ]]></if>
+			<if test="paymentAmount != null and paymentAmount != ''"><![CDATA[ #{paymentAmount}, ]]></if>
+			<if test="reason != null and reason != ''"><![CDATA[ #{reason}, ]]></if>
+			<if test="witnessName != null and witnessName != ''"><![CDATA[  #{witnessName}, ]]></if>
+			<if test="witnessPhone != null and witnessPhone != ''"><![CDATA[  #{witnessPhone}, ]]></if>
+			<if test="reasonPicUrl != null and reasonPicUrl != ''"><![CDATA[  #{reasonPicUrl}, ]]></if>
+			<if test="feedback != null and feedback != ''"><![CDATA[  #{feedback}, ]]></if>
+			<if test="feedbackPicUrl != null and feedbackPicUrl != ''"><![CDATA[  #{feedbackPicUrl}, ]]></if>
+			<if test="state != null and state != ''"><![CDATA[  #{state}, ]]></if>
+			<if test="remark != null and remark != ''"><![CDATA[  #{remark}, ]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime}, ]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime}, ]]></if>
+
+		</trim>
+	</sql>
+	<!-- 插入app记录 -->
+	<insert id="insertEntry" parameterType="productDonationApplyInfo" >
+		<![CDATA[INSERT INTO product_donation_apply_info]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="value"></include>
+
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM product_donation_apply_info WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<delete id="deleteByCondtion" parameterType="productDonationApplyInfo" >
+		<![CDATA[DELETE FROM product_donation_apply_info]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</delete>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="productDonationApplyInfo" >
+		<![CDATA[UPDATE product_donation_apply_info]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="productDonationApplyInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="productDonationApplyInfo" resultType="productDonationApplyInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="productDonationApplyInfo" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+</mapper>

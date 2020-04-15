@@ -8,7 +8,7 @@ spring:
         max-active: 30
         max-idle: 10
         max-wait: 5000
-    timeout: 1000
+    timeout: 10000
     password: @irh.redis.password@
 
   datasource:

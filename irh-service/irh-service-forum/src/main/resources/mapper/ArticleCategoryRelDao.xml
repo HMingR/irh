@@ -113,7 +113,7 @@
   			SELECT
   			at.name
 			FROM
-				article_tag_rel AS atr
+				article_category_rel AS atr
 				LEFT JOIN ( SELECT `name`, id FROM article_tag_info WHERE state != 1) AS at ON at.id = atr.category_id
 			WHERE
 				atr.article_id = #{id}
