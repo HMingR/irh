@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
@@ -20,13 +24,13 @@ import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.order.provider.service.ProductDonationApplyInfoService;
-import top.imuster.order.provider.service.ProductDonationOrderRelService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -43,7 +47,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     private ProductDonationApplyInfoDao productDonationApplyInfoDao;
 
     @Resource
-    private ProductDonationOrderRelService productDonationOrderRelService;
+    GenerateSendMessageService generateSendMessageService;
 
     @Resource
     private OrderInfoService orderInfoService;
@@ -114,6 +118,9 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<String> determine(Long applyId, Long operatorId) throws IOException {
+        List<ProductDonationApplyInfo> list = productDonationApplyInfoDao.selectEntryList(applyId);
+        if(list == null || list.isEmpty()) return Message.createByError("未找到相关申请信息,请刷新后重试");
+        ProductDonationApplyInfo applyInfo = list.get(0);
         String jString = (String) redisTemplate.opsForValue().get(RedisUtil.getDonationApplyCode(String.valueOf(applyId)));
         List<OrderInfo> res = objectMapper.readValue(jString, new TypeReference<List<OrderInfo>>() {});
         res.stream().forEach(orderInfo -> {
@@ -122,9 +129,43 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             orderInfo.setOrderVersion(orderInfo.getOrderVersion() + 1);
             orderInfo.setState(60);
             orderInfoService.updateByKey(orderInfo);
+
+            //发送消息
+            SendUserCenterDto send = new SendUserCenterDto();
+            send.setToId(orderInfo.getSalerId());
+            send.setFromId(-1L);
+            send.setDate(DateUtils.now());
+            send.setContent(new StringBuffer().append("您的爱心订单已经被用于").append(applyInfo.getReason()).toString());
+            generateSendMessageService.sendToMq(send);
         });
         redisTemplate.delete(RedisUtil.getDonationApplyCode(String.valueOf(applyId)));
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<Page<ProductDonationApplyInfo>> finishApplyList(Integer pageSize, Integer currentPage) {
+        HashMap<String, Integer> param = new HashMap<>();
+        param.put("pageSize", pageSize);
+        param.put("startIndex", ((currentPage < 1 ? 1 : currentPage) - 1));
+        List<ProductDonationApplyInfo> list = productDonationApplyInfoDao.selectFinishApplyList(param);
+        Integer count = productDonationApplyInfoDao.selectApplyCountByState(5);
+        Page<ProductDonationApplyInfo> page = new Page<>();
+        page.setData(list);
+        page.setTotalCount(count);
+        return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Message<Page<ProductDonationApplyInfo>> unfinishApplyList(Integer pageSize, Integer currentPage) {
+        HashMap<String, Integer> param = new HashMap<>();
+        param.put("pageSize", pageSize);
+        param.put("startIndex", ((currentPage < 1 ? 1 : currentPage) - 1));
+        List<ProductDonationApplyInfo> list = productDonationApplyInfoDao.selectUnfinishApplyList(param);
+        Integer count = productDonationApplyInfoDao.selectApplyCountByState(2);
+        Page<ProductDonationApplyInfo> page = new Page<>();
+        page.setTotalCount(count);
+        page.setData(list);
+        return Message.createBySuccess(page);
     }
 
 }

@@ -1,53 +1,43 @@
 package top.imuster.order.provider.web.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.dto.UserDto;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
-import top.imuster.order.api.service.DonationApplyServiceFeignApi;
 import top.imuster.order.provider.service.ProductDonationApplyInfoService;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 /**
  * @ClassName: DonationApplyController
- * @Description: 公益基金申请
+ * @Description: 对外提供的捐赠订单查询接口
  * @author: hmr
- * @date: 2020/4/14 16:48
+ * @date: 2020/4/16 8:49
  */
 @RestController
-@RequestMapping("/feign/order/donation")
-public class DonationApplyController extends BaseController implements DonationApplyServiceFeignApi  {
+@RequestMapping("/donation")
+public class DonationApplyController {
 
     @Resource
     ProductDonationApplyInfoService productDonationApplyInfoService;
 
-    @Override
-    @PostMapping
-    public Message<String> apply(@RequestBody ProductDonationApplyInfo applyInfo){
-        UserDto userInfo = getCurrentUserFromCookie();
-        return productDonationApplyInfoService.apply(userInfo, applyInfo);
+    /**
+     * @Author hmr
+     * @Description 分页查看已经转账了的申请
+     * @Date: 2020/4/16 8:51
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    @GetMapping("/finish/{pageSize}/{currentPage}")
+    public Message<Page<ProductDonationApplyInfo>> finishApplyList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return productDonationApplyInfoService.finishApplyList(pageSize, currentPage);
     }
 
-    @Override
-    @PostMapping("/approve")
-    public Message<String> approve(@RequestBody ProductDonationApplyInfo approveInfo) {
-        return productDonationApplyInfoService.approve(approveInfo);
+    @GetMapping("/unfinish/{pageSize}/{currentPage}")
+    public Message<Page<ProductDonationApplyInfo>> unfinishApplyList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return productDonationApplyInfoService.unfinishApplyList(pageSize, currentPage);
     }
-
-    @PostMapping("/grant/{operatorId}/{id}")
-    public Message<String> grantMoney(@PathVariable("id") Long applyId, @PathVariable("operatorId") Long operatorId) throws JsonProcessingException {
-        return productDonationApplyInfoService.grant(applyId, operatorId);
-    }
-
-    @GetMapping("/determine/{operatorId}/{applyId}")
-    public Message<String> determineGrant(@PathVariable("applyId") Long applyId, @PathVariable("operatorId") Long operatorId) throws IOException {
-        return productDonationApplyInfoService.determine(applyId, operatorId);
-    }
-
-
-
 }

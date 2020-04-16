@@ -181,5 +181,42 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id} AND state = 4
 	</select>
+
+	<resultMap id="includeOrderMap" type="productDonationApplyInfo">
+		<id column="id" property="id"></id>
+		<result column="apply_user_id" property="applyUserId"></result>
+		<result column="apply_amount" property="applyAmount"></result>
+		<result column="payment_amount" property="paymentAmount"></result>
+		<result column="reason" property="reason"></result>
+		<result column="reason_pic_url" property="reasonPicUrl"></result>
+		<result column="feedback" property="feedback"></result>
+		<result column="approve_user" property="approveUser"></result>
+		<result column="grant_user" property="grantUser"></result>
+		<result column="update_time" property="updateTime"></result>
+		<collection property="useOrders"
+					ofType="top.imuster.order.api.pojo.OrderInfo"
+					column="id"
+					select="top.imuster.order.provider.dao.ProductDonationOrderRelDao.selectOrderListByFinishApplyId"></collection>
+	</resultMap>
+
+
+	<select id="selectFinishApplyList" parameterType="map" resultMap="includeOrderMap">
+		<![CDATA[SELECT *]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = 5 ORDER BY update_time DESC LIMIT #{startIndex}, #{pageSize}
+	</select>
+
+	<select id="selectApplyCountByState" resultType="integer" parameterType="integer">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = #{state}
+	</select>
+
+	<select id="selectUnfinishApplyList" parameterType="hashmap" resultType="productDonationApplyInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = 2 ORDER BY update_time LIMIT #{startIndex}, #{pageSize}
+	</select>
 	
 </mapper>

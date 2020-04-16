@@ -124,4 +124,22 @@
 	
 	<!-- 其它SQL语句 -->
 	
+	<select id="selectOrderListByFinishApplyId" parameterType="long" resultType="orderInfo">
+		SELECT
+			saler_nickname AS salerNickname,
+			saler_id AS salerId,
+			finish_time AS finishTime
+		FROM
+			order_info
+		WHERE
+		id IN (
+		SELECT
+			id
+		FROM
+			product_donation_order_rel
+		WHERE
+		donation_apply_id = #{applyId}
+	)
+	</select>
+	
 </mapper>

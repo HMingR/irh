@@ -2,6 +2,7 @@ package top.imuster.order.provider.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.UserDto;
@@ -55,4 +56,24 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> determine(Long applyId, Long operatorId) throws IOException;
+
+    /**
+     * @Author hmr
+     * @Description 分页查看已经转账的申请的信息和使用了哪些订单
+     * @Date: 2020/4/16 8:54
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    Message<Page<ProductDonationApplyInfo>> finishApplyList(Integer pageSize, Integer currentPage);
+
+    /**
+     * @Author hmr
+     * @Description 查看正在申请的
+     * @Date: 2020/4/16 9:39
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    Message<Page<ProductDonationApplyInfo>> unfinishApplyList(Integer pageSize, Integer currentPage);
 }

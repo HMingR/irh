@@ -5,6 +5,7 @@ import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 
@@ -62,6 +63,17 @@ public class ProductDonationApplyInfo extends BaseDomain {
 	private String remark;
 
 	private Long grantUser;
+
+	//当前申请使用了哪些订单
+	private List<OrderInfo> useOrders;
+
+	public List<OrderInfo> getUserOrders() {
+		return useOrders;
+	}
+
+	public void setUserOrders(List<OrderInfo> userOrders) {
+		this.useOrders = userOrders;
+	}
 
 	public Long getGrantUser() {
 		return grantUser;

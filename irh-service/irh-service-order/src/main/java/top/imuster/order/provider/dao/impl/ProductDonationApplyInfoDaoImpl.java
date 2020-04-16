@@ -6,6 +6,9 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * ProductDonationApplyInfoDao 实现类
  * @author 黄明人
@@ -15,7 +18,9 @@ import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
 public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonationApplyInfo, Long> implements ProductDonationApplyInfoDao {
 	private final static String NAMESPACE = "top.imuster.order.provider.dao.ProductDonationApplyInfoDao.";
 	private final static String SELECT_AVAILABLE_APPLY_BY_ID = "selectAvailableApplyById";
-	
+	private final static String SELECT_FINISH_APPLY_LIST = "selectFinishApplyList";
+	private final static String SELECT_FINISH_APPLY_COUNT = "selectFinishApplyCount";
+	private final static String SELECT_UN_FINISH_APPLY_LIST = "selectUnfinishApplyList";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -24,5 +29,20 @@ public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonation
 	@Override
 	public ProductDonationApplyInfo selectAvailableApplyById(Long id) {
 		return this.select(getNameSpace(SELECT_AVAILABLE_APPLY_BY_ID), id);
+	}
+
+	@Override
+	public List<ProductDonationApplyInfo> selectFinishApplyList(HashMap<String, Integer> param) {
+		return this.selectList(getNameSpace(SELECT_FINISH_APPLY_LIST), param);
+	}
+
+	@Override
+	public Integer selectApplyCountByState(Integer state) {
+		return this.select(getNameSpace(SELECT_FINISH_APPLY_COUNT), state);
+	}
+
+	@Override
+	public List<ProductDonationApplyInfo> selectUnfinishApplyList(HashMap<String, Integer> param) {
+		return this.selectList(getNameSpace(SELECT_UN_FINISH_APPLY_LIST), param);
 	}
 }
