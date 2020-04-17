@@ -1,0 +1,58 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5        # 心跳时间
+    lease-expiration-duration-in-seconds: 15    # 过期时间
+server:
+  port: 10100
+spring:
+  application:
+    name: message-server
+
+  datasource:
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      username: @irh.mysql.username@
+      password: @irh.mysql.password@
+      url: @irh.mysql.url@
+      initial-size: 5     # 初始化大小
+      max-active: 20      # 连接池中最大的活动数
+      max-wait: 30000                             # 最大连接等待时间
+      time-between-eviction-runs-millis: 60000    # 配置检测可以关闭的空闲连接间隔时间
+      validation-query: select '1' from dual      # 测试连接
+
+  rabbitmq:
+    host: @irh.rabbitmq.host@
+    port: @irh.rabbitmq.port@
+    username: @irh.rabbitmq.username@
+    password: @irh.rabbitmq.password@
+
+  mail:
+    username: 1978773465@qq.com
+    password: srxhdikamojzbajg
+    host: smtp.qq.com
+
+irh:
+  elasticsearch:
+    host: '@irh.elasticsearch.host@'
+  goods:     #商城模块索引
+    index: irh_goods
+    type: doc
+    source_field: id,product_name,main_pic_url,,st,mt,sale_price,original_price,trade_type,original_price,product_desc
+  forum:     #论坛模块索引
+    index: irh_forum
+    type: doc
+    source_field: id,main_picture_url,title,st,mt
+
+mybatis:
+  mapper-locations: /mapper/*
+  type-aliases-package: top.imuster.message.pojo
+
+logging:
+  config: classpath:logback-spring.xml
+
+enable:
+  needLogin: false
+

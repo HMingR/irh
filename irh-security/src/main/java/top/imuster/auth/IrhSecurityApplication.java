@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableDiscoveryClient
 @ComponentScan(basePackages = {"top.imuster.common",
                                 "top.imuster.auth",
-                                "top.imuster.user.api.service.hystrix"})
+                                "top.imuster.*.api.service.hystrix"})
 public class IrhSecurityApplication {
 
     public static void main(String[] args) {

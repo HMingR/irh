@@ -1,0 +1,33 @@
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka   # 注册到eureka注册中心
+  instance:
+    lease-renewal-interval-in-seconds: 5      # 心跳时间
+    lease-expiration-duration-in-seconds: 15  # 过期时间
+enable:
+  needLogin: false
+
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 6000
+
+hystrix:
+  command:
+    default:  #default全局有效，service id指定应用有效
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000 #断路器超时时间，默认1000ms
+
+#fdfs:
+#  so-timeout: 1501 # 读取超时时间
+#  connect-timeout: 5001 # 连接超时时间
+#  thumb-image: # 缩略图
+#    width: 60
+#    height: 60
+#  tracker-list: # tracker地址：你的虚拟机服务器地址+端口（默认是22122）
+#    - 192.168.174.129:22122

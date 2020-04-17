@@ -11,7 +11,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  * @author: lpf
  * @date: 2019/11/30 21:11
  */
-@SpringBootApplication           //(exclude = DataSourceAutoConfiguration.class)    //排除数据库自动加载
+@SpringBootApplication
 @EnableEurekaClient
 public class IrhFileApplication {
 

@@ -1,0 +1,44 @@
+spring:
+  datasource:
+      druid:
+        driver-class-name: com.mysql.jdbc.Driver
+        username: @irh.mysql.username@
+        password: @irh.mysql.password@
+        url: jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+        initial-size: 5     # 初始化大小
+        max-active: 20      # 连接池中最大的活动数
+        max-wait: 30000                             # 最大连接等待时间
+        time-between-eviction-runs-millis: 60000    # 配置检测可以关闭的空闲连接间隔时间
+        validation-query: select '1' from dual      # 测试连接
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka   # 注册到eureka注册中心
+  instance:
+    lease-renewal-interval-in-seconds: 5      # 心跳时间
+    lease-expiration-duration-in-seconds: 15  # 过期时间
+enable:
+  needLogin: false
+
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 6000
+
+hystrix:
+  command:
+    default:  #default全局有效，service id指定应用有效
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000 #断路器超时时间，默认1000ms
+
+#fdfs:
+#  so-timeout: 1501 # 读取超时时间
+#  connect-timeout: 5001 # 连接超时时间
+#  thumb-image: # 缩略图
+#    width: 60
+#    height: 60
+#  tracker-list: # tracker地址：你的虚拟机服务器地址+端口（默认是22122）
+#    - 192.168.174.129:22122
