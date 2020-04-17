@@ -1,20 +1,10 @@
 server:
   port: 10086
 spring:
+  profiles:
+    active: dev
   application:
     name: irh-registry
-eureka:
-  instance:
-    health-check-url-path: /actuator/health
-  client:
-    service-url:
-      defaultZone: http://localhost:10086/eureka
-    register-with-eureka: false      # 不需要把自己注册给自己
-    fetch-registry: false            # 不需要拉取服务
-  server:
-    enable-self-preservation: false     # 关闭自我保护模式
-    eviction-interval-timer-in-ms: 10000   # 10s   定期清理无效链接
-
 management:
   endpoint:
     health:

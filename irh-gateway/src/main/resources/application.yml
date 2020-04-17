@@ -1,6 +1,8 @@
 server:
   port: 10900
 spring:
+  profiles:
+    active: dev
   application:
     name: irh-gateway
 eureka:
