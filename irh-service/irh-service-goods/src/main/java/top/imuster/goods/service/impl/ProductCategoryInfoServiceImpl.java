@@ -47,9 +47,7 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     @Override
     public Message<List<ProductCategoryInfo>> getCategoryTree() throws GoodsException {
         try{
-            ProductCategoryInfo condition = new ProductCategoryInfo();
-            condition.setState(2);
-            List<ProductCategoryInfo> allCategory = productCategoryInfoDao.selectEntryList(condition);
+            List<ProductCategoryInfo> allCategory =productCategoryInfoDao.selectAllCategory();
             return Message.createBySuccess(generateTree(allCategory));
         }catch (Exception e){
             throw new GoodsException("获得商品分类数据失败");

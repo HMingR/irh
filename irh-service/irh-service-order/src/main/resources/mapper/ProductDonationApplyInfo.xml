@@ -7,6 +7,7 @@
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
+            title AS title,
             apply_user_id AS applyUserId,
             alipay_num AS alipayNum,
             apply_amount AS applyAmount,
@@ -31,6 +32,7 @@
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+            <if test="title != null and title != ''"><![CDATA[AND title = #{title}]]></if>
             <if test="applyUserId != null and applyUserId != ''"><![CDATA[AND apply_user_id = #{applyUserId}]]></if>
             <if test="alipayNum != null and alipayNum != ''"><![CDATA[AND alipay_num = #{alipayNum}]]></if>
             <if test="applyAmount != null and applyAmount != ''"><![CDATA[AND apply_amount = #{applyAmount}]]></if>
@@ -60,6 +62,7 @@
 			<if test="applyUserId != null"><![CDATA[apply_user_id = #{applyUserId},]]></if>
 			<if test="alipayNum != null"><![CDATA[alipay_num = #{alipayNum},]]></if>
 			<if test="applyAmount != null"><![CDATA[apply_amount = #{applyAmount},]]></if>
+			<if test="title != null"><![CDATA[title = #{title},]]></if>
 			<if test="paymentAmount != null"><![CDATA[payment_amount = #{paymentAmount},]]></if>
 			<if test="reason != null"><![CDATA[reason = #{reason},]]></if>
 			<if test="witnessName != null"><![CDATA[witness_name = #{witnessName},]]></if>
@@ -80,6 +83,7 @@
 			<if test="applyUserId != null and applyUserId != ''"><![CDATA[ apply_user_id , ]]></if>
 			<if test="alipayNum != null and alipayNum != ''"><![CDATA[  alipay_num  , ]]></if>
 			<if test="applyAmount != null and applyAmount != ''"><![CDATA[  apply_amount  , ]]></if>
+			<if test="title != null and title != ''"><![CDATA[  title  , ]]></if>
 			<if test="paymentAmount != null and paymentAmount != ''"><![CDATA[  payment_amount  , ]]></if>
 			<if test="reason != null and reason != ''"><![CDATA[  reason  , ]]></if>
 			<if test="witnessName != null and witnessName != ''"><![CDATA[  witness_name  , ]]></if>
@@ -100,6 +104,7 @@
 			<if test="applyUserId != null and applyUserId != ''"><![CDATA[  #{applyUserId}, ]]></if>
 			<if test="alipayNum != null and alipayNum != ''"><![CDATA[ #{alipayNum}, ]]></if>
 			<if test="applyAmount != null and applyAmount != ''"><![CDATA[ #{applyAmount}, ]]></if>
+			<if test="title != null and title != ''"><![CDATA[ #{title}, ]]></if>
 			<if test="paymentAmount != null and paymentAmount != ''"><![CDATA[ #{paymentAmount}, ]]></if>
 			<if test="reason != null and reason != ''"><![CDATA[ #{reason}, ]]></if>
 			<if test="witnessName != null and witnessName != ''"><![CDATA[  #{witnessName}, ]]></if>
@@ -184,6 +189,7 @@
 
 	<resultMap id="includeOrderMap" type="productDonationApplyInfo">
 		<id column="id" property="id"></id>
+		<result column="title" property="title"></result>
 		<result column="apply_user_id" property="applyUserId"></result>
 		<result column="apply_amount" property="applyAmount"></result>
 		<result column="payment_amount" property="paymentAmount"></result>
@@ -217,6 +223,19 @@
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = 2 ORDER BY update_time LIMIT #{startIndex}, #{pageSize}
+	</select>
+
+	<select id="selectNewestApplyInfo" resultType="productDonationApplyInfo">
+		<![CDATA[SELECT id, title, update_time AS updateTime]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = 5 ORDER BY update_time LIMIT 0, 5
+	</select>
+
+	<select id="selectApplyInfoById" parameterType="long" resultType="productDonationApplyInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{applyId}
 	</select>
 	
 </mapper>

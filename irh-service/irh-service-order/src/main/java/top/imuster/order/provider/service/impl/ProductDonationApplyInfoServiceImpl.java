@@ -24,6 +24,7 @@ import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.order.provider.service.ProductDonationApplyInfoService;
+import top.imuster.order.provider.service.ProductDonationOrderRelService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -45,6 +46,9 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
 
     @Resource
     private ProductDonationApplyInfoDao productDonationApplyInfoDao;
+
+    @Resource
+    private ProductDonationOrderRelService productDonationOrderRelService;
 
     @Resource
     GenerateSendMessageService generateSendMessageService;
@@ -166,6 +170,25 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
         page.setTotalCount(count);
         page.setData(list);
         return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Message<List<ProductDonationApplyInfo>> getNewestApply() {
+        List<ProductDonationApplyInfo> applyInfos = productDonationApplyInfoDao.selectNewestApplyInfo();
+        return Message.createBySuccess(applyInfos);
+    }
+
+    @Override
+    public Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId) {
+        ProductDonationApplyInfo applyInfo;
+        if(type == 1){
+            applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
+            List<OrderInfo> useOrders = productDonationOrderRelService.getOrderInfoByApplyId(applyId);
+            applyInfo.setUserOrders(useOrders);
+        }else{
+            applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
+        }
+        return Message.createBySuccess(applyInfo);
     }
 
 }

@@ -50,4 +50,22 @@ public interface ProductDonationApplyInfoDao extends BaseDao<ProductDonationAppl
      * @reture: java.util.List<top.imuster.order.api.pojo.ProductDonationApplyInfo>
      **/
     List<ProductDonationApplyInfo> selectUnfinishApplyList(HashMap<String, Integer> param);
+
+    /**
+     * @Author hmr
+     * @Description 获得最新通过审核的申请
+     * @Date: 2020/4/18 10:21
+     * @param
+     * @reture: top.imuster.order.api.pojo.ProductDonationApplyInfo
+     **/
+    List<ProductDonationApplyInfo> selectNewestApplyInfo();
+
+    /**
+     * @Author hmr
+     * @Description 根据订单查看申请的详细信息
+     * @Date: 2020/4/18 17:53
+     * @param applyId
+     * @reture: top.imuster.order.api.pojo.ProductDonationApplyInfo
+     **/
+    ProductDonationApplyInfo selectApplyInfoById(Long applyId);
 }

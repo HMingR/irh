@@ -4,11 +4,13 @@ package top.imuster.order.provider.service.impl;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.pojo.ProductDonationOrderRel;
 import top.imuster.order.provider.dao.ProductDonationOrderRelDao;
 import top.imuster.order.provider.service.ProductDonationOrderRelService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * ProductDonationOrderRelService 实现类
@@ -24,5 +26,10 @@ public class ProductDonationOrderRelServiceImpl extends BaseServiceImpl<ProductD
     @Override
     public BaseDao<ProductDonationOrderRel, Long> getDao() {
         return this.productDonationOrderRelDao;
+    }
+
+    @Override
+    public List<OrderInfo> getOrderInfoByApplyId(Long applyId) {
+        return productDonationOrderRelDao.selectOrderListByFinishApplyId(applyId);
     }
 }

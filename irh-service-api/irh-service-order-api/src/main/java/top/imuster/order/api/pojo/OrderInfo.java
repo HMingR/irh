@@ -1,5 +1,6 @@
 package top.imuster.order.api.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -15,6 +16,7 @@ import java.util.Date;
  * @since 2019-11-24 16:31:57
  */
 @ApiModel("订单实体类")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class OrderInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 18856694430L;

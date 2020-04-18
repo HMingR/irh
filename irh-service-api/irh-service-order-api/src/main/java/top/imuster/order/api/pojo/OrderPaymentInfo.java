@@ -1,6 +1,7 @@
 package top.imuster.order.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -11,6 +12,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2019-11-24 16:31:57
  */
 @ApiModel("订单支付情况实体类")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class OrderPaymentInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 11925240015L;

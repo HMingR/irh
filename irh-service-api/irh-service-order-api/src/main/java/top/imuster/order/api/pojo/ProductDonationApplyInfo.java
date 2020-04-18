@@ -1,6 +1,7 @@
 package top.imuster.order.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-04-14 16:45:13
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class ProductDonationApplyInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 15969687939L;
@@ -25,6 +27,10 @@ public class ProductDonationApplyInfo extends BaseDomain {
 
 	// 申请人
 	private Long applyUserId;
+
+
+	//标题
+	private String title;
 
 	// 收款支付宝账号, max length: 13
 	private String alipayNum;
@@ -66,6 +72,14 @@ public class ProductDonationApplyInfo extends BaseDomain {
 
 	//当前申请使用了哪些订单
 	private List<OrderInfo> useOrders;
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public List<OrderInfo> getUserOrders() {
 		return useOrders;

@@ -128,5 +128,9 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	
+	<select id="selectAllCategory" resultType="productCategoryInfo">
+		<![CDATA[SELECT id, parent_id AS parentId, `name` ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = 2
+	</select>
 </mapper>

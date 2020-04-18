@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -23,12 +23,12 @@ public class ProductInfo extends BaseDomain {
 	}
 	// 商品表的主键
 	@ApiModelProperty("商品表的主键id")
-	@NotEmpty(groups = ValidateGroup.editGroup.class)
+	@NotNull(groups = ValidateGroup.editGroup.class)
 	private Long id;
 
 	// 商品名称, max length: 255
 	@ApiModelProperty("商品名称")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品名称不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "商品名称不能为空")
 	private String title;
 
 	// 商品主图url
@@ -37,7 +37,7 @@ public class ProductInfo extends BaseDomain {
 
 	// 计量单位, max length: 255
 	@ApiModelProperty("计量单位")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "计量单位不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "计量单位不能为空")
 	private String unit;
 
 	// 商品原价
@@ -46,17 +46,17 @@ public class ProductInfo extends BaseDomain {
 
 	// 售卖价格
 	@ApiModelProperty("售卖价格")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "售卖价格不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "售卖价格不能为空")
 	private String salePrice;
 
 	// 商品的新旧程度,1~10数值越大越新
 	@ApiModelProperty("商品的新旧程度,1~10数值越大越新")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品的新旧程度不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "商品的新旧程度不能为空")
 	private Integer oldDegree;
 
 	// 商品描述
 	@ApiModelProperty("商品描述")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "商品描述不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "商品描述不能为空")
 	private String productDesc;
 
 	// 商品详情页, max length: 255
@@ -65,12 +65,12 @@ public class ProductInfo extends BaseDomain {
 
 	// 10-正常交易  20-公益捐赠
 	@ApiModelProperty("10-正常交易  20-公益捐赠")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "交易类型不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "交易类型不能为空")
 	private Integer tradeType;
 
 	// 分类id
 	@ApiModelProperty("分类id")
-	@NotEmpty(groups = ValidateGroup.releaseGroup.class, message = "分类id不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "分类id不能为空")
 	private Long categoryId;
 
 	//更新分类时存放新的category
@@ -85,8 +85,19 @@ public class ProductInfo extends BaseDomain {
 
 	private String tagNames;
 
+	//其他图片的url
+	private String otherImgUrl;
+
 	//state 1-无效 2-有效 3-锁定
 
+
+	public String getOtherImgUrl() {
+		return otherImgUrl;
+	}
+
+	public void setOtherImgUrl(String otherImgUrl) {
+		this.otherImgUrl = otherImgUrl;
+	}
 
 	public String getTitle() {
 		return title;

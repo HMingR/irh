@@ -10,6 +10,7 @@ import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.provider.service.ProductDonationApplyInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: DonationApplyController
@@ -39,5 +40,22 @@ public class DonationApplyController {
     @GetMapping("/unfinish/{pageSize}/{currentPage}")
     public Message<Page<ProductDonationApplyInfo>> unfinishApplyList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         return productDonationApplyInfoService.unfinishApplyList(pageSize, currentPage);
+    }
+
+    @GetMapping("/detail/{type}/{id}")
+    public Message<ProductDonationApplyInfo> getApplyInfoById(@PathVariable("type") Integer type, @PathVariable("id") Long applyId){
+        return productDonationApplyInfoService.getApplyInfoById(type, applyId);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 获得最新的5个已经发放资金的申请
+     * @Date: 2020/4/18 10:42
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    @GetMapping
+    public Message<List<ProductDonationApplyInfo>> getNewestApply(){
+        return productDonationApplyInfoService.getNewestApply();
     }
 }

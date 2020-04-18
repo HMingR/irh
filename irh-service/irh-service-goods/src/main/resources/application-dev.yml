@@ -39,8 +39,6 @@ eureka:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
-logging:
-  config: classpath:logback-spring.xml
 
 enable:
   needLogin: false

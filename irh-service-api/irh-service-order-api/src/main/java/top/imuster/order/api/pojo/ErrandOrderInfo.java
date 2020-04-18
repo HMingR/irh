@@ -1,6 +1,7 @@
 package top.imuster.order.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -11,6 +12,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-02-11 17:49:36
  */
 @ApiModel("跑腿订单实体类")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class ErrandOrderInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 11790645230L;

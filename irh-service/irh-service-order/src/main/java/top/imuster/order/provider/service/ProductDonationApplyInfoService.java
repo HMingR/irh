@@ -9,6 +9,7 @@ import top.imuster.common.core.dto.UserDto;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * ProductDonationApplyInfoService接口
@@ -62,7 +63,7 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @Description 分页查看已经转账的申请的信息和使用了哪些订单
      * @Date: 2020/4/16 8:54
      * @param pageSize
-     * @param currentPage
+     * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
      **/
     Message<Page<ProductDonationApplyInfo>> finishApplyList(Integer pageSize, Integer currentPage);
@@ -76,4 +77,23 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
      **/
     Message<Page<ProductDonationApplyInfo>> unfinishApplyList(Integer pageSize, Integer currentPage);
+
+    /**
+     * @Author hmr
+     * @Description 获得最新通过审核的申请
+     * @Date: 2020/4/18 10:19
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ProductDonationApplyInfo>
+     **/
+    Message<List<ProductDonationApplyInfo>> getNewestApply();
+
+    /**
+     * @Author hmr
+     * @Description 根据type和id获得申请详情
+     * @Date: 2020/4/18 17:47
+     * @param type   1-标识查看的申请已经完成，返回的信息中需要包含使用了哪些人的订单   2-标识查看正在审核的
+     * @param applyId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ProductDonationApplyInfo>
+     **/
+    Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId);
 }
