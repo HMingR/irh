@@ -42,7 +42,6 @@ public class ProductController extends BaseController {
      * @Author hmr
      * @Description
      * @Date: 2020/2/10 16:07
-     * @param file
      * @param productInfo
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
@@ -82,6 +81,21 @@ public class ProductController extends BaseController {
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> productList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
         Long userId = getCurrentUserIdFromCookie();
+        return productInfoService.list(userId, pageSize, currentPage);
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 根据userId分页查看
+     * @Date: 2020/4/19 16:44
+     * @param userId
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
+     **/
+    @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
+    public Message<Page<ProductInfo>> productListByUserId(@PathVariable("userId") Long userId, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
         return productInfoService.list(userId, pageSize, currentPage);
     }
 

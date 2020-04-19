@@ -89,6 +89,16 @@ public class ArticleInfoController extends BaseController {
         return Message.createBySuccess(page);
     }
 
+    @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
+    public Message<Page<ArticleInfo>> getListByUserId(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage")Integer currentPage, @PathVariable("userId") Long userId){
+        Page<ArticleInfo> page = new Page<>();
+        page.setPageSize(pageSize);
+        page.setCurrentPage(currentPage);
+        List<ArticleInfo> list = articleInfoService.list(page, userId);
+        page.setData(list);
+        return Message.createBySuccess(page);
+    }
+
     /**
      * @Author hmr
      * @Description 根据id查看帖子的详细信息，

@@ -13,6 +13,8 @@ spring:
 
 logging:
   config: classpath:logback-spring.xml
+  level:
+    top.imuster.goods: debug
 
 image.fileTypes:
   - jpg

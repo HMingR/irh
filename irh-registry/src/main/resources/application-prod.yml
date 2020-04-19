@@ -3,7 +3,7 @@ eureka:
     health-check-url-path: /actuator/health
   client:
     service-url:
-      defaultZone: http://39.105.0.169:10086/eureka
+      defaultZone: http://localhost:10086/eureka
     register-with-eureka: false      # 不需要把自己注册给自己
     fetch-registry: false            # 不需要拉取服务
   server:

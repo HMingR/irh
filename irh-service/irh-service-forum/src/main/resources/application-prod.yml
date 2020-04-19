@@ -5,7 +5,7 @@ spring:
     port: 6379
     jedis:
       pool:
-        max-active: 30
+        max-active: 20
         max-idle: 10
         max-wait: -1
     timeout: 1000

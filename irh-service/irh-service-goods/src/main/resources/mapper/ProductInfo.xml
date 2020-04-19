@@ -21,6 +21,7 @@
             update_time AS updateTime,
             state AS state,
             consumer_id AS consumerId,
+            tag_names AS tagNames,
             browser_times AS browserTimes
 		]]>
 	</sql>
@@ -100,7 +101,7 @@
 	</sql>
 
 	<sql id="value">
-		<trim prefix="," suffix="," suffixOverrides=",">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null and id != ''"><![CDATA[ #{id} ,]]></if>
 			<if test="title != null and title != ''"><![CDATA[ #{title},]]></if>
 			<if test="mainPicUrl != null and mainPicUrl != ''"><![CDATA[ #{mainPicUrl},]]></if>

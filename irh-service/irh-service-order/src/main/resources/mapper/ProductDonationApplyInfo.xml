@@ -125,7 +125,6 @@
 		<include refid="key"></include>
 			VALUES
 		<include refid="value"></include>
-
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

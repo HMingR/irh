@@ -41,4 +41,5 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         Page<ProductDemandInfo> productDemandInfoPage = this.selectPage(condition, page);
         return Message.createBySuccess(productDemandInfoPage);
     }
+
 }

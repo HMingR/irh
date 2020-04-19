@@ -80,4 +80,9 @@ public class DemandProductController extends BaseController {
         productDemandInfoService.updateByKey(condition);
         return Message.createBySuccess();
     }
+
+    @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
+    public Message<Page<ProductDemandInfo>> getListByUserId(@PathVariable("pageSize")Integer pageSize, @PathVariable("currentPage") Integer currentPage, @PathVariable("userId") Long userId){
+        return productDemandInfoService.list(userId, pageSize, currentPage);
+    }
 }

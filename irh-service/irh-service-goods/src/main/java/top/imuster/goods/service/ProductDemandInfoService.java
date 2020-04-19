@@ -23,4 +23,5 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductDemandInfo>>
      **/
     Message<Page<ProductDemandInfo>> list(Long userId, Integer pageSize, Integer currentPage);
+
 }

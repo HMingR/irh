@@ -128,13 +128,14 @@
 		SELECT
 			saler_nickname AS salerNickname,
 			saler_id AS salerId,
-			finish_time AS finishTime
+			finish_time AS finishTime,
+			payment_money AS paymentMoney
 		FROM
 			order_info
 		WHERE
 		id IN (
 		SELECT
-			id
+			order_id
 		FROM
 			product_donation_order_rel
 		WHERE
