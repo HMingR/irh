@@ -33,7 +33,7 @@ public class DemandProductController extends BaseController {
     @ApiOperation(value = "发布需求", httpMethod = "PUT")
     @NeedLogin
     @PutMapping
-    public Message add(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) {
+    public Message<String> add(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) {
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         productDemandInfo.setConsumerId(userId);
@@ -54,7 +54,7 @@ public class DemandProductController extends BaseController {
 
     @ApiOperation(value = "根据id查询", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message getById(@PathVariable("id") Long id){
+    public Message<ProductDemandInfo> getById(@PathVariable("id") Long id){
         ProductDemandInfo productDemandInfo = productDemandInfoService.selectEntryList(id).get(0);
         return Message.createBySuccess(productDemandInfo);
     }
@@ -62,7 +62,7 @@ public class DemandProductController extends BaseController {
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
     @NeedLogin
     @PostMapping
-    public Message edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
+    public Message<String> edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
         validData(bindingResult);
         productDemandInfo.setConsumerId(getCurrentUserIdFromCookie());
         productDemandInfoService.updateByKey(productDemandInfo);
@@ -72,7 +72,7 @@ public class DemandProductController extends BaseController {
     @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")
     @NeedLogin
     @DeleteMapping("/{id}")
-    public Message delete(@PathVariable("id") Long id){
+    public Message<String> delete(@PathVariable("id") Long id){
         ProductDemandInfo condition = new ProductDemandInfo();
         condition.setId(id);
         condition.setConsumerId(getCurrentUserIdFromCookie());
@@ -81,6 +81,15 @@ public class DemandProductController extends BaseController {
         return Message.createBySuccess();
     }
 
+    /**
+     * @Author hmr
+     * @Description 根据用户id分页查看该用户发布的需求
+     * @Date: 2020/4/19 18:17
+     * @param pageSize
+     * @param currentPage
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductDemandInfo>>
+     **/
     @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
     public Message<Page<ProductDemandInfo>> getListByUserId(@PathVariable("pageSize")Integer pageSize, @PathVariable("currentPage") Integer currentPage, @PathVariable("userId") Long userId){
         return productDemandInfoService.list(userId, pageSize, currentPage);

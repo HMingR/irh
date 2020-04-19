@@ -89,6 +89,15 @@ public class ArticleInfoController extends BaseController {
         return Message.createBySuccess(page);
     }
 
+    /**
+     * @Author hmr
+     * @Description 根据用户id分页查看用户发布的文章
+     * @Date: 2020/4/19 18:20
+     * @param pageSize
+     * @param currentPage
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleInfo>>
+     **/
     @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
     public Message<Page<ArticleInfo>> getListByUserId(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage")Integer currentPage, @PathVariable("userId") Long userId){
         Page<ArticleInfo> page = new Page<>();
