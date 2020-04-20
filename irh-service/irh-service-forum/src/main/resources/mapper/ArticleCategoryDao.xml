@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.life.provider.dao.ArticleTagDao">
+<mapper namespace="top.imuster.life.provider.dao.ArticleCategoryDao">
 
 	<!-- article_tag_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
             name,
-            category_id AS categoryId,
             state,
             create_time AS createTime,
             update_time AS updateTime 
@@ -23,7 +22,6 @@
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="name != null and name != ''"><![CDATA[AND name = #{name}]]></if>
-            <if test="categoryId != null and categoryId != ''"><![CDATA[AND category_id = #{categoryId}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
@@ -40,7 +38,6 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="name != null"><![CDATA[name = #{name},]]></if>
-			<if test="categoryId != null"><![CDATA[category_id = #{categoryId},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
@@ -54,8 +51,7 @@
 				(
                 id, 
                 name, 
-                category_id, 
-                state, 
+                state,
                 create_time, 
                 update_time 
 				)
@@ -63,8 +59,7 @@
 				(
                 #{id}, 
                 #{name}, 
-                #{categoryId}, 
-                #{state}, 
+                #{state},
                 #{createTime}, 
                 #{updateTime} 
 				)
@@ -124,20 +119,6 @@
 	
 	<!-- 其它SQL语句 -->
 
-	<select id="selectTagIdByCategory" parameterType="long" resultType="long">
-		<![CDATA[SELECT id ]]>
-		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE category_id = #{categoryId} AND state = 2]]>
-	</select>
 
-	<select id="selectTagInfoByCategoryIds" resultType="top.imuster.life.api.pojo.ArticleCategoryInfo" parameterType="java.lang.reflect.Array">
-		<![CDATA[SELECT]]>
-		<include refid="QUERY_COLUMN_LIST"/>
-		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[ WHERE category_id IN ]]>
-		<foreach collection="list" item="id" open="(" separator="," close=")">
-			<![CDATA[#{id}]]>
-		</foreach>
-	</select>
 	
 </mapper>

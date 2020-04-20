@@ -120,11 +120,11 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
             targetIds.add(targetId);
             Double score = redisTemplate.opsForZSet().score(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
             scores.add(score.longValue());
+            redisTemplate.opsForHash().delete(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
         }
         res.add(targetIds);
         res.add(scores);
         return res;
-
     }
 
     @Override

@@ -11,7 +11,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.life.api.pojo.ArticleCategoryInfo;
-import top.imuster.life.provider.service.ArticleTagService;
+import top.imuster.life.provider.service.ArticleCategoryService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,26 +23,12 @@ import java.util.List;
  * @date: 2020/2/3 11:06
  */
 @RestController
-@RequestMapping("/forum/tag")
+@RequestMapping("/forum/category")
 @Api(value = "ArticleCategoryController - 论坛分类控制器")
-public class ArticleTagController extends BaseController {
+public class ArticleCategoryController extends BaseController {
 
     @Resource
-    ArticleTagService articleTagService;
-
-    /**
-     * @Author hmr
-     * @Description 提供给用户选择分类的
-     * @Date: 2020/2/3 11:08
-     * @param
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<top.imuster.forum.api.pojo.ArticleCategory>>
-     **/
-    @ApiOperation(value = "根据分类id获得标签", httpMethod = "GET")
-    @GetMapping("/list/{ids}")
-    public Message<List<ArticleCategoryInfo>> getListById(@PathVariable("ids") String ids){
-        return articleTagService.getTagByCategoryIds(ids);
-    }
-
+    ArticleCategoryService articleCategoryService;
 
     @ApiOperation(value = "获得所有的标签", httpMethod = "GET")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum:alltag'")
@@ -50,15 +36,15 @@ public class ArticleTagController extends BaseController {
     public Message<List<ArticleCategoryInfo>> getAllTag(){
         ArticleCategoryInfo articleCategoryInfo = new ArticleCategoryInfo();
         articleCategoryInfo.setState(2);
-        List<ArticleCategoryInfo> articleCategoryInfos = articleTagService.selectEntryList(articleCategoryInfo);
+        List<ArticleCategoryInfo> articleCategoryInfos = articleCategoryService.selectEntryList(articleCategoryInfo);
         return Message.createBySuccess(articleCategoryInfos);
     }
 
-    @ApiOperation("根据id获得标签的名字")
+    @ApiOperation("根据id获得分类的名字")
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'forum::tag::name::'+#p0")
     @GetMapping("/name/{id}")
     public Message<String> getTagNameById(@PathVariable("id") Long id){
-        List<ArticleCategoryInfo> articleCategoryInfos = articleTagService.selectEntryList(id);
+        List<ArticleCategoryInfo> articleCategoryInfos = articleCategoryService.selectEntryList(id);
         if(articleCategoryInfos.isEmpty()){
             return Message.createBySuccess(String.valueOf(id));
         }

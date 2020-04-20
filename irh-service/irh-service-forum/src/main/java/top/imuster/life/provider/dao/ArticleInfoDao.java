@@ -124,12 +124,12 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据给定的标签id
+     * @Description 根据给定的分类id获得文章简略信息
      * @Date: 2020/3/25 14:30
      * @param tagIds
      * @reture: java.util.List<top.imuster.life.api.pojo.ArticleInfo>
      **/
-    List<ArticleInfo> selectArticleBriefByTagIds(@Param("ids") List<Long> ids);
+    List<ArticleInfo> selectArticleBriefByCategoryId(ArticleInfo articleInfo);
 
     /**
      * @Author hmr
@@ -143,7 +143,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 插入文章信息
+     * @Description 插入文章信息，并返回id
      * @Date: 2020/4/12 9:59
      * @param articleInfo
      * @reture: java.lang.Long

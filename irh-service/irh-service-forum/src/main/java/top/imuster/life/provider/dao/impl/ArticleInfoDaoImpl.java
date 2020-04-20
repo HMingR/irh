@@ -32,7 +32,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
 	private final static String SELECT_BRIEF_BY_HOT_TOPIC_ID = "selectBriefByHotTopicId";
 	private final static String UPDATE_FORARDR_TIMES_BY_CONDITION = "updateForwardTimesByCondition";
-	private final static String SELECT_ARTICLE_BRIEF_BY_TAGIDS = "selectArticleBriefByTagIds";
+	private final static String SELECT_ARTICLE_BRIEF_BY_CATEGORY_ID = "selectArticleBriefByCategoryId";
 	private final static String SELECT_USER_ARTICLE_RANK = "selectUserArticleRank";
 	private final static String INSERT_ARTICLE = "insertArticle";
 	//返回本DAO命名空间,并添加statement
@@ -104,8 +104,8 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	}
 
 	@Override
-	public List<ArticleInfo> selectArticleBriefByTagIds(List<Long> tagIds) {
-		return this.selectList(getNameSpace(SELECT_ARTICLE_BRIEF_BY_TAGIDS), tagIds);
+	public List<ArticleInfo> selectArticleBriefByCategoryId(ArticleInfo articleInfo) {
+		return this.selectList(getNameSpace(SELECT_ARTICLE_BRIEF_BY_CATEGORY_ID), articleInfo);
 	}
 
 	@Override

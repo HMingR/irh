@@ -61,8 +61,6 @@ public class ArticleInfo extends BaseDomain {
 	@ApiModelProperty("每个文章下的一级留言信息")
 	private List<ArticleReviewInfo> childs;
 
-	private List<ArticleCategoryInfo> tagList;
-
 	@ApiModelProperty("给文章添加的标签")
 	private String tagNames;
 
@@ -77,12 +75,19 @@ public class ArticleInfo extends BaseDomain {
 	//浏览时间(浏览记录用)
 	private String browseDate;
 
-	private List<String> categoryNames;
-
-	private List<Long> categoryIds;
+	//分类id
+	private Long categoryId;
 
 	// 1-无效  2-有效 3-发布中  4-草稿箱中
 //	private Short state;
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
 
 	public Long getId() {
 		return id;
@@ -164,14 +169,6 @@ public class ArticleInfo extends BaseDomain {
 		this.childs = childs;
 	}
 
-	public List<ArticleCategoryInfo> getTagList() {
-		return tagList;
-	}
-
-	public void setTagList(List<ArticleCategoryInfo> tagList) {
-		this.tagList = tagList;
-	}
-
 	public String getTagNames() {
 		return tagNames;
 	}
@@ -212,19 +209,4 @@ public class ArticleInfo extends BaseDomain {
 		this.browseDate = browseDate;
 	}
 
-	public List<String> getCategoryNames() {
-		return categoryNames;
-	}
-
-	public void setCategoryNames(List<String> categoryNames) {
-		this.categoryNames = categoryNames;
-	}
-
-	public List<Long> getCategoryIds() {
-		return categoryIds;
-	}
-
-	public void setCategoryIds(List<Long> categoryIds) {
-		this.categoryIds = categoryIds;
-	}
 }

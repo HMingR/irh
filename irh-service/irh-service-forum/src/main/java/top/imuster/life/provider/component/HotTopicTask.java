@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 @Slf4j
 public class HotTopicTask extends QuartzJobBean {
 
+    //显示热搜的数量
     private static Long HOT_TOPIC_NUM = 30L;
 
     @Value("${hot.topic.total}")

@@ -144,7 +144,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @param categoryId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.life.api.pojo.ArticleInfo>
      **/
-    Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Long pageSize, Long currentPage) ;
+    Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Integer pageSize, Integer currentPage) ;
 
     /**
      * @Author hmr

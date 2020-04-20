@@ -20,7 +20,8 @@
             review_total AS reviewTotal,
             forward_times AS forwardTimes,
             detail_page AS detailPage,
-            tag_names AS tagNames
+            tag_names AS tagNames,
+            category_id AS categoryId
 		]]>
 	</sql>
 
@@ -46,6 +47,7 @@
             <if test="forwardTimes != null and forwardTimes != ''"><![CDATA[AND forward_times = #{forwardTimes}]]></if>
             <if test="detailPage != null and detailPage != ''"><![CDATA[AND detail_page = #{detailPage}]]></if>
             <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
+            <if test="categoryId != null and categoryId != ''"><![CDATA[AND category_id = #{categoryId}]]></if>
 		</where>
 	</sql>
 	
@@ -72,6 +74,7 @@
 			<if test="forwardTimes != null"><![CDATA[forward_times = #{forwardTimes},]]></if>
 			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
 			<if test="detailPage != null"><![CDATA[detail_page = #{detailPage},]]></if>
+			<if test="categoryId != null"><![CDATA[category_id = #{categoryId},]]></if>
 		</set>
 	</sql>
 
@@ -90,6 +93,7 @@
 			<if test="detailPage != null and detailPage != ''">detail_page, </if>
 			<if test="tagNames != null and tagNames != ''">tag_names, </if>
 			<if test="userId != null and userId != ''">user_id, </if>
+			<if test="categoryId != null and categoryId != ''">category_id, </if>
 		</trim>
 	</sql>
 
@@ -108,6 +112,7 @@
 			<if test="detailPage != null and detailPage != ''">#{detailPage}, </if>
 			<if test="tagNames != null and tagNames != ''">#{tagNames}, </if>
 			<if test="userId != null and userId != ''">#{userId}, </if>
+			<if test="categoryId != null and categoryId != ''">#{categoryId}, </if>
 		</trim>
 
 	</sql>
@@ -173,7 +178,7 @@
 	<!-- 其它SQL语句 -->
 
 	<select id="selectListByCondition" parameterType="articleInfo" resultType="top.imuster.life.api.pojo.ArticleInfo">
-		<![CDATA[SELECT id, title, review_total AS reviewTotal, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes]]>
+		<![CDATA[SELECT id, title, review_total AS reviewTotal, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes, category_id AS categoryId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
@@ -195,7 +200,7 @@
 	</select>
 
 	<select id="selectBriefById" parameterType="long" resultType="articleInfo">
-		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes]]>
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes, category_id AS categoryId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>
@@ -226,10 +231,10 @@
 	<select id="selectUpTop5ByCategoryId" resultType="articleInfo" parameterType="long">
 		<![CDATA[SELECT id, title ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE article_category = #{id} ORDER BY up_total DESC LIMIT 0, 5
+		WHERE category_id = #{id} ORDER BY up_total DESC LIMIT 0, 5
 	</select>
 
-	<select id="selectBrowserTimesByIds" parameterType="long" resultType="java.util.Map">
+	<select id="selectBrowserTimesByIds" parameterType="map" resultType="java.util.Map">
 		<![CDATA[SELECT id, browser_times ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE id IN]]>
@@ -254,7 +259,7 @@
 	</update>
 
 	<select id="selectBriefByHotTopicId" resultType="top.imuster.life.api.pojo.ForumHotTopicInfo" parameterType="long">
-		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime, main_picture AS mainPicUrl, up_total AS upTotal, forward_times AS forwardTimes, user_id AS userId  ]]>
+		<![CDATA[SELECT id AS targetId, browser_times AS browserTimes, title AS targetTitle, create_time AS createTime, main_picture AS mainPicUrl, up_total AS upTotal, forward_times AS forwardTimes, user_id AS userId , category_id AS categoryId  ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state != 1 AND id = #{aLong}]]>
 	</select>
@@ -274,14 +279,11 @@
 		</foreach>
 	</update>
 
-	<select id="selectArticleBriefByTagIds" parameterType="list" resultType="top.imuster.life.api.pojo.ArticleInfo">
-		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId]]>
+	<select id="selectArticleBriefByCategoryId" parameterType="top.imuster.life.api.pojo.ArticleInfo" resultType="top.imuster.life.api.pojo.ArticleInfo">
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId, category_id AS categoryId]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		<![CDATA[WHERE id IN]]>
-		<foreach collection="ids" item="index" open="(" close=")" separator=",">
-			#{index}
-		</foreach>
-		<![CDATA[ORDER BY create_time, browser_times DESC]]>
+		<![CDATA[WHERE category_id = #{categoryId,jdbcType=BIGINT} AND state = 2]]>
+		<![CDATA[ORDER BY create_time, browser_times DESC LIMIT #{startIndex}, #{endIndex}]]>
 	</select>
 
 	<select id="selectUserArticleRank" parameterType="map" resultType="java.lang.Long">
@@ -300,7 +302,7 @@
 		 ]]>
 	</select>
 
-	<insert id="insertArticle" useGeneratedKeys="true">
+	<insert id="insertArticle" useGeneratedKeys="true" keyColumn="id" parameterType="top.imuster.life.api.pojo.ArticleInfo">
 		<![CDATA[ INSERT INTO article_info]]>
 		<include refid="key"></include>
 		<![CDATA[ VALUES ]]>

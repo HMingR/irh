@@ -174,7 +174,7 @@ public class ArticleInfoController extends BaseController {
 
     @ApiOperation("根据文章分类id获得该分类下的文章,按照点赞和发布时间排序")
     @GetMapping("/brief/category/{pageSize}/{currentPage}/{categoryId}")
-    public Message<List<ArticleInfo>> getArticleBriefByCategoryId(@PathVariable Long categoryId, @PathVariable("pageSize") Long pageSize, @PathVariable("currentPage") Long currentPage ){
+    public Message<List<ArticleInfo>> getArticleBriefByCategoryId(@PathVariable Long categoryId, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage ){
         return articleInfoService.getBriefByCategoryId(categoryId, pageSize, currentPage);
     }
 }

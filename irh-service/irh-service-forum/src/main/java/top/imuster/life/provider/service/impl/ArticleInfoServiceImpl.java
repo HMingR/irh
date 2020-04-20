@@ -4,7 +4,6 @@ package top.imuster.life.provider.service.impl;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,15 +21,11 @@ import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
-import top.imuster.life.api.pojo.ArticleCategoryInfo;
-import top.imuster.life.api.pojo.ArticleCategoryRel;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.pojo.ForumHotTopicInfo;
 import top.imuster.life.provider.dao.ArticleInfoDao;
-import top.imuster.life.provider.service.ArticleCategoryRelService;
 import top.imuster.life.provider.service.ArticleCollectionService;
 import top.imuster.life.provider.service.ArticleInfoService;
-import top.imuster.life.provider.service.ArticleTagService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -51,12 +46,6 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Resource
     private ArticleInfoDao articleInfoDao;
-
-    @Resource
-    ArticleTagService articleTagService;
-
-    @Resource
-    ArticleCategoryRelService articleCategoryRelService;
 
     @Resource
     private ArticleCollectionService articleCollectionService;
@@ -90,15 +79,10 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     public void release(Long userId, ArticleInfo articleInfo) {
         articleInfo.setState(3);
         articleInfo.setUserId(userId);
-        List<Long> categoryIds = articleInfo.getCategoryIds();
+        String content = articleInfo.getContent();
+        articleInfo.setContent("");
         Long articleId = articleInfoDao.insertArticle(articleInfo);
-        ArticleCategoryRel categoryRel = new ArticleCategoryRel();
-        categoryRel.setArticleId(articleId);
-        for (Long categoryId : categoryIds){
-            categoryRel.setCategoryId(categoryId);
-            articleCategoryRelService.insertEntry(categoryRel);
-        }
-        createStaticPage(articleInfo.getContent(), articleId);
+        createStaticPage(content, articleId);
     }
 
     /**
@@ -134,12 +118,6 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     public ArticleInfo getArticleDetailById(Long id) {
         ArticleInfo result = articleInfoDao.selectEntryList(id).get(0);
-        List<Long> categoryIds = result.getCategoryIds();
-        if(categoryIds != null && !categoryIds.isEmpty()){
-            Long[] longIds = (Long[])ConvertUtils.convert(categoryIds, Long.class);
-            List<ArticleCategoryInfo> articleCategoryInfos = articleTagService.selectEntryList(longIds);
-            result.setTagList(articleCategoryInfos);
-        }
         return result;
     }
 
@@ -165,10 +143,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     @Override
     @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'article::brief::' + #p0")
     public ArticleInfo getBriefById(Long id) {
-        ArticleInfo articleInfo = articleInfoDao.selectBriefById(id);
-        List<String> categoryNames = articleCategoryRelService.getArticleTagsById(id);
-        articleInfo.setCategoryNames(categoryNames);
-        return articleInfo;
+        return articleInfoDao.selectBriefById(id);
     }
 
     @Override
@@ -239,15 +214,14 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    public Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Long pageSize, Long currentPage) {
-        //根据分类获得该分类下的标签
-        List<Long> tagIds = articleTagService.getTagByCategoryId(categoryId);
-
-        //根据标签分页查询文章id
-        List<Long> articleIds =  articleCategoryRelService.selectArticleIdsByIds(tagIds, pageSize, currentPage);
-
+    public Message<List<ArticleInfo>> getBriefByCategoryId(Long categoryId, Integer pageSize, Integer currentPage) {
+        ArticleInfo articleInfo = new ArticleInfo();
+        articleInfo.setState(2);
+        articleInfo.setCategoryId(categoryId);
+        articleInfo.setStartIndex( (currentPage < 1? 1 : currentPage) * pageSize);
+        articleInfo.setEndIndex(pageSize);
         //根据文章id获得文章的简略信息
-        List<ArticleInfo> articleInfoList = articleInfoDao.selectArticleBriefByTagIds(articleIds);
+        List<ArticleInfo> articleInfoList = articleInfoDao.selectArticleBriefByCategoryId(articleInfo);
         return Message.createBySuccess(articleInfoList);
     }
 
