@@ -4,6 +4,8 @@ server:
     max-http-post-size: 4048576
     max-http-header-size: 4048576
 spring:
+  profiles:
+    active: dev
   application:
     name: file-service
   servlet:
