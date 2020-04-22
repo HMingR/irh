@@ -1,7 +1,8 @@
 package top.imuster.goods.api.service.hystrix;
 
 import feign.hystrix.FallbackFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
@@ -15,9 +16,10 @@ import java.util.List;
  * @author: hmr
  * @date: 2020/2/7 17:08
  */
-@Slf4j
 @Component
 public class GoodsCategoryServiceFeignApiHystrix implements FallbackFactory<GoodsCategoryServiceFeignApi> {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public GoodsCategoryServiceFeignApi create(Throwable throwable) {

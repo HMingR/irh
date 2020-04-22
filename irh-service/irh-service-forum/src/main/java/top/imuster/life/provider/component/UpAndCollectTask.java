@@ -3,6 +3,8 @@ package top.imuster.life.provider.component;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.utils.DateUtils;
@@ -17,9 +19,10 @@ import javax.annotation.Resource;
  * @author: hmr
  * @date: 2020/2/8 19:32
  */
-@Slf4j
 @Component
 public class UpAndCollectTask extends QuartzJobBean {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     UserForumAttributeService userForumAttributeService;

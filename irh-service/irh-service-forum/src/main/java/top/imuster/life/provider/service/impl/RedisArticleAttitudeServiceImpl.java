@@ -1,7 +1,8 @@
 package top.imuster.life.provider.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,8 +26,11 @@ import java.util.*;
  * @date: 2020/2/8 17:26
  */
 @Service("redisArticleAttitudeService")
-@Slf4j
 public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeService {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
+
+
     @Autowired
     RedisTemplate redisTemplate;
 

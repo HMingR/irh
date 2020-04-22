@@ -1,5 +1,6 @@
 package imuster;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +9,6 @@ import top.imuster.order.provider.IrhOrderApplication;
 import top.imuster.order.provider.dao.OrderInfoDao;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 
 
 /**
@@ -26,17 +26,9 @@ public class test {
 
     @Test
     public void test(){
-        HashMap<String, String> param = new HashMap<>();
-        param.put("start", "2020-01-02");
-        param.put("end", "2020-03-02");
-        Long aLong = orderInfoDao.selectAmountIncrementTotal(param);
-        System.out.println("------->" + aLong);
 
-        Long l = orderInfoDao.selectOrderAmountTotalByCreateTime("2020-01-02");
-        System.out.println("------------->" + l.longValue() + aLong);
-
-        long l1 = orderInfoDao.selectOrderTotalByCreateTime("2020-01-02");
-        System.out.println("------------->" + l1);
+        String s = DigestUtils.sha1Hex("123456");
+        System.out.println(s);
 
     }
 

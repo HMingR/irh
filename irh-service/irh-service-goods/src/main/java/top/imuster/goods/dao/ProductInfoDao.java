@@ -1,8 +1,12 @@
 package top.imuster.goods.dao;
 
 
+import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.goods.api.pojo.ProductInfo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * ProductInfoDao 接口
@@ -56,4 +60,22 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: java.lang.Long
      **/
     Long insertInfoReturnId(ProductInfo condition);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查询对应的浏览记录
+     * @Date: 2020/4/22 9:42
+     * @param ids
+     * @reture: java.util.Map<java.lang.Long,java.lang.Long>
+     **/
+    Map<Long, Long> selectBrowserTimesByIds(@Param("ids") Long[] ids);
+
+    /**
+     * @Author hmr
+     * @Description 根据id更新浏览记录
+     * @Date: 2020/4/22 9:51
+     * @param update
+     * @reture: void
+     **/
+    void updateBrowserTimesByCondition(@Param("update") List<ProductInfo> update);
 }

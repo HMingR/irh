@@ -14,18 +14,36 @@ public class UpDto implements Serializable {
     private static final long serialVersionUID = 1143404769078891830L;
 
     private Long targetId;
+
+    // 1-文章   2-评论
     private Integer type;
+
+
     private Long userId;
+
+
     private Integer state = UpStateEnum.NONE.getType();
 
     public UpDto() {
     }
+
+
 
     public UpDto(Long targetId, Integer type, Long userId, Integer state) {
         this.targetId = targetId;
         this.type = type;
         this.userId = userId;
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "UpDto{" +
+                "targetId=" + targetId +
+                ", type=" + type +
+                ", userId=" + userId +
+                ", state=" + state +
+                '}';
     }
 
     public Integer getState() {

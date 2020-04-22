@@ -1,6 +1,7 @@
 package top.imuster.goods.web.rpc;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -23,8 +24,9 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/goods/feign")
-@Slf4j
 public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
+
+    private static final Logger log = LoggerFactory.getLogger(GoodsServiceFeignClient.class);
 
     @Resource
     ProductInfoService productInfoService;

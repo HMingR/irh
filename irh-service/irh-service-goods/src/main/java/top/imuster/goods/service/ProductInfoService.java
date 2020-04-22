@@ -4,7 +4,10 @@ package top.imuster.goods.service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.goods.api.pojo.ProductInfo;
+
+import java.util.List;
 
 /**
  * ProductInfoService接口
@@ -69,4 +72,13 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage);
+
+    /**
+     * @Author hmr
+     * @Description 将redis中的浏览记录更新到DB中
+     * @Date: 2020/4/22 9:39
+     * @param browserTimesDtos
+     * @reture: void
+     **/
+    void transBrowserTimesFromRedis2DB(List<BrowserTimesDto> browserTimesDtos);
 }

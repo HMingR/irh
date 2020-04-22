@@ -9,3 +9,5 @@ eureka:
   server:
     enable-self-preservation: false     # 关闭自我保护模式
     eviction-interval-timer-in-ms: 10000   # 10s   定期清理无效链接
+logging:
+  level: debug

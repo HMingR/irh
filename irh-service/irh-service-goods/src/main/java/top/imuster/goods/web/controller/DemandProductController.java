@@ -8,8 +8,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.service.ProductDemandInfoService;
@@ -93,5 +95,18 @@ public class DemandProductController extends BaseController {
     @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
     public Message<Page<ProductDemandInfo>> getListByUserId(@PathVariable("pageSize")Integer pageSize, @PathVariable("currentPage") Integer currentPage, @PathVariable("userId") Long userId){
         return productDemandInfoService.list(userId, pageSize, currentPage);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 记录浏览
+     * @Date: 2020/4/22 9:07
+     * @param targetId
+     * @reture: void
+     **/
+    @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT, disableHotTopic = true, value = "#p0")
+    @GetMapping("/browser/{targetId}")
+    public void browser(@PathVariable("targetId") Long targetId){
+
     }
 }

@@ -145,7 +145,7 @@ public class ProductController extends BaseController {
      **/
     @ApiOperation("用户下架商品")
     @DeleteMapping("/{id}")
-    public Message delProduct(@PathVariable("id") Long id){
+    public Message<String> delProduct(@PathVariable("id") Long id){
         ProductInfo productInfo = new ProductInfo();
         Long userId = getCurrentUserIdFromCookie();
         productInfo.setConsumerId(userId);
@@ -158,17 +158,17 @@ public class ProductController extends BaseController {
         return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
     }
 
-
     /**
      * @Author hmr
-     * @Description 获得商品详情页
-     * @Date: 2020/1/21 9:45
-     * @param
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     * @Description 记录浏览
+     * @Date: 2020/4/22 9:04
+     * @param targetId
+     * @reture: void
      **/
-    @GetMapping("/detail")
-    public Message<String> getProductDetailUrl(){
-        return null;
+    @GetMapping("/browser/{targetId}")
+    @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0", disableHotTopic = true, disableBrowseRecord = false)
+    public void browser(@PathVariable("targetId") Long targetId){
+
     }
 
 }

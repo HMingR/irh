@@ -1,8 +1,9 @@
 package top.imuster.life.provider.service.impl;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,9 @@ import java.util.Map;
  * @since 2020-02-08 15:27:10
  */
 @Service("articleCollectionService")
-@Slf4j
 public class ArticleCollectionServiceImpl extends BaseServiceImpl<ArticleCollectionRel, Long> implements ArticleCollectionService {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private ArticleCollectionDao articleCollectionDao;

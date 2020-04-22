@@ -1,7 +1,8 @@
 package top.imuster.goods.service.impl;
 
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +12,8 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
 import top.imuster.goods.api.pojo.ProductCategoryRel;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.dao.ProductCategoryInfoDao;
+import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductCategoryInfoService;
 import top.imuster.goods.service.ProductCategoryRelService;
 import top.imuster.goods.service.ProductInfoService;
@@ -26,9 +27,10 @@ import java.util.List;
  * @author 黄明人
  * @since 2019-11-26 10:46:26
  */
-@Slf4j
 @Service("productCategoryInfoService")
 public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCategoryInfo, Long> implements ProductCategoryInfoService {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private ProductCategoryInfoDao productCategoryInfoDao;

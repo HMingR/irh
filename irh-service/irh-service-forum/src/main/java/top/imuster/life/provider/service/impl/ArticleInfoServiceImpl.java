@@ -3,7 +3,8 @@ package top.imuster.life.provider.service.impl;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -38,8 +39,9 @@ import java.util.*;
  * @since 2020-01-30 15:25:20
  */
 @Service("articleInfoService")
-@Slf4j
 public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> implements ArticleInfoService {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Value("${batch.size}")
     private int batchSize;   //批量处理浏览记录的大小

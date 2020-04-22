@@ -6,6 +6,9 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * ProductInfoDao 实现类
  * @author 黄明人
@@ -19,6 +22,8 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String SELECT_PRODUCT_INFO_BY_MESSAGE_ID = "selectProductInfoByMessageId";
 	private final static String SELECT_PRODUCT_BRIEF_INFO_BY_ID = "selectProductBriefInfoById";
 	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
+	private final static String SELECT_BROWSER_TIMES_BY_IDS = "selectBrowserTimesByIds";
+	private final static String UPDATE_BROWSER_TIMES_BY_CONDITION =  "updateBrowserTimesByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -47,5 +52,15 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	@Override
 	public Long insertInfoReturnId(ProductInfo condition) {
 		return (long) this.insert(getNameSpace(INSERT_INFO_RETURN_ID), condition);
+	}
+
+	@Override
+	public Map<Long, Long> selectBrowserTimesByIds(Long[] ids) {
+		return this.select(getNameSpace(SELECT_BROWSER_TIMES_BY_IDS), ids);
+	}
+
+	@Override
+	public void updateBrowserTimesByCondition(List<ProductInfo> update) {
+		this.update(getNameSpace(UPDATE_BROWSER_TIMES_BY_CONDITION), update);
 	}
 }

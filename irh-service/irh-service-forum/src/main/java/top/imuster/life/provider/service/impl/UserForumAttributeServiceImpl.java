@@ -20,10 +20,7 @@ import top.imuster.life.provider.dao.UserForumAttributeDao;
 import top.imuster.life.provider.service.*;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +31,7 @@ import java.util.stream.Collectors;
 @Service("userForumAttributeService")
 public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttributeInfo, Long> implements UserForumAttributeService {
 
-    protected  final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private UserForumAttributeDao userForumAttributeDao;
@@ -61,7 +58,6 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
     public void transUpFromRedis2DB() {
         List<UpDto> allUps = redisArticleAttitudeService.getAllUpFromRedis();
         if (allUps == null || allUps.isEmpty()) return;
-
         allUps.stream().forEach(upDto -> {
             Long targetId = upDto.getTargetId();
             Long userId = upDto.getUserId();
@@ -89,6 +85,7 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
         List<UpCountDto> list = redisArticleAttitudeService.getAllUpCountFromRedis();
         if(list == null || list.isEmpty()) return;
 
+        //将list按照UpCountDto的type属性进行分类，转换成一个map，key为type的取值
         Map<Integer, List<UpCountDto>> collect = list.stream().collect(Collectors.groupingBy(UpCountDto::getType));
 
         //文章
@@ -116,13 +113,16 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
             Long targetId = upCountDto.getTargetId();
             if(upCountDto.getType() == 1){
                 ArticleInfo info = articleInfos.stream().filter(articleInfo -> articleInfo.getId().equals(targetId)).findFirst().orElse(null);
-                info.setUpTotal(info.getUpTotal() + count);
-                articleInfoService.updateByKey(info);
+                if(info != null){
+                    info.setUpTotal(info.getUpTotal() + count);
+                    articleInfoService.updateByKey(info);
+                }
             }else {
                 ArticleReviewInfo info = articleReviewInfos.stream().filter(articleReview -> articleReview.getId().equals(targetId)).findFirst().orElse(null);
-                //todo 存在空指针异常
-                info.setUpTotal(info.getUpTotal() + count);
-                articleReviewService.updateByKey(info);
+                if(info != null){
+                    info.setUpTotal(info.getUpTotal() + count);
+                    articleReviewService.updateByKey(info);
+                }
             }
         }
 
@@ -192,6 +192,8 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
         UserForumAttributeInfo condition = new UserForumAttributeInfo();
         condition.setUserId(userId);
         condition.setTargetId(targetId);
-        return userForumAttributeDao.selectEntryList(condition).get(0);
+        List<UserForumAttributeInfo> infos = userForumAttributeDao.selectEntryList(condition);
+        if(infos == null || infos.isEmpty()) return null;
+        return infos.get(0);
     }
 }

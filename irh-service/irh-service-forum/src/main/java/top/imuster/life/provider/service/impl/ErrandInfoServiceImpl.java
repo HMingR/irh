@@ -1,8 +1,9 @@
 package top.imuster.life.provider.service.impl;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
@@ -21,8 +22,9 @@ import java.util.List;
  * @since 2020-02-11 17:49:35
  */
 @Service("errandInfoService")
-@Slf4j
 public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> implements ErrandInfoService {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private ErrandInfoDao errandInfoDao;

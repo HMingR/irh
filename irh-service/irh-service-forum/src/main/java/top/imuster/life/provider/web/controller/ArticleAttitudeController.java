@@ -31,38 +31,6 @@ public class ArticleAttitudeController extends BaseController {
     @Resource
     UserForumAttributeService userForumAttributeService;
 
-    /**
-     * @Author hmr
-     * @Description 给文章点赞
-     * @Date: 2020/2/14 10:06
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    /*@ApiOperation("给文章点赞")
-    @BrowserAnnotation(browserType = BrowserType.FORUM, disableBrowserTimes = true, value = "#p0")
-    @GetMapping("/up/1/{id}")
-    public Message<String> upArticleById(@PathVariable("id") Long id){
-        redisArticleAttitudeService.saveUp2Redis(id, 1, getCurrentUserIdFromCookie());
-        redisArticleAttitudeService.incrementUpCount(id, 1);
-        return Message.createBySuccess();
-    }*/
-
-    /**
-     * @Author hmr
-     * @Description 给文章的评论点赞
-     * @Date: 2020/2/14 10:06
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    /*@ApiOperation("给文章的评论点赞")
-    @NeedLogin
-    @GetMapping("/up/2/{id}")
-    public Message<String> upReviewById(@PathVariable("id") Long id){
-        redisArticleAttitudeService.saveUp2Redis(id, 2, getCurrentUserIdFromCookie());
-        redisArticleAttitudeService.incrementUpCount(id, 2);
-        return Message.createBySuccess();
-    }*/
-
 
     /**
      * @Author hmr

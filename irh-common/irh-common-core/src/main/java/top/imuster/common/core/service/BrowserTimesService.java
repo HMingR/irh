@@ -1,12 +1,10 @@
 package top.imuster.common.core.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.stereotype.Service;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.exception.GlobalException;
@@ -21,8 +19,10 @@ import java.util.Map;
  * @author: hmr
  * @date: 2020/2/15 17:02
  */
-@Slf4j
 public abstract class BrowserTimesService {
+
+    protected static final Logger log = LoggerFactory.getLogger(BrowserTimesService.class);
+
     protected List<BrowserTimesDto> getBrowserTimesFromRedis(RedisTemplate redisTemplate, BrowserType type){
         if(type == null || redisTemplate == null){
             log.error("从redis中统计浏览记录的BrowserTimesService初始化失败, type为{},redisTemplate为{}", type, redisTemplate);

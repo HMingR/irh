@@ -1,9 +1,8 @@
 package top.imuster.goods.exception;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.exception.GlobalExceptionHandler;
@@ -15,8 +14,8 @@ import top.imuster.common.core.exception.GlobalExceptionHandler;
  * @date: 2019/12/22 10:50
  */
 @RestControllerAdvice
-@Slf4j
 public class GoodsExceptionHandler extends GlobalExceptionHandler {
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(GoodsException.class)
     public Message goodsExceptionHandler(GoodsException exception){

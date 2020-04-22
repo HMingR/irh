@@ -3,6 +3,8 @@ package top.imuster.life.provider.component;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
@@ -18,8 +20,9 @@ import javax.annotation.Resource;
  * @date: 2020/2/14 10:08
  */
 @Component
-@Slf4j
 public class HotTopicTask extends QuartzJobBean {
+
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     //显示热搜的数量
     private static Long HOT_TOPIC_NUM = 30L;

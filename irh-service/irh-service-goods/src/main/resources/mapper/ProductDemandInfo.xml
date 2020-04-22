@@ -159,4 +159,19 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<update id="updateBrowserTimesByCondition" parameterType="list">
+		UPDATE
+		<include refid="QUERY_FROM_TABLE"/>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="browser_times = case" suffix="end,">
+				<foreach collection="update" item="item" index="index"></foreach>
+				WHEN id = #{item.id,jdbcType=BIGINT} then browser_times = browser_times + #{item.browserTimes}
+			</trim>
+		</trim>
+		where id IN
+		<foreach collection="update" index="index" item="item" separator="," open="(" close=")">
+			#{item.id,jdbcType=BIGINT}
+		</foreach>
+	</update>
 </mapper>
