@@ -16,7 +16,8 @@
             state,
             main_pic AS mainPic,
             tag_names AS tagNames,
-            browser_times AS browserTimes
+            browser_times AS browserTimes,
+            other_pics AS otherPics
 		]]>
 	</sql>
 
@@ -37,6 +38,7 @@
             <if test="mainPic != null and mainPic != ''"><![CDATA[AND main_pic = #{mainPic}]]></if>
             <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
             <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
+            <if test="otherPics != null and otherPics != ''"><![CDATA[AND other_pics = #{otherPics}]]></if>
 		</where>
 	</sql>
 	
@@ -59,6 +61,7 @@
 			<if test="mainPic != null"><![CDATA[main_pic = #{mainPic},]]></if>
 			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
 			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
+			<if test="otherPics != null"><![CDATA[other_pics = #{otherPics},]]></if>
 		</set>
 	</sql>
 
@@ -66,7 +69,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null and id != ''"><![CDATA[ id, ]]></if>
 			<if test="topic != null and topic != ''"><![CDATA[ topic, ]]></if>
-			<if test="categoryId != null and categoryId != ''"><![CDATA[ categoryId, ]]></if>
+			<if test="categoryId != null and categoryId != ''"><![CDATA[ category_id, ]]></if>
 			<if test="content != null and content != ''"><![CDATA[ content, ]]></if>
 			<if test="consumerId != null and consumerId != ''"><![CDATA[ consumer_id, ]]></if>
 			<if test="createTime != null and createTime != ''"><![CDATA[create_time,]]></if>
@@ -74,6 +77,7 @@
 			<if test="state != null and state != ''"><![CDATA[state,]]></if>
 			<if test="mainPic != null and mainPic != ''"><![CDATA[ main_pic,]]></if>
 			<if test="tagNames != null and tagNames != ''"><![CDATA[ tag_names,]]></if>
+			<if test="otherPics != null and otherPics != ''"><![CDATA[ other_pics,]]></if>
 		</trim>
 	</sql>
 
@@ -89,6 +93,7 @@
 			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
 			<if test="mainPic != null and mainPic != ''"><![CDATA[  #{mainPic},]]></if>
 			<if test="tagNames != null and tagNames != ''"><![CDATA[  #{tagNames},]]></if>
+			<if test="otherPics != null and otherPics != ''"><![CDATA[  #{otherPics},]]></if>
 		</trim>
 	</sql>
 

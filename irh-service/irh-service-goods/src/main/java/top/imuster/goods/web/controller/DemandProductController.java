@@ -44,7 +44,7 @@ public class DemandProductController extends BaseController {
         return Message.createByError("发布失败");
     }
 
-    @ApiOperation("分页查看发布的需求")
+    @ApiOperation("分页查看自己发布的需求")
     @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ProductDemandInfo>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){

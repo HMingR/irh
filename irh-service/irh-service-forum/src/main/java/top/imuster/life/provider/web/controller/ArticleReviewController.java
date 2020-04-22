@@ -14,7 +14,6 @@ import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: ArticleReviewController
@@ -38,23 +37,18 @@ public class ArticleReviewController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReviewInfo>>
      **/
     @ApiOperation(value = "根据一级留言id获得其对应的所有留言或回复", httpMethod = "POST")
-    @PostMapping("/child")
-    public Message<List<ArticleReviewInfo>> reviewDetails(@RequestBody Page<ArticleReviewInfo> page){
-        if(page.getSearchCondition() == null){
-            page.setSearchCondition(new ArticleReviewInfo());
-        }
+    @GetMapping("/child/{pageSize}/{currentPage}/{firstClassId}")
+    public Message<Page<ArticleReviewInfo>> reviewDetails(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage, @PathVariable("firstClassId") Long firstClassId){
         Long userId = getCurrentUserIdFromCookie();
-        List<ArticleReviewInfo> articleReviewInfos = articleReviewService.reviewDetails(page, userId);
-        return Message.createBySuccess(articleReviewInfos);
+        return articleReviewService.reviewDetails(pageSize, currentPage, firstClassId, userId);
     }
-
 
     /**
      * @Author hmr
      * @Description 用户写留言
      * @Date: 2020/2/3 10:49
      * @param articleReviewInfo
-     * @param bindingResult
+     * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "用户写留言", httpMethod = "POST")
@@ -78,7 +72,7 @@ public class ArticleReviewController extends BaseController {
      **/
     @ApiOperation("根据文章id分页查询一级留言")
     @GetMapping("/firstClass/{pageSize}/{currentPage}/{articleId}")
-    public Message<List<ArticleReviewInfo>> getArticleReviewByPage(@PathVariable("articleId") Long articleId, @PathVariable("currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize){
+    public Message<Page<ArticleReviewInfo>> getArticleReviewByPage(@PathVariable("articleId") Long articleId, @PathVariable("currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize){
         Long userId = getCurrentUserIdFromCookie(false);
         return articleReviewService.selectFirstClassReviewListByArticleId(articleId, currentPage, pageSize, userId);
     }

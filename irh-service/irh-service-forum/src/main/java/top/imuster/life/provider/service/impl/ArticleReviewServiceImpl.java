@@ -37,13 +37,17 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
     }
 
     @Override
-    public List<ArticleReviewInfo> reviewDetails(Page<ArticleReviewInfo> page, Long userId) {
-        ArticleReviewInfo searchCondition = page.getSearchCondition();
+    public Message<Page<ArticleReviewInfo>> reviewDetails(Integer pageSize, Integer currentPage, Long firstClassId, Long userId) {
+        Page<ArticleReviewInfo> page = new Page<>();
+        page.setCurrentPage((currentPage < 1 ? 1 : currentPage));
+        page.setPageSize(pageSize);
+        ArticleReviewInfo searchCondition = new ArticleReviewInfo();
         searchCondition.setState(2);
 
         //按照降序排列
         searchCondition.setOrderField("create_time");
-        searchCondition.setOrderFieldType("ASC");
+        searchCondition.setOrderFieldType("DESC");
+        searchCondition.setFirstClassId(firstClassId);
         Page<ArticleReviewInfo> articleReviewPage = this.selectPage(searchCondition, page);
         List<ArticleReviewInfo> res = articleReviewPage.getData();
 
@@ -66,7 +70,7 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
                 }
             }
         });
-        return res;
+        return Message.createBySuccess(page);
     }
 
     @Override
@@ -76,8 +80,8 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
         articleReviewInfo.setState(2);
         articleReviewInfo.setOrderField("create_time");
         articleReviewInfo.setOrderFieldType("DESC");
-        articleReviewInfo.setFirstClassId(0L);
-        articleReviewInfo.setParentId(0L);
+        articleReviewInfo.setFirstClassId(-1L);
+        articleReviewInfo.setParentId(-1L);
         Page<ArticleReviewInfo> page = new Page<>();
         page.setCurrentPage(currentPage);
         page.setPageSize(pageSize);
@@ -102,13 +106,20 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
     }
 
     @Override
-    public Message<List<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Long articleId, Integer currentPage, Integer pageSize, Long userId) {
+    public Message<Page<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Long articleId, Integer currentPage, Integer pageSize, Long userId) {
         ArticleReviewInfo searchCondition = new ArticleReviewInfo();
         searchCondition.setStartIndex((currentPage-1) * pageSize);
         searchCondition.setEndIndex(pageSize);
         searchCondition.setArticleId(articleId);
-        List<ArticleReviewInfo> data = articleReviewDao.selectFirstClassReviewByArticleId(searchCondition);
+        searchCondition.setState(2);
 
+        //分页获得一级留言信息
+        List<ArticleReviewInfo> data = articleReviewDao.selectFirstClassReviewByArticleId(searchCondition);
+        searchCondition.setFirstClassId(-1L);
+        searchCondition.setParentId(-1L);
+
+        //一级留言总数
+        Integer firstClassCount = this.selectEntryListCount(searchCondition);
         ArticleReviewInfo review = new ArticleReviewInfo();
         review.setState(2);
         data.stream().forEach(articleReview -> {
@@ -123,6 +134,10 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
         });
         //按照点赞多少进行降序排列
         List<ArticleReviewInfo> collect = data.stream().sorted(Comparator.comparingLong(ArticleReviewInfo::getUpTotal).reversed()).collect(Collectors.toList());
-        return Message.createBySuccess(collect);
+
+        Page<ArticleReviewInfo> page = new Page<>();
+        page.setTotalCount(firstClassCount);
+        page.setData(collect);
+        return Message.createBySuccess(page);
     }
 }

@@ -7,7 +7,6 @@ import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 
@@ -50,15 +49,12 @@ public class ArticleReviewInfo extends BaseDomain {
 	private Integer childTotalCount;
 
 	//一级留言的id,也就是顶级parent_id,当parent_id为0时该值也为0,当parent_id不为0时,则该值为回复树的顶层回复id
-	@ApiModelProperty("一级留言的id,也就是顶级parent_id,当parent_id为0时该值也为0,当parent_id不为0时,则该值为回复树的顶层回复id")
+	@ApiModelProperty("一级留言的id,也就是顶级parent_id,当parent_id为-1时该值也为-1,当parent_id不为-1时,则该值为回复树的顶层回复id")
 	@NotNull(groups = ValidateGroup.addGroup.class, message = "一级留言的id不能为空")
 	private Long firstClassId;
 
 	@ApiModelProperty("点赞总数")
 	private Long upTotal;
-
-	//每个留言下的回复数
-	private List<ArticleReviewInfo> childs;
 
 	//父id的作者id
 	@ApiModelProperty("父id的作者id")
@@ -120,14 +116,6 @@ public class ArticleReviewInfo extends BaseDomain {
 
 	public void setChildTotalCount(Integer childTotalCount) {
 		this.childTotalCount = childTotalCount;
-	}
-
-	public List<ArticleReviewInfo> getChilds() {
-		return childs;
-	}
-
-	public void setChilds(List<ArticleReviewInfo> childs) {
-		this.childs = childs;
 	}
 
 	public Long getId() {

@@ -11,6 +11,7 @@ mybatis:
   mapper-locations: mapper/*
   type-aliases-package: top.imuster.user.api.pojo  #别名扫描
 
+
 feign:
   hystrix:
     enabled: true
@@ -46,7 +47,3 @@ secure:
       - /error
       - /user/feign/login/
       - /user/feign/roleAndAuth
-
-
-
-

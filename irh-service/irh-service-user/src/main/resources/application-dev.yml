@@ -37,6 +37,7 @@ eureka:
     lease-expiration-duration-in-seconds: 15    # 过期时间
 
 logging:
+  config: classpath:logback-spring.xml
   level:
     top.imuster.user: debug
 

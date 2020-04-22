@@ -40,17 +40,25 @@ public class ProductDemandInfo extends BaseDomain {
 	//封面图片
 	private String mainPic;
 
-
 	//自定义的标签名称
 	private String tagNames;
-
 
 	//浏览次数
 	private Long browserTimes;
 
+	private String otherPics;
+
 	// 状态 1-无效 2-有效
 //	private Short state;
 
+
+	public String getOtherPics() {
+		return otherPics;
+	}
+
+	public void setOtherPics(String otherPics) {
+		this.otherPics = otherPics;
+	}
 
 	public Long getBrowserTimes() {
 		return browserTimes;

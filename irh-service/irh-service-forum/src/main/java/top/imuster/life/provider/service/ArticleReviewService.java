@@ -23,7 +23,7 @@ public interface ArticleReviewService extends BaseService<ArticleReviewInfo, Lon
      * @param userId
      * @reture: java.util.List<ArticleReviewInfo>
      **/
-    List<ArticleReviewInfo> reviewDetails(Page<ArticleReviewInfo> page, Long userId);
+    Message<Page<ArticleReviewInfo>> reviewDetails(Integer pageSize, Integer currentPage, Long firstClassId, Long userId);
 
     /**
      * @Author hmr
@@ -71,5 +71,5 @@ public interface ArticleReviewService extends BaseService<ArticleReviewInfo, Lon
      * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ArticleReviewInfo>>
      **/
-    Message<List<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Long articleId, Integer currentPage, Integer pageSize, Long userId);
+    Message<Page<ArticleReviewInfo>> selectFirstClassReviewListByArticleId(Long articleId, Integer currentPage, Integer pageSize, Long userId);
 }

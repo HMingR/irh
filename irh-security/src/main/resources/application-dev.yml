@@ -1,14 +1,14 @@
 spring:
   redis:
-    database: '@irh.redis.databaseIndex@'
-    host: '@irh.redis.host@'
+    database: 0
+    host: 39.105.0.169
     port: 6379
     jedis:
       pool:
         max-active: 30
         max-idle: 10
         max-wait: -1
-    timeout: 1000
+    timeout: 10000
     password: irh_aliyun_redis
 
   datasource:
@@ -35,7 +35,7 @@ eureka:
       defaultZone: http://localhost:10086/eureka
   instance:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
-    lease-expiration-duration-in-seconds: 15    # 过期时间
+    lease-expiration-duration-in-seconds: 10    # 过期时间
 
 logging:
   level:
@@ -44,3 +44,6 @@ logging:
 management:
   security:
     enabled: false
+
+enable:
+  needLogin: false

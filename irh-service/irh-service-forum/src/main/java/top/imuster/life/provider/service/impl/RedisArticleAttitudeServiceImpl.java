@@ -1,6 +1,7 @@
 package top.imuster.life.provider.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -84,11 +85,15 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
         while (cursor.hasNext()){
             Map.Entry<Object, Object> map = cursor.next();
             log.info("--->map中的信息为key:{}, value:{}", map.getKey(), map.getValue());
-            String key = (String)map.getKey();
-            UpCountDto dto = new UpCountDto(key, (long) map.getValue());
+            String key = String.valueOf(map.getKey());
+            String value = String.valueOf(map.getValue());
+            if(key == null || value == null || StringUtils.isBlank(key) || StringUtils.isBlank(value)){
+                redisTemplate.opsForHash().delete(GlobalConstant.IRH_USER_UP_MAP, key);
+                continue;
+            }
+            UpCountDto dto = new UpCountDto(key, Long.parseLong(value));
             list.add(dto);
             //从Redis中删除这条记录
-            redisTemplate.opsForHash().delete(GlobalConstant.IRH_USER_UP_MAP, key);
         }
         return list;
     }
@@ -120,7 +125,8 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
             targetIds.add(targetId);
             Double score = redisTemplate.opsForZSet().score(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
             scores.add(score.longValue());
-            redisTemplate.opsForHash().delete(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
+            //todo WRONGTYPE Operation against a key holding the wrong kind of value
+            //redisTemplate.opsForHash().delete(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
         }
         res.add(targetIds);
         res.add(scores);

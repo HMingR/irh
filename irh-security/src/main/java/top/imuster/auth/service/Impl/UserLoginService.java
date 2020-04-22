@@ -160,7 +160,7 @@ public class UserLoginService {
         List<String> services = discoveryClient.getServices();
         URI uri = null;
         for (String service : services) {
-            if(service.equalsIgnoreCase("security-service")){
+            if(service.equalsIgnoreCase("irh-gateway")){
                 ServiceInstance serviceInstance1 = discoveryClient.getInstances(service).get(0);
                 uri = serviceInstance1.getUri();
             }
@@ -168,7 +168,7 @@ public class UserLoginService {
         if(StringUtils.isBlank(String.valueOf(uri))){
             throw new CustomSecurityException("认证服务器已经停止工作,请稍后重试或联系管理员");
         }
-        String url = new StringBuilder().append(uri).append("/oauth/token").toString();
+        String url = new StringBuilder().append(uri).append("/api/security/oauth/token").toString();
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         String httpBasic = getHttpBasic(clientId, clientSecret);
         header.add("Authorization",httpBasic);

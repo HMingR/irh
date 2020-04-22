@@ -2,6 +2,8 @@ package top.imuster.life.provider.service.impl;
 
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,10 @@ import top.imuster.life.provider.dao.UserForumAttributeDao;
 import top.imuster.life.provider.service.*;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +33,8 @@ import java.util.stream.Collectors;
  */
 @Service("userForumAttributeService")
 public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttributeInfo, Long> implements UserForumAttributeService {
+
+    protected  final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private UserForumAttributeDao userForumAttributeDao;
@@ -86,16 +93,25 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
 
         //文章
         List<UpCountDto> article = collect.get(1);
+
+        List<ArticleInfo> articleInfos = null;
         //获得所有的id
-        Long[] articleIds = (Long[])article.stream().map(UpCountDto::getTargetId).toArray();
-        List<ArticleInfo> articleInfos = articleInfoService.getUpTotalByIds(articleIds);
+        if(article != null && !article.isEmpty()){
+            Object[] objects = article.stream().map(UpCountDto::getTargetId).toArray();
+            Long[] articleIds = Arrays.stream(objects).map(p -> Long.valueOf(p.toString())).toArray(Long[]::new);
+            articleInfos = articleInfoService.getUpTotalByIds(articleIds);
+        }
 
         // 评论
         List<UpCountDto> review = collect.get(2);
-        Long[] reviewIds = (Long[]) review.stream().map(UpCountDto::getTargetId).toArray();
-        List<ArticleReviewInfo> articleReviewInfos = articleReviewService.getUpTotalByIds(reviewIds);
+        List<ArticleReviewInfo> articleReviewInfos = null;
+        if(review != null && !review.isEmpty()){
+            Object[] objects = review.stream().map(UpCountDto::getTargetId).toArray();
+            Long[] reviewIds = Arrays.stream(objects).map(p -> Long.valueOf(p.toString())).toArray(Long[]::new);
+            articleReviewInfos = articleReviewService.getUpTotalByIds(reviewIds);
+        }
 
-        list.stream().forEach(upCountDto -> {
+        for (UpCountDto upCountDto : list){
             Long count = upCountDto.getCount();
             Long targetId = upCountDto.getTargetId();
             if(upCountDto.getType() == 1){
@@ -104,10 +120,11 @@ public class UserForumAttributeServiceImpl extends BaseServiceImpl<UserForumAttr
                 articleInfoService.updateByKey(info);
             }else {
                 ArticleReviewInfo info = articleReviewInfos.stream().filter(articleReview -> articleReview.getId().equals(targetId)).findFirst().orElse(null);
+                //todo 存在空指针异常
                 info.setUpTotal(info.getUpTotal() + count);
                 articleReviewService.updateByKey(info);
             }
-        });
+        }
 
     }
 

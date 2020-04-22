@@ -36,6 +36,7 @@ eureka:
 logging:
   level:
     top.imuster: debug
+  config: classpath:logback-spring.xml
 
 
 browse:   # redis中存储的浏览记录
