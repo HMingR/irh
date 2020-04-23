@@ -27,7 +27,8 @@
             update_time AS updateTime,
             create_time AS createTime,
             portrait,
-            type
+            type,
+            signature
 		]]>
 	</sql>
 
@@ -62,6 +63,7 @@
             <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
             <if test="searchStartTime != null and searchStartTime != ''"><![CDATA[AND create_time >= #{searchStartTime}]]></if>
             <if test="searchEndTime != null and searchEndTime != ''"><![CDATA[AND create_time <= #{searchEndTime}]]></if>
+            <if test="signature != null and signature != ''"><![CDATA[AND signature <= #{signature}]]></if>
 		</where>
 	</sql>
 	
@@ -95,6 +97,7 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="portrait != null"><![CDATA[portrait = #{portrait},]]></if>
 			<if test="type != null"><![CDATA[type = #{type},]]></if>
+			<if test="signature != null"><![CDATA[signature = #{signature},]]></if>
 		</set>
 	</sql>
 
@@ -124,7 +127,8 @@
                 update_time, 
                 create_time,
                 portrait,
-                type
+                type,
+                signature
 				)
 			VALUES
 				(
@@ -149,7 +153,8 @@
                 #{updateTime}, 
                 #{createTime},
                 #{portrait},
-                #{type}
+                #{type},
+                #{signature}
 				)
 		]]>
 	</insert>
@@ -269,7 +274,7 @@
 	</select>
 
 	<select id="selectUserDtoById" parameterType="long" resultType="top.imuster.common.core.dto.UserDto">
-		<![CDATA[SELECT id AS userId, nickname AS nickname, portrait AS pic, state, type AS userType, create_time AS createTime, academy_name AS academyName]]>
+		<![CDATA[SELECT id AS userId, nickname AS nickname, portrait AS pic, state, type AS userType, create_time AS createTime, academy_name AS academyName, signature]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE id = #{userId}]]>
 	</select>

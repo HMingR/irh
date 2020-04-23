@@ -1,6 +1,5 @@
 package top.imuster.user.provider.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import java.util.HashMap;
  * @since 2019-11-26 10:46:26
  */
 @Service("userInfoService")
-@Slf4j
 public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> implements UserInfoService {
 
     @Autowired

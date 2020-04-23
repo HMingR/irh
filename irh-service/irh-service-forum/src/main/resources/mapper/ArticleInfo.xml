@@ -206,7 +206,7 @@
 	</select>
 
 	<select id="selectInfoByTargetIds" parameterType="java.lang.reflect.Array" resultType="top.imuster.life.api.pojo.ArticleInfo">
-		<![CDATA[SELECT id, title, browser_times AS browserTimes, up_total AS upTotal]]>
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, up_total AS upTotal, main_picture AS mainPicture, create_time AS createTime, tag_names AS tagNames]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state != 1 AND  id IN]]>
 		<foreach collection="array" item="id" open="(" separator="," close=")">

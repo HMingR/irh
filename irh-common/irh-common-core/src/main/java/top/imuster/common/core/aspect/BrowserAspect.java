@@ -1,7 +1,6 @@
 package top.imuster.common.core.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -32,7 +31,6 @@ import java.util.concurrent.TimeUnit;
  * @date: 2020/1/23 17:22
  */
 @Component
-@Slf4j
 @Aspect
 public class BrowserAspect extends BaseController {
 
@@ -66,7 +64,7 @@ public class BrowserAspect extends BaseController {
         boolean disableBrowserTimes = annotation.disableBrowserTimes();
         boolean disableHotTopic = annotation.disableHotTopic();
         boolean disableBrowseRecord = annotation.disableBrowseRecord();
-        //处理浏览记录
+        //处理浏览次数
         if(!disableBrowserTimes){
             redisTemplate.opsForHash().increment(browserType.getRedisKeyHeader(), String.valueOf(targetId), 1);
             redisTemplate.expire(browserType.getRedisKeyHeader(), 30L, TimeUnit.MINUTES);
@@ -74,8 +72,9 @@ public class BrowserAspect extends BaseController {
 
         //处理热搜
         if(!disableHotTopic){
+            int score = annotation.hotTopicScore();
             String zSetKey = RedisUtil.getHotTopicKey(browserType);
-            redisTemplate.opsForZSet().incrementScore(zSetKey, String.valueOf(targetId), 1);
+            redisTemplate.opsForZSet().incrementScore(zSetKey, String.valueOf(targetId), score);
             redisTemplate.expire(zSetKey, refreshTime, TimeUnit.MINUTES);
         }
 

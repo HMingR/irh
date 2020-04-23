@@ -91,10 +91,12 @@ public interface RedisArticleAttitudeService {
      * @Description 从redis中获得前topic的热搜
      * @Date: 2020/2/14 11:06
      * @param topic
+     * @param pageSize
+     * @param currentPage
      * @reture: java.util.Set<java.lang.Long>
      *
      * @return*/
-    List<HashSet<Long>> getHotTopicFromRedis(Long topic);
+    List<HashSet<Long>> getHotTopicFromRedis(Long topic, Integer pageSize, Integer currentPage);
 
     /**
      * @Author hmr

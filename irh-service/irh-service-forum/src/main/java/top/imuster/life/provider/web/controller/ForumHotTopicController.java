@@ -39,8 +39,8 @@ public class ForumHotTopicController {
     }
 
     @ApiOperation("实时总榜")
-    @GetMapping
-    public Message<List<ArticleInfo>> currentHotTopicList(){
-        return forumHotTopicService.currentHotTopicList(topic);
+    @GetMapping("/current/{pageSize}/{currentPage}")
+    public Message<List<ArticleInfo>> currentHotTopicList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return forumHotTopicService.currentHotTopicList(topic, pageSize, currentPage);
     }
 }

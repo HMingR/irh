@@ -15,7 +15,7 @@ import java.util.List;
  * @Date: 2019/12/1 10:04
  **/
 public abstract class BaseServiceImpl<T, KEY extends Serializable> implements BaseService<T, KEY> {
-	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * 获取DAO操作类
@@ -41,7 +41,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 			Class<?> clz = t.getClass();
 			id = (KEY)clz.getMethod("getId").invoke(t);
 		} catch (Exception e) {
-			LOGGER.warn("获取对象主键值失败!");
+			log.warn("获取对象主键值失败!");
 			e.printStackTrace();
 		}
 		if(id != null) {
@@ -57,7 +57,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 	            Class<?> clz = t.getClass();
 	            id = (KEY)clz.getMethod(idMethodName).invoke(t);
 	        } catch (Exception e) {
-	            LOGGER.warn("获取对象主键值失败!");
+	            log.warn("获取对象主键值失败!");
 	            e.printStackTrace();
 	        }
 	        if(id != null) {
@@ -84,7 +84,7 @@ public abstract class BaseServiceImpl<T, KEY extends Serializable> implements Ba
 			clz.getMethod("setStartIndex", Integer.class).invoke(condition, page.getStartIndex());
 			clz.getMethod("setEndIndex", Integer.class).invoke(condition, page.getEndIndex());
 		} catch (Exception e) {
-			LOGGER.error("设置分页设置失败",e);
+			log.error("设置分页设置失败",e);
 		}
 		Integer size = getDao().selectEntryListCount(condition);
 		if(size == null || size <= 0) {

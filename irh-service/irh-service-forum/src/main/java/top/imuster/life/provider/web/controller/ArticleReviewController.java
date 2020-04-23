@@ -7,8 +7,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.provider.service.ArticleReviewService;
@@ -53,6 +55,7 @@ public class ArticleReviewController extends BaseController {
      **/
     @ApiOperation(value = "用户写留言", httpMethod = "POST")
     @NeedLogin
+    @BrowserAnnotation(value = "#p0.articleId", browserType = BrowserType.FORUM, hotTopicScore = 1, disableBrowserTimes = true)
     @PostMapping("/write")
     public Message<String> writeReview(@Validated(ValidateGroup.addGroup.class) @RequestBody ArticleReviewInfo articleReviewInfo, BindingResult bindingResult){
         validData(bindingResult);

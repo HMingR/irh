@@ -35,7 +35,7 @@ public class BaseController {
     @Autowired
     RedisTemplate redisTemplate;
 
-    protected  final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected void validData(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

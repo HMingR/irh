@@ -119,9 +119,11 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
 
 
     @Override
-    public List<HashSet<Long>> getHotTopicFromRedis(Long topic) {
+    public List<HashSet<Long>> getHotTopicFromRedis(Long topic, Integer pageSize, Integer currentPage) {
+        currentPage = currentPage < 0? 1 : currentPage;
+        int start = (currentPage - 1) * pageSize;
         ArrayList<HashSet<Long>> res = new ArrayList<>();
-        Set<String> set = redisTemplate.opsForZSet().reverseRange(RedisUtil.getHotTopicKey(BrowserType.FORUM), 0, topic - 1);
+        Set<String> set = redisTemplate.opsForZSet().reverseRange(RedisUtil.getHotTopicKey(BrowserType.FORUM), start, pageSize);
         HashSet<Long> targetIds = new HashSet<>();
         HashSet<Long> scores = new HashSet<>();
         for (String s : set) {
@@ -129,8 +131,6 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
             targetIds.add(targetId);
             Double score = redisTemplate.opsForZSet().score(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
             scores.add(score.longValue());
-            //todo WRONGTYPE Operation against a key holding the wrong kind of value
-            //redisTemplate.opsForHash().delete(RedisUtil.getHotTopicKey(BrowserType.FORUM), String.valueOf(targetId));
         }
         res.add(targetIds);
         res.add(scores);

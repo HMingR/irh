@@ -39,7 +39,9 @@ public interface ForumHotTopicService extends BaseService<ForumHotTopicInfo, Lon
      * @Description 实时热度榜
      * @Date: 2020/2/14 12:24
      * @param topic
+     * @param pageSize
+     * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleInfo>>
      **/
-    Message<List<ArticleInfo>> currentHotTopicList(int topic);
+    Message<List<ArticleInfo>> currentHotTopicList(int topic, Integer pageSize, Integer currentPage);
 }

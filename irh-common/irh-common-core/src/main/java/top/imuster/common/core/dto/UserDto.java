@@ -30,7 +30,18 @@ public class UserDto extends BaseDomain {
 
     private String academyName;
 
+    //个性签名
+    private String signature;
+
     public UserDto() {
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public String getAcademyName() {

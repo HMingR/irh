@@ -69,7 +69,7 @@ public class ArticleAttitudeController extends BaseController {
 
     /**
      * @Author hmr
-     * @Description TODO
+     * @Description 查看自己在文章模块点赞的记录
      * @Date: 2020/3/24 10:12
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.UserForumAttributeInfo>>
@@ -86,7 +86,7 @@ public class ArticleAttitudeController extends BaseController {
      * @Description 根据id和type获得点赞总数
      * @Date: 2020/2/9 10:47
      * @param id
-     * @param type
+     * @param type 1-文章 2-评论
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.Long>
      **/
     @ApiOperation("根据id和type获得点赞总数")

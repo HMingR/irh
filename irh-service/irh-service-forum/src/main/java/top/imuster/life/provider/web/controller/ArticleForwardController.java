@@ -37,7 +37,7 @@ public class ArticleForwardController extends BaseController {
 
     @ApiOperation("转发")
     @NeedLogin
-    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "p0.id")
+    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "p0.id", hotTopicScore = 3)
     @PostMapping
     public Message<String> forward(@RequestBody ArticleForwardInfo articleForwardInfo){
         Long userId = getCurrentUserIdFromCookie();

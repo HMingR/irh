@@ -82,20 +82,26 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
     }
 
     @Override
-    public Message<List<ArticleInfo>> currentHotTopicList(int topic) {
-        List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis((long)topic);
+    public Message<List<ArticleInfo>> currentHotTopicList(int topic, Integer pageSize, Integer currentPage) {
+        List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis((long)topic, pageSize, currentPage);
         if(res == null || res.isEmpty()) {
             return null;
         }
+        //文章id
         Long[] longs = res.get(0).toArray(new Long[res.get(0).size()]);
+        //文章对应的热度
         final Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
         HashMap<Long, Long> scoreMap = new HashMap<>();
         if(longs.length == 0 || scores.length == 0){
             //todo 当没有热搜的时候应该放历史热搜
             return Message.createBySuccess();
         }
-        for (Long i : scores){
-            scoreMap.put(i, i);
+
+        // 判断id的长度是否和热度的长度相同
+        if(longs.length == scores.length){
+            for (int i = 0; i < longs.length; i++) {
+                scoreMap.put(longs[i], scores[i]);
+            }
         }
         List<ArticleInfo> articleInfos = articleInfoService.selectInfoByTargetIds(longs);
         articleInfos.stream().forEach(articleInfo -> {

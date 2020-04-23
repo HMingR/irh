@@ -38,6 +38,9 @@ public class UserInfo extends BaseDomain {
 	@NotEmpty(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "密码不能为空")
 	private String password;
 
+	//个性签名
+	private String signature;
+
 	// 支付宝账号, max length: 13
 	@ApiModelProperty("支付宝账号")
 	private String alipayNum;
@@ -103,29 +106,12 @@ public class UserInfo extends BaseDomain {
 
 	private List<RoleInfo> roleList;
 
-	@Override
-	public String toString() {
-		return "UserInfo{" +
-				"id=" + id +
-				", age=" + age +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				", alipayNum='" + alipayNum + '\'' +
-				", nickname='" + nickname + '\'' +
-				", qq='" + qq + '\'' +
-				", gender=" + gender +
-				", phoneNum='" + phoneNum + '\'' +
-				", buildingNum='" + buildingNum + '\'' +
-				", buildingStorey='" + buildingStorey + '\'' +
-				", dormNum='" + dormNum + '\'' +
-				", realName='" + realName + '\'' +
-				", certificateNum='" + certificateNum + '\'' +
-				", schoolName='" + schoolName + '\'' +
-				", academyName='" + academyName + '\'' +
-				", majorName='" + majorName + '\'' +
-				", roleList=" + roleList +
-				", type=" + type +
-				'}';
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 
 	public String getPortrait() {
