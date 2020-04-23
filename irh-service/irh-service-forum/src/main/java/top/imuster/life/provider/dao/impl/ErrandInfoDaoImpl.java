@@ -18,6 +18,7 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 	private final static String NAMESPACE = "top.imuster.order.provider.dao.ErrandInfoDao.";
 	private final static String SELECT_LIST = "selectList";
 	private final static String SELECT_STATE_BY_ID = "selectStateById";
+	private final static String SELECT_LIST_COUNT_BY_USER_ID = "selectListCountByUserId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -31,5 +32,10 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 	@Override
 	public Integer selectStateById(Long id) {
 		return this.select(getNameSpace(SELECT_STATE_BY_ID), id);
+	}
+
+	@Override
+	public Integer selectListCountByUserId(Long userId) {
+		return this.select(getNameSpace(SELECT_LIST_COUNT_BY_USER_ID), userId);
 	}
 }

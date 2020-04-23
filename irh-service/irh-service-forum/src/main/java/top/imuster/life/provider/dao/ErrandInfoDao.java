@@ -30,4 +30,13 @@ public interface ErrandInfoDao extends BaseDao<ErrandInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer selectStateById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id查看该用户发布的服务数量
+     * @Date: 2020/4/23 19:38
+     * @param condition
+     * @reture: java.lang.Integer
+     **/
+    Integer selectListCountByUserId(Long userId);
 }

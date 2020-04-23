@@ -42,14 +42,13 @@ public class ErrandController extends BaseController {
     @DeleteMapping("/{id}")
     public Message<String> delete(@PathVariable("id") Long id){
         return errandInfoService.deleteErrandById(id, getCurrentUserIdFromCookie());
-
     }
 
     @ApiOperation("查看自己发布的跑腿服务")
-    @PostMapping("/list")
+    @GetMapping("/list/{pageSize}/{currentPage}")
     @NeedLogin
-    public Message<Page<ErrandInfo>> list(@RequestBody Page<ErrandInfo> page){
+    public Message<Page<ErrandInfo>> list(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         Long userId = getCurrentUserIdFromCookie();
-        return errandInfoService.getListByCondition(page, userId);
+        return errandInfoService.getListByCondition(pageSize, currentPage, userId);
     }
 }

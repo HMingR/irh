@@ -135,16 +135,20 @@
 
 	<!-- 其它SQL语句 -->
 	<select id="selectList" parameterType="errandInfo" resultType="errandInfo">
-		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement]]>
+		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		<include refid="QUERY_WHERE_CLAUSE"/>
-		AND state != 1
-		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+		AND state != 1 AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
 	</select>
 
 	<select id="selectStateById" parameterType="long" resultType="integer">
 		<![CDATA[SELECT state ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
+	</select>
+
+	<select id="selectListCountByUserId" parameterType="long" resultType="integer">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE publisher_id = #{userId,jdbcType=BIGINT} AND state != 1
 	</select>
 </mapper>

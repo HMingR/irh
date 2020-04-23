@@ -1,14 +1,11 @@
 package top.imuster.user.provider.web.controller;
 
+import com.sun.management.OperatingSystemMXBean;
+
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
-
-import ch.qos.logback.core.util.SystemInfo;
-import com.sun.management.OperatingSystemMXBean;
-import oshi.hardware.CentralProcessor;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: test
- * @Description: TODO
+ * @Description: test
  * @author: hmr
  * @date: 2020/2/25 12:29
  */

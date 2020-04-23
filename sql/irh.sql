@@ -11,11 +11,28 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 30/03/2020 15:43:56
+ Date: 22/04/2020 20:49:23
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for article_category_info
+-- ----------------------------
+DROP TABLE IF EXISTS `article_category_info`;
+CREATE TABLE `article_category_info`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '帖子标签关系表',
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分类名称',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '状态 1-无效 2-有效',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of article_category_info
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for article_collection_rel
@@ -43,8 +60,8 @@ CREATE TABLE `article_forward_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户转发表主键',
   `user_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '转发人的id',
   `article_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '文章id',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '评论',
-  `state` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '1-无效  2-有效',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '评论',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效  2-有效',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
@@ -61,28 +78,33 @@ DROP TABLE IF EXISTS `article_info`;
 CREATE TABLE `article_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文章/帖子表主键',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
-  `article_category` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '文章/帖子分类id',
+  `tag_names` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章/帖子分类id集合',
   `collect_total` bigint(20) UNSIGNED NULL DEFAULT 0 COMMENT '收藏总数',
   `up_total` bigint(20) UNSIGNED NULL DEFAULT 0 COMMENT '点赞总数',
   `browser_times` bigint(20) UNSIGNED NULL DEFAULT 0 COMMENT '浏览次数',
   `user_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '发布者id',
-  `review_total` int(255) NULL DEFAULT NULL COMMENT '留言总数',
-  `main_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面图片',
+  `review_total` int(255) NULL DEFAULT 0 COMMENT '留言总数',
+  `main_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '封面图片',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容',
-  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效  2-有效',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效  2-有效   3-发布中  4-草稿箱',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   `forward_times` bigint(20) NULL DEFAULT NULL COMMENT '转发总次数',
-  `detail_page` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章详情页url',
+  `detail_page` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '文章详情页url',
+  `category_id` bigint(20) NULL DEFAULT NULL COMMENT '文章分类id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of article_info
 -- ----------------------------
-INSERT INTO `article_info` VALUES (1, '如何实现Java的并发控制', 1, 23, 231, 2427, 5, 45, 'group1/M00/00/00/rBgYGV58UnmABQvwAAAWMFASKN0306.png', '我们不得不面对一个非常尴尬的事实，那就是， 我们都知道，只要有意义，那么就必须慎重考虑。 总结的来说， 可是，即使是这样，科学和人文谁更有意义的出现仍然代表了一定的意义。 我们不得不面对一个非常尴尬的事实，那就是， 在这种困难的抉择下，本人思来想去，寝食难安。 奥普拉·温弗瑞在不经意间这样说过，你相信什么，你就成为什么样的人。这启发了我， 卢梭曾经说过，浪费时间是一桩大罪过。这启发了我， 一般来讲，我们都必须务必慎重的考虑考虑。 所谓科学和人文谁更有意义，关键是科学和人文谁更有意义需要如何写。 那么， 这样看来， 佚名在不经意间这样说过，感激每一个新的挑战，因为它会锻造你的意志和品格。带着这句话，我们还要更加慎重的审视这个问题： 我们都知道，只要有意义，那么就必须慎重考虑。 科学和人文谁更有意义因何而发生？ 既然如此， 就我个人来说，科学和人文谁更有意义对我的意义，不能不说非常重大。 就我个人来说，科学和人文谁更有意义对我的意义，不能不说非常重大。\r\n　　我们不得不面对一个非常尴尬的事实，那就是， 培根在不经意间这样说过，阅读使人充实，会谈使人敏捷，写作使人精确。这句话语虽然很短，但令我浮想联翩。 从这个角度来看， 从这个角度来看， 我们都知道，只要有意义，那么就必须慎重考虑。 歌德曾经说过，读一本好书，就如同和一个高尚的人在交谈。我希望诸位也能好好地体会这句话。 生活中，若科学和人文谁更有意义出现了，我们就不得不考虑它出现了的事实。 科学和人文谁更有意义，发生了会如何，不发生又会如何。 吉姆·罗恩曾经说过，要么你主宰生活，要么你被生活主宰。这句话语虽然很短，但令我浮想联翩。 可是，即使是这样，科学和人文谁更有意义的出现仍然代表了一定的意义。 俾斯麦曾经提到过，对于不屈不挠的人来说，没有失败这回事。这似乎解答了我的疑惑。 从这个角度来看， 富兰克林在不经意间这样说过，读书是易事，思索是难事，但两者缺一，便全无用处。我希望诸位也能好好地体会这句话。 带着这些问题，我们来审视一下科学和人文谁更有意义。 我们都知道，只要有意义，那么就必须慎重考虑。 问题的关键究竟为何？ 一般来说， 带着这些问题，我们来审视一下科学和人文谁更有意义。 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 既然如何， 而这些并不是完全重要，更加重要的问题是， 塞涅卡曾经说过，生命如同寓言，其价值不在与长短，而在与内容。这不禁令我深思。 生活中，若科学和人文谁更有意义出现了，我们就不得不考虑它出现了的事实。 在这种困难的抉择下，本人思来想去，寝食难安。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 莎士比亚说过一句富有哲理的话，那脑袋里的智慧，就像打火石里的火花一样，不去打它是不肯出来的。我希望诸位也能好好地体会这句话。 可是，即使是这样，科学和人文谁更有意义的出现仍然代表了一定的意义。 而这些并不是完全重要，更加重要的问题是， 那么， 一般来讲，我们都必须务必慎重的考虑考虑。 在这种困难的抉择下，本人思来想去，寝食难安。 既然如此， 生活中，若科学和人文谁更有意义出现了，我们就不得不考虑它出现了的事实。 而这些并不是完全重要，更加重要的问题是， 每个人都不得不面对这些问题。 在面对这种问题时， 邓拓曾经提到过，越是没有本领的就越加自命不凡。这似乎解答了我的疑惑。 奥普拉·温弗瑞说过一句富有哲理的话，你相信什么，你就成为什么样的人。这似乎解答了我的疑惑。 就我个人来说，科学和人文谁更有意义对我的意义，不能不说非常重大。 对我个人而言，科学和人文谁更有意义不仅仅是一个重大的事件，还可能会改变我的人生。 问题的关键究竟为何？ 从这个角度来看， 而这些并不是完全重要，更加重要的问题是， 俾斯麦说过一句富有哲理的话，失败是坚忍的最后考验。这句话语虽然很短，但令我浮想联翩。 我们不得不面对一个非常尴尬的事实，那就是， 问题的关键究竟为何？ 生活中，若科学和人文谁更有意义出现了，我们就不得不考虑它出现了的事实。 从这个角度来看， 科学和人文谁更有意义的发生，到底需要如何做到，不科学和人文谁更有意义的发生，又会如何产生。 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。 所谓科学和人文谁更有意义，关键是科学和人文谁更有意义需要如何写。 对我个人而言，科学和人文谁更有意义不仅仅是一个重大的事件，还可能会改变我的人生。 科学和人文谁更有意义的发生，到底需要如何做到，不科学和人文谁更有意义的发生，又会如何产生。 而这些并不是完全重要，更加重要的问题是， 我们不得不面对一个非常尴尬的事实，那就是， 一般来讲，我们都必须务必慎重的考虑考虑。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 而这些并不是完全重要，更加重要的问题是， 要想清楚，科学和人文谁更有意义，到底是一种怎么样的存在。 一般来说， 西班牙曾经说过，自知之明是最难得的知识。带着这句话，我们还要更加慎重的审视这个问题： 一般来说， 对我个人而言，科学和人文谁更有意义不仅仅是一个重大的事件，还可能会改变我的人生。 而这些并不是完全重要，更加重要的问题是， 西班牙曾经提到过，自己的鞋子，自己知道紧在哪里。带着这句话，我们还要更加慎重的审视这个问题： 那么， 科学和人文谁更有意义，到底应该如何实现。 科学和人文谁更有意义的发生，到底需要如何做到，不科学和人文谁更有意义的发生，又会如何产生。 我们不得不面对一个非常尴尬的事实，那就是， 经过上述讨论， 经过上述讨论， 要想清楚，科学和人文谁更有意义，到底是一种怎么样的存在。 对我个人而言，科学和人文谁更有意义不仅仅是一个重大的事件，还可能会改变我的人生。 伏尔泰曾经说过，坚持意志伟大的事业需要始终不渝的精神。这句话语虽然很短，但令我浮想联翩。 科学和人文谁更有意义的发生，到底需要如何做到，不科学和人文谁更有意义的发生，又会如何产生。 现在，解决科学和人文谁更有意义的问题，是非常非常重要的。 所以， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。 对我个人而言，科学和人文谁更有意义不仅仅是一个重大的事件，还可能会改变我的人生。 一般来说， 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 问题的关键究竟为何？ 一般来说， 查尔斯·史考伯说过一句富有哲理的话，一个人几乎可以在任何他怀有无限热忱的事情上成功。 这似乎解答了我的疑惑。 而这些并不是完全重要，更加重要的问题是， 了解清楚科学和人文谁更有意义到底是一种怎么样的存在，是解决一切问题的关键。\r\n　　带着这些问题，我们来审视一下科学和人文谁更有意义。 我们不得不面对一个非常尴尬的事实，那就是， 问题的关键究竟为何？ 那么， 经过上述讨论， 要想清楚，科学和人文谁更有意义，到底是一种怎么样的存在。 生活中，若科学和人文谁更有意义出现了，我们就不得不考虑它出现了的事实。 亚伯拉罕·林肯说过一句富有哲理的话，你活了多少岁不算什么，重要的是你是如何度过这些岁月的。我希望诸位也能好好地体会这句话。 邓拓在不经意间这样说过，越是没有本领的就越加自命不凡。这句话语虽然很短，但令我浮想联翩。 科学和人文谁更有意义，发生了会如何，不发生又会如何。 歌德说过一句富有哲理的话，决定一个人的一生，以及整个命运的，只是一瞬之间。这句话语虽然很短，但令我浮想联翩。 一般来讲，我们都必须务必慎重的考虑考虑。 科学和人文谁更有意义，发生了会如何，不发生又会如何。 一般来说， 科学和人文谁更有意义因何而发生？ 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 科学和人文谁更有意义因何而发生？ 既然如此， 所谓科学和人文谁更有意义，关键是科学和人文谁更有意义需要如何写。', 2, '2020-02-15 16:07:35', '2020-03-26 15:38:45', 567, NULL);
-INSERT INTO `article_info` VALUES (2, '对于spring boot的一些理解', 1, 34, 233, 234, 5, 343, 'group1/M00/00/00/rBgYGV58UpyAKF2NAADOBzjSeLM908.jpg', '科学和人文谁更有意义，到底应该如何实现。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 富兰克林曾经说过，你热爱生命吗？那么别浪费时间，因为时间是组成生命的材料。这启发了我， 要想清楚，科学和人文谁更有意义，到底是一种怎么样的存在。 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。 现在，解决科学和人文谁更有意义的问题，是非常非常重要的。 所以， 每个人都不得不面对这些问题。 在面对这种问题时， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 要想清楚，科学和人文谁更有意义，到底是一种怎么样的存在。 要想清楚，科学和人文谁更有意义，到底是一种怎么样的存在。 总结的来说， 科学和人文谁更有意义的发生，到底需要如何做到，不科学和人文谁更有意义的发生，又会如何产生。 我们都知道，只要有意义，那么就必须慎重考虑。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 可是，即使是这样，科学和人文谁更有意义的出现仍然代表了一定的意义。 就我个人来说，科学和人文谁更有意义对我的意义，不能不说非常重大。 从这个角度来看， 科学和人文谁更有意义的发生，到底需要如何做到，不科学和人文谁更有意义的发生，又会如何产生。 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 在这种困难的抉择下，本人思来想去，寝食难安。 奥普拉·温弗瑞曾经说过，你相信什么，你就成为什么样的人。我希望诸位也能好好地体会这句话。 达·芬奇说过一句富有哲理的话，大胆和坚定的决心能够抵得上武器的精良。带着这句话，我们还要更加慎重的审视这个问题： 带着这些问题，我们来审视一下科学和人文谁更有意义。 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。', 2, '2020-03-26 10:03:58', '2020-03-26 15:38:42', 2342, NULL);
-INSERT INTO `article_info` VALUES (3, '看看怎么样', 1, 33, 232, 357, 5, 442, NULL, '啊手动阀手动阀手动阀手动阀手动阀手动阀啊', 2, '2020-03-26 15:14:46', '2020-03-26 15:38:43', 23423, NULL);
+INSERT INTO `article_info` VALUES (23, '测试', '1,2', 32, 34, 1122, 5, 0, 'group1/M00/00/01/rBgYGV6RdkOACa0DAABW5M6zRWk259.jpg', '', 2, '2020-04-11 16:41:00', '2020-04-14 15:15:06', 12, 'group1/M00/00/01/rBgYGV6Rdl-AUwSJAAAFMqfA8Jo04.html', NULL);
+INSERT INTO `article_info` VALUES (24, '测试3', NULL, 0, 0, 2, 8, 12, NULL, '<p>斯大法官</p><p class=\"ql-align-center\"><img src=\"http://39.105.0.169:8080/group1/M00/00/01/rBgYGV6RgoqASQGSAACHVu5mYbk744.jpg\"></p><p class=\"ql-align-center\">啊手动阀手动阀</p>', 2, '2020-04-11 16:41:00', '2020-04-12 15:42:29', 22, NULL, NULL);
+INSERT INTO `article_info` VALUES (25, '测试3', NULL, 0, 0, 1, 5, 23, '', '<p>啊手动阀</p><p class=\"ql-align-center\">山东分公司</p>', 1, '2020-04-11 16:48:28', '2020-04-12 15:42:30', 1, '', NULL);
+INSERT INTO `article_info` VALUES (26, '测试4', NULL, 0, 0, 2, 8, 0, '', NULL, 1, '2020-04-11 17:03:24', '2020-04-12 15:42:31', 23, 'group1/M00/00/01/rBgYGV6Rh9yAHFHtAAAGzuEUmz432.html', NULL);
+INSERT INTO `article_info` VALUES (27, '测试1000', NULL, 0, 0, 10, 5, 0, '', NULL, 1, '2020-04-11 17:06:44', '2020-04-12 15:42:32', 43, 'group1/M00/00/01/rBgYGV6RiKOAHZS6AAAG6UeUZ4M07.html', NULL);
+INSERT INTO `article_info` VALUES (28, '101', NULL, 0, 0, 1, 9, 0, '', NULL, 2, '2020-04-11 17:38:11', '2020-04-12 15:42:34', 2, 'group1/M00/00/01/rBgYGV6RkAKAVlwPAAAJEsUuf8I85.html', NULL);
+INSERT INTO `article_info` VALUES (29, '啊手动阀手动阀', NULL, 0, 0, 277, 5, 0, '', NULL, 2, '2020-04-11 17:43:50', '2020-04-22 12:06:17', 12, 'group1/M00/00/01/rBgYGV6RkVaAESV4AAAIYImhsWs70.html', NULL);
 
 -- ----------------------------
 -- Table structure for article_review_info
@@ -92,24 +114,87 @@ CREATE TABLE `article_review_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文章评论表主键',
   `article_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '文章编号id',
   `user_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `first_class_id` bigint(20) NULL DEFAULT 0 COMMENT '一级留言的id,也就是顶级parent_id,当parent_id为0时该值也为0',
-  `parent_id` bigint(20) UNSIGNED NULL DEFAULT 0 COMMENT '回复消息的id，0表示是新的留言的时候 ',
+  `first_class_id` bigint(20) NULL DEFAULT -1 COMMENT '一级留言的id,也就是顶级parent_id,当parent_id为0时该值也为0',
+  `parent_id` bigint(20) NULL DEFAULT -1 COMMENT '回复消息的id，0表示是新的留言的时候 ',
   `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '内容',
   `up_total` bigint(20) UNSIGNED NULL DEFAULT 0 COMMENT '点赞总数',
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效 2-有效',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 116 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of article_review_info
 -- ----------------------------
-INSERT INTO `article_review_info` VALUES (1, 1, 5, 0, 0, '一级留言', 0, 2, '2020-03-04 10:43:02', '2020-03-04 10:43:30');
-INSERT INTO `article_review_info` VALUES (2, 1, 5, 1, 1, '二级留言1', 0, 2, '2020-03-04 10:43:23', '2020-03-04 10:43:34');
-INSERT INTO `article_review_info` VALUES (3, 1, 3, 1, 1, '二级留言2', 0, 2, '2020-03-04 10:44:05', '2020-03-04 10:45:08');
-INSERT INTO `article_review_info` VALUES (4, 1, 2, 1, 2, '回复二级留言2的留言信息', 0, 2, '2020-03-04 10:44:30', '2020-03-04 10:45:09');
-INSERT INTO `article_review_info` VALUES (5, 1, 1, 1, 4, 'test12', 0, 2, '2020-03-04 10:44:58', '2020-03-04 10:45:11');
+INSERT INTO `article_review_info` VALUES (48, 29, 5, -1, -1, '123123132132', 12, 2, '2020-04-21 21:37:56', '2020-04-22 12:26:16');
+INSERT INTO `article_review_info` VALUES (49, 29, 5, 48, -1, '1111111111', 0, 2, '2020-04-21 21:38:10', NULL);
+INSERT INTO `article_review_info` VALUES (50, 29, 5, 48, -1, '111111122132324323434534545555555555555555555566666666666666666666666666666666666666', 0, 2, '2020-04-21 21:51:51', NULL);
+INSERT INTO `article_review_info` VALUES (51, 29, 5, 48, -1, '1212121211231123321', 0, 2, '2020-04-21 21:54:23', NULL);
+INSERT INTO `article_review_info` VALUES (52, 29, 5, 48, 50, '@master    护士的农夫i哦啊季后赛得分咖啡色的理解', 0, 2, '2020-04-21 22:04:58', NULL);
+INSERT INTO `article_review_info` VALUES (53, 29, 5, -1, -1, '12312312313', 12, 2, '2020-04-21 22:18:16', '2020-04-22 12:26:18');
+INSERT INTO `article_review_info` VALUES (54, 29, 5, -1, -1, '12312312313', 12, 2, '2020-04-21 22:18:30', '2020-04-22 12:26:18');
+INSERT INTO `article_review_info` VALUES (55, 29, 5, -1, -1, '121212321123123123321', 4, 2, '2020-04-22 09:52:59', '2020-04-22 12:26:18');
+INSERT INTO `article_review_info` VALUES (56, 29, 5, -1, -1, 'wqqwqwqwqwqweqweqewq', 4, 2, '2020-04-22 09:54:28', '2020-04-22 12:26:18');
+INSERT INTO `article_review_info` VALUES (57, 29, 5, -1, -1, '11111111', 0, 2, '2020-04-22 09:54:47', NULL);
+INSERT INTO `article_review_info` VALUES (58, 29, 5, -1, -1, 'azasdasdfasfdasdf', 0, 2, '2020-04-22 09:55:21', NULL);
+INSERT INTO `article_review_info` VALUES (59, 29, 5, -1, -1, '122132132323443543433434r435345345fdffgfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 0, 2, '2020-04-22 10:01:42', NULL);
+INSERT INTO `article_review_info` VALUES (60, 29, 5, -1, -1, 'dddddddddddddddddxccccccccccccccccc', 0, 2, '2020-04-22 10:01:49', NULL);
+INSERT INTO `article_review_info` VALUES (61, 29, 5, -1, -1, 'ccccccccccccccccccccccccccccccccccc', 0, 2, '2020-04-22 10:01:54', NULL);
+INSERT INTO `article_review_info` VALUES (62, 29, 5, -1, -1, 'ccc       vvvvvvvvvvvvvvvcxx                                            ', 0, 2, '2020-04-22 10:02:00', NULL);
+INSERT INTO `article_review_info` VALUES (63, 29, 5, -1, -1, 'ccc       vvvvvvvvvvvvvvvcxx                                            ', 0, 2, '2020-04-22 10:02:00', NULL);
+INSERT INTO `article_review_info` VALUES (64, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:26', NULL);
+INSERT INTO `article_review_info` VALUES (65, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:31', NULL);
+INSERT INTO `article_review_info` VALUES (66, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:32', NULL);
+INSERT INTO `article_review_info` VALUES (67, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:32', NULL);
+INSERT INTO `article_review_info` VALUES (68, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:32', NULL);
+INSERT INTO `article_review_info` VALUES (69, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:32', NULL);
+INSERT INTO `article_review_info` VALUES (70, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:33', NULL);
+INSERT INTO `article_review_info` VALUES (71, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:33', NULL);
+INSERT INTO `article_review_info` VALUES (72, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:33', NULL);
+INSERT INTO `article_review_info` VALUES (73, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:33', NULL);
+INSERT INTO `article_review_info` VALUES (74, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:33', NULL);
+INSERT INTO `article_review_info` VALUES (75, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:34', NULL);
+INSERT INTO `article_review_info` VALUES (76, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:34', NULL);
+INSERT INTO `article_review_info` VALUES (77, 29, 5, 48, -1, '测试', 0, 2, '2020-04-22 10:05:34', NULL);
+INSERT INTO `article_review_info` VALUES (78, 29, 5, -1, -1, '噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢哦哦哦', 0, 2, '2020-04-22 10:06:19', NULL);
+INSERT INTO `article_review_info` VALUES (79, 29, 5, -1, -1, '噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢哦哦哦', 0, 2, '2020-04-22 10:06:23', NULL);
+INSERT INTO `article_review_info` VALUES (80, 29, 5, 48, -1, '11111踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩从踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩踩从', 0, 2, '2020-04-22 10:30:42', NULL);
+INSERT INTO `article_review_info` VALUES (81, 29, 5, 48, -1, '12121212121231213213213', 0, 2, '2020-04-22 10:31:53', NULL);
+INSERT INTO `article_review_info` VALUES (82, 29, 5, 48, 81, '11111111111', 0, 2, '2020-04-22 10:32:28', NULL);
+INSERT INTO `article_review_info` VALUES (83, 29, 5, 48, 81, '是灯光灌灌灌灌灌灌灌灌灌灌灌灌灌灌灌灌使得否                    士大夫水水水水水水水水水水水水水水水水', 0, 2, '2020-04-22 10:32:43', NULL);
+INSERT INTO `article_review_info` VALUES (84, 29, 5, 48, -1, '123333333333333333333333333333333333333333333333333333333333333333333333333', 0, 2, '2020-04-22 10:40:36', NULL);
+INSERT INTO `article_review_info` VALUES (85, 29, 5, 48, -1, '呱呱呱呱呱呱呱呱呱呱呱呱呱呱呱古古怪怪苟富贵灌灌灌灌灌灌灌灌灌灌灌灌灌灌灌灌', 0, 2, '2020-04-22 10:40:56', NULL);
+INSERT INTO `article_review_info` VALUES (86, 29, 5, 48, -1, '有有有有有有有有有有有有有有有有有有有呱呱呱呱呱呱呱呱呱呱呱呱呱呱呱古古怪怪', 0, 2, '2020-04-22 10:41:25', NULL);
+INSERT INTO `article_review_info` VALUES (87, 29, 5, 48, -1, '21111111111111111111111111111111111111111111111113333333333333333333333333333333333333333333333333333', 0, 2, '2020-04-22 10:43:42', NULL);
+INSERT INTO `article_review_info` VALUES (88, 29, 5, 48, -1, '122113333333333333333333333333333333333333333333333333333333333', 0, 2, '2020-04-22 10:45:38', NULL);
+INSERT INTO `article_review_info` VALUES (89, 29, 5, 48, -1, '122222222222222222222222222222', 0, 2, '2020-04-22 10:46:01', NULL);
+INSERT INTO `article_review_info` VALUES (90, 29, 5, 48, -1, '1222222222222222222222', 0, 2, '2020-04-22 10:46:37', NULL);
+INSERT INTO `article_review_info` VALUES (91, 29, 5, -1, -1, '11111', 0, 2, '2020-04-22 11:00:28', NULL);
+INSERT INTO `article_review_info` VALUES (92, 29, 5, -1, -1, '111111', 0, 2, '2020-04-22 11:04:38', NULL);
+INSERT INTO `article_review_info` VALUES (93, 29, 5, -1, -1, '112112211221', 0, 2, '2020-04-22 11:18:57', NULL);
+INSERT INTO `article_review_info` VALUES (94, 29, 5, -1, -1, '112112211221', 0, 2, '2020-04-22 11:19:04', NULL);
+INSERT INTO `article_review_info` VALUES (95, 29, 5, -1, -1, '12122123の ', 0, 2, '2020-04-22 11:19:15', NULL);
+INSERT INTO `article_review_info` VALUES (96, 29, 5, -1, -1, '', 0, 2, '2020-04-22 11:20:42', NULL);
+INSERT INTO `article_review_info` VALUES (97, 29, 5, -1, -1, '1231312', 0, 2, '2020-04-22 11:20:46', NULL);
+INSERT INTO `article_review_info` VALUES (98, 29, 5, -1, -1, '1111', 0, 2, '2020-04-22 11:24:43', NULL);
+INSERT INTO `article_review_info` VALUES (99, 29, 5, -1, -1, '12121212121', 0, 2, '2020-04-22 11:24:53', NULL);
+INSERT INTO `article_review_info` VALUES (100, 29, 5, -1, -1, '1111111111', 0, 2, '2020-04-22 11:35:58', NULL);
+INSERT INTO `article_review_info` VALUES (101, 29, 5, -1, -1, '1111221212121121221', 0, 2, '2020-04-22 11:36:31', NULL);
+INSERT INTO `article_review_info` VALUES (102, 29, 5, -1, -1, '123123123123123123123333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333', 0, 2, '2020-04-22 11:38:03', NULL);
+INSERT INTO `article_review_info` VALUES (103, 29, 5, -1, -1, '12333333333333333333333333333333333333333333333333', 0, 2, '2020-04-22 11:38:28', NULL);
+INSERT INTO `article_review_info` VALUES (104, 29, 5, -1, -1, '1234444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444', 0, 2, '2020-04-22 11:38:34', NULL);
+INSERT INTO `article_review_info` VALUES (105, 29, 5, -1, -1, '12222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222', 0, 2, '2020-04-22 11:40:14', NULL);
+INSERT INTO `article_review_info` VALUES (106, 29, 5, -1, -1, '1243士大夫方法方法烦烦烦烦烦烦烦烦烦烦烦烦水电站反反复复烦烦烦烦烦烦烦烦烦烦烦烦使得否反对水水水水水水水水水水水水水水水水', 0, 2, '2020-04-22 11:42:25', NULL);
+INSERT INTO `article_review_info` VALUES (107, 29, 5, -1, -1, '122222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222', 0, 2, '2020-04-22 11:44:47', NULL);
+INSERT INTO `article_review_info` VALUES (108, 29, 5, 48, 90, '122222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222撒大苏打实打实大苏打实打实大苏打实打实士大夫方法方法烦烦烦烦烦烦烦烦烦烦烦烦', 0, 2, '2020-04-22 11:45:06', NULL);
+INSERT INTO `article_review_info` VALUES (109, 29, 5, -1, -1, '11212333333333333333333333333333333333阿三顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶啊手动阀打发打发打发打发打发打发打发的啊手动阀打发打发打发打发打发打发打发的', 0, 2, '2020-04-22 11:53:43', NULL);
+INSERT INTO `article_review_info` VALUES (110, 29, 5, -1, -1, '12222222222222222222222222222223333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333', 0, 2, '2020-04-22 11:54:55', NULL);
+INSERT INTO `article_review_info` VALUES (111, 29, 5, -1, -1, '1111', 0, 2, '2020-04-22 11:58:26', NULL);
+INSERT INTO `article_review_info` VALUES (112, 29, 5, -1, -1, '11111', 0, 2, '2020-04-22 11:59:17', NULL);
+INSERT INTO `article_review_info` VALUES (113, 29, 5, -1, -1, '1122121', 0, 2, '2020-04-22 12:00:39', NULL);
+INSERT INTO `article_review_info` VALUES (114, 29, 5, -1, -1, '123111111111133333333333', 0, 2, '2020-04-22 12:01:14', NULL);
+INSERT INTO `article_review_info` VALUES (115, 29, 5, -1, -1, '12222222', 0, 2, '2020-04-22 12:02:08', NULL);
 
 -- ----------------------------
 -- Table structure for article_tag_info
@@ -128,27 +213,9 @@ CREATE TABLE `article_tag_info`  (
 -- ----------------------------
 -- Records of article_tag_info
 -- ----------------------------
-INSERT INTO `article_tag_info` VALUES (1, '热点', 1, 2, '2020-02-24 16:48:43', NULL);
-INSERT INTO `article_tag_info` VALUES (2, 'java', 1, 2, '2020-02-28 10:19:52', '2020-02-28 10:20:04');
-INSERT INTO `article_tag_info` VALUES (3, 'js', 1, 2, '2020-02-28 10:20:02', NULL);
-
--- ----------------------------
--- Table structure for article_tag_rel
--- ----------------------------
-DROP TABLE IF EXISTS `article_tag_rel`;
-CREATE TABLE `article_tag_rel`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '帖子标签关系表',
-  `tag_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '标签id',
-  `article_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '文章id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of article_tag_rel
--- ----------------------------
-INSERT INTO `article_tag_rel` VALUES (1, 1, 1);
-INSERT INTO `article_tag_rel` VALUES (2, 2, 1);
-INSERT INTO `article_tag_rel` VALUES (3, 3, 1);
+INSERT INTO `article_tag_info` VALUES (1, 'Java', 17, 2, '2020-04-11 10:11:29', NULL);
+INSERT INTO `article_tag_info` VALUES (2, 'Java Script', 17, 2, '2020-04-11 10:11:44', NULL);
+INSERT INTO `article_tag_info` VALUES (3, 'MySql', 17, 2, '2020-04-11 10:11:54', NULL);
 
 -- ----------------------------
 -- Table structure for auth_info
@@ -164,22 +231,11 @@ CREATE TABLE `auth_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '状态 1:删除 2:无效 2:有效',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of auth_info
 -- ----------------------------
-INSERT INTO `auth_info` VALUES (1, 0, '权限', '/auth/**', '*', '2019-12-02 18:34:59', '2020-01-30 17:03:19', 2);
-INSERT INTO `auth_info` VALUES (2, 1, '权限:查看test', '/auth/list/**', 'post', '2019-12-18 15:28:55', '2020-01-30 17:03:26', 2);
-INSERT INTO `auth_info` VALUES (3, 1, '权限:修改', '/auth/edit', NULL, '2019-12-18 19:04:01', '2020-01-30 14:15:54', 2);
-INSERT INTO `auth_info` VALUES (4, 0, '用户', '/admin/**', NULL, '2020-01-30 14:15:45', '2020-01-30 14:16:21', 2);
-INSERT INTO `auth_info` VALUES (5, 4, '用户:查看所有', '/admin/list/**', NULL, '2020-01-30 14:16:16', '2020-01-30 14:16:42', 2);
-INSERT INTO `auth_info` VALUES (6, 4, '用户:查询管理员', '/admin/list/1', NULL, '2020-01-30 14:16:56', '2020-01-30 14:17:19', 2);
-INSERT INTO `auth_info` VALUES (7, 4, '用户:查看会员', '/admin/list/2', NULL, '2020-01-30 14:17:43', NULL, 2);
-INSERT INTO `auth_info` VALUES (8, 4, '用户:添加', '/admin', NULL, '2020-01-30 14:18:24', NULL, 2);
-INSERT INTO `auth_info` VALUES (9, 4, '用户:查询单个', '/admin/*', NULL, '2020-01-30 14:19:10', '2020-02-23 11:53:34', 2);
-INSERT INTO `auth_info` VALUES (10, 4, '用户:修改用户角色', '/admin/adminRole', NULL, '2020-01-30 14:20:05', NULL, 2);
-INSERT INTO `auth_info` VALUES (11, 4, '用户:删除角色', '/admin/*/*', NULL, '2020-01-30 14:22:40', NULL, 2);
 
 -- ----------------------------
 -- Table structure for auth_role_rel
@@ -193,14 +249,11 @@ CREATE TABLE `auth_role_rel`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
   `create_management_id` bigint(50) UNSIGNED NULL DEFAULT NULL COMMENT '创建人编号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of auth_role_rel
 -- ----------------------------
-INSERT INTO `auth_role_rel` VALUES (1, 1, 1, '2019-12-18 15:21:22', '2020-02-04 14:18:13', 5);
-INSERT INTO `auth_role_rel` VALUES (2, 1, 2, '2019-12-24 18:15:56', '2020-02-04 14:18:09', 5);
-INSERT INTO `auth_role_rel` VALUES (3, 2, 2, '2019-12-24 18:16:29', '2020-02-04 14:18:08', 5);
 
 -- ----------------------------
 -- Table structure for consumer_interest_tag_rel
@@ -214,17 +267,13 @@ CREATE TABLE `consumer_interest_tag_rel`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
   `score` tinyint(1) UNSIGNED NULL DEFAULT 5 COMMENT '评分',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of consumer_interest_tag_rel
 -- ----------------------------
-INSERT INTO `consumer_interest_tag_rel` VALUES (1, 5, 1, '2020-02-28 11:03:13', NULL, 5);
-INSERT INTO `consumer_interest_tag_rel` VALUES (2, 1, 1, '2020-02-28 11:03:35', NULL, 5);
-INSERT INTO `consumer_interest_tag_rel` VALUES (3, 2, 1, '2020-02-28 11:03:46', NULL, 5);
-INSERT INTO `consumer_interest_tag_rel` VALUES (4, 3, 1, '2020-02-28 11:03:52', NULL, 5);
-INSERT INTO `consumer_interest_tag_rel` VALUES (5, 2, 2, '2020-02-28 11:03:58', NULL, 5);
-INSERT INTO `consumer_interest_tag_rel` VALUES (6, 4, 2, '2020-02-28 11:04:10', NULL, 5);
+INSERT INTO `consumer_interest_tag_rel` VALUES (14, 5, 17, '2020-04-11 09:33:59', NULL, 5);
+INSERT INTO `consumer_interest_tag_rel` VALUES (15, 5, 18, '2020-04-11 09:34:07', NULL, 5);
 
 -- ----------------------------
 -- Table structure for errand_info
@@ -240,12 +289,11 @@ CREATE TABLE `errand_info`  (
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   `state` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '1-删除 2-有效 3-已被接单',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of errand_info
 -- ----------------------------
-INSERT INTO `errand_info` VALUES (1, 5, '帮我测试一下', '测试看看要求', 100, '2020-02-11 20:24:25', '2020-02-15 12:16:48', 3);
 
 -- ----------------------------
 -- Table structure for errand_order_info
@@ -263,23 +311,11 @@ CREATE TABLE `errand_order_info`  (
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   `state` tinyint(1) UNSIGNED NULL DEFAULT 3 COMMENT '1-取消订单  2-删除 3-未完成 4-已完成 5-下单失败',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of errand_order_info
 -- ----------------------------
-INSERT INTO `errand_order_info` VALUES (1, '1228517271270326272', 1, 5, NULL, NULL, NULL, NULL, NULL, 5);
-INSERT INTO `errand_order_info` VALUES (2, '1228519277410123776', 1, 5, NULL, NULL, NULL, NULL, NULL, 5);
-INSERT INTO `errand_order_info` VALUES (3, '1228519513171951616', 1, 5, NULL, NULL, NULL, NULL, NULL, 5);
-INSERT INTO `errand_order_info` VALUES (4, '1228519952865034240', 1, 5, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `errand_order_info` VALUES (5, '1228529327893643264', 1, 5, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `errand_order_info` VALUES (6, '1228529887573180416', 1, 5, NULL, NULL, NULL, NULL, NULL, 5);
-INSERT INTO `errand_order_info` VALUES (7, '1228530539405770752', 1, 5, NULL, NULL, NULL, NULL, NULL, 3);
-INSERT INTO `errand_order_info` VALUES (8, '1228531165258842112', 1, 5, NULL, NULL, NULL, NULL, NULL, 3);
-INSERT INTO `errand_order_info` VALUES (9, '1228532441048678400', 1, 5, NULL, NULL, NULL, NULL, NULL, 3);
-INSERT INTO `errand_order_info` VALUES (10, '1228532893467279360', 1, 5, NULL, NULL, NULL, NULL, NULL, 3);
-INSERT INTO `errand_order_info` VALUES (11, '1228533131267538944', 1, 5, NULL, NULL, NULL, NULL, NULL, 3);
-INSERT INTO `errand_order_info` VALUES (12, '1228533591533682688', 1, 5, NULL, NULL, NULL, NULL, NULL, 3);
 
 -- ----------------------------
 -- Table structure for forum_hot_topic_info
@@ -293,14 +329,17 @@ CREATE TABLE `forum_hot_topic_info`  (
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '2-有效  1-无效',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of forum_hot_topic_info
 -- ----------------------------
-INSERT INTO `forum_hot_topic_info` VALUES (1, 1, 112, NULL, '2020-03-26 11:32:46', 2);
-INSERT INTO `forum_hot_topic_info` VALUES (2, 2, 16, NULL, '2020-03-26 14:21:10', 2);
-INSERT INTO `forum_hot_topic_info` VALUES (3, 3, 3453, '2020-03-26 15:44:21', NULL, 2);
+INSERT INTO `forum_hot_topic_info` VALUES (10, 23, 1131, NULL, '2020-04-14 15:24:23', NULL);
+INSERT INTO `forum_hot_topic_info` VALUES (11, 24, 14, NULL, '2020-04-11 17:57:20', NULL);
+INSERT INTO `forum_hot_topic_info` VALUES (12, 25, 19, NULL, '2020-04-11 17:57:20', NULL);
+INSERT INTO `forum_hot_topic_info` VALUES (13, 26, 41, NULL, '2020-04-11 17:57:20', NULL);
+INSERT INTO `forum_hot_topic_info` VALUES (14, 27, 20, NULL, '2020-04-11 17:57:20', NULL);
+INSERT INTO `forum_hot_topic_info` VALUES (15, 29, 396, NULL, '2020-04-22 12:26:17', NULL);
 
 -- ----------------------------
 -- Table structure for interest_tag_info
@@ -314,27 +353,14 @@ CREATE TABLE `interest_tag_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '状态:1-无效 2-有效',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of interest_tag_info
 -- ----------------------------
-INSERT INTO `interest_tag_info` VALUES (1, '计算机', 5, '2020-02-24 13:15:27', '2020-02-28 11:04:56', 2);
-INSERT INTO `interest_tag_info` VALUES (2, '生物', 5, '2020-02-24 13:15:37', NULL, 2);
-INSERT INTO `interest_tag_info` VALUES (3, '超自然', 5, '2020-02-24 13:15:48', NULL, 2);
-INSERT INTO `interest_tag_info` VALUES (4, '生活', 5, '2020-02-24 13:15:58', NULL, 2);
-INSERT INTO `interest_tag_info` VALUES (5, '足球', 5, '2020-02-24 13:16:06', '2020-02-24 13:17:39', 2);
-INSERT INTO `interest_tag_info` VALUES (6, '八卦', 5, '2020-02-24 13:16:19', '2020-02-24 13:17:36', 2);
-INSERT INTO `interest_tag_info` VALUES (7, '娱乐圈', 5, '2020-02-24 13:16:25', '2020-02-24 13:17:37', 2);
-INSERT INTO `interest_tag_info` VALUES (8, '奢侈品', 5, '2020-02-24 13:16:40', '2020-02-24 13:17:34', 2);
-INSERT INTO `interest_tag_info` VALUES (9, '漫画test', 5, '2020-02-24 13:16:46', '2020-02-28 12:27:28', 1);
-INSERT INTO `interest_tag_info` VALUES (10, '手机', 5, '2020-02-24 13:16:50', '2020-02-24 14:26:50', 1);
-INSERT INTO `interest_tag_info` VALUES (11, '影视', 5, '2020-02-24 13:16:56', '2020-02-24 13:17:33', 2);
-INSERT INTO `interest_tag_info` VALUES (12, '国际', 5, '2020-02-24 13:16:59', '2020-02-24 13:17:32', 2);
-INSERT INTO `interest_tag_info` VALUES (13, '情感', 5, '2020-02-24 13:17:04', '2020-02-24 13:17:32', 2);
-INSERT INTO `interest_tag_info` VALUES (14, '搞笑', 5, '2020-02-24 13:17:14', '2020-02-24 13:17:31', 2);
-INSERT INTO `interest_tag_info` VALUES (15, '5G', 5, '2020-02-24 13:17:18', '2020-02-24 13:17:31', 2);
-INSERT INTO `interest_tag_info` VALUES (16, '时尚', 5, '2020-02-24 13:17:30', NULL, 2);
+INSERT INTO `interest_tag_info` VALUES (17, 'IT', 5, '2020-04-11 09:32:15', NULL, 2);
+INSERT INTO `interest_tag_info` VALUES (18, '娱乐', 5, '2020-04-11 09:32:28', NULL, 2);
+INSERT INTO `interest_tag_info` VALUES (19, '游戏', 5, '2020-04-11 09:32:37', NULL, 2);
 
 -- ----------------------------
 -- Table structure for irh_template
@@ -357,29 +383,6 @@ CREATE TABLE `irh_template`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for management_info
--- ----------------------------
-DROP TABLE IF EXISTS `management_info`;
-CREATE TABLE `management_info`  (
-  `id` bigint(20) NOT NULL COMMENT '管理人员表主键',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '姓名',
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录密码',
-  `type` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '10:服务人员  20:校园组织 25:公益组织 30:校园社团 40:管理员',
-  `desc` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
-  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `state` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '10:注销 20:锁定 30:审核中 40:审核通过',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of management_info
--- ----------------------------
-INSERT INTO `management_info` VALUES (1, 'hmr', '$2a$10$QDGDZDkNan7AKACYqjMoxOrJoHKs4HfzxfFQStzyQtfuyRMMZUsu2', 40, '超级管理员', '2019-12-02 18:30:15', '2019-12-02 18:31:00', 2);
-INSERT INTO `management_info` VALUES (2, 'ls', '$2a$10$QDGDZDkNan7AKACYqjMoxOrJoHKs4HfzxfFQStzyQtfuyRMMZUsu2', 30, '管理员', '2020-01-21 19:13:40', '2020-01-21 19:13:57', 2);
-INSERT INTO `management_info` VALUES (3, 'zs', '$2a$10$QDGDZDkNan7AKACYqjMoxOrJoHKs4HfzxfFQStzyQtfuyRMMZUsu2', 30, '管理员', '2020-01-21 19:14:31', NULL, 2);
-
--- ----------------------------
 -- Table structure for news_info
 -- ----------------------------
 DROP TABLE IF EXISTS `news_info`;
@@ -395,13 +398,11 @@ CREATE TABLE `news_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `sender_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '发送方id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of news_info
 -- ----------------------------
-INSERT INTO `news_info` VALUES (1, NULL, '测试', '测试内容', NULL, NULL, '2020-01-18 11:23:02', NULL, NULL, 0);
-INSERT INTO `news_info` VALUES (2, NULL, '测试', '测试内容', NULL, NULL, '2020-01-18 11:24:20', NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for oauth_access_token
@@ -432,7 +433,7 @@ CREATE TABLE `oauth_approvals`  (
   `scope` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `status` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `expiresAt` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
-  `lastModifiedAt` timestamp(0) NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `lastModifiedAt` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -462,7 +463,7 @@ CREATE TABLE `oauth_client_details`  (
 -- Records of oauth_client_details
 -- ----------------------------
 INSERT INTO `oauth_client_details` VALUES ('app', NULL, 'app', 'app', 'password,refresh_token', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('irhWebApp', NULL, '$2a$10$js00/YC69RHrLISBfhh8SuTySOyhOoh.wKM/iFDEEKwqwegaKezjG', 'app', 'authorization_code,password,refresh_token,client_credentials', NULL, NULL, 43200, 43200, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('irhWebApp', NULL, '$2a$10$IliTyZPWTbcMd3TI0pdLD.IrW843ZnfMV0tlgcSbbd4N7nqXjGMaW', 'app', 'authorization_code,password,refresh_token,client_credentials', NULL, NULL, 43200, 43200, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for oauth_client_token
@@ -515,32 +516,31 @@ DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单表主键',
   `saler_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '会员表的id',
-  `saler_ nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '会员表的nickname字段',
+  `saler_nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '会员表的nickname字段',
   `buyer_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '会员表的id',
   `product_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '商品id',
   `payment_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '支付金额',
   `order_remark` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单标题',
   `address` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '送货地址:将楼号、楼层、宿舍号以json格式存储',
-  `trade_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 10 COMMENT '10:线上交易 20:线下交易 30:公益捐赠',
+  `trade_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 10 COMMENT '10:正常交易  20:公益捐赠',
   `payment_time` timestamp(0) NULL DEFAULT NULL COMMENT '支付时间',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '订单创建时间',
   `finish_time` timestamp(0) NULL DEFAULT NULL COMMENT '交易完成时间,用户确定收货的时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
-  `state` tinyint(1) UNSIGNED NULL DEFAULT 40 COMMENT '10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功 ',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 40 COMMENT '10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功\r\n60:捐款金额已分配 ',
   `order_code` char(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单编号,必须保证唯一,且64位之内64个字符以内,只能包含字母、数字、下划线',
   `order_version` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '订单版本，默认为1，当修改订单的时候会将版本号加1',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order_info
 -- ----------------------------
-INSERT INTO `order_info` VALUES (1, 4, '', 5, 1231231, 123.00, '马上来', '', 10, NULL, '2020-01-17 16:59:22', NULL, '2020-02-29 12:28:19', 40, '2345234523452345', 1);
-INSERT INTO `order_info` VALUES (2, 4, '', 5, 2345234, 456.00, '', '', 10, NULL, '2020-02-12 17:51:16', NULL, '2020-03-02 17:53:38', 40, 'bdsfgbvrs', 1);
-INSERT INTO `order_info` VALUES (3, 4, '', 5, 5345622, 6575.00, '', '', 10, NULL, '2020-01-02 17:51:35', NULL, '2020-03-02 17:53:42', 40, '234556', 1);
-INSERT INTO `order_info` VALUES (4, 2, '', 5, 45675, 12.00, '', '', 10, NULL, '2020-02-02 17:51:53', NULL, '2020-03-02 17:53:46', 40, '56785678', 1);
-INSERT INTO `order_info` VALUES (5, 1, '', 2, 34533, 567.00, '', '', 10, NULL, '2020-03-02 17:52:05', NULL, '2019-03-02 17:52:33', 40, '456', 1);
-INSERT INTO `order_info` VALUES (6, 3, '', 2, 4356, 0.00, '', '', 10, NULL, '2020-03-02 17:52:30', NULL, '2020-03-02 17:52:11', 40, '6525436', 1);
+INSERT INTO `order_info` VALUES (7, 8, '里斯', 5, 1, 123.00, '', '23号楼923寝室', 10, '2020-04-08 15:00:05', '2020-04-08 15:00:05', '2020-04-13 15:00:05', '2020-04-14 11:38:52', 40, '1234123412111', 1);
+INSERT INTO `order_info` VALUES (8, 5, 'master', 8, 2, 700.00, '', '23号楼922寝室', 10, NULL, '2020-04-14 11:32:28', NULL, '2020-04-14 11:38:44', 40, '23562334512', 1);
+INSERT INTO `order_info` VALUES (9, 5, 'master', 8, 3, 1000.00, '', '23号楼922寝室', 20, '2020-04-16 15:00:05', '2020-04-16 10:28:12', '2020-04-16 10:28:12', '2020-04-19 14:23:31', 50, '1234123411', 1);
+INSERT INTO `order_info` VALUES (10, 5, 'master', 8, 4, 7000.00, '', '23号楼922寝室', 20, NULL, '2020-04-16 10:38:14', NULL, '2020-04-16 10:38:31', 50, '223546757243', 1);
+INSERT INTO `order_info` VALUES (11, 5, 'master', 8, 4, 0.00, '', '', 10, NULL, '2020-04-19 12:15:39', NULL, '2020-04-19 12:15:42', 50, '', 1);
 
 -- ----------------------------
 -- Table structure for order_payment_info
@@ -575,18 +575,22 @@ CREATE TABLE `product_category_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1:无效  2:有效',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_category_info
 -- ----------------------------
-INSERT INTO `product_category_info` VALUES (1, 0, 'A', '1', '2019-12-22 11:27:17', '2020-02-24 15:03:41', 2);
-INSERT INTO `product_category_info` VALUES (2, 0, 'B', '2', '2019-12-22 11:27:29', '2020-02-24 15:03:42', 2);
-INSERT INTO `product_category_info` VALUES (3, 1, 'C', '3', '2019-12-22 14:26:46', '2020-02-24 15:03:46', 2);
-INSERT INTO `product_category_info` VALUES (4, 3, 'D', '4', '2019-12-22 14:27:04', '2020-02-24 15:03:48', 2);
-INSERT INTO `product_category_info` VALUES (5, 2, 'E', '5', '2019-12-22 14:27:24', '2020-02-24 15:03:49', 2);
-INSERT INTO `product_category_info` VALUES (6, 0, 'F', '', '2020-02-24 15:03:38', '2020-02-24 15:03:52', 2);
-INSERT INTO `product_category_info` VALUES (7, 2, 'test', 'tttt', NULL, NULL, NULL);
+INSERT INTO `product_category_info` VALUES (1, 0, '家电', '家电', '2020-04-18 16:15:14', NULL, 2);
+INSERT INTO `product_category_info` VALUES (2, 0, '服饰', '服饰', '2020-04-18 16:15:44', NULL, 2);
+INSERT INTO `product_category_info` VALUES (3, 0, '化妆品', '化妆品', '2020-04-18 16:15:57', NULL, 2);
+INSERT INTO `product_category_info` VALUES (4, 1, '联想', '联想', '2020-04-18 16:16:37', NULL, 2);
+INSERT INTO `product_category_info` VALUES (5, 1, '海尔', '海尔', '2020-04-18 16:16:57', NULL, 2);
+INSERT INTO `product_category_info` VALUES (6, 1, '雷神', '雷神', '2020-04-18 16:17:36', '2020-04-18 16:17:40', 2);
+INSERT INTO `product_category_info` VALUES (7, 2, 'JACK_JONES', 'JACK_JONES', '2020-04-18 16:18:12', NULL, 2);
+INSERT INTO `product_category_info` VALUES (8, 2, '真维斯', '真维斯', '2020-04-18 16:18:24', NULL, 2);
+INSERT INTO `product_category_info` VALUES (9, 2, '花花公子', '花花公子', '2020-04-18 16:18:33', NULL, 2);
+INSERT INTO `product_category_info` VALUES (10, 2, '劲霸', '劲霸', '2020-04-18 16:19:55', NULL, 2);
+INSERT INTO `product_category_info` VALUES (11, 3, '香奈儿', '香奈儿', '2020-04-18 16:20:49', NULL, 2);
 
 -- ----------------------------
 -- Table structure for product_category_rel
@@ -619,13 +623,74 @@ CREATE TABLE `product_demand_info`  (
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次更新时间',
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '状态 1-无效 2-有效',
+  `main_pic` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '封面图片url',
+  `other_pics` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '其他附图的地址，多个用逗号分隔',
+  `tag_names` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '标签名称',
+  `browser_times` bigint(20) UNSIGNED NULL DEFAULT 0 COMMENT '浏览次数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_demand_info
 -- ----------------------------
-INSERT INTO `product_demand_info` VALUES (1, '谁有自行车', 1, '需要一台山地自行车', 5, '2020-02-24 15:35:21', '2020-02-24 15:42:09', 2);
+INSERT INTO `product_demand_info` VALUES (2, '谁有Java相关的书', 1, '急需一本软件工程专业Java课程相关的书', 5, '2020-04-13 14:10:47', '2020-04-13 15:09:46', 2, 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg', NULL, 'java|书籍', 12);
+INSERT INTO `product_demand_info` VALUES (3, '自行车', 2, '马上毕业了，那位学长有自行车', 5, '2020-04-13 14:11:02', '2020-04-13 15:09:58', 1, '', NULL, '自行车', 343);
+INSERT INTO `product_demand_info` VALUES (4, '87678', 2, '撒打发', 5, '2020-04-21 15:47:32', NULL, 2, 'group1/M00/00/01/rBgYGV6eo6aAEg6uAAA4C-O0X9g914.jpg', 'group1/M00/00/01/rBgYGV6eo6mAIQanAAA4C-O0X9g672.jpg,group1/M00/00/01/rBgYGV6eo6yADPoRAABd06ZVPBU039.jpg', '32', 0);
+
+-- ----------------------------
+-- Table structure for product_donation_apply_info
+-- ----------------------------
+DROP TABLE IF EXISTS `product_donation_apply_info`;
+CREATE TABLE `product_donation_apply_info`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '爱心捐款申请表',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `apply_user_id` bigint(20) NULL DEFAULT NULL COMMENT '申请人',
+  `alipay_num` char(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '收款支付宝账号',
+  `apply_amount` decimal(10, 4) NULL DEFAULT NULL COMMENT '申请金额',
+  `payment_amount` decimal(10, 4) NULL DEFAULT NULL COMMENT '实际发放金额',
+  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '申请理由',
+  `witness_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '证明人姓名',
+  `witness_phone` char(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '证明人电话号码',
+  `reason_pic_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '申请凭证图片url',
+  `feedback` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '反馈',
+  `feedback_pic_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '反馈图片url',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-删除  2-审核中  3-失败  4-审核通过 5-已转账',
+  `approve_user_id` bigint(20) NULL DEFAULT NULL COMMENT '审核人id',
+  `approve_user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核人姓名',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '审核备注',
+  `grant_user_id` bigint(20) NULL DEFAULT NULL COMMENT '发放金额的人的id',
+  `grant_user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发放金额的人的名字',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  `apply_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请编号',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of product_donation_apply_info
+-- ----------------------------
+INSERT INTO `product_donation_apply_info` VALUES (1, '內蒙古科技大学活动', 5, '1000', 1100.0000, 1000.0000, '人数较多', '', '', 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg', '感谢大家的支持', 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg', 5, 5, 'hmr', '可以', 5, '5', '2020-04-16 10:42:59', '2020-04-19 15:40:46', NULL);
+INSERT INTO `product_donation_apply_info` VALUES (2, '青年大学习活动', 8, '1000', 800.0000, NULL, '发放流量资金', '', '', '', '', '', 2, NULL, NULL, '', NULL, NULL, '2020-04-18 18:14:30', '2020-04-18 18:15:01', NULL);
+INSERT INTO `product_donation_apply_info` VALUES (3, '就是像申请', 5, '123412234', 1000.0000, NULL, '物料看看', '', '', 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg', '', '', 2, NULL, NULL, '', NULL, NULL, '2020-04-19 14:50:22', '2020-04-19 14:55:41', NULL);
+
+-- ----------------------------
+-- Table structure for product_donation_order_rel
+-- ----------------------------
+DROP TABLE IF EXISTS `product_donation_order_rel`;
+CREATE TABLE `product_donation_order_rel`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '爱心捐赠申请表和商品订单关系表',
+  `order_id` bigint(20) NULL DEFAULT NULL COMMENT '订单表的主键id',
+  `donation_apply_id` bigint(20) NULL DEFAULT NULL COMMENT '申请表id',
+  `operation_user_id` bigint(20) NULL DEFAULT NULL COMMENT '操作人',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of product_donation_order_rel
+-- ----------------------------
+INSERT INTO `product_donation_order_rel` VALUES (1, 9, 1, 5, '2020-04-19 14:23:42', NULL);
 
 -- ----------------------------
 -- Table structure for product_evaluate_info
@@ -658,30 +723,33 @@ CREATE TABLE `product_evaluate_info`  (
 DROP TABLE IF EXISTS `product_info`;
 CREATE TABLE `product_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商品表的主键',
-  `product_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品名称',
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品标题',
   `main_pic_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品主图url',
   `unit` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '计量单位',
   `original_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品原价',
   `sale_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '售卖价格',
   `old_degree` tinyint(1) NULL DEFAULT 5 COMMENT '商品的新旧程度,1~10数值越大越新',
-  `product_desc` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品描述',
+  `product_desc` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品描述',
   `product_details_page` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品详情页',
   `trade_type` tinyint(1) NULL DEFAULT 10 COMMENT '10-正常交易  20-公益捐赠',
   `category_id` bigint(20) NULL DEFAULT NULL COMMENT '分类id',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
-  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效 2-有效',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效 2-有效 3-锁定',
   `consumer_id` bigint(20) NULL DEFAULT NULL COMMENT '出售商品的人的id',
-  `buying_time` char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '卖家买入该商品的时间',
+  `browser_times` bigint(20) NULL DEFAULT NULL COMMENT '浏览次数',
+  `tag_names` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_info
 -- ----------------------------
-INSERT INTO `product_info` VALUES (1, '华为', 'qwergdshsdf', '个', 10000.00, 5000.00, 5, '华为手机', '', 10, 1, '2020-01-21 10:45:54', '2020-03-09 10:35:03', 1, 5, NULL);
-INSERT INTO `product_info` VALUES (2, '小米', 'asdfasdfqwer', '个', 1000.00, 234.00, 9, '小米手机', '', 10, 1, '2020-02-24 12:22:11', '2020-03-09 10:34:59', 2, 5, NULL);
-INSERT INTO `product_info` VALUES (3, 'oppoTest', '1231123123', '', 123.00, 12.00, 5, NULL, '', 10, NULL, '2020-03-06 19:00:36', '2020-03-09 10:34:05', 2, NULL, NULL);
+INSERT INTO `product_info` VALUES (1, '山地自行车', 'group1/M00/00/01/rBgYGV6RdkOACa0DAABW5M6zRWk259.jpg', '辆', 500.00, 200.00, 9, '本人已经大四，出售一辆全新的山地自行车，有没有想要的', '', 10, 1, '2020-04-13 15:09:31', '2020-04-19 16:56:40', 2, 5, 2, '自行车|九九新');
+INSERT INTO `product_info` VALUES (2, '出一台联想笔记本', 'group1/M00/00/01/rBgYGV6RdkOACa0DAABW5M6zRWk259.jpg', '台', 1000.00, 700.00, 8, '用了两年的联想笔记本,打算卖出去,所有的钱都捐给慈善机构', '', 10, 2, '2020-04-14 11:31:04', '2020-04-19 16:56:42', 2, 4, 12, '电脑|联想');
+INSERT INTO `product_info` VALUES (3, 'Iphone8', '', '台', 2000.00, 1700.00, 6, '本人用了两年的手机', '', 20, 2, '2020-04-16 10:27:20', '2020-04-16 10:37:51', 2, 5, 234, '手机|苹果');
+INSERT INTO `product_info` VALUES (4, 'Mac Book', '', '台', 8000.00, 7600.00, 9, '用了三个月', '', 20, 2, '2020-04-16 10:37:46', NULL, 2, 5, 111111, '电脑|苹果');
+INSERT INTO `product_info` VALUES (5, '2435', '', '2', NULL, 124.00, 5, '23452', '', 10, 1, '2020-04-19 15:25:49', NULL, 2, 5, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for product_message_info
@@ -691,11 +759,12 @@ CREATE TABLE `product_message_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商品留言表主键',
   `product_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '商品id',
   `consumer_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '用户编号',
-  `parent_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '回复消息的id，0表示是新的留言的时候 ',
+  `parent_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '回复消息的id，0表示是新的留言(一级留言)的时候 ',
+  `first_class_id` bigint(20) NULL DEFAULT NULL COMMENT '一级留言id，0标识一级留言',
   `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '内容',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
-  `state` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '1-无效 2-有效',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '1-无效 2-有效',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -725,16 +794,6 @@ CREATE TABLE `report_feedback_info`  (
 -- ----------------------------
 -- Records of report_feedback_info
 -- ----------------------------
-INSERT INTO `report_feedback_info` VALUES (0, 2, 20000004, 10000002, '引战', 2, NULL, NULL, '2020-01-16 12:29:32', '2020-03-01 11:27:52', 2);
-INSERT INTO `report_feedback_info` VALUES (1, 1, 10000009, 90000001, '引战', 2, NULL, '未发现', '2020-01-16 12:26:02', '2020-03-01 11:27:57', 2);
-INSERT INTO `report_feedback_info` VALUES (2, 1, 10000009, 90000002, '引战', 2, NULL, '', '2020-01-16 12:26:10', '2020-03-01 11:27:58', 2);
-INSERT INTO `report_feedback_info` VALUES (3, 1, 10000009, 90000003, '破坏友好气氛', 2, NULL, NULL, '2020-01-16 12:27:24', '2020-03-01 11:28:05', 2);
-INSERT INTO `report_feedback_info` VALUES (4, 1, 10000009, 90000004, '言语激烈', 2, NULL, NULL, '2020-01-16 12:28:13', '2020-03-01 11:28:13', 2);
-INSERT INTO `report_feedback_info` VALUES (5, 2, 20000004, 90000004, '淫秽信息', 2, NULL, NULL, '2020-01-16 12:28:57', '2020-03-01 11:28:25', 2);
-INSERT INTO `report_feedback_info` VALUES (7, 2, 20000004, 90000008, '无用信息', 2, NULL, NULL, '2020-01-16 12:30:31', '2020-03-01 11:28:34', 2);
-INSERT INTO `report_feedback_info` VALUES (8, 3, 30000005, 90000004, NULL, 2, NULL, '举报成功', '2020-01-16 12:31:17', '2020-01-16 12:32:04', 2);
-INSERT INTO `report_feedback_info` VALUES (9, 3, 30000004, 90000012, NULL, 2, NULL, NULL, '2020-01-16 12:31:59', '2020-02-28 15:45:06', 2);
-INSERT INTO `report_feedback_info` VALUES (10, 3, 30000005, 90000012, NULL, 2, NULL, '', '2020-01-16 12:32:25', '2020-03-01 11:14:31', 2);
 
 -- ----------------------------
 -- Table structure for role_info
@@ -747,19 +806,17 @@ CREATE TABLE `role_info`  (
   `state` tinyint(1) UNSIGNED NULL DEFAULT 2 COMMENT '状态 1:无效  2:有效',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
-  `create_management` bigint(50) NULL DEFAULT NULL COMMENT '创建人id',
+  `create_management` bigint(50) UNSIGNED NULL DEFAULT NULL COMMENT '创建人id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_info
 -- ----------------------------
-INSERT INTO `role_info` VALUES (1, 'admin', '超级管理员', 2, '2019-12-02 18:31:58', '2019-12-24 18:15:07', 1);
-INSERT INTO `role_info` VALUES (2, 'user1', '普通管理员', 2, '2019-12-02 18:33:15', '2019-12-24 19:30:37', 1);
-INSERT INTO `role_info` VALUES (3, '3', '3', 1, '2019-12-18 16:16:48', '2020-02-23 12:11:58', 5);
-INSERT INTO `role_info` VALUES (4, 'tettest', 'teest', 2, NULL, '2020-02-23 11:55:17', 2);
-INSERT INTO `role_info` VALUES (5, 'te', 'teest', 1, NULL, '2020-02-23 11:55:39', 2);
-INSERT INTO `role_info` VALUES (6, 'tttt', 'ttt', NULL, NULL, '2020-02-23 12:12:01', 5);
+INSERT INTO `role_info` VALUES (1, 'admin', '管理员', 2, '2020-04-11 09:25:27', NULL, 5);
+INSERT INTO `role_info` VALUES (2, 'super_admin', '超级管理员', 2, '2020-04-11 09:25:45', '2020-04-11 09:25:51', 5);
+INSERT INTO `role_info` VALUES (3, 'association', '社团', 2, '2020-04-11 09:27:17', NULL, 5);
+INSERT INTO `role_info` VALUES (8, 'organization', '组织', 2, '2020-04-11 09:27:40', NULL, 5);
 
 -- ----------------------------
 -- Table structure for static_template
@@ -794,12 +851,11 @@ CREATE TABLE `user_authen_record_info`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_authen_record_info
 -- ----------------------------
-INSERT INTO `user_authen_record_info` VALUES (1, 'group1/M00/00/00/rBgYGV6AHk-AYtsAAAIKbm-WIog367.jpg', 5, '', '', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user_forum_attribute_info
@@ -829,6 +885,7 @@ CREATE TABLE `user_info`  (
   `age` tinyint(1) UNSIGNED NULL DEFAULT 18 COMMENT '年龄',
   `email` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '登录用的邮箱',
   `password` char(65) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'md5加密的密码',
+  `sign` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '个性签名',
   `alipay_num` char(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '支付宝账号',
   `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户昵称',
   `qq` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'qq账号',
@@ -842,24 +899,20 @@ CREATE TABLE `user_info`  (
   `school_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '学校名称',
   `academy_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '学院',
   `major_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '专业',
-  `state` tinyint(1) UNSIGNED NULL DEFAULT 10 COMMENT '10:注销 20:锁定 30:审核中  40:审核通过 50:认证失败',
+  `state` tinyint(1) UNSIGNED NULL DEFAULT 25 COMMENT '10:注销 20:锁定 25:未实名 30:审核中  40:审核通过 50:认证失败',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '注册时间',
-  `type` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '10:普通会员 20:服务人员  30:校园组织 35:公益组织 40:校园社团 50:管理员',
+  `type` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '10:普通会员 20:服务人员  30:校园组织  40:校园社团 50:管理员',
   `portrait` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户头像',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES (1, 18, NULL, '$2a$10$dkGY5PlR8uERXm/l0FZ/GOEM7AwixXBmhxfs8fq65KHSVygD/cyJm', NULL, 'ww', NULL, NULL, '10000', NULL, NULL, NULL, NULL, NULL, '北京大学', '信息工程学院', '软件工程', NULL, '2020-02-26 15:49:00', '2020-02-15 15:48:27', 20, NULL);
-INSERT INTO `user_info` VALUES (2, 18, '', '$2a$10$dkGY5PlR8uERXm/l0FZ/GOEM7AwixXBmhxfs8fq65KHSVygD/cyJm', '', '里斯', '', 2, '12315', '', '', '', '', '', '北大青鸟', '食品工程学院', '食品安全', 10, '2020-02-26 15:49:06', '2019-11-23 11:23:34', 35, NULL);
-INSERT INTO `user_info` VALUES (3, 18, '', '$2a$10$dkGY5PlR8uERXm/l0FZ/GOEM7AwixXBmhxfs8fq65KHSVygD/cyJm', '', 'zhangsan', '', 2, '120', '', '', '', '', '', '黑马', '生物工程', '', 40, '2020-02-28 15:14:31', '2020-01-26 15:48:27', 50, NULL);
-INSERT INTO `user_info` VALUES (4, 18, '2452035127@qq.com', '$2a$10$dkGY5PlR8uERXm/l0FZ/GOEM7AwixXBmhxfs8fq65KHSVygD/cyJm', NULL, '赵六', '2452035127', 1, '119', '22', '5', '512', NULL, NULL, '清华大学', '信息工程学院', '软件工程', 40, '2020-02-28 15:14:27', '2019-02-26 15:48:27', 40, NULL);
-INSERT INTO `user_info` VALUES (5, 18, '1978773465@qq.com', '$2a$10$dkGY5PlR8uERXm/l0FZ/GOEM7AwixXBmhxfs8fq65KHSVygD/cyJm', '', 'hmr', '1978773465@qq.com', 2, '110', '23', '9', '922', '', '', '內蒙古科技大学', '信息工程学院', '软件工程', 40, '2020-02-06 15:52:52', '2019-12-20 17:17:05', 50, NULL);
-INSERT INTO `user_info` VALUES (6, 34, '199999test.com', '$2a$10$ZuInL8QqyNpXwGiL3kROY.kREyjDQPINHybrq6RTK6NFvH7x46N8O', NULL, 'hmrr', NULL, 1, '', '', NULL, '', '', NULL, '', '', '', NULL, '2020-02-26 15:49:35', '2019-10-26 15:48:27', 10, NULL);
-INSERT INTO `user_info` VALUES (7, 18, '234234234@test', '', '', 'test01', '', 2, '', '', '', '', '', '', '', '', '', 30, '2020-02-28 15:14:23', '2020-02-26 15:48:27', NULL, NULL);
+INSERT INTO `user_info` VALUES (5, 18, '1978773465@qq.com', '$2a$10$DUDz1OKs5jmIDvUIrVwbAuP.586WMg/cVJYqZC7Nmk9USe5ebPc9a', NULL, '', 'master', '1978773465', 2, '110', '23', '9', '922', '', '', '內蒙古科技大学', '信息工程学院', '软件工程', 40, '2020-04-21 09:11:16', '2020-04-10 20:42:22', 50, 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg');
+INSERT INTO `user_info` VALUES (8, 18, '1234567890@qq.com', '$2a$10$DUDz1OKs5jmIDvUIrVwbAuP.586WMg/cVJYqZC7Nmk9USe5ebPc9a', NULL, '', '里斯', '12345678789', 2, '119', '', '', '', '', '', '清华大学', '文学院', '', 25, '2020-04-21 19:18:49', '2020-04-11 09:29:06', 10, 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg');
+INSERT INTO `user_info` VALUES (9, 18, '1111111111@qq.com', '$2a$10$DUDz1OKs5jmIDvUIrVwbAuP.586WMg/cVJYqZC7Nmk9USe5ebPc9a', NULL, '', '张三', '', 2, '', '', '', '', '', '', '北京大学', '理学院', '生物工程', 25, '2020-04-21 19:18:51', '2020-04-11 09:30:51', 20, 'group1/M00/00/01/rBgYGV6Qaf6Ad3zKAACHVu5mYbk685.jpg');
 
 -- ----------------------------
 -- Table structure for user_role_rel
@@ -874,12 +927,11 @@ CREATE TABLE `user_role_rel`  (
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后一次修改时间',
   `state` tinyint(1) NULL DEFAULT 2 COMMENT '状态 1:无效 2:有效',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_role_rel
 -- ----------------------------
-INSERT INTO `user_role_rel` VALUES (1, 5, 1, 1, '2019-12-02 18:34:02', '2020-01-28 15:40:06', 2);
-INSERT INTO `user_role_rel` VALUES (2, 5, 2, 1, '2019-12-02 18:34:20', '2020-01-28 15:40:09', 2);
+INSERT INTO `user_role_rel` VALUES (3, 5, 2, 5, '2020-04-11 09:28:15', NULL, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

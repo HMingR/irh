@@ -1,7 +1,6 @@
 package top.imuster.life.provider.service.impl;
 
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,16 +34,17 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
-    public Message<Page<ErrandInfo>> getListByCondition(Page<ErrandInfo> page, Long userId) {
-        if (null == page.getSearchCondition()){
-            page.setSearchCondition(new ErrandInfo());
-        }
-        if(StringUtils.isBlank(page.getSearchCondition().getOrderField())){
-            page.getSearchCondition().setOrderField("create_time");
-            page.getSearchCondition().setOrderFieldType("DESC");
-        }
-        List<ErrandInfo> errandInfos = errandInfoDao.selectList(page.getSearchCondition());
-        page.setTotalCount(errandInfoDao.selectEntryListCount(page.getSearchCondition()));
+    public Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId) {
+        Page<ErrandInfo> page = new Page<>();
+        ErrandInfo condition = new ErrandInfo();
+        condition.setPublisherId(userId);
+        condition.setStartIndex((currentPage < 1 ? 1 : currentPage) * pageSize);
+        condition.setEndIndex(pageSize);
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
+        List<ErrandInfo> errandInfos = errandInfoDao.selectList(condition);
+        Integer count = errandInfoDao.selectListCountByUserId(userId);
+        page.setTotalCount(count);
         page.setData(errandInfos);
         return Message.createBySuccess(page);
     }

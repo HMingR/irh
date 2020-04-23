@@ -20,7 +20,7 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @param searchCondition
      * @reture: java.util.List<top.imuster.life.api.pojo.ErrandInfo>
      **/
-    Message<Page<ErrandInfo>> getListByCondition(Page<ErrandInfo> page, Long userId);
+    Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId);
 
     /**
      * @Author hmr

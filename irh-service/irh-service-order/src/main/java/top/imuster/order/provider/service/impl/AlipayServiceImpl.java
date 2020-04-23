@@ -10,8 +10,9 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -37,8 +38,9 @@ import java.util.Map;
  * @date: 2019/12/22 20:24
  */
 @Service("alipayService")
-@Slf4j
 public class AlipayServiceImpl implements AlipayService {
+
+    private static final Logger log = LoggerFactory.getLogger(AlipayServiceImpl.class);
 
     @Autowired
     GoodsServiceFeignApi goodsServiceFeignApi;

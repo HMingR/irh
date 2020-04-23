@@ -1,7 +1,8 @@
 package top.imuster.file.api.service.hystrix;
 
 import feign.hystrix.FallbackFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.wrapper.Message;
@@ -13,9 +14,10 @@ import top.imuster.file.api.service.FileServiceFeignApi;
  * @author: hmr
  * @date: 2020/1/10 20:33
  */
-@Slf4j
 @Component
 public class FileServiceFeignApiHystrix implements FallbackFactory<FileServiceFeignApi> {
+
+    private static final Logger log = LoggerFactory.getLogger(FileServiceFeignApiHystrix.class);
 
     @Override
     public FileServiceFeignApi create(Throwable throwable) {

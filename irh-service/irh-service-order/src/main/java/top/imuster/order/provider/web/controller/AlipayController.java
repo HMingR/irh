@@ -82,7 +82,7 @@ public class AlipayController extends BaseController {
             }
             params.put(name,valueStr);
         }
-        logger.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
+        log.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
 
         params.remove("sign_type");
         try {
@@ -91,7 +91,7 @@ public class AlipayController extends BaseController {
                 return Message.createByError("非法请求,验证不通过");
             }
         } catch (AlipayApiException e) {
-            logger.error("支付宝验证回调异常",e);
+            log.error("支付宝验证回调异常",e);
         }
         alipayService.aliCallBack(params);
         //todo 通知卖家
