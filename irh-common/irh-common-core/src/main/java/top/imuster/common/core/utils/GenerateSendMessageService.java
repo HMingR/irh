@@ -2,7 +2,8 @@ package top.imuster.common.core.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,8 +23,9 @@ import java.util.concurrent.TimeUnit;
  * @date: 2020/1/17 10:26
  */
 @Service("generateSendMessageService")
-@Slf4j
 public class GenerateSendMessageService {
+
+    private static final Logger log = LoggerFactory.getLogger(GenerateSendMessageService.class);
 
     @Autowired
     RabbitTemplate rabbitTemplate;

@@ -15,7 +15,7 @@ public class Send2MQ {
         return type;
     }
 
-    public void setType(MqTypeEnum type) {
+    protected void setType(MqTypeEnum type) {
         this.type = type;
     }
 }

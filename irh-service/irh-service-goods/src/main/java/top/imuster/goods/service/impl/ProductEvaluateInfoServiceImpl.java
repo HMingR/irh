@@ -7,7 +7,6 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.dao.ProductEvaluateInfoDao;
@@ -64,7 +63,6 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         sendMessageDto.setToId(order.getSalerId());
         sendMessageDto.setFromId(order.getBuyerId());
         sendMessageDto.setContent("我对您发布的商品进行了评价,快来看看吧");
-        sendMessageDto.setType(MqTypeEnum.CENTER);
         generateSendMessageService.sendToMq(sendMessageDto);
         return Message.createBySuccess();
     }

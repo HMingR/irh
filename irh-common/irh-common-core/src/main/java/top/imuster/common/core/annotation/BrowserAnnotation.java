@@ -52,7 +52,7 @@ public @interface BrowserAnnotation {
 
     /**
      * @Author hmr
-     * @Description 热搜权值,不同的操作热搜也不一样,如
+     * @Description 热搜权值,不同的操作热搜也不一样,如浏览和点赞的热度值是不一样的
      * @Date: 2020/4/23 11:06
      * @param
      * @reture: int

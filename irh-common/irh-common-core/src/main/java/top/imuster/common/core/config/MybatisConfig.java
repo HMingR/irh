@@ -1,4 +1,4 @@
-package top.imuster.common.base.config;
+package top.imuster.common.core.config;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;

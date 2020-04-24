@@ -101,11 +101,11 @@ public class ArticleAttitudeController extends BaseController {
      * @Author hmr
      * @Description 根据id查看是否点赞了该目标
      * @Date: 2020/2/24 12:03
-     * @param type
+     * @param type 1-未点赞  2-点赞
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
      **/
-    @ApiOperation("根据id查看是否点赞了该目标1-未点赞  2-点赞")
+    @ApiOperation("根据id查看是否点赞了该目标")
     @GetMapping("/state/{type}/{id}")
     public Message<Integer> getUpStateByTargetId(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie(false);

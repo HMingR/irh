@@ -1,6 +1,7 @@
 package top.imuster.common.core.config;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,8 +19,9 @@ import top.imuster.common.core.enums.MqTypeEnum;
  * @date: 2020/1/12 10:47
  */
 @Configuration
-@Slf4j
 public class RabbitMqConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(RabbitMqConfig.class);
     //交换机名称
     public static final String EXCHANGE_TOPICS_INFORM = "exchange_topics_inform";
 
@@ -70,6 +72,11 @@ public class RabbitMqConfig {
         return new Queue(MqTypeEnum.ERRAND.getQueueName(), true);
     }
 
+    @Bean
+    public Queue releaseQueue(){
+        return new Queue(MqTypeEnum.RELEASE.getQueueName(), true);
+    }
+
     @Bean(EXCHANGE_TOPICS_INFORM)
     public Exchange exchange(){
         return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(true).build();
@@ -98,6 +105,11 @@ public class RabbitMqConfig {
     @Bean
     public Binding authenRecordQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
         return BindingBuilder.bind(authenRecordQueue()).to(exchange).with(MqTypeEnum.AUTHEN_RECORD.getRoutingKeyMatchRule()).noargs();
+    }
+
+    @Bean
+    public Binding releaseQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
+        return BindingBuilder.bind(releaseQueue()).to(exchange).with(MqTypeEnum.RELEASE.getRoutingKeyMatchRule()).noargs();
     }
 
 }

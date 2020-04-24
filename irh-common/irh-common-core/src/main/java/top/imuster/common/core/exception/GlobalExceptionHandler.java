@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -70,6 +71,12 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Message needLoginExceptionHandler(NeedLoginException exception){
         return Message.createByCustom(MessageCode.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseBody
+    public Message<String> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception){
+        return Message.createByError("参数异常");
     }
 
     /**

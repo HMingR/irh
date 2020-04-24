@@ -8,7 +8,6 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductMessageInfo;
 import top.imuster.goods.dao.ProductMessageDao;
@@ -55,7 +54,6 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
         Long writer = productMessageInfo.getConsumerId();  //写留言的人
         Long messageId = productMessageDao.insertReturnId(productMessageInfo);  //插入留言后返回的id
         SendUserCenterDto sendToSaler = new SendUserCenterDto();
-        sendToSaler.setType(MqTypeEnum.CENTER);
         if(productMessageInfo.getParentId() == 0){
             Long salerId = productInfoService.getConsumerIdById(productMessageInfo.getProductId());
             sendToSaler.setFromId(writer);
