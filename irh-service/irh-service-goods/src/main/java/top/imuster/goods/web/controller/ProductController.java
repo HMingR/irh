@@ -71,7 +71,8 @@ public class ProductController extends BaseController {
      **/
     @GetMapping("/brief/{id}")
     public Message<ProductInfo> getDetailById(@PathVariable("id") Long id){
-        return productInfoService.getProductBriefInfoById(id);
+        ProductInfo info = productInfoService.getProductBriefInfoById(id);
+        return Message.createBySuccess(info);
     }
 
 

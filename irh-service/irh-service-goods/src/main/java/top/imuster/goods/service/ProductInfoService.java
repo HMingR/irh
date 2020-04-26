@@ -51,7 +51,7 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @param id
      * @reture: java.lang.String
      **/
-    Message<ProductInfo> getProductBriefInfoById(Long id);
+    ProductInfo getProductBriefInfoById(Long id);
 
     /**
      * @Author hmr

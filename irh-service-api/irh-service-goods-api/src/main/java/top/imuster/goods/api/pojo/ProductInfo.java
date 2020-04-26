@@ -92,8 +92,19 @@ public class ProductInfo extends BaseDomain {
 	//其他图片的url
 	private String otherImgUrl;
 
+	//浏览时间
+	private String browseDate;
+
 	//state 1-无效 2-有效 3-锁定
 
+
+	public String getBrowseDate() {
+		return browseDate;
+	}
+
+	public void setBrowseDate(String browseDate) {
+		this.browseDate = browseDate;
+	}
 
 	public String getOtherImgUrl() {
 		return otherImgUrl;
