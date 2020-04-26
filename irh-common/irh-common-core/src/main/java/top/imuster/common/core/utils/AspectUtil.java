@@ -16,7 +16,7 @@ public class AspectUtil {
      * @param joinPoint
      * @reture: java.lang.Long
      **/
-    public static Long getTargetId(JoinPoint joinPoint){
+    public static Long getTargetIdByPathVariable(JoinPoint joinPoint){
         Long result;
         MethodSignature signature = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();

@@ -21,8 +21,8 @@ import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
- * @ClassName: ReleaseQueueLinstener
- * @Description: 发布消息队列的监听器   每个不同种类信息的key可以查看   ReleaseType
+ * @ClassName: ReleaseQueueListener
+ * @Description: 发布消息队列的监听器   每个不同种类信息的key可以查看   ReleaseType类
  * @author: hmr
  * @date: 2020/4/24 10:52
  */
@@ -52,8 +52,13 @@ public class ReleaseQueueListener {
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
                                             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
                                             key = "info.1.release.1"))
-    public void GoodsReleaseListener(String msg) throws IOException {
-        SendReleaseDto releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+    public void GoodsReleaseListener(String msg){
+        SendReleaseDto releaseDto = null;
+        try {
+            releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+        } catch (IOException e) {
+            log.error("------Product-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
+        }
         ProductInfo releaseInfo = (ProductInfo)releaseDto.getTargetInfo();
         goodsReleaseInfoService.save(releaseInfo);
 
@@ -70,8 +75,13 @@ public class ReleaseQueueListener {
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
             key = "info.2.release.2"))
-    public void articleReleaseListener(String msg) throws IOException {
-        SendReleaseDto releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+    public void articleReleaseListener(String msg){
+        SendReleaseDto releaseDto = null;
+        try {
+            releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+        } catch (IOException e) {
+            log.error("------Article-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
+        }
         ArticleInfo releaseInfo = (ArticleInfo)releaseDto.getTargetInfo();
         articleReleaseInfoService.save(releaseInfo);
     }
@@ -87,8 +97,13 @@ public class ReleaseQueueListener {
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
             key = "info.3.release.3"))
-    public void DemandReleaseListener(String msg) throws IOException {
-        SendReleaseDto releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+    public void DemandReleaseListener(String msg){
+        SendReleaseDto releaseDto = null;
+        try {
+            releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+        } catch (IOException e) {
+            log.error("------Demand-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
+        }
         ProductDemandInfo releaseInfo = (ProductDemandInfo)releaseDto.getTargetInfo();
         demandReleaseInfoService.save(releaseInfo);
     }

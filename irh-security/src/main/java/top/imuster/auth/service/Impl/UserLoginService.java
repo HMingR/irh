@@ -24,7 +24,6 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.common.core.dto.SendEmailDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
@@ -127,7 +126,6 @@ public class UserLoginService {
         emailDto.setTemplateEnum(TemplateEnum.USER_REGISTER);
         emailDto.setExpiration(20L);
         emailDto.setUnit(TimeUnit.MINUTES);
-        emailDto.setType(MqTypeEnum.EMAIL);
         generateSendMessageService.sendRegistEmail(emailDto);
     }
 

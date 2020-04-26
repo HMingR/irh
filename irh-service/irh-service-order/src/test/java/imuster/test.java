@@ -26,10 +26,8 @@ public class test {
 
     @Test
     public void test(){
-
         String s = DigestUtils.sha1Hex("123456");
         System.out.println(s);
-
     }
 
 }

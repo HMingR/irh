@@ -63,9 +63,9 @@ public class GoodsSearchService {
         //搜索条件
         //根据关键字搜索
         if(StringUtils.isNotEmpty(searchParam.getKeyword())){
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "product_name", "trade_type", "product_desc")
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "productName", "tradeType", "productDesc")
                     .minimumShouldMatch("70%")
-                    .field("product_name", 10);
+                    .field("productName", 10);
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
         if(StringUtils.isNotEmpty(searchParam.getMt())){
@@ -78,7 +78,7 @@ public class GoodsSearchService {
         }
         if(StringUtils.isNotEmpty(searchParam.getOldDegree())){
             //根据新旧程度
-            boolQueryBuilder.filter(QueryBuilders.termQuery("old_degree",searchParam.getOldDegree()));
+            boolQueryBuilder.filter(QueryBuilders.termQuery("oldDegree",searchParam.getOldDegree()));
         }
         searchSourceBuilder.query(boolQueryBuilder);
 
@@ -118,26 +118,26 @@ public class GoodsSearchService {
                 info.setId(Long.parseLong(id));
 
                 //取出name
-                String productName = (String) sourceAsMap.get("product_name");
+                String productName = (String) sourceAsMap.get("productName");
                 info.setTitle(productName);
 
                 //图片
-                String pic = (String) sourceAsMap.get("main_pic_url");
+                String pic = (String) sourceAsMap.get("mainPicUrl");
                 info.setMainPicUrl(pic);
 
                 //价格
-                String price = (String) sourceAsMap.get("sale_price");
+                String price = (String) sourceAsMap.get("salePrice");
                 info.setSalePrice(price);
 
                 //trade_type
-                String tradeType = (String) sourceAsMap.get("trade_type");
+                String tradeType = (String) sourceAsMap.get("tradeType");
                 if(tradeType != null){
                     info.setTradeType(Integer.parseInt(tradeType));
                 }
 
                 //旧价格
-                if(sourceAsMap.get("original_price")!=null ) {
-                    String originalPrice = (String) sourceAsMap.get("original_price");
+                if(sourceAsMap.get("originalPrice")!=null ) {
+                    String originalPrice = (String) sourceAsMap.get("originalPrice");
                     info.setOriginalPrice(originalPrice);
                 }
                 //将coursePub对象放入list

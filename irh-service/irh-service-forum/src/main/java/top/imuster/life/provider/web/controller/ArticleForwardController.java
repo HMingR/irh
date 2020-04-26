@@ -10,6 +10,7 @@ import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.life.api.pojo.ArticleForwardInfo;
+import top.imuster.life.provider.annotation.HotTopicAnnotation;
 import top.imuster.life.provider.service.ArticleForwardInfoService;
 
 import javax.annotation.Resource;
@@ -37,7 +38,8 @@ public class ArticleForwardController extends BaseController {
 
     @ApiOperation("转发")
     @NeedLogin
-    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "p0.id", hotTopicScore = 3)
+    @HotTopicAnnotation(targetId = "#p0.id", score = 3)
+    @BrowserAnnotation(browserType = BrowserType.FORUM, value = "p0.id")
     @PostMapping
     public Message<String> forward(@RequestBody ArticleForwardInfo articleForwardInfo){
         Long userId = getCurrentUserIdFromCookie();

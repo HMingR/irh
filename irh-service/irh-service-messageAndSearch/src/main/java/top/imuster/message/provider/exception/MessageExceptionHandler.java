@@ -1,6 +1,7 @@
 package top.imuster.message.provider.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.imuster.common.base.wrapper.Message;
@@ -12,8 +13,9 @@ import top.imuster.common.base.wrapper.Message;
  * @date: 2020/1/18 11:19
  */
 @RestControllerAdvice(basePackages = "top.imuster.message")
-@Slf4j
 public class MessageExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageExceptionHandler.class);
 
     @ExceptionHandler({MessageException.class})
     public Message messageExceptionHandler(Exception e){

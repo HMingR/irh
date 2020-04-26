@@ -104,7 +104,7 @@ public class DemandProductController extends BaseController {
      * @param targetId
      * @reture: void
      **/
-    @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT, disableHotTopic = true, value = "#p0")
+    @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT, value = "#p0")
     @GetMapping("/browser/{targetId}")
     public void browser(@PathVariable("targetId") Long targetId){
 

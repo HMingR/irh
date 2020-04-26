@@ -10,7 +10,6 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendAuthenRecordDto;
 import top.imuster.common.core.dto.SendUserCenterDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.user.api.pojo.UserAuthenRecordInfo;
@@ -66,7 +65,6 @@ public class UserAuthenRecordInfoServiceImpl extends BaseServiceImpl<UserAuthenR
         message.setDate(DateUtils.now());
         message.setFromId(0L);
         message.setToId(userId);
-        message.setType(MqTypeEnum.CENTER);
         generateSendMessageService.sendToMq(message);
         return Message.createBySuccess();
     }

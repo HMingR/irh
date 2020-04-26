@@ -14,7 +14,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface HotTopicAnnotation {
 
-    //
     String targetId();
 
     int score();

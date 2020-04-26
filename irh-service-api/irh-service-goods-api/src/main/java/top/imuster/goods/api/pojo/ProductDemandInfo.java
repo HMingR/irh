@@ -1,6 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
  * @author 黄明人
  * @since 2020-01-16 10:19:41
  */
+@Document(indexName = "goods", type = "demand")
 public class ProductDemandInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 7996610101L;

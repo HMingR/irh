@@ -38,13 +38,13 @@ irh:
   elasticsearch:
     host: '@irh.elasticsearch.host@'
   goods:     #商城模块索引
-    index: irh_goods
+    index: goods
     type: doc
-    source_field: id,product_name,main_pic_url,,st,mt,sale_price,original_price,trade_type,original_price,product_desc
+    source_field: id,productName,mainPicUrl,,st,mt,salePrice,originalPrice,tradeType,originalPrice,productDesc
   forum:     #论坛模块索引
-    index: irh_forum
+    index: forum
     type: doc
-    source_field: id,main_picture_url,title,st,mt
+    source_field: id,mainPictureUrl,title,st,mt,tagNames
 
 mybatis:
   mapper-locations: /mapper/*

@@ -42,7 +42,7 @@
                 <irh.rabbitmq.port>5672</irh.rabbitmq.port>
                 <irh.rabbitmq.username>admin</irh.rabbitmq.username>
                 <irh.rabbitmq.password>197877346hmr</irh.rabbitmq.password>
-                <irh.elasticsearch.host>localhost:9200</irh.elasticsearch.host>
+                <irh.elasticsearch.host>39.97.121.108:9200</irh.elasticsearch.host>
             </properties>
         </profile>
 
@@ -241,6 +241,15 @@
                 <version>2.0.4.RELEASE</version>
                 <optional>true</optional>
             </dependency>
+
+            <!--生成简略图-->
+            <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+            <dependency>
+                <groupId>net.coobird</groupId>
+                <artifactId>thumbnailator</artifactId>
+                <version>0.4.8</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.aspectj</groupId>

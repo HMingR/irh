@@ -16,11 +16,8 @@ import org.springframework.stereotype.Component;
 import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.config.ExpressionEvaluator;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.AspectUtil;
-import top.imuster.common.core.utils.DateUtils;
-import top.imuster.common.core.utils.RedisUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -59,43 +56,11 @@ public class BrowserAspect extends BaseController {
         BrowserAnnotation annotation = getAnnotation(joinPoint);
         Long targetId = null;
         if(StringUtils.isNotBlank(annotation.value())) targetId = getTargetId(joinPoint);
-        if(targetId == null || StringUtils.isBlank(annotation.value()))  targetId = AspectUtil.getTargetId(joinPoint);
+        if(targetId == null || StringUtils.isBlank(annotation.value()))  targetId = AspectUtil.getTargetIdByPathVariable(joinPoint);
         BrowserType browserType = annotation.browserType();
-        boolean disableBrowserTimes = annotation.disableBrowserTimes();
-        boolean disableHotTopic = annotation.disableHotTopic();
-        boolean disableBrowseRecord = annotation.disableBrowseRecord();
         //处理浏览次数
-        if(!disableBrowserTimes){
-            redisTemplate.opsForHash().increment(browserType.getRedisKeyHeader(), String.valueOf(targetId), 1);
-            redisTemplate.expire(browserType.getRedisKeyHeader(), 30L, TimeUnit.MINUTES);
-        }
-
-        //处理热搜
-        if(!disableHotTopic){
-            int score = annotation.hotTopicScore();
-            String zSetKey = RedisUtil.getHotTopicKey(browserType);
-            redisTemplate.opsForZSet().incrementScore(zSetKey, String.valueOf(targetId), score);
-            redisTemplate.expire(zSetKey, refreshTime, TimeUnit.MINUTES);
-        }
-
-        if(disableBrowseRecord) return;
-
-        Long userId = getCurrentUserIdFromCookie(false);
-        if(userId == null) return;
-        BrowseRecordDto recordDto = new BrowseRecordDto();
-        recordDto.setCreateTime(DateUtils.now());
-        recordDto.setTargetId(targetId);
-
-        String recordKey = RedisUtil.getBrowseRecordKey(browserType, userId);
-        try{
-            redisTemplate.opsForList().leftPush(recordKey, objectMapper.writeValueAsString(recordDto));
-        }catch (Exception e){
-            log.error("将浏览记录序列化失败");
-        }
-        redisTemplate.expire(recordKey, 180, TimeUnit.DAYS);
-        Long size = redisTemplate.opsForList().size(recordKey);
-        if(size > 30) redisTemplate.opsForList().rightPop(recordKey);
-
+        redisTemplate.opsForHash().increment(browserType.getRedisKeyHeader(), String.valueOf(targetId), 1);
+        redisTemplate.expire(browserType.getRedisKeyHeader(), 30L, TimeUnit.MINUTES);
     }
 
     /**

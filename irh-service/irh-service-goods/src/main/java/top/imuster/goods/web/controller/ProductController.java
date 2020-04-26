@@ -1,6 +1,7 @@
 package top.imuster.goods.web.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,10 +10,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowseRecordAnnotation;
 import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -168,10 +171,17 @@ public class ProductController extends BaseController {
      * @param targetId
      * @reture: void
      **/
-    @GetMapping("/browser/{targetId}")
-    @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0", disableHotTopic = true, disableBrowseRecord = false)
-    public void browser(@PathVariable("targetId") Long targetId){
-
+    @GetMapping("/browser/{targetId}/{time}")
+    @BrowseRecordAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p2")
+    @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0")
+    public void browser(@PathVariable("targetId") Long targetId, @PathVariable("time") Long time, BrowseRecordDto recordDto){
+        Long userId = getCurrentUserIdFromCookie(false);
+        if(userId == null) return;
+        recordDto.setUserId(userId);
+        recordDto.setBrowserTime(time);
+        recordDto.setTargetId(targetId);
+        recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
+        recordDto.setCreateTime(DateUtil.now());
     }
 
 }

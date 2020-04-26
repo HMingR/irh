@@ -46,7 +46,7 @@ public class AdminOrderController extends BaseController {
     public Message<Page<OrderInfo>> orderList(@ApiParam @RequestBody Page<OrderInfo> page){
         Message<Page<OrderInfo>> pageMessage = orderServiceFeignApi.orderList(page);
         if(null == pageMessage){
-            logger.error("分页条件查询订单失败");
+            log.error("分页条件查询订单失败");
             return Message.createByError("查询失败");
         }
         return pageMessage;

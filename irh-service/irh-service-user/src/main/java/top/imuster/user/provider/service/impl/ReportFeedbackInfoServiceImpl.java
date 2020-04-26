@@ -11,7 +11,6 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.common.core.dto.SendUserCenterDto;
-import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.DateUtils;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
@@ -74,7 +73,6 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         target.setToId(sendToId);
         if(condition.getResult() == 3){
             //警告并删除相关内容
-            target.setType(MqTypeEnum.CENTER);
             target.setContent("您在irh中发布的" + FeedbackEnum.getNameByType(info.getType()) + "被人举报，经过核实举报属实。如果再次发现类似情况，您的账号将被冻结");
         }else if(condition.getResult() == 4){
             //冻结账号
@@ -84,7 +82,6 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             SendUserCenterDto temp = new SendUserCenterDto();
             temp.setContent("您举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
             temp.setDate(DateUtils.now());
-            temp.setType(MqTypeEnum.CENTER);
             for (Long reporterId : reporterIds) {
                 temp.setToId(reporterId);
                 generateSendMessageService.sendToMq(temp);
@@ -93,7 +90,6 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             //给被封的人发邮件
             SendEmailDto customer = new SendEmailDto();
             customer.setDate(DateUtils.now());
-            customer.setType(MqTypeEnum.EMAIL);
             String emailById = userInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
                 log.info("根据id{}查询会员email失败",info.getCustomerId());

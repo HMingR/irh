@@ -3,6 +3,7 @@ package top.imuster.life.api.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.elasticsearch.annotations.Document;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @since 2020-01-30 15:25:20
  */
 @ApiModel("文章/帖子表主键")
+@Document(indexName = "article", type = "article")
 public class ArticleInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 7095780754L;

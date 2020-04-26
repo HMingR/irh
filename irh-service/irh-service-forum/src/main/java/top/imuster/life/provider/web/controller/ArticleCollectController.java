@@ -9,6 +9,7 @@ import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.life.api.pojo.ArticleCollectionRel;
+import top.imuster.life.provider.annotation.HotTopicAnnotation;
 import top.imuster.life.provider.service.ArticleCollectionService;
 
 import javax.annotation.Resource;
@@ -36,7 +37,8 @@ public class ArticleCollectController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("用户收藏")
-    @BrowserAnnotation(value = "#p0", browserType = BrowserType.FORUM, hotTopicScore = 4, disableBrowserTimes = true)
+    @HotTopicAnnotation(targetId = "#p0", score = 5)
+    @BrowserAnnotation(value = "#p0", browserType = BrowserType.FORUM)
     @GetMapping("/{id}")
     public Message<String> collection(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();
