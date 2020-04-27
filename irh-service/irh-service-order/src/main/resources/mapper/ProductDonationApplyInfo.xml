@@ -21,7 +21,9 @@
             state,
             remark,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            user_up_total AS userUpTotal,
+            user_down_total AS userDownTotal
 		]]>
 	</sql>
 
@@ -47,6 +49,8 @@
             <if test="remark != null and remark != ''"><![CDATA[AND remark = #{remark}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="userDownTotal != null and userDownTotal != ''"><![CDATA[AND user_down_total = #{userDownTotal}]]></if>
+            <if test="userUpTotal != null and userUpTotal != ''"><![CDATA[AND user_up_total = #{userUpTotal}]]></if>
 		</where>
 	</sql>
 	
@@ -236,5 +240,35 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{applyId}
 	</select>
+
+	<update id="updateUpTotal" parameterType="list">
+		UPDATE product_donation_apply_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="user_up_total = case" suffix="end,">
+				<foreach collection="list" item="item" index="index">
+					when id = #{item.targetId} then user_up_total + #{item.total}
+				</foreach>
+			</trim>
+		</trim>
+		where id IN
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item.targetId,jdbcType=BIGINT}
+		</foreach>
+	</update>
+
+	<update id="updateDownTotal" parameterType="list">
+		UPDATE product_donation_apply_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="user_down_total = case" suffix="end,">
+				<foreach collection="list" item="item" separator="," open="(" close=")">
+					WHEN id = #{item.targetId,jdbcType=BIGINT} THEN user_down_total + #{item.total,jdbcType=INTEGER}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id IN
+		<foreach collection="list" open="(" close=")" separator="," item="item">
+			#{item.targetId,jdbcType=BIGINT}
+		</foreach>
+	</update>
 	
 </mapper>

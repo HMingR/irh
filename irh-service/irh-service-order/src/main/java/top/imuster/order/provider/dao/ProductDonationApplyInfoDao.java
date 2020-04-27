@@ -1,7 +1,9 @@
 package top.imuster.order.provider.dao;
 
 
+import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.order.api.dto.DonationAttributeDto;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 
 import java.util.HashMap;
@@ -68,4 +70,22 @@ public interface ProductDonationApplyInfoDao extends BaseDao<ProductDonationAppl
      * @reture: top.imuster.order.api.pojo.ProductDonationApplyInfo
      **/
     ProductDonationApplyInfo selectApplyInfoById(Long applyId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id更新DonationAttributeDto的user_up_total
+     * @Date: 2020/4/27 14:26
+     * @param upList
+     * @reture: void
+     **/
+    Integer updateUpTotal(@Param("list") List<DonationAttributeDto> upList);
+
+    /**
+     * @Author hmr
+     * @Description 根据id更新DonationAttributeDto的user_down_total
+     * @Date: 2020/4/27 14:34
+     * @param downList
+     * @reture: java.lang.Integer
+     **/
+    Integer updateDownTotal(@Param("list") List<DonationAttributeDto> downList);
 }

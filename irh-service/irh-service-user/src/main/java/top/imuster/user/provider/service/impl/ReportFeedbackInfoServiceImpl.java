@@ -11,7 +11,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.common.core.dto.SendUserCenterDto;
-import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.life.api.service.ForumServiceFeignApi;
@@ -68,7 +68,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         }
         ReportFeedbackInfo info = reportFeedbackInfoService.selectEntryList(condition.getId()).get(0);
         SendUserCenterDto target = new SendUserCenterDto();
-        target.setDate(DateUtils.now());
+        target.setDate(DateUtil.now());
         Long sendToId = getSendToId(info.getType(), info.getTargetId());
         target.setToId(sendToId);
         if(condition.getResult() == 3){
@@ -81,7 +81,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             List<Long> reporterIds = getReporterIdByTargetId(condition.getTargetId(), condition.getType());
             SendUserCenterDto temp = new SendUserCenterDto();
             temp.setContent("您举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
-            temp.setDate(DateUtils.now());
+            temp.setDate(DateUtil.now());
             for (Long reporterId : reporterIds) {
                 temp.setToId(reporterId);
                 generateSendMessageService.sendToMq(temp);
@@ -89,7 +89,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
 
             //给被封的人发邮件
             SendEmailDto customer = new SendEmailDto();
-            customer.setDate(DateUtils.now());
+            customer.setDate(DateUtil.now());
             String emailById = userInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
                 log.info("根据id{}查询会员email失败",info.getCustomerId());

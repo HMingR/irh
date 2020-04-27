@@ -3,6 +3,7 @@ package top.imuster.order.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.order.api.dto.DonationAttributeDto;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
 
@@ -23,6 +24,8 @@ public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonation
 	private final static String SELECT_UN_FINISH_APPLY_LIST = "selectUnfinishApplyList";
 	private final static String SELECT_NEWEST_APPLY_INFO = "selectNewestApplyInfo";
 	private final static String SELECT_APPLY_INFO_BY_ID = "selectApplyInfoById";
+	private final static String UPDATE_UP_TOTAL = "updateUpTotal";
+	private final static String UPDATE_DOWN_TOTAL = "updateDownTotal";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -57,5 +60,15 @@ public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonation
 	@Override
 	public ProductDonationApplyInfo selectApplyInfoById(Long applyId) {
 		return this.select(getNameSpace(SELECT_APPLY_INFO_BY_ID), applyId);
+	}
+
+	@Override
+	public Integer updateUpTotal(List<DonationAttributeDto> upList) {
+		return this.update(getNameSpace(UPDATE_UP_TOTAL), upList);
+	}
+
+	@Override
+	public Integer updateDownTotal(List<DonationAttributeDto> downList) {
+		return this.update(getNameSpace(UPDATE_DOWN_TOTAL), downList);
 	}
 }

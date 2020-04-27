@@ -108,4 +108,21 @@ public class RedisUtil {
     public static String getDonationApplyCode(String applyId) {
         return new StringBuffer().append(GlobalConstant.IRH_ORDER_DONATION).append(applyId).toString();
     }
+
+    /**
+     * @Author hmr
+     * @Description 根据type和targetId获得存储在redis中的公益资金点赞（点踩）总数的key
+     * @Date: 2020/4/27 8:56
+     * @param type 1-踩   2-顶
+     * @reture: java.lang.String
+     **/
+    public static String getDonationApplyAttributeKey(Integer type) {
+        if(type == 1){
+            return GlobalConstant.IRH_DONATION_APPLY_ATTRIBUTE_DOWN;
+        }else if(type == 2){
+            return GlobalConstant.IRH_DONATION_APPLY_ATTRIBUTE_UP;
+        }else{
+            return null;
+        }
+    }
 }

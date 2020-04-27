@@ -1,11 +1,9 @@
 package top.imuster.common.core.utils;
 
-import cn.hutool.core.date.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -18,13 +16,13 @@ import java.util.*;
  * @author: hmr
  * @date: 2019/12/23 21:50
  */
-public class DateUtils {
+public class DateUtil {
 
-    protected static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
+    protected static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     private static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:dd";
 
-    private DateUtils(){}
+    private DateUtil(){}
 
     /**
      * @Description: 获得当前时间，该方法是线程安全的，默认是yyyy-MM-dd HH:mm:dd格式
@@ -205,12 +203,12 @@ public class DateUtils {
     }
 
     public static String getTheDateOfStartTime(String date){
-        Date theDateOfStartTime = getTheDateOfStartTime(DateUtil.parse(date, DEFAULT_FORMAT));
+        Date theDateOfStartTime = getTheDateOfStartTime(cn.hutool.core.date.DateUtil.parse(date, DEFAULT_FORMAT));
         return takeDate2String(theDateOfStartTime);
     }
 
     public static String getTheDateOfStartTime(String strDate, String pattern){
-        Date theDateOfStartTime = getTheDateOfStartTime(DateUtil.parse(strDate, pattern));
+        Date theDateOfStartTime = getTheDateOfStartTime(cn.hutool.core.date.DateUtil.parse(strDate, pattern));
         return takeDate2String(theDateOfStartTime, pattern);
     }
 
@@ -303,12 +301,4 @@ public class DateUtils {
         lastMonth = dft.format(cal.getTime());
         return getMinMonthDate(lastMonth);
     }
-
-    public static void main(String[] args) {
-        String s = "2019-03-01 00:00:01";
-        String substring = s.substring(0, 7);
-        System.out.println(substring);
-    }
-
-
 }

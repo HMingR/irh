@@ -96,4 +96,23 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ProductDonationApplyInfo>
      **/
     Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/4/27 8:55
+     * @param type
+     * @param targetId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> upOrDownApply(Integer type, Long targetId);
+
+    /**
+     * @Author hmr
+     * @Description 收集donationApply的赞和踩
+     * @Date: 2020/4/27 14:11
+     * @param
+     * @reture: void
+     **/
+    void collectDonationAttribute();
 }

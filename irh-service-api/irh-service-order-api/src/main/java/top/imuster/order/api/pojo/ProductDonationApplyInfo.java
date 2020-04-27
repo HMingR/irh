@@ -28,7 +28,6 @@ public class ProductDonationApplyInfo extends BaseDomain {
 	// 申请人
 	private Long applyUserId;
 
-
 	//标题
 	private String title;
 
@@ -72,6 +71,26 @@ public class ProductDonationApplyInfo extends BaseDomain {
 
 	//当前申请使用了哪些订单
 	private List<OrderInfo> useOrders;
+
+	private Integer userUpTotal;
+
+	private Integer userDownTotal;
+
+	public Integer getUserUpTotal() {
+		return userUpTotal;
+	}
+
+	public void setUserUpTotal(Integer userUpTotal) {
+		this.userUpTotal = userUpTotal;
+	}
+
+	public Integer getUserDownTotal() {
+		return userDownTotal;
+	}
+
+	public void setUserDownTotal(Integer userDownTotal) {
+		this.userDownTotal = userDownTotal;
+	}
 
 	public String getTitle() {
 		return title;

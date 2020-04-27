@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.service.BrowserTimesService;
-import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.DateUtil;
 
 import javax.annotation.Resource;
 
@@ -26,9 +26,9 @@ public class DemandBrowserTask extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        log.info("{}---->开始执行商城浏览记录的定时任务", DateUtils.now());
+        log.info("{}---->开始执行商城浏览记录的定时任务", DateUtil.now());
         demandBrowserTimesService.generate();
-        log.info("{}---->完成执行商城浏览记录的定时任务", DateUtils.now());
+        log.info("{}---->完成执行商城浏览记录的定时任务", DateUtil.now());
 
     }
 }

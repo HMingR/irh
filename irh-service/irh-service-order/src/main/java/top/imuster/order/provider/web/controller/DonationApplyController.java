@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.provider.service.ProductDonationApplyInfoService;
 
@@ -57,5 +58,19 @@ public class DonationApplyController {
     @GetMapping
     public Message<List<ProductDonationApplyInfo>> getNewestApply(){
         return productDonationApplyInfoService.getNewestApply();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 用户给申请提供自己的态度
+     * @Date: 2020/4/27 8:53
+     * @param type 1-不同意  2-同意
+     * @param targetId 申请表的主键id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @NeedLogin
+    @GetMapping("/attribute/{type}/{targetId}")
+    public Message<String> upOrDown(@PathVariable("type") Integer type, @PathVariable("targetId") Long targetId){
+        return productDonationApplyInfoService.upOrDownApply(type, targetId);
     }
 }

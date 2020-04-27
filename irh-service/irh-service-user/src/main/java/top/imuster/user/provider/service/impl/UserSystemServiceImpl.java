@@ -2,7 +2,7 @@ package top.imuster.user.provider.service.impl;
 
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.user.api.dto.UserTrendDto;
 import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.UserInfoService;
@@ -33,15 +33,15 @@ public class UserSystemServiceImpl implements UserSystemService {
         Long userTotal = 0L;
         if(type == 1){
             //获得一周的开始时间和结束时间
-            ArrayList<String> weekStartTimeAndEndTime = DateUtils.getWeekStartTimeAndEndTime();
+            ArrayList<String> weekStartTimeAndEndTime = DateUtil.getWeekStartTimeAndEndTime();
             //获得一周7天的开始时间
-            List<String> weekDayStartTime = DateUtils.getBetweenDates(weekStartTimeAndEndTime.get(0), weekStartTimeAndEndTime.get(1));
+            List<String> weekDayStartTime = DateUtil.getBetweenDates(weekStartTimeAndEndTime.get(0), weekStartTimeAndEndTime.get(1));
 
             if(weekDayStartTime == null || weekDayStartTime.isEmpty()) throw new UserException();
 
             for (int i = 0; i < weekDayStartTime.size(); i++) {
-                String start = DateUtils.getTheDateOfStartTime(weekDayStartTime.get(i), "yyyy-MM-dd");
-                String end = DateUtils.getTheDateOfEndTime(weekDayStartTime.get(i), "yyyy-MM-dd");
+                String start = DateUtil.getTheDateOfStartTime(weekDayStartTime.get(i), "yyyy-MM-dd");
+                String end = DateUtil.getTheDateOfEndTime(weekDayStartTime.get(i), "yyyy-MM-dd");
                 Long increment = userInfoService.getIncrementUserByTime(start, end);
                 userTotal = userInfoService.getUserTotalByCreateTime(start);
                 userTotals.add(userTotal);
@@ -51,14 +51,14 @@ public class UserSystemServiceImpl implements UserSystemService {
             userTrendDto.setUnit("天");
         }else if(type == 2){
             //一个月
-            String startTime = DateUtils.getPastDate(30);
-            String endTime = DateUtils.now();
-            List<String> days = DateUtils.getBetweenDates(startTime, endTime);
+            String startTime = DateUtil.getPastDate(30);
+            String endTime = DateUtil.now();
+            List<String> days = DateUtil.getBetweenDates(startTime, endTime);
             userTotal = userInfoService.getUserTotalByCreateTime(startTime);
             userTotals.add(userTotal);
             days.stream().forEach(time -> {
-                String start = DateUtils.getTheDateOfStartTime(time, "yyyy-MM-dd");
-                String end = DateUtils.getTheDateOfEndTime(time, "yyyy-MM-dd");
+                String start = DateUtil.getTheDateOfStartTime(time, "yyyy-MM-dd");
+                String end = DateUtil.getTheDateOfEndTime(time, "yyyy-MM-dd");
                 long increment = userInfoService.getIncrementUserByTime(start, end);
                 increments.add(increment);
                 userTotals.add(userTotals.get(userTotals.size()-1) + increment);
@@ -66,7 +66,7 @@ public class UserSystemServiceImpl implements UserSystemService {
             abscissaUnit = days;
         }else if(type == 3){
             //最近半年
-            ArrayList<String> days = DateUtils.getDays(180);
+            ArrayList<String> days = DateUtil.getDays(180);
             int m = 7;
             for (int j = 0; j < days.size() - 1;) {
                 String start = days.get(j);
@@ -87,14 +87,14 @@ public class UserSystemServiceImpl implements UserSystemService {
             userTrendDto.setUnit("周");
         }else if(type == 4){
             //最近一年
-            String startTime = DateUtils.getPastDate(365);
-            String endTime = DateUtils.getPreMonth(startTime);
+            String startTime = DateUtil.getPastDate(365);
+            String endTime = DateUtil.getPreMonth(startTime);
             boolean flag = true;
             while (flag){
                 //当目前的月份和搜索的时间的结束时间相同时，则再循环一次就可以退出循环
-                if(DateUtils.getPreMonth(DateUtils.getMinMonthDate(DateUtils.now())).equalsIgnoreCase(endTime)){
+                if(DateUtil.getPreMonth(DateUtil.getMinMonthDate(DateUtil.now())).equalsIgnoreCase(endTime)){
                     startTime = endTime;
-                    endTime = DateUtils.now();
+                    endTime = DateUtil.now();
                     flag = false;
                 }
                 userTotal = userInfoService.getUserTotalByCreateTime(startTime);
@@ -102,7 +102,7 @@ public class UserSystemServiceImpl implements UserSystemService {
                 increments.add(increment);
                 userTotals.add(userTotal);
                 startTime = endTime;
-                endTime = DateUtils.getPreMonth(endTime);
+                endTime = DateUtil.getPreMonth(endTime);
                 abscissaUnit.add(new StringBuilder().append(startTime.substring(0, 7)).append("月").toString());
             }
             userTrendDto.setUnit("月");

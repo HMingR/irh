@@ -4,20 +4,25 @@ package top.imuster.order.provider.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.dto.UserDto;
-import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.order.api.dto.DonationAttributeDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.provider.dao.ProductDonationApplyInfoDao;
@@ -29,10 +34,7 @@ import top.imuster.order.provider.service.ProductDonationOrderRelService;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -138,7 +140,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             SendUserCenterDto send = new SendUserCenterDto();
             send.setToId(orderInfo.getSalerId());
             send.setFromId(-1L);
-            send.setDate(DateUtils.now());
+            send.setDate(DateUtil.now());
             send.setContent(new StringBuffer().append("您的爱心订单已经被用于").append(applyInfo.getReason()).toString());
             generateSendMessageService.sendToMq(send);
         });
@@ -189,6 +191,43 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
         }
         return Message.createBySuccess(applyInfo);
+    }
+
+    @Override
+    public Message<String> upOrDownApply(Integer type, Long targetId) {
+        String redisKey = RedisUtil.getDonationApplyAttributeKey(type);
+        redisTemplate.opsForHash().increment(redisKey, targetId, 1);
+        return Message.createBySuccess();
+    }
+
+    @Override
+    public void collectDonationAttribute() {
+        List<DonationAttributeDto> downList = getListByRedisKey(GlobalConstant.IRH_DONATION_APPLY_ATTRIBUTE_DOWN);
+        List<DonationAttributeDto> upList = getListByRedisKey(GlobalConstant.IRH_DONATION_APPLY_ATTRIBUTE_UP);
+        Integer upResTotal = productDonationApplyInfoDao.updateUpTotal(upList);
+        log.info("更新了{}条赞成记录", upResTotal);
+        Integer downResTotal = productDonationApplyInfoDao.updateDownTotal(downList);
+        log.info("更新了{}条反对记录", downResTotal);
+    }
+
+    private List<DonationAttributeDto> getListByRedisKey(String redisKey){
+        Cursor<Map.Entry<Object, Object>> down = redisTemplate.opsForHash().scan(redisKey, ScanOptions.NONE);
+        DonationAttributeDto attributeDto = new DonationAttributeDto();
+        ArrayList<DonationAttributeDto> list = new ArrayList<>();
+        while(down.hasNext()){
+            Map.Entry<Object, Object> next = down.next();
+            if(next.getKey() == null || next.getValue() == null) continue;
+            String key = String.valueOf(next.getKey());
+            if(StringUtils.isEmpty(key)) continue;
+            long targetId = Long.parseLong(key);
+            String value = String.valueOf(next.getValue());
+            if(StringUtils.isEmpty(value)) continue;
+            int total = Integer.parseInt(value);
+            attributeDto.setTargetId(targetId);
+            attributeDto.setTotal(total);
+            list.add(attributeDto);
+        }
+        return list;
     }
 
 }

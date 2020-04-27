@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import top.imuster.common.core.utils.DateUtils;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
@@ -168,9 +168,9 @@ public class AlipayServiceImpl implements AlipayService {
         }
         String gmt_payment = paras.get("gmt_payment");
         if(StringUtils.isNotEmpty(gmt_payment)){
-            realOrder.setPaymentTime(DateUtils.parse(gmt_payment));
+            realOrder.setPaymentTime(DateUtil.parse(gmt_payment));
         }else{
-            realOrder.setPaymentTime(DateUtils.parse(new Date()));
+            realOrder.setPaymentTime(DateUtil.parse(new Date()));
         }
         return realOrder;
     }

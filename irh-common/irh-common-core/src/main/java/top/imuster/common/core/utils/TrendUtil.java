@@ -21,13 +21,13 @@ public class TrendUtil {
         List<String> startTimes = new ArrayList<>();
         List<String> endTimes = new ArrayList<>();
         //获得一周的开始时间和结束时间
-        ArrayList<String> weekStartTimeAndEndTime = DateUtils.getWeekStartTimeAndEndTime();
+        ArrayList<String> weekStartTimeAndEndTime = DateUtil.getWeekStartTimeAndEndTime();
         //获得一周7天的开始时间
-        List<String> weekDayStartTime = DateUtils.getBetweenDates(weekStartTimeAndEndTime.get(0), weekStartTimeAndEndTime.get(1));
+        List<String> weekDayStartTime = DateUtil.getBetweenDates(weekStartTimeAndEndTime.get(0), weekStartTimeAndEndTime.get(1));
         int index = 0;
         for (String s : weekDayStartTime) {
-            String start = DateUtils.getTheDateOfStartTime(weekDayStartTime.get(index), "yyyy-MM-dd");
-            String end = DateUtils.getTheDateOfEndTime(weekDayStartTime.get(index), "yyyy-MM-dd");
+            String start = DateUtil.getTheDateOfStartTime(weekDayStartTime.get(index), "yyyy-MM-dd");
+            String end = DateUtil.getTheDateOfEndTime(weekDayStartTime.get(index), "yyyy-MM-dd");
             startTimes.add(start);
             endTimes.add(end);
             index++;
@@ -48,12 +48,12 @@ public class TrendUtil {
     public static Map<String, List<String>> getCurrentOneMonthTime(){
         List<String> startTimes = new ArrayList<>();
         List<String> endTimes = new ArrayList<>();
-        String startTime = DateUtils.getPastDate(30);
-        String endTime = DateUtils.now();
-        List<String> days = DateUtils.getBetweenDates(startTime, endTime);
+        String startTime = DateUtil.getPastDate(30);
+        String endTime = DateUtil.now();
+        List<String> days = DateUtil.getBetweenDates(startTime, endTime);
         days.stream().forEach(time -> {
-            String start = DateUtils.getTheDateOfStartTime(time, "yyyy-MM-dd");
-            String end = DateUtils.getTheDateOfEndTime(time, "yyyy-MM-dd");
+            String start = DateUtil.getTheDateOfStartTime(time, "yyyy-MM-dd");
+            String end = DateUtil.getTheDateOfEndTime(time, "yyyy-MM-dd");
             startTimes.add(start);
             endTimes.add(end);
 
@@ -72,7 +72,7 @@ public class TrendUtil {
      * @reture: java.util.Map<java.lang.String,java.util.Set<java.lang.String>>
      **/
     public static Map<String, List<String>> getSixMonthTime(){
-        ArrayList<String> days = DateUtils.getDays(180);
+        ArrayList<String> days = DateUtil.getDays(180);
         List<String> startTimes = new ArrayList<>(26);
         List<String> endTimes = new ArrayList<>();
         int m = 7;
@@ -99,20 +99,20 @@ public class TrendUtil {
         List<String> startTimes = new ArrayList<>(12);
         List<String> endTimes = new ArrayList<>(12);
         //最近一年
-        String startTime = DateUtils.getPastDate(365);
-        String endTime = DateUtils.getPreMonth(startTime);
+        String startTime = DateUtil.getPastDate(365);
+        String endTime = DateUtil.getPreMonth(startTime);
         boolean flag = true;
         while (flag){
             //当目前的月份和搜索的时间的结束时间相同时，则再循环一次就可以退出循环
-            if(DateUtils.getPreMonth(DateUtils.getMinMonthDate(DateUtils.now())).equalsIgnoreCase(endTime)){
+            if(DateUtil.getPreMonth(DateUtil.getMinMonthDate(DateUtil.now())).equalsIgnoreCase(endTime)){
                 startTime = endTime;
-                endTime = DateUtils.now();
+                endTime = DateUtil.now();
                 flag = false;
             }
             startTimes.add(startTime);
             endTimes.add(endTime);
             startTime = endTime;
-            endTime = DateUtils.getPreMonth(endTime);
+            endTime = DateUtil.getPreMonth(endTime);
         }
         HashMap<String, List<String>> res = new HashMap<>();
         res.put("start", startTimes);
