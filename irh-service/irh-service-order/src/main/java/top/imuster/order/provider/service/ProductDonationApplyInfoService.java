@@ -91,11 +91,11 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @Author hmr
      * @Description 根据type和id获得申请详情
      * @Date: 2020/4/18 17:47
-     * @param type   1-标识查看的申请已经完成，返回的信息中需要包含使用了哪些人的订单   2-标识查看正在审核的
+     * @param state   5-标识查看的申请已经完成，返回的信息中需要包含使用了哪些人的订单   2-标识查看正在审核的或者审核通过但是未转账的
      * @param applyId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ProductDonationApplyInfo>
      **/
-    Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId);
+    Message<ProductDonationApplyInfo> getApplyInfoById(Integer state, Long applyId);
 
     /**
      * @Author hmr
@@ -115,4 +115,13 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @reture: void
      **/
     void collectDonationAttribute();
+
+    /**
+     * @Author hmr
+     * @Description 分页获得申请列表
+     * @Date: 2020/4/28 10:25
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    Message<Page<ProductDonationApplyInfo>> getApplyList(Page<ProductDonationApplyInfo> page);
 }

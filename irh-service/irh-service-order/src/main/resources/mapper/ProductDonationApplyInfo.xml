@@ -46,6 +46,7 @@
             <if test="feedback != null and feedback != ''"><![CDATA[AND feedback = #{feedback}]]></if>
             <if test="feedbackPicUrl != null and feedbackPicUrl != ''"><![CDATA[AND feedback_pic_url = #{feedbackPicUrl}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="remark != null and remark != ''"><![CDATA[AND remark = #{remark}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 

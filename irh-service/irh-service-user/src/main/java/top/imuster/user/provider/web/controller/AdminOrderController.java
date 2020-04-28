@@ -1,7 +1,6 @@
 package top.imuster.user.provider.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/admin/order")
-@Api("后台管理订单")
 public class AdminOrderController extends BaseController {
 
     @Autowired
@@ -89,6 +87,11 @@ public class AdminOrderController extends BaseController {
     @GetMapping("/donation/determine/{applyId}")
     Message<String> determine(@PathVariable("applyId") Long applyId) throws IOException {
         return donationApplyServiceFeignApi.determineGrant(applyId, getCurrentUserIdFromCookie());
+    }
+
+    @PostMapping("/list")
+    public Message<Page<ProductDonationApplyInfo>> getList(@RequestBody Page<ProductDonationApplyInfo> page){
+        return donationApplyServiceFeignApi.getApplyList(page);
     }
 }
 

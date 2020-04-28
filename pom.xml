@@ -12,6 +12,7 @@
         <module>irh-security</module>
         <module>irh-service-api</module>
         <module>irh-service</module>
+        <module>irh-monitor</module>
     </modules>
 
     <groupId>top.imuster</groupId>

@@ -181,14 +181,17 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     }
 
     @Override
-    public Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId) {
-        ProductDonationApplyInfo applyInfo;
-        if(type == 1){
+    public Message<ProductDonationApplyInfo> getApplyInfoById(Integer state, Long applyId) {
+        ProductDonationApplyInfo applyInfo = new ProductDonationApplyInfo();
+        if(state == 5){
             applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
             List<OrderInfo> useOrders = productDonationOrderRelService.getOrderInfoByApplyId(applyId);
             applyInfo.setUserOrders(useOrders);
         }else{
-            applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
+            applyInfo.setState(state);
+            List<ProductDonationApplyInfo> infos = productDonationApplyInfoDao.selectEntryList(applyInfo);
+            if(infos == null || infos.isEmpty()) return Message.createByError("没有找到相关的申请,请刷新后重试");
+            applyInfo = infos.get(0);
         }
         return Message.createBySuccess(applyInfo);
     }
@@ -208,6 +211,19 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
         log.info("更新了{}条赞成记录", upResTotal);
         Integer downResTotal = productDonationApplyInfoDao.updateDownTotal(downList);
         log.info("更新了{}条反对记录", downResTotal);
+    }
+
+    @Override
+    public Message<Page<ProductDonationApplyInfo>> getApplyList(Page<ProductDonationApplyInfo> page) {
+        if(page.getSearchCondition() == null){
+            ProductDonationApplyInfo condition = new ProductDonationApplyInfo();
+            condition.setOrderField("user_up_total");
+            condition.setOrderFieldType("DESC");
+            condition.setState(2);
+            page.setSearchCondition(condition);
+        }
+        Page<ProductDonationApplyInfo> res = this.selectPage(page.getSearchCondition(), page);
+        return Message.createBySuccess(res);
     }
 
     private List<DonationAttributeDto> getListByRedisKey(String redisKey){

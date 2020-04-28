@@ -1,6 +1,5 @@
 package top.imuster.common.core.exception;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,47 +28,47 @@ import java.util.stream.Collectors;
  */
 public class GlobalExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     //处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常。
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Message handleValidationExceptionHandler(MethodArgumentNotValidException exception){
+    public Message<String> handleValidationExceptionHandler(MethodArgumentNotValidException exception){
         String message = exception.getBindingResult().getAllErrors()
                         .stream()
                         .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .collect(Collectors.joining());
-        logger.error("错误信息为{}", message);
+        log.error("错误信息为{}", message);
         return Message.createByCustom(MessageCode.ILLEGAL_ARGUMENT_CODE);
     }
 
     //处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是javax.validation.ConstraintViolationException
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
-    public Message constraintViolationExceptionHandler(ConstraintViolationException e) {
+    public Message<String> constraintViolationExceptionHandler(ConstraintViolationException e) {
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
-        logger.error("错误信息为{}", message);
+        log.error("错误信息为{}", message);
         return Message.createByCustom(MessageCode.ILLEGAL_ARGUMENT_CODE);
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public Message bindExceptionHandler(BindException exception){
+    public Message<String> bindExceptionHandler(BindException exception){
         String defaultMessage = exception.getAllErrors().get(0).getDefaultMessage();
-        logger.error("错误信息为{}", defaultMessage);
+        log.error("错误信息为{}", defaultMessage);
         return Message.createByError(defaultMessage);
     }
 
     @ExceptionHandler(ValidationException.class)
     @ResponseBody
-    public Message validationExceptionHandler(ValidationException exception){
+    public Message<String> validationExceptionHandler(ValidationException exception){
         String message = exception.getMessage();
         return Message.createByCustom(MessageCode.ILLEGAL_ARGUMENT_CODE, message);
     }
 
     @ExceptionHandler(NeedLoginException.class)
     @ResponseBody
-    public Message needLoginExceptionHandler(NeedLoginException exception){
+    public Message<String> needLoginExceptionHandler(NeedLoginException exception){
         return Message.createByCustom(MessageCode.UNAUTHORIZED);
     }
 
@@ -79,42 +78,9 @@ public class GlobalExceptionHandler {
         return Message.createByError("参数异常");
     }
 
-    /**
-     * @Description: 空指针异常
-     * @Author: hmr
-     * @Date: 2020/1/11 21:34
-     * @param e
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ExceptionHandler(NullPointerException.class)
-    public Message nullPointerExceptionHandler(NullPointerException e){
-        logger.error("服务器出现空指针异常{}", e.getMessage(), e);
-        return Message.createByError("服务器内部出现异常");
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public Message runtimeExceptionHandler(RuntimeException e){
-        logger.error("服务器内部出现运行时异常{}",e.getMessage(), e);
-        return Message.createByError("服务器内部出现异常");
-    }
-
-    //类型转换异常
-    @ExceptionHandler(ClassCastException.class)
-    public Message classCastExceptionHandler(ClassCastException e) {
-        logger.error("服务器内部出现类型转换异常{}",e.getMessage(),e);
-        return Message.createByError("服务器内部出现异常");
-    }
-
-    //json解析异常
-    @ExceptionHandler(JsonProcessingException.class)
-    public Message jsonProcessingExceptionHandler(JsonProcessingException e){
-        logger.error("服务器内部错误,解析json失败,错误信息为{}",e.getMessage(), e);
-        return Message.createByError("服务器内部错误,解析json失败");
-    }
-
     @ExceptionHandler(Exception.class)
     public Message exception(Exception e){
-        logger.error("服务器出现未知错误,错误信息为{}",e.getMessage(),e);
+        log.error("服务器出现未知错误,错误信息为{}",e.getMessage(),e);
         return Message.createByError("服务器出现未知错误，请稍后重试或联系管理员");
     }
 
@@ -125,7 +91,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Message httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException exception){
-        logger.error("请求方式错误{}",exception.getMessage());
+        log.error("请求方式错误{}",exception.getMessage());
         return Message.createByError("非法的请求方式");
     }
 

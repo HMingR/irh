@@ -2,6 +2,7 @@ package top.imuster.order.provider.web.rpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
@@ -48,6 +49,17 @@ public class DonationApplyServiceFeignClient extends BaseController implements D
         return productDonationApplyInfoService.determine(applyId, operatorId);
     }
 
+    @Override
+    @GetMapping("/{state}/{targetId}")
+    public Message<ProductDonationApplyInfo> getApplyInfoById(@PathVariable("state") Integer state, @PathVariable("targetId") Long targetId) {
+        return productDonationApplyInfoService.getApplyInfoById(state, targetId);
+    }
+
+    @Override
+    @PostMapping("/list")
+    public Message<Page<ProductDonationApplyInfo>> getApplyList(Page<ProductDonationApplyInfo> page) {
+        return productDonationApplyInfoService.getApplyList(page);
+    }
 
 
 }

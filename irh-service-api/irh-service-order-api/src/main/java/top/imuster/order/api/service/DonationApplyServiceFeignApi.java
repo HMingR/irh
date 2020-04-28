@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.api.service.hystrix.OrderServiceFeignApiHystrix;
@@ -63,5 +64,27 @@ public interface DonationApplyServiceFeignApi {
      **/
     @GetMapping("/determine/{operatorId}/{applyId}")
     Message<String> determineGrant(@PathVariable("applyId") Long applyId, @PathVariable("operatorId") Long operatorId) throws IOException;
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得申请详情
+     * @Date: 2020/4/28 10:38
+     * @param type 5-标识查看的申请已经完成，返回的信息中需要包含使用了哪些人的订单   type的取值和实体类中的state一致
+     * @param targetId 申请id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ProductDonationApplyInfo>
+     **/
+    @GetMapping("/donation/{state}/{targetId}")
+    Message<ProductDonationApplyInfo> getApplyInfoById(@PathVariable("state") Integer state, @PathVariable("targetId")Long targetId);
+
+    /**
+     * @Author hmr
+     * @Description 条件查询申请
+     * @Date: 2020/4/28 10:24
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    @PostMapping("/list")
+    Message<Page<ProductDonationApplyInfo>> getApplyList(@RequestBody Page<ProductDonationApplyInfo> page);
+
 
 }
