@@ -1,7 +1,13 @@
 server:
   port: 10800
+  tomcat:
+    max-connections: 600000
 
 spring:
+  security:
+    user:
+      name: admin
+      password: admin
   profiles:
     active: dev
   application:
@@ -11,6 +17,16 @@ spring:
       username: admin
       password: admin
 
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
 eureka:
   client:
     service-url:
@@ -18,3 +34,4 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5      # 心跳时间
     lease-expiration-duration-in-seconds: 15  # 过期时间
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${server.port}

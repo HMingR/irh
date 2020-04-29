@@ -33,7 +33,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true</irh.mysql.url>
+                <irh.mysql.url>jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true&amp;useAffectedRows=true</irh.mysql.url>
                 <irh.mysql.username>root</irh.mysql.username>
                 <irh.mysql.password>123456</irh.mysql.password>
                 <irh.redis.host>39.105.0.169</irh.redis.host>
@@ -173,6 +173,7 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
+                <scope>test</scope>
             </dependency>
 
 

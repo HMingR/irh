@@ -43,9 +43,19 @@ public class ErrandInfo extends BaseDomain {
 	@ApiModelProperty("价钱")
 	private String money;
 
+	private Integer version;
 
 	// 1-删除 2-有效 3-已被接单
 //	private Short state;
+
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
 	public Long getId() {
 		return this.id;

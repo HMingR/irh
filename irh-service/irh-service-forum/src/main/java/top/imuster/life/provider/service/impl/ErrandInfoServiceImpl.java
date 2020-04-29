@@ -50,10 +50,13 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
-    public boolean isAvailable(Long id) {
-        Integer state = errandInfoDao.selectStateById(id);
+    public boolean isAvailable(Long id, Integer errandVersion) {
+        ErrandInfo errandInfo = new ErrandInfo();
+        errandInfo.setId(id);
+        errandInfo.setVersion(errandVersion);
+        Integer state = errandInfoDao.selectStateByIdAndVersion(errandInfo);
         if(state == null) return false;
-        return state.intValue() == 2;
+        return state == 2;
     }
 
     @Override
@@ -70,5 +73,15 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
             errandInfoDao.updateByKey(errandInfo);
         }
         return Message.createByError("删除失败,请刷新后重试");
+    }
+
+    @Override
+    public boolean updateStateByIdAndVersion(Long id, Integer errandVersion) {
+        ErrandInfo errandInfo = new ErrandInfo();
+        errandInfo.setVersion(errandVersion);
+        errandInfo.setId(id);
+        errandInfo.setState(3);
+        Integer temp = errandInfoDao.updateStateByIdAndVersion(errandInfo);
+        return temp != null;
     }
 }

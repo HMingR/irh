@@ -25,8 +25,19 @@ public class SendUserCenterDto extends Send2MQ  implements Serializable {
     //内容
     private String content;
 
-    //留言表中的id
+    //目标id
     private Long resourceId;
+
+    //消息类型  10-商城留言  20-论坛留言  30-跑腿订单通知  40-商城订单通知 50-商城公益基金 60-商城评价  60-其他系统通知
+    private Integer newsType;
+
+    public Integer getNewsType() {
+        return newsType;
+    }
+
+    public void setNewsType(Integer newsType) {
+        this.newsType = newsType;
+    }
 
     public SendUserCenterDto(){
         this.setType(MqTypeEnum.CENTER);

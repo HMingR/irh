@@ -60,36 +60,44 @@
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id ,]]></if>
+			<if test="orderCode != null and orderCode != ''"><![CDATA[ order_code  ,]]></if>
+			<if test="errandId != null and errandId != ''"><![CDATA[ errand_id  ,]]></if>
+			<if test="holderId != null and holderId != ''"><![CDATA[ holder_id  ,]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[ publisher_id  ,]]></if>
+			<if test="payMoney != null and payMoney != ''"><![CDATA[ pay_money  ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ create_time ,]]></if>
+			<if test="finishTime != null and finishTime != ''"><![CDATA[ finish_time ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="values">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[#{id} ,]]></if>
+			<if test="orderCode != null and orderCode != ''"><![CDATA[#{orderCode} ,]]></if>
+			<if test="errandId != null and errandId != ''"><![CDATA[#{errandId} ,]]></if>
+			<if test="holderId != null and holderId != ''"><![CDATA[ #{holderId} ,]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[#{publisherId} ,]]></if>
+			<if test="payMoney != null and payMoney != ''"><![CDATA[   #{payMoney} ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[#{createTime} ,]]></if>
+			<if test="finishTime != null and finishTime != ''"><![CDATA[#{finishTime} ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[#{updateTime} ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
+		</trim>
+	</sql>
+
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="errandOrderInfo" >
 		<![CDATA[
 			INSERT INTO errand_order_info
-				(
-                id, 
-                order_code, 
-                errand_id, 
-                holder_id, 
-                publisher_id, 
-                pay_money, 
-                create_time, 
-                finish_time, 
-                update_time, 
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{orderCode}, 
-                #{errandId}, 
-                #{holderId}, 
-                #{publisherId}, 
-                #{payMoney}, 
-                #{createTime}, 
-                #{finishTime}, 
-                #{updateTime}, 
-                #{state} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="values"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -151,4 +159,10 @@
 		WHERE order_code = #{code}
 	</select>
 	
+	<insert id="insertInfoReturnId" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO errand_order_info
+		<include refid="key"></include>
+		VALUES
+		<include refid="values"></include>
+	</insert>
 </mapper>

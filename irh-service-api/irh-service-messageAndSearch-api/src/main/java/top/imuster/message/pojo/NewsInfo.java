@@ -30,16 +30,12 @@ public class NewsInfo extends BaseDomain {
 	@ApiModelProperty("发送方id")
 	private Long senderId;
 
-	// 标题, max length: 255
-	@ApiModelProperty("标题")
-	private String title;
-
 	// 内容
 	@ApiModelProperty("内容")
 	private String content;
 
-	// 消息类型 10-订单  20-商品留言  30-商品评价
-	@ApiModelProperty("消息类型 10-订单  20-商品留言  30-商品评价")
+	//  10-商城留言  20-论坛留言  30-跑腿订单通知  40-商城订单通知 50-商城公益基金 60-商城评价  60-其他系统通知
+	@ApiModelProperty("消息类型 10-商城留言  20-论坛留言  30-跑腿订单通知  40-商城订单通知 50-商城公益基金 60-商城评价  60-其他系统通知")
 	private Integer newsType;
 
 	//根据news_type指向不同表的id
@@ -56,7 +52,6 @@ public class NewsInfo extends BaseDomain {
 				"id=" + id +
 				", receiverId=" + receiverId +
 				", senderId=" + senderId +
-				", title='" + title + '\'' +
 				", content='" + content + '\'' +
 				", newsType=" + newsType +
 				", targetId=" + targetId +
@@ -99,13 +94,6 @@ public class NewsInfo extends BaseDomain {
 	}
     public void setReceiverId(Long receiverId) {
 		this.receiverId = receiverId;
-	}
-	
-	public String getTitle() {
-		return this.title;
-	}
-    public void setTitle(String title) {
-		this.title = title;
 	}
 	
 	public String getContent() {

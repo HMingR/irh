@@ -3,7 +3,8 @@ package top.imuster.order.provider.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,8 +30,10 @@ import javax.annotation.Resource;
  * @since 2020-02-11 17:49:36
  */
 @Service("errandOrderService")
-@Slf4j
 public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Long> implements ErrandOrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(ErrandOrderServiceImpl.class);
+
 
     @Resource
     private ErrandOrderDao errandOrderDao;
@@ -69,13 +72,14 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
-    public String receiveOrder(Long id, Long userId) throws JsonProcessingException {
+    public String receiveOrder(Long id, Integer version, Long userId) throws JsonProcessingException {
         checkFromRedisById(id);
         ErrandOrderInfo errandOrderInfo = new ErrandOrderInfo();
         String orderCode = String.valueOf(UuidUtils.nextId());
         errandOrderInfo.setHolderId(userId);
         errandOrderInfo.setErrandId(id);
         errandOrderInfo.setOrderCode(orderCode);
+        errandOrderInfo.setErrandVersion(version);
         String value = new ObjectMapper().writeValueAsString(errandOrderInfo);
         rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, MqTypeEnum.ERRAND.getRoutingKey(), value);
         return orderCode;
@@ -95,6 +99,12 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
             if(state == 3) return Message.createBySuccess("接单成功,请按照发布者的要求及时完成任务");
             return Message.createByError("接单失败,当前订单已经被其他人抢走了");
         }
+    }
+
+    @Override
+    public boolean acceptErrand(ErrandOrderInfo order) {
+        Long id = errandOrderDao.insertInfoReturnId(order);
+        return id != null;
     }
 
 

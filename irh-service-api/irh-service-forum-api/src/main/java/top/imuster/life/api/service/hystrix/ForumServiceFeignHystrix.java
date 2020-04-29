@@ -1,7 +1,8 @@
 package top.imuster.life.api.service.hystrix;
 
 import feign.hystrix.FallbackFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -16,10 +17,9 @@ import top.imuster.life.api.service.ForumServiceFeignApi;
  * @date: 2020/2/1 12:10
  */
 @Component
-@Slf4j
 public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFeignApi>{
 
-
+    private static final Logger log = LoggerFactory.getLogger(ForumServiceFeignHystrix.class);
 
     @Override
     public ForumServiceFeignApi create(Throwable throwable) {
@@ -80,12 +80,13 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
             }
 
             @Override
-            public void updateErrandInfoById(Long id) {
+            public boolean updateErrandInfoById(Long id, Integer errandVersion) {
                 log.error("更新ErrandInfo失败,id为{}", id);
+                return false;
             }
 
             @Override
-            public boolean errandIsAvailable(Long errandId) {
+            public boolean errandIsAvailable(Long errandId, Integer errandVersion) {
                 return false;
             }
         };

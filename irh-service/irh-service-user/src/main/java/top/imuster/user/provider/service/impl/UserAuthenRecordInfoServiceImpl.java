@@ -65,6 +65,7 @@ public class UserAuthenRecordInfoServiceImpl extends BaseServiceImpl<UserAuthenR
         message.setDate(DateUtil.now());
         message.setFromId(0L);
         message.setToId(userId);
+        message.setNewsType(60);
         generateSendMessageService.sendToMq(message);
         return Message.createBySuccess();
     }

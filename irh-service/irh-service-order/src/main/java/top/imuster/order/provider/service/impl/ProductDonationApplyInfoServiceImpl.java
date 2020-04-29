@@ -142,6 +142,8 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             send.setFromId(-1L);
             send.setDate(DateUtil.now());
             send.setContent(new StringBuffer().append("您的爱心订单已经被用于").append(applyInfo.getReason()).toString());
+            send.setNewsType(50);
+            send.setResourceId(applyId);
             generateSendMessageService.sendToMq(send);
         });
         redisTemplate.delete(RedisUtil.getDonationApplyCode(String.valueOf(applyId)));

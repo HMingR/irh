@@ -1,6 +1,7 @@
 package top.imuster.message.provider.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.message.pojo.NewsInfo;
@@ -19,5 +20,5 @@ public interface NewsInfoService extends BaseService<NewsInfo, Long> {
      * @param sendMessageDto
      * @reture: void
      **/
-    void writeFromMq(SendUserCenterDto sendMessageDto);
+    void writeFromMq(SendUserCenterDto sendMessageDto) throws JsonProcessingException;
 }

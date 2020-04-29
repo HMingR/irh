@@ -4,6 +4,10 @@ server:
     max-http-post-size: 4048576
     max-http-header-size: 4048576
 spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:10800
   profiles:
     active: dev
   application:
@@ -30,6 +34,7 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5      # 心跳时间
     lease-expiration-duration-in-seconds: 15  # 过期时间
+    instance-id: ${spring.application.name}:${server.port}
 enable:
   needLogin: false
 
@@ -47,6 +52,14 @@ hystrix:
           thread:
             timeoutInMilliseconds: 60000 #断路器超时时间，默认1000ms
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 #fdfs:
 #  so-timeout: 1501 # 读取超时时间
 #  connect-timeout: 5001 # 连接超时时间

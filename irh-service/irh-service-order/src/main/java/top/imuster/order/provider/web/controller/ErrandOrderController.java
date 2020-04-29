@@ -33,14 +33,15 @@ public class ErrandOrderController extends BaseController {
      * @Author hmr
      * @Description 通过消息队列来控制并发
      * @Date: 2020/2/12 10:04
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     * @param id 跑腿id
+     * @param version 跑腿的版本信息
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String> 返回一个orderCode，使用该orderCode查看是否成功接单
      **/
-    @ApiOperation("接单，需要轮询操作")
+    @ApiOperation("接单")
     @NeedLogin
-    @GetMapping("/{id}")
-    public Message<String> orderReceive(@PathVariable("id") Long id) throws JsonProcessingException {
-        String s = errandOrderService.receiveOrder(id, getCurrentUserIdFromCookie());
+    @GetMapping("/{id}/{version}")
+    public Message<String> orderReceive(@PathVariable("id") Long id, @PathVariable("version") Integer version) throws JsonProcessingException {
+        String s = errandOrderService.receiveOrder(id, version, getCurrentUserIdFromCookie());
         return Message.createBySuccess(s);
     }
 

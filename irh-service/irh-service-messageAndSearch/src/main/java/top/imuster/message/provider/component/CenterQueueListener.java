@@ -1,7 +1,8 @@
 package top.imuster.message.provider.component;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.message.provider.service.NewsInfoService;
@@ -19,7 +20,8 @@ import java.io.IOException;
 public class CenterQueueListener {
     private static final String QUEUE_NAME = "queue_inform_center";
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Resource
     NewsInfoService newsInfoService;

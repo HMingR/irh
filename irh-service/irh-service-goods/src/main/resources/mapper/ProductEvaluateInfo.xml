@@ -68,6 +68,41 @@
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="productId != null"><![CDATA[product_id ,]]></if>
+			<if test="productName != null"><![CDATA[product_name ,]]></if>
+			<if test="buyerId != null"><![CDATA[buyer_id ,]]></if>
+			<if test="salerId != null"><![CDATA[saler_id ,]]></if>
+			<if test="orderId != null"><![CDATA[order_id ,]]></if>
+			<if test="content != null"><![CDATA[content ,]]></if>
+			<if test="productQualityEvaluate != null"><![CDATA[product_quality_evaluate ,]]></if>
+			<if test="salerServiceEvaluate != null"><![CDATA[saler_service_evaluate ,]]></if>
+			<if test="wholeEvaluate != null"><![CDATA[whole_evaluate ,]]></if>
+			<if test="createTime != null"><![CDATA[create_time ,]]></if>
+			<if test="updateTime != null"><![CDATA[update_time,]]></if>
+			<if test="state != null"><![CDATA[state,]]></if>
+		</trim>
+	</sql>
+
+
+	<sql id="values">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="productId != null"><![CDATA[#{productId},]]></if>
+			<if test="productName != null"><![CDATA[ #{productName},]]></if>
+			<if test="buyerId != null"><![CDATA[  #{buyerId},]]></if>
+			<if test="salerId != null"><![CDATA[  #{salerId},]]></if>
+			<if test="orderId != null"><![CDATA[  #{orderId},]]></if>
+			<if test="content != null"><![CDATA[ #{content},]]></if>
+			<if test="productQualityEvaluate != null"><![CDATA[ #{productQualityEvaluate},]]></if>
+			<if test="salerServiceEvaluate != null"><![CDATA[    #{salerServiceEvaluate},]]></if>
+			<if test="wholeEvaluate != null"><![CDATA[    #{wholeEvaluate},]]></if>
+			<if test="createTime != null"><![CDATA[    #{createTime},]]></if>
+			<if test="updateTime != null"><![CDATA[    #{updateTime},]]></if>
+			<if test="state != null"><![CDATA[    #{state},]]></if>
+		</trim>
+	</sql>
+
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="productEvaluateInfo" >
 		<![CDATA[
@@ -158,5 +193,12 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<insert id="insertInfoReturnId" parameterType="productEvaluateInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO product_evaluate_info
+		<include refid="key"></include>
+		VALUES
+		<include refid="values"></include>
+	</insert>
 	
 </mapper>

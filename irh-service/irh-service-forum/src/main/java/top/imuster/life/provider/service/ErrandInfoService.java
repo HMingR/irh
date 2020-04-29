@@ -27,9 +27,10 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @Description 根据id查看当前跑腿是否还能接单
      * @Date: 2020/2/12 11:19
      * @param id
+     * @param errandVersion
      * @reture: boolean
      **/
-    boolean isAvailable(Long id);
+    boolean isAvailable(Long id, Integer errandVersion);
 
     /**
      * @Author hmr
@@ -40,4 +41,14 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> deleteErrandById(Long id, Long currentUserIdFromCookie);
+
+    /**
+     * @Author hmr
+     * @Description 根据id和版本更新
+     * @Date: 2020/4/29 11:47
+     * @param id
+     * @param errandVersion 版本
+     * @reture: void
+     **/
+    boolean updateStateByIdAndVersion(Long id, Integer errandVersion);
 }

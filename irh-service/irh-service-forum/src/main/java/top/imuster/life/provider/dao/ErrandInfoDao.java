@@ -29,7 +29,7 @@ public interface ErrandInfoDao extends BaseDao<ErrandInfo, Long> {
      * @param id
      * @reture: java.lang.Integer
      **/
-    Integer selectStateById(Long id);
+    Integer selectStateByIdAndVersion(ErrandInfo errandInfo);
 
     /**
      * @Author hmr
@@ -39,4 +39,13 @@ public interface ErrandInfoDao extends BaseDao<ErrandInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer selectListCountByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/4/29 11:48
+     * @param errandInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer updateStateByIdAndVersion(ErrandInfo errandInfo);
 }

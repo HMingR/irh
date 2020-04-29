@@ -58,15 +58,17 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
             Long salerId = productInfoService.getConsumerIdById(productMessageInfo.getProductId());
             sendToSaler.setFromId(writer);
             sendToSaler.setToId(salerId);
-            if(salerId.equals(writer)) return;   //卖家评论自己
-            sendToSaler.setContent("有人对你的商品进行了留言:" + productMessageInfo.getContent());
+            if(salerId.equals(writer)) return;   //卖家评论自己,不发送消息
+            sendToSaler.setContent("有人对你的商品进行了留言");
+            sendToSaler.setNewsType(10);
             sendToSaler.setResourceId(messageId);
         } else {
             long toId = productMessageDao.selectSalerIdByMessageParentId(productMessageInfo.getParentId());
-            sendToSaler.setContent("有人对你的留言进行了回复:" + productMessageInfo.getContent());
-            if(writer.equals(toId)) return;  //楼主评论自己
+            if(writer.equals(toId)) return;  //楼主评论自己，不发送消息
+            sendToSaler.setContent("有人对你的留言进行了回复");
             sendToSaler.setToId(toId);
             sendToSaler.setFromId(writer);
+            sendToSaler.setNewsType(10);
             sendToSaler.setResourceId(messageId);
         }
         generateSendMessageService.sendToMq(sendToSaler);

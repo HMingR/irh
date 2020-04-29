@@ -10,7 +10,8 @@
             user_id AS userId,
             product_id AS productId,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            state
 		]]>
 	</sql>
 
@@ -25,6 +26,7 @@
             <if test="productId != null and productId != ''"><![CDATA[AND product_id = #{productId}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
 		</where>
 	</sql>
 	
@@ -41,29 +43,40 @@
 			<if test="productId != null"><![CDATA[product_id = #{productId},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
 		</set>
+	</sql>
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id ,]]></if>
+			<if test="userId != null and userId != ''"><![CDATA[ user_id ,]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[ product_id   ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ create_time,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time,]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="values">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id},]]></if>
+			<if test="userId != null and userId != ''"><![CDATA[  #{userId},]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[  #{productId},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
+			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
+		</trim>
 	</sql>
 
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="productCollectRel" >
 		<![CDATA[
 			INSERT INTO product_collect_rel
-				(
-                id, 
-                user_id, 
-                product_id, 
-                create_time,
-                update_time 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{userId}, 
-                #{productId}, 
-                #{createTime},
-                #{updateTime} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="values"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

@@ -30,10 +30,11 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @Description 下单操作,使用rabbitmq
      * @Date: 2020/2/12 11:00
      * @param id
+     * @param version
      * @param currentUserIdFromCookie
      * @reture: void
      **/
-    String receiveOrder(Long id, Long currentUserIdFromCookie) throws JsonProcessingException;
+    String receiveOrder(Long id, Integer version, Long currentUserIdFromCookie) throws JsonProcessingException;
 
     /**
      * @Author hmr
@@ -43,4 +44,13 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> getOrderStateByCode(String code);
+
+    /**
+     * @Author hmr
+     * @Description 将订单的状态b
+     * @Date: \ 11:10
+     * @param order
+     * @reture: boolean
+     **/
+    boolean acceptErrand(ErrandOrderInfo order);
 }

@@ -39,14 +39,14 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     }
 
     @Override
-    public void evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo){
+    public Long evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo){
         ProductEvaluateInfo evaluateInfo = new ProductEvaluateInfo();
         evaluateInfo.setBuyerId(order.getBuyerId());
         evaluateInfo.setProductId(order.getProductId());
         evaluateInfo.setSalerId(order.getSalerId());
         evaluateInfo.setOrderId(order.getId());
         evaluateInfo.setState(2);
-        productEvaluateInfoDao.insertEntry(evaluateInfo);
+        return productEvaluateInfoDao.insertInfoReturnId(evaluateInfo);
     }
 
     @Override
@@ -58,10 +58,12 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         if(order.getState() != 50){
             return Message.createByError("该订单还没有完成交易，完成该订单之后才能进行评价");
         }
-        this.evaluateByOrder(order, productEvaluateInfo);
+        Long id = this.evaluateByOrder(order, productEvaluateInfo);
         SendUserCenterDto sendMessageDto = new SendUserCenterDto();
         sendMessageDto.setToId(order.getSalerId());
         sendMessageDto.setFromId(order.getBuyerId());
+        sendMessageDto.setResourceId(id);
+        sendMessageDto.setNewsType(60);
         sendMessageDto.setContent("我对您发布的商品进行了评价,快来看看吧");
         generateSendMessageService.sendToMq(sendMessageDto);
         return Message.createBySuccess();

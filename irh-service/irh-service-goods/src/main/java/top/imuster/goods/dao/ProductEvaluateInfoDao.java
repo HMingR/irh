@@ -11,5 +11,13 @@ import top.imuster.goods.api.pojo.ProductEvaluateInfo;
  */
 public interface ProductEvaluateInfoDao extends BaseDao<ProductEvaluateInfo, Long> {
     //自定义扩展
+    /**
+     * @Author hmr
+     * @Description 插入留言信息并返回id
+     * @Date: 2020/4/29 10:19
+     * @param evaluateInfo
+     * @reture: java.lang.Integer
+     **/
+    Long insertInfoReturnId(ProductEvaluateInfo evaluateInfo);
 
 }

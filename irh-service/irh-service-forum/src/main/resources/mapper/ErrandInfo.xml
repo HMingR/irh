@@ -13,7 +13,8 @@
             money,
             create_time AS createTime,
             update_time AS updateTime,
-            state 
+            state,
+            version
 		]]>
 	</sql>
 
@@ -30,7 +31,8 @@
             <if test="money != null and money != ''"><![CDATA[AND money = #{money}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
-            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="version != null and version != ''"><![CDATA[AND version = #{version}]]></if>
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
 		</where>
 	</sql>
@@ -51,35 +53,46 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="version != null"><![CDATA[version = #{version},]]></if>
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id ,]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[ publisher_id  ,]]></if>
+			<if test="content != null and content != ''"><![CDATA[ content ,]]></if>
+			<if test="requirement != null and requirement != ''"><![CDATA[ requirement  ,]]></if>
+			<if test="money != null and money != ''"><![CDATA[ money ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ create_time ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time ,]]></if>
+			<if test="version != null and version != ''"><![CDATA[ version  ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state  ,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="values">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id} ,]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[   #{publisherId} ,]]></if>
+			<if test="content != null and content != ''"><![CDATA[   #{content} ,]]></if>
+			<if test="requirement != null and requirement != ''"><![CDATA[   #{requirement} ,]]></if>
+			<if test="money != null and money != ''"><![CDATA[   #{money} ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[   #{createTime} ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[   #{updateTime} ,]]></if>
+			<if test="version != null and version != ''"><![CDATA[   #{version} ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
+		</trim>
+	</sql>
+
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="errandInfo" >
+	<insert id="insertEntry" parameterType="errandInfo" keyProperty="id" >
 		<![CDATA[
 			INSERT INTO errand_info
-				(
-                id, 
-                publisher_id, 
-                content,
-                requirement, 
-                money, 
-                create_time, 
-                update_time, 
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{publisherId}, 
-                #{content},
-                #{requirement}, 
-                #{money}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="values"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -140,10 +153,10 @@
 		AND state != 1 AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
 	</select>
 
-	<select id="selectStateById" parameterType="long" resultType="integer">
+	<select id="selectStateByIdAndVersion" parameterType="errandInfo" resultType="integer">
 		<![CDATA[SELECT state ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE id = #{id}
+		WHERE id = #{id} AND version = #{version}
 	</select>
 
 	<select id="selectListCountByUserId" parameterType="long" resultType="integer">
@@ -151,4 +164,10 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE publisher_id = #{userId,jdbcType=BIGINT} AND state != 1
 	</select>
+
+	<update id="updateStateByIdAndVersion" parameterType="errandInfo">
+		UPDATE errand_info
+		SET state = #{state}, version = #{version} + 1
+		WHERE id = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=INTEGER}
+	</update>
 </mapper>

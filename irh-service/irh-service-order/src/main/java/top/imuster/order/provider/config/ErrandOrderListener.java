@@ -2,7 +2,8 @@ package top.imuster.order.provider.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,8 +24,10 @@ import java.util.concurrent.TimeUnit;
  * @date: 2020/2/12 10:48
  */
 @Component
-@Slf4j
 public class ErrandOrderListener {
+
+
+    private static final Logger log = LoggerFactory.getLogger(ErrandOrderListener.class);
 
     @Resource
     ErrandOrderService errandOrderService;
@@ -40,7 +43,8 @@ public class ErrandOrderListener {
         try{
             ErrandOrderInfo order = new ObjectMapper().readValue(msg, ErrandOrderInfo.class);
             Long errandId = order.getErrandId();
-            boolean available = forumServiceFeignApi.errandIsAvailable(errandId);
+            Integer errandVersion = order.getErrandVersion();
+            boolean available = forumServiceFeignApi.errandIsAvailable(errandId, errandVersion);
             redisTemplate.expire(String.valueOf(order.getOrderCode()), 1, TimeUnit.MINUTES);
             if(!available){
                 //当需要将订单存入数据库的时候，如果当前跑腿已经被人抢走了，则将结果存放在redis中，并结束当前方法
@@ -49,10 +53,10 @@ public class ErrandOrderListener {
             }
             //下单成功也将订单编号放入redis中
             redisTemplate.opsForHash().put(GlobalConstant.IRH_LIFE_ERRAND_MAP, String.valueOf(order.getOrderCode()), 2);
-            order.setState(3);
-            int i = errandOrderService.insertEntry(order);
-            if(i == 1){
-                forumServiceFeignApi.updateErrandInfoById(errandId);
+            boolean flag = forumServiceFeignApi.updateErrandInfoById(errandId, errandVersion);
+            if(flag){
+                order.setState(3);
+                errandOrderService.acceptErrand(order);
                 //当更新成功之后将errandInfo的id存储到redis中，并设置过期时间
                 redisTemplate.opsForHash().put(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(errandId), errandId);
                 redisTemplate.expire(RedisUtil.getErrandKey(errandId), 1, TimeUnit.MINUTES);

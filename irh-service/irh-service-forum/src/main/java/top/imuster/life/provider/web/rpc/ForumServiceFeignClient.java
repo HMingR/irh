@@ -5,9 +5,8 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.life.api.pojo.ArticleCategoryInfo;
-import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
-import top.imuster.life.api.pojo.ErrandInfo;
+import top.imuster.life.api.pojo.ArticleReviewInfo;
 import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.life.provider.service.ArticleCategoryService;
 import top.imuster.life.provider.service.ArticleInfoService;
@@ -121,17 +120,14 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
     }
 
     @Override
-    @GetMapping("/errand/{id}")
-    public void updateErrandInfoById(@PathVariable("id") Long id) {
-        ErrandInfo errandInfo = new ErrandInfo();
-        errandInfo.setId(id);
-        errandInfo.setState(3);
-        errandInfoService.updateByKey(errandInfo);
+    @GetMapping("/errand/{id}/{version}")
+    public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion) {
+        return errandInfoService.updateStateByIdAndVersion(id, errandVersion);
     }
 
     @Override
-    @GetMapping("/errand/avail/{errandId}")
-    public boolean errandIsAvailable(@PathVariable("errandId") Long errandId) {
-        return errandInfoService.isAvailable(errandId);
+    @GetMapping("/errand/avail/{errandId}/{version}")
+    public boolean errandIsAvailable(@PathVariable("errandId") Long errandId,@PathVariable("version") Integer errandVersion) {
+        return errandInfoService.isAvailable(errandId, errandVersion);
     }
 }

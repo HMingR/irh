@@ -11,13 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	/**
-	 * Configure.
-	 *
-	 * @param http the http
-	 *
-	 * @throws Exception the exception
-	 */
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.headers().frameOptions().disable()
@@ -30,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/api/**", "/applications/**", "/api/applications/**", "/login.html", "/**/*.css", "/img/**", "/third-party/**")
+				.antMatchers("/**/**", "/applications/**", "/api/applications/**", "/login.html", "/**/*.css", "/img/**", "/third-party/**")
 				.permitAll()
 				.anyRequest().authenticated();
 	}

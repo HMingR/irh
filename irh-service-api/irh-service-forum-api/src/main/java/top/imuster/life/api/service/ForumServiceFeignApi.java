@@ -107,18 +107,21 @@ public interface ForumServiceFeignApi {
      * @Description 根据更新errandInfo的信息
      * @Date: 2020/3/7 15:37
      * @param id
+     * @param errandVersion
      * @reture: void
      **/
-    @GetMapping("/errand/{id}")
-    void updateErrandInfoById(@PathVariable("id") Long id);
+    @GetMapping("/errand/{id}/{version}")
+    boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion);
 
     /**
      * @Author hmr
      * @Description 根据id查看errand是否可以被下单
      * @Date: 2020/3/7 15:42
      * @param errandId
+     * @param errandVersion
      * @reture: boolean
      **/
-    @GetMapping("/errand/avail/{errandId}")
-    boolean errandIsAvailable(@PathVariable("errandId") Long errandId);
+    @GetMapping("/errand/avail/{errandId}/{version}")
+    boolean errandIsAvailable(@PathVariable("errandId") Long errandId,@PathVariable("version") Integer errandVersion);
+
 }

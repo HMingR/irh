@@ -82,6 +82,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             SendUserCenterDto temp = new SendUserCenterDto();
             temp.setContent("您举报的关于" + FeedbackEnum.getNameByType(info.getType()) + ":" + info.getTargetId() + "的信息已经被管理员成功处理，已经将相关账号进行冻结。感谢您的及时反馈");
             temp.setDate(DateUtil.now());
+            temp.setNewsType(60);
             for (Long reporterId : reporterIds) {
                 temp.setToId(reporterId);
                 generateSendMessageService.sendToMq(temp);
