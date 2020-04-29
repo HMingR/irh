@@ -94,6 +94,13 @@ public class GoodsOrderController extends BaseController{
         return Message.createBySuccess(orderInfo);
     }
 
+    /**
+     * @Author hmr
+     * @Description 买家完成订单
+     * @Date: 2020/4/29 16:35
+     * @param orderId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
     @GetMapping("/finish/{orderId}")
     @NeedLogin
     public Message<String> finish(@PathVariable("orderId") Long orderId){

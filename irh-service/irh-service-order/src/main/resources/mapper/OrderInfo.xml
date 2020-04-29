@@ -78,40 +78,10 @@
 	<insert id="insertEntry" parameterType="orderInfo" >
 		<![CDATA[
 			INSERT INTO order_info
-				(
-                id, 
-                saler_id, 
-                buyer_id,
-                product_id, 
-                payment_money, 
-                order_remark, 
-                address, 
-                trade_type, 
-                payment_time, 
-                create_time, 
-                finish_time, 
-                update_time,
-                order_code
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{salerId}, 
-                #{buyerId},
-                #{productId}, 
-                #{paymentMoney}, 
-                #{orderRemark}, 
-                #{address}, 
-                #{tradeType}, 
-                #{paymentTime}, 
-                #{createTime}, 
-                #{finishTime}, 
-                #{updateTime},
-                #{orderCode}
-                #{state} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="values"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -174,43 +144,55 @@
 		<![CDATA[ WHERE order_code = #{orderCode} ]]>
 	</select>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id  ,]]></if>
+			<if test="salerId != null and salerId != ''"><![CDATA[  saler_id,]]></if>
+			<if test="buyerId != null and buyerId != ''"><![CDATA[  buyer_id ,]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[  product_id ,]]></if>
+			<if test="paymentMoney != null and paymentMoney != ''"><![CDATA[  payment_money ,]]></if>
+			<if test="orderRemark != null and orderRemark != ''"><![CDATA[  order_remark,]]></if>
+			<if test="address != null and address != ''"><![CDATA[  address ,]]></if>
+			<if test="tradeType != null and tradeType != ''"><![CDATA[  trade_type ,]]></if>
+			<if test="paymentTime != null and paymentTime != ''"><![CDATA[  payment_time ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  create_time ,]]></if>
+			<if test="finishTime != null and finishTime != ''"><![CDATA[  finish_time ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[  state ,]]></if>
+			<if test="orderCode != null and orderCode != ''"><![CDATA[  order_code  ,]]></if>
+			<if test="salerNickname != null and salerNickname != ''"><![CDATA[saler_nickname,]]></if>
+			<if test="orderVersion != null and orderVersion != ''"><![CDATA[  order_version  ,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="values">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[  #{id},]]></if>
+			<if test="salerId != null and salerId != ''"><![CDATA[  #{salerId},]]></if>
+			<if test="buyerId != null and buyerId != ''"><![CDATA[ #{buyerId},]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[  #{productId},]]></if>
+			<if test="paymentMoney != null and paymentMoney != ''"><![CDATA[  #{paymentMoney},]]></if>
+			<if test="orderRemark != null and orderRemark != ''"><![CDATA[ #{orderRemark},]]></if>
+			<if test="address != null and address != ''"><![CDATA[  #{address},]]></if>
+			<if test="tradeType != null and tradeType != ''"><![CDATA[  #{tradeType},]]></if>
+			<if test="paymentTime != null and paymentTime != ''"><![CDATA[  #{paymentTime},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  #{createTime},]]></if>
+			<if test="finishTime != null and finishTime != ''"><![CDATA[  #{finishTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  #{updateTime},]]></if>
+			<if test="state != null and state != ''"><![CDATA[  #{state},]]></if>
+			<if test="orderCode != null and orderCode != ''"><![CDATA[ #{orderCode},]]></if>
+			<if test="salerNickname != null and salerNickname != ''"><![CDATA[ #{salerNickname},]]></if>
+			<if test="orderVersion != null and orderVersion != ''"><![CDATA[ #{orderVersion},]]></if>
+		</trim>
+	</sql>
+
 	<insert id="insertOrder" parameterType="orderInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 		<![CDATA[
 			INSERT INTO order_info
-				(
-                id,
-                saler_id,
-                buyer_id,
-                product_id,
-                payment_money,
-                order_remark,
-                address,
-                trade_type,
-                payment_time,
-                create_time,
-                finish_time,
-                update_time,
-                order_code
-                state
-				)
-			VALUES
-				(
-                #{id},
-                #{salerId},
-                #{buyerId},
-                #{productId},
-                #{paymentMoney},
-                #{orderRemark},
-                #{address},
-                #{tradeType},
-                #{paymentTime},
-                #{createTime},
-                #{finishTime},
-                #{updateTime},
-                #{orderCode}
-                #{state}
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="values"></include>
 	</insert>
 
 	<select id="selectAmountIncrementTotal" resultType="long" parameterType="map">

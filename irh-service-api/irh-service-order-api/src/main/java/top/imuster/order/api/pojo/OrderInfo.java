@@ -83,6 +83,10 @@ public class OrderInfo extends BaseDomain {
 	@ApiModelProperty("订单版本，默认为1，当修改订单的时候会将版本号加1")
 	private Integer orderVersion;
 
+	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
+	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
+	//private Short state;
+
 	public String getSalerNickname() {
 		return salerNickname;
 	}
@@ -98,12 +102,6 @@ public class OrderInfo extends BaseDomain {
 	public void setMoney(double money) {
 		this.money = money;
 	}
-
-	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
-	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
-	//private Short state;
-
-
 
 	public Integer getOrderVersion() {
 		return orderVersion;

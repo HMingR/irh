@@ -70,7 +70,7 @@ public class AlipayController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @PostMapping("/alipayNotify")
-    public Message payResult(HttpServletRequest request) throws ParseException {
+    public Message<String> payResult(HttpServletRequest request) throws ParseException {
         Map<String,String> params = Maps.newHashMap();
         Map requestParams = request.getParameterMap();
         for(Iterator iter = requestParams.keySet().iterator(); iter.hasNext();){
@@ -94,7 +94,6 @@ public class AlipayController extends BaseController {
             log.error("支付宝验证回调异常",e);
         }
         alipayService.aliCallBack(params);
-        //todo 通知卖家
         return Message.createBySuccess("支付成功,已提醒卖家");
     }
 
