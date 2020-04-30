@@ -47,8 +47,8 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
 
     @Override
     @PostMapping("/register")
-    public Message<String> register(@RequestBody UserInfo userInfo,@PathVariable("code") String code) {
-        return userInfoService.register(userInfo, code);
+    public Message<String> register(@RequestBody UserInfo userInfo) {
+        return userInfoService.register(userInfo);
     }
 
     @Override

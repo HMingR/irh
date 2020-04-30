@@ -82,7 +82,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
-    public Message<String> register(UserInfo userInfo, String code){
+    public Message<String> register(UserInfo userInfo){
         UserInfo condition;
         CheckValidDto checkValidDto = new CheckValidDto();
         //校验邮箱
@@ -101,16 +101,9 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
             return Message.createByError("邮箱或用户名重复");
         }
         String realToken = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerRegisterByEmailToken(email));
-        if(StringUtils.isBlank(realToken) || !code.equalsIgnoreCase(realToken)){
-            return Message.createByError("验证码错误");
-        }
         userInfo.setState(30);
-        int result = userInfoDao.insertEntry(userInfo);
-        if(result != 1){
-            log.error("用户注册失败,校验参数没有问题,但是在最后存入数据库的时候出现问题,用户注册信息为{}", userInfo);
-            return Message.createByError("服务器内部错误,请稍后重试");
-        }
-        return Message.createBySuccess("注册成功");
+        userInfoDao.insertEntry(userInfo);
+        return Message.createBySuccess("注册成功，在个人中心的实名认证中提交相应材料并通过审核之后才能使用全部功能哦!");
     }
 
     @Override

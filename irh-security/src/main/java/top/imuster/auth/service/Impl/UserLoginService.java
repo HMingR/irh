@@ -23,20 +23,25 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.exception.CustomSecurityException;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
+import top.imuster.security.api.dto.UserLoginDto;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * @ClassName: UserLoginService
@@ -69,6 +74,9 @@ public class UserLoginService {
 
     @Autowired
     DiscoveryClient discoveryClient;
+
+    @Resource
+    private Pattern emailPattern;
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -116,13 +124,16 @@ public class UserLoginService {
         }
     }
 
-    public void getCode(String email){
+    public void getCode(String email, Integer type){
         SendEmailDto emailDto = new SendEmailDto();
         String code = UUID.randomUUID().toString().substring(0, 4);
         emailDto.setEmail(email);
-        emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
         emailDto.setContent(code);
-        emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+        if(type == 1){
+            emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+        }else if(type == 2){
+            emailDto.setRedisKey(RedisUtil.getConsumerLoginByEmail(email));
+        }
         emailDto.setTemplateEnum(TemplateEnum.USER_REGISTER);
         emailDto.setExpiration(20L);
         emailDto.setUnit(TimeUnit.MINUTES);
@@ -229,5 +240,47 @@ public class UserLoginService {
         //将串进行base64编码
         byte[] encode = Base64Utils.encode(string.getBytes());
         return "Basic "+new String(encode);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 用户注册,需要先校验参数
+     * @Date: 2020/4/30 9:33
+     * @param userInfo
+     * @param code
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    public Message<String> register(UserInfo userInfo, String code) {
+        String email = userInfo.getEmail();
+        if(StringUtils.isEmpty(email)) return Message.createByError("登录邮箱为kong");
+
+        String redisKey = RedisUtil.getConsumerRegisterByEmailToken(email);
+        String redisCode = (String)redisTemplate.opsForValue().get(redisKey);
+
+        if(StringUtils.isEmpty(redisCode) || redisCode.equalsIgnoreCase(code)) return Message.createByError("验证码错误");
+
+        return userServiceFeignApi.register(userInfo);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 用户验证码登录
+     * @Date: 2020/4/30 10:10
+     * @param userLoginDto
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.security.api.bo.SecurityUserDto>
+     **/
+    public Message<SecurityUserDto> loginByCode(UserLoginDto userLoginDto) {
+        String email = userLoginDto.getLoginName();
+        String code = userLoginDto.getCode();
+        if(StringUtils.isEmpty(email)) return Message.createByError("请输入用户名");
+        if(StringUtils.isEmpty(code)) return Message.createByError("请输入验证码");
+        if(emailPattern.matcher(email).matches()) return Message.createByError("邮箱格式错误");
+
+        String redisCode = (String)redisTemplate.opsForValue().get(RedisUtil.getConsumerLoginByEmail(email));
+        if(StringUtils.isEmpty(redisCode) || !code.equalsIgnoreCase(redisCode)) return Message.createByError("验证码错误");
+//todo
+//        userServiceFeignApi.loadUserInfoByEmail()
+
+        return null;
     }
 }

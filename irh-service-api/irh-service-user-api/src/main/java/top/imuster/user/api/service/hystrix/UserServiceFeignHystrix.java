@@ -1,7 +1,8 @@
 package top.imuster.user.api.service.hystrix;
 
 import feign.hystrix.FallbackFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
@@ -17,10 +18,9 @@ import java.util.List;
  * @date: 2020/1/27 16:34
  */
 @Component
-@Slf4j
 public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeignApi> {
 
-    /**/
+    private static final Logger log = LoggerFactory.getLogger(UserServiceFeignHystrix.class);
 
     @Override
     public UserServiceFeignApi create(Throwable throwable) {
@@ -42,7 +42,7 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
             }
 
             @Override
-            public Message<String> register(UserInfo userInfo, String code){
+            public Message<String> register(UserInfo userInfo){
                 log.error("用户注册失败,用户信息为{}", userInfo);
                 return Message.createByError("注册失败");
             }

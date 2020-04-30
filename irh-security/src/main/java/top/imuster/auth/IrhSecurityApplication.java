@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.regex.Pattern;
+
 /**
  * @ClassName: IrhSecurityApplication
  * @Description: IrhSecurityApplication
@@ -39,5 +41,10 @@ public class IrhSecurityApplication {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
+    }
+
+    @Bean
+    public Pattern emailPattern(){
+        return Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
     }
 }

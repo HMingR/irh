@@ -125,4 +125,15 @@ public class RedisUtil {
             return null;
         }
     }
+
+    /**
+     * @Author hmr
+     * @Description 获得redis中用户邮箱登录发送的验证码
+     * @Date: 2020/4/30 10:14
+     * @param email
+     * @reture: java.lang.String
+     **/
+    public static String getConsumerLoginByEmail(String email) {
+        return new StringBuffer().append(GlobalConstant.IRH_CONSUMER_CODE_LOGIN).append(email).toString();
+    }
 }
