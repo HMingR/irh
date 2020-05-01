@@ -1,4 +1,4 @@
-package top.imuster.auth.config;
+package top.imuster.auth.component;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -9,7 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import top.imuster.auth.component.SmsUserDetailsService;
+import top.imuster.auth.config.SmsCodeAuthenticationToken;
 import top.imuster.common.core.utils.RedisUtil;
 
 /**
@@ -20,9 +20,6 @@ import top.imuster.common.core.utils.RedisUtil;
  */
 public class SmsAuthenticationProvider implements AuthenticationProvider {
     private static final Logger log = LoggerFactory.getLogger(SmsAuthenticationProvider.class);
-
-    @Autowired
-    SmsUserDetailsService smsUserDetailsService;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -46,7 +43,4 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
         return (SmsCodeAuthenticationToken.class.isAssignableFrom(aClass));
     }
 
-    public void setSmsUserDetailsService(SmsUserDetailsService smsUserDetailsService) {
-        this.smsUserDetailsService = smsUserDetailsService;
-    }
 }

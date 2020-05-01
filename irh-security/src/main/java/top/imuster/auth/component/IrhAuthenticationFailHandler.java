@@ -1,4 +1,4 @@
-package top.imuster.auth.config;
+package top.imuster.auth.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * @ClassName: IrhAuthenticationSuccessHandler
- * @Description: TODO
+ * @Description: 认证失败的处理逻辑
  * @author: hmr
  * @date: 2020/4/30 20:14
  */

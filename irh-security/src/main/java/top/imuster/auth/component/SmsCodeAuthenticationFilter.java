@@ -1,4 +1,4 @@
-package top.imuster.auth.config;
+package top.imuster.auth.component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import top.imuster.auth.component.SmsUserDetailsService;
+import top.imuster.auth.config.SecurityConstants;
+import top.imuster.auth.config.SmsCodeAuthenticationToken;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,9 +34,6 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
     public SmsCodeAuthenticationFilter(){
         super(new AntPathRequestMatcher("/emailCodeLogin", "POST"));
     }
-
-    @Autowired
-    SmsUserDetailsService smsUserDetailsService;
 
     @Autowired
     AuthenticationManager authenticationManager;

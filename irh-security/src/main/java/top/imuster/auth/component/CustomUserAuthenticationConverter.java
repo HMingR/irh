@@ -1,4 +1,4 @@
-package top.imuster.auth.config;
+package top.imuster.auth.component;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

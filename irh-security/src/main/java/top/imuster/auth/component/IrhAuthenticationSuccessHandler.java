@@ -1,4 +1,4 @@
-package top.imuster.auth.config;
+package top.imuster.auth.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.MapUtils;
@@ -21,7 +21,7 @@ import java.io.IOException;
 
 /**
  * @ClassName: IrhAuthenticationSuccessHandler
- * @Description: TODO
+ * @Description: 认证成功的处理逻辑
  * @author: hmr
  * @date: 2020/4/30 20:14
  */
@@ -64,15 +64,5 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(token));
-
-
-        /*String type = request.getHeader("Accept");
-        if(!type.contains("text/html")){
-
-
-        }else {
-            super.onAuthenticationSuccess(request, response, authentication);
-        }*/
-
     }
 }

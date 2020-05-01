@@ -10,18 +10,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import top.imuster.auth.component.SmsUserDetailsService;
+import top.imuster.auth.component.IrhAuthenticationFailHandler;
+import top.imuster.auth.component.IrhAuthenticationSuccessHandler;
+import top.imuster.auth.component.SmsAuthenticationProvider;
+import top.imuster.auth.component.SmsCodeAuthenticationFilter;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @Order(2147483636)
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Resource
-    private SmsUserDetailsService smsUserDetailsService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -32,7 +31,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public SmsAuthenticationProvider smsAuthenticationProvider(){
         SmsAuthenticationProvider provider = new SmsAuthenticationProvider();
         // 设置userDetailsService
-        provider.setSmsUserDetailsService(smsUserDetailsService);
         // 禁止隐藏用户未找到异常
         return provider;
     }

@@ -6,9 +6,12 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 /**
- * Created by fp295 on 2018/6/16.
- * 自定义AbstractAuthenticationToken，
- */
+ * @Author hmr
+ * @Description 自定义AbstractAuthenticationToken
+ * @Date: 2020/5/1 13:51
+ * @param irh平台的认证实体类   可以通过继承该类来实现不同的登录逻辑
+ * @reture:
+ **/
 public class IrhAuthenticationToken extends AbstractAuthenticationToken {
 
     private static final long serialVersionUID = 110L;
