@@ -6,6 +6,9 @@ mybatis:
   type-aliases-package: top.imuster.goods.api.pojo   #别名扫描
 
 spring:
+  data:
+    mongodb:
+      uri: mongodb://101.200.87.195:27017/recommender
   profiles:
     active: dev
   application:
