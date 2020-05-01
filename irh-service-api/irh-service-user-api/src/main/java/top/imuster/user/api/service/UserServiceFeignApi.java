@@ -45,8 +45,8 @@ public interface UserServiceFeignApi {
      * @param code 发送到邮箱的验证码
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @PostMapping("/register/{code}")
-    Message<String> register(@RequestBody UserInfo userInfo,@PathVariable("code") String code);
+    @PostMapping("/register")
+    Message<String> register(@RequestBody UserInfo userInfo);
 
     /**
      * @Author hmr

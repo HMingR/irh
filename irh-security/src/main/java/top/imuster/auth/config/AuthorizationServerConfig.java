@@ -5,7 +5,6 @@ import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -19,6 +18,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import top.imuster.auth.component.CustomUserAuthenticationConverter;
+import top.imuster.auth.service.Impl.UsernameUserDetailsServiceImpl;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -35,8 +36,8 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Autowired
-    UserDetailsService userDetailsService;
+    @Resource
+    UsernameUserDetailsServiceImpl usernameDetailsService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -91,7 +92,7 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         endpoints.accessTokenConverter(jwtAccessTokenConverter)
                 .authenticationManager(authenticationManager)//认证管理器
                 .tokenStore(tokenStore)//令牌存储
-                .userDetailsService(userDetailsService);//用户信息service
+                .userDetailsService(usernameDetailsService);//用户信息service
     }
 
     //授权服务器的安全配置

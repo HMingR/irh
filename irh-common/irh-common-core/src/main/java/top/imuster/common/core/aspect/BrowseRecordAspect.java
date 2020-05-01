@@ -51,7 +51,7 @@ public class BrowseRecordAspect extends BaseController {
         BrowseRecordAnnotation annotation = getAnnotation(joinPoint);
         BrowseRecordDto recordDto = new BrowseRecordDto();
         if(StringUtils.isNotBlank(annotation.value())) recordDto = getRecordInfo(joinPoint);
-        if(recordDto == null) return;
+        if(recordDto == null || recordDto.getUserId() == null) return;    //当没有得到方法形参中的recordDto或者recordDto中的userId为null时，直接返回
         BrowserType browserType = recordDto.getBrowserType();
         Long userId = recordDto.getUserId();
         if(userId == null || browserType == null) return;

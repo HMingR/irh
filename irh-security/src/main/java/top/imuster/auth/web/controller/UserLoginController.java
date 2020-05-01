@@ -11,20 +11,21 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.imuster.auth.service.Impl.UserLoginService;
+import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.utils.CookieUtil;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
+import top.imuster.security.api.dto.UserLoginDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 /**
@@ -43,7 +44,7 @@ public class UserLoginController extends BaseController {
     @Value("${auth.cookieMaxAge}")
     private int cookieMaxAge;
 
-    @Autowired
+    @Resource
     UserLoginService userLoginService;
 
     @Autowired
@@ -55,9 +56,21 @@ public class UserLoginController extends BaseController {
         validData(bindingResult);
         SecurityUserDto result = userLoginService.login(userInfo.getEmail(), userInfo.getPassword());
         saveAccessTokenToCookie(result.getAuthToken().getAccessToken());
-        result.getAuthToken().setJwtToken(" ");
-        result.getAuthToken().setRefreshToken(" ");
+        result.getAuthToken().setJwtToken("");
+        result.getAuthToken().setRefreshToken("");
         return Message.createBySuccess(result);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据验证码登录
+     * @Date: 2020/4/30 10:05
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.security.api.bo.SecurityUserDto>
+     **/
+    @PostMapping("emailCodeLogin1")
+    public Message<SecurityUserDto> loginByCode(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
+        return userLoginService.loginByCode(userLoginDto);
     }
 
     @ApiOperation("在用户需要访问受保护的信息时，需要调用该接口获得jwt")
@@ -96,14 +109,25 @@ public class UserLoginController extends BaseController {
     @PostMapping("/register/{code}")
     public Message<String> register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) UserInfo userInfo, BindingResult bindingResult, @ApiParam("发送的验证码") @PathVariable String code) throws Exception {
         validData(bindingResult);
-        return userServiceFeignApi.register(userInfo, code);
+        return userLoginService.register(userInfo, code);
     }
 
 
+    /**
+     * @Author hmr
+     * @Description 发送email验证码
+     * @Date: 2020/4/30 10:12
+     * @param email  接受code的邮箱
+     * @param type   1-注册  2-登录
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
     @ApiOperation(value = "发送email验证码",httpMethod = "GET")
-    @GetMapping("/sendCode/{email}")
-    public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email) throws Exception {
-        userLoginService.getCode(email);
+    @GetMapping("/sendCode/{type}/{email}")
+    public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email, @PathVariable("type") Integer type) throws Exception {
+        if(type != 1 && type != 2){
+            return Message.createByError("参数异常,请刷新后重试");
+        }
+        userLoginService.getCode(email, type);
         return Message.createBySuccess();
     }
 

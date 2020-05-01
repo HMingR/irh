@@ -21,8 +21,8 @@ import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.util.List;
 
-@Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+@Service("usernameDetailsService")
+public class UsernameUserDetailsServiceImpl implements UserDetailsService {
 
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -65,9 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         log.info("查询到的用户信息为{}", userInfo);
         List<String> roleName = userServiceFeignApi.getRoleByUserName(username);
-
         UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
-
         String userAuth  = StringUtils.join(roleName.toArray(), ",");
         UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
         userDetails.setUserInfo(userDto);

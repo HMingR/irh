@@ -39,7 +39,7 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @param userInfo
      * @reture: void
      **/
-    Message<String> register(UserInfo userInfo, String code);
+    Message<String> register(UserInfo userInfo);
 
     /**
      * @Author hmr

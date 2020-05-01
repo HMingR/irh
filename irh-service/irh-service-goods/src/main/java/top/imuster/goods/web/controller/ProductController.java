@@ -79,9 +79,10 @@ public class ProductController extends BaseController {
     /**
      * @Author hmr
      * @Description 用户查看自己发布的商品
-     * @Date: 2020/2/10 16:08
-     * @param page
-     * @reture: top.imuster.common.base.wrapper.Message
+     * @Date: 2020/4/30 9:14
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
     @ApiOperation(value = "用户查看自己发布的商品", httpMethod = "GET")
     @NeedLogin
@@ -167,22 +168,22 @@ public class ProductController extends BaseController {
 
     /**
      * @Author hmr
-     * @Description 记录浏览
+     * @Description 记录浏览和浏览次数
      * @Date: 2020/4/22 9:04
      * @param targetId
      * @reture: void
      **/
-    @GetMapping("/browser/{targetId}/{time}")
+    @GetMapping("/browse/{targetId}/{time}")
     @BrowseRecordAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p2")
     @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0")
-    public void browser(@PathVariable("targetId") Long targetId, @PathVariable("time") Long time, BrowseRecordDto recordDto){
+    public Message<String> browser(@PathVariable("targetId") Long targetId, @PathVariable("time") Long time, BrowseRecordDto recordDto){
         Long userId = getCurrentUserIdFromCookie(false);
-        if(userId == null) return;
         recordDto.setUserId(userId);
         recordDto.setBrowserTime(time);
         recordDto.setTargetId(targetId);
         recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
         recordDto.setCreateTime(DateUtil.now());
+        return Message.createBySuccess();
     }
 
 }
