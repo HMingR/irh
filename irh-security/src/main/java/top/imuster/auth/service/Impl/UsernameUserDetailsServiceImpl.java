@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
-import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
 import top.imuster.user.api.pojo.UserInfo;
@@ -21,8 +20,8 @@ import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.util.List;
 
-@Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+@Service("usernameDetailsService")
+public class UsernameUserDetailsServiceImpl implements UserDetailsService {
 
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -57,12 +56,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         UserInfo userInfo = userServiceFeignApi.loadUserInfoByEmail(username);
-        if(userInfo == null) {
+        /*if(userInfo == null) {
             throw new CustomSecurityException("用户名或者密码错误");
         }
         if(userInfo.getState() == null || userInfo.getState() <= 20){
             throw new CustomSecurityException("该账号已被冻结,请联系管理员");
-        }
+        }*/
         log.info("查询到的用户信息为{}", userInfo);
         List<String> roleName = userServiceFeignApi.getRoleByUserName(username);
 

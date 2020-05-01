@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@ComponentScan(basePackages = {"top.imuster.message", "top.imuster.common.core"})
+@ComponentScan(basePackages = {"top.imuster.message", "top.imuster.common"})
 @EnableFeignClients(basePackages = {"top.imuster.goods.api.service", "top.imuster.order.api.service"})
 public class MessageProviderApplication {
     public static void main(String[] args) {

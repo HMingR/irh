@@ -2,6 +2,7 @@ package top.imuster.auth.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +17,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.*;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import top.imuster.auth.component.SmsUserDetailsService;
+import top.imuster.auth.config.SmsCodeAuthenticationToken;
 import top.imuster.auth.exception.CustomSecurityException;
+import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendEmailDto;
 import top.imuster.common.core.enums.TemplateEnum;
@@ -30,6 +37,7 @@ import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
+import top.imuster.security.api.bo.UserDetails;
 import top.imuster.security.api.dto.UserLoginDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
@@ -50,7 +58,7 @@ import java.util.regex.Pattern;
  * @date: 2020/1/27 16:47
  */
 @Service("userLoginService")
-public class UserLoginService {
+public class UserLoginServiceImpl implements UserLoginService {
 
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -129,6 +137,7 @@ public class UserLoginService {
         String code = UUID.randomUUID().toString().substring(0, 4);
         emailDto.setEmail(email);
         emailDto.setContent(code);
+        log.info("验证码为:{}", code);
         if(type == 1){
             emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
         }else if(type == 2){
@@ -262,6 +271,17 @@ public class UserLoginService {
         return userServiceFeignApi.register(userInfo);
     }
 
+    @Autowired
+    private AuthorizationServerTokenServices authorizationServerTokenServices;
+
+    @Autowired
+    private ClientDetailsService clientDetailsService;
+
+    @Resource
+    SmsUserDetailsService smsUserDetailsService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
     /**
      * @Author hmr
      * @Description 用户验证码登录
@@ -269,15 +289,30 @@ public class UserLoginService {
      * @param userLoginDto
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.security.api.bo.SecurityUserDto>
      **/
-    public Message<SecurityUserDto> loginByCode(UserLoginDto userLoginDto) {
+    public Message<SecurityUserDto> loginByCode(UserLoginDto userLoginDto) throws JsonProcessingException {
         String email = userLoginDto.getLoginName();
         String code = userLoginDto.getCode();
         if(StringUtils.isEmpty(email)) return Message.createByError("请输入用户名");
         if(StringUtils.isEmpty(code)) return Message.createByError("请输入验证码");
-        if(emailPattern.matcher(email).matches()) return Message.createByError("邮箱格式错误");
+        //if(emailPattern.matcher(email).matches()) return Message.createByError("邮箱格式错误");
+
+        UserDetails userDetails = smsUserDetailsService.loadUserByUsername(email);
+        SmsCodeAuthenticationToken authenticationToken = new SmsCodeAuthenticationToken(email, code, userDetails.getAuthorities());
 
         String redisCode = (String)redisTemplate.opsForValue().get(RedisUtil.getConsumerLoginByEmail(email));
-        if(StringUtils.isEmpty(redisCode) || !code.equalsIgnoreCase(redisCode)) return Message.createByError("验证码错误");
+        //if(StringUtils.isEmpty(redisCode) || !code.equalsIgnoreCase(redisCode)) return Message.createByError("验证码错误");
+        String clientId = "irhWebApp";
+        String clientSecret = "$2a$10$IliTyZPWTbcMd3TI0pdLD.IrW843ZnfMV0tlgcSbbd4N7nqXjGMaW";
+        ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
+        TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_MAP, clientId, clientDetails.getScope(), "client_credentials");
+
+        OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
+
+        OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request, authenticationToken);
+
+        OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
+        log.info(objectMapper.writeValueAsString(token));
+
 //todo
 //        userServiceFeignApi.loadUserInfoByEmail()
 

@@ -11,12 +11,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.imuster.auth.service.Impl.UserLoginService;
+import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.utils.CookieUtil;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
@@ -24,8 +24,8 @@ import top.imuster.security.api.dto.UserLoginDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 /**
@@ -44,7 +44,7 @@ public class UserLoginController extends BaseController {
     @Value("${auth.cookieMaxAge}")
     private int cookieMaxAge;
 
-    @Autowired
+    @Resource
     UserLoginService userLoginService;
 
     @Autowired
@@ -68,8 +68,8 @@ public class UserLoginController extends BaseController {
      * @param
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.security.api.bo.SecurityUserDto>
      **/
-    @PostMapping("codeLogin")
-    public Message<SecurityUserDto> loginByCode(@RequestBody UserLoginDto userLoginDto){
+    @PostMapping("emailCodeLogin1")
+    public Message<SecurityUserDto> loginByCode(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
         return userLoginService.loginByCode(userLoginDto);
     }
 
@@ -124,7 +124,7 @@ public class UserLoginController extends BaseController {
     @ApiOperation(value = "发送email验证码",httpMethod = "GET")
     @GetMapping("/sendCode/{type}/{email}")
     public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email, @PathVariable("type") Integer type) throws Exception {
-        if(!(type == 1 || type == 2)){
+        if(type != 1 && type != 2){
             return Message.createByError("参数异常,请刷新后重试");
         }
         userLoginService.getCode(email, type);
