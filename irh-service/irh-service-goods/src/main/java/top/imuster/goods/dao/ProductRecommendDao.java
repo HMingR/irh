@@ -1,14 +1,17 @@
 package top.imuster.goods.dao;
 
-import java.util.List;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+import top.imuster.goods.api.dto.ProductRecommendDto;
 
 /**
  * @ClassName: ProductRecommendDao
  * @Description: ProductRecommendDao
  * @author: hmr
- * @date: 2020/5/1 14:19
+ * @date: 2020/5/1 15:53
  */
-public interface ProductRecommendDao {
+@Repository
+public interface ProductRecommendDao extends MongoRepository<ProductRecommendDto, String> {
 
-    List<?> getListByUserId(Integer pageSize, Integer currentPage, Long userId);
+    ProductRecommendDto findByUserId(Integer userId);
 }

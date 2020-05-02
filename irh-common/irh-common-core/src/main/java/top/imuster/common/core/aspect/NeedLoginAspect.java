@@ -1,11 +1,12 @@
 package top.imuster.common.core.aspect;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -27,9 +28,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @Aspect
-@Slf4j
 @Component
 public class NeedLoginAspect {
+
+    private static final Logger log = LoggerFactory.getLogger(NeedLoginAspect.class);
 
     @Value("enable.needLogin")
     private static boolean enable;
