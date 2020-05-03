@@ -16,7 +16,7 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
         username: root
         password: 197877346hmr
-        url: jdbc:mysql://39.105.0.169:33306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true
+        url: jdbc:mysql://39.105.0.169:33306/irh?characterEncoding=UTF-8&amp;useUnicode=true&amp;allowMultiQueries=true;useAffectedRows=true
         initial-size: 5     # 初始化大小
         max-active: 20      # 连接池中最大的活动数
         max-wait: 30000                             # 最大连接等待时间
@@ -31,7 +31,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://39.105.0.169:10086/eureka
+      defaultZone: http://39.97.123.63:10086/eureka
   instance:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间

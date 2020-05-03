@@ -17,6 +17,7 @@ import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
+import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -51,7 +52,7 @@ public class ProductController extends BaseController {
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0")
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
     @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
     @NeedLogin
     @PutMapping

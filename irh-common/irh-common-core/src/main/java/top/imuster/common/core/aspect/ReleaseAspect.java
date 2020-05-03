@@ -57,6 +57,7 @@ public class ReleaseAspect {
         ReleaseAnnotation annotation = getAnnotation(joinPoint);
         ReleaseType type = annotation.type();
         SendReleaseDto sendReleaseDto = new SendReleaseDto();
+        sendReleaseDto.setOperationType(annotation.operationType());
         sendReleaseDto.setTargetInfo(targetInfo);
         sendReleaseDto.setReleaseType(type);
         generateSendMessageService.sendToMq(sendReleaseDto);

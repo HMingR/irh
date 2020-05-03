@@ -5,4 +5,5 @@ eureka:
     registry-fetch-interval-seconds: 5           # 设置拉取服务的间隔时间
 
 logging:
-  level: error
+  level:
+    root: error

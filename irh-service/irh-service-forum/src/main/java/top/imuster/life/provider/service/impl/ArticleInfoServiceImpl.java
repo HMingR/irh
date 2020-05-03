@@ -1,6 +1,8 @@
 package top.imuster.life.provider.service.impl;
 
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HtmlUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.slf4j.Logger;
@@ -83,6 +85,14 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         articleInfo.setUserId(userId);
         String content = articleInfo.getContent();
         articleInfo.setContent("");
+
+        //清除文章中的html代码和空白字符
+        String summaryText = StrUtil.cleanBlank(HtmlUtil.cleanHtmlTag(articleInfo.getContent()));
+        if(summaryText.length() > 50){
+            articleInfo.setArticleSummary(summaryText.substring(0, 50));
+        }else{
+            articleInfo.setArticleSummary(summaryText);
+        }
         Long articleId = articleInfoDao.insertArticle(articleInfo);
         createStaticPage(content, articleId);
     }

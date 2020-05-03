@@ -80,8 +80,20 @@ public class ArticleInfo extends BaseDomain {
 	//分类id
 	private Long categoryId;
 
+	//文章简介  一般为文章前50个非html和非空白字符
+	private String articleSummary;
+
 	// 1-无效  2-有效 3-发布中  4-草稿箱中
 //	private Short state;
+
+
+	public String getArticleSummary() {
+		return articleSummary;
+	}
+
+	public void setArticleSummary(String articleSummary) {
+		this.articleSummary = articleSummary;
+	}
 
 	public Long getCategoryId() {
 		return categoryId;

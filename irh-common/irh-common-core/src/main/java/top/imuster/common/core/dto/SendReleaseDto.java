@@ -2,6 +2,7 @@ package top.imuster.common.core.dto;
 
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 
 /**
@@ -17,6 +18,16 @@ public class SendReleaseDto extends Send2MQ {
     }
 
     BaseDomain targetInfo;
+
+    OperationType operationType;
+
+    public OperationType getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(OperationType operationType) {
+        this.operationType = operationType;
+    }
 
     public BaseDomain getTargetInfo() {
         return targetInfo;

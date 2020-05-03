@@ -24,10 +24,10 @@ spring:
       validation-query: select '1' from dual      # 测试连接
 
   rabbitmq:
-    host: @irh.rabbitmq.host@
-    port: @irh.rabbitmq.port@
-    username: @irh.rabbitmq.username@
-    password: @irh.rabbitmq.password@
+    host: 39.105.0.169
+    port: 5672
+    username: admin
+    password: 197877346hmr
 
   mail:
     username: 1978773465@qq.com
@@ -36,7 +36,7 @@ spring:
 
 irh:
   elasticsearch:
-    host: '@irh.elasticsearch.host@'
+    host: 39.97.121.108:9200
   goods:     #商城模块索引
     index: goods
     type: doc

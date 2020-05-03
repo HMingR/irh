@@ -21,7 +21,8 @@
             forward_times AS forwardTimes,
             detail_page AS detailPage,
             tag_names AS tagNames,
-            category_id AS categoryId
+            category_id AS categoryId,
+            article_summary AS articleSummary
 		]]>
 	</sql>
 
@@ -48,6 +49,7 @@
             <if test="detailPage != null and detailPage != ''"><![CDATA[AND detail_page = #{detailPage}]]></if>
             <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
             <if test="categoryId != null and categoryId != ''"><![CDATA[AND category_id = #{categoryId}]]></if>
+            <if test="articleSummary != null and articleSummary != ''"><![CDATA[AND article_summary = #{articleSummary}]]></if>
 		</where>
 	</sql>
 	
@@ -75,6 +77,7 @@
 			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
 			<if test="detailPage != null"><![CDATA[detail_page = #{detailPage},]]></if>
 			<if test="categoryId != null"><![CDATA[category_id = #{categoryId},]]></if>
+			<if test="articleSummary != null"><![CDATA[article_summary = #{articleSummary},]]></if>
 		</set>
 	</sql>
 
@@ -94,6 +97,7 @@
 			<if test="tagNames != null and tagNames != ''">tag_names, </if>
 			<if test="userId != null and userId != ''">user_id, </if>
 			<if test="categoryId != null and categoryId != ''">category_id, </if>
+			<if test="articleSummary != null and articleSummary != ''">article_summary,</if>
 		</trim>
 	</sql>
 
@@ -113,6 +117,7 @@
 			<if test="tagNames != null and tagNames != ''">#{tagNames}, </if>
 			<if test="userId != null and userId != ''">#{userId}, </if>
 			<if test="categoryId != null and categoryId != ''">#{categoryId}, </if>
+			<if test="articleSummary != null and articleSummary != ''">#{articleSummary},</if>
 		</trim>
 
 	</sql>

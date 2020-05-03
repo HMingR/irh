@@ -10,6 +10,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.dto.SendReleaseDto;
+import top.imuster.common.core.enums.OperationType;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
@@ -59,8 +60,9 @@ public class ReleaseQueueListener {
         } catch (IOException e) {
             log.error("------Product-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
+        OperationType operationType = releaseDto.getOperationType();
         ProductInfo releaseInfo = (ProductInfo)releaseDto.getTargetInfo();
-        goodsReleaseInfoService.save(releaseInfo);
+        //goodsReleaseInfoService.save(releaseInfo);
 
     }
 

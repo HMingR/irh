@@ -20,7 +20,6 @@ import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
-import top.imuster.security.api.dto.UserLoginDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
@@ -59,18 +58,6 @@ public class UserLoginController extends BaseController {
         result.getAuthToken().setJwtToken("");
         result.getAuthToken().setRefreshToken("");
         return Message.createBySuccess(result);
-    }
-
-    /**
-     * @Author hmr
-     * @Description 根据验证码登录
-     * @Date: 2020/4/30 10:05
-     * @param
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.security.api.bo.SecurityUserDto>
-     **/
-    @PostMapping("emailCodeLogin1")
-    public Message<SecurityUserDto> loginByCode(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
-        return userLoginService.loginByCode(userLoginDto);
     }
 
     @ApiOperation("在用户需要访问受保护的信息时，需要调用该接口获得jwt")
