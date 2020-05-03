@@ -155,16 +155,7 @@ public class ProductController extends BaseController {
     @ApiOperation("用户下架商品")
     @DeleteMapping("/{id}")
     public Message<String> delProduct(@PathVariable("id") Long id){
-        ProductInfo productInfo = new ProductInfo();
-        Long userId = getCurrentUserIdFromCookie();
-        productInfo.setConsumerId(userId);
-        productInfo.setId(id);
-        productInfo.setState(1);
-        int i = productInfoService.updateByKey(productInfo);
-        if(i != 0){
-            return Message.createBySuccess("操作成功");
-        }
-        return Message.createByError("更新失败,找不到对应的商品,请刷新后重试");
+        return productInfoService.deleteById(id, getCurrentUserIdFromCookie());
     }
 
     /**

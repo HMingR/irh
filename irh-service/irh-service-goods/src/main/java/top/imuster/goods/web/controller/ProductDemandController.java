@@ -29,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/goods/demand")
 @PropertySource("classpath:application.yml")
-public class DemandProductController extends BaseController {
+public class ProductDemandController extends BaseController {
     @Resource
     ProductDemandInfoService productDemandInfoService;
 
@@ -77,12 +77,8 @@ public class DemandProductController extends BaseController {
     @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> delete(@PathVariable("id") Long id){
-        ProductDemandInfo condition = new ProductDemandInfo();
-        condition.setId(id);
-        condition.setConsumerId(getCurrentUserIdFromCookie());
-        condition.setState(1);
-        productDemandInfoService.updateByKey(condition);
-        return Message.createBySuccess();
+        Long userId = getCurrentUserIdFromCookie();
+        return productDemandInfoService.deleteById(id, userId);
     }
 
     /**

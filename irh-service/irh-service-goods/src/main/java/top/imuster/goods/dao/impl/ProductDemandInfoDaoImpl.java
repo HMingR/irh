@@ -19,6 +19,7 @@ public class ProductDemandInfoDaoImpl extends BaseDaoImpl<ProductDemandInfo, Lon
 	private final static String NAMESPACE = "top.imuster.goods.dao.ProductDemandInfoDao.";
 	private final static String SELECT_LIST = "selectList";
 	private final static String UPDATE_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
+	private final static String SELECT_USER_ID_BY_DEMAND_ID = "selectUserIdByDemandId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -27,5 +28,10 @@ public class ProductDemandInfoDaoImpl extends BaseDaoImpl<ProductDemandInfo, Lon
 	@Override
 	public void updateBrowserTimesByCondition(List<ProductInfo> update) {
 		update(getNameSpace(UPDATE_BROWSER_TIMES_BY_CONDITION), update);
+	}
+
+	@Override
+	public Long selectUserIdByDemandId(Long id) {
+		return this.select(getNameSpace(SELECT_USER_ID_BY_DEMAND_ID), id);
 	}
 }

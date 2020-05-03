@@ -1,6 +1,8 @@
 package top.imuster.goods.service.impl;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
@@ -24,6 +26,9 @@ import java.util.List;
  */
 @Service("productDemandInfoService")
 public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandInfo, Long> implements ProductDemandInfoService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductDemandInfoServiceImpl.class);
+
 
     private int batchSize = 100;
 
@@ -80,6 +85,21 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
             }
             productDemandInfoDao.updateBrowserTimesByCondition(update);
         }
+    }
+
+    @Override
+    public Message<String> deleteById(Long id, Long userId) {
+        Long userIdByDemandId = productDemandInfoDao.selectUserIdByDemandId(id);
+        if(userIdByDemandId == null) return Message.createByError("删除失败,请刷新后重试");
+        if(!userId.equals(userIdByDemandId)){
+            log.error("id为{}的用户试图删除id为{}的需求，但是该需求不属于他", userId, id);
+            return Message.createByError("非法操作,你当前的操作已经被记录");
+        }
+        ProductDemandInfo productDemandInfo = new ProductDemandInfo();
+        productDemandInfo.setId(id);
+        productDemandInfo.setState(1);
+        productDemandInfoDao.updateByKey(productDemandInfo);
+        return Message.createBySuccess();
     }
 
 }

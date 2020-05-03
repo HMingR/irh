@@ -120,4 +120,19 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         }
 
     }
+
+    @Override
+    public Message<String> deleteById(Long id, Long userId) {
+        Long userIdByProductId = productInfoDao.selectUserIdByProductId(id);
+        if(userIdByProductId == null) return Message.createByError("删除失败,请刷新后重试");
+        if(!userId.equals(userIdByProductId)){
+            log.error("id为{}的用户试图删除id为{}的商品，但是该商品不属于他", userId, id);
+            return Message.createByError("非法操作,你当前的操作已经被记录");
+        }
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setId(id);
+        productInfo.setState(1);
+        productInfoDao.updateByKey(productInfo);
+        return Message.createBySuccess();
+    }
 }

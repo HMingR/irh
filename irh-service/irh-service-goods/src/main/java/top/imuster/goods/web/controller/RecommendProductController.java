@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 
 /**
  * @ClassName: RecommendProductController
- * @Description: 个人推荐控制哎
+ * @Description: 个人推荐控制
  * @author: hmr
  * @date: 2020/5/1 14:02
  */

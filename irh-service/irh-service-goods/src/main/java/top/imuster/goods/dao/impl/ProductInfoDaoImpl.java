@@ -24,6 +24,7 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
 	private final static String SELECT_BROWSER_TIMES_BY_IDS = "selectBrowserTimesByIds";
 	private final static String UPDATE_BROWSER_TIMES_BY_CONDITION =  "updateBrowserTimesByCondition";
+	private final static String SELECT_USER_ID_BY_PRODUCT_ID = "selectUserIdByProductId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -62,5 +63,10 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	@Override
 	public void updateBrowserTimesByCondition(List<ProductInfo> update) {
 		this.update(getNameSpace(UPDATE_BROWSER_TIMES_BY_CONDITION), update);
+	}
+
+	@Override
+	public Long selectUserIdByProductId(Long id) {
+		return this.select(getNameSpace(SELECT_USER_ID_BY_PRODUCT_ID), id);
 	}
 }

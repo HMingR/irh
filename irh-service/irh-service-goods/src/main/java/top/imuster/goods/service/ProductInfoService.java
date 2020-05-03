@@ -81,4 +81,13 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: void
      **/
     void transBrowserTimesFromRedis2DB(List<BrowserTimesDto> browserTimesDtos);
+
+    /**
+     * @Author hmr
+     * @Description 根据id删除
+     * @Date: 2020/5/3 16:25
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteById(Long id, Long userId);
 }

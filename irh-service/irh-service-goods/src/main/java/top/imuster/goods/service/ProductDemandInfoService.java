@@ -35,4 +35,14 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @reture: void
      **/
     void transBrowserTimesFromRedis2DB(List<BrowserTimesDto> browserTimesDtos);
+
+    /**
+     * @Author hmr
+     * @Description 根据demand的id删除自己发布的需求
+     * @Date: 2020/5/3 16:17
+     * @param id
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteById(Long id, Long userId);
 }

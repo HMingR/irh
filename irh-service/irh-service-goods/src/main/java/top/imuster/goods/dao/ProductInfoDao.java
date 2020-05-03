@@ -78,4 +78,13 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: void
      **/
     void updateBrowserTimesByCondition(@Param("update") List<ProductInfo> update);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/3 16:26
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long selectUserIdByProductId(Long id);
 }

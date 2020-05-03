@@ -23,4 +23,13 @@ public interface ProductDemandInfoDao extends BaseDao<ProductDemandInfo, Long> {
      * @reture: void
      **/
     void updateBrowserTimesByCondition(@Param("update") List<ProductInfo> update);
+
+    /**
+     * @Author hmr
+     * @Description 根据主键id查询发布者id
+     * @Date: 2020/5/3 16:18
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long selectUserIdByDemandId(Long id);
 }

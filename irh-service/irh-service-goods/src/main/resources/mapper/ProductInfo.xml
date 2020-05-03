@@ -297,5 +297,11 @@
 		</foreach>
 	</update>
 
+	<select id="selectUserIdByProductId" resultType="long" parameterType="long">
+		SELECT consumer_id
+		FROM product_info
+		WHERE id = #{id,jdbcType=BIGINT}
+	</select>
+
 	
 </mapper>

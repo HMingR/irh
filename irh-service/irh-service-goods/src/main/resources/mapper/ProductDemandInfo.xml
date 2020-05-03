@@ -174,4 +174,9 @@
 			#{item.id,jdbcType=BIGINT}
 		</foreach>
 	</update>
+
+	<select id="selectUserIdByDemandId" parameterType="long" resultType="long">
+		SELECT consumer_id FROM product_demand_info
+		WHERE id = #{id}
+	</select>
 </mapper>
