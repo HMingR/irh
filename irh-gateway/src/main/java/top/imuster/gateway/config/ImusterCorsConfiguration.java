@@ -21,12 +21,11 @@ public class ImusterCorsConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         //允许跨域的域名，如果要携带cookie，不能写*，*代表所有域名都可以跨域访问
-        configuration.addAllowedOrigin("http://manage.imuster.top");
-        configuration.addAllowedOrigin("http://www.imuster.top");
+        //configuration.addAllowedOrigin("http://manage.imuster.top");
+        configuration.addAllowedOrigin("*");
         configuration.setAllowCredentials(true);   //是否允许携带cookie
         configuration.addAllowedMethod("*");       //代表所有的请求方法：GET，POST，HEAD
         configuration.addAllowedHeader("*");       //代表允许携带任何头信息
-
         //初始化cors配置源对象
         UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
         configurationSource.registerCorsConfiguration("/**",configuration);

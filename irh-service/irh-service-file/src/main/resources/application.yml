@@ -4,10 +4,19 @@ server:
     max-http-post-size: 4048576
     max-http-header-size: 4048576
 spring:
-  boot:
-    admin:
-      client:
-        url: http://localhost:10800
+  redis:
+    database: 0
+    host: 39.105.0.169
+    port: 6379
+    jedis:
+      pool:
+        MaxWaitMillis: 100000
+        max-active: 100
+        max-idle: 20
+        min-idle: 10
+        max-wait: 5000
+    timeout: 10000
+    password: irh_aliyun_redis
   profiles:
     active: dev
   application:
@@ -16,25 +25,6 @@ spring:
     multipart:
       max-file-size: 10MB    #最大文件大小
       max-request-size: 10MB #请求数据大小
-  datasource:
-      druid:
-        driver-class-name: com.mysql.jdbc.Driver
-        username: @irh.mysql.username@
-        password: @irh.mysql.password@
-        url: jdbc:mysql://localhost:3306/irh?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
-        initial-size: 5     # 初始化大小
-        max-active: 20      # 连接池中最大的活动数
-        max-wait: 30000                             # 最大连接等待时间
-        time-between-eviction-runs-millis: 60000    # 配置检测可以关闭的空闲连接间隔时间
-        validation-query: select '1' from dual      # 测试连接
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:10086/eureka   # 注册到eureka注册中心
-  instance:
-    lease-renewal-interval-in-seconds: 5      # 心跳时间
-    lease-expiration-duration-in-seconds: 15  # 过期时间
-    instance-id: ${spring.application.name}:${server.port}
 enable:
   needLogin: false
 

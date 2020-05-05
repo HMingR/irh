@@ -19,11 +19,6 @@ logging:
   level:
     top.imuster.goods: debug
 
-image.fileTypes:
-  - jpg
-  - png
-  - bmp
-
 feign:    # 启动hystrix
   hystrix:
     enabled: true

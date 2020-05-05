@@ -4,7 +4,6 @@ package top.imuster.goods.web.controller;
 import cn.hutool.core.date.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +36,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/goods/es")
 public class ProductController extends BaseController {
-
-    @Value("${image.fileTypes}")
-    private List<String> types;
 
     @Resource
     ProductInfoService productInfoService;
@@ -120,8 +116,11 @@ public class ProductController extends BaseController {
     @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT)
     @GetMapping("/{id}")
     public Message<ProductInfo> getProductById(@PathVariable("id")Long id){
-        ProductInfo productInfo = productInfoService.selectEntryList(id).get(0);
-        return Message.createBySuccess(productInfo);
+        List<ProductInfo> productInfos = productInfoService.selectEntryList(id);
+        if(productInfos != null && !productInfos.isEmpty()){
+            return Message.createBySuccess(productInfos.get(0));
+        }
+        return Message.createBySuccess("为找到相关的商品,请刷新后重试");
     }
 
 

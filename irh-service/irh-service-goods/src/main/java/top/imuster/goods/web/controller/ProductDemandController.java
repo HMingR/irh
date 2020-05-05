@@ -2,7 +2,6 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,7 @@ import java.util.List;
 @Api("会员发布的需求")
 @RestController
 @RequestMapping("/goods/demand")
-@PropertySource("classpath:application.yml")
+//@PropertySource("classpath:application.yml")
 public class ProductDemandController extends BaseController {
     @Resource
     ProductDemandInfoService productDemandInfoService;

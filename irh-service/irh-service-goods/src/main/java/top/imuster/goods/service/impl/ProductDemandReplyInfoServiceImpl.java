@@ -80,4 +80,9 @@ public class ProductDemandReplyInfoServiceImpl extends BaseServiceImpl<ProductDe
         }
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public Integer getReplyTotalByDemandId(Long id) {
+        return productDemandReplyInfoDao.selectReplyTotalByDemandId(id);
+    }
 }

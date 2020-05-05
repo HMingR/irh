@@ -13,6 +13,7 @@ import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductDemandInfoDao;
 import top.imuster.goods.service.ProductDemandInfoService;
+import top.imuster.goods.service.ProductDemandReplyInfoService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
 
     private static final Logger log = LoggerFactory.getLogger(ProductDemandInfoServiceImpl.class);
 
+    @Resource
+    private ProductDemandReplyInfoService productDemandReplyInfoService;
 
     private int batchSize = 100;
 
@@ -51,6 +54,12 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         condition.setOrderFieldType("DESC");
         condition.setState(2);
         Page<ProductDemandInfo> productDemandInfoPage = this.selectPage(condition, page);
+        List<ProductDemandInfo> data = productDemandInfoPage.getData();
+        data.stream().forEach(productDemandInfo -> {
+            Long id = productDemandInfo.getId();
+            Integer replyTotal = productDemandReplyInfoService.getReplyTotalByDemandId(id);
+            productDemandInfo.setReplyTotal(replyTotal);
+        });
         return Message.createBySuccess(productDemandInfoPage);
     }
 

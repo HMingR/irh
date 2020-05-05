@@ -34,4 +34,13 @@ public interface ProductDemandReplyInfoService extends BaseService<ProductDemand
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductDemandReplyInfo>>
      **/
     Message<Page<ProductDemandReplyInfo>> getReplyChildById(Integer pageSize, Integer currentPage, Long replyId);
+
+    /**
+     * @Author hmr
+     * @Description 根据demand的id查询回复总数
+     * @Date: 2020/5/4 19:24
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    Integer getReplyTotalByDemandId(Long id);
 }

@@ -156,5 +156,11 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectReplyTotalByDemandId" parameterType="long" resultType="int">
+		SELECT COUNT(1)
+		FROM product_demand_reply_info
+		WHERE demand_id = #{id,jdbcType=BIGINT} AND state = 2
+	</select>
 	
 </mapper>

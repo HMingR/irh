@@ -50,9 +50,19 @@ public class ProductDemandInfo extends BaseDomain {
 
 	private String otherPics;
 
+	private Integer replyTotal;
+
 	// 状态 1-无效 2-有效
 //	private Short state;
 
+
+	public Integer getReplyTotal() {
+		return replyTotal;
+	}
+
+	public void setReplyTotal(Integer replyTotal) {
+		this.replyTotal = replyTotal;
+	}
 
 	public String getOtherPics() {
 		return otherPics;

@@ -14,9 +14,14 @@ import top.imuster.goods.dao.ProductDemandReplyInfoDao;
 @Repository("productDemandReplyInfoDao")
 public class ProductDemandReplyInfoDaoImpl extends BaseDaoImpl<ProductDemandReplyInfo, Long> implements ProductDemandReplyInfoDao {
 	private final static String NAMESPACE = "top.imuster.goods.provider.dao.ProductDemandReplyInfoDao.";
-	
+	private final static String SELECT_REPLY_TOTAL_BY_DEMAND_ID = "selectReplyTotalByDemandId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public Integer selectReplyTotalByDemandId(Long id) {
+		return this.select(getNameSpace(SELECT_REPLY_TOTAL_BY_DEMAND_ID), id);
 	}
 }
