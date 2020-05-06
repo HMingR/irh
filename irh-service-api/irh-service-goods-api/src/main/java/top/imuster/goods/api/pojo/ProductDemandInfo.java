@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * @author 黄明人
  * @since 2020-01-16 10:19:41
  */
-@Document(indexName = "goods", type = "demand")
+@Document(indexName = "demand", type = "demand")
 public class ProductDemandInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 7996610101L;

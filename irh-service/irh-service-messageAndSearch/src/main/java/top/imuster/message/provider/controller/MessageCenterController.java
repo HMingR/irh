@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.exception.GlobalException;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
@@ -66,7 +67,7 @@ public class MessageCenterController extends BaseController {
 
     @ApiOperation("更新消息状态,type为10-删除 20-已读")
     @GetMapping("/type/{id}")
-    public Message updateById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+    public Message<String> updateById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         NewsInfo newsInfo = new NewsInfo();
         newsInfo.setId(id);
         newsInfo.setState(type);
@@ -76,7 +77,7 @@ public class MessageCenterController extends BaseController {
 
     @ApiOperation("根据消息的类型获得定位到消息的具体位置,根据不同的type有不同的响实体类信息")
     @GetMapping("/{newsType}/{targetId}")
-    public Message newsDetail(@ApiParam("消息类型 10-订单(响应OrderInfo)  20-商品留言(ProductMessageInfo)  30-商品评价(ProductEvaluate)") @PathVariable("newsType")Long newsType, @PathVariable("targetId")Long targetId){
+    public Message<BaseDomain> newsDetail(@ApiParam("消息类型 10-订单(响应OrderInfo)  20-商品留言(ProductMessageInfo)  30-商品评价(ProductEvaluate)") @PathVariable("newsType")Long newsType, @PathVariable("targetId")Long targetId){
         if(newsType == 10){
             OrderInfo orderById = orderServiceFeignApi.getOrderById(targetId);
             return Message.createBySuccess(orderById);

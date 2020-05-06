@@ -3,7 +3,6 @@ package top.imuster.goods.api.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -16,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @since 2019-11-24 16:31:58
  */
 @ApiModel("商品实体类")
-@Document(indexName = "goods", type = "product")
+@Document(indexName = "goods", type = "goods")
 public class ProductInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 18274143046L;
@@ -26,7 +25,6 @@ public class ProductInfo extends BaseDomain {
 	}
 	// 商品表的主键
 	@ApiModelProperty("商品表的主键id")
-	@Id
 	@NotNull(groups = ValidateGroup.editGroup.class)
 	private Long id;
 

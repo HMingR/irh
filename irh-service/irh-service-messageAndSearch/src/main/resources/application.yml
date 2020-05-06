@@ -10,8 +10,8 @@ server:
 spring:
   data:
     elasticsearch:
-      cluster-name: docker-cluster
-      cluster-nodes: 39.97.121.108:9200
+      cluster-name: elasticsearch
+      cluster-nodes: 39.97.121.108:9300
       repositories:
         enabled: true
 
@@ -62,4 +62,12 @@ logging:
 
 enable:
   needLogin: false
+
+elasticsearch:
+  pool: 10
+  ip: 39.97.121.108
+  port: 9300
+  cluster:
+    name: elasticsearch
+
 

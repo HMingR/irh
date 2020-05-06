@@ -16,7 +16,7 @@ public interface GoodsReleaseInfoService{
      * @Description 根据 OperationType(更新，删除，新增) 将商品信息同步到ES中
      * @Date: 2020/5/3 9:37
      * @param productInfo
-     * @param operationType
+     * @param operationType
      * @reture: void
      **/
     void synchGoodsFromDB2ESByType(ProductInfo productInfo, OperationType operationType);
