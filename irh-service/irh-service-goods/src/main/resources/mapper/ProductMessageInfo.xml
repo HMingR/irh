@@ -157,5 +157,11 @@
 		WHERE id = #{parentId}
 	</select>
 
+	<select id="selectReplyTotalById" parameterType="long" resultType="int">
+		SELECT COUNT(1)
+		FROM product_message_info
+		WHERE parent_id = #{id,jdbcType=BIGINT} AND state = 2
+	</select>
+
 	
 </mapper>

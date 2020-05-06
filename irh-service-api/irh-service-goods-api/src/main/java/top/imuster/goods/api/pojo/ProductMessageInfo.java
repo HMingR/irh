@@ -45,8 +45,19 @@ public class ProductMessageInfo extends BaseDomain {
 	private String content;
 
 	private Long firstClassId;
+
+	private Integer replyTotal;
 	// 1-无效 2-有效
 	//private Short state;
+
+
+	public Integer getReplyTotal() {
+		return replyTotal;
+	}
+
+	public void setReplyTotal(Integer replyTotal) {
+		this.replyTotal = replyTotal;
+	}
 
 	public Long getFirstClassId() {
 		return firstClassId;

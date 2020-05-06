@@ -1,6 +1,7 @@
 package top.imuster.goods.service;
 
 
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
@@ -33,4 +34,16 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
      * @param productEvaluateInfo
      * @return*/
     Message<String> generateSendMessage(Long orderId, ProductEvaluateInfo productEvaluateInfo);
+
+     /**
+      * @Author hmr
+      * @Description 根据用户id分页查询
+      * @Date: 2020/5/6 9:36
+      * @param pageSize
+      * @param currentPage
+      * @param userId
+      * @param type  (1:查询自己 2:查询卖家被评论的记录)
+      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductEvaluateInfo>>
+      **/
+    Message<Page<ProductEvaluateInfo>> getListByUserId(Integer pageSize, Integer currentPage, Long userId, Integer type);
 }

@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.dto.SendReleaseDto;
 import top.imuster.common.core.enums.OperationType;
-import top.imuster.goods.api.pojo.ProductDemandInfo;
-import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.life.api.pojo.ArticleInfo;
+import top.imuster.goods.api.dto.ESProductDto;
+import top.imuster.life.api.dto.EsArticleDto;
 import top.imuster.message.provider.service.ArticleReleaseInfoService;
-import top.imuster.message.provider.service.DemandReleaseInfoService;
 import top.imuster.message.provider.service.GoodsReleaseInfoService;
 
 import javax.annotation.Resource;
@@ -36,9 +34,6 @@ public class ReleaseQueueListener {
 
     @Resource
     ArticleReleaseInfoService articleReleaseInfoService;
-
-    @Resource
-    DemandReleaseInfoService demandReleaseInfoService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -61,9 +56,8 @@ public class ReleaseQueueListener {
             log.error("------Product-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
         OperationType operationType = releaseDto.getOperationType();
-        ProductInfo releaseInfo = (ProductInfo)releaseDto.getTargetInfo();
-        //goodsReleaseInfoService.save(releaseInfo);
-
+        ESProductDto releaseInfo = (ESProductDto)releaseDto.getTargetInfo();
+        goodsReleaseInfoService.executeByOperationType(releaseInfo, operationType);
     }
 
 
@@ -84,8 +78,9 @@ public class ReleaseQueueListener {
         } catch (IOException e) {
             log.error("------Article-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
-        ArticleInfo releaseInfo = (ArticleInfo)releaseDto.getTargetInfo();
-        articleReleaseInfoService.save(releaseInfo);
+        OperationType operationType = releaseDto.getOperationType();
+        EsArticleDto releaseInfo = (EsArticleDto)releaseDto.getTargetInfo();
+        articleReleaseInfoService.executeByOperationType(releaseInfo, operationType);
     }
 
 
@@ -96,7 +91,7 @@ public class ReleaseQueueListener {
      * @param msg
      * @reture: void
      **/
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
+    /*@RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
             key = "info.3.release.3"))
     public void DemandReleaseListener(String msg){
@@ -106,7 +101,8 @@ public class ReleaseQueueListener {
         } catch (IOException e) {
             log.error("------Demand-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
-        ProductDemandInfo releaseInfo = (ProductDemandInfo)releaseDto.getTargetInfo();
-        demandReleaseInfoService.save(releaseInfo);
-    }
+        OperationType operationType = releaseDto.getOperationType();
+        ESDemandDto releaseInfo = (ESDemandDto)releaseDto.getTargetInfo();
+        demandReleaseInfoService.executeByOperationType(releaseInfo, operationType);
+    }*/
 }

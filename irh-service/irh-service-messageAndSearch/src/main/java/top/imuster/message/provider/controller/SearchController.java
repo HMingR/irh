@@ -2,7 +2,6 @@ package top.imuster.message.provider.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
-import org.elasticsearch.client.transport.TransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +31,7 @@ public class SearchController {
     private static final Logger log = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
-    private TransportClient transportClient;
-
-    @Autowired
     ObjectMapper objectMapper;
-
-
-    @GetMapping("/test1")
-    public void test1(){
-    }
 
     @Autowired
     GoodsSearchService goodsSearchService;
@@ -50,8 +41,8 @@ public class SearchController {
 
 
     @ApiOperation("使用ElasticSearch搜索商品,page为当前页码,size为页面大小")
-    @GetMapping("/goods/list/{page}/{size}")
-    public Message<Page<ProductInfo>> list(@PathVariable("page") int page, @PathVariable("size") int size, GoodsSearchParam courseSearchParam) {
+    @GetMapping("/goods/list/{pageSize}/{currentPage}")
+    public Message<Page<ProductInfo>> list(@PathVariable("currentPage") int page, @PathVariable("pageSize") int size, GoodsSearchParam courseSearchParam) {
         return goodsSearchService.goodsList(page,size,courseSearchParam);
     }
 

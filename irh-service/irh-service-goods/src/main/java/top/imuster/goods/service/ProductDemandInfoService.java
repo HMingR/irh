@@ -45,4 +45,14 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> deleteById(Long id, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 用户发布
+     * @Date: 2020/5/6 12:02
+     * @param productDemandInfo
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> releaseDemand(ProductDemandInfo productDemandInfo, Long userId);
 }

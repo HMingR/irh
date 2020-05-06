@@ -6,36 +6,47 @@ package top.imuster.message.dto;
  * @author: hmr
  * @date: 2020/1/31 10:37
  */
-public class GoodsSearchParam extends ForumSearchParam {
+public class GoodsSearchParam {
 
-    //新旧程度
-    String oldDegree;
+    //查询的关键字
+    String keyword;
 
     //价格区间
-    Float priceMin;
-    Float priceMax;
+    String priceMin;
 
-    public String getOldDegree() {
-        return oldDegree;
+    String priceMax;
+
+    Integer tradeType;
+
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setOldDegree(String oldDegree) {
-        this.oldDegree = oldDegree;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
-    public Float getPriceMin() {
+    public String getPriceMin() {
         return priceMin;
     }
 
-    public void setPriceMin(Float priceMin) {
+    public void setPriceMin(String priceMin) {
         this.priceMin = priceMin;
     }
 
-    public Float getPriceMax() {
+    public String getPriceMax() {
         return priceMax;
     }
 
-    public void setPriceMax(Float priceMax) {
+    public void setPriceMax(String priceMax) {
         this.priceMax = priceMax;
+    }
+
+    public Integer getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(Integer tradeType) {
+        this.tradeType = tradeType;
     }
 }

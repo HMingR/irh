@@ -39,7 +39,6 @@ public class ProductInfo extends BaseDomain {
 
 	// 计量单位, max length: 255
 	@ApiModelProperty("计量单位")
-	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "计量单位不能为空")
 	private String unit;
 
 	// 商品原价
@@ -72,7 +71,7 @@ public class ProductInfo extends BaseDomain {
 
 	// 分类id
 	@ApiModelProperty("分类id")
-	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "分类id不能为空")
+	@NotNull(groups = ValidateGroup.releaseGroup.class, message = "分类不能为空")
 	private Long categoryId;
 
 	//更新分类时存放新的category

@@ -67,7 +67,6 @@ public class ArticleDetailPageListener {
             condition.setDetailPage(msg.getText());
             articleInfoService.updateByKey(condition);
         }
-
     }
 
 }

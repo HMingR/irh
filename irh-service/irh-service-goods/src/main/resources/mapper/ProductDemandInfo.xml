@@ -98,7 +98,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="productDemandInfo" >
+	<insert id="insertEntry" parameterType="productDemandInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		<![CDATA[
 			INSERT INTO product_demand_info
 		]]>
@@ -179,4 +179,14 @@
 		SELECT consumer_id FROM product_demand_info
 		WHERE id = #{id}
 	</select>
+
+
+	<insert id="insertInfoReturnId" useGeneratedKeys="true" parameterType="productDemandInfo">
+		<![CDATA[
+			INSERT INTO product_demand_info
+		]]>
+		<include refid="key"></include>
+		VALUES
+		<include refid="value"></include>
+	</insert>
 </mapper>

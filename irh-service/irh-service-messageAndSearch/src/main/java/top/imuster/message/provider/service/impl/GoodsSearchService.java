@@ -8,6 +8,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -51,8 +52,6 @@ public class GoodsSearchService {
         }
         //创建搜索请求对象
         SearchRequest searchRequest = new SearchRequest(goodsIndex);
-        //设置搜索类型
-        searchRequest.types(goodsType);
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //过虑源字段
@@ -63,25 +62,34 @@ public class GoodsSearchService {
         //搜索条件
         //根据关键字搜索
         if(StringUtils.isNotEmpty(searchParam.getKeyword())){
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "productName", "tradeType", "productDesc")
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "productName", "productDesc", "tagNames", "topic", "content")
                     .minimumShouldMatch("70%")
                     .field("productName", 10);
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
-        if(StringUtils.isNotEmpty(searchParam.getMt())){
-            //根据一级分类
-            boolQueryBuilder.filter(QueryBuilders.termQuery("mt",searchParam.getMt()));
-        }
-        if(StringUtils.isNotEmpty(searchParam.getSt())){
-            //根据二级分类
-            boolQueryBuilder.filter(QueryBuilders.termQuery("st",searchParam.getSt()));
-        }
-        if(StringUtils.isNotEmpty(searchParam.getOldDegree())){
-            //根据新旧程度
-            boolQueryBuilder.filter(QueryBuilders.termQuery("oldDegree",searchParam.getOldDegree()));
-        }
-        searchSourceBuilder.query(boolQueryBuilder);
 
+        //交易类型
+        if(searchParam.getTradeType() != null){
+            boolQueryBuilder.filter(QueryBuilders.termQuery("tradeType",searchParam.getTradeType()));
+        }
+
+        RangeQueryBuilder rangequerybuilder = null;
+        if(StringUtils.isNotEmpty(searchParam.getPriceMin()) && StringUtils.isNotEmpty(searchParam.getPriceMax())){
+            rangequerybuilder = QueryBuilders
+                    .rangeQuery("salePrice")
+                    .from(searchParam.getPriceMin()).to(searchParam.getPriceMax());
+        }else if(StringUtils.isNotEmpty(searchParam.getPriceMin()) && StringUtils.isEmpty(searchParam.getPriceMax())){
+            rangequerybuilder = QueryBuilders
+                    .rangeQuery("salePrice")
+                    .from(searchParam.getPriceMin());
+        }else if(StringUtils.isEmpty(searchParam.getPriceMin()) && StringUtils.isNotEmpty(searchParam.getPriceMax())){
+            rangequerybuilder = QueryBuilders
+                    .rangeQuery("salePrice")
+                    .to(searchParam.getPriceMax());
+        }
+
+        searchSourceBuilder.query(boolQueryBuilder);
+        searchSourceBuilder.query(rangequerybuilder);
 
         //设置分页参数
         if(page<=0){
@@ -135,11 +143,6 @@ public class GoodsSearchService {
                     info.setTradeType(Integer.parseInt(tradeType));
                 }
 
-                //旧价格
-                if(sourceAsMap.get("originalPrice")!=null ) {
-                    String originalPrice = (String) sourceAsMap.get("originalPrice");
-                    info.setOriginalPrice(originalPrice);
-                }
                 //将coursePub对象放入list
                 list.add(info);
             }

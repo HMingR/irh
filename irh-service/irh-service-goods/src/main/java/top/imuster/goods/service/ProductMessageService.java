@@ -14,16 +14,6 @@ import top.imuster.goods.api.pojo.ProductMessageInfo;
 public interface ProductMessageService extends BaseService<ProductMessageInfo, Long> {
 
     /**
-     * @Description: 根据id生成某个商品的留言树
-     * @Author: hmr
-     * @Date: 2020/1/9 15:23
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message
-     *
-     * @return*/
-    Message<Page<ProductMessageInfo>> getMessagePage(ProductMessageInfo id);
-
-    /**
      * @Author hmr
      * @Description 发送消息
      * @Date: 2020/1/15 13:44
@@ -34,4 +24,5 @@ public interface ProductMessageService extends BaseService<ProductMessageInfo, L
     void generateSendMessage(ProductMessageInfo productMessageInfo) throws Exception;
 
 
+    Message<Page<ProductMessageInfo>> getMessagePage(Integer pageSize, Integer currentPage, Long goodsId, Long parentId, Long firstClassId);
 }

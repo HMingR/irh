@@ -1,15 +1,12 @@
 package top.imuster.message.dto;
 
-import java.io.Serializable;
-
 /**
  * @ClassName: GoodsSearchParam
  * @Description: GoodsSearchParam
  * @author: hmr
  * @date: 2020/1/31 10:37
  */
-public class ForumSearchParam implements Serializable {
-    private static final long serialVersionUID = 8901015039921851580L;
+public class ForumSearchParam{
     //关键字
     String keyword;
 

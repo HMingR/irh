@@ -5,13 +5,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: EvaluateController
@@ -43,6 +43,29 @@ public class EvaluateController extends BaseController {
         return productEvaluateInfoService.generateSendMessage(orderId, productEvaluateInfo);
     }
 
+    /**
+     * @Author hmr
+     * @Description type 1-表示查询买家的所有有效评价(用来查询自己评价记录)    2-表示卖家被评论的评论(查询别人对自己的评价)
+     * @Date: 2020/5/6 9:39
+     * @param type
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductEvaluateInfo>>
+     **/
+    @GetMapping("/list/{pageSize}/{currentPage}/{type}")
+    public Message<Page<ProductEvaluateInfo>> getList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        Long userId = getCurrentUserIdFromCookie();
+        return productEvaluateInfoService.getListByUserId(pageSize, currentPage, userId, type);
+    }
+
+    @GetMapping("/{pageSize}/{currentPage}/{userId}")
+    public Message<Page<ProductEvaluateInfo>> listBuUserId(@PathVariable("type") Integer type,
+                                                           @PathVariable("pageSize") Integer pageSize,
+                                                           @PathVariable("userId") Long userId,
+                                                           @PathVariable("currentPage") Integer currentPage){
+        return productEvaluateInfoService.getListByUserId(pageSize, currentPage, userId, 2);
+    }
+
     @ApiOperation("根据评论id删除自己的评价")
     @DeleteMapping("/{id}")
     public Message deleteEvaluateById(@PathVariable("id") Long id){
@@ -62,21 +85,4 @@ public class EvaluateController extends BaseController {
         return Message.createBySuccess(productEvaluateInfo);
     }
 
-    /**
-     * @Description: type -1表示查询买家的所有有效评价(用来查询自己评价记录)    -2表示卖家被评论的评论(查询别人对自己的评价)
-     * @Author: hmr
-     * @Date: 2020/1/9 15:10
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation("根据用户的id查询对该用户的所有评价(1:查询自己 2:查询卖家被评论的记录)")
-    @GetMapping("/{type}/{userId}")
-    public Message listById(@PathVariable("userId") Long id, @PathVariable("type") Integer type){
-        ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
-        if(type == 1) productEvaluateInfo.setBuyerId(id);
-        if(type == 2) productEvaluateInfo.setSalerId(id);
-        productEvaluateInfo.setState(2);
-        List<ProductEvaluateInfo> productEvaluateInfos = productEvaluateInfoService.selectEntryList(productEvaluateInfo);
-        return Message.createBySuccess(productEvaluateInfos);
-    }
 }

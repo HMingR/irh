@@ -6,10 +6,14 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.SendDetailPageDto;
+import top.imuster.common.core.enums.OperationType;
+import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
@@ -71,7 +75,12 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         sendMessage.setObject(productInfo);
         sendMessage.setTemplateEnum(TemplateEnum.PRODUCT_TEMPLATE);
         generateSendMessageService.sendToMq(sendMessage);
+        convertInfo(new ESProductDto(productInfo));
         return Message.createBySuccess();
+    }
+
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
+    private void convertInfo(ESProductDto productDto){
     }
 
     @Override

@@ -45,13 +45,7 @@ public class ProductMessageController extends BaseController {
                                                   @PathVariable("goodsId") Long goodsId,
                                                   @PathVariable("parentId") Long parentId,
                                                   @PathVariable("firstClassId") Long firstClassId){
-        ProductMessageInfo condition = new ProductMessageInfo();
-        condition.setFirstClassId(firstClassId);
-        condition.setParentId(parentId);
-        condition.setProductId(goodsId);
-        condition.setStartIndex((currentPage - 1) * pageSize);
-        condition.setEndIndex(pageSize);
-        return productMessageService.getMessagePage(condition);
+        return productMessageService.getMessagePage(pageSize, currentPage, goodsId, parentId, firstClassId);
     }
 
     @ApiOperation("根据商品id和留言父id写留言信息")

@@ -29,4 +29,12 @@ public interface ProductMessageDao extends BaseDao<ProductMessageInfo, Long> {
      **/
     Long selectSalerIdByMessageParentId(Long parentId);
 
+    /**
+     * @Author hmr
+     * @Description 根据一级留言id查看该留言下的回复数量
+     * @Date: 2020/5/6 19:49
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    Integer selectReplyTotalById(Long id);
 }

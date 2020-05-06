@@ -46,12 +46,12 @@ irh:
     host: '@irh.elasticsearch.host@'
   goods:     #商城模块索引
     index: goods
-    type: doc
-    source_field: id,productName,mainPicUrl,,st,mt,salePrice,originalPrice,tradeType,originalPrice,productDesc
+    type: goods
+    source_field: id,title,mainPicUrl,tagNames,salePrice,tradeType,desc,type,createTime
   forum:     #论坛模块索引
     index: forum
-    type: doc
-    source_field: id,mainPictureUrl,title,st,mt,tagNames
+    type: forum
+    source_field: id,mainPictureUrl,title,st,mt,tagNames,createTime
 
 mybatis:
   mapper-locations: /mapper/*

@@ -4,6 +4,7 @@ package top.imuster.goods.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
@@ -67,5 +68,18 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         sendMessageDto.setContent("我对您发布的商品进行了评价,快来看看吧");
         generateSendMessageService.sendToMq(sendMessageDto);
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<Page<ProductEvaluateInfo>> getListByUserId(Integer pageSize, Integer currentPage, Long userId, Integer type) {
+        Page<ProductEvaluateInfo> page = new Page<>();
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
+        ProductEvaluateInfo productEvaluateInfo = new ProductEvaluateInfo();
+        if(type == 1) productEvaluateInfo.setBuyerId(userId);
+        if(type == 2) productEvaluateInfo.setSalerId(userId);
+        productEvaluateInfo.setState(2);
+        page = this.selectPage(productEvaluateInfo, page);
+        return Message.createBySuccess(page);
     }
 }

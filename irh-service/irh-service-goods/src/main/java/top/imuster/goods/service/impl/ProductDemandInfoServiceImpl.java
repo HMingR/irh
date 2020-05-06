@@ -8,7 +8,11 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.dto.BrowserTimesDto;
+import top.imuster.common.core.enums.OperationType;
+import top.imuster.common.core.enums.ReleaseType;
+import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductDemandInfoDao;
@@ -109,6 +113,21 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         productDemandInfo.setState(1);
         productDemandInfoDao.updateByKey(productDemandInfo);
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<String> releaseDemand(ProductDemandInfo productDemandInfo, Long userId) {
+        productDemandInfo.setConsumerId(userId);
+        Long aLong = productDemandInfoDao.insertInfoReturnId(productDemandInfo);
+        if(aLong == null) return Message.createByError();
+        productDemandInfo.setId(aLong);
+        convertInfo(new ESProductDto(productDemandInfo));
+        return Message.createBySuccess();
+    }
+
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
+    private void convertInfo(ESProductDto esDto){
+
     }
 
 }

@@ -15,6 +15,7 @@ import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * ProductMessageService 实现类
@@ -38,16 +39,6 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
         return this.productMessageDao;
     }
 
-    @Override
-    public Message<Page<ProductMessageInfo>> getMessagePage(ProductMessageInfo condition) {
-        condition.setOrderField("create_time");
-        condition.setOrderFieldType("DESC");
-        Page<ProductMessageInfo> page = new Page<>();
-        page.setPageSize(condition.getPageSize());
-        page.setCurrentPage(condition.getPageSize());
-        Page<ProductMessageInfo> infoPage = this.selectPage(condition, page);
-        return Message.createBySuccess(infoPage);
-    }
 
     @Override
     public void generateSendMessage(ProductMessageInfo productMessageInfo){
@@ -72,6 +63,29 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
             sendToSaler.setResourceId(messageId);
         }
         generateSendMessageService.sendToMq(sendToSaler);
+    }
+
+    @Override
+    public Message<Page<ProductMessageInfo>> getMessagePage(Integer pageSize, Integer currentPage, Long goodsId, Long parentId, Long firstClassId) {
+        Page<ProductMessageInfo> page = new Page<>();
+        ProductMessageInfo condition = new ProductMessageInfo();
+        page.setPageSize(pageSize < 1 ? 10 : pageSize);
+        page.setCurrentPage(currentPage < 1? 1: currentPage);
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
+        condition.setProductId(goodsId);
+        condition.setFirstClassId(firstClassId);
+        condition.setParentId(parentId);
+        page = this.selectPage(condition, page);
+        List<ProductMessageInfo> data = page.getData();
+        if(data != null && !data.isEmpty()){
+            data.stream().forEach(productMessageInfo -> {
+                Long id = productMessageInfo.getId();
+                Integer replyTotal = productMessageDao.selectReplyTotalById(id);
+                productMessageInfo.setReplyTotal(replyTotal);
+            });
+        }
+        return Message.createBySuccess(page);
     }
 
 }

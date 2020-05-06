@@ -38,12 +38,7 @@ public class ProductDemandController extends BaseController {
     public Message<String> add(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) {
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
-        productDemandInfo.setConsumerId(userId);
-        int i = productDemandInfoService.insertEntry(productDemandInfo);
-        if(i == 1){
-            return Message.createBySuccess("发布成功");
-        }
-        return Message.createByError("发布失败");
+        return productDemandInfoService.releaseDemand(productDemandInfo, userId);
     }
 
     @ApiOperation("分页查看自己发布的需求")
