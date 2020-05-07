@@ -54,6 +54,7 @@ public class ProductRecordServiceImpl implements ProductRecordService {
             articleInfo.setBrowseDate(browseRecordDto.getCreateTime());
             res.add(articleInfo);
         }
+        page.setData(res);
         page.setTotalCount(redisTemplate.opsForList().size(browseRecordKey).intValue());
         return Message.createBySuccess(page);
     }

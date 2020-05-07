@@ -18,6 +18,7 @@ public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessageInfo, Long>
 	private final static String INSERT_RETURN_ID = "insertReturnId";
 	private final static String SELECT_PRODUCT_EMAIL_BY_MESSAGE_PARENT_ID = "selectSalerIdByMessageParentId";
 	private final static String SELECT_REPLY_TOTAL_BY_ID = "selectReplyTotalById";
+	private final static String SELECT_PARENT_WRITER_ID_BY_ID = "selectParentWriterIdById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -36,5 +37,10 @@ public class ProductMessageDaoImpl extends BaseDaoImpl<ProductMessageInfo, Long>
 	@Override
 	public Integer selectReplyTotalById(Long id) {
 		return this.select(getNameSpace(SELECT_REPLY_TOTAL_BY_ID), id);
+	}
+
+	@Override
+	public Long selectParentWriterIdById(Long pid) {
+		return this.select(getNameSpace(SELECT_PARENT_WRITER_ID_BY_ID), pid);
 	}
 }

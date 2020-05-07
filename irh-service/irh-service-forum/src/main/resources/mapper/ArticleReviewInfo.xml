@@ -175,4 +175,10 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[ WHERE first_class_id = -1 AND parent_id = -1 AND article_id = #{articleId} AND state != 1 LIMIT #{startIndex}, #{endIndex}]]>
 	</select>
+
+	<select id="selectParentWriterIdById" parameterType="long" resultType="long">
+		SELECT user_id
+		FROM article_review_info
+		WHERE id = #{parentId,jdbcType=BIGINT}
+	</select>
 </mapper>

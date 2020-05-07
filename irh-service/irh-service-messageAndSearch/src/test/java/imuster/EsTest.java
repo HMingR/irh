@@ -8,6 +8,8 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.delete.DeleteRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -24,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -32,8 +33,8 @@ import top.imuster.common.core.utils.DateUtil;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.message.provider.MessageProviderApplication;
-import top.imuster.message.provider.dao.GoodsRepository;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -56,18 +57,15 @@ public class EsTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
-    GoodsRepository goodsRepository;
-
-    @Autowired
-    private ElasticsearchOperations elasticsearchOperations;
+    @Resource
+    DeleteRequestBuilder goodsDeleteRequestBuilder;
 
 
     private static final Logger log = LoggerFactory.getLogger(EsTest.class);
 
+    @Test
     public void test000(){
-//        UpdateQuery updateQuery = QueryBuilders.termQuery("id", 10);
-//        elasticsearchOperations.update()
+        goodsDeleteRequestBuilder.setIndex("goods").setType("goods").setId("rEjf7HEBxJqHH_wUeBI3").execute();
     }
 
 
@@ -75,18 +73,18 @@ public class EsTest {
     public void test() throws JsonProcessingException {
 
         ESProductDto esProductDto = new ESProductDto();
-        esProductDto.setId(11L);
+        esProductDto.setId(12L);
         esProductDto.setConsumerId(8L);
 //        esProductDto.setSalePrice("1000");
-        esProductDto.setTitle("想低价收一台山地自行车");
+        esProductDto.setTitle("高价收一台maccccccc");
         esProductDto.setMainPicUrl("group1/M00/00/01/rBgYGV6wxzyAYZe_AAAi4sTh7gg602.png");
 //        esProductDto.setTradeType(10);
-        esProductDto.setDesc("马上毕业了，那位学长有自行车");
+        esProductDto.setDesc("马上毕业了，那位学长有mbp,高价收收收收收收收收");
         esProductDto.setType(2);
-        esProductDto.setTagNames("测试|自行车|毕业季");
+        esProductDto.setTagNames("测试|电脑|毕业季|apple");
         esProductDto.setCreateTime(DateUtil.current());
-        Iterable<ESProductDto> id = goodsRepository.search(QueryBuilders.matchPhraseQuery("id", 10));
-        //IndexResponse indexResponse = transportClient.prepareIndex("goods", "goods").setSource(objectMapper.writeValueAsString(esProductDto)).get();
+        //Iterable<ESProductDto> id = goodsRepository.search(QueryBuilders.matchPhraseQuery("id", 10));
+        IndexResponse indexResponse = transportClient.prepareIndex("goods", "goods").setSource(esProductDto).setId("13").get();
         //System.out.println(indexResponse.getIndex());
     }
 

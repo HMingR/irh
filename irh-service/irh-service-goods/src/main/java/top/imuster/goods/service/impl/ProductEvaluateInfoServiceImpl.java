@@ -10,12 +10,15 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
+import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductEvaluateInfoDao;
 import top.imuster.goods.service.ProductEvaluateInfoService;
+import top.imuster.goods.service.ProductInfoService;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * ProductEvaluateInfoService 实现类
@@ -27,6 +30,9 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
 
     @Resource
     private ProductEvaluateInfoDao productEvaluateInfoDao;
+
+    @Resource
+    private ProductInfoService productInfoService;
 
     @Resource
     private GenerateSendMessageService generateSendMessageService;
@@ -80,6 +86,14 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         if(type == 2) productEvaluateInfo.setSalerId(userId);
         productEvaluateInfo.setState(2);
         page = this.selectPage(productEvaluateInfo, page);
+        List<ProductEvaluateInfo> data = page.getData();
+        if(data != null && !data.isEmpty()){
+            data.stream().forEach(condition -> {
+                Long productId = condition.getProductId();
+                ProductInfo briefInfoById = productInfoService.getProductBriefInfoById(productId);
+                condition.setProductbrief(briefInfoById);
+            });
+        }
         return Message.createBySuccess(page);
     }
 }

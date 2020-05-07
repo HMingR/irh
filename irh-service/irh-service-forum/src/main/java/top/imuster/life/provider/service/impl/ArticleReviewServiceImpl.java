@@ -65,9 +65,10 @@ public class ArticleReviewServiceImpl extends BaseServiceImpl<ArticleReviewInfo,
             Long parentId = condition.getParentId();
             if(parentId != null){
                 Long writerId = collect.get(parentId);
-                if(writerId != null){
-                    condition.setParentWriterId(writerId);
+                if(writerId == null && condition.getParentId() == -1) {
+                    writerId = articleReviewDao.selectParentWriterIdById(parentId);
                 }
+                condition.setParentWriterId(writerId);
             }
         });
         return Message.createBySuccess(page);

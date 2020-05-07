@@ -1,5 +1,6 @@
 package top.imuster.message.provider.component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,7 @@ import top.imuster.common.core.dto.SendReleaseDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.life.api.dto.EsArticleDto;
-import top.imuster.message.provider.service.ArticleReleaseInfoService;
-import top.imuster.message.provider.service.GoodsReleaseInfoService;
+import top.imuster.message.provider.service.impl.EsOperationService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -29,11 +29,11 @@ import java.io.IOException;
 public class ReleaseQueueListener {
     private static final Logger log = LoggerFactory.getLogger(ReleaseQueueListener.class);
 
-    @Resource
-    GoodsReleaseInfoService goodsReleaseInfoService;
 
     @Resource
-    ArticleReleaseInfoService articleReleaseInfoService;
+    EsOperationService esOperationService;
+
+    @Resource
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -48,7 +48,7 @@ public class ReleaseQueueListener {
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
                                             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
                                             key = "info.1.release.1"))
-    public void GoodsReleaseListener(String msg){
+    public void GoodsReleaseListener(String msg) throws JsonProcessingException {
         SendReleaseDto releaseDto = null;
         try {
             releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
@@ -57,7 +57,7 @@ public class ReleaseQueueListener {
         }
         OperationType operationType = releaseDto.getOperationType();
         ESProductDto releaseInfo = (ESProductDto)releaseDto.getTargetInfo();
-        goodsReleaseInfoService.executeByOperationType(releaseInfo, operationType);
+        esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "goods");
     }
 
 
@@ -71,7 +71,7 @@ public class ReleaseQueueListener {
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
             key = "info.2.release.2"))
-    public void articleReleaseListener(String msg){
+    public void articleReleaseListener(String msg) throws JsonProcessingException {
         SendReleaseDto releaseDto = null;
         try {
             releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
@@ -80,7 +80,7 @@ public class ReleaseQueueListener {
         }
         OperationType operationType = releaseDto.getOperationType();
         EsArticleDto releaseInfo = (EsArticleDto)releaseDto.getTargetInfo();
-        articleReleaseInfoService.executeByOperationType(releaseInfo, operationType);
+        esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "article");
     }
 
 

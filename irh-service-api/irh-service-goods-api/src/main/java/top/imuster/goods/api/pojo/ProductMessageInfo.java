@@ -47,9 +47,20 @@ public class ProductMessageInfo extends BaseDomain {
 	private Long firstClassId;
 
 	private Integer replyTotal;
+
+	//父级留言的作者
+	private Long parentWriterId;
 	// 1-无效 2-有效
 	//private Short state;
 
+
+	public Long getParentWriterId() {
+		return parentWriterId;
+	}
+
+	public void setParentWriterId(Long parentWriterId) {
+		this.parentWriterId = parentWriterId;
+	}
 
 	public Integer getReplyTotal() {
 		return replyTotal;

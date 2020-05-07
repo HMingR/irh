@@ -160,16 +160,17 @@ public class ProductController extends BaseController {
      * @param targetId
      * @reture: void
      **/
-    @GetMapping("/browse/{targetId}/{time}")
+    @GetMapping("/browse/{targetId}/{type}")
     @BrowseRecordAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p2")
     @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0")
-    public Message<String> browser(@PathVariable("targetId") Long targetId, @PathVariable("time") Long time, BrowseRecordDto recordDto){
+    public Message<String> browser(@PathVariable("targetId") Long targetId, @PathVariable("type") String detail, BrowseRecordDto recordDto){
         Long userId = getCurrentUserIdFromCookie(false);
         recordDto.setUserId(userId);
-        recordDto.setBrowserTime(time);
         recordDto.setTargetId(targetId);
         recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
         recordDto.setCreateTime(DateUtil.now());
+        if("11".equals(detail)) recordDto.setScoreDetail("4.0,3.0");
+        else recordDto.setScoreDetail("0.0,3.0");
         return Message.createBySuccess();
     }
 

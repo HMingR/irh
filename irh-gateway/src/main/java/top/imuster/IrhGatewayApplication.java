@@ -39,7 +39,7 @@ public class IrhGatewayApplication {
                 context.addConstraint(securityConstraint);
             }
         };
-        tomcat.addAdditionalTomcatConnectors(redirectConnector());
+        //tomcat.addAdditionalTomcatConnectors(redirectConnector());
         return tomcat;
     }
 

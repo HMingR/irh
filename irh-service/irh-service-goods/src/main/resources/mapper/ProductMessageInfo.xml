@@ -163,5 +163,11 @@
 		WHERE parent_id = #{id,jdbcType=BIGINT} AND state = 2
 	</select>
 
+	<select id="selectParentWriterIdById" parameterType="long" resultType="long">
+		SELECT consumer_id
+		FROM product_message_info
+		WHERE id = #{pid,jdbcType=BIGINT}
+	</select>
+
 	
 </mapper>

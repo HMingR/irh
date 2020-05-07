@@ -16,6 +16,8 @@ import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * ProductMessageService 实现类
@@ -79,10 +81,19 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
         page = this.selectPage(condition, page);
         List<ProductMessageInfo> data = page.getData();
         if(data != null && !data.isEmpty()){
+            Map<Long, Long> collect = data.stream().collect(Collectors.toMap(ProductMessageInfo::getId, ProductMessageInfo::getConsumerId));
             data.stream().forEach(productMessageInfo -> {
                 Long id = productMessageInfo.getId();
+                Long pid = productMessageInfo.getParentId();
                 Integer replyTotal = productMessageDao.selectReplyTotalById(id);
                 productMessageInfo.setReplyTotal(replyTotal);
+                Long parentWriterId = collect.get(pid);
+
+                //当查询到的该页面中没有某一条留言的父留言，通过这个查询夫留言的作者，但是必须是三级留言
+                if(parentWriterId == null && productMessageInfo.getParentId() != -1){
+                    parentWriterId = productMessageDao.selectParentWriterIdById(pid);
+                }
+                productMessageInfo.setParentWriterId(parentWriterId);
             });
         }
         return Message.createBySuccess(page);

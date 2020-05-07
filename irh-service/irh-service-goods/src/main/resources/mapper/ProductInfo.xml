@@ -250,7 +250,6 @@
 	<select id="selectProductBriefInfoById" resultType="top.imuster.goods.api.pojo.ProductInfo" parameterType="productInfo">
 		<![CDATA[SELECT
 					id,
-					product_details_page AS productDetailsPage,
 					main_pic_url AS mainPicUrl,
 					original_price AS originalPrice,
 					sale_price AS salePrice,

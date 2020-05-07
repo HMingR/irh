@@ -62,8 +62,19 @@ public class ProductEvaluateInfo extends BaseDomain {
 	@ApiModelProperty("整体评价等级,0~10个等级")
 	private Integer wholeEvaluate;
 
+	private ProductInfo Productbrief;
+
 	// 1-无效 2-有效
 	//private Short state;
+
+
+	public ProductInfo getProductbrief() {
+		return Productbrief;
+	}
+
+	public void setProductbrief(ProductInfo productbrief) {
+		Productbrief = productbrief;
+	}
 
 	public Long getId() {
 		return this.id;

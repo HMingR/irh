@@ -1,8 +1,10 @@
 package top.imuster.goods.api.dto;
 
+import cn.hutool.core.lang.Assert;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -18,10 +20,11 @@ public class ESProductDto extends BaseDomain {
 
     private Integer type;
 
+    private String title;
+
     @Id
     private Long id;
 
-    private String title;
 
     private String tagNames;
 
@@ -132,4 +135,5 @@ public class ESProductDto extends BaseDomain {
     public void setTradeType(Integer tradeType) {
         this.tradeType = tradeType;
     }
+
 }

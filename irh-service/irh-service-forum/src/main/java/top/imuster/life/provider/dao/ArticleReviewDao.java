@@ -50,4 +50,13 @@ public interface ArticleReviewDao extends BaseDao<ArticleReviewInfo, Long> {
      * @reture: java.util.List<top.imuster.life.api.pojo.ArticleReviewInfo>
      **/
     List<ArticleReviewInfo> selectFirstClassReviewByArticleId(ArticleReviewInfo searchCondition);
+
+    /**
+     * @Author hmr
+     * @Description 根据parentId查询该记录的作者
+     * @Date: 2020/5/7 8:45
+     * @param parentId
+     * @reture: java.lang.Long
+     **/
+    Long selectParentWriterIdById(Long parentId);
 }

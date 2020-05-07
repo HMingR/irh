@@ -20,6 +20,7 @@ public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReviewInfo, Long> i
 	private final static String SELECT_UP_TOTAL_BY_IDS = "selectUpTotalByIds";
 	private final static String SELECT_UP_TOTAL_BY_ID = "selectUpTotalById";
 	private final static String SELECT_FIRST_CLASS_REVIEW_BY_ARTICLE = "selectFirstClassReviewByArticleId";
+	private final static String SELECT_PARENT_WRITER_ID_BY_ID = "selectParentWriterIdById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -43,5 +44,10 @@ public class ArticleReviewDaoImpl extends BaseDaoImpl<ArticleReviewInfo, Long> i
 	@Override
 	public List<ArticleReviewInfo> selectFirstClassReviewByArticleId(ArticleReviewInfo searchCondition) {
 		return this.selectList(getNameSpace(SELECT_FIRST_CLASS_REVIEW_BY_ARTICLE), searchCondition);
+	}
+
+	@Override
+	public Long selectParentWriterIdById(Long parentId) {
+		return this.select(getNameSpace(SELECT_PARENT_WRITER_ID_BY_ID), parentId);
 	}
 }

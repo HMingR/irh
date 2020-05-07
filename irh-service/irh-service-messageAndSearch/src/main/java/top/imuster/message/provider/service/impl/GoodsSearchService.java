@@ -17,10 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.message.dto.GoodsSearchParam;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class GoodsSearchService {
     RestHighLevelClient restHighLevelClient;
 
 
-    public Message<Page<ProductInfo>> goodsList(int page, int size, GoodsSearchParam searchParam){
+    public Message<Page<ESProductDto>> goodsList(int page, int size, GoodsSearchParam searchParam){
         if(searchParam == null){
             searchParam = new GoodsSearchParam();
         }
@@ -105,9 +106,8 @@ public class GoodsSearchService {
 
         searchRequest.source(searchSourceBuilder);
 
-        Message<Page<ProductInfo>> queryResult = new Message<Page<ProductInfo>>();
-        Page<ProductInfo> productInfoPage = new Page<>();
-        List<ProductInfo> list = productInfoPage.getData();
+        Page<ESProductDto> productInfoPage = new Page<>();
+        List<ESProductDto> list = new ArrayList<>();
         try {
             //执行搜索
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest);
@@ -118,40 +118,48 @@ public class GoodsSearchService {
             productInfoPage.setTotalCount((int)totalHits);
             SearchHit[] searchHits = hits.getHits();
             for(SearchHit hit:searchHits){
-                ProductInfo info = new ProductInfo();
+                ESProductDto info = new ESProductDto();
                 //源文档
                 Map<String, Object> sourceAsMap = hit.getSourceAsMap();
                 //取出id
-                String id = (String)sourceAsMap.get("id");
+                String id = String.valueOf(sourceAsMap.get("id"));
                 info.setId(Long.parseLong(id));
 
                 //取出name
-                String productName = (String) sourceAsMap.get("productName");
-                info.setTitle(productName);
+                String title = (String) sourceAsMap.get("title");
+                info.setTitle(title);
 
                 //图片
                 String pic = (String) sourceAsMap.get("mainPicUrl");
                 info.setMainPicUrl(pic);
 
                 //价格
-                String price = (String) sourceAsMap.get("salePrice");
-                info.setSalePrice(price);
-
-                //trade_type
-                String tradeType = (String) sourceAsMap.get("tradeType");
-                if(tradeType != null){
-                    info.setTradeType(Integer.parseInt(tradeType));
+                Object salePrice = sourceAsMap.get("salePrice");
+                if(salePrice != null){
+                    info.setSalePrice(String.valueOf(salePrice));
                 }
 
+                Object tagNames = sourceAsMap.get("tagNames");
+                if(tagNames != null) info.setTagNames(String.valueOf(tagNames));
+
+                //trade_type
+                Object tradeType = sourceAsMap.get("tradeType");
+                if(tradeType != null){
+                    info.setTradeType(Integer.parseInt(String.valueOf(tradeType)));
+                }
+
+                Object type = sourceAsMap.get("type");
+                if(type != null){
+                    info.setType(Integer.parseInt(String.valueOf(type)));
+                }
                 //将coursePub对象放入list
                 list.add(info);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        queryResult.setData(productInfoPage);
-        return queryResult;
+        productInfoPage.setData(list);
+        return Message.createBySuccess(productInfoPage);
         
     }
 }

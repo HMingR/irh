@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.message.dto.ForumSearchParam;
 import top.imuster.message.dto.GoodsSearchParam;
@@ -42,7 +42,7 @@ public class SearchController {
 
     @ApiOperation("使用ElasticSearch搜索商品,page为当前页码,size为页面大小")
     @GetMapping("/goods/list/{pageSize}/{currentPage}")
-    public Message<Page<ProductInfo>> list(@PathVariable("currentPage") int page, @PathVariable("pageSize") int size, GoodsSearchParam courseSearchParam) {
+    public Message<Page<ESProductDto>> list(@PathVariable("currentPage") int page, @PathVariable("pageSize") int size, GoodsSearchParam courseSearchParam) {
         return goodsSearchService.goodsList(page,size,courseSearchParam);
     }
 

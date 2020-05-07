@@ -37,4 +37,13 @@ public interface ProductMessageDao extends BaseDao<ProductMessageInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer selectReplyTotalById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据留言id获得父级留言的作者
+     * @Date: 2020/5/7 8:40
+     * @param pid
+     * @reture: java.lang.Long
+     **/
+    Long selectParentWriterIdById(Long pid);
 }
