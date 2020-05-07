@@ -3,6 +3,7 @@ package top.imuster.common.core.utils;
 import org.apache.commons.lang3.StringUtils;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.enums.BrowserType;
+import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.exception.GlobalException;
 
 /**
@@ -102,7 +103,7 @@ public class RedisUtil {
      * @Author hmr
      * @Description 根据慈善基金申请id把自动生成的订单id保存到redis里面，该方法生成key
      * @Date: 2020/4/15 15:42
-     * @param valueOf
+     * @param applyId
      * @reture: java.lang.Object
      **/
     public static String getDonationApplyCode(String applyId) {
@@ -135,5 +136,19 @@ public class RedisUtil {
      **/
     public static String getConsumerLoginByEmail(String email) {
         return new StringBuffer().append(GlobalConstant.IRH_CONSUMER_CODE_LOGIN).append(email).toString();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据发布类型获得存储在redis中的tagname的key
+     * @Date: 2020/5/7 20:12
+     * @param releaseType
+     * @reture: java.lang.Object
+     **/
+    public static String getRedisTagNameKey(ReleaseType releaseType) {
+        if(ReleaseType.GOODS.equals(releaseType) || ReleaseType.DEMAND.equals(releaseType))
+            return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_SET_KEY).append("goods").toString();
+        else
+            return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_SET_KEY).append("article").toString();
     }
 }

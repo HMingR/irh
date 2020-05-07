@@ -21,6 +21,7 @@ import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -172,6 +173,12 @@ public class ProductController extends BaseController {
         if("11".equals(detail)) recordDto.setScoreDetail("4.0,3.0");
         else recordDto.setScoreDetail("0.0,3.0");
         return Message.createBySuccess();
+    }
+
+
+    @GetMapping("/recommend/{text}")
+    public Message<List<Object>> recommendTagName(@PathVariable("text") String text) throws IOException {
+        return productInfoService.recommendTagNames(text);
     }
 
 }

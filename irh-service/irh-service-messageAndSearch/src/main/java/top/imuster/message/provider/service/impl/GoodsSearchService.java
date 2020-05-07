@@ -63,9 +63,9 @@ public class GoodsSearchService {
         //搜索条件
         //根据关键字搜索
         if(StringUtils.isNotEmpty(searchParam.getKeyword())){
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "productName", "productDesc", "tagNames", "topic", "content")
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "title", "desc", "tagNames", "content")
                     .minimumShouldMatch("70%")
-                    .field("productName", 10);
+                    .field("title", 10);
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
 
@@ -152,6 +152,9 @@ public class GoodsSearchService {
                 if(type != null){
                     info.setType(Integer.parseInt(String.valueOf(type)));
                 }
+
+                Object desc = sourceAsMap.get("desc");
+                if(desc != null) info.setDesc(String.valueOf(desc));
                 //将coursePub对象放入list
                 list.add(info);
             }

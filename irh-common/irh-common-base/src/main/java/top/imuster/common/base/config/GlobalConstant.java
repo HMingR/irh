@@ -9,6 +9,7 @@ package top.imuster.common.base.config;
 public class GlobalConstant {
 
     public static final String IRH_CONSUMER_CODE_LOGIN = "irh::consumer::code::login::";
+    public static final String IRH_TAG_NAMES_SET_KEY = "irh::tag::names::set::key::";
 
     private GlobalConstant(){}
 

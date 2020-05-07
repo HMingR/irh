@@ -1,7 +1,13 @@
 package top.imuster.goods.service.impl;
 
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -13,16 +19,16 @@ import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.*;
 
 /**
  * ProductInfoService 实现类
@@ -39,6 +45,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
     @Resource
     private GenerateSendMessageService generateSendMessageService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Override
@@ -143,5 +152,30 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         productInfo.setState(1);
         productInfoDao.updateByKey(productInfo);
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<List<Object>> recommendTagNames(String text) throws IOException {
+        Analyzer anal = new IKAnalyzer(true);
+        StringReader reader=new StringReader(text);
+        //分词
+        TokenStream ts = anal.tokenStream("", reader);
+        CharTermAttribute term=ts.getAttribute(CharTermAttribute.class);
+        //遍历分词数据
+        ts.reset();
+        Set<String> words = new HashSet<>();
+        while(ts.incrementToken()){
+            String s = term.toString();
+            if(s.length() <= 1) continue;
+            words.add(s);
+        }
+        ts.close();
+        reader.close();
+        String tempKey = UUID.randomUUID().toString();
+        redisTemplate.opsForSet().add(tempKey, (String[])words.toArray(new String[words.size()]));
+        Set<String> result = redisTemplate.opsForSet().intersect(RedisUtil.getRedisTagNameKey(ReleaseType.GOODS), tempKey);
+        List<Object> res = Arrays.asList(result.toArray());
+        redisTemplate.delete(tempKey);
+        return Message.createBySuccess(res);
     }
 }

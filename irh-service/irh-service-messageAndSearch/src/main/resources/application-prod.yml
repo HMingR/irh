@@ -1,7 +1,7 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://39.105.0.169:10086/eureka
+      defaultZone: http://39.97.123.63:10086/eureka
   instance:
     lease-renewal-interval-in-seconds: 5        # 心跳时间
     lease-expiration-duration-in-seconds: 15    # 过期时间
@@ -29,26 +29,6 @@ spring:
     username: admin
     password: 197877346hmr
 
-  mail:
-    username: 1978773465@qq.com
-    password: srxhdikamojzbajg
-    host: smtp.qq.com
-
-irh:
-  elasticsearch:
-    host: 39.97.121.108:9200
-  goods:     #商城模块索引
-    index: goods
-    type: doc
-    source_field: id,productName,mainPicUrl,st,mt,salePrice,originalPrice,tradeType,originalPrice,productDesc
-  forum:     #论坛模块索引
-    index: forum
-    type: doc
-    source_field: id,mainPictureUrl,title,st,mt
-
-mybatis:
-  mapper-locations: /mapper/*
-  type-aliases-package: top.imuster.message.pojo
 
 logging:
   config: classpath:logback-spring.xml

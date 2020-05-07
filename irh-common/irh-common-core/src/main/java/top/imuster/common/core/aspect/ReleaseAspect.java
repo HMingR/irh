@@ -7,7 +7,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.AnnotatedElementKey;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.BaseDomain;
@@ -16,6 +18,7 @@ import top.imuster.common.core.config.ExpressionEvaluator;
 import top.imuster.common.core.dto.SendReleaseDto;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.common.core.utils.RedisUtil;
 
 import javax.annotation.Resource;
 
@@ -30,6 +33,9 @@ import javax.annotation.Resource;
 public class ReleaseAspect {
 
     private static final Logger log = LoggerFactory.getLogger(ReleaseAspect.class);
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     private ExpressionEvaluator<BaseDomain> evaluator = new ExpressionEvaluator<>();
 
@@ -49,18 +55,28 @@ public class ReleaseAspect {
     @AfterReturning("pointCut()")
     public void afterReturning(JoinPoint joinPoint){
         log.info("进入releaseAspect");
-        BaseDomain targetInfo = getTargetInfo(joinPoint);
+        ReleaseAnnotation annotation = getAnnotation(joinPoint);
+        BaseDomain targetInfo = (BaseDomain) getTargetInfo(joinPoint, annotation.value());
         if(targetInfo == null){
             log.warn("----->用户发布信息时没有从方法中获得指定的信息");
             return;
         }
-        ReleaseAnnotation annotation = getAnnotation(joinPoint);
         ReleaseType type = annotation.type();
         SendReleaseDto sendReleaseDto = new SendReleaseDto();
         sendReleaseDto.setOperationType(annotation.operationType());
         sendReleaseDto.setTargetInfo(targetInfo);
         sendReleaseDto.setReleaseType(type);
         generateSendMessageService.sendToMq(sendReleaseDto);
+
+        Object tagNames = getTargetInfo(joinPoint, annotation.tagNamesValue());
+        if(tagNames != null) saveTagNames2Redis(String.valueOf(tagNames), type);
+    }
+
+    private void saveTagNames2Redis(String tagNames, ReleaseType releaseType){
+        String[] split = tagNames.split("\\|");
+        for (int i = 0; i < split.length; i++){
+            redisTemplate.opsForSet().add(RedisUtil.getRedisTagNameKey(releaseType), split[i]);
+        }
     }
 
     /**
@@ -70,16 +86,15 @@ public class ReleaseAspect {
      * @param joinPoint
      * @reture: top.imuster.common.base.domain.BaseDomain
      **/
-    public BaseDomain getTargetInfo(JoinPoint joinPoint){
+    public Object getTargetInfo(JoinPoint joinPoint, String el){
         BaseDomain target;
         try{
-            ReleaseAnnotation handler = getAnnotation(joinPoint);
             if (joinPoint.getArgs() == null) {
                 return null;
             }
             EvaluationContext evaluationContext = evaluator.createEvaluationContext(joinPoint.getTarget(), joinPoint.getTarget().getClass(), ((MethodSignature) joinPoint.getSignature()).getMethod(), joinPoint.getArgs());
             AnnotatedElementKey methodKey = new AnnotatedElementKey(((MethodSignature) joinPoint.getSignature()).getMethod(), joinPoint.getTarget().getClass());
-            target = evaluator.condition(handler.value(), methodKey, evaluationContext, BaseDomain.class);
+            target = evaluator.condition(el, methodKey, evaluationContext, BaseDomain.class);
             log.info("aspect中获得的信息为:{}", target);
             return target;
         }catch (Exception e){

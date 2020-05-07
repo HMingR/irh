@@ -41,4 +41,13 @@ public @interface ReleaseAnnotation {
      * @reture: top.imuster.common.core.enums.OperationType
      **/
     OperationType operationType();
+
+    /**
+     * @Author hmr
+     * @Description EL表达式，发布信息的标签,用来保存在redis
+     * @Date: 2020/5/7 20:03
+     * @param
+     * @reture: java.lang.String
+     **/
+    String tagNamesValue() default "";
 }

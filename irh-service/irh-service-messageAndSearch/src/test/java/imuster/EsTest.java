@@ -8,7 +8,6 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
-import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -34,7 +33,6 @@ import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.message.provider.MessageProviderApplication;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -57,17 +55,8 @@ public class EsTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Resource
-    DeleteRequestBuilder goodsDeleteRequestBuilder;
-
 
     private static final Logger log = LoggerFactory.getLogger(EsTest.class);
-
-    @Test
-    public void test000(){
-        goodsDeleteRequestBuilder.setIndex("goods").setType("goods").setId("rEjf7HEBxJqHH_wUeBI3").execute();
-    }
-
 
     @Test
     public void test() throws JsonProcessingException {
@@ -96,16 +85,16 @@ public class EsTest {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //过虑源字段
-        String[] source_field_array = "id,title,mainPicUrl,salePrice,tradeType,desc,customerId,tagNames,type".split(",");
+        String[] source_field_array = "id,title,mainPicUrl,tagNames,salePrice,tradeType,desc,type,createTime".split(",");
         searchSourceBuilder.fetchSource(source_field_array,new String[]{});
         //创建布尔查询对象
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         //搜索条件
         //根据关键字搜索
         if(StringUtils.isNotEmpty("")){
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("看看", "productName", "productDesc")
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("看看", "title", "desc")
                     .minimumShouldMatch("70%")
-                    .field("productName", 10);
+                    .field("title", 10);
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
 
@@ -148,12 +137,6 @@ public class EsTest {
             //价格
             String price = (String) sourceAsMap.get("salePrice");
             info.setSalePrice(price);
-
-            /*String tradeType = String.valueOf(sourceAsMap.get("tradeType"));
-            if(StringUtils.isNotEmpty(tradeType)){
-                info.setTradeType(Integer.parseInt(tradeType));
-            }*/
-
 
             String type = String.valueOf(sourceAsMap.get("type"));
             if(StringUtils.isNotEmpty(type)) info.setType(Integer.parseInt(type));
