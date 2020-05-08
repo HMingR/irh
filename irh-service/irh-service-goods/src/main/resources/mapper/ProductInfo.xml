@@ -167,7 +167,7 @@
 		</trim>
 	</sql>
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="productInfo" >
+	<insert id="insertEntry" parameterType="productInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		<![CDATA[INSERT INTO product_info]]>
 		<include refid="key"></include>
 		VALUES
@@ -261,13 +261,6 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id} AND state = 2
 	</select>
-
-	<insert id="insertInfoReturnId" parameterType="productInfo" useGeneratedKeys="true">
-		<![CDATA[INSERT INTO product_info]]>
-		<include refid="key"></include>
-		VALUES
-		<include refid="value"></include>
-	</insert>
 
 	<select id="selectBrowserTimesByIds" resultType="map">
 		<![CDATA[SELECT

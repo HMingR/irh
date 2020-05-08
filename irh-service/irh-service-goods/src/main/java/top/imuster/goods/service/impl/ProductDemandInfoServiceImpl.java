@@ -16,6 +16,7 @@ import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductDemandInfoDao;
+import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductDemandInfoService;
 import top.imuster.goods.service.ProductDemandReplyInfoService;
 
@@ -101,12 +102,13 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     }
 
     @Override
+    @ReleaseAnnotation(type = ReleaseType.DEMAND, value = "#p0", operationType = OperationType.REMOVE)
     public Message<String> deleteById(Long id, Long userId) {
         Long userIdByDemandId = productDemandInfoDao.selectUserIdByDemandId(id);
         if(userIdByDemandId == null) return Message.createByError("删除失败,请刷新后重试");
         if(!userId.equals(userIdByDemandId)){
             log.error("id为{}的用户试图删除id为{}的需求，但是该需求不属于他", userId, id);
-            return Message.createByError("非法操作,你当前的操作已经被记录");
+            throw new GoodsException("非法操作,你当前的操作已经被记录");
         }
         ProductDemandInfo productDemandInfo = new ProductDemandInfo();
         productDemandInfo.setId(id);
@@ -118,9 +120,10 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     @Override
     public Message<String> releaseDemand(ProductDemandInfo productDemandInfo, Long userId) {
         productDemandInfo.setConsumerId(userId);
-        Long aLong = productDemandInfoDao.insertInfoReturnId(productDemandInfo);
-        if(aLong == null) return Message.createByError();
-        productDemandInfo.setId(aLong);
+        productDemandInfoDao.insertEntry(productDemandInfo);
+        Long demandInfoId = productDemandInfo.getId();
+        if(demandInfoId == null) return Message.createByError();
+        productDemandInfo.setId(demandInfoId);
         convertInfo(new ESProductDto(productDemandInfo));
         return Message.createBySuccess();
     }

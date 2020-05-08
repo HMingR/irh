@@ -20,7 +20,6 @@ public class ProductDemandInfoDaoImpl extends BaseDaoImpl<ProductDemandInfo, Lon
 	private final static String SELECT_LIST = "selectList";
 	private final static String UPDATE_BROWSER_TIMES_BY_CONDITION = "updateBrowserTimesByCondition";
 	private final static String SELECT_USER_ID_BY_DEMAND_ID = "selectUserIdByDemandId";
-	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -34,11 +33,5 @@ public class ProductDemandInfoDaoImpl extends BaseDaoImpl<ProductDemandInfo, Lon
 	@Override
 	public Long selectUserIdByDemandId(Long id) {
 		return this.select(getNameSpace(SELECT_USER_ID_BY_DEMAND_ID), id);
-	}
-
-	@Override
-	public Long insertInfoReturnId(ProductDemandInfo info) {
-		Integer insert = this.insert(getNameSpace(INSERT_INFO_RETURN_ID), info);
-		return insert.longValue();
 	}
 }

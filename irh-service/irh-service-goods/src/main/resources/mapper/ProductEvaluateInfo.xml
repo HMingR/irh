@@ -104,41 +104,13 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="productEvaluateInfo" >
+	<insert id="insertEntry" parameterType="productEvaluateInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
 		<![CDATA[
 			INSERT INTO product_evaluate_info
-				(
-                id, 
-                product_id, 
-                product_name, 
-                buyer_id, 
-                saler_id,
-                order_id, 
-                content, 
-                product_quality_evaluate, 
-                saler_service_evaluate, 
-                whole_evaluate, 
-                create_time, 
-                update_time, 
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{productId}, 
-                #{productName}, 
-                #{buyerId}, 
-                #{salerId},
-                #{orderId}, 
-                #{content}, 
-                #{productQualityEvaluate}, 
-                #{salerServiceEvaluate}, 
-                #{wholeEvaluate}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="values"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->
@@ -193,12 +165,4 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-
-	<insert id="insertInfoReturnId" parameterType="productEvaluateInfo" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO product_evaluate_info
-		<include refid="key"></include>
-		VALUES
-		<include refid="values"></include>
-	</insert>
-	
 </mapper>

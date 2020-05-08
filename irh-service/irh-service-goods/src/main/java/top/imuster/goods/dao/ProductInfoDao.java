@@ -52,14 +52,6 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      **/
     ProductInfo selectProductBriefInfoById(Long id);
 
-    /**
-     * @Author hmr
-     * @Description 插入值并返回id
-     * @Date: 2020/4/12 19:56
-     * @param condition
-     * @reture: java.lang.Long
-     **/
-    Long insertInfoReturnId(ProductInfo condition);
 
     /**
      * @Author hmr

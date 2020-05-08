@@ -103,8 +103,8 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
 
     @Override
     public boolean acceptErrand(ErrandOrderInfo order) {
-        Long id = errandOrderDao.insertInfoReturnId(order);
-        return id != null;
+        errandOrderDao.insertEntry(order);
+        return order.getId() != null;
     }
 
 

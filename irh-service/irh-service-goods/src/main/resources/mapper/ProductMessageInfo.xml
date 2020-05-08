@@ -57,7 +57,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="productMessageInfo" >
+	<insert id="insertEntry" parameterType="productMessageInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
 		<![CDATA[ INSERT INTO product_message_info ]]>
 		<include refid="key"></include>
 		VALUES
@@ -117,14 +117,14 @@
 
 	<sql id="key">
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
-			<if test="productId != null and productId != ''"><![CDATA[AND product_id ,]]></if>
-			<if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id ,]]></if>
-			<if test="parentId != null and parentId != ''"><![CDATA[AND parent_id,]]></if>
-			<if test="content != null and content != ''"><![CDATA[AND content,]]></if>
+			<if test="id != null and id != ''"><![CDATA[ id = #{id}]]></if>
+			<if test="productId != null and productId != ''"><![CDATA[ product_id ,]]></if>
+			<if test="consumerId != null and consumerId != ''"><![CDATA[ consumer_id ,]]></if>
+			<if test="parentId != null and parentId != ''"><![CDATA[ parent_id,]]></if>
+			<if test="content != null and content != ''"><![CDATA[ content,]]></if>
 			<if test="createTime != null and createTime != ''"><![CDATA[create_time,]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time,]]></if>
-			<if test="state != null and state != ''"><![CDATA[ state = #{state},]]></if>
+			<if test="state != null and state != ''"><![CDATA[ state,]]></if>
 			<if test="firstClassId != null and firstClassId != ''"><![CDATA[ first_class_id,]]></if>
 		</trim>
 	</sql>
@@ -144,14 +144,7 @@
 	</sql>
 	
 	<!-- 其它SQL语句 -->
-	<insert id="insertReturnId" parameterType="productMessageInfo" useGeneratedKeys="true" keyProperty="id">
-		<![CDATA[ INSERT INTO product_message_info ]]>
-		<include refid="key"></include>
-		VALUES
-		<include refid="value"></include>
-	</insert>
-
-	<select id="selectSalerIdByMessageParentId" parameterType="long" resultType="long">
+	<select id="selectUserIdByMessageParentId" parameterType="long" resultType="long">
 		SELECT consumer_id
 		FROM product_message_info
 		WHERE id = #{parentId}

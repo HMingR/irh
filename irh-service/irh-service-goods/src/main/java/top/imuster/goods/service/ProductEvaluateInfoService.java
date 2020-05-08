@@ -33,7 +33,7 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
      * @param orderId
      * @param productEvaluateInfo
      * @return*/
-    Message<String> generateSendMessage(Long orderId, ProductEvaluateInfo productEvaluateInfo);
+    Message<String> writeEvaluateByOrderId(Long orderId, ProductEvaluateInfo productEvaluateInfo);
 
      /**
       * @Author hmr

@@ -1,5 +1,6 @@
 package top.imuster.common.core.aspect;
 
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,6 +17,7 @@ import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.config.ExpressionEvaluator;
 import top.imuster.common.core.dto.SendReleaseDto;
+import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
@@ -56,15 +58,22 @@ public class ReleaseAspect {
     public void afterReturning(JoinPoint joinPoint){
         log.info("进入releaseAspect");
         ReleaseAnnotation annotation = getAnnotation(joinPoint);
-        BaseDomain targetInfo = (BaseDomain) getTargetInfo(joinPoint, annotation.value());
+        Object targetInfo = getTargetInfo(joinPoint, annotation.value());
         if(targetInfo == null){
             log.warn("----->用户发布信息时没有从方法中获得指定的信息");
             return;
         }
         ReleaseType type = annotation.type();
+        OperationType operationType = annotation.operationType();
+
         SendReleaseDto sendReleaseDto = new SendReleaseDto();
-        sendReleaseDto.setOperationType(annotation.operationType());
-        sendReleaseDto.setTargetInfo(targetInfo);
+        if(OperationType.UPDATE.equals(operationType) || OperationType.INSERT.equals(operationType)){
+            sendReleaseDto.setTargetInfo((BaseDomain)targetInfo);
+        } else{
+            sendReleaseDto.setTargetId(Long.parseLong(String.valueOf(targetInfo)));
+        }
+
+        sendReleaseDto.setOperationType(operationType);
         sendReleaseDto.setReleaseType(type);
         generateSendMessageService.sendToMq(sendReleaseDto);
 
@@ -86,7 +95,8 @@ public class ReleaseAspect {
      * @param joinPoint
      * @reture: top.imuster.common.base.domain.BaseDomain
      **/
-    public Object getTargetInfo(JoinPoint joinPoint, String el){
+    private Object getTargetInfo(JoinPoint joinPoint, String el){
+        if(StringUtils.isBlank(el)) return null;
         BaseDomain target;
         try{
             if (joinPoint.getArgs() == null) {

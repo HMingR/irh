@@ -181,12 +181,4 @@
 	</select>
 
 
-	<insert id="insertInfoReturnId" useGeneratedKeys="true" parameterType="productDemandInfo">
-		<![CDATA[
-			INSERT INTO product_demand_info
-		]]>
-		<include refid="key"></include>
-		VALUES
-		<include refid="value"></include>
-	</insert>
 </mapper>

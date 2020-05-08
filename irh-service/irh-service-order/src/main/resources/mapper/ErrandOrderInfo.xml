@@ -91,7 +91,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="errandOrderInfo" >
+	<insert id="insertEntry" parameterType="errandOrderInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 		<![CDATA[
 			INSERT INTO errand_order_info
 		]]>
@@ -159,10 +159,5 @@
 		WHERE order_code = #{code}
 	</select>
 	
-	<insert id="insertInfoReturnId" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO errand_order_info
-		<include refid="key"></include>
-		VALUES
-		<include refid="values"></include>
-	</insert>
+
 </mapper>

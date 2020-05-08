@@ -21,6 +21,16 @@ public class SendReleaseDto extends Send2MQ {
 
     OperationType operationType;
 
+    Long targetId;
+
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
+    }
+
     public OperationType getOperationType() {
         return operationType;
     }
@@ -38,6 +48,8 @@ public class SendReleaseDto extends Send2MQ {
     }
 
     public void setReleaseType(ReleaseType releaseType) {
+        //demand和goods在后期更改成了同一个MQ队列
+        if(ReleaseType.DEMAND.equals(releaseType)) releaseType = ReleaseType.GOODS;
         MqTypeEnum.RELEASE.setRelease(releaseType);
     }
 }

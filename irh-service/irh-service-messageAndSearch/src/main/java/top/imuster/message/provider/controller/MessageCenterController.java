@@ -66,7 +66,7 @@ public class MessageCenterController extends BaseController {
 
 
     @ApiOperation("更新消息状态,type为10-删除 20-已读")
-    @GetMapping("/type/{id}")
+    @GetMapping("/{type}/{id}")
     public Message<String> updateById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         NewsInfo newsInfo = new NewsInfo();
         newsInfo.setId(id);

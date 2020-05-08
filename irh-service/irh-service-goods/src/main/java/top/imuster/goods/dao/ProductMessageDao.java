@@ -13,21 +13,12 @@ public interface ProductMessageDao extends BaseDao<ProductMessageInfo, Long> {
     //自定义扩展
     /**
      * @Author hmr
-     * @Description 插入信息，返回生成的id
-     * @Date: 2020/1/21 10:54
-     * @param productMessageInfo
-     * @reture: java.lang.Long
-     **/
-    Long insertReturnId(ProductMessageInfo productMessageInfo);
-
-    /**
-     * @Author hmr
      * @Description 根据父id获得父id对应的消息的发送者的id
      * @Date: 2020/1/21 11:21
      * @param parentId
      * @reture: java.lang.String
      **/
-    Long selectSalerIdByMessageParentId(Long parentId);
+    Long selectUserIdByMessageParentId(Long parentId);
 
     /**
      * @Author hmr
@@ -46,4 +37,5 @@ public interface ProductMessageDao extends BaseDao<ProductMessageInfo, Long> {
      * @reture: java.lang.Long
      **/
     Long selectParentWriterIdById(Long pid);
+
 }

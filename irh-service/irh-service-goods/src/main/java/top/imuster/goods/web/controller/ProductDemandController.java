@@ -9,8 +9,11 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
+import top.imuster.common.core.enums.OperationType;
+import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.service.ProductDemandInfoService;
@@ -27,7 +30,6 @@ import java.util.List;
 @Api("会员发布的需求")
 @RestController
 @RequestMapping("/goods/demand")
-//@PropertySource("classpath:application.yml")
 public class ProductDemandController extends BaseController {
     @Resource
     ProductDemandInfoService productDemandInfoService;
@@ -59,6 +61,7 @@ public class ProductDemandController extends BaseController {
 
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
     @NeedLogin
+    @ReleaseAnnotation(type = ReleaseType.DEMAND, value = "#p0", operationType = OperationType.UPDATE)
     @PostMapping
     public Message<String> edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
         validData(bindingResult);

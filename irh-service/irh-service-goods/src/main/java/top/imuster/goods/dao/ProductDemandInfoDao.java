@@ -32,6 +32,4 @@ public interface ProductDemandInfoDao extends BaseDao<ProductDemandInfo, Long> {
      * @reture: java.lang.Long
      **/
     Long selectUserIdByDemandId(Long id);
-
-    Long insertInfoReturnId(ProductDemandInfo info);
 }

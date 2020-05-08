@@ -15,7 +15,6 @@ import top.imuster.order.provider.dao.ErrandOrderDao;
 public class ErrandOrderDaoImpl extends BaseDaoImpl<ErrandOrderInfo, Long> implements ErrandOrderDao {
 	private final static String NAMESPACE = "top.imuster.life.provider.dao.ErrandOrderDao.";
 	private final static String SELECT_ORDER_STATE_BY_CODE = "selectOrderStateByCode";
-	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -26,8 +25,4 @@ public class ErrandOrderDaoImpl extends BaseDaoImpl<ErrandOrderInfo, Long> imple
 		return this.select(getNameSpace(SELECT_ORDER_STATE_BY_CODE), code);
 	}
 
-	@Override
-	public Long insertInfoReturnId(ErrandOrderInfo order) {
-		return (long) this.insert(getNameSpace(INSERT_INFO_RETURN_ID), order);
-	}
 }

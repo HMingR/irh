@@ -20,12 +20,4 @@ public interface ErrandOrderDao extends BaseDao<ErrandOrderInfo, Long> {
      **/
     Integer selectOrderStateByCode(String code);
 
-    /**
-     * @Author hmr
-     * @Description 插入信息并且返回id
-     * @Date: 2020/4/29 11:17
-     * @param order
-     * @reture: java.lang.Long
-     **/
-    Long insertInfoReturnId(ErrandOrderInfo order);
 }

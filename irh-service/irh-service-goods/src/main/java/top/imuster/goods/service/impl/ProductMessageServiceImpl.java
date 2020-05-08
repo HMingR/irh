@@ -45,26 +45,27 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
     @Override
     public void generateSendMessage(ProductMessageInfo productMessageInfo){
         Long writer = productMessageInfo.getConsumerId();  //写留言的人
-        Long messageId = productMessageDao.insertReturnId(productMessageInfo);  //插入留言后返回的id
-        SendUserCenterDto sendToSaler = new SendUserCenterDto();
-        if(productMessageInfo.getParentId() == 0){
+        productMessageDao.insertEntry(productMessageInfo);  //插入留言后返回的id
+        Long messageId = productMessageInfo.getId();
+        SendUserCenterDto sendToDto = new SendUserCenterDto();
+        if(productMessageInfo.getParentId() == -1){
             Long salerId = productInfoService.getConsumerIdById(productMessageInfo.getProductId());
-            sendToSaler.setFromId(writer);
-            sendToSaler.setToId(salerId);
             if(salerId.equals(writer)) return;   //卖家评论自己,不发送消息
-            sendToSaler.setContent("有人对你的商品进行了留言");
-            sendToSaler.setNewsType(10);
-            sendToSaler.setResourceId(messageId);
+            sendToDto.setFromId(writer);
+            sendToDto.setToId(salerId);
+            sendToDto.setContent("有人对你的商品进行了留言");
+            sendToDto.setNewsType(10);
+            sendToDto.setResourceId(messageId);
         } else {
-            long toId = productMessageDao.selectSalerIdByMessageParentId(productMessageInfo.getParentId());
-            if(writer.equals(toId)) return;  //楼主评论自己，不发送消息
-            sendToSaler.setContent("有人对你的留言进行了回复");
-            sendToSaler.setToId(toId);
-            sendToSaler.setFromId(writer);
-            sendToSaler.setNewsType(10);
-            sendToSaler.setResourceId(messageId);
+            Long toId = productMessageDao.selectUserIdByMessageParentId(productMessageInfo.getParentId());
+            if(toId == null || writer.equals(toId)) return;  //楼主评论自己，不发送消息
+            sendToDto.setContent("有人对你的留言进行了回复");
+            sendToDto.setToId(toId);
+            sendToDto.setFromId(writer);
+            sendToDto.setNewsType(10);
+            sendToDto.setResourceId(messageId);
         }
-        generateSendMessageService.sendToMq(sendToSaler);
+        generateSendMessageService.sendToMq(sendToDto);
     }
 
     @Override

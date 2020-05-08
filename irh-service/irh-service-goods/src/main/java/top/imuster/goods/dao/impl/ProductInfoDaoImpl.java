@@ -21,7 +21,6 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String SELECT_SALER_ID_BY_PRODUCT_ID = "selectSalerIdByProductId";
 	private final static String SELECT_PRODUCT_INFO_BY_MESSAGE_ID = "selectProductInfoByMessageId";
 	private final static String SELECT_PRODUCT_BRIEF_INFO_BY_ID = "selectProductBriefInfoById";
-	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
 	private final static String SELECT_BROWSER_TIMES_BY_IDS = "selectBrowserTimesByIds";
 	private final static String UPDATE_BROWSER_TIMES_BY_CONDITION =  "updateBrowserTimesByCondition";
 	private final static String SELECT_USER_ID_BY_PRODUCT_ID = "selectUserIdByProductId";
@@ -48,11 +47,6 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	@Override
 	public ProductInfo selectProductBriefInfoById(Long id) {
 		return this.select(getNameSpace(SELECT_PRODUCT_BRIEF_INFO_BY_ID), id);
-	}
-
-	@Override
-	public Long insertInfoReturnId(ProductInfo condition) {
-		return (long) this.insert(getNameSpace(INSERT_INFO_RETURN_ID), condition);
 	}
 
 	@Override

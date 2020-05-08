@@ -2,8 +2,10 @@ server:
   port: 10400
 
 mybatis:
-  mapper-locations: /mapper/*
+  mapper-locations: classpath:mapper/*
   type-aliases-package: top.imuster.goods.api.pojo   #别名扫描
+  configuration:
+    default-executor-type: simple
 
 spring:
   data:

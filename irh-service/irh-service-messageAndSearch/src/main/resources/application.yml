@@ -59,6 +59,8 @@ mybatis:
 
 logging:
   config: classpath:logback-spring.xml
+  level:
+    top.imuster.message.provider.dao: debug
 
 enable:
   needLogin: false

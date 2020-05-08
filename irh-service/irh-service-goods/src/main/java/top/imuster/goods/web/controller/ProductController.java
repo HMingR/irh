@@ -12,9 +12,12 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowseRecordAnnotation;
 import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
+import top.imuster.common.core.enums.OperationType;
+import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.exception.GoodsException;
@@ -130,6 +133,7 @@ public class ProductController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "修改商品信息", httpMethod = "POST")
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.UPDATE)
     @PutMapping("/edit")
     public Message editProduct(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws GoodsException {
         validData(bindingResult);
@@ -176,7 +180,15 @@ public class ProductController extends BaseController {
     }
 
 
-    @GetMapping("/recommend/{text}")
+    /**
+     * @Author hmr
+     * @Description 根据text的内容推荐标签
+     * @Date: 2020/5/8 9:32
+     * @param text
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.Object>>
+     **/
+    @NeedLogin
+    @GetMapping("/recommendTag/{text}")
     public Message<List<Object>> recommendTagName(@PathVariable("text") String text) throws IOException {
         return productInfoService.recommendTagNames(text);
     }

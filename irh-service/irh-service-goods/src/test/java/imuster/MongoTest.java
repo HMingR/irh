@@ -2,27 +2,17 @@ package imuster;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.imuster.goods.GoodsProviderApplication;
 import top.imuster.goods.api.dto.ProductRecommendDto;
 import top.imuster.goods.dao.ProductRecommendDao;
 import top.imuster.goods.service.impl.ProductRecommendService;
-
-import java.util.List;
 
 /**
  * @ClassName: MongoTest
@@ -45,17 +35,16 @@ public class MongoTest {
     @Autowired
     ProductRecommendService productRecommendService;
 
+    @Autowired
+    SqlSessionTemplate sqlSessionTemplate;
+
     @Test
     public void test() throws JsonProcessingException {
-/*        MongoCollection<Document> test = mongoTemplate.getCollection("test");
-        BasicDBObject basicQuery = new BasicDBObject();
-        Document document = new Document();
-        document.append("userId", 123.0);
-        FindIterable<Document> documents = test.find(document);
-        System.out.println(objectMapper.writeValueAsString(documents.first()));*/
-
         ProductRecommendDto one = productRecommendService.findOne(58556);
         System.out.println(objectMapper.writeValueAsString(one));
+    }
 
+    public void test02(){
+        //sqlSessionTemplate.insert(statement, parameter);
     }
 }

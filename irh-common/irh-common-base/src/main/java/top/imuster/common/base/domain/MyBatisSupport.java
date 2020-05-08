@@ -1,7 +1,6 @@
 package top.imuster.common.base.domain;
 
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -11,17 +10,6 @@ public class MyBatisSupport {
 
     @Resource
     private SqlSessionTemplate sqlSessionTemplate;
-
-    /**
-     * @Description: 需要批量操作的时候可以使用这个方法
-     * @Author: hmr
-     * @Date: 2019/11/25 11:02
-     * @param batchSqlSessionTemplate
-     * @reture: void
-     **/
-    protected void changeToBatchExecuteType(@Qualifier("batchSqlSessionTemplate") SqlSessionTemplate batchSqlSessionTemplate){
-        this.sqlSessionTemplate = batchSqlSessionTemplate;
-    }
 
     protected int insert(String statement, Object parameter){
         int res = 0;

@@ -14,14 +14,8 @@ import top.imuster.goods.dao.ProductEvaluateInfoDao;
 @Repository("productEvaluateInfoDao")
 public class ProductEvaluateInfoDaoImpl extends BaseDaoImpl<ProductEvaluateInfo, Long> implements ProductEvaluateInfoDao {
 	private final static String NAMESPACE = "top.imuster.goods.dao.ProductEvaluateInfoDao.";
-	private final static String INSERT_INFO_RETURN_ID = "insertInfoReturnId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
-	}
-
-	@Override
-	public Long insertInfoReturnId(ProductEvaluateInfo evaluateInfo) {
-		return (long)this.insert(getNameSpace(INSERT_INFO_RETURN_ID), evaluateInfo);
 	}
 }

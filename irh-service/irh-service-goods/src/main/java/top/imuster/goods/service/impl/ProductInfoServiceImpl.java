@@ -78,9 +78,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
     @Override
     public Message<String> releaseProduct(ProductInfo productInfo) {
-        Long id = productInfoDao.insertInfoReturnId(productInfo);
+        productInfoDao.insertEntry(productInfo);
         SendDetailPageDto sendMessage = new SendDetailPageDto();
-        productInfo.setId(id);
+        productInfo.setId(productInfo.getId());
         sendMessage.setObject(productInfo);
         sendMessage.setTemplateEnum(TemplateEnum.PRODUCT_TEMPLATE);
         generateSendMessageService.sendToMq(sendMessage);
@@ -88,6 +88,13 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         return Message.createBySuccess();
     }
 
+    /**
+     * @Author hmr
+     * @Description 将信息转换成ES中的结构并发送到MQ中
+     * @Date: 2020/5/8 9:22
+     * @param productDto
+     * @reture: void
+     **/
     @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
     private void convertInfo(ESProductDto productDto){
     }
@@ -140,6 +147,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.REMOVE)
     public Message<String> deleteById(Long id, Long userId) {
         Long userIdByProductId = productInfoDao.selectUserIdByProductId(id);
         if(userIdByProductId == null) return Message.createByError("删除失败,请刷新后重试");

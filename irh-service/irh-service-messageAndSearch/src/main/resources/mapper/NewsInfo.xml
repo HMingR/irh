@@ -8,7 +8,6 @@
 		<![CDATA[
             id,
             receiver_id AS receiverId,
-            title,
             content,
             news_type AS newsType,
             create_time AS createTime,
@@ -27,7 +26,6 @@
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="receiverId != null and receiverId != ''"><![CDATA[AND receiver_id = #{receiverId}]]></if>
-            <if test="title != null and title != ''"><![CDATA[AND title = #{title}]]></if>
             <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
             <if test="newsType != null and newsType != ''"><![CDATA[AND news_type = #{newsType}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
@@ -48,7 +46,6 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="receiverId != null"><![CDATA[receiver_id = #{receiverId},]]></if>
-			<if test="title != null"><![CDATA[title = #{title},]]></if>
 			<if test="content != null"><![CDATA[content = #{content},]]></if>
 			<if test="newsType != null"><![CDATA[news_type = #{newsType},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
@@ -59,36 +56,42 @@
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[  id ,]]></if>
+			<if test="receiverId != null and receiverId != ''"><![CDATA[  receiver_id ,]]></if>
+			<if test="content != null and content != ''"><![CDATA[ content,]]></if>
+			<if test="newsType != null and newsType != ''"><![CDATA[  news_type,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  create_time,]]></if>
+			<if test="state != null and state != ''"><![CDATA[  state ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time,]]></if>
+			<if test="senderId != null and senderId != ''"><![CDATA[  sender_id,]]></if>
+			<if test="targetId != null and targetId != ''"><![CDATA[  target_id,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id},]]></if>
+			<if test="receiverId != null and receiverId != ''"><![CDATA[ #{receiverId},]]></if>
+			<if test="content != null and content != ''"><![CDATA[ #{content},]]></if>
+			<if test="newsType != null and newsType != ''"><![CDATA[ #{newsType},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
+			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
+			<if test="senderId != null and senderId != ''"><![CDATA[ #{senderId},]]></if>
+			<if test="targetId != null and targetId != ''"><![CDATA[ #{targetId},]]></if>
+		</trim>
+	</sql>
+
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="newsInfo" >
 		<![CDATA[
 			INSERT INTO news_info
-				(
-                id, 
-                receiver_id, 
-                title, 
-                content, 
-                news_type, 
-                create_time, 
-                state, 
-                update_time,
-                sender_id,
-                target_id
-				)
-			VALUES
-				(
-                #{id}, 
-                #{receiverId}, 
-                #{title}, 
-                #{content}, 
-                #{newsType}, 
-                #{createTime}, 
-                #{state}, 
-                #{updateTime},
-                #{senderId},
-                #{targetId}
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

@@ -48,22 +48,23 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Override
     public Long evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo){
         ProductEvaluateInfo evaluateInfo = new ProductEvaluateInfo();
-        evaluateInfo.setBuyerId(order.getBuyerId());
         evaluateInfo.setProductId(order.getProductId());
         evaluateInfo.setSalerId(order.getSalerId());
         evaluateInfo.setOrderId(order.getId());
         evaluateInfo.setState(2);
-        return productEvaluateInfoDao.insertInfoReturnId(evaluateInfo);
+        productEvaluateInfoDao.insertEntry(evaluateInfo);
+        return evaluateInfo.getId();
     }
 
     @Override
-    public Message<String> generateSendMessage(Long orderId, ProductEvaluateInfo productEvaluateInfo) {
+    public Message<String> writeEvaluateByOrderId(Long orderId, ProductEvaluateInfo productEvaluateInfo) {
         OrderInfo order = orderServiceFeignApi.getOrderById(orderId);
         if(order == null){
             return Message.createByError("未找到相应的订单,请刷新后重试");
-        }
-        if(order.getState() != 50){
+        }if(order.getState() != 50){
             return Message.createByError("该订单还没有完成交易，完成该订单之后才能进行评价");
+        }if(!order.getBuyerId().equals(productEvaluateInfo.getBuyerId())){
+            return Message.createByError("参数错误,您不是该订单的买家,请刷新后重试");
         }
         Long id = this.evaluateByOrder(order, productEvaluateInfo);
         SendUserCenterDto sendMessageDto = new SendUserCenterDto();
@@ -91,7 +92,7 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
             data.stream().forEach(condition -> {
                 Long productId = condition.getProductId();
                 ProductInfo briefInfoById = productInfoService.getProductBriefInfoById(productId);
-                condition.setProductbrief(briefInfoById);
+                condition.setProductBrief(briefInfoById);
             });
         }
         return Message.createBySuccess(page);
