@@ -5,9 +5,9 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
+import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -94,10 +94,10 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据内容分词
-     * @Date: 2020/5/7 20:22
-     * @param text
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.String>>
+     * @Description 将redis中得到的收藏记录总数保存到DB中
+     * @Date: 2020/5/9 9:24
+     * @param list
+     * @reture: void
      **/
-    Message<List<Object>> recommendTagNames(String text) throws IOException;
+    void updateProductCollectTotal(List<GoodsForwardDto> list);
 }

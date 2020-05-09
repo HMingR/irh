@@ -1,9 +1,6 @@
 package top.imuster.goods.web.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
@@ -39,5 +36,10 @@ public class ProductRecordController extends BaseController {
     @GetMapping("/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> recordList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws IOException {
         return productRecordService.getUserRecordList(pageSize, currentPage, getCurrentUserIdFromCookie());
+    }
+
+    @DeleteMapping
+    public Message<String> deleteAll(){
+        return productRecordService.deleteAll(getCurrentUserIdFromCookie());
     }
 }

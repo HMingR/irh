@@ -71,8 +71,9 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         sendMessageDto.setToId(order.getSalerId());
         sendMessageDto.setFromId(order.getBuyerId());
         sendMessageDto.setResourceId(id);
+        sendMessageDto.setTargetId(productEvaluateInfo.getProductId());
         sendMessageDto.setNewsType(60);
-        sendMessageDto.setContent("我对您发布的商品进行了评价,快来看看吧");
+        sendMessageDto.setContent(productEvaluateInfo.getContent());
         generateSendMessageService.sendToMq(sendMessageDto);
         return Message.createBySuccess();
     }

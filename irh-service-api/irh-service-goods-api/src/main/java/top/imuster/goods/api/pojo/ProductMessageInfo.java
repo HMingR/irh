@@ -44,6 +44,7 @@ public class ProductMessageInfo extends BaseDomain {
 	@NotNull(groups = ValidateGroup.addGroup.class, message = "参数错误")
 	private String content;
 
+	@NotNull(groups = ValidateGroup.addGroup.class, message = "参数错误")
 	private Long firstClassId;
 
 	private Integer replyTotal;

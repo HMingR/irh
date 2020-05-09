@@ -11,6 +11,7 @@
             product_id AS productId,
             create_time AS createTime,
             update_time AS updateTime,
+            type,
             state
 		]]>
 	</sql>
@@ -44,6 +45,7 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
 		</set>
 	</sql>
 
@@ -55,6 +57,7 @@
 			<if test="createTime != null and createTime != ''"><![CDATA[ create_time,]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time,]]></if>
 			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
+			<if test="type != null and type != ''"><![CDATA[ type ,]]></if>
 		</trim>
 	</sql>
 
@@ -66,6 +69,7 @@
 			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
 			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
+			<if test="type != null and type != ''"><![CDATA[ #{type},]]></if>
 		</trim>
 	</sql>
 
@@ -131,5 +135,16 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	
+
+	<select id="selectUserIdById" parameterType="long" resultType="long">
+		SELECT user_id
+		FROM product_collect_rel
+		WHERE id = #{id,jdbcType=BIGINT} AND state = 2
+	</select>
+
+	<update id="deleteAllCollectByUserId" parameterType="long">
+		UPDATE product_collect_rel SET
+		state = 1 WHERE user_id = #{currentUserIdFromCookie,jdbcType=BIGINT}
+	</update>
+
 </mapper>

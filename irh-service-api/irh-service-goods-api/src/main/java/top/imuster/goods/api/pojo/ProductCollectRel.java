@@ -24,6 +24,18 @@ public class ProductCollectRel extends BaseDomain {
 	// 商品id
 	private Long productId;
 
+	//1-收藏商品  2-收藏需求
+	private Integer type;
+
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

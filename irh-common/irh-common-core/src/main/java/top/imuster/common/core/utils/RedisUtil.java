@@ -151,4 +151,10 @@ public class RedisUtil {
         else
             return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_SET_KEY).append("article").toString();
     }
+
+    public static String getGoodsCollectMapKey(Integer type) {
+        if(type == 1) return new StringBuffer().append(GlobalConstant.IRH_PRODUCT_COLLECT_MAP_KEY).toString();
+        if(type == 2) return new StringBuffer().append(GlobalConstant.IRH_DEMAND_COLLECT_MAP_KEY).toString();
+        throw new GlobalException("参数异常");
+    }
 }

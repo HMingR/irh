@@ -52,9 +52,19 @@ public class ProductDemandInfo extends BaseDomain {
 
 	private Integer replyTotal;
 
+	private Integer collectTotal;
+
 	// 状态 1-无效 2-有效
 //	private Short state;
 
+
+	public Integer getCollectTotal() {
+		return collectTotal;
+	}
+
+	public void setCollectTotal(Integer collectTotal) {
+		this.collectTotal = collectTotal;
+	}
 
 	public Integer getReplyTotal() {
 		return replyTotal;

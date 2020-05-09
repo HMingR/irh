@@ -24,7 +24,6 @@ import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -178,19 +177,4 @@ public class ProductController extends BaseController {
         else recordDto.setScoreDetail("0.0,3.0");
         return Message.createBySuccess();
     }
-
-
-    /**
-     * @Author hmr
-     * @Description 根据text的内容推荐标签
-     * @Date: 2020/5/8 9:32
-     * @param text
-     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.Object>>
-     **/
-    @NeedLogin
-    @GetMapping("/recommendTag/{text}")
-    public Message<List<Object>> recommendTagName(@PathVariable("text") String text) throws IOException {
-        return productInfoService.recommendTagNames(text);
-    }
-
 }

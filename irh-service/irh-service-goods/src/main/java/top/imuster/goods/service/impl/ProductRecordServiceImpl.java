@@ -58,4 +58,11 @@ public class ProductRecordServiceImpl implements ProductRecordService {
         page.setTotalCount(redisTemplate.opsForList().size(browseRecordKey).intValue());
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public Message<String> deleteAll(Long currentUserIdFromCookie) {
+        String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, currentUserIdFromCookie);
+        redisTemplate.delete(browseRecordKey);
+        return Message.createBySuccess();
+    }
 }
