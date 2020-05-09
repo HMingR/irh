@@ -88,5 +88,5 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @param list
      * @reture: java.lang.Integer
      **/
-    Integer updateCollectTotal(@Param("update") List<GoodsForwardDto> list);
+    Integer updateCollectTotal(@Param("list") List<GoodsForwardDto> list);
 }

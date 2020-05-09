@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.life.provider.dao.ErrandInfoDao">
+<mapper namespace="top.imuster.goods.dao.ErrandInfoDao">
 
 	<!-- errand_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -14,7 +14,9 @@
             create_time AS createTime,
             update_time AS updateTime,
             state,
-            version
+            version,
+            address,
+            phone_num AS phoneNum
 		]]>
 	</sql>
 
@@ -33,6 +35,8 @@
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="version != null and version != ''"><![CDATA[AND version = #{version}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="address != null and address != ''"><![CDATA[AND address = #{address}]]></if>
+            <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
 		</where>
 	</sql>
@@ -54,6 +58,8 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="version != null"><![CDATA[version = #{version},]]></if>
+			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
+			<if test="address != null"><![CDATA[address = #{address},]]></if>
 		</set>
 	</sql>
 
@@ -68,6 +74,8 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time ,]]></if>
 			<if test="version != null and version != ''"><![CDATA[ version  ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[ state  ,]]></if>
+			<if test="address != null and address != ''"><![CDATA[ address  ,]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num  ,]]></if>
 		</trim>
 	</sql>
 
@@ -82,11 +90,13 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[   #{updateTime} ,]]></if>
 			<if test="version != null and version != ''"><![CDATA[   #{version} ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
+			<if test="address != null and address != ''"><![CDATA[   #{address} ,]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[   #{phoneNum} ,]]></if>
 		</trim>
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="errandInfo" keyProperty="id" >
+	<insert id="insertEntry" parameterType="top.imuster.life.api.pojo.ErrandInfo" keyProperty="id" >
 		<![CDATA[
 			INSERT INTO errand_info
 		]]>
@@ -107,20 +117,20 @@
 	</delete>
 
 	<!-- 删除,通过条件 -->
-	<delete id="deleteByCondition" parameterType="errandInfo" >
+	<delete id="deleteByCondition" parameterType="top.imuster.life.api.pojo.ErrandInfo" >
 		<![CDATA[DELETE FROM errand_info]]>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</delete>
 
 	<!-- 修改记录通过主键 -->
-	<update id="updateByKey" parameterType="errandInfo" >
+	<update id="updateByKey" parameterType="top.imuster.life.api.pojo.ErrandInfo" >
 		<![CDATA[UPDATE errand_info]]>
 		<include refid="UPDATE_COLUMN_SET"/>
 		<![CDATA[WHERE id = #{id}]]>
 	</update>
 
 	<!-- 查询,通过主键IN(array) -->
-	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="errandInfo">
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="top.imuster.life.api.pojo.ErrandInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -131,7 +141,7 @@
 	</select>
 
 	<!-- 查询,通过条件 -->
-	<select id="selectEntryList" parameterType="errandInfo" resultType="errandInfo">
+	<select id="selectEntryList" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
 		<![CDATA[SELECT]]>
 		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
@@ -140,20 +150,20 @@
 	</select>
 
 	<!-- 总数查询,通过条件 -->
-	<select id="selectEntryListCount" parameterType="errandInfo" resultType="int">
+	<select id="selectEntryListCount" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="int">
 		<![CDATA[SELECT COUNT(id) AS dataCount]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
 
 	<!-- 其它SQL语句 -->
-	<select id="selectList" parameterType="errandInfo" resultType="errandInfo">
+	<select id="selectList" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
 		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		AND state != 1 AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
 	</select>
 
-	<select id="selectStateByIdAndVersion" parameterType="errandInfo" resultType="integer">
+	<select id="selectStateByIdAndVersion" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="integer">
 		<![CDATA[SELECT state ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id} AND version = #{version}
@@ -165,7 +175,7 @@
 		WHERE publisher_id = #{userId,jdbcType=BIGINT} AND state != 1
 	</select>
 
-	<update id="updateStateByIdAndVersion" parameterType="errandInfo">
+	<update id="updateStateByIdAndVersion" parameterType="top.imuster.life.api.pojo.ErrandInfo">
 		UPDATE errand_info
 		SET state = #{state}, version = #{version} + 1
 		WHERE id = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=INTEGER}

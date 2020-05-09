@@ -1,4 +1,4 @@
-package top.imuster.life.provider.web.controller;
+package top.imuster.goods.web.controller;
 
 
 import io.swagger.annotations.Api;
@@ -8,8 +8,8 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.goods.service.ErrandInfoService;
 import top.imuster.life.api.pojo.ErrandInfo;
-import top.imuster.life.provider.service.ErrandInfoService;
 
 import javax.annotation.Resource;
 
@@ -31,10 +31,7 @@ public class ErrandController extends BaseController {
     @NeedLogin
     @PostMapping
     public Message<String> release(@RequestBody ErrandInfo errandInfo){
-        Long userId = getCurrentUserIdFromCookie();
-        errandInfo.setPublisherId(userId);
-        errandInfoService.insertEntry(errandInfo);
-        return Message.createBySuccess();
+        return errandInfoService.release(errandInfo, getCurrentUserIdFromCookie());
     }
 
     @ApiOperation("删除自己的跑腿服务")

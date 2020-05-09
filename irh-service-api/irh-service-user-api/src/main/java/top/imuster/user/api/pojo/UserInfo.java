@@ -61,18 +61,6 @@ public class UserInfo extends BaseDomain {
 	@ApiModelProperty("手机号")
 	private String phoneNum;
 
-	// 寝室楼号
-	@ApiModelProperty("寝室楼号")
-	private String buildingNum;
-
-	// 楼层, max length: 255
-	@ApiModelProperty("楼层")
-	private String buildingStorey;
-
-	// 寝室号
-	@ApiModelProperty("寝室号")
-	private String dormNum;
-
 	// 真实姓名, max length: 255
 	@ApiModelProperty("真实姓名")
 	private String realName;
@@ -101,10 +89,20 @@ public class UserInfo extends BaseDomain {
 	@ApiModelProperty("用户头像地址")
 	private String portrait;
 
+	private String address;
+
 	// 10:注销 20:锁定 25:未实名 30:审核中 40:审核通过 50:认证失败
 	//state
 
 	private List<RoleInfo> roleList;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public String getSignature() {
 		return signature;
@@ -199,27 +197,6 @@ public class UserInfo extends BaseDomain {
 	}
     public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
-	}
-	
-	public String getBuildingNum() {
-		return this.buildingNum;
-	}
-    public void setBuildingNum(String buildingNum) {
-		this.buildingNum = buildingNum;
-	}
-	
-	public String getBuildingStorey() {
-		return this.buildingStorey;
-	}
-    public void setBuildingStorey(String buildingStorey) {
-		this.buildingStorey = buildingStorey;
-	}
-	
-	public String getDormNum() {
-		return this.dormNum;
-	}
-    public void setDormNum(String dormNum) {
-		this.dormNum = dormNum;
 	}
 	
 	public String getRealName() {

@@ -8,6 +8,7 @@ import top.imuster.goods.api.config.FeignConfig;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
+import top.imuster.life.api.pojo.ErrandInfo;
 
 /**
  * @ClassName: GoodsServiceFeignApi
@@ -108,4 +109,36 @@ public interface GoodsServiceFeignApi {
      * @return*/
     @GetMapping("/es/pi/ei/{id}")
     ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(@PathVariable("id") Long targetId);
+
+    /**
+     * @Author hmr
+     * @Description 根据更新errandInfo的信息
+     * @Date: 2020/3/7 15:37
+     * @param id
+     * @param errandVersion
+     * @reture: void
+     **/
+    @GetMapping("/errand/{id}/{version}")
+    boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看errand是否可以被下单
+     * @Date: 2020/3/7 15:42
+     * @param errandId
+     * @param errandVersion
+     * @reture: boolean
+     **/
+    @GetMapping("/errand/avail/{errandId}/{version}")
+    boolean errandIsAvailable(@PathVariable("errandId") Long errandId,@PathVariable("version") Integer errandVersion);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得errand的地址和电话
+     * @Date: 2020/5/9 16:06
+     * @param errandId
+     * @reture: top.imuster.life.api.pojo.ErrandInfo
+     **/
+    @GetMapping("/errand/addAndPhone/{id}")
+    ErrandInfo getErrandInfoById(@PathVariable("id") Long errandId);
 }

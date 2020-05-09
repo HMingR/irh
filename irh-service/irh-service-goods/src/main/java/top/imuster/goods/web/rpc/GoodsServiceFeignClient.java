@@ -10,9 +10,11 @@ import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessageInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.goods.exception.GoodsException;
+import top.imuster.goods.service.ErrandInfoService;
 import top.imuster.goods.service.ProductEvaluateInfoService;
 import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
+import top.imuster.life.api.pojo.ErrandInfo;
 
 import javax.annotation.Resource;
 
@@ -36,6 +38,10 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Resource
     ProductEvaluateInfoService productEvaluateInfoService;
+
+
+    @Resource
+    ErrandInfoService errandInfoService;
 
     @Override
     @PostMapping(value = "/es/list")
@@ -144,5 +150,23 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @GetMapping("/es/pi/ei/{id}")
     public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(@PathVariable("id") Long targetId) {
         return productEvaluateInfoService.selectEntryList(targetId).get(0);
+    }
+
+    @Override
+    @GetMapping("/errand/{id}/{version}")
+    public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion) {
+        return errandInfoService.updateStateByIdAndVersion(id, errandVersion);
+    }
+
+    @Override
+    @GetMapping("/errand/avail/{errandId}/{version}")
+    public boolean errandIsAvailable(@PathVariable("errandId") Long errandId,@PathVariable("version") Integer errandVersion) {
+        return errandInfoService.isAvailable(errandId, errandVersion);
+    }
+
+    @Override
+    @GetMapping("/errand/addAndPhone/{id}")
+    public ErrandInfo getErrandInfoById(@PathVariable("id") Long errandId) {
+        return errandInfoService.getAddAndPhoneById(errandId);
     }
 }

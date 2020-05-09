@@ -1,10 +1,10 @@
-package top.imuster.life.provider.dao.impl;
+package top.imuster.goods.dao.impl;
 
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.goods.dao.ErrandInfoDao;
 import top.imuster.life.api.pojo.ErrandInfo;
-import top.imuster.life.provider.dao.ErrandInfoDao;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository("errandInfoDao")
 public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements ErrandInfoDao {
-	private final static String NAMESPACE = "top.imuster.order.provider.dao.ErrandInfoDao.";
+	private final static String NAMESPACE = "top.imuster.goods.dao.ErrandInfoDao.";
 	private final static String SELECT_LIST = "selectList";
 	private final static String SELECT_STATE_BY_ID_AND_VERSION = "selectStateByIdAndVersion";
 	private final static String SELECT_LIST_COUNT_BY_USER_ID = "selectListCountByUserId";

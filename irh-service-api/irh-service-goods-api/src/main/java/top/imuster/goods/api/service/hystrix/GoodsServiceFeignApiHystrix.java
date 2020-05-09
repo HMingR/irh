@@ -9,6 +9,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
+import top.imuster.life.api.pojo.ErrandInfo;
 
 /**
  * @ClassName: GoodsServiceFeignApiHystrix
@@ -75,6 +76,21 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
 
             @Override
             public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(Long targetId) {
+                return null;
+            }
+
+            @Override
+            public boolean updateErrandInfoById(Long id, Integer errandVersion) {
+                return false;
+            }
+
+            @Override
+            public boolean errandIsAvailable(Long errandId, Integer errandVersion) {
+                return false;
+            }
+
+            @Override
+            public ErrandInfo getErrandInfoById(Long errandId) {
                 return null;
             }
         };

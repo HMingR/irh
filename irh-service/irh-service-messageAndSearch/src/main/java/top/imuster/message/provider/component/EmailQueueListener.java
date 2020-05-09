@@ -1,9 +1,16 @@
 package top.imuster.message.provider.component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import top.imuster.common.core.dto.SendEmailDto;
+
+import java.io.IOException;
 
 /**
  * @ClassName: EmailQueueListener
@@ -17,8 +24,24 @@ public class EmailQueueListener {
 
     private static final String QUEUE_NAME = "queue_inform_email";
 
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    TemplateEngine templateEngine;
+
     @RabbitListener(queues = QUEUE_NAME)
-    private void listener(String msg){
-        log.info("信息为{}", msg);
+    private void listener(String msg) throws IOException {
+        SendEmailDto sendEmailDto = objectMapper.readValue(msg, SendEmailDto.class);
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        //邮件发送人
+        simpleMailMessage.setFrom("irh平台");
+        //邮件接收人
+        simpleMailMessage.setTo(sendEmailDto.getEmail());
+        //邮件主题
+        simpleMailMessage.setSubject("通知");
+        //邮件内容
+        simpleMailMessage.setText(sendEmailDto.getContent());
     }
 }

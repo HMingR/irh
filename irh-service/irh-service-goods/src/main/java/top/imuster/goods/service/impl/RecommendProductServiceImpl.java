@@ -3,6 +3,7 @@ package top.imuster.goods.service.impl;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 import top.imuster.common.base.domain.Page;
@@ -24,6 +25,8 @@ import java.util.*;
  */
 @Service("recommendProductService")
 public class RecommendProductServiceImpl implements RecommendProductService {
+
+    private RedisTemplate redisTemplate;
 
     @Override
     public Message<Page<ProductInfo>> getRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId) {

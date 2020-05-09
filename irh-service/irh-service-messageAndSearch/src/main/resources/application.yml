@@ -13,9 +13,9 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      username: @irh.mysql.username@
-      password: @irh.mysql.password@
-      url: @irh.mysql.url@
+      username: '@irh.mysql.username@'
+      password: '@irh.mysql.password@'
+      url: '@irh.mysql.url@'
       initial-size: 5     # 初始化大小
       max-active: 20      # 连接池中最大的活动数
       max-wait: 30000                             # 最大连接等待时间
@@ -23,15 +23,24 @@ spring:
       validation-query: select '1' from dual      # 测试连接
 
   rabbitmq:
-    host: @irh.rabbitmq.host@
-    port: @irh.rabbitmq.port@
-    username: @irh.rabbitmq.username@
-    password: @irh.rabbitmq.password@
+    host: '@irh.rabbitmq.host@'
+    port: '@irh.rabbitmq.port@'
+    username: '@irh.rabbitmq.username@'
+    password: '@irh.rabbitmq.password@'
 
   mail:
     username: 1978773465@qq.com
     password: srxhdikamojzbajg
     host: smtp.qq.com
+    port: 25
+
+  freemarker:
+    prefix: classpath:/templates/
+    content-type: text/html
+    suffix: .ftl
+    template-loader-path: classpath:/templates
+    charset: UTF-8
+    check-template-location: true
 
 irh:
   elasticsearch:

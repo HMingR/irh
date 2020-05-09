@@ -38,6 +38,12 @@ public class ProductRecordController extends BaseController {
         return productRecordService.getUserRecordList(pageSize, currentPage, getCurrentUserIdFromCookie());
     }
 
+    @DeleteMapping("/{index}")
+    @NeedLogin
+    public Message<String> deleteByIndex(@PathVariable("index") Integer index){
+        return productRecordService.deleteByIndex(index, getCurrentUserIdFromCookie());
+    }
+
     @DeleteMapping
     public Message<String> deleteAll(){
         return productRecordService.deleteAll(getCurrentUserIdFromCookie());

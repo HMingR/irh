@@ -65,4 +65,12 @@ public class ProductRecordServiceImpl implements ProductRecordService {
         redisTemplate.delete(browseRecordKey);
         return Message.createBySuccess();
     }
+
+    @Override
+    public Message<String> deleteByIndex(Integer index, Long userId) {
+        String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, userId);
+        Object target = redisTemplate.opsForList().index(browseRecordKey, index);
+        redisTemplate.opsForList().remove(browseRecordKey, 1, target);
+        return Message.createBySuccess();
+    }
 }

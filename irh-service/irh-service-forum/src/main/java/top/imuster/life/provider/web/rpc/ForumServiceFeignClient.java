@@ -11,7 +11,6 @@ import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.life.provider.service.ArticleCategoryService;
 import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ArticleReviewService;
-import top.imuster.life.provider.service.ErrandInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,9 +33,6 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
 
     @Resource
     ArticleReviewService articleReviewService;
-
-    @Resource
-    ErrandInfoService errandInfoService;
 
     @Override
     @DeleteMapping("{id}")
@@ -119,15 +115,4 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
         return userId;
     }
 
-    @Override
-    @GetMapping("/errand/{id}/{version}")
-    public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion) {
-        return errandInfoService.updateStateByIdAndVersion(id, errandVersion);
-    }
-
-    @Override
-    @GetMapping("/errand/avail/{errandId}/{version}")
-    public boolean errandIsAvailable(@PathVariable("errandId") Long errandId,@PathVariable("version") Integer errandVersion) {
-        return errandInfoService.isAvailable(errandId, errandVersion);
-    }
 }

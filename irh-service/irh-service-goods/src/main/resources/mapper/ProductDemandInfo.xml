@@ -166,12 +166,12 @@
 	<!-- 其它SQL语句 -->
 
 	<update id="updateBrowserTimesByCondition" parameterType="list">
-		UPDATE
-		<include refid="QUERY_FROM_TABLE"/>
+		UPDATE product_demand_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browser_times = case" suffix="end,">
-				<foreach collection="update" item="item" index="index"></foreach>
-				WHEN id = #{item.id,jdbcType=BIGINT} then browser_times = browser_times + #{item.browserTimes}
+				<foreach collection="update" item="item" index="index">
+					WHEN id = #{item.id,jdbcType=BIGINT} then browser_times = browser_times + #{item.browserTimes}
+				</foreach>
 			</trim>
 		</trim>
 		where id IN
@@ -186,16 +186,16 @@
 	</select>
 
 	<update id="updateCollectTotal" parameterType="top.imuster.goods.api.dto.GoodsForwardDto">
-		UPDATE
-		<include refid="QUERY_FROM_TABLE"/>
+		UPDATE product_demand_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="collect_total = case" suffix="end,">
-				<foreach collection="update" item="item" index="index"></foreach>
-				WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total = collect_total + #{item.times}
+				<foreach collection="target" item="item" index="index">
+					WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total = collect_total + #{item.times}
+				</foreach>
 			</trim>
 		</trim>
 		where id IN
-		<foreach collection="update" index="index" item="item" separator="," open="(" close=")">
+		<foreach collection="target" index="index" item="item" separator="," open="(" close=")">
 			#{item.targetId,jdbcType=BIGINT}
 		</foreach>
 	</update>

@@ -41,8 +41,7 @@ public class ErrandOrderController extends BaseController {
     @NeedLogin
     @GetMapping("/{id}/{version}")
     public Message<String> orderReceive(@PathVariable("id") Long id, @PathVariable("version") Integer version) throws JsonProcessingException {
-        String s = errandOrderService.receiveOrder(id, version, getCurrentUserIdFromCookie());
-        return Message.createBySuccess(s);
+        return errandOrderService.receiveOrder(id, version, getCurrentUserIdFromCookie());
     }
 
     @ApiOperation("根据id删除订单, type标识 5-删除发布的(作为卖家) 6-删除接单(作为买家)")
@@ -59,7 +58,7 @@ public class ErrandOrderController extends BaseController {
         if(searchCondition == null){
             page.setSearchCondition(new ErrandOrderInfo());
         }
-        if(StringUtils.isBlank(searchCondition.getOrderField())){
+        if(StringUtils.isEmpty(searchCondition.getOrderField())){
             searchCondition.setOrderField("create_time");
             searchCondition.setOrderFieldType("DESC");
         }
@@ -82,8 +81,7 @@ public class ErrandOrderController extends BaseController {
     @ApiOperation("根据id查看订单详情")
     @GetMapping("/detail/{id}")
     public Message<ErrandOrderInfo> getOrderById(@PathVariable("id") Long id){
-        ErrandOrderInfo errandOrderInfo = errandOrderService.selectEntryList(id).get(0);
-        return Message.createBySuccess(errandOrderInfo);
+        return errandOrderService.getOrderInfoById(id);
     }
 
     /**

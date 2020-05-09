@@ -34,7 +34,7 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @param currentUserIdFromCookie
      * @reture: void
      **/
-    String receiveOrder(Long id, Integer version, Long currentUserIdFromCookie) throws JsonProcessingException;
+    Message<String> receiveOrder(Long id, Integer version, Long currentUserIdFromCookie) throws JsonProcessingException;
 
     /**
      * @Author hmr
@@ -52,5 +52,14 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @param order
      * @reture: boolean
      **/
-    boolean acceptErrand(ErrandOrderInfo order);
+    ErrandOrderInfo acceptErrand(ErrandOrderInfo order);
+
+    /**
+     * @Author hmr
+     * @Description 根据订单id查看详情
+     * @Date: 2020/5/9 16:01
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ErrandOrderInfo>
+     **/
+    Message<ErrandOrderInfo> getOrderInfoById(Long id);
 }

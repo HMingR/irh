@@ -15,8 +15,6 @@
             qq,
             gender,
             phone_num AS phoneNum,
-            building_num AS buildingNum,
-            building_storey AS buildingStorey,
             dorm_num AS dormNum,
             real_name AS realName,
             certificate_num AS certificateNum,
@@ -28,7 +26,8 @@
             create_time AS createTime,
             portrait,
             type,
-            signature
+            signature,
+            address
 		]]>
 	</sql>
 
@@ -47,8 +46,6 @@
             <if test="qq != null and qq != ''"><![CDATA[AND qq = #{qq}]]></if>
             <if test="gender != null and gender != ''"><![CDATA[AND gender = #{gender}]]></if>
             <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
-            <if test="buildingNum != null and buildingNum != ''"><![CDATA[AND building_num = #{buildingNum}]]></if>
-            <if test="buildingStorey != null and buildingStorey != ''"><![CDATA[AND building_storey = #{buildingStorey}]]></if>
             <if test="dormNum != null and dormNum != ''"><![CDATA[AND dorm_num = #{dormNum}]]></if>
             <if test="realName != null and realName != ''"><![CDATA[AND real_name like "%"#{realName}"%"]]></if>
             <if test="certificateNum != null and certificateNum != ''"><![CDATA[AND certificate_num = #{certificateNum}]]></if>
@@ -64,6 +61,7 @@
             <if test="searchStartTime != null and searchStartTime != ''"><![CDATA[AND create_time >= #{searchStartTime}]]></if>
             <if test="searchEndTime != null and searchEndTime != ''"><![CDATA[AND create_time <= #{searchEndTime}]]></if>
             <if test="signature != null and signature != ''"><![CDATA[AND signature <= #{signature}]]></if>
+            <if test="address != null and address != ''"><![CDATA[AND address <= #{address}]]></if>
 		</where>
 	</sql>
 	
@@ -84,8 +82,6 @@
 			<if test="qq != null"><![CDATA[qq = #{qq},]]></if>
 			<if test="gender != null"><![CDATA[gender = #{gender},]]></if>
 			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
-			<if test="buildingNum != null"><![CDATA[building_num = #{buildingNum},]]></if>
-			<if test="buildingStorey != null"><![CDATA[building_storey = #{buildingStorey},]]></if>
 			<if test="dormNum != null"><![CDATA[dorm_num = #{dormNum},]]></if>
 			<if test="realName != null"><![CDATA[real_name = #{realName},]]></if>
 			<if test="certificateNum != null"><![CDATA[certificate_num = #{certificateNum},]]></if>
@@ -98,6 +94,7 @@
 			<if test="portrait != null"><![CDATA[portrait = #{portrait},]]></if>
 			<if test="type != null"><![CDATA[type = #{type},]]></if>
 			<if test="signature != null"><![CDATA[signature = #{signature},]]></if>
+			<if test="address != null"><![CDATA[address = #{address},]]></if>
 		</set>
 	</sql>
 
@@ -115,9 +112,7 @@
                 qq, 
                 gender, 
                 phone_num, 
-                building_num, 
-                building_storey, 
-                dorm_num, 
+                dorm_num,
                 real_name, 
                 certificate_num, 
                 school_name, 
@@ -128,7 +123,8 @@
                 create_time,
                 portrait,
                 type,
-                signature
+                signature,
+                address
 				)
 			VALUES
 				(
@@ -141,9 +137,7 @@
                 #{qq}, 
                 #{gender}, 
                 #{phoneNum}, 
-                #{buildingNum}, 
-                #{buildingStorey}, 
-                #{dormNum}, 
+                #{dormNum},
                 #{realName}, 
                 #{certificateNum}, 
                 #{schoolName}, 
@@ -154,7 +148,8 @@
                 #{createTime},
                 #{portrait},
                 #{type},
-                #{signature}
+                #{signature},
+                #{address}
 				)
 		]]>
 	</insert>
@@ -277,6 +272,12 @@
 		<![CDATA[SELECT id AS userId, nickname AS nickname, portrait AS pic, state, type AS userType, create_time AS createTime, academy_name AS academyName, signature]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE id = #{userId}]]>
+	</select>
+
+	<select id="selectAddAndPhoneById" parameterType="long" resultType="map">
+		SELECT address, phone_num AS phoneNum
+		FROM user_info
+		where id = #{userId,jdbcType=BIGINT}
 	</select>
 
 </mapper>

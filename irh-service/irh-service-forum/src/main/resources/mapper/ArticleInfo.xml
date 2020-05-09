@@ -270,11 +270,11 @@
 	</select>
 
 	<update id="updateForwardTimesByCondition" parameterType="list">
-		update article_info
+		UPDATE article_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="forward_times = case" suffix="end,">
 				<foreach collection="list" item="item" index="index">
-					when id = #{item.targetId} then forward_times + #{item.times}
+					WHEN id = #{item.targetId} THEN forward_times + #{item.times}
 				</foreach>
 			</trim>
 		</trim>

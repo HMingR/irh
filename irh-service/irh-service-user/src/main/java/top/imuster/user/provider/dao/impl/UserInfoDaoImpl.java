@@ -25,6 +25,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	private final static String SELECT_INCREMENT_USER_BY_TIME = "selectIncrementUserByTime";
 	private final static String SELECT_USER_STATE_BY_ID = "selectUserStateById";
 	private final static String SELECT_USER_DTO_BY_ID = "selectUserDtoById";
+	private final static String SELECT_ADD_AND_PHONE_BY_ID = "selectAddAndPhoneById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -63,6 +64,11 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	@Override
 	public UserDto selectUserDtoById(Long userId) {
 		return this.select(getNameSpace(SELECT_USER_DTO_BY_ID), userId);
+	}
+
+	@Override
+	public Map<String, String> selectAddAndPhoneById(Long userId) {
+		return this.select(getNameSpace(SELECT_ADD_AND_PHONE_BY_ID), userId);
 	}
 
 }

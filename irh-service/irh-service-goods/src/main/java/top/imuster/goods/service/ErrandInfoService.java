@@ -1,4 +1,4 @@
-package top.imuster.life.provider.service;
+package top.imuster.goods.service;
 
 
 import top.imuster.common.base.domain.Page;
@@ -51,4 +51,23 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: void
      **/
     boolean updateStateByIdAndVersion(Long id, Integer errandVersion);
+
+    /**
+     * @Author hmr
+     * @Description 发布跑腿
+     * @Date: 2020/5/9 14:39
+     * @param errandInfo
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> release(ErrandInfo errandInfo, Long currentUserIdFromCookie);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得errand的id
+     * @Date: 2020/5/9 16:08
+     * @param errandId
+     * @reture: top.imuster.life.api.pojo.ErrandInfo
+     **/
+    ErrandInfo getAddAndPhoneById(Long errandId);
 }

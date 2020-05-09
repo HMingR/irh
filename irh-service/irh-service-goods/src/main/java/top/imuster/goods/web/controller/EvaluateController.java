@@ -51,8 +51,10 @@ public class EvaluateController extends BaseController {
      * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductEvaluateInfo>>
      **/
+    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}/{type}")
     public Message<Page<ProductEvaluateInfo>> getList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        if(type != 1 && type != 2) return Message.createByError();
         Long userId = getCurrentUserIdFromCookie();
         return productEvaluateInfoService.getListByUserId(pageSize, currentPage, userId, type);
     }

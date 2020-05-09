@@ -10,6 +10,7 @@ import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: UserServiceFeignClient
@@ -59,5 +60,17 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
         userInfo.setState(state);
         userInfoService.updateByKey(userInfo);
         return Message.createBySuccess();
+    }
+
+    @Override
+    @GetMapping("/addAndPhone/{userId}")
+    public Map<String, String> getUserAddressAndPhoneById(@PathVariable("userId") Long userId) {
+        return userInfoService.getAddAndPhoneById(userId);
+    }
+
+    @Override
+    @GetMapping("/email/{id}")
+    public String getUserEmailById(@PathVariable("id") Long holderId) {
+        return userInfoService.getEmailById(holderId);
     }
 }

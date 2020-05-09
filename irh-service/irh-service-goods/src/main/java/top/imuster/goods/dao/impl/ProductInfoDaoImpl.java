@@ -68,6 +68,7 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 
 	@Override
 	public Integer updateCollectTotal(List<GoodsForwardDto> list) {
+		if(list == null || list.isEmpty()) return 0;
 		return this.update(getNameSpace(UPDATE_COLLECT_TOTAL), list);
 	}
 }

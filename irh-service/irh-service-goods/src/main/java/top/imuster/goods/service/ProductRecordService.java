@@ -33,4 +33,13 @@ public interface ProductRecordService {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> deleteAll(Long currentUserIdFromCookie);
+
+    /**
+     * @Author hmr
+     * @Description 按照序号删除
+     * @Date: 2020/5/9 10:30
+     * @param index
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteByIndex(Integer index, Long userId);
 }

@@ -1,4 +1,4 @@
-package top.imuster.life.provider.dao;
+package top.imuster.goods.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;

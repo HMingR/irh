@@ -39,6 +39,7 @@ public class ProductDemandInfoDaoImpl extends BaseDaoImpl<ProductDemandInfo, Lon
 
 	@Override
 	public Integer updateCollectTotal(List<GoodsForwardDto> list) {
+		if(list == null || list.isEmpty()) return 0;
 		return this.update(getNameSpace(UPDATE_COLLECT_TOTAL),list);
 	}
 }
