@@ -70,4 +70,15 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: top.imuster.life.api.pojo.ErrandInfo
      **/
     ErrandInfo getAddAndPhoneById(Long errandId);
+
+    /**
+     * @Author hmr
+     * @Description 展示所有可用的跑腿
+     * @Date: 2020/5/10 15:42
+     * @param pageSize
+     * @param currentPage
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ErrandInfo>>
+     **/
+    Message<Page<ErrandInfo>> listByType(Integer pageSize, Integer currentPage, Integer type);
 }

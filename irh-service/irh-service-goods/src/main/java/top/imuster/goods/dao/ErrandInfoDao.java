@@ -48,4 +48,13 @@ public interface ErrandInfoDao extends BaseDao<ErrandInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer updateStateByIdAndVersion(ErrandInfo errandInfo);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/10 15:47
+     * @param conditon
+     * @reture: java.util.List<top.imuster.life.api.pojo.ErrandInfo>
+     **/
+    List<ErrandInfo> selectErrandBrief(ErrandInfo conditon);
 }

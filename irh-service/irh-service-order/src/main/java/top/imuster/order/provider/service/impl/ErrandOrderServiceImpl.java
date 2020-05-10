@@ -59,7 +59,6 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     public Message<String> delete(Long id, Long userId, Integer type) {
         ErrandOrderInfo errandOrderInfo = errandOrderDao.selectEntryList(id).get(0);
         if(errandOrderInfo.getState() == 3) return Message.createByError("当前订单还没有完成,请等待订单完成之后再删除");
-
         //判断当前用户有没有权限删除
         if(type == 5){
             if(!errandOrderInfo.getPublisherId().equals(userId)){

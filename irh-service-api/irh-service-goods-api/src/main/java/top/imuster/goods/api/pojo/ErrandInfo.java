@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 
@@ -31,7 +31,7 @@ public class ErrandInfo extends BaseDomain {
 
 	// 服务内容, max length: 255
 	@ApiModelProperty("服务内容")
-	@NotNull(groups = ValidateGroup.addGroup.class, message = "内容不能为空")
+	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "内容不能为空")
 	private String content;
 
 	// 要求
@@ -39,7 +39,7 @@ public class ErrandInfo extends BaseDomain {
 	private String requirement;
 
 	// 价钱
-	@NotNull(groups = ValidateGroup.addGroup.class, message = "价钱不能为空")
+	@NotEmpty(groups = ValidateGroup.addGroup.class, message = "价钱不能为空")
 	@ApiModelProperty("价钱")
 	private String money;
 
@@ -48,13 +48,22 @@ public class ErrandInfo extends BaseDomain {
 	//送货地址
 	private String address;
 
-
 	//接收方电话
 	private String phoneNum;
+
+	//凭证  如取快递的时候需要取件密码
+	private String cypher;
 
 	// 1-删除 2-有效 3-已被接单
 //	private Short state;
 
+	public String getCypher() {
+		return cypher;
+	}
+
+	public void setCypher(String cypher) {
+		this.cypher = cypher;
+	}
 
 	public String getAddress() {
 		return address;

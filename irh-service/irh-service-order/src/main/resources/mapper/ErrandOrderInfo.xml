@@ -63,7 +63,6 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="address != null and address != ''"><![CDATA[AND address = #{address},]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum},]]></if>
-
 		</set>
 	</sql>
 
@@ -96,6 +95,7 @@
 			<if test="finishTime != null and finishTime != ''"><![CDATA[#{finishTime} ,]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[#{updateTime} ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
+			<if test="address != null and address != ''"><![CDATA[   #{address} ,]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[   #{phoneNum} ,]]></if>
 		</trim>
 	</sql>

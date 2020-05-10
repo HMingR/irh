@@ -8,11 +8,11 @@ package top.imuster.common.core.enums;
  */
 public enum TemplateEnum {
 
-    USER_REGISTER("用户注册-发送验证码", "templates/UserRegister.ftl"),
+    USER_REGISTER("用户注册-发送验证码", "UserRegister.ftl"),
 
     ARTICLE_TEMPLATE("论坛模块文章详情页", "static/article.ftl"),
 
-    SIMPLE_TEMPLATE("发送简单的邮件模板", "templates/Simple.ftl"),
+    SIMPLE_TEMPLATE("发送简单的邮件模板", "Simple.ftl"),
 
     //todo 商品详情页还没有
     PRODUCT_TEMPLATE("商品详情页", "");

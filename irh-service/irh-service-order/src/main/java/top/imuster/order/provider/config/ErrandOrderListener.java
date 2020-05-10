@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ErrandOrderListener {
 
-
     private static final Logger log = LoggerFactory.getLogger(ErrandOrderListener.class);
 
     @Resource
@@ -88,12 +87,12 @@ public class ErrandOrderListener {
         userCenterDto.setNewsType(30);
         userCenterDto.setToId(orderInfo.getHolderId());
         userCenterDto.setFromId(0L);
-        userCenterDto.setContent("您已成功获得订单编号为: " + orderInfo.getOrderCode() +" 跑腿订单,请尽快按照要求完成任务,并且请当面结算酬金");
+        userCenterDto.setContent(new StringBuilder("您已成功获得订单编号为: ").append(orderInfo.getOrderCode()).append(" 跑腿订单,请尽快按照要求完成任务,并且请当面结算酬金,点击查看详细信息").toString());
         generateSendMessageService.sendToMq(userCenterDto);
         SendEmailDto sendEmailDto = new SendEmailDto();
         String holderEmail = userServiceFeignApi.getUserEmailById(orderInfo.getHolderId());
         sendEmailDto.setEmail(holderEmail);
-        sendEmailDto.setContent("irh:您已成功获得订单编号为: " + orderInfo.getPublisherId() +" 发布的跑腿,请尽快按照要求完成任务,或登录irh平台查看详情");
+        sendEmailDto.setContent(new StringBuilder("irh:您已成功获得订单编号为: ").append(orderInfo.getOrderCode()).append("的跑腿订单,请尽快按照要求完成任务,或登录irh平台查看详情").toString());
         sendEmailDto.setTemplateEnum(TemplateEnum.SIMPLE_TEMPLATE);
         generateSendMessageService.sendToMq(sendEmailDto);
         userCenterDto.setContent("您发布的跑腿任务已经被接单,请耐心等待,点击查看详情");

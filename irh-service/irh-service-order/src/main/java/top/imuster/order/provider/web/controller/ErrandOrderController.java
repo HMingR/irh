@@ -54,6 +54,8 @@ public class ErrandOrderController extends BaseController {
     @ApiOperation("查看订单，type(1-查看别人接收自己发布的跑腿  2-自己接的跑腿订单)  state取值:3-未完成  4-已完成")
     @PostMapping("/{type}/{state}")
     public Message<Page<ErrandOrderInfo>> list(@RequestBody Page<ErrandOrderInfo> page, @PathVariable("type") Integer type, @PathVariable("state") Integer state){
+        if(type != 1 && type != 2) return Message.createByError("参数异常");
+        if(state != 3 && state != 4) return Message.createByError("参数异常");
         ErrandOrderInfo searchCondition = page.getSearchCondition();
         if(searchCondition == null){
             page.setSearchCondition(new ErrandOrderInfo());

@@ -129,6 +129,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         String code = UUID.randomUUID().toString().substring(0, 4);
         emailDto.setEmail(email);
         emailDto.setContent(code);
+        emailDto.setSubject("irh验证码");
         log.info("验证码为:{}", code);
         if(type == 1){
             emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));

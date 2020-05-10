@@ -41,6 +41,8 @@ spring:
     template-loader-path: classpath:/templates
     charset: UTF-8
     check-template-location: true
+#    settings:
+#      classic_compatible: true
 
 irh:
   elasticsearch:

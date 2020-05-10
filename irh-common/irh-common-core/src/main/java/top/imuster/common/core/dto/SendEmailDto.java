@@ -33,8 +33,22 @@ public class SendEmailDto extends Send2MQ implements Serializable {
     //过期时间单位
     private TimeUnit unit;
 
+    //主题
+    private String subject = "irh通知";
+
+    //邮件的模板
+    private TemplateEnum templateEnum;
+
     public SendEmailDto(){
         this.setType(MqTypeEnum.EMAIL);
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     @Override
@@ -49,9 +63,6 @@ public class SendEmailDto extends Send2MQ implements Serializable {
                 ", templateEnum=" + templateEnum +
                 '}';
     }
-
-    //邮件的模板
-    private TemplateEnum templateEnum;
 
     public Long getExpiration() {
         return expiration;

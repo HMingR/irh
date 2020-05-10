@@ -16,7 +16,8 @@
             state,
             version,
             address,
-            phone_num AS phoneNum
+            phone_num AS phoneNum,
+            cypher
 		]]>
 	</sql>
 
@@ -37,6 +38,7 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
             <if test="address != null and address != ''"><![CDATA[AND address = #{address}]]></if>
             <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
+            <if test="cypher != null and cypher != ''"><![CDATA[AND cypher = #{cypher}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
 		</where>
 	</sql>
@@ -60,6 +62,7 @@
 			<if test="version != null"><![CDATA[version = #{version},]]></if>
 			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
+			<if test="cypher != null"><![CDATA[cypher = #{cypher},]]></if>
 		</set>
 	</sql>
 
@@ -76,6 +79,7 @@
 			<if test="state != null and state != ''"><![CDATA[ state  ,]]></if>
 			<if test="address != null and address != ''"><![CDATA[ address  ,]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num  ,]]></if>
+			<if test="cypher != null and cypher != ''"><![CDATA[ cypher  ,]]></if>
 		</trim>
 	</sql>
 
@@ -92,6 +96,7 @@
 			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
 			<if test="address != null and address != ''"><![CDATA[   #{address} ,]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[   #{phoneNum} ,]]></if>
+			<if test="cypher != null and cypher != ''"><![CDATA[   #{cypher} ,]]></if>
 		</trim>
 	</sql>
 
@@ -180,4 +185,13 @@
 		SET state = #{state}, version = #{version} + 1
 		WHERE id = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=INTEGER}
 	</update>
+
+
+	<select id="selectErrandBrief" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
+		SELECT id, content, requirement, money, create_time AS createTime, version
+		FROM errand_info
+		WHERE state = 2
+		ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR}
+		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
+	</select>
 </mapper>

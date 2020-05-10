@@ -1,16 +1,22 @@
 package top.imuster.message.provider.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.TemplateEngine;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.core.dto.SendEmailDto;
+import top.imuster.common.core.utils.DateUtil;
 
-import java.io.IOException;
+import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName: EmailQueueListener
@@ -27,21 +33,31 @@ public class EmailQueueListener {
     @Autowired
     ObjectMapper objectMapper;
 
+
     @Autowired
-    TemplateEngine templateEngine;
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    Configuration configuration;
+
 
     @RabbitListener(queues = QUEUE_NAME)
-    private void listener(String msg) throws IOException {
+    private void listener(String msg) throws Exception{
+        log.info("接受到errand的下单消息");
         SendEmailDto sendEmailDto = objectMapper.readValue(msg, SendEmailDto.class);
+        MimeMessage mimeMailMessage = null;
+        mimeMailMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
+        mimeMessageHelper.setFrom("1978773465@qq.com");
+        mimeMessageHelper.setTo(sendEmailDto.getEmail());
+        mimeMessageHelper.setSubject(sendEmailDto.getSubject() == null ? "irh通知" : sendEmailDto.getSubject());
 
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        //邮件发送人
-        simpleMailMessage.setFrom("irh平台");
-        //邮件接收人
-        simpleMailMessage.setTo(sendEmailDto.getEmail());
-        //邮件主题
-        simpleMailMessage.setSubject("通知");
-        //邮件内容
-        simpleMailMessage.setText(sendEmailDto.getContent());
+        Map<String, Object> model = new HashMap<>();
+        model.put("context",sendEmailDto.getContent());
+        model.put("date", sendEmailDto.getDate() == null ? DateUtil.now() : sendEmailDto.getDate());
+        Template template = configuration.getTemplate(sendEmailDto.getTemplateEnum().getTemplateLocation());
+        String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+        mimeMessageHelper.setText(text, true);
+        javaMailSender.send(mimeMailMessage);
     }
 }

@@ -91,6 +91,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             //给被封的人发邮件
             SendEmailDto customer = new SendEmailDto();
             customer.setDate(DateUtil.now());
+            customer.setSubject("irh关于冻结账号的通知");
             String emailById = userInfoService.getEmailById(info.getCustomerId());
             if(StringUtils.isBlank(emailById)){
                 log.info("根据id{}查询会员email失败",info.getCustomerId());

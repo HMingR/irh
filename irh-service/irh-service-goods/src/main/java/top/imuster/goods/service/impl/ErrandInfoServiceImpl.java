@@ -27,7 +27,7 @@ import java.util.Map;
 @Service("errandInfoService")
 public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> implements ErrandInfoService {
 
-    protected  final Logger log = LoggerFactory.getLogger(this.getClass());
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserServiceFeignApi userServiceFeignApi;
@@ -84,6 +84,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
 
     @Override
     public boolean updateStateByIdAndVersion(Long id, Integer errandVersion) {
+        log.info("更新version");
         ErrandInfo errandInfo = new ErrandInfo();
         errandInfo.setVersion(errandVersion);
         errandInfo.setId(id);
@@ -124,5 +125,26 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         List<ErrandInfo> errandInfos = this.selectEntryList(errandId);
         if(errandInfos == null || errandInfos.isEmpty()) return null;
         return errandInfos.get(0);
+    }
+
+    @Override
+    public Message<Page<ErrandInfo>> listByType(Integer pageSize, Integer currentPage, Integer type) {
+        ErrandInfo condition = new ErrandInfo();
+
+        if(type == 1) condition.setOrderField("create_time");
+        else condition.setOrderField("money");
+
+        condition.setOrderFieldType("DESC");
+        condition.setState(2);
+        condition.setStartIndex((currentPage- 1) * pageSize);
+        condition.setEndIndex(pageSize);
+
+        List<ErrandInfo> list = errandInfoDao.selectErrandBrief(condition);
+        Integer count = errandInfoDao.selectEntryListCount(condition);
+        Page<ErrandInfo> page = new Page<>();
+        page.setData(list);
+        page.setTotalCount(count);
+
+        return Message.createBySuccess(page);
     }
 }

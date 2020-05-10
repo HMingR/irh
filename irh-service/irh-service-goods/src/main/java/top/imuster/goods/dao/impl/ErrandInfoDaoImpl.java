@@ -20,6 +20,7 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 	private final static String SELECT_STATE_BY_ID_AND_VERSION = "selectStateByIdAndVersion";
 	private final static String SELECT_LIST_COUNT_BY_USER_ID = "selectListCountByUserId";
 	private final static String UPDATE_STATE_BY_ID_AND_VERSION = "updateStateByIdAndVersion";
+	private final static String SELECT_ERRAND_BRIEF = "selectErrandBrief";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -43,5 +44,10 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 	@Override
 	public Integer updateStateByIdAndVersion(ErrandInfo errandInfo) {
 		return this.update(getNameSpace(UPDATE_STATE_BY_ID_AND_VERSION), errandInfo);
+	}
+
+	@Override
+	public List<ErrandInfo> selectErrandBrief(ErrandInfo conditon) {
+		return this.selectList(getNameSpace(SELECT_ERRAND_BRIEF), conditon);
 	}
 }
