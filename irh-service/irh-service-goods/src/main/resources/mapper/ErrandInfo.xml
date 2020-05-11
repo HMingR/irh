@@ -165,7 +165,8 @@
 	<select id="selectList" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
 		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		AND state != 1 AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
+		WHERE
+		state != 1 AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
 	</select>
 
 	<select id="selectStateByIdAndVersion" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="integer">

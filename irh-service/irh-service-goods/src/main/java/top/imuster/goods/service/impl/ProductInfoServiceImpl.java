@@ -1,13 +1,9 @@
 package top.imuster.goods.service.impl;
 
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.wltea.analyzer.lucene.IKAnalyzer;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -19,7 +15,6 @@ import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
-import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -27,9 +22,9 @@ import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * ProductInfoService 实现类
@@ -130,16 +125,16 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
                 selectIds[x] = ids[j];
                 if(j == ids.length - 1) break;
             }
-            Map<Long, Long> result = productInfoDao.selectBrowserTimesByIds(ids);
+//            Map<Long, Long> result = productInfoDao.selectBrowserTimesByIds(ids);
             for (int z = 0; z < selectIds.length; z++){
                 if(selectIds[z] == null || selectIds[z] == 0) break;
                 Long selectId = selectIds[z];
                 Long total = totals[i * batchSize + z];
-                Long original = result.get(selectId);
-                original = original + total;
+//                Long original = result.get(selectId);
+//                original = original + total;
                 ProductInfo condition = new ProductInfo();
                 condition.setId(selectId);
-                condition.setBrowserTimes(original);
+                condition.setBrowserTimes(total);
                 update.add(condition);
             }
             productInfoDao.updateBrowserTimesByCondition(update);

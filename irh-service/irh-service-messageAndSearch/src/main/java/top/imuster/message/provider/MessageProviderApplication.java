@@ -18,6 +18,11 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients(basePackages = {"top.imuster.goods.api.service", "top.imuster.order.api.service"})
 public class MessageProviderApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MessageProviderApplication.class, args);
+        try{
+
+            SpringApplication.run(MessageProviderApplication.class, args);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

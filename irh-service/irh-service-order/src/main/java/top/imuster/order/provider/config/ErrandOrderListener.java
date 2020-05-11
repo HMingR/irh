@@ -50,7 +50,6 @@ public class ErrandOrderListener {
 
     @RabbitListener(queues = "queue_info_errand")
     public void generateOrder(String msg){
-        log.info("接收到跑腿订单");
         try{
             ErrandOrderInfo order = new ObjectMapper().readValue(msg, ErrandOrderInfo.class);
             Long errandId = order.getErrandId();
@@ -81,7 +80,6 @@ public class ErrandOrderListener {
 
 
     private void sendMessage(ErrandOrderInfo orderInfo){
-        log.info("接单成功,开始发送消息到用户中心和email");
         SendUserCenterDto userCenterDto = new SendUserCenterDto();
         userCenterDto.setTargetId(orderInfo.getId());
         userCenterDto.setNewsType(30);

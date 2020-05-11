@@ -4,7 +4,6 @@ package top.imuster.order.provider.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -52,25 +51,16 @@ public class ErrandOrderController extends BaseController {
     }
 
     @ApiOperation("查看订单，type(1-查看别人接收自己发布的跑腿  2-自己接的跑腿订单)  state取值:3-未完成  4-已完成")
-    @PostMapping("/{type}/{state}")
-    public Message<Page<ErrandOrderInfo>> list(@RequestBody Page<ErrandOrderInfo> page, @PathVariable("type") Integer type, @PathVariable("state") Integer state){
+    @GetMapping("/list/{pageSize}/{currentPage}/{type}/{state}")
+    public Message<Page<ErrandOrderInfo>> list(@PathVariable("pageSize") Integer pageSize,
+                                               @PathVariable("currentPage") Integer currentPage,
+                                               @PathVariable("type") Integer type,
+                                               @PathVariable("state") Integer state){
         if(type != 1 && type != 2) return Message.createByError("参数异常");
         if(state != 3 && state != 4) return Message.createByError("参数异常");
-        ErrandOrderInfo searchCondition = page.getSearchCondition();
-        if(searchCondition == null){
-            page.setSearchCondition(new ErrandOrderInfo());
-        }
-        if(StringUtils.isEmpty(searchCondition.getOrderField())){
-            searchCondition.setOrderField("create_time");
-            searchCondition.setOrderFieldType("DESC");
-        }
-        searchCondition.setState(state);
-        Long userId = getCurrentUserIdFromCookie();
-        if(type == 1) searchCondition.setPublisherId(userId);
-        if(type == 2) searchCondition.setHolderId(userId);
-        page.setSearchCondition(searchCondition);
-        Page<ErrandOrderInfo> errandOrderPage = errandOrderService.selectPage(searchCondition, page);
-        return Message.createBySuccess(errandOrderPage);
+        if(pageSize < 1) pageSize = 1;
+        if(currentPage < 1) currentPage = 1;
+        return errandOrderService.list(pageSize, currentPage, type, state, getCurrentUserIdFromCookie());
     }
 
     /**

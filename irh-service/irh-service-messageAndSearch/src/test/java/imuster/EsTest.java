@@ -2,6 +2,8 @@ package imuster;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -25,7 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.utils.DateUtil;
@@ -33,7 +38,9 @@ import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.message.provider.MessageProviderApplication;
 
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,8 +62,41 @@ public class EsTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     private static final Logger log = LoggerFactory.getLogger(EsTest.class);
+
+
+    @Autowired
+    Configuration configuration;
+
+    @Test
+    public void sendTemplateMail() {
+
+        MimeMessage mimeMailMessage = null;
+        try {
+            //template = configuration.getTemplate("Simple.ftl", "UTF-8");
+            mimeMailMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
+            mimeMessageHelper.setFrom("irh");
+            mimeMessageHelper.setTo("1978773465@qq.com");
+            mimeMessageHelper.setSubject("验证码");
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("context","测试");
+            model.put("date", "today");
+            Template template = configuration.getTemplate("Simple.ftl");
+            String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            System.out.println(text);
+            mimeMessageHelper.setText(text, true);
+
+            javaMailSender.send(mimeMailMessage);
+        } catch (Exception e) {
+            log.error("邮件发送失败{}", e.getMessage());
+        }
+
+    }
 
     @Test
     public void test() throws JsonProcessingException {

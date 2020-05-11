@@ -45,7 +45,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         Page<ErrandInfo> page = new Page<>();
         ErrandInfo condition = new ErrandInfo();
         condition.setPublisherId(userId);
-        condition.setStartIndex((currentPage < 1 ? 1 : currentPage) * pageSize);
+        condition.setStartIndex((currentPage < 1 ? 1 : currentPage - 1) * pageSize);
         condition.setEndIndex(pageSize);
         condition.setOrderField("create_time");
         condition.setOrderFieldType("DESC");
@@ -67,24 +67,25 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
-    public Message<String> deleteErrandById(Long id, Long userId) {
-        ErrandInfo errandInfo = errandInfoDao.selectEntryList(id).get(0);
-        if(errandInfo != null){
-            Integer state = errandInfo.getState();
-            if(state == 3) return Message.createByError("删除失败,该任务已被领取");
-            if(!errandInfo.getPublisherId().equals(userId)){
-                log.error("{}的用户恶意删除他人的跑腿信息", userId);
-                return Message.createByError("不能删除其他人发布的跑腿,如果多次违规操作,将会冻结账号");
-            }
-            errandInfo.setState(1);
-            errandInfoDao.updateByKey(errandInfo);
+    public Message<String> deleteErrandById(Long id, Long userId, Integer version) {
+        List<ErrandInfo> errandInfos = errandInfoDao.selectEntryList(id);
+        if(errandInfos == null || errandInfos.isEmpty()) return Message.createByError("未找到相关信息,请刷新后重试");
+        ErrandInfo errandInfo = errandInfos.get(0);
+        Integer originalVersion = errandInfo.getVersion();
+        Integer state = errandInfo.getState();
+        if(!originalVersion.equals(version)) return Message.createByError("删除失败,信息已经更改,请刷新后重试");
+        if(state == 3) return Message.createByError("删除失败,该任务已被领取");
+        if(!errandInfo.getPublisherId().equals(userId)){
+            log.error("{}的用户恶意删除他人的跑腿信息", userId);
+            return Message.createByError("不能删除其他人发布的跑腿,如果多次违规操作,将会冻结账号");
         }
+        errandInfo.setState(1);
+        errandInfoDao.updateByKey(errandInfo);
         return Message.createByError("删除失败,请刷新后重试");
     }
 
     @Override
     public boolean updateStateByIdAndVersion(Long id, Integer errandVersion) {
-        log.info("更新version");
         ErrandInfo errandInfo = new ErrandInfo();
         errandInfo.setVersion(errandVersion);
         errandInfo.setId(id);

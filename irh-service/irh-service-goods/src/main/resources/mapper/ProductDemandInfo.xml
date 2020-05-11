@@ -169,13 +169,13 @@
 		UPDATE product_demand_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browser_times = case" suffix="end,">
-				<foreach collection="update" item="item" index="index">
-					WHEN id = #{item.id,jdbcType=BIGINT} then browser_times = browser_times + #{item.browserTimes}
+				<foreach collection="list" item="item" index="index">
+					WHEN id = #{item.id,jdbcType=BIGINT} then  browser_times + #{item.browserTimes}
 				</foreach>
 			</trim>
 		</trim>
 		where id IN
-		<foreach collection="update" index="index" item="item" separator="," open="(" close=")">
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
 			#{item.id,jdbcType=BIGINT}
 		</foreach>
 	</update>
@@ -189,13 +189,13 @@
 		UPDATE product_demand_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="collect_total = case" suffix="end,">
-				<foreach collection="target" item="item" index="index">
-					WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total = collect_total + #{item.times}
+				<foreach collection="list" item="item" index="index">
+					WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total + #{item.times}
 				</foreach>
 			</trim>
 		</trim>
 		where id IN
-		<foreach collection="target" index="index" item="item" separator="," open="(" close=")">
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
 			#{item.targetId,jdbcType=BIGINT}
 		</foreach>
 	</update>

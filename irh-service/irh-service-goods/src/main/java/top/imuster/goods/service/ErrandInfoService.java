@@ -38,9 +38,10 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @Date: 2020/3/15 15:49
      * @param id
      * @param currentUserIdFromCookie
+     * @param version
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> deleteErrandById(Long id, Long currentUserIdFromCookie);
+    Message<String> deleteErrandById(Long id, Long currentUserIdFromCookie, Integer version);
 
     /**
      * @Author hmr

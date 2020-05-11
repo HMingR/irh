@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.config.RabbitMqConfig;
@@ -129,5 +130,20 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
         if(res == null || res.isEmpty()) return Message.createBySuccess("未找到相关订单,请刷新后重试");
         ErrandOrderInfo orderInfo = res.get(0);
         return Message.createBySuccess(orderInfo);
+    }
+
+    @Override
+    public Message<Page<ErrandOrderInfo>> list(Integer pageSize, Integer currentPage, Integer type, Integer state, Long userId) {
+        ErrandOrderInfo searchCondition = new ErrandOrderInfo();
+        searchCondition.setOrderField("create_time");
+        searchCondition.setOrderFieldType("DESC");
+        searchCondition.setState(state);
+        if(type == 1) searchCondition.setPublisherId(userId);
+        if(type == 2) searchCondition.setHolderId(userId);
+        Page<ErrandOrderInfo> page = new Page<>();
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
+        page = this.selectPage(searchCondition, page);
+        return Message.createBySuccess(page);
     }
 }

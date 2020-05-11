@@ -45,6 +45,7 @@ public class DonationApplyController {
 
     @GetMapping("/detail/{type}/{id}")
     public Message<ProductDonationApplyInfo> getApplyInfoById(@PathVariable("type") Integer type, @PathVariable("id") Long applyId){
+        if(type != 5 && type != 2) return Message.createByError("参数异常");
         return productDonationApplyInfoService.getApplyInfoById(type, applyId);
     }
 

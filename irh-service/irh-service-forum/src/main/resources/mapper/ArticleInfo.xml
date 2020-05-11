@@ -253,7 +253,7 @@
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="browser_times = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when id = #{item.id} then #{item.browserTimes}
+                    when id = #{item.id} then browser_times + #{item.browserTimes}
                 </foreach>
             </trim>
         </trim>

@@ -1,7 +1,6 @@
 package top.imuster.goods.dao;
 
 
-import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -61,7 +60,7 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @param ids
      * @reture: java.util.Map<java.lang.Long,java.lang.Long>
      **/
-    Map<Long, Long> selectBrowserTimesByIds(@Param("ids") Long[] ids);
+    Map<Long, Long> selectBrowserTimesByIds(Long[] ids);
 
     /**
      * @Author hmr
@@ -70,7 +69,7 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @param update
      * @reture: void
      **/
-    void updateBrowserTimesByCondition(@Param("update") List<ProductInfo> update);
+    void updateBrowserTimesByCondition(List<ProductInfo> update);
 
     /**
      * @Author hmr
@@ -88,5 +87,5 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @param list
      * @reture: java.lang.Integer
      **/
-    Integer updateCollectTotal(@Param("list") List<GoodsForwardDto> list);
+    Integer updateCollectTotal(List<GoodsForwardDto> list);
 }

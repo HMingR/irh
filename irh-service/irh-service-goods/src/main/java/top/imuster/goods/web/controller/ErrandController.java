@@ -40,9 +40,9 @@ public class ErrandController extends BaseController {
 
     @ApiOperation("删除自己的跑腿服务")
     @NeedLogin
-    @DeleteMapping("/{id}")
-    public Message<String> delete(@PathVariable("id") Long id){
-        return errandInfoService.deleteErrandById(id, getCurrentUserIdFromCookie());
+    @DeleteMapping("/{id}/{version}")
+    public Message<String> delete(@PathVariable("id") Long id, @PathVariable("version") Integer version){
+        return errandInfoService.deleteErrandById(id, getCurrentUserIdFromCookie(), version);
     }
 
     @ApiOperation("查看自己发布的跑腿服务")

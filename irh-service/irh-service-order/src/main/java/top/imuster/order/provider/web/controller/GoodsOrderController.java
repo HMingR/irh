@@ -13,6 +13,7 @@ import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: OrderController
@@ -53,12 +54,13 @@ public class GoodsOrderController extends BaseController{
 
 
     /**
-     * @Description: 条件查询会员自己的订单
-     * @Author: hmr
-     * @Date: 2019/12/28 14:33
-     * @param page
-     * @param bindingResult
-     * @reture: top.imuster.common.base.wrapper.Message
+     * @Author hmr
+     * @Description 条件查询会员自己的订单
+     * @Date: 2020/5/10 20:31
+     * @param type
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.OrderInfo>>
      **/
     @ApiOperation("条件分页查询会员自己的订单，按照时间降序排序")
     @GetMapping("/list/{type}/{pageSize}/{currentPage}")
@@ -90,8 +92,10 @@ public class GoodsOrderController extends BaseController{
     @GetMapping("/{id}")
     @NeedLogin
     public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id){
-        OrderInfo orderInfo = orderInfoService.selectEntryList(id).get(0);
-        return Message.createBySuccess(orderInfo);
+        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(id);
+        if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createBySuccess("未找到相关订单,刷新后重试");
+        OrderInfo info = orderInfoList.get(0);
+        return Message.createBySuccess(info);
     }
 
     /**

@@ -1,7 +1,6 @@
 package top.imuster.goods.dao;
 
 
-import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
@@ -23,7 +22,7 @@ public interface ProductDemandInfoDao extends BaseDao<ProductDemandInfo, Long> {
      * @param update
      * @reture: void
      **/
-    void updateBrowserTimesByCondition(@Param("update") List<ProductInfo> update);
+    void updateBrowserTimesByCondition(List<ProductInfo> update);
 
     /**
      * @Author hmr
@@ -41,5 +40,5 @@ public interface ProductDemandInfoDao extends BaseDao<ProductDemandInfo, Long> {
      * @param list
      * @reture: java.lang.Integer
      **/
-    Integer updateCollectTotal(@Param("target") List<GoodsForwardDto> list);
+    Integer updateCollectTotal(List<GoodsForwardDto> list);
 }

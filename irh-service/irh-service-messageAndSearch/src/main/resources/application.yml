@@ -35,14 +35,14 @@ spring:
     port: 25
 
   freemarker:
-    prefix: classpath:/templates/
+#    prefix: classpath:/templates
     content-type: text/html
     suffix: .ftl
-    template-loader-path: classpath:/templates
+#    template-loader-path: classpath:/templates
     charset: UTF-8
     check-template-location: true
-#    settings:
-#      classic_compatible: true
+    settings:
+      classic_compatible: true
 
 irh:
   elasticsearch:

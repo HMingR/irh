@@ -204,16 +204,16 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
                 selectIds[x] = ids[j];
                 if(j == ids.length - 1) break;
             }
-            Map<Long, Long> result = articleInfoDao.selectBrowserTimesByIds(ids);
+           // Map<Long, Long> result = articleInfoDao.selectBrowserTimesByIds(ids);
             for (int z = 0; z < selectIds.length; z++){
                 if(selectIds[z] == null || selectIds[z] == 0) break;
                 Long selectId = selectIds[z];
                 Long total = totals[i * batchSize + z];
-                Long original = result.get(selectId);
-                original = original + total;
+                //Long original = result.get(selectId);
+                //original = original + total;
                 ArticleInfo condition = new ArticleInfo();
                 condition.setId(selectId);
-                condition.setBrowserTimes(original);
+                condition.setBrowserTimes(total);
                 update.add(condition);
             }
             articleInfoDao.updateBrowserTimesByCondition(update);

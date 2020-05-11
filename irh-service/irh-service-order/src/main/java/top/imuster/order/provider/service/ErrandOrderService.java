@@ -2,6 +2,7 @@ package top.imuster.order.provider.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.pojo.ErrandOrderInfo;
@@ -62,4 +63,17 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ErrandOrderInfo>
      **/
     Message<ErrandOrderInfo> getOrderInfoById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 查看自己的订单
+     * @Date: 2020/5/10 19:59
+     * @param pageSize
+     * @param currentPage
+     * @param type
+     * @param state
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ErrandOrderInfo>>
+     **/
+    Message<Page<ErrandOrderInfo>> list(Integer pageSize, Integer currentPage, Integer type, Integer state, Long userId);
 }

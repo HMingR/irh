@@ -269,7 +269,7 @@
 		]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id IN
-		<foreach collection="ids" open="(" close=")" separator="," item="item" index="index">
+		<foreach collection="array" open="(" close=")" separator="," item="item" index="index">
 			#{item}
 		</foreach>
 	</select>
@@ -278,13 +278,13 @@
 		update product_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browser_times = case" suffix="end,">
-				<foreach collection="update" item="item" index="index">
+				<foreach collection="list" item="item" index="index">
 					when id = #{item.id} then browser_times + #{item.browserTimes}
 				</foreach>
 			</trim>
 		</trim>
 		WHERE id IN
-		<foreach collection="update" index="index" item="item" separator="," open="(" close=")">
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
 			#{item.id,jdbcType=BIGINT}
 		</foreach>
 	</update>
