@@ -1,10 +1,11 @@
-package top.imuster.goods.api.pojo;
+package top.imuster.order.api.pojo;
 
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.goods.api.pojo.ProductInfo;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -66,7 +67,6 @@ public class ProductEvaluateInfo extends BaseDomain {
 
 	// 1-无效 2-有效
 	//private Short state;
-
 
 	public ProductInfo getProductBrief() {
 		return productBrief;

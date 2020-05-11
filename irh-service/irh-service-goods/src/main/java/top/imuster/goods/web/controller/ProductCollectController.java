@@ -56,4 +56,11 @@ public class ProductCollectController extends BaseController {
     public Message<Page<ProductCollectRel>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         return productCollectRelService.list(pageSize, currentPage, getCurrentUserIdFromCookie());
     }
+
+    @NeedLogin
+    @GetMapping("/state/{id}")
+    public Message<Integer> getCollectState(@PathVariable("id") Long id){
+        Long userId = getCurrentUserIdFromCookie();
+        return productCollectRelService.getCollectStateById(userId, id);
+    }
 }

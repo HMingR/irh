@@ -157,4 +157,15 @@ public class RedisUtil {
         if(type == 2) return new StringBuffer().append(GlobalConstant.IRH_DEMAND_COLLECT_MAP_KEY).toString();
         throw new GlobalException("参数异常");
     }
+
+    /**
+     * @Author hmr
+     * @Description 获得二手商品的订单map
+     * @Date: 2020/5/11 10:44
+     * @param
+     * @reture: java.lang.String
+     **/
+    public static String getOrderCodeKey(Long userId) {
+        return new StringBuffer().append(GlobalConstant.IRH_PRODUCT_ORDER_KEY).append(userId).toString();
+    }
 }

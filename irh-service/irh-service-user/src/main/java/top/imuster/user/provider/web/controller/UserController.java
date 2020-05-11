@@ -47,7 +47,7 @@ public class UserController extends BaseController {
      **/
     @ApiOperation(value = "修改信息前需要校验各种参数(用户名、邮箱、手机号等)必须唯一",httpMethod = "POST")
     @PostMapping("/check")
-    public Message<String> checkValid(@ApiParam("CheckValidDto实体类") @RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
+    public Message<String> checkValid(@Validated(ValidateGroup.addGroup.class) @RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
         boolean flag = userInfoService.checkValid(checkValidDto);
         if(flag){

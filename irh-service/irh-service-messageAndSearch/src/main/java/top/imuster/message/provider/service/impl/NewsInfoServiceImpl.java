@@ -58,9 +58,8 @@ public class NewsInfoServiceImpl extends BaseServiceImpl<NewsInfo, Long> impleme
     public Message<Page<NewsInfo>> getAtMeMessage(Long userId, Integer pageSize, Integer currentPage) {
         NewsInfo newsInfo = new NewsInfo();
         newsInfo.setReceiverId(userId);
-        newsInfo.setState(30);
-        newsInfo.setStartIndex(pageSize < 1? 10 : pageSize);
-        newsInfo.setEndIndex((currentPage < 1 ? 1 : currentPage) * pageSize);
+        newsInfo.setStartIndex((currentPage - 1) * pageSize);
+        newsInfo.setEndIndex(pageSize);
         Integer totalCount = newsInfoDao.selectAtMeTotal(newsInfo);
         List<NewsInfo> res = newsInfoDao.selectAtMeMessage(newsInfo);
         Page<NewsInfo> page = new Page<>();

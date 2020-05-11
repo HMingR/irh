@@ -8,15 +8,13 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.AlipayService;
@@ -52,8 +50,8 @@ public class AlipayController extends BaseController {
     @NeedLogin
     @ApiOperation("提交订单准备预下单,返回一个支付宝网站,需要解析里面的地址生成二维码")
     @PostMapping("/perPayment")
-    public Message prePayment(@RequestBody @Validated(ValidateGroup.prePayment.class) OrderInfo orderInfo, BindingResult bindingResult, HttpServletRequest request) throws OrderException {
-        validData(bindingResult);
+    public Message prePayment(@RequestBody /*@Validated(ValidateGroup.prePayment.class)*/ OrderInfo orderInfo, BindingResult bindingResult) throws OrderException {
+      //  validData(bindingResult);
         try{
             AlipayTradePrecreateResponse alipayResponse = alipayService.alipayF2F(orderInfo);
             return Message.createBySuccess(alipayResponse.getQrCode());
@@ -71,6 +69,7 @@ public class AlipayController extends BaseController {
      **/
     @PostMapping("/alipayNotify")
     public Message<String> payResult(HttpServletRequest request) throws ParseException {
+        log.info("支付成功,执行支付宝回调");
         Map<String,String> params = Maps.newHashMap();
         Map requestParams = request.getParameterMap();
         for(Iterator iter = requestParams.keySet().iterator(); iter.hasNext();){

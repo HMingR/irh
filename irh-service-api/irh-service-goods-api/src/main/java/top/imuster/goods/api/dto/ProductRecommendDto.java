@@ -3,7 +3,6 @@ package top.imuster.goods.api.dto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 
@@ -15,27 +14,6 @@ import java.util.List;
  */
 @Document(collection = "UserRecs")
 public class ProductRecommendDto {
-
-    class MongoProductInfo{
-        private Integer productId;
-        private Double score;
-
-        public Integer getProductId() {
-            return productId;
-        }
-
-        public void setProductId(Integer productId) {
-            this.productId = productId;
-        }
-
-        public Double getScore() {
-            return score;
-        }
-
-        public void setScore(Double score) {
-            this.score = score;
-        }
-    }
 
     @Id
     private String id;

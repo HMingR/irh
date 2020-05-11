@@ -64,7 +64,7 @@ public interface UserServiceFeignApi {
      * @Description 根据id获得用户的电话和地址
      * @Date: 2020/5/9 14:53
      * @param userId
-     * @reture: java.util.Map<java.lang.String,java.lang.String>
+     * @reture: java.util.Map<java.lang.String,java.lang.String>  返回的key为:address , phoneNum
      **/
     @GetMapping("/addAndPhone/{userId}")
     Map<String, String> getUserAddressAndPhoneById(@PathVariable("userId") Long userId);

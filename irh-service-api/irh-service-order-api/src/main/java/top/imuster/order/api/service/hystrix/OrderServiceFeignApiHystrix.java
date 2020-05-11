@@ -9,8 +9,6 @@ import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 
-import java.util.List;
-
 /**
  * @ClassName: OrderServiceFeignApiHystrix
  * @Description: 服务降级
@@ -44,6 +42,16 @@ public class OrderServiceFeignApiHystrix implements FallbackFactory<OrderService
 
             @Override
             public Message<OrderTrendDto> getOrderTotalTrend(Integer type) {
+                return null;
+            }
+
+            @Override
+            public void deleteProductEvaluate(Long targetId) {
+
+            }
+
+            @Override
+            public Long getEvaluateWriterIdById(Long targetId) {
                 return null;
             }
         };

@@ -26,6 +26,8 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String UPDATE_BROWSER_TIMES_BY_CONDITION =  "updateBrowserTimesByCondition";
 	private final static String SELECT_USER_ID_BY_PRODUCT_ID = "selectUserIdByProductId";
 	private final static String UPDATE_COLLECT_TOTAL = "updateCollectTotal";
+	private final static String LOCK_PRODUCT_BY_ID = "lockProductById";
+	private final static String SELECT_PRODUCT_BRIEF_INFO_LIST = "selectProductBriefInfoList";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -70,5 +72,15 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	public Integer updateCollectTotal(List<GoodsForwardDto> list) {
 		if(list == null || list.isEmpty()) return 0;
 		return this.update(getNameSpace(UPDATE_COLLECT_TOTAL), list);
+	}
+
+	@Override
+	public Integer lockProductById(Long productId) {
+		return this.update(getNameSpace(LOCK_PRODUCT_BY_ID), productId);
+	}
+
+	@Override
+	public List<ProductInfo> selectProductBriefInfoList(ProductInfo condition) {
+		return this.selectList(getNameSpace(SELECT_PRODUCT_BRIEF_INFO_LIST), condition);
 	}
 }

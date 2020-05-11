@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.life.api.pojo.ErrandInfo;
@@ -39,9 +38,9 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
-            public boolean lockStock(Long productId) {
+            public ProductInfo lockStock(Long productId) {
                 log.error("商品下单锁定库存失败服务降级");
-                return false;
+                return null;
             }
 
             @Override
@@ -53,12 +52,6 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             @Override
             public boolean deleteProductMessageById(Long id) {
                 log.error("删除商品留言失败，服务降级");
-                return false;
-            }
-
-            @Override
-            public boolean deleteProductEvaluate(Long id) {
-                log.error("删除商品评价失败，服务降级");
                 return false;
             }
 
@@ -75,11 +68,6 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
-            public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(Long targetId) {
-                return null;
-            }
-
-            @Override
             public boolean updateErrandInfoById(Long id, Integer errandVersion) {
                 return false;
             }
@@ -91,6 +79,11 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
 
             @Override
             public ErrandInfo getErrandInfoById(Long errandId) {
+                return null;
+            }
+
+            @Override
+            public ProductInfo getProductBriefInfoById(Long productId) {
                 return null;
             }
         };

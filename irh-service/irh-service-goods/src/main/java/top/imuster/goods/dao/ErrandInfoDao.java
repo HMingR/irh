@@ -57,4 +57,5 @@ public interface ErrandInfoDao extends BaseDao<ErrandInfo, Long> {
      * @reture: java.util.List<top.imuster.life.api.pojo.ErrandInfo>
      **/
     List<ErrandInfo> selectErrandBrief(ErrandInfo conditon);
+
 }

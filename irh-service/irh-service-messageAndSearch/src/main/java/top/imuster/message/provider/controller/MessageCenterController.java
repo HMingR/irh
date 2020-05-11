@@ -1,6 +1,5 @@
 package top.imuster.message.provider.controller;
 
-import cn.hutool.core.lang.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +52,7 @@ public class MessageCenterController extends BaseController {
     @GetMapping("/atMe/{pageSize}/{currentPage}")
     @NeedLogin
     public Message<Page<NewsInfo>> atMe(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        if(pageSize< 1 || currentPage< 1) return Message.createByError("参数错误");
         return newsInfoService.getAtMeMessage(getCurrentUserIdFromCookie(), pageSize, currentPage);
     }
 
@@ -60,7 +60,7 @@ public class MessageCenterController extends BaseController {
     @ApiOperation("更新消息状态,type为10-删除 20-已读")
     @GetMapping("/{type}/{id}")
     public Message<String> updateById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
-        Assert.isTrue(type == 10 || type == 20, "参数异常");
+        if(type != 20 && type != 10) return Message.createByError("参数错误");
         return newsInfoService.updateMessageState(id, type, getCurrentUserIdFromCookie());
     }
 

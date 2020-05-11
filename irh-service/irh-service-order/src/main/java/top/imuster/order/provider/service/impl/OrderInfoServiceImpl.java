@@ -2,27 +2,34 @@ package top.imuster.order.provider.service.impl;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.TrendUtil;
+import top.imuster.common.core.utils.UuidUtils;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.dto.OrderTrendDto;
-import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.dao.OrderInfoDao;
-import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
+import top.imuster.order.provider.service.ProductEvaluateInfoService;
+import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * OrderInfoService 实现类
@@ -39,6 +46,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     @Resource
     private OrderInfoDao orderInfoDao;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    ProductEvaluateInfoService productEvaluateInfoService;
+
+    @Autowired
+    private UserServiceFeignApi userServiceFeignApi;
+
     @Override
     public BaseDao<OrderInfo, Long> getDao() {
         return this.orderInfoDao;
@@ -50,29 +66,50 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
-    public OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId){
-        ProductInfo productInfo = productOrderDto.getProductInfo();
-        OrderInfo orderInfo = productOrderDto.getOrderInfo();
-        if(orderInfo.getOrderCode() == null){
-            throw new OrderException("错误的订单信息,请刷新页面重新提交订单");
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Message<OrderInfo> getOrderByProduct(OrderInfo orderInfo, Long userId, Long productId){
+        String orderCode = orderInfo.getOrderCode();
+        String redisOrder = (String)redisTemplate.opsForValue().get(RedisUtil.getOrderCodeKey(userId));
+        if( StringUtils.isEmpty(orderCode) || StringUtils.isEmpty(redisOrder) || !orderCode.equals(redisOrder)){
+            return Message.createByError("错误的订单信息,请刷新页面重新提交订单");
         }
-        boolean b = checkProduct(productInfo.getId());
-        if(!b){
-            throw new OrderException("该商品已经不存在,请刷新后重试");
+
+        String address = orderInfo.getAddress();
+        String phoneNum = orderInfo.getPhoneNum();
+
+        //校验地址和电话
+        if(StringUtils.isEmpty(address) || StringUtils.isEmpty(phoneNum)){
+            Map<String, String> addAndPhone = userServiceFeignApi.getUserAddressAndPhoneById(userId);
+            if(StringUtils.isEmpty(address)){
+                String originalAdd = addAndPhone.get("address");
+                if(StringUtils.isEmpty(originalAdd)) return Message.createByError("您没有在个人中心中设置默认地址,也没有在提交订单的时候设置送货地址,请填写地址后重新提交");
+                orderInfo.setAddress(originalAdd);
+            }
+            if(StringUtils.isEmpty(phoneNum)){
+                String originalPhone = addAndPhone.get("phoneNum");
+                if (StringUtils.isEmpty(originalPhone)) return Message.createByError("您没有在个人中心中完善您的联系电话或者没有在提交订单的时候提交联系电话");
+                orderInfo.setPhoneNum(phoneNum);
+            }
         }
-        orderInfo.setProductId(productInfo.getId());
-        orderInfo.setPaymentMoney(productInfo.getSalePrice());
-        orderInfo.setSalerId(productInfo.getConsumerId());
+
+        ProductInfo product = checkProduct(productId);
+        if(product == null){
+            return Message.createByError("该商品已经不存在,请刷新后重试");
+        }
+
+        orderInfo.setProductId(product.getId());
+        orderInfo.setPaymentMoney(product.getSalePrice());
+        orderInfo.setSalerId(product.getConsumerId());
         orderInfo.setBuyerId(userId);
         orderInfo.setState(40);
         orderInfo.setTradeType(orderInfo.getTradeType());
-        Long id = orderInfoDao.insertOrder(orderInfo);
-        if(id == null){
+
+        orderInfoDao.insertOrder(orderInfo);
+        if(orderInfo.getId() == null){
             log.error("插入订单返回插入值的id为null,订单信息为{}", orderInfo);
-            throw new OrderException("生成订单失败,请稍后重试");
+            return Message.createByError("生成订单失败,请稍后重试");
         }
-        orderInfo.setId(id);
-        return orderInfo;
+        return Message.createBySuccess(orderInfo);
     }
 
     @Override
@@ -104,6 +141,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         }
         Integer count = orderInfoDao.selectOrderListCountByUserId(orderInfo);
         List<OrderInfo> list = orderInfoDao.selectOrderListByUserId(orderInfo);
+        list.stream().forEach(condition -> {
+            Long id = condition.getId();
+            Long evaluateId = productEvaluateInfoService.getEvaluateIdByOrderId(id);
+            condition.setEvaluateId(evaluateId);
+        });
         page.setTotalCount(count);
         page.setData(list);
         return Message.createBySuccess(page);
@@ -137,12 +179,19 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         return orderInfoDao.selectOrderVersionById(id);
     }
 
+    @Override
+    public Message<String> createOrderCode(Long userId) {
+        String code = String.valueOf(UuidUtils.nextId());
+        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeKey(userId), code, 30, TimeUnit.MINUTES);
+        return Message.createBySuccess(code);
+    }
+
     /**
      * @Author hmr
      * @Description 根据type和clazz获得结果
      * @Date: 2020/3/2 17:03
      * @param type
-     * @param clazz 1-金额  2-订单数量
+     * @param clazz 1-金额  2-订单数量
      * @reture: top.imuster.order.api.dto.OrderTrendDto
      **/
     private OrderTrendDto getResult(int type, int clazz){
@@ -201,7 +250,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
      * @param productId
      * @reture:
      **/
-    private boolean checkProduct(Long productId){
+    private ProductInfo checkProduct(Long productId){
         return goodsServiceFeignApi.lockStock(productId);
     }
 }

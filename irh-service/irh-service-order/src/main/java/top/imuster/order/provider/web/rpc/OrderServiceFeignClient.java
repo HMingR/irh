@@ -1,18 +1,17 @@
 package top.imuster.order.provider.web.rpc;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
-import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
+import top.imuster.order.provider.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: OrderServuceFeignClient
@@ -27,6 +26,9 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
 
     @Resource
     OrderInfoService orderInfoService;
+
+    @Resource
+    ProductEvaluateInfoService productEvaluateInfoService;
 
     @Override
     @GetMapping("/{orderId}")
@@ -53,5 +55,20 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     @GetMapping("/trend/total/{type}")
     public Message<OrderTrendDto> getOrderTotalTrend(@PathVariable("type") Integer type) {
         return orderInfoService.getOrderTotalTrend(type);
+    }
+
+    @Override
+    @DeleteMapping("/{targetId}")
+    public void deleteProductEvaluate(@PathVariable("targetId") Long targetId) {
+        ProductEvaluateInfo condition = new ProductEvaluateInfo();
+        condition.setId(targetId);
+        condition.setState(1);
+        productEvaluateInfoService.updateByKey(condition);
+    }
+
+    @Override
+    @GetMapping("/evaluate/{id}")
+    public Long getEvaluateWriterIdById(@PathVariable("id") Long targetId) {
+        return null;
     }
 }

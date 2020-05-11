@@ -1,4 +1,4 @@
-package top.imuster.goods.service.impl;
+package top.imuster.order.provider.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,13 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.utils.GenerateSendMessageService;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
-import top.imuster.goods.dao.ProductEvaluateInfoDao;
-import top.imuster.goods.service.ProductEvaluateInfoService;
-import top.imuster.goods.service.ProductInfoService;
+import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
+import top.imuster.order.provider.dao.ProductEvaluateInfoDao;
+import top.imuster.order.provider.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,8 +31,8 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Resource
     private ProductEvaluateInfoDao productEvaluateInfoDao;
 
-    @Resource
-    private ProductInfoService productInfoService;
+    @Autowired
+    GoodsServiceFeignApi goodsServiceFeignApi;
 
     @Resource
     private GenerateSendMessageService generateSendMessageService;
@@ -92,10 +92,15 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         if(data != null && !data.isEmpty()){
             data.stream().forEach(condition -> {
                 Long productId = condition.getProductId();
-                ProductInfo briefInfoById = productInfoService.getProductBriefInfoById(productId);
+                ProductInfo briefInfoById = goodsServiceFeignApi.getProductBriefInfoById(productId);
                 condition.setProductBrief(briefInfoById);
             });
         }
         return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Long getEvaluateIdByOrderId(Long id) {
+        return productEvaluateInfoDao.selectIdByOrderId(id);
     }
 }

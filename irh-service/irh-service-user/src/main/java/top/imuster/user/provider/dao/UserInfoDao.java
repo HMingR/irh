@@ -77,7 +77,7 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @Description
      * @Date: 2020/5/9 14:56
      * @param userId
-     * @reture: java.util.Map<java.lang.String,java.lang.String>
+     * @reture: java.util.Map<java.lang.String,java.lang.String> 返回的key为:address , phoneNum
      **/
     Map<String, String> selectAddAndPhoneById(Long userId);
 }

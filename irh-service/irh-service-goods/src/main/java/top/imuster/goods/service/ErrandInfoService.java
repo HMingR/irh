@@ -82,4 +82,5 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ErrandInfo>>
      **/
     Message<Page<ErrandInfo>> listByType(Integer pageSize, Integer currentPage, Integer type);
+
 }

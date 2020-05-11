@@ -83,4 +83,14 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
         page = this.selectPage(condition, page);
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public Message<Integer> getCollectStateById(Long userId, Long id) {
+        ProductCollectRel productCollectRel = new ProductCollectRel();
+        productCollectRel.setUserId(userId);
+        productCollectRel.setProductId(id);
+        productCollectRel.setState(2);
+        Integer count = productCollectRelDao.selectEntryListCount(productCollectRel);
+        return Message.createBySuccess(count);
+    }
 }

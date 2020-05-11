@@ -53,4 +53,14 @@ public interface ProductCollectRelService extends BaseService<ProductCollectRel,
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductCollectRel>>
      **/
     Message<Page<ProductCollectRel>> list(Integer pageSize, Integer currentPage, Long currentUserIdFromCookie);
+
+    /**
+     * @Author hmr
+     * @Description 查看是否收藏
+     * @Date: 2020/5/11 14:20
+     * @param userId
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<Integer> getCollectStateById(Long userId, Long id);
 }

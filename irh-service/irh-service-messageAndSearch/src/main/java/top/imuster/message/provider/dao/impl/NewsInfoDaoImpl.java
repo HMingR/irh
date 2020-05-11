@@ -19,6 +19,7 @@ public class NewsInfoDaoImpl extends BaseDaoImpl<NewsInfo, Long> implements News
 	private final static String SELECT_AT_ME_MESSAGE = "selectAtMeMessage";
 	private final static String SELECT_AT_ME_TOTAL = "selectAtMeTotal";
 	private final static String SELECT_RECEIVER_ID_BY_ID = "selectReceiverIdById";
+	private final static String SELECT_IDS_BY_RESOURCE_ID = "selectIdsByResourceId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;

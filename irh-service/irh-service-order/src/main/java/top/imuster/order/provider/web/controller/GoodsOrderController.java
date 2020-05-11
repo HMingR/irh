@@ -7,8 +7,6 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.utils.UuidUtils;
-import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.service.OrderInfoService;
 
@@ -33,23 +31,21 @@ public class GoodsOrderController extends BaseController{
      * @Description: 生成订单
      * @Author: hmr
      * @Date: 2019/12/28 14:26
-     * @param productOrderDto
-     * @param request
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("生成订单")
-    @PutMapping("/create")
+    @PutMapping("/create/{productId}")
     @NeedLogin
-    public Message<OrderInfo> createOrder(@RequestBody ProductOrderDto productOrderDto) throws Exception {
+    public Message<OrderInfo> createOrder(@PathVariable("productId") Long productId, @RequestBody OrderInfo orderInfo) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
-        OrderInfo order = orderInfoService.getOrderByProduct(productOrderDto, userId);
-        return Message.createBySuccess(order);
+        return orderInfoService.getOrderByProduct(orderInfo, userId, productId);
     }
 
     @ApiOperation("进入生成订单页面的时候返回一个订单号,用来防止用户重复提交订单,前端提交时必须带上")
+    @NeedLogin
     @GetMapping("/code")
     public Message<String> generateOrderCode(){
-        return Message.createBySuccess(String.valueOf(UuidUtils.nextId()));
+        return orderInfoService.createOrderCode(getCurrentUserIdFromCookie());
     }
 
 
@@ -66,6 +62,7 @@ public class GoodsOrderController extends BaseController{
     @GetMapping("/list/{type}/{pageSize}/{currentPage}")
     @NeedLogin
     public Message<Page<OrderInfo>> orderList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        if(type != 1 && type != 2) return Message.createByError("参数异常,请刷新后重试");
         Long userId = getCurrentUserIdFromCookie();
         return orderInfoService.list(pageSize, currentPage, userId, type);
     }
@@ -88,13 +85,27 @@ public class GoodsOrderController extends BaseController{
         return Message.createBySuccess();
     }
 
+    /**
+     * @Author hmr
+     * @Description type  1-作为卖家  2-作为买家
+     * @Date: 2020/5/11 9:38
+     * @param id
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.OrderInfo>
+     **/
     @ApiOperation(value = "根据id获得订单详情", httpMethod = "GET")
-    @GetMapping("/{id}")
+    @GetMapping("/{type}/{id}")
     @NeedLogin
-    public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id){
-        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(id);
+    public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+        if(type != 1 && type != 2) return Message.createByError("参数错误");
+        OrderInfo info = new OrderInfo();
+        info.setId(id);
+
+        //防止其他人恶意获得他人的订单信息
+        if(type == 1) info.setSalerId(getCurrentUserIdFromCookie());
+        else info.setBuyerId(getCurrentUserIdFromCookie());
+        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(info);
         if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createBySuccess("未找到相关订单,刷新后重试");
-        OrderInfo info = orderInfoList.get(0);
         return Message.createBySuccess(info);
     }
 

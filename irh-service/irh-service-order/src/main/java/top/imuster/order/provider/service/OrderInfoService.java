@@ -5,7 +5,6 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.dto.OrderTrendDto;
-import top.imuster.order.api.dto.ProductOrderDto;
 import top.imuster.order.api.pojo.OrderInfo;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @param token
      * @reture: top.imuster.order.api.pojo.OrderInfo
      **/
-    OrderInfo getOrderByProduct(ProductOrderDto productOrderDto, Long userId);
+    Message<OrderInfo> getOrderByProduct(OrderInfo orderInfo, Long userId, Long productId);
 
     /**
      * @Author hmr
@@ -93,4 +92,13 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer getOrderVersionById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 生成订单编号
+     * @Date: 2020/5/11 10:41
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> createOrderCode(Long currentUserIdFromCookie);
 }

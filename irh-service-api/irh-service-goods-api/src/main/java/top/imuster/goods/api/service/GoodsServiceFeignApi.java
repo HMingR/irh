@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.hystrix.GoodsServiceFeignApiHystrix;
 import top.imuster.life.api.pojo.ErrandInfo;
@@ -47,7 +46,7 @@ public interface GoodsServiceFeignApi {
      * @reture: boolean
      **/
     @GetMapping("/es/lockStock/{productId}")
-    boolean lockStock(@PathVariable("productId") Long productId);
+    ProductInfo lockStock(@PathVariable("productId") Long productId);
 
     /**
      * @Description: 交易成功之后修改商品状态为下架
@@ -71,16 +70,6 @@ public interface GoodsServiceFeignApi {
 
     /**
      * @Author hmr
-     * @Description 根据id删除评价信息
-     * @Date: 2020/1/16 20:40
-     * @param id
-     * @reture: boolean
-     **/
-    @DeleteMapping("/es/pe/{id}")
-    boolean deleteProductEvaluate(@PathVariable("id") Long id);
-
-    /**
-     * @Author hmr
      * @Description 1-商品 2-留言 3-评价 4-帖子
      * @Date: 2020/1/17 10:59
      * @param null
@@ -99,16 +88,6 @@ public interface GoodsServiceFeignApi {
     @GetMapping("/es/pi/pm/{psId}")
     ProductInfo getProductInfoByProductMessage(@PathVariable("psId") Long targetId);
 
-    /**
-     * @Author hmr
-     * @Description 根据商品评价的id查找商品
-     * @Date: 2020/1/22 11:46
-     * @param targetId
-     * @reture: top.imuster.goods.api.pojo.ProductInfo
-     *
-     * @return*/
-    @GetMapping("/es/pi/ei/{id}")
-    ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(@PathVariable("id") Long targetId);
 
     /**
      * @Author hmr
@@ -141,4 +120,14 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/errand/addAndPhone/{id}")
     ErrandInfo getErrandInfoById(@PathVariable("id") Long errandId);
+
+    /**
+     * @Author hmr
+     * @Description 获得商品的坚简略信息
+     * @Date: 2020/5/11 19:51
+     * @param productId
+     * @reture: top.imuster.goods.api.pojo.ProductInfo
+     **/
+    @GetMapping("/es/brief/{id}")
+    ProductInfo getProductBriefInfoById(@PathVariable("id") Long productId);
 }

@@ -2,9 +2,10 @@ package top.imuster.user.api.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.enums.CheckTypeEnum;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -19,11 +20,11 @@ public class CheckValidDto implements Serializable {
 
     //需要校验的值
     @ApiModelProperty("需要校验的值")
-    @NotEmpty(message = "校验的值不能为空")
+    @NotBlank(groups = ValidateGroup.addGroup.class ,message = "校验的值不能为空")
     private String validValue;
 
     //需要校验的类型
-    @NotEmpty(message = "校验类型不能为空")
+    @NotBlank(groups = ValidateGroup.addGroup.class ,message = "校验类型不能为空")
     @ApiModelProperty("需要校验的类型")
     private CheckTypeEnum type;
 

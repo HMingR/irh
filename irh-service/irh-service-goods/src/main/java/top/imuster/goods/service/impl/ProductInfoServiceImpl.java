@@ -160,6 +160,27 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
     @Override
     public void updateProductCollectTotal(List<GoodsForwardDto> list) {
-        Integer total = productInfoDao.updateCollectTotal(list);
+        productInfoDao.updateCollectTotal(list);
+    }
+
+    @Override
+    public Integer lockProduct(Long productId) {
+        return productInfoDao.lockProductById(productId);
+    }
+
+    @Override
+    public Message<Page<ProductInfo>> getProductBriefInfoByPage(Integer currentPage, Integer pageSize) {
+        Page<ProductInfo> page = new Page<>();
+        ProductInfo condition = new ProductInfo();
+        condition.setState(2);
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
+        condition.setStartIndex((currentPage - 1) * pageSize);
+        condition.setEndIndex(pageSize);
+        List<ProductInfo> list = productInfoDao.selectProductBriefInfoList(condition);
+        Integer count = productInfoDao.selectEntryListCount(condition);
+        page.setTotalCount(count);
+        page.setData(list);
+        return Message.createBySuccess(page);
     }
 }

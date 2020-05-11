@@ -1,4 +1,5 @@
-package top.imuster.goods.web.controller;
+package top.imuster.order.provider.web.controller;
+
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -7,8 +8,8 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
-import top.imuster.goods.service.ProductEvaluateInfoService;
+import top.imuster.order.api.pojo.ProductEvaluateInfo;
+import top.imuster.order.provider.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 @Api("商品评价,指的是购买商品之后对商品的评价")
 @RestController
-@RequestMapping("/goods/evaluate")
+@RequestMapping("/evaluate")
 public class EvaluateController extends BaseController {
 
     @Resource
@@ -37,7 +38,7 @@ public class EvaluateController extends BaseController {
     @ApiOperation("根据订单的id评价(用户的订单只有在收货状态的时候才能进行评论,前台可以先进行一次逻辑判断)")
     @NeedLogin
     @PostMapping("/{orderId}")
-    public Message evaluateByOrderId(@PathVariable("orderId") Long orderId,@RequestBody ProductEvaluateInfo productEvaluateInfo){
+    public Message<String> evaluateByOrderId(@PathVariable("orderId") Long orderId, @RequestBody ProductEvaluateInfo productEvaluateInfo){
         productEvaluateInfo.setBuyerId(getCurrentUserIdFromCookie());
         return productEvaluateInfoService.writeEvaluateByOrderId(orderId, productEvaluateInfo);
     }
@@ -49,7 +50,7 @@ public class EvaluateController extends BaseController {
      * @param type
      * @param pageSize
      * @param currentPage
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductEvaluateInfo>>
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductEvaluateInfo>>
      **/
     @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}/{type}")

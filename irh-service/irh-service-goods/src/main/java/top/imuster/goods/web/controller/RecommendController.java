@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.RecommendProductService;
 
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/recommend")
-public class RecommendController {
+public class RecommendController extends BaseController {
 
     @Resource
     RecommendProductService recommendProductService;
@@ -36,11 +37,10 @@ public class RecommendController {
      * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
-    @GetMapping("/{pageSize}/{currentPage}/{userId}")
+    @GetMapping("/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> getRecommendByUserId(@PathVariable("pageSize") Integer pageSize,
-                                                           @PathVariable("currentPage") Integer currentPage,
-                                                           @PathVariable("userId") Long userId){
-        return recommendProductService.getRecommendListByUserId(pageSize, currentPage, userId);
+                                                           @PathVariable("currentPage") Integer currentPage){
+        return recommendProductService.getRecommendListByUserId(pageSize, currentPage, getCurrentUserIdFromCookie(false));
     }
 
     /**

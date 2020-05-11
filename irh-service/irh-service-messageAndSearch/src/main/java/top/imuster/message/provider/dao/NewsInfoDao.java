@@ -40,4 +40,5 @@ public interface NewsInfoDao extends BaseDao<NewsInfo, Long> {
      * @reture: java.lang.Long
      **/
     Long selectReceiverIdById(Long id);
+
 }

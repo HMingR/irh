@@ -148,4 +148,5 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
 
         return Message.createBySuccess(page);
     }
+
 }

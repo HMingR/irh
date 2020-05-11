@@ -75,7 +75,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="orderInfo" >
+	<insert id="insertEntry" parameterType="orderInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
 		<![CDATA[
 			INSERT INTO order_info
 		]]>

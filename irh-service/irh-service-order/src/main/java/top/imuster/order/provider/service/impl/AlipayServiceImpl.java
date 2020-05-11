@@ -99,7 +99,7 @@ public class AlipayServiceImpl implements AlipayService {
                 .setSellerId(sellerId).setBody(body)
                 .setOperatorId(operatorId).setStoreId(operatorId)
                 .setTimeoutExpress(timeoutExpress)
-                .setNotifyUrl("http://localhost:8082/alipay/payResult")//支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
+               // .setNotifyUrl("http://localhost:8082/alipay/payResult")//支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
                 .setGoodsDetailList(productInfos);
 
         AlipayF2FPrecreateResult result = tradeService.tradePrecreate(builder);

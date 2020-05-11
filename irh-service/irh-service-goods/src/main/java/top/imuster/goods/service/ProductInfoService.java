@@ -100,4 +100,22 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: void
      **/
     void updateProductCollectTotal(List<GoodsForwardDto> list);
+
+    /**
+     * @Author hmr
+     * @Description 更新product的state
+     * @Date: 2020/5/11 9:57
+     * @param productId
+     * @reture: java.lang.Integer
+     **/
+    Integer lockProduct(Long productId);
+
+    /**
+     * @Author hmr
+     * @Description 查询发布时间最新的商品
+     * @Date: 2020/5/11 20:39
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
+     **/
+    Message<Page<ProductInfo>> getProductBriefInfoByPage(Integer currentPage, Integer pageSize);
 }

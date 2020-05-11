@@ -72,6 +72,7 @@ public class DonationApplyController {
     @NeedLogin
     @GetMapping("/attribute/{type}/{targetId}")
     public Message<String> upOrDown(@PathVariable("type") Integer type, @PathVariable("targetId") Long targetId){
+        if(type != 1 && type != 2) return Message.createByError("参数错误");
         return productDonationApplyInfoService.upOrDownApply(type, targetId);
     }
 }

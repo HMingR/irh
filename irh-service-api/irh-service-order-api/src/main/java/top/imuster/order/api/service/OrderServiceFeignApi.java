@@ -1,17 +1,12 @@
 package top.imuster.order.api.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.service.hystrix.OrderServiceFeignApiHystrix;
-
-import java.util.List;
 
 /**
  * @ClassName: OrderServiceFeignApi
@@ -62,4 +57,24 @@ public interface OrderServiceFeignApi {
      **/
     @GetMapping("/trend/total/{type}")
     Message<OrderTrendDto> getOrderTotalTrend(@PathVariable("type") Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 根据评价id删除商品评价
+     * @Date: 2020/5/11 19:54
+     * @param targetId
+     * @reture: void
+     **/
+    @DeleteMapping("/{targetId}")
+    void deleteProductEvaluate(@PathVariable("targetId") Long targetId);
+
+    /**
+     * @Author hmr
+     * @Description 根据评价id查看评价人
+     * @Date: 2020/5/11 19:57
+     * @param targetId
+     * @reture: java.lang.Long
+     **/
+    @GetMapping("/evaluate/{id}")
+    Long getEvaluateWriterIdById(@PathVariable("id") Long targetId);
 }

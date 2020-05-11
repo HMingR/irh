@@ -15,6 +15,7 @@ import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.life.api.service.ForumServiceFeignApi;
+import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.user.api.enums.FeedbackEnum;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.provider.dao.ReportFeedbackInfoDao;
@@ -47,6 +48,8 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
 
     @Autowired
     private ForumServiceFeignApi forumServiceFeignApi;
+
+    private OrderServiceFeignApi orderServiceFeignApi;
 
     @Autowired
     private GenerateSendMessageService generateSendMessageService;
@@ -142,7 +145,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
             log.info("编号为{}的管理员删除编号为{}的留言", userId, targetId);
         }else if(reportFeedbackInfo.getType() == 3){
             //商品评价
-            goodsServiceFeignApi.deleteProductEvaluate(targetId);
+            orderServiceFeignApi.deleteProductEvaluate(targetId);
             log.info("编号为{}的管理员删除编号为{}的评价",userId, targetId);
         }else if(reportFeedbackInfo.getType() == 4){
             //论坛帖子
@@ -164,9 +167,11 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
      * @reture: java.lang.String 会员email
      **/
     private Long getSendToId(Integer type, Long targetId){
-        Long consumerId;
-        if(type <= 3){
+        Long consumerId = null;
+        if(type == 1 || type == 2){
             consumerId = goodsServiceFeignApi.getConsumerIdByType(targetId, type);
+        }else if(type == 3){
+            consumerId = orderServiceFeignApi.getEvaluateWriterIdById(targetId);
         }else{
             consumerId = forumServiceFeignApi.getUserIdByType(targetId, type);
         }

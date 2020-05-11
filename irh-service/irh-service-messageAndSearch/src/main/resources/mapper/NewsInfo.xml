@@ -151,12 +151,29 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	<select id="selectAtMeMessage" parameterType="newsInfo" resultType="newsInfo">
-		<![CDATA[SELECT COUNT(1) AS repeatTotal,]]>
-		<include refid="QUERY_COLUMN_LIST"/>
-		<include refid="QUERY_FROM_TABLE"/>
-		WHERE receiver_id = #{receiverId} AND state = #{state,jdbcType=INTEGER} AND news_type IN (10, 20, 60)
-		ORDER BY resource_id LIMIT #{startIndex}, #{endIndex}
+	<select id="selectAtMeMessage" parameterType="top.imuster.message.pojo.NewsInfo" resultType="top.imuster.message.pojo.NewsInfo">
+
+		SELECT
+		COUNT( 1 ) AS repeatTotal,
+		id,
+		receiver_id AS receiverId,
+		content,
+		news_type AS newsType,
+		create_time AS createTime,
+		state,
+		update_time AS updateTime,
+		sender_id AS senderId,
+		target_id AS targetId,
+		resource_id AS resourceId
+		FROM
+		news_info
+		WHERE
+		receiver_id = #{receiverId}
+		AND state = 30
+		AND news_type IN ( 10, 20, 60 )
+		GROUP BY
+		resource_id
+		LIMIT #{startIndex}, #{endIndex}
 	</select>
 
 	<select id="selectAtMeTotal" parameterType="newsInfo" resultType="int">
@@ -174,4 +191,5 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id,jdbcType=BIGINT}
 	</select>
+
 </mapper>

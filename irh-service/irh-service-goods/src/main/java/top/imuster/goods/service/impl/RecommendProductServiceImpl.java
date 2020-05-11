@@ -3,6 +3,7 @@ package top.imuster.goods.service.impl;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
@@ -10,9 +11,14 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.goods.api.dto.MongoProductInfo;
+import top.imuster.goods.api.dto.ProductRecommendDto;
 import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.dao.ProductRecommendDao;
+import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.RecommendProductService;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
@@ -28,9 +34,30 @@ public class RecommendProductServiceImpl implements RecommendProductService {
 
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private ProductInfoService productInfoService;
+
+    @Resource
+    private ProductRecommendDao productRecommendDao;
+
+
     @Override
     public Message<Page<ProductInfo>> getRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId) {
-        return null;
+        if(userId == null){
+            return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
+        }else{
+            Page<ProductInfo> page = new Page<>();
+            List<ProductInfo> list = new ArrayList<>();
+            ProductRecommendDto reco = productRecommendDao.findByUserId(userId);
+            List<MongoProductInfo> recs = reco.getRecs();
+            recs.stream().forEach(mongoProductInfo -> {
+                Integer productId = mongoProductInfo.getProductId();
+                list.add(productInfoService.getProductBriefInfoById(productId.longValue()));
+            });
+            page.setData(list);
+            page.setTotalCount(list.size());
+            return Message.createBySuccess(page);
+        }
     }
 
     @Override

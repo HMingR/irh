@@ -1,14 +1,16 @@
 package imuster;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.imuster.order.provider.IrhOrderApplication;
 import top.imuster.order.provider.dao.OrderInfoDao;
+import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 
 /**
@@ -24,10 +26,13 @@ public class test {
     @Resource
     public OrderInfoDao orderInfoDao;
 
+    @Autowired
+    UserServiceFeignApi userServiceFeignApi;
+
     @Test
     public void test(){
-        String s = DigestUtils.sha1Hex("123456");
-        System.out.println(s);
+        Map<String, String> user = userServiceFeignApi.getUserAddressAndPhoneById(5L);
+        System.out.println(user.get("address"));
     }
 
 }

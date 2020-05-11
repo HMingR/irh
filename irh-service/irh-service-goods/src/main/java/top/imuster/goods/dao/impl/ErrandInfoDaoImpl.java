@@ -50,4 +50,5 @@ public class ErrandInfoDaoImpl extends BaseDaoImpl<ErrandInfo, Long> implements 
 	public List<ErrandInfo> selectErrandBrief(ErrandInfo conditon) {
 		return this.selectList(getNameSpace(SELECT_ERRAND_BRIEF), conditon);
 	}
+
 }

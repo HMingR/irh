@@ -1,11 +1,11 @@
-package top.imuster.goods.service;
+package top.imuster.order.provider.service;
 
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.pojo.OrderInfo;
+import top.imuster.order.api.pojo.ProductEvaluateInfo;
 
 /**
  * ProductEvaluateInfoService接口
@@ -29,7 +29,6 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
      * @Description 发送消息
      * @Date: 2020/1/15 12:39
      * @reture: void
-     *
      * @param orderId
      * @param productEvaluateInfo
      * @return*/
@@ -43,7 +42,16 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
       * @param currentPage
       * @param userId
       * @param type  (1:查询自己 2:查询卖家被评论的记录)
-      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductEvaluateInfo>>
+      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductEvaluateInfo>>
       **/
     Message<Page<ProductEvaluateInfo>> getListByUserId(Integer pageSize, Integer currentPage, Long userId, Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 根据订单id获得评价id
+     * @Date: 2020/5/11 20:07
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long getEvaluateIdByOrderId(Long id);
 }

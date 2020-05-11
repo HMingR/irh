@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.goods.dao.ProductEvaluateInfoDao">
+<mapper namespace="top.imuster.order.provider.dao.ProductEvaluateInfoDao">
 
 	<!-- product_evaluate_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -165,4 +165,10 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+
+	<select id="selectIdByOrderId" parameterType="long" resultType="long">
+		SELECT id
+		FROM product_evaluate_info
+		WHERE order_id = #{id,jdbcType=BIGINT}
+	</select>
 </mapper>

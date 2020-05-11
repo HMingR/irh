@@ -2,16 +2,16 @@ package top.imuster.goods.web.rpc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessageInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ErrandInfoService;
-import top.imuster.goods.service.ProductEvaluateInfoService;
 import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.ProductMessageService;
 import top.imuster.life.api.pojo.ErrandInfo;
@@ -35,9 +35,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Resource
     ProductMessageService productMessageService;
-
-    @Resource
-    ProductEvaluateInfoService productEvaluateInfoService;
 
 
     @Resource
@@ -66,23 +63,15 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Override
     @GetMapping("/es/lockStock/{productId}")
-    public boolean lockStock(@PathVariable("productId") Long productId) throws GoodsException {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public ProductInfo lockStock(@PathVariable("productId") Long productId) throws GoodsException {
         try{
-            ProductInfo productInfo = new ProductInfo();
-            productInfo.setId(productId);
-            productInfo.setState(2);
-            Integer count = productInfoService.selectEntryListCount(productInfo);
-            if(count == 0){
-                return false;
-            }
-            productInfo.setState(3);
-            int i = productInfoService.updateByKey(productInfo);
-            if(i != 1){
-                return false;
-            }
-            return true;
+            Integer count = productInfoService.lockProduct(productId);
+            if(count == null || count == 0) return null;
+            ProductInfo productInfo = productInfoService.selectEntryList(productId).get(0);
+            return productInfo;
         }catch (Exception e){
-            throw new GoodsException("锁定库存失败");
+            return null;
         }
     }
 
@@ -110,16 +99,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
         return i == 1;
     }
 
-    @Override
-    @DeleteMapping("/es/pe/{id}")
-    public boolean deleteProductEvaluate(@PathVariable("id") Long id) {
-        ProductEvaluateInfo condition = new ProductEvaluateInfo();
-        condition.setState(1);
-        condition.setId(id);
-        int i = productEvaluateInfoService.updateByKey(condition);
-        return i == 1;
-    }
-
     /**
      * @Description 1-商品 2-留言 3-评价
      * @Date: 2020/1/17 11:01
@@ -133,9 +112,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
         } else if(type == 2){
             ProductMessageInfo productMessageInfo = productMessageService.selectEntryList(id).get(0);
             return productMessageInfo.getConsumerId();
-        }else if(type == 3){
-            ProductEvaluateInfo productEvaluateInfo = productEvaluateInfoService.selectEntryList(id).get(0);
-            return productEvaluateInfo.getBuyerId();
         }
         return null;
     }
@@ -144,12 +120,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @GetMapping("/es/pi/{psId}")
     public ProductInfo getProductInfoByProductMessage(@PathVariable("psId") Long targetId) {
         return productInfoService.getProductInfoByMessageId(targetId);
-    }
-
-    @Override
-    @GetMapping("/es/pi/ei/{id}")
-    public ProductEvaluateInfo getProductEvaluateInfoByEvaluateId(@PathVariable("id") Long targetId) {
-        return productEvaluateInfoService.selectEntryList(targetId).get(0);
     }
 
     @Override
@@ -168,5 +138,11 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @GetMapping("/errand/addAndPhone/{id}")
     public ErrandInfo getErrandInfoById(@PathVariable("id") Long errandId) {
         return errandInfoService.getAddAndPhoneById(errandId);
+    }
+
+    @Override
+    @GetMapping("/es/brief/{id}")
+    public ProductInfo getProductBriefInfoById(@PathVariable("id") Long productId) {
+        return productInfoService.getProductBriefInfoById(productId);
     }
 }

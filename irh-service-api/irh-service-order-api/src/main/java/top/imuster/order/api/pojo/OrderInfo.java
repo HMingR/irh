@@ -43,7 +43,7 @@ public class OrderInfo extends BaseDomain {
 
 	// 会员表的id
 	@ApiModelProperty("会员表的id")
-	@NotEmpty(groups = ValidateGroup.queryGroup.class, message = "会员的id不能为空")
+	@NotNull(groups = ValidateGroup.queryGroup.class, message = "会员的id不能为空")
 	private Long buyerId;
 
 	// 商品id
@@ -82,6 +82,27 @@ public class OrderInfo extends BaseDomain {
 
 	@ApiModelProperty("订单版本，默认为1，当修改订单的时候会将版本号加1")
 	private Integer orderVersion;
+
+	private String phoneNum;
+
+	//是否评价
+	private Long evaluateId;
+
+	public Long getEvaluateId() {
+		return evaluateId;
+	}
+
+	public void setEvaluateId(Long evaluateId) {
+		this.evaluateId = evaluateId;
+	}
+
+	public String getPhoneNum() {
+		return phoneNum;
+	}
+
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
 
 	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
 	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
