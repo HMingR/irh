@@ -1,5 +1,7 @@
 package top.imuster.order.provider.service.impl;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.GoodsDetail;
@@ -10,26 +12,34 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.core.dto.SendEmailDto;
+import top.imuster.common.core.dto.SendUserCenterDto;
+import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.DateUtil;
+import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.AlipayService;
 import top.imuster.order.provider.service.OrderInfoService;
+import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName: AlipayServiceImpl
@@ -45,11 +55,20 @@ public class AlipayServiceImpl implements AlipayService {
     @Autowired
     GoodsServiceFeignApi goodsServiceFeignApi;
 
-    //@Autowired
-    //AlipayConfig alipayConfig;
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Resource
     OrderInfoService orderInfoService;
+
+    @Autowired
+    UserServiceFeignApi userServiceFeignApi;
+
+    @Autowired
+    GenerateSendMessageService generateSendMessageService;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     // 支付宝当面付2.0服务
     private static AlipayTradeService tradeService;
@@ -99,7 +118,7 @@ public class AlipayServiceImpl implements AlipayService {
                 .setSellerId(sellerId).setBody(body)
                 .setOperatorId(operatorId).setStoreId(operatorId)
                 .setTimeoutExpress(timeoutExpress)
-               // .setNotifyUrl("http://localhost:8082/alipay/payResult")//支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
+                .setNotifyUrl("https://222.186.174.9:13163/api/order/alipay/alipayNotify")//支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
                 .setGoodsDetailList(productInfos);
 
         AlipayF2FPrecreateResult result = tradeService.tradePrecreate(builder);
@@ -128,19 +147,93 @@ public class AlipayServiceImpl implements AlipayService {
         }
     }
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void aliCallBack(Map<String, String> params) throws OrderException, ParseException {
+    public void aliCallBack(HttpServletRequest request) throws OrderException, ParseException {
+        Map<String,String> params = Maps.newHashMap();
+        Map requestParams = request.getParameterMap();
+        for(Iterator iter = requestParams.keySet().iterator(); iter.hasNext();){
+            String name = (String)iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for(int i = 0 ; i <values.length;i++){
+                valueStr = (i == values.length -1)?valueStr + values[i]:valueStr + values[i]+",";
+            }
+            params.put(name,valueStr);
+        }
+        log.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
+
+        params.remove("sign_type");
+        try {
+            boolean alipayRSACheckedV2 = AlipaySignature.rsaCheckV2(params, Configs.getAlipayPublicKey(),"utf-8",Configs.getSignType());
+            if(!alipayRSACheckedV2){
+                log.error("支付宝回调地址收到非法请求");
+                return;
+            }
+        } catch (AlipayApiException e) {
+            log.error("支付宝验证回调异常",e);
+        }
+
         OrderInfo orderInfo = validateParams(params);
         orderInfo.setState(40);
         orderInfo.setTradeType(10);
 
-        //更新订单状态
-        orderInfoService.updateByKey(orderInfo);
-        //更新商品库存状态
-        goodsServiceFeignApi.productStockOut(orderInfo.getProductId());
+        Integer state = orderInfoService.completeTrade(orderInfo);
+        if(state != 1){
+            log.error("-------->支付宝支付成功回调时修改订单状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+        }
 
-        // todo 需要使用消息队列给卖家发送消息
+        //更新商品库存状态
+        boolean b = goodsServiceFeignApi.updateProductState(orderInfo.getProductId(), 4);
+        if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+
+        //删除在redis中保存的key
+        redisTemplate.delete(RedisUtil.getOrderCodeExpireKey(orderInfo.getOrderCode()));
+
+        sendMessage(orderInfo);
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 给卖家和买家发送消息
+     * @Date: 2020/5/12 14:09
+     * @param orderInfo
+     * @reture: void
+     **/
+    private void sendMessage(OrderInfo orderInfo){
+        Long salerId = orderInfo.getSalerId();
+        String sendTo = userServiceFeignApi.getUserEmailById(salerId);
+
+        //发给卖家邮件
+        SendEmailDto sendEmailDto = new SendEmailDto();
+        sendEmailDto.setSubject("发货通知");
+        sendEmailDto.setTemplateEnum(TemplateEnum.SIMPLE_TEMPLATE);
+        sendEmailDto.setContent(new StringBuffer("您在irh平台发布的编号为: ").append(orderInfo.getProductId()).append("商品已经被其他人买走了,请登录irh平台查看详情").toString());
+        sendEmailDto.setDate(DateUtil.now());
+        sendEmailDto.setEmail(sendTo);
+        generateSendMessageService.sendToMq(sendEmailDto);
+
+        SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
+        sendUserCenterDto.setTargetId(orderInfo.getId());
+        sendUserCenterDto.setToId(salerId);
+        sendUserCenterDto.setNewsType(40);
+        sendUserCenterDto.setContent(new StringBuffer("您在irh平台发布的编号为: ").append(orderInfo.getProductId()).append("商品已经被其他人买走了,点击查看").toString());
+        sendUserCenterDto.setDate(DateUtil.now());
+        sendUserCenterDto.setFromId(-1L);
+        generateSendMessageService.sendToMq(sendUserCenterDto);
+
+        sendUserCenterDto = new SendUserCenterDto();
+
+        sendUserCenterDto.setTargetId(orderInfo.getId());
+        sendUserCenterDto.setContent(new StringBuffer("您已成功下单商品编号为: ").append(orderInfo.getProductId()).append("的商品,点击查看").toString());
+        sendUserCenterDto.setFromId(-1L);
+        sendUserCenterDto.setNewsType(40);
+        sendUserCenterDto.setToId(orderInfo.getBuyerId());
+        sendUserCenterDto.setDate(DateUtil.now());
+        generateSendMessageService.sendToMq(sendUserCenterDto);
+
 
     }
 

@@ -8,6 +8,7 @@ import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * OrderInfoService接口
@@ -101,4 +102,54 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> createOrderCode(Long currentUserIdFromCookie);
+
+    /**
+     * @Author hmr
+     * @Description 根据订单id查看订单详情
+     * @Date: 2020/5/12 9:50
+     * @param id
+     * @param type
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    Message<OrderInfo> getOrderDetailById(Long id, Integer type, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 关闭订单
+     * @Date: 2020/5/12 10:25
+     * @param orderId
+     * @param userId
+     * @param type
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> cancleOrder(Long orderId, Long userId, Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 支付完成之后修改订单状态
+     * @Date: 2020/5/12 13:58
+     * @param orderInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer completeTrade(OrderInfo orderInfo);
+
+    /**
+     * @Author hmr
+     * @Description 根据orderCode获得productId，如果当前订单已经完成或者已经删除，则不返回；反之返回productId
+     * @Date: 2020/5/12 15:18
+     * @param orderCode
+     * @reture: java.lang.Long   buyerId   productId
+     **/
+    Map<String, String> getProductIdByExpireOrderCode(String orderCode);
+
+    /**
+     * @Author hmr
+     * @Description 超时关闭订单
+     * @Date: 2020/5/12 15:23
+     * @param orderCode
+     * @param buyerId
+     * @reture: java.lang.Integer
+     **/
+    Integer cancleOrderByCode(String orderCode, Long buyerId, Long orderId);
 }

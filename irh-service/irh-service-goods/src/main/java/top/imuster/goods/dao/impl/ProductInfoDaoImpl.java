@@ -28,6 +28,7 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String UPDATE_COLLECT_TOTAL = "updateCollectTotal";
 	private final static String LOCK_PRODUCT_BY_ID = "lockProductById";
 	private final static String SELECT_PRODUCT_BRIEF_INFO_LIST = "selectProductBriefInfoList";
+	private final static String UPDATE_PRODUCT_STATE_BY_ID = "updateProductStateById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -82,5 +83,10 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	@Override
 	public List<ProductInfo> selectProductBriefInfoList(ProductInfo condition) {
 		return this.selectList(getNameSpace(SELECT_PRODUCT_BRIEF_INFO_LIST), condition);
+	}
+
+	@Override
+	public Integer updateProductStateById(ProductInfo condition) {
+		return this.update(getNameSpace(UPDATE_PRODUCT_STATE_BY_ID), condition);
 	}
 }

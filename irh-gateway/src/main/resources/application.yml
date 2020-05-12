@@ -1,5 +1,5 @@
 server:
-  port: 443
+  port: 10900
   ssl:
     key-store-password: AOzksRxv
     key-store: classpath:imuster.pfx

@@ -100,7 +100,7 @@ public class ProductDemandController extends BaseController {
      * @reture: void
      **/
     @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT, value = "#p0")
-    @GetMapping("/browser/{targetId}")
+    @GetMapping("/browse/{targetId}")
     public void browser(@PathVariable("targetId") Long targetId){
 
     }

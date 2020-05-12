@@ -94,7 +94,7 @@ public class ProductInfo extends BaseDomain {
 
 	private Integer collectTotal;
 
-	//state 1-无效 2-有效 3-锁定
+	//state 1-无效 2-有效 3-锁定 4-卖出
 
 
 	public Integer getCollectTotal() {

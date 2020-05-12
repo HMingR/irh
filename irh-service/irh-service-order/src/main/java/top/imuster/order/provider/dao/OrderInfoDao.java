@@ -6,6 +6,7 @@ import top.imuster.order.api.pojo.OrderInfo;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * OrderInfoDao 接口
@@ -105,4 +106,31 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer selectOrderVersionById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 完成交易
+     * @Date: 2020/5/12 13:58
+     * @param orderInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer completeTrade(OrderInfo orderInfo);
+
+    /**
+     * @Author hmr
+     * @Description 根据orderCode获得productId，如果当前订单已经完成或者已经删除，则不返回；反之返回productId
+     * @Date: 2020/5/12 15:19
+     * @param orderCode
+     * @reture: java.lang.Long
+     **/
+    Map<String, String> selectProductIdAndBuyerIdByOrderCode(String orderCode);
+
+    /**
+     * @Author hmr
+     * @Description 根据订单code更新订单状态
+     * @Date: 2020/5/12 15:25
+     * @param info
+     * @reture: java.lang.Integer
+     **/
+    Integer updateOrderStateByOrderCode(OrderInfo info);
 }

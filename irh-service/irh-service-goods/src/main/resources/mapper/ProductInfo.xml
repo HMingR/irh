@@ -332,5 +332,11 @@
 		ORDER BY #{orderField} #{orderFieldType}
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
+
+	<update id="updateProductStateById" parameterType="top.imuster.goods.api.pojo.ProductInfo">
+		UPDATE product_info
+		SET state = #{state,jdbcType=INTEGER}
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
 	
 </mapper>

@@ -88,6 +88,10 @@ public class OrderInfo extends BaseDomain {
 	//是否评价
 	private Long evaluateId;
 
+	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
+	@ApiModelProperty("10:订单超时 20:取消订单 40:等待支付 50:交易成功 60:买家删除订单  70:卖家删除订单  80:评价  90:追评")
+	//private Short state;
+
 	public Long getEvaluateId() {
 		return evaluateId;
 	}
@@ -103,10 +107,6 @@ public class OrderInfo extends BaseDomain {
 	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
 	}
-
-	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
-	@ApiModelProperty("10:订单超时 20:取消订单 30:删除订单 40:等待支付 50:交易成功")
-	//private Short state;
 
 	public String getSalerNickname() {
 		return salerNickname;

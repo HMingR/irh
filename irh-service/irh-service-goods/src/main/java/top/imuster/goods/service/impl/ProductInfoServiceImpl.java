@@ -183,4 +183,13 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         page.setData(list);
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public boolean updateProductStateById(Long productId, Integer state) {
+        ProductInfo condition = new ProductInfo();
+        condition.setId(productId);
+        condition.setState(state);
+        Integer temp = productInfoDao.updateProductStateById(condition);
+        return temp != 0;
+    }
 }

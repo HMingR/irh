@@ -17,7 +17,7 @@ public class ProductRecommendService {
     @Autowired
     ProductRecommendDao productRecommendDao;
 
-    public ProductRecommendDto findOne(Integer userId){
+    public ProductRecommendDto findOne(Long userId){
         return productRecommendDao.findByUserId(userId);
     }
 

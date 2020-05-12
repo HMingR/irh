@@ -118,4 +118,14 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
     Message<Page<ProductInfo>> getProductBriefInfoByPage(Integer currentPage, Integer pageSize);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/12 10:49
+     * @param productId
+     * @param state
+     * @reture: boolean
+     **/
+    boolean updateProductStateById(Long productId, Integer state);
 }

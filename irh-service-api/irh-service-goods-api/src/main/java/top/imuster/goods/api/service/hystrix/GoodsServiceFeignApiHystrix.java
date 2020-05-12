@@ -44,12 +44,6 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
-            public boolean productStockOut(Long productId) {
-                log.error("商品下单后改变商品状态失败，服务降级");
-                return false;
-            }
-
-            @Override
             public boolean deleteProductMessageById(Long id) {
                 log.error("删除商品留言失败，服务降级");
                 return false;
@@ -85,6 +79,11 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             @Override
             public ProductInfo getProductBriefInfoById(Long productId) {
                 return null;
+            }
+
+            @Override
+            public boolean updateProductState(Long productId, Integer state) {
+                return false;
             }
         };
     }

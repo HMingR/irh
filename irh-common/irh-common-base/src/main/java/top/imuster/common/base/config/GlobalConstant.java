@@ -13,6 +13,7 @@ public class GlobalConstant {
     public static final String IRH_PRODUCT_COLLECT_MAP_KEY = "irh::product::collect::map::key";
     public static final String IRH_DEMAND_COLLECT_MAP_KEY = "irh::demand::collect::map::key";
     public static final String IRH_PRODUCT_ORDER_KEY = "irh::product::order::";
+    public static final String IRH_ORDER_CODE_EXPIRE_KEY = "irh::order::code::expire::key::";
 
     private GlobalConstant(){}
 

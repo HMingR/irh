@@ -16,6 +16,7 @@ import top.imuster.goods.service.ProductMessageService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @ClassName: ProductMessageController
@@ -71,6 +72,21 @@ public class ProductMessageController extends BaseController {
         condition.setState(1);
         productMessageService.updateByKey(condition);
         return Message.createBySuccess();
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得留言信息详情
+     * @Date: 2020/5/12 8:45
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.goods.api.pojo.ProductMessageInfo>
+     **/
+    @GetMapping("/detail/{id}")
+    public Message<ProductMessageInfo> getDetail(@PathVariable("id") Long id){
+        List<ProductMessageInfo> list = productMessageService.selectEntryList(id);
+        if(list == null || list.isEmpty()) return Message.createBySuccess();
+        return Message.createBySuccess(list.get(0));
     }
 
 }

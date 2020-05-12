@@ -1,7 +1,8 @@
 package top.imuster.order.api.service.hystrix;
 
 import feign.hystrix.FallbackFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -16,8 +17,10 @@ import top.imuster.order.api.service.OrderServiceFeignApi;
  * @date: 2019/12/29 22:02
  */
 @Component
-@Slf4j
 public class OrderServiceFeignApiHystrix implements FallbackFactory<OrderServiceFeignApi> {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
     @Override
     public OrderServiceFeignApi create(Throwable throwable) {
@@ -27,6 +30,11 @@ public class OrderServiceFeignApiHystrix implements FallbackFactory<OrderService
             public OrderInfo getOrderById(Long orderId) {
                 log.error("OrderServiceFeignApiHystrix--> 根据订单的id条件查询订单信息服务失败");
                 return null;
+            }
+
+            @Override
+            public boolean updateOrderStateById(Long id, Integer state) {
+                return false;
             }
 
             @Override

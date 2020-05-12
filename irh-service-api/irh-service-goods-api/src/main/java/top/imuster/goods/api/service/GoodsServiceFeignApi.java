@@ -49,16 +49,6 @@ public interface GoodsServiceFeignApi {
     ProductInfo lockStock(@PathVariable("productId") Long productId);
 
     /**
-     * @Description: 交易成功之后修改商品状态为下架
-     * @Author: hmr
-     * @Date: 2019/12/30 16:08
-     * @param productId
-     * @reture: boolean
-     **/
-    @GetMapping("/es/stockOut/{productId}")
-    boolean productStockOut(@PathVariable("productId") Long productId);
-
-    /**
      * @Author hmr
      * @Description 根据id删除商品的留言信息
      * @Date: 2020/1/16 20:34
@@ -130,4 +120,15 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/brief/{id}")
     ProductInfo getProductBriefInfoById(@PathVariable("id") Long productId);
+
+    /**
+     * @Author hmr
+     * @Description 卖家
+     * @Date: 2020/5/12 10:44
+     * @param productId
+     * @param i
+     * @reture: boolean
+     **/
+    @GetMapping("/es/state/{targetId}/{state}")
+    boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state);
 }

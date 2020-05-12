@@ -76,20 +76,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     }
 
     @Override
-    @GetMapping("/es/stockOut/{productId}")
-    public boolean productStockOut(@PathVariable("productId") Long productId) {
-        try{
-            ProductInfo productInfo = new ProductInfo();
-            productInfo.setId(productId);
-            productInfo.setState(2);
-            productInfoService.updateByKey(productInfo);
-            return true;
-        }catch (Exception e){
-            throw new GoodsException("商品下单失败,请稍后重试");
-        }
-    }
-
-    @Override
     @DeleteMapping("/es/pm/{id}")
     public boolean deleteProductMessageById(@PathVariable("id") Long id) {
         ProductMessageInfo condition = new ProductMessageInfo();
@@ -144,5 +130,11 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @GetMapping("/es/brief/{id}")
     public ProductInfo getProductBriefInfoById(@PathVariable("id") Long productId) {
         return productInfoService.getProductBriefInfoById(productId);
+    }
+
+    @Override
+    @GetMapping("/es/state/{targetId}/{state}")
+    public boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state) {
+        return productInfoService.updateProductStateById(productId, state);
     }
 }

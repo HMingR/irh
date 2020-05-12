@@ -28,6 +28,9 @@ public interface OrderServiceFeignApi {
     @GetMapping("/{orderId}")
     OrderInfo getOrderById(@PathVariable("orderId") Long orderId);
 
+    @GetMapping("/state/{id}/{state}")
+    boolean updateOrderStateById(@PathVariable("id") Long id,@PathVariable("state") Integer state);
+
     /**
      * @Description: 分页条件查询订单
      * @Author: hmr

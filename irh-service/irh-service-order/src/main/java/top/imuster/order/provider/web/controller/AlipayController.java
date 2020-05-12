@@ -1,10 +1,6 @@
 package top.imuster.order.provider.web.controller;
 
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
-import com.alipay.demo.trade.config.Configs;
-import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -22,8 +18,6 @@ import top.imuster.order.provider.service.AlipayService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * @ClassName: AlipayController
@@ -69,30 +63,7 @@ public class AlipayController extends BaseController {
      **/
     @PostMapping("/alipayNotify")
     public Message<String> payResult(HttpServletRequest request) throws ParseException {
-        log.info("支付成功,执行支付宝回调");
-        Map<String,String> params = Maps.newHashMap();
-        Map requestParams = request.getParameterMap();
-        for(Iterator iter = requestParams.keySet().iterator(); iter.hasNext();){
-            String name = (String)iter.next();
-            String[] values = (String[]) requestParams.get(name);
-            String valueStr = "";
-            for(int i = 0 ; i <values.length;i++){
-                valueStr = (i == values.length -1)?valueStr + values[i]:valueStr + values[i]+",";
-            }
-            params.put(name,valueStr);
-        }
-        log.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
-
-        params.remove("sign_type");
-        try {
-            boolean alipayRSACheckedV2 = AlipaySignature.rsaCheckV2(params, Configs.getAlipayPublicKey(),"utf-8",Configs.getSignType());
-            if(!alipayRSACheckedV2){
-                return Message.createByError("非法请求,验证不通过");
-            }
-        } catch (AlipayApiException e) {
-            log.error("支付宝验证回调异常",e);
-        }
-        alipayService.aliCallBack(params);
+        alipayService.aliCallBack(request);
         return Message.createBySuccess("支付成功,已提醒卖家");
     }
 

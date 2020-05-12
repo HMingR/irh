@@ -59,13 +59,22 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Override
     public Message<String> writeEvaluateByOrderId(Long orderId, ProductEvaluateInfo productEvaluateInfo) {
         OrderInfo order = orderServiceFeignApi.getOrderById(orderId);
+        Integer orderState = order.getState();
         if(order == null){
             return Message.createByError("未找到相应的订单,请刷新后重试");
-        }if(order.getState() != 50){
+        }if(orderState == 40){
             return Message.createByError("该订单还没有完成交易，完成该订单之后才能进行评价");
         }if(!order.getBuyerId().equals(productEvaluateInfo.getBuyerId())){
             return Message.createByError("参数错误,您不是该订单的买家,请刷新后重试");
-        }
+        }if(orderState == 90) return Message.createByError("您已经追评了,不能再进行评价了");
+
+
+        Integer state = 80;
+        if(orderState == 50) state = 80;   //第一次评价
+        else if(orderState == 80) state = 90;   //追评
+        boolean b = orderServiceFeignApi.updateOrderStateById(orderId, state);
+        if(!b) return Message.createByError();
+
         Long id = this.evaluateByOrder(order, productEvaluateInfo);
         SendUserCenterDto sendMessageDto = new SendUserCenterDto();
         sendMessageDto.setToId(order.getSalerId());

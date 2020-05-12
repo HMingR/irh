@@ -8,6 +8,7 @@ import top.imuster.order.provider.dao.OrderInfoDao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * OrderInfoDao 实现类
@@ -27,6 +28,10 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	private final static String SELECT_ORDER_LIST_BY_USER_ID= "selectOrderListByUserId";
 	private final static String SELECT_ALL_DONATION_ORDER = "selectAllDonationOrder";
 	private final static String SELECT_ORDER_VERSION_BY_ID = "selectOrderVersionById";
+	private final static String COMPLETE_TRADE = "completeTrade";
+	private final static String SELECT_PRODUCT_ID_BY_ORDER_CODE = "selectProductIdByOrderCode";
+	private final static String UPDATE_ORDER_STATE_BY_ORDER_CODE = "updateOrderStateByOrderCode";
+	private final static String GET_BUYER_ID_BY_ORDER_CODE = "getBuyerIdByOrderCode";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -81,4 +86,20 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	public Integer selectOrderVersionById(Long id) {
 		return this.select(getNameSpace(SELECT_ORDER_VERSION_BY_ID), id);
 	}
+
+	@Override
+	public Integer completeTrade(OrderInfo orderInfo) {
+		return this.update(getNameSpace(COMPLETE_TRADE), orderInfo);
+	}
+
+	@Override
+	public Map<String, String> selectProductIdAndBuyerIdByOrderCode(String orderCode) {
+		return this.select(getNameSpace(SELECT_PRODUCT_ID_BY_ORDER_CODE), orderCode);
+	}
+
+	@Override
+	public Integer updateOrderStateByOrderCode(OrderInfo info) {
+		return this.update(getNameSpace(UPDATE_ORDER_STATE_BY_ORDER_CODE), info);
+	}
+
 }

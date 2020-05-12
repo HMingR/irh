@@ -1,6 +1,5 @@
 package top.imuster.order.provider.web.rpc;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -12,6 +11,7 @@ import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.order.provider.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: OrderServuceFeignClient
@@ -21,7 +21,6 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/feign/order")
-@Slf4j
 public class OrderServiceFeignClient implements OrderServiceFeignApi {
 
     @Resource
@@ -33,8 +32,19 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     @Override
     @GetMapping("/{orderId}")
     public OrderInfo getOrderById(@PathVariable("orderId") Long orderId) {
-        OrderInfo orderInfo = orderInfoService.selectEntryList(orderId).get(0);
-        return orderInfo;
+        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(orderId);
+        if(orderInfoList == null || orderInfoList.isEmpty()) return null;
+        return orderInfoList.get(0);
+    }
+
+    @Override
+    @GetMapping("/state/{id}/{state}")
+    public boolean updateOrderStateById(@PathVariable("id") Long id, @PathVariable("state") Integer state){
+        OrderInfo info = new OrderInfo();
+        info.setState(state);
+        info.setId(id);
+        int i = orderInfoService.updateByKey(info);
+        return i == 1;
     }
 
     @Override

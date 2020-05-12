@@ -160,12 +160,23 @@ public class RedisUtil {
 
     /**
      * @Author hmr
-     * @Description 获得二手商品的订单map
+     * @Description 获得二手商品的订单key
      * @Date: 2020/5/11 10:44
      * @param
      * @reture: java.lang.String
      **/
     public static String getOrderCodeKey(Long userId) {
         return new StringBuffer().append(GlobalConstant.IRH_PRODUCT_ORDER_KEY).append(userId).toString();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 生成订单之后将订单编号保存在redis中，用来在过期的时候查看当前订单是否完成
+     * @Date: 2020/5/12 15:04
+     * @param orderCode
+     * @reture: java.lang.String
+     **/
+    public static String getOrderCodeExpireKey(String orderCode) {
+        return new StringBuffer(GlobalConstant.IRH_ORDER_CODE_EXPIRE_KEY).append(orderCode).toString();
     }
 }

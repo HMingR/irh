@@ -12,6 +12,8 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.SendUserCenterDto;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.TrendUtil;
 import top.imuster.common.core.utils.UuidUtils;
@@ -69,10 +71,13 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<OrderInfo> getOrderByProduct(OrderInfo orderInfo, Long userId, Long productId){
         String orderCode = orderInfo.getOrderCode();
-        String redisOrder = (String)redisTemplate.opsForValue().get(RedisUtil.getOrderCodeKey(userId));
+        String orderCodeKey = RedisUtil.getOrderCodeKey(userId);
+        String redisOrder = (String)redisTemplate.opsForValue().get(orderCodeKey);
+
         if( StringUtils.isEmpty(orderCode) || StringUtils.isEmpty(redisOrder) || !orderCode.equals(redisOrder)){
             return Message.createByError("错误的订单信息,请刷新页面重新提交订单");
         }
+        redisTemplate.delete(orderCodeKey);
 
         String address = orderInfo.getAddress();
         String phoneNum = orderInfo.getPhoneNum();
@@ -109,6 +114,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
             log.error("插入订单返回插入值的id为null,订单信息为{}", orderInfo);
             return Message.createByError("生成订单失败,请稍后重试");
         }
+
+        //设置十分钟的过期时间
+        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeExpireKey(orderCode), productId, 10, TimeUnit.MINUTES);
         return Message.createBySuccess(orderInfo);
     }
 
@@ -129,18 +137,14 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     public Message<Page<OrderInfo>> list(Integer pageSize, Integer currentPage, Long userId, Integer type) {
         Page<OrderInfo> page = new Page<>();
         OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setStartIndex((currentPage < 1 ? 1 : currentPage - 1) * pageSize);
-        if(type == 1){
-            //买家
-            orderInfo.setState(30);
-            orderInfo.setBuyerId(userId);
-        }else{
-            //卖家
-            orderInfo.setState(35);
-            orderInfo.setSalerId(userId);
-        }
+        orderInfo.setStartIndex((currentPage - 1) * pageSize);
+        orderInfo.setEndIndex(pageSize);
+        if(type == 1)orderInfo.setBuyerId(userId);  //买家
+        else orderInfo.setSalerId(userId);    //卖家
+
         Integer count = orderInfoDao.selectOrderListCountByUserId(orderInfo);
         List<OrderInfo> list = orderInfoDao.selectOrderListByUserId(orderInfo);
+
         list.stream().forEach(condition -> {
             Long id = condition.getId();
             Long evaluateId = productEvaluateInfoService.getEvaluateIdByOrderId(id);
@@ -184,6 +188,71 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         String code = String.valueOf(UuidUtils.nextId());
         redisTemplate.opsForValue().set(RedisUtil.getOrderCodeKey(userId), code, 30, TimeUnit.MINUTES);
         return Message.createBySuccess(code);
+    }
+
+    @Override
+    public Message<OrderInfo> getOrderDetailById(Long id, Integer type, Long userId) {
+        OrderInfo info = new OrderInfo();
+        info.setId(id);
+
+        //防止其他人恶意获得他人的订单信息
+        if(type == 1) info.setSalerId(userId);
+        else info.setBuyerId(userId);
+        List<OrderInfo> orderInfoList = this.selectEntryList(info);
+        if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createBySuccess("未找到相关订单,刷新后重试");
+        return Message.createBySuccess(orderInfoList.get(0));
+    }
+
+    @Override
+    public Message<String> cancleOrder(Long orderId, Long userId, Integer type) {
+        List<OrderInfo> list = this.selectEntryList(orderId);
+        if(list == null || list.isEmpty()) return Message.createByError("未找到相关订单");
+        OrderInfo order = list.get(0);
+        if(type == 1) {
+            if(!order.getBuyerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
+            order.setState(60);
+        }else{
+            if(!order.getSalerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
+            order.setState(70);
+        }
+        if(order.getState() == 40){
+            //订单还没有支付,取消订单需要更新商品状态
+            boolean flag = goodsServiceFeignApi.updateProductState(order.getProductId(), 2);
+            if(!flag) return Message.createByError("删除失败,请稍后重试");
+            String orderCodeKey = RedisUtil.getOrderCodeKey(userId);
+            redisTemplate.delete(orderCodeKey);
+            order.setState(20);
+        }else order.setState(30);
+        this.updateByKey(order);
+        return Message.createBySuccess();
+    }
+
+    @Override
+    public Integer completeTrade(OrderInfo orderInfo) {
+        return orderInfoDao.completeTrade(orderInfo);
+    }
+
+    @Override
+    public Map<String, String> getProductIdByExpireOrderCode(String orderCode) {
+        return orderInfoDao.selectProductIdAndBuyerIdByOrderCode(orderCode);
+    }
+
+    @Override
+    public Integer cancleOrderByCode(String orderCode, Long buyerId, Long orderId) {
+        OrderInfo info = new OrderInfo();
+        info.setOrderCode(orderCode);
+        info.setState(10);
+        Integer temp = orderInfoDao.updateOrderStateByOrderCode(info);
+        if(temp == 1){
+            SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
+            sendUserCenterDto.setDate(DateUtil.now());
+            sendUserCenterDto.setToId(buyerId);
+            sendUserCenterDto.setNewsType(40);
+            sendUserCenterDto.setFromId(-1L);
+            sendUserCenterDto.setTargetId(orderId);
+            sendUserCenterDto.setContent(new StringBuffer("您三十分钟之前提交的订单已经超时").toString());
+        }
+        return temp;
     }
 
     /**

@@ -56,4 +56,6 @@ public class RecommendController extends BaseController {
         return recommendProductService.recommendTagNames(text);
     }
 
+
+
 }

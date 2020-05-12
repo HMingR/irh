@@ -11,7 +11,6 @@ import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: OrderController
@@ -63,27 +62,11 @@ public class GoodsOrderController extends BaseController{
     @NeedLogin
     public Message<Page<OrderInfo>> orderList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         if(type != 1 && type != 2) return Message.createByError("参数异常,请刷新后重试");
+        if(pageSize < 1 || currentPage < 1) return Message.createByError("参数错误,请刷新");
         Long userId = getCurrentUserIdFromCookie();
         return orderInfoService.list(pageSize, currentPage, userId, type);
     }
 
-    /**
-     * @Description: 根据id删除订单
-     * @Author: hmr
-     * @Date: 2019/12/28 14:42
-     * @param orderId
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation("根据id删除订单")
-    @DeleteMapping("/{orderId}")
-    @NeedLogin
-    public Message editOrder(@PathVariable("orderId") Long orderId){
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setId(orderId);
-        orderInfo.setState(30);
-        orderInfoService.updateByKey(orderInfo);
-        return Message.createBySuccess();
-    }
 
     /**
      * @Author hmr
@@ -98,15 +81,7 @@ public class GoodsOrderController extends BaseController{
     @NeedLogin
     public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         if(type != 1 && type != 2) return Message.createByError("参数错误");
-        OrderInfo info = new OrderInfo();
-        info.setId(id);
-
-        //防止其他人恶意获得他人的订单信息
-        if(type == 1) info.setSalerId(getCurrentUserIdFromCookie());
-        else info.setBuyerId(getCurrentUserIdFromCookie());
-        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(info);
-        if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createBySuccess("未找到相关订单,刷新后重试");
-        return Message.createBySuccess(info);
+        return orderInfoService.getOrderDetailById(id, type,getCurrentUserIdFromCookie());
     }
 
     /**
@@ -120,5 +95,19 @@ public class GoodsOrderController extends BaseController{
     @NeedLogin
     public Message<String> finish(@PathVariable("orderId") Long orderId){
         return orderInfoService.finishOrder(orderId, getCurrentUserIdFromCookie());
+    }
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/12 11:09
+     * @param type   1-买家删除   2-卖家删除
+     * @param orderId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @NeedLogin
+    @DeleteMapping("/cancel/{type}/{id}")
+    public Message<String> cancleOrder(@PathVariable("type") Integer type, @PathVariable("id") Long orderId){
+        return orderInfoService.cancleOrder(orderId, getCurrentUserIdFromCookie(), type);
     }
 }

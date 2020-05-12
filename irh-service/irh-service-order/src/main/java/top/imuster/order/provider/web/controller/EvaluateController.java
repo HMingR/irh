@@ -96,5 +96,4 @@ public class EvaluateController extends BaseController {
         if(infos == null || infos.isEmpty()) return Message.createBySuccess();
         return Message.createBySuccess(infos.get(0));
     }
-
 }
