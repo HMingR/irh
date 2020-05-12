@@ -44,6 +44,9 @@ public class ArticleForwardController extends BaseController {
     public Message<String> forward(@RequestBody ArticleForwardInfo articleForwardInfo){
         Long userId = getCurrentUserIdFromCookie();
         articleForwardInfo.setUserId(userId);
+        //埋点日志 userId|productId|score
+        log.info("埋点日志=>用户转发文章");
+        log.info("ARTICLE_RATING_PREFIX" + ":" + userId + "|" + articleForwardInfo.getArticleId() + "|"+ "5" );    //转发文章得5分
         return articleForwardInfoService.forward(articleForwardInfo);
     }
 

@@ -58,6 +58,9 @@ public class ProductMessageController extends BaseController {
         Long userId = getCurrentUserIdFromCookie();
         productMessageInfo.setConsumerId(userId);
         productMessageService.generateSendMessage(productMessageInfo);
+        //埋点日志 userId|productId|score
+        log.info("埋点日志=>用户留言商品");
+        log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + productMessageInfo.getProductId() + "|"+ "3" );    //留言商品得3分
         return Message.createBySuccess();
     }
 

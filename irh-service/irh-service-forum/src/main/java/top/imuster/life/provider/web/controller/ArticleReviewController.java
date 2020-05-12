@@ -64,6 +64,9 @@ public class ArticleReviewController extends BaseController {
         Long userId = getCurrentUserIdFromCookie();
         articleReviewInfo.setUserId(userId);
         articleReviewService.insertEntry(articleReviewInfo);
+        //埋点日志 userId|productId|score
+        log.info("埋点日志=>用户给文章留言");
+        log.info("ARTICLE_RATING_PREFIX" + ":" + userId + "|" + articleReviewInfo.getArticleId() + "|"+ "3" );    //留言文章得3分
         return Message.createBySuccess();
     }
 

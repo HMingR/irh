@@ -43,8 +43,14 @@ public class ArticleAttitudeController extends BaseController {
     @ApiOperation("给文章模块点赞  type取值 1-文章  2-评论")
     @GetMapping("/up/{type}/{id}")
     public Message<String> up(@PathVariable("type") Integer type, @PathVariable("id") Long targetId){
-        redisArticleAttitudeService.saveUp2Redis(targetId, type, getCurrentUserIdFromCookie());
+        Long userId = getCurrentUserIdFromCookie();
+        redisArticleAttitudeService.saveUp2Redis(targetId, type, userId);
         redisArticleAttitudeService.incrementUpCount(targetId, type);
+        if (type == 1) {
+            //埋点日志 userId|productId|score
+            log.info("埋点日志=>用户点赞文章");
+            log.info("ARTICLE_RATING_PREFIX" + ":" + userId + "|" + targetId + "|"+ "4" );    //点赞文章得3分
+        }
         return Message.createBySuccess();
     }
 
