@@ -48,7 +48,7 @@ public class ArticleDetailPageListener {
         template = configuration.getTemplate(templateLocation, "UTF-8");
     }
 
-    @RabbitListener
+    @RabbitListener(queues = "queue_inform_detail")
     public void generate(String body) throws Exception {
         SendDetailPageDto entry = objectMapper.readValue(body, SendDetailPageDto.class);
         String content = entry.getEntry();

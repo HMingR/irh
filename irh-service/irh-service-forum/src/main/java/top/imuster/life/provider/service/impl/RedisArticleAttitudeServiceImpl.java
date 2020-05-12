@@ -88,7 +88,6 @@ public class RedisArticleAttitudeServiceImpl implements RedisArticleAttitudeServ
         List<UpCountDto> list = new ArrayList<>();
         while (cursor.hasNext()){
             Map.Entry<Object, Object> map = cursor.next();
-            log.info("--->map中的信息为key:{}, value:{}", map.getKey(), map.getValue());
             String key = String.valueOf(map.getKey());
             String value = String.valueOf(map.getValue());
             if(key == null || value == null || StringUtils.isBlank(key) || StringUtils.isBlank(value)){

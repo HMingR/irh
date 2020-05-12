@@ -6,6 +6,19 @@ mybatis:
   type-aliases-package: top.imuster.order.api.pojo   #别名扫描
 
 spring:
+  redis:
+    database: 0
+    host: 39.105.0.169
+    port: 6379
+    jedis:
+      pool:
+        MaxWaitMillis: 100000
+        max-active: 100
+        max-idle: 20
+        min-idle: 10
+        max-wait: 5000
+    timeout: 10000
+    password: irh_aliyun_redis
   profiles:
     active: dev
   datasource:
@@ -26,13 +39,6 @@ spring:
     port: "@irh.rabbitmq.port@"
     username: "@irh.rabbitmq.username@"
     password: "@irh.rabbitmq.password@"
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:10086/eureka
-  instance:
-    lease-renewal-interval-in-seconds: 5        # 心跳时间
-    lease-expiration-duration-in-seconds: 15    # 过期时间
 
 debug:
   true
@@ -40,4 +46,4 @@ debug:
 logging:
   config: classpath:logback-spring.xml
   level:
-    top.imuster.order: debug
+    top.imuster.order.provider: debug

@@ -279,7 +279,7 @@
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browser_times = case" suffix="end,">
 				<foreach collection="update" item="item" index="index">
-					when id = #{item.id} then #{item.browserTimes}
+					when id = #{item.id} then browser_times + #{item.browserTimes}
 				</foreach>
 			</trim>
 		</trim>
@@ -294,6 +294,21 @@
 		FROM product_info
 		WHERE id = #{id,jdbcType=BIGINT}
 	</select>
+
+	<update id="updateCollectTotal" parameterType="top.imuster.goods.api.dto.GoodsForwardDto">
+		UPDATE product_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="collect_total = case" suffix="end,">
+				<foreach collection="list" item="item">
+					WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total + #{item.times,jdbcType=INTEGER}
+				</foreach>
+			</trim>
+			WHEN id IN
+			<foreach collection="list" item="item" separator="," open="(" close=")">
+				#{item.targetId,jdbcType=BIGINT}
+			</foreach>
+		</trim>
+	</update>
 
 	
 </mapper>

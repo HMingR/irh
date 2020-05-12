@@ -11,6 +11,7 @@ import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: UserServiceFeignApi
@@ -57,4 +58,24 @@ public interface UserServiceFeignApi {
      **/
     @GetMapping("/{userId}/{state}")
     Message<String> updateUserState(@PathVariable("userId") Long userId, @PathVariable("state") Integer state);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得用户的电话和地址
+     * @Date: 2020/5/9 14:53
+     * @param userId
+     * @reture: java.util.Map<java.lang.String,java.lang.String>
+     **/
+    @GetMapping("/addAndPhone/{userId}")
+    Map<String, String> getUserAddressAndPhoneById(@PathVariable("userId") Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得email
+     * @Date: 2020/5/9 15:48
+     * @param holderId
+     * @reture: java.lang.Long
+     **/
+    @GetMapping("/email/{id}")
+    String getUserEmailById(@PathVariable("id") Long holderId);
 }

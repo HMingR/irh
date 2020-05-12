@@ -32,7 +32,7 @@ public class QuartzConfig {
 
     @Bean
     public Trigger goodsBrowserTrigger(@Qualifier("goodsBrowserCollect") JobDetail goodsBrowserCollect){
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(180).repeatForever();
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(2).repeatForever();
         return TriggerBuilder.newTrigger()
                 .forJob(goodsBrowserCollect)
                 .withIdentity(GOODS_BROWSER_TASK)
@@ -44,7 +44,7 @@ public class QuartzConfig {
     public Trigger demandBrowserTrigger(@Qualifier("demandBrowserCollect") JobDetail demandBrowserCollect){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
                                                     .simpleSchedule()
-                                                    .withIntervalInMinutes(180)
+                                                    .withIntervalInMinutes(2)
                                                     .repeatForever();
         return TriggerBuilder.newTrigger()
                 .forJob(demandBrowserCollect)
@@ -52,7 +52,5 @@ public class QuartzConfig {
                 .withSchedule(scheduleBuilder)
                 .build();
     }
-
-
 
 }

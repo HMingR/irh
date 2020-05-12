@@ -1,19 +1,23 @@
-package top.imuster.life.provider.service.impl;
+package top.imuster.goods.service.impl;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.dao.ErrandInfoDao;
+import top.imuster.goods.service.ErrandInfoService;
 import top.imuster.life.api.pojo.ErrandInfo;
-import top.imuster.life.provider.dao.ErrandInfoDao;
-import top.imuster.life.provider.service.ErrandInfoService;
+import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ErrandInfoService 实现类
@@ -24,6 +28,9 @@ import java.util.List;
 public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> implements ErrandInfoService {
 
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private UserServiceFeignApi userServiceFeignApi;
 
     @Resource
     private ErrandInfoDao errandInfoDao;
@@ -82,6 +89,40 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         errandInfo.setId(id);
         errandInfo.setState(3);
         Integer temp = errandInfoDao.updateStateByIdAndVersion(errandInfo);
-        return temp != null;
+        return temp != 0;
+    }
+
+    @Override
+    public Message<String> release(ErrandInfo errandInfo, Long userId) {
+        String address = errandInfo.getAddress();
+        String phoneNum = errandInfo.getPhoneNum();
+        Map<String, String> res = null;
+        if(StringUtils.isEmpty(address) || StringUtils.isEmpty(phoneNum)){
+            res = userServiceFeignApi.getUserAddressAndPhoneById(userId);
+            if(res == null){
+                log.error("编号为{}的用户无法根据id获得自己的phone和address信息",userId);
+                return Message.createByError("服务器繁忙,请稍后重试");
+            }
+        }
+        if(StringUtils.isEmpty(address)){
+            String dbAddress = res.get("address");
+            if(StringUtils.isEmpty(dbAddress)) return Message.createByError("您没有默认的地址,请在个人中心中完善,或在提交时填写地址");
+            errandInfo.setAddress(dbAddress);
+        }
+        if(StringUtils.isEmpty(phoneNum)){
+            String dbPhoneNum = res.get("phoneNum");
+            if(StringUtils.isEmpty(dbPhoneNum)) return Message.createByError("您没有默认的电话号码,请在个人中心中完善,或在提交时填写电话");
+            errandInfo.setPhoneNum(dbPhoneNum);
+        }
+        errandInfo.setPublisherId(userId);
+        errandInfoDao.insertEntry(errandInfo);
+        return Message.createBySuccess();
+    }
+
+    @Override
+    public ErrandInfo getAddAndPhoneById(Long errandId) {
+        List<ErrandInfo> errandInfos = this.selectEntryList(errandId);
+        if(errandInfos == null || errandInfos.isEmpty()) return null;
+        return errandInfos.get(0);
     }
 }

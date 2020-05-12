@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.RecommendProductService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @ClassName: RecommendProductController
@@ -19,7 +22,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/recommend")
-public class RecommendProductController {
+public class RecommendController {
 
     @Resource
     RecommendProductService recommendProductService;
@@ -38,6 +41,19 @@ public class RecommendProductController {
                                                            @PathVariable("currentPage") Integer currentPage,
                                                            @PathVariable("userId") Long userId){
         return recommendProductService.getRecommendListByUserId(pageSize, currentPage, userId);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据text的内容推荐标签
+     * @Date: 2020/5/8 9:32
+     * @param text
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.Object>>
+     **/
+    @NeedLogin
+    @GetMapping("/tag/{text}")
+    public Message<List<Object>> recommendTagName(@PathVariable("text") String text) throws IOException {
+        return recommendProductService.recommendTagNames(text);
     }
 
 }

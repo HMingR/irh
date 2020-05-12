@@ -20,14 +20,33 @@
 
         <dependency>
             <groupId>top.imuster</groupId>
-            <artifactId>irh-service-forum-api</artifactId>
+            <artifactId>irh-service-order-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>top.imuster</groupId>
-            <artifactId>irh-service-order-api</artifactId>
+            <artifactId>irh-service-goods-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>top.imuster</groupId>
+            <artifactId>irh-service-user-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

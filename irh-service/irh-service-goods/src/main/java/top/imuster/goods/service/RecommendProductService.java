@@ -4,6 +4,9 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductInfo;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
  * @ClassName: RecommendProductService
  * @Description:
@@ -11,6 +14,15 @@ import top.imuster.goods.api.pojo.ProductInfo;
  * @date: 2020/5/1 14:03
  */
 public interface RecommendProductService {
+
+    /**
+     * @Author hmr
+     * @Description 根据内容分词
+     * @Date: 2020/5/7 20:22
+     * @param text
+     * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.String>>
+     **/
+    Message<List<Object>> recommendTagNames(String text) throws IOException;
 
     /**
      * @Author hmr

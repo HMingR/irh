@@ -71,4 +71,13 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @reture: top.imuster.common.core.dto.UserDto
      **/
     UserDto selectUserDtoById(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/9 14:56
+     * @param userId
+     * @reture: java.util.Map<java.lang.String,java.lang.String>
+     **/
+    Map<String, String> selectAddAndPhoneById(Long userId);
 }

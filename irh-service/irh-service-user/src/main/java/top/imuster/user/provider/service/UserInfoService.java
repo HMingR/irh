@@ -7,6 +7,8 @@ import top.imuster.common.core.dto.UserDto;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.UserInfo;
 
+import java.util.Map;
+
 /**
  * ConsumerInfoService接口
  * @author 黄明人
@@ -96,4 +98,13 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.core.dto.UserDto>
      **/
     Message<UserDto> getUserDtoByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/9 14:55
+     * @param userId
+     * @reture: java.util.Map<java.lang.String,java.lang.String>
+     **/
+    Map<String, String> getAddAndPhoneById(Long userId);
 }

@@ -15,7 +15,9 @@
             create_time AS createTime,
             finish_time AS finishTime,
             update_time AS updateTime,
-            state 
+            state,
+            address,
+            phone_num AS phoneNum
 		]]>
 	</sql>
 
@@ -35,6 +37,8 @@
             <if test="finishTime != null and finishTime != ''"><![CDATA[AND finish_time = #{finishTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
+            <if test="address != null and address != ''"><![CDATA[AND address = #{address}]]></if>
+            <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 2]]></if>
 		</where>
 	</sql>
@@ -57,6 +61,9 @@
 			<if test="finishTime != null"><![CDATA[finish_time = #{finishTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="address != null and address != ''"><![CDATA[AND address = #{address},]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum},]]></if>
+
 		</set>
 	</sql>
 
@@ -72,6 +79,8 @@
 			<if test="finishTime != null and finishTime != ''"><![CDATA[ finish_time ,]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ update_time ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
+			<if test="address != null and address != ''"><![CDATA[ address ,]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num ,]]></if>
 		</trim>
 	</sql>
 
@@ -87,6 +96,7 @@
 			<if test="finishTime != null and finishTime != ''"><![CDATA[#{finishTime} ,]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[#{updateTime} ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[   #{phoneNum} ,]]></if>
 		</trim>
 	</sql>
 

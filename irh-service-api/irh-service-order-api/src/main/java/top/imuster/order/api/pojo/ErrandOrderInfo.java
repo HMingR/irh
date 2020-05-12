@@ -57,6 +57,25 @@ public class ErrandOrderInfo extends BaseDomain {
 	// 1-取消订单  2-删除  3-未完成 4-已完成 5-下单失败  6-发布者删除  7-接单者删除
 //	private Short state;
 
+	private String address;
+
+	private String phoneNum;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhoneNum() {
+		return phoneNum;
+	}
+
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
 
 	public Integer getErrandVersion() {
 		return errandVersion;

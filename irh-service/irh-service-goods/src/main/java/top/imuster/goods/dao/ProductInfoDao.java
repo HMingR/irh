@@ -3,6 +3,7 @@ package top.imuster.goods.dao;
 
 import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
 import java.util.List;
@@ -79,4 +80,13 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: java.lang.Long
      **/
     Long selectUserIdByProductId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 更新收藏
+     * @Date: 2020/5/9 9:27
+     * @param list
+     * @reture: java.lang.Integer
+     **/
+    Integer updateCollectTotal(@Param("list") List<GoodsForwardDto> list);
 }

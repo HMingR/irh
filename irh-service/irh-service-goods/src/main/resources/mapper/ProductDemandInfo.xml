@@ -17,7 +17,8 @@
             main_pic AS mainPic,
             tag_names AS tagNames,
             browser_times AS browserTimes,
-            other_pics AS otherPics
+            other_pics AS otherPics,
+            collect_total AS collectTotal
 		]]>
 	</sql>
 
@@ -39,6 +40,7 @@
             <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
             <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
             <if test="otherPics != null and otherPics != ''"><![CDATA[AND other_pics = #{otherPics}]]></if>
+            <if test="collectTotal != null and collectTotal != ''"><![CDATA[AND collect_total = #{collectTotal}]]></if>
 		</where>
 	</sql>
 	
@@ -62,6 +64,7 @@
 			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
 			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
 			<if test="otherPics != null"><![CDATA[other_pics = #{otherPics},]]></if>
+			<if test="collectTotal != null"><![CDATA[collect_total = #{collectTotal},]]></if>
 		</set>
 	</sql>
 
@@ -78,6 +81,7 @@
 			<if test="mainPic != null and mainPic != ''"><![CDATA[ main_pic,]]></if>
 			<if test="tagNames != null and tagNames != ''"><![CDATA[ tag_names,]]></if>
 			<if test="otherPics != null and otherPics != ''"><![CDATA[ other_pics,]]></if>
+			<if test="collectTotal != null and collectTotal != ''"><![CDATA[ collect_total,]]></if>
 		</trim>
 	</sql>
 
@@ -94,6 +98,7 @@
 			<if test="mainPic != null and mainPic != ''"><![CDATA[  #{mainPic},]]></if>
 			<if test="tagNames != null and tagNames != ''"><![CDATA[  #{tagNames},]]></if>
 			<if test="otherPics != null and otherPics != ''"><![CDATA[  #{otherPics},]]></if>
+			<if test="collectTotal != null and collectTotal != ''"><![CDATA[  #{collectTotal},]]></if>
 		</trim>
 	</sql>
 
@@ -161,12 +166,12 @@
 	<!-- 其它SQL语句 -->
 
 	<update id="updateBrowserTimesByCondition" parameterType="list">
-		UPDATE
-		<include refid="QUERY_FROM_TABLE"/>
+		UPDATE product_demand_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browser_times = case" suffix="end,">
-				<foreach collection="update" item="item" index="index"></foreach>
-				WHEN id = #{item.id,jdbcType=BIGINT} then browser_times = browser_times + #{item.browserTimes}
+				<foreach collection="update" item="item" index="index">
+					WHEN id = #{item.id,jdbcType=BIGINT} then browser_times = browser_times + #{item.browserTimes}
+				</foreach>
 			</trim>
 		</trim>
 		where id IN
@@ -179,6 +184,21 @@
 		SELECT consumer_id FROM product_demand_info
 		WHERE id = #{id}
 	</select>
+
+	<update id="updateCollectTotal" parameterType="top.imuster.goods.api.dto.GoodsForwardDto">
+		UPDATE product_demand_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="collect_total = case" suffix="end,">
+				<foreach collection="target" item="item" index="index">
+					WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total = collect_total + #{item.times}
+				</foreach>
+			</trim>
+		</trim>
+		where id IN
+		<foreach collection="target" index="index" item="item" separator="," open="(" close=")">
+			#{item.targetId,jdbcType=BIGINT}
+		</foreach>
+	</update>
 
 
 </mapper>

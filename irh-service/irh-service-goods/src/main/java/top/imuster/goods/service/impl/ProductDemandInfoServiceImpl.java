@@ -13,6 +13,7 @@ import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.goods.api.dto.ESProductDto;
+import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductDemandInfoDao;
@@ -128,9 +129,12 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         return Message.createBySuccess();
     }
 
-    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
-    private void convertInfo(ESProductDto esDto){
-
+    @Override
+    public void updateDemandCollectTotal(List<GoodsForwardDto> list) {
+        productDemandInfoDao.updateCollectTotal(list);
     }
+
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
+    private void convertInfo(ESProductDto esDto){}
 
 }

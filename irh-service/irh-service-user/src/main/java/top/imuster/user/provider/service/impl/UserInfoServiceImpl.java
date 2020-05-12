@@ -22,6 +22,7 @@ import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * UserInfoService 实现类
@@ -142,11 +143,15 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     @Override
     public Message<UserDto> getUserDtoByUserId(Long userId) {
         UserDto userDto = userInfoDao.selectUserDtoById(userId);
-
         //没有找到,则直接返回用户id
         if(userDto == null) return Message.createBySuccess(new UserDto(userId));
         //此处把text设置成用户的昵称是为了适配前端
         return Message.createBySuccess(userDto.getNickname(), userDto);
+    }
+
+    @Override
+    public Map<String, String> getAddAndPhoneById(Long userId) {
+        return userInfoDao.selectAddAndPhoneById(userId);
     }
 
 }

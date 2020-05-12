@@ -42,9 +42,14 @@ public class NewsInfo extends BaseDomain {
 	@ApiModelProperty("根据news_type指向不同表的id")
 	private Long targetId;
 
+
+	//一般用于折叠回复的消息
+	private Long resourceId;
+
+	private Integer repeatTotal;
+
 	// 10:删除  20:已读  30:未读
 	//private Short state;
-
 
 	@Override
 	public String toString() {
@@ -56,6 +61,22 @@ public class NewsInfo extends BaseDomain {
 				", newsType=" + newsType +
 				", targetId=" + targetId +
 				'}';
+	}
+
+	public Integer getRepeatTotal() {
+		return repeatTotal;
+	}
+
+	public void setRepeatTotal(Integer repeatTotal) {
+		this.repeatTotal = repeatTotal;
+	}
+
+	public Long getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(Long resourceId) {
+		this.resourceId = resourceId;
 	}
 
 	public Integer getNewsType() {

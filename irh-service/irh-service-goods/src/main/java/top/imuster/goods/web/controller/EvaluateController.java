@@ -2,8 +2,6 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -13,6 +11,7 @@ import top.imuster.goods.api.pojo.ProductEvaluateInfo;
 import top.imuster.goods.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: EvaluateController
@@ -55,14 +54,16 @@ public class EvaluateController extends BaseController {
      * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductEvaluateInfo>>
      **/
+    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}/{type}")
     public Message<Page<ProductEvaluateInfo>> getList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        if(type != 1 && type != 2) return Message.createByError();
         Long userId = getCurrentUserIdFromCookie();
         return productEvaluateInfoService.getListByUserId(pageSize, currentPage, userId, type);
     }
 
     @GetMapping("/{pageSize}/{currentPage}/{userId}")
-    public Message<Page<ProductEvaluateInfo>> listBuUserId(@PathVariable("type") Integer type,
+    public Message<Page<ProductEvaluateInfo>> listByUserId(@PathVariable("type") Integer type,
                                                            @PathVariable("pageSize") Integer pageSize,
                                                            @PathVariable("userId") Long userId,
                                                            @PathVariable("currentPage") Integer currentPage){
@@ -84,8 +85,18 @@ public class EvaluateController extends BaseController {
     @ApiOperation("根据id查询该评价的内容")
     @GetMapping("/{id}")
     public Message getEvaluateById(@PathVariable("id") Long id){
-        ProductEvaluateInfo productEvaluateInfo = productEvaluateInfoService.selectEntryList(id).get(0);
-        return Message.createBySuccess(productEvaluateInfo);
+        List<ProductEvaluateInfo> lists = productEvaluateInfoService.selectEntryList(id);
+        if(lists == null || lists.isEmpty()) return Message.createBySuccess();
+        return Message.createBySuccess(lists.get(0));
+    }
+
+    @GetMapping("/byOrderId/{orderId}")
+    public Message<ProductEvaluateInfo> getInfoByOrderId(@PathVariable("orderId") Long orderId){
+        ProductEvaluateInfo condition = new ProductEvaluateInfo();
+        condition.setOrderId(orderId);
+        List<ProductEvaluateInfo> infos = productEvaluateInfoService.selectEntryList(condition);
+        if(infos == null || infos.isEmpty()) return Message.createBySuccess();
+        return Message.createBySuccess(infos.get(0));
     }
 
 }

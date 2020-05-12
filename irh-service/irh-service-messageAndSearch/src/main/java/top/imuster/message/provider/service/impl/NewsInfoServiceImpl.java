@@ -3,20 +3,22 @@ package top.imuster.message.provider.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.message.pojo.NewsInfo;
 import top.imuster.message.provider.dao.NewsInfoDao;
 import top.imuster.message.provider.service.NewsInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * NewsInfoService 实现类
@@ -39,16 +41,49 @@ public class NewsInfoServiceImpl extends BaseServiceImpl<NewsInfo, Long> impleme
     }
 
     @Override
-    public void writeFromMq(@ApiParam SendUserCenterDto sendMessageDto) throws JsonProcessingException {
+    public void writeFromMq(SendUserCenterDto sendMessageDto) throws JsonProcessingException {
         boolean flag = checkMessage(sendMessageDto);
         if(!flag) return;
         NewsInfo newsInfo = new NewsInfo();
         newsInfo.setContent(sendMessageDto.getContent());
         newsInfo.setSenderId(sendMessageDto.getFromId());
         newsInfo.setReceiverId(sendMessageDto.getToId());
-        newsInfo.setTargetId(sendMessageDto.getResourceId());
+        newsInfo.setTargetId(sendMessageDto.getTargetId());
+        newsInfo.setResourceId(sendMessageDto.getResourceId());
         newsInfo.setNewsType(sendMessageDto.getNewsType());
         newsInfoDao.insertEntry(newsInfo);
+    }
+
+    @Override
+    public Message<Page<NewsInfo>> getAtMeMessage(Long userId, Integer pageSize, Integer currentPage) {
+        NewsInfo newsInfo = new NewsInfo();
+        newsInfo.setReceiverId(userId);
+        newsInfo.setState(30);
+        newsInfo.setStartIndex(pageSize < 1? 10 : pageSize);
+        newsInfo.setEndIndex((currentPage < 1 ? 1 : currentPage) * pageSize);
+        Integer totalCount = newsInfoDao.selectAtMeTotal(newsInfo);
+        List<NewsInfo> res = newsInfoDao.selectAtMeMessage(newsInfo);
+        Page<NewsInfo> page = new Page<>();
+        page.setData(res);
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
+        page.setTotalCount(totalCount);
+        return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Message<String> updateMessageState(Long id, Integer type, Long currentUserId) {
+        Long userId = newsInfoDao.selectReceiverIdById(id);
+        if(userId == null) return Message.createByError("操作失败,没有找到相关的消息,请刷新后重试");
+        if(!userId.equals(currentUserId)){
+            log.error("----->用户id为{}的用户试图删除不属于自己的消息,消息id为{}", currentUserId, id);
+            return Message.createByError("惭怍失败,该操作属于非法操作,我们已经记录下您当前的操作,请刷新后重试");
+        }
+        NewsInfo newsInfo = new NewsInfo();
+        newsInfo.setId(id);
+        newsInfo.setState(type);
+        newsInfoDao.updateByKey(newsInfo);
+        return Message.createBySuccess();
     }
 
     /**

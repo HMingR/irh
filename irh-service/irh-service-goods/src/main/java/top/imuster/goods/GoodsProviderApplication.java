@@ -17,7 +17,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableDiscoveryClient
 @EnableMongoRepositories
 @EnableFeignClients(basePackages = {"top.imuster.order.api.service",
-                                    "top.imuster.file.api.service"})
+                                    "top.imuster.file.api.service",
+                                    "top.imuster.user.api.service"})
 @ComponentScan(basePackages = {
         "top.imuster.common.core",
         "top.imuster"})

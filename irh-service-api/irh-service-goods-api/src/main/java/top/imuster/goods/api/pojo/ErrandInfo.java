@@ -45,9 +45,32 @@ public class ErrandInfo extends BaseDomain {
 
 	private Integer version;
 
+	//送货地址
+	private String address;
+
+
+	//接收方电话
+	private String phoneNum;
+
 	// 1-删除 2-有效 3-已被接单
 //	private Short state;
 
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhoneNum() {
+		return phoneNum;
+	}
+
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
 
 	public Integer getVersion() {
 		return version;

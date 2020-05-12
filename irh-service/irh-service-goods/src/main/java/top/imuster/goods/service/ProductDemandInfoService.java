@@ -5,6 +5,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
+import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 
 import java.util.List;
@@ -51,8 +52,10 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @Description 用户发布
      * @Date: 2020/5/6 12:02
      * @param productDemandInfo
-     * @param userId
+     * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> releaseDemand(ProductDemandInfo productDemandInfo, Long userId);
+
+    void updateDemandCollectTotal(List<GoodsForwardDto> list);
 }

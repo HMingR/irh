@@ -78,17 +78,6 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
                 log.error("管理员根据类型查看用户id失败");
                 return null;
             }
-
-            @Override
-            public boolean updateErrandInfoById(Long id, Integer errandVersion) {
-                log.error("更新ErrandInfo失败,id为{}", id);
-                return false;
-            }
-
-            @Override
-            public boolean errandIsAvailable(Long errandId, Integer errandVersion) {
-                return false;
-            }
         };
     }
 }

@@ -10,6 +10,7 @@ import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: UserServiceFeignHystrix
@@ -49,6 +50,16 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
 
             @Override
             public Message<String> updateUserState(Long userId, Integer state) {
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getUserAddressAndPhoneById(Long userId) {
+                return null;
+            }
+
+            @Override
+            public String getUserEmailById(Long holderId) {
                 return null;
             }
         };

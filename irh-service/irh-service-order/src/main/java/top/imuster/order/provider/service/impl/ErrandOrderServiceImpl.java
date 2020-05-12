@@ -17,12 +17,14 @@ import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.UuidUtils;
+import top.imuster.goods.api.service.GoodsServiceFeignApi;
+import top.imuster.life.api.pojo.ErrandInfo;
 import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.dao.ErrandOrderDao;
-import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * ErrandOrderService 实现类
@@ -43,6 +45,10 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    GoodsServiceFeignApi goodsServiceFeignApi;
+
 
     @Override
     public BaseDao<ErrandOrderInfo, Long> getDao() {
@@ -72,17 +78,28 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
-    public String receiveOrder(Long id, Integer version, Long userId) throws JsonProcessingException {
-        checkFromRedisById(id);
+    public Message<String> receiveOrder(Long id, Integer version, Long userId) throws JsonProcessingException {
+        boolean flag = redisTemplate.opsForHash().hasKey(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(id));
+        if(flag) return Message.createByError("订单已经被抢走了,请刷新后重新选择其他的");
+        ErrandInfo errandInfo = goodsServiceFeignApi.getErrandInfoById(id);
+
+        if(errandInfo == null) return Message.createByError("没有找到相关的跑腿信息,请刷新后重试");
+
         ErrandOrderInfo errandOrderInfo = new ErrandOrderInfo();
+
         String orderCode = String.valueOf(UuidUtils.nextId());
+        errandOrderInfo.setPayMoney(errandInfo.getMoney());
         errandOrderInfo.setHolderId(userId);
         errandOrderInfo.setErrandId(id);
+        errandOrderInfo.setPublisherId(errandInfo.getPublisherId());
         errandOrderInfo.setOrderCode(orderCode);
         errandOrderInfo.setErrandVersion(version);
+        errandOrderInfo.setAddress(errandInfo.getAddress());
+        errandOrderInfo.setPhoneNum(errandInfo.getPhoneNum());
+
         String value = new ObjectMapper().writeValueAsString(errandOrderInfo);
         rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, MqTypeEnum.ERRAND.getRoutingKey(), value);
-        return orderCode;
+        return Message.createBySuccess(orderCode);
     }
 
     @Override
@@ -102,21 +119,16 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
-    public boolean acceptErrand(ErrandOrderInfo order) {
+    public ErrandOrderInfo acceptErrand(ErrandOrderInfo order) {
         errandOrderDao.insertEntry(order);
-        return order.getId() != null;
+        return order;
     }
 
-
-    /**
-     * @Author hmr
-     * @Description 从redis中查看当前的跑腿是否已经被接单
-     * @Date: 2020/2/12 11:39
-     * @param id
-     * @reture: void
-     **/
-    private void checkFromRedisById(Long id){
-        Boolean flag = redisTemplate.opsForHash().hasKey(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(id));
-        if(flag) throw new OrderException("下单失败,该订单已经被抢走了");
+    @Override
+    public Message<ErrandOrderInfo> getOrderInfoById(Long id) {
+        List<ErrandOrderInfo> res = this.selectEntryList(id);
+        if(res == null || res.isEmpty()) return Message.createBySuccess("未找到相关订单,请刷新后重试");
+        ErrandOrderInfo orderInfo = res.get(0);
+        return Message.createBySuccess(orderInfo);
     }
 }

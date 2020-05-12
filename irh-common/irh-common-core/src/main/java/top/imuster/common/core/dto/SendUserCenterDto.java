@@ -25,11 +25,22 @@ public class SendUserCenterDto extends Send2MQ  implements Serializable {
     //内容
     private String content;
 
-    //目标id
+    //目标id(比如留言，那么该值标识新的留言记录)
     private Long resourceId;
+
+    //源id(比如留言，如果是一级留言的话那么标识商品的信息，如果是二级留言，则标识parentId的值；指的是原来在数据库中的；一般用于回复)
+    private Long targetId;
 
     //消息类型  10-商城留言  20-论坛留言  30-跑腿订单通知  40-商城订单通知 50-商城公益基金 60-商城评价  60-其他系统通知
     private Integer newsType;
+
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
+    }
 
     public SendUserCenterDto(){
         this.setType(MqTypeEnum.CENTER);

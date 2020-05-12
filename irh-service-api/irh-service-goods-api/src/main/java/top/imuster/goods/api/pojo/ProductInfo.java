@@ -92,8 +92,18 @@ public class ProductInfo extends BaseDomain {
 	//浏览时间
 	private String browseDate;
 
+	private Integer collectTotal;
+
 	//state 1-无效 2-有效 3-锁定
 
+
+	public Integer getCollectTotal() {
+		return collectTotal;
+	}
+
+	public void setCollectTotal(Integer collectTotal) {
+		this.collectTotal = collectTotal;
+	}
 
 	public String getBrowseDate() {
 		return browseDate;

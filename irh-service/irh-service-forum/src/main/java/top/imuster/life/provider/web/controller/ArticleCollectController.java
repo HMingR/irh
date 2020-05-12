@@ -51,7 +51,7 @@ public class ArticleCollectController extends BaseController {
         return articleCollectionService.unCollect(id);
     }
 
-    @ApiOperation(("用户分页查看自己的收藏列表，不需要条件,按照点赞时间降序排列"))
+    @ApiOperation(("用户分页查看自己的收藏列表，不需要条件,按照时间降序排列"))
     @PostMapping
     public Message<Page<ArticleCollectionRel>> collectList(Page<ArticleCollectionRel> page){
         return articleCollectionService.collectList(page, getCurrentUserIdFromCookie());

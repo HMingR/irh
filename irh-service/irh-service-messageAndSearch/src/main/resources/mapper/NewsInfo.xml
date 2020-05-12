@@ -14,7 +14,8 @@
             state,
             update_time AS updateTime,
             sender_id AS senderId,
-            target_id AS targetId
+            target_id AS targetId,
+            resource_id AS resourceId
 		]]>
 	</sql>
 
@@ -33,6 +34,7 @@
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="senderId != null and senderId != ''"><![CDATA[AND sender_id = #{senderId}]]></if>
             <if test="targetId != null and targetId != ''"><![CDATA[AND target_id = #{targetId}]]></if>
+            <if test="resourceId != null and resourceId != ''"><![CDATA[AND resource_id = #{resourceId}]]></if>
 		</where>
 	</sql>
 	
@@ -53,6 +55,7 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="senderId != null"><![CDATA[sender_id = #{senderId},]]></if>
 			<if test="targetId != null"><![CDATA[target_id = #{targetId},]]></if>
+			<if test="resourceId != null"><![CDATA[resource_id = #{resourceId},]]></if>
 		</set>
 	</sql>
 
@@ -67,6 +70,7 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time,]]></if>
 			<if test="senderId != null and senderId != ''"><![CDATA[  sender_id,]]></if>
 			<if test="targetId != null and targetId != ''"><![CDATA[  target_id,]]></if>
+			<if test="resourceId != null and resourceId != ''"><![CDATA[  resource_id,]]></if>
 		</trim>
 	</sql>
 
@@ -81,6 +85,7 @@
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
 			<if test="senderId != null and senderId != ''"><![CDATA[ #{senderId},]]></if>
 			<if test="targetId != null and targetId != ''"><![CDATA[ #{targetId},]]></if>
+			<if test="resourceId != null and resourceId != ''"><![CDATA[ #{resourceId},]]></if>
 		</trim>
 	</sql>
 
@@ -146,5 +151,27 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-	
+	<select id="selectAtMeMessage" parameterType="newsInfo" resultType="newsInfo">
+		<![CDATA[SELECT COUNT(1) AS repeatTotal,]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE receiver_id = #{receiverId} AND state = #{state,jdbcType=INTEGER} AND news_type IN (10, 20, 60)
+		ORDER BY resource_id LIMIT #{startIndex}, #{endIndex}
+	</select>
+
+	<select id="selectAtMeTotal" parameterType="newsInfo" resultType="int">
+		SELECT
+			COUNT( DISTINCT resource_id )
+		FROM
+			news_info
+		WHERE
+			receiver_id = #{receiverId,jdbcType=BIGINT}
+			AND state != 10
+	</select>
+
+	<select id="selectReceiverIdById" parameterType="long" resultType="long">
+		<![CDATA[SELECT receiver_id]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</select>
 </mapper>
