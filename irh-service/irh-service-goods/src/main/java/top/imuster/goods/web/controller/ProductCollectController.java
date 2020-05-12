@@ -36,6 +36,9 @@ public class ProductCollectController extends BaseController {
     public Message<String> collect(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         if(type != 1 && type != 2) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
+        //埋点日志 userId|productId|score
+        log.info("埋点日志=>用户收藏商品");
+        log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + id + "|"+ "4" );    //收藏商品得4分
         return productCollectRelService.collect(userId, type, id);
     }
 

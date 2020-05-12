@@ -42,6 +42,9 @@ public class ArticleCollectController extends BaseController {
     @GetMapping("/{id}")
     public Message<String> collection(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();
+        //埋点日志 userId|productId|score
+        log.info("埋点日志=>用户收藏文章");
+        log.info("ARTICLE_RATING_PREFIX" + ":" + userId + "|" + id + "|"+ "4" );    //收藏文章得4分
         return articleCollectionService.collect(userId, id);
     }
 
