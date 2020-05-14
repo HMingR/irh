@@ -76,4 +76,14 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ErrandOrderInfo>>
      **/
     Message<Page<ErrandOrderInfo>> list(Integer pageSize, Integer currentPage, Integer type, Integer state, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 发布者完成订单
+     * @Date: 2020/5/13 19:48
+     * @param userId
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> finishOrder(Long userId, Long id);
 }

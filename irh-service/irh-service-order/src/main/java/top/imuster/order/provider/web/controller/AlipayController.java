@@ -4,10 +4,7 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
@@ -43,11 +40,11 @@ public class AlipayController extends BaseController {
      **/
     @NeedLogin
     @ApiOperation("提交订单准备预下单,返回一个支付宝网站,需要解析里面的地址生成二维码")
-    @PostMapping("/perPayment")
-    public Message prePayment(@RequestBody /*@Validated(ValidateGroup.prePayment.class)*/ OrderInfo orderInfo, BindingResult bindingResult) throws OrderException {
+    @GetMapping("/perPayment/{orderCode}")
+    public Message<String> prePayment(@RequestParam("orderCode") String orderCode, BindingResult bindingResult) throws OrderException {
       //  validData(bindingResult);
         try{
-            AlipayTradePrecreateResponse alipayResponse = alipayService.alipayF2F(orderInfo);
+            AlipayTradePrecreateResponse alipayResponse = alipayService.alipayF2F(orderCode);
             return Message.createBySuccess(alipayResponse.getQrCode());
         }catch (Exception e){
             throw new OrderException(e.getMessage());

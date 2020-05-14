@@ -35,7 +35,7 @@ management:
     enabled: false
 
 baidu:    # 调用百度AI的accessToken
-  accessToken: 24.d3d15caaab162df7a0405664a9ae7091.2592000.1587978125.282335-19129665    # access token
+  accessToken: 24.54d8034729e43e77dd2c3b0d7e947236.2592000.1591933911.282335-19129665    # access token
   templateSign: 86a4cc9321bfc4fa106ba2a6d374ce56    # 识别一卡通的模板id
   bdRecogniseUrl: https://aip.baidubce.com/rest/2.0/solution/v1/iocr/recognise
 
@@ -52,6 +52,9 @@ ribbon:
   ConnectTimeout: 5000  #请求连接的超时时间
   ReadTimeout: 6000 #请求处理的超时时间
 
+
+file:
+  urlPrefix: http://39.105.0.169:8080/
 
 secure:
   ignored:

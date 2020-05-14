@@ -4,52 +4,6 @@
 <mapper namespace="top.imuster.goods.dao.ProductInfoDao">
 
 	<!-- product_info 所有查询列 -->
-	<sql id="Base_Column_List">
-	id,
-	title,
-	main_pic_url,
-	unit,
-	original_price,
-	sale_price,
-	old_degree,
-	product_desc,
-	product_details_page,
-	trade_type,
-	category_id,
-	new_category_id,
-	consumer_id,
-	browser_times,
-	tag_names,
-	other_img_url,
-	create_time,
-	update_time,
-	`state`,
-	search_start_time,
-	search_end_time
-</sql>
-	<resultMap id="BaseResultMap" type="top.imuster.goods.api.pojo.ProductInfo">
-		<result column="id" property="id"/>
-		<result column="title" property="title"/>
-		<result column="main_pic_url" property="mainPicUrl"/>
-		<result column="unit" property="unit"/>
-		<result column="original_price" property="originalPrice"/>
-		<result column="sale_price" property="salePrice"/>
-		<result column="old_degree" property="oldDegree"/>
-		<result column="product_desc" property="productDesc"/>
-		<result column="product_details_page" property="productDetailsPage"/>
-		<result column="trade_type" property="tradeType"/>
-		<result column="category_id" property="categoryId"/>
-		<result column="new_category_id" property="newCategoryId"/>
-		<result column="consumer_id" property="consumerId"/>
-		<result column="browser_times" property="browserTimes"/>
-		<result column="tag_names" property="tagNames"/>
-		<result column="other_img_url" property="otherImgUrl"/>
-		<result column="create_time" property="createTime"/>
-		<result column="update_time" property="updateTime"/>
-		<result column="state" property="state"/>
-		<result column="search_start_time" property="searchStartTime"/>
-		<result column="search_end_time" property="searchEndTime"/>
-	</resultMap>
 	<sql id="QUERY_COLUMN_LIST">
 		<![CDATA[
             id,
@@ -68,7 +22,8 @@
             state AS state,
             consumer_id AS consumerId,
             tag_names AS tagNames,
-            browser_times AS browserTimes
+            browser_times AS browserTimes,
+            collect_total AS collectTotal
 		]]>
 	</sql>
 
@@ -257,7 +212,8 @@
 					tag_names AS tagNames,
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
-					consumer_id AS consumerId ]]>
+					consumer_id AS consumerId,
+					collect_total AS collectTotal]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>
@@ -296,18 +252,18 @@
 	</select>
 
 	<update id="updateCollectTotal" parameterType="top.imuster.goods.api.dto.GoodsForwardDto">
-		UPDATE product_info
+		update product_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="collect_total = case" suffix="end,">
-				<foreach collection="list" item="item">
-					WHEN id = #{item.targetId,jdbcType=BIGINT} then collect_total + #{item.times,jdbcType=INTEGER}
+				<foreach collection="list" item="item" index="index">
+					when id = #{item.targetId,jdbcType=BIGINT} then collect_total + #{item.times,jdbcType=INTEGER}
 				</foreach>
 			</trim>
-			WHEN id IN
-			<foreach collection="list" item="item" separator="," open="(" close=")">
-				#{item.targetId,jdbcType=BIGINT}
-			</foreach>
 		</trim>
+		WHERE id IN
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+			#{item.targetId,jdbcType=BIGINT,jdbcType=BIGINT}
+		</foreach>
 	</update>
 
 	<update id="lockProductById" parameterType="long">

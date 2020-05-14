@@ -62,7 +62,7 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
-            public boolean updateErrandInfoById(Long id, Integer errandVersion) {
+            public boolean updateErrandInfoById(Long id, Integer errandVersion, Integer state) {
                 return false;
             }
 
@@ -84,6 +84,11 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             @Override
             public boolean updateProductState(Long productId, Integer state) {
                 return false;
+            }
+
+            @Override
+            public Integer getErrandVersionById(Long errandId) {
+                return null;
             }
         };
     }

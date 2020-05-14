@@ -41,7 +41,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
-    public Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId) {
+    public Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId, Integer state) {
         Page<ErrandInfo> page = new Page<>();
         ErrandInfo condition = new ErrandInfo();
         condition.setPublisherId(userId);
@@ -49,6 +49,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         condition.setEndIndex(pageSize);
         condition.setOrderField("create_time");
         condition.setOrderFieldType("DESC");
+        condition.setState(state);
         List<ErrandInfo> errandInfos = errandInfoDao.selectList(condition);
         Integer count = errandInfoDao.selectListCountByUserId(userId);
         page.setTotalCount(count);
@@ -85,11 +86,11 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
-    public boolean updateStateByIdAndVersion(Long id, Integer errandVersion) {
+    public boolean updateStateByIdAndVersion(Long id, Integer errandVersion, Integer state) {
         ErrandInfo errandInfo = new ErrandInfo();
         errandInfo.setVersion(errandVersion);
         errandInfo.setId(id);
-        errandInfo.setState(3);
+        errandInfo.setState(state);
         Integer temp = errandInfoDao.updateStateByIdAndVersion(errandInfo);
         return temp != 0;
     }
@@ -147,6 +148,13 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         page.setTotalCount(count);
 
         return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Integer getErrandVersionById(Long errandId) {
+        List<ErrandInfo> errandInfos = this.selectEntryList(errandId);
+        if(errandInfos == null || errandInfos.isEmpty()) return null;
+        return errandInfos.get(0).getVersion();
     }
 
 }

@@ -17,7 +17,8 @@
             update_time AS updateTime,
             state,
             address,
-            phone_num AS phoneNum
+            phone_num AS phoneNum,
+            version AS errandVersion
 		]]>
 	</sql>
 
@@ -61,8 +62,9 @@
 			<if test="finishTime != null"><![CDATA[finish_time = #{finishTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
-			<if test="address != null and address != ''"><![CDATA[AND address = #{address},]]></if>
-			<if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum},]]></if>
+			<if test="address != null and address != ''"><![CDATA[ address = #{address},]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num = #{phoneNum},]]></if>
+			version = version + 1
 		</set>
 	</sql>
 

@@ -15,7 +15,6 @@
             qq,
             gender,
             phone_num AS phoneNum,
-            dorm_num AS dormNum,
             real_name AS realName,
             certificate_num AS certificateNum,
             school_name AS schoolName,
@@ -46,7 +45,6 @@
             <if test="qq != null and qq != ''"><![CDATA[AND qq = #{qq}]]></if>
             <if test="gender != null and gender != ''"><![CDATA[AND gender = #{gender}]]></if>
             <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
-            <if test="dormNum != null and dormNum != ''"><![CDATA[AND dorm_num = #{dormNum}]]></if>
             <if test="realName != null and realName != ''"><![CDATA[AND real_name like "%"#{realName}"%"]]></if>
             <if test="certificateNum != null and certificateNum != ''"><![CDATA[AND certificate_num = #{certificateNum}]]></if>
             <if test="schoolName != null and schoolName != ''"><![CDATA[AND school_name = #{schoolName}]]></if>
@@ -82,7 +80,6 @@
 			<if test="qq != null"><![CDATA[qq = #{qq},]]></if>
 			<if test="gender != null"><![CDATA[gender = #{gender},]]></if>
 			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
-			<if test="dormNum != null"><![CDATA[dorm_num = #{dormNum},]]></if>
 			<if test="realName != null"><![CDATA[real_name = #{realName},]]></if>
 			<if test="certificateNum != null"><![CDATA[certificate_num = #{certificateNum},]]></if>
 			<if test="schoolName != null"><![CDATA[school_name = #{schoolName},]]></if>
@@ -112,8 +109,7 @@
                 qq, 
                 gender, 
                 phone_num, 
-                dorm_num,
-                real_name, 
+                real_name,
                 certificate_num, 
                 school_name, 
                 academy_name, 
@@ -137,8 +133,7 @@
                 #{qq}, 
                 #{gender}, 
                 #{phoneNum}, 
-                #{dormNum},
-                #{realName}, 
+                #{realName},
                 #{certificateNum}, 
                 #{schoolName}, 
                 #{academyName}, 

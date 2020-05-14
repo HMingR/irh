@@ -32,11 +32,11 @@ public class RedisOperateServiceImpl implements RedisOperateService {
         List<GoodsForwardDto> list = new ArrayList<>();
         while (cursor.hasNext()){
             Map.Entry<Object, Object> map = cursor.next();
-            Long key = (Long)map.getKey();
+            Long key = Long.parseLong(String.valueOf(map.getKey()));
             GoodsForwardDto dto = new GoodsForwardDto(key, Integer.parseInt(String.valueOf(map.getValue())));
             list.add(dto);
             //从Redis中删除这条记录
-            redisTemplate.opsForHash().delete(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, key);
+            redisTemplate.opsForHash().delete(GlobalConstant.IRH_FORUM_FORWARD_TIMES_MAP, String.valueOf(key));
         }
         return list;
     }

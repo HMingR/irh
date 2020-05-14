@@ -3,6 +3,7 @@ package top.imuster.user.provider.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -104,8 +105,9 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "根据用户id获得用户基本信息", httpMethod = "GET")
     @GetMapping("/{id}")
-    public Message<UserDto> getUserNameById(@PathVariable("id") Long id){
-        return userInfoService.getUserDtoByUserId(id);
+    public Message<UserDto> getUserNameById(@PathVariable("id") String id){
+        if(id == null || StringUtils.isEmpty(id) || "null".equals(id)) return Message.createByError("参数错误");
+        return userInfoService.getUserDtoByUserId(Long.parseLong(id));
     }
 
     @ApiOperation("查看用户账号的状态")

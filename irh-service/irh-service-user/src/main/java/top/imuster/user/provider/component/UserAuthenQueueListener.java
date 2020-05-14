@@ -32,7 +32,7 @@ public class UserAuthenQueueListener {
             SendAuthenRecordDto recordDto = objectMapper.readValue(msg, SendAuthenRecordDto.class);
             userAuthenRecordInfoService.writeFromMQ2DB(recordDto);
         }catch (Exception e){
-            log.error("------>无法将认证服务器发送到MQ中的数据序列化成对象,MQ中的数据为{}", msg);
+            log.error("------>无法将认证服务器发送到MQ中的数据序列化成对象,MQ中的数据为{},{}", msg, e.getStackTrace());
         }
     }
 

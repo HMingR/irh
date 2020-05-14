@@ -29,6 +29,7 @@ import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
@@ -92,9 +93,11 @@ public class AlipayServiceImpl implements AlipayService {
 
 
     @Override
-    public AlipayTradePrecreateResponse alipayF2F(OrderInfo orderInfo) throws OrderException {
-        //唯一的订单编号
-        String orderCode = orderInfo.getOrderCode();
+    public AlipayTradePrecreateResponse alipayF2F(String orderCode) throws OrderException {
+        Long productId = (Long) redisTemplate.opsForValue().get(RedisUtil.getOrderCodeExpireKey(orderCode));
+        if(productId == null) throw new OrderException("订单不存在或订单超时,请重新生成订单");
+        OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderCode(orderCode);
+
         //订单标题
         String subject = "irh校园智慧服务平台";
         String paymentMoney = orderInfo.getPaymentMoney();
@@ -111,7 +114,10 @@ public class AlipayServiceImpl implements AlipayService {
 
         //商品详情
         List<GoodsDetail> productInfos = new ArrayList<>();
-        //todo 通过Feign向goods模块发送请求,查询商品的详情,还需要通知卖家
+        ProductInfo productInfo = goodsServiceFeignApi.getProductBriefInfoById(productId);
+        GoodsDetail goodsDetail = getGoodsDetail(productInfo);
+        productInfos.add(goodsDetail);
+
 
         AlipayTradePrecreateRequestBuilder builder = new AlipayTradePrecreateRequestBuilder()
                 .setSubject(subject).setTotalAmount(paymentMoney).setOutTradeNo(orderCode)
@@ -145,6 +151,15 @@ public class AlipayServiceImpl implements AlipayService {
                 log.error("不支持的交易状态，交易返回异常!!!");
                 throw new OrderException("不支持的交易状态，交易返回异常");
         }
+    }
+
+
+    private GoodsDetail getGoodsDetail(ProductInfo productInfo){
+        GoodsDetail goodsDetail = new GoodsDetail();
+        goodsDetail.setGoodsName(productInfo.getTitle());
+        goodsDetail.setGoodsId(String.valueOf(productInfo.getId()));
+        goodsDetail.setPrice(Long.parseLong(productInfo.getSalePrice()));
+        return goodsDetail;
     }
 
     @SneakyThrows

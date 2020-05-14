@@ -45,12 +45,24 @@ public class ErrandController extends BaseController {
         return errandInfoService.deleteErrandById(id, getCurrentUserIdFromCookie(), version);
     }
 
+    /**
+     * @Author hmr
+     * @Description 查看和自己有关的跑腿
+     * @Date: 2020/5/13 18:08
+     * @param stae 2-还没有被接单的  3-已经被接单   4-已完成
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ErrandInfo>>
+     **/
     @ApiOperation("查看自己发布的跑腿服务")
-    @GetMapping("/list/{pageSize}/{currentPage}")
+    @GetMapping("/list/{pageSize}/{currentPage}/{state}")
     @NeedLogin
-    public Message<Page<ErrandInfo>> list(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+    public Message<Page<ErrandInfo>> list(@PathVariable("pageSize") Integer pageSize,
+                                          @PathVariable("currentPage") Integer currentPage,
+                                          @PathVariable("state") Integer state){
+        if((state != 2 && state != 3 && state != 4) || pageSize < 1 || currentPage < 1) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
-        return errandInfoService.getListByCondition(pageSize, currentPage, userId);
+        return errandInfoService.getListByCondition(pageSize, currentPage, userId, state);
     }
 
     /**

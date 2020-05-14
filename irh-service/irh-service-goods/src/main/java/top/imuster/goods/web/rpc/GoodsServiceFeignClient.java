@@ -109,9 +109,9 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     }
 
     @Override
-    @GetMapping("/errand/{id}/{version}")
-    public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion) {
-        return errandInfoService.updateStateByIdAndVersion(id, errandVersion);
+    @GetMapping("/errand/{id}/{version}/{state}")
+    public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion, @PathVariable("state") Integer state) {
+        return errandInfoService.updateStateByIdAndVersion(id, errandVersion, state);
     }
 
     @Override
@@ -136,5 +136,11 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @GetMapping("/es/state/{targetId}/{state}")
     public boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state) {
         return productInfoService.updateProductStateById(productId, state);
+    }
+
+    @Override
+    @GetMapping("/errand/version/{id}")
+    public Integer getErrandVersionById(@PathVariable("id") Long errandId) {
+        return errandInfoService.getErrandVersionById(errandId);
     }
 }

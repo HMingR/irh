@@ -19,9 +19,41 @@ public class SendAuthenRecordDto extends Send2MQ implements Serializable {
 
     private String inputName;
 
+    private String inputNum;
+
+    private Integer result;
+
+    //认证类型  1-一卡通  2-身份证
+    private Integer authenType;
+
     public SendAuthenRecordDto(){
         super.setType(MqTypeEnum.AUTHEN_RECORD);
     }
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
+
+    public Integer getAuthenType() {
+        return authenType;
+    }
+
+    public void setAuthenType(Integer authenType) {
+        this.authenType = authenType;
+    }
+
+    public String getInputNum() {
+        return inputNum;
+    }
+
+    public void setInputNum(String inputNum) {
+        this.inputNum = inputNum;
+    }
+
 
 
     public Long getUserId() {

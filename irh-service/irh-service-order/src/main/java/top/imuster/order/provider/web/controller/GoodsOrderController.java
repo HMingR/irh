@@ -47,7 +47,6 @@ public class GoodsOrderController extends BaseController{
         return orderInfoService.createOrderCode(getCurrentUserIdFromCookie());
     }
 
-
     /**
      * @Author hmr
      * @Description 条件查询会员自己的订单

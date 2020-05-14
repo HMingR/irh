@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import top.imuster.auth.service.Impl.UserAuthenServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
@@ -29,16 +28,16 @@ public class UserAuthenticationController extends BaseController {
     @ApiOperation("身份证实名认证,需要上传身份证到本地服务器之后返回一个图片的uri")
     @NeedLogin
     @PostMapping("/identityCard")
-    public Message<String> realNameAuthen(@RequestParam("file") MultipartFile file, @RequestParam("realName") String inputName){
+    public Message<String> realNameAuthen(@RequestParam("fileUri") String fileUri, @RequestParam("realName") String inputName, @RequestParam("inputCardNo") String inputCardNo){
         Long userId = getCurrentUserIdFromCookie();
-        return userAuthenServiceImpl.realNameAuthentication(userId, file, inputName);
+        return userAuthenServiceImpl.realNameAuthentication(userId, fileUri, inputName, inputCardNo);
     }
 
     @ApiOperation("一卡通实名认证")
     @NeedLogin
     @PostMapping("/oneCard")
-    public Message<String> oneCardSolution(@RequestParam("file") MultipartFile file, @RequestParam("realName") String inputName, @RequestParam("inputCardNo") String inputCardNo) throws Exception {
+    public Message<String> oneCardSolution(@RequestParam("fileUri") String fileUri, @RequestParam("realName") String inputName, @RequestParam("inputCardNo") String inputCardNo) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
-        return userAuthenServiceImpl.oneCardSolution(file, inputName, userId, inputCardNo);
+        return userAuthenServiceImpl.oneCardSolution(fileUri, inputName, userId, inputCardNo);
     }
 }

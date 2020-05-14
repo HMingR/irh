@@ -35,6 +35,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
     @Override
     @PostMapping(produces = { MediaType.APPLICATION_JSON_UTF8_VALUE },consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Message<String> upload(@RequestPart("file") MultipartFile file) {
+         log.info("开始上传文件");
         try{
             //封装文件信息
             FastDFSFile fastDFSFile = new FastDFSFile(
@@ -52,7 +53,6 @@ public class FileController extends BaseController implements FileServiceFeignAp
             log.error("---------->上传文件失败{}",e.getMessage(),e);
             throw new FileException("文件上传失败");
         }
-
     }
 
     /**
@@ -87,4 +87,5 @@ public class FileController extends BaseController implements FileServiceFeignAp
         String[] uploads = FastDFSUtil.upload(fastDFSFile);
         return Message.createBySuccess(uploads[0] + "/" + uploads[1]);
     }
+
 }

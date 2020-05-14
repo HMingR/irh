@@ -64,7 +64,7 @@ public class ErrandOrderListener {
             }
             //下单成功也将订单编号放入redis中
             redisTemplate.opsForHash().put(GlobalConstant.IRH_LIFE_ERRAND_MAP, String.valueOf(order.getOrderCode()), 2);
-            boolean flag = goodsServiceFeignApi.updateErrandInfoById(errandId, errandVersion);
+            boolean flag = goodsServiceFeignApi.updateErrandInfoById(errandId, errandVersion, 3);
             if(flag){
                 order.setState(3);
                 ErrandOrderInfo resultOrder = errandOrderService.acceptErrand(order);

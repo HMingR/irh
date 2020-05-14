@@ -1,5 +1,7 @@
 package top.imuster.order.provider.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
@@ -21,6 +23,9 @@ import java.util.Map;
 @Component
 public class OrderKeyExpirationListener extends KeyExpirationEventMessageListener {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+
     @Resource
     OrderInfoService orderInfoService;
 
@@ -34,6 +39,7 @@ public class OrderKeyExpirationListener extends KeyExpirationEventMessageListene
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String expiredKey = message.toString();
+        log.info("-------------->redis的key失效{}", expiredKey);
         if(expiredKey.startsWith(GlobalConstant.IRH_ORDER_CODE_EXPIRE_KEY)){
             String[] split = expiredKey.split(GlobalConstant.IRH_ORDER_CODE_EXPIRE_KEY);
             String orderCode = split[1];

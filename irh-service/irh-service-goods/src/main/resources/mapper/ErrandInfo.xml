@@ -59,10 +59,10 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
-			<if test="version != null"><![CDATA[version = #{version},]]></if>
 			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="cypher != null"><![CDATA[cypher = #{cypher},]]></if>
+			version = version + 1,
 		</set>
 	</sql>
 
@@ -183,7 +183,7 @@
 
 	<update id="updateStateByIdAndVersion" parameterType="top.imuster.life.api.pojo.ErrandInfo">
 		UPDATE errand_info
-		SET state = #{state}, version = #{version} + 1
+		SET state = #{state}, version = version + 1
 		WHERE id = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=INTEGER}
 	</update>
 

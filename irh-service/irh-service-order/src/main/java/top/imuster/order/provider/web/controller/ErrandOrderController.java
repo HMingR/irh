@@ -56,8 +56,7 @@ public class ErrandOrderController extends BaseController {
                                                @PathVariable("currentPage") Integer currentPage,
                                                @PathVariable("type") Integer type,
                                                @PathVariable("state") Integer state){
-        if(type != 1 && type != 2) return Message.createByError("参数异常");
-        if(state != 3 && state != 4) return Message.createByError("参数异常");
+        if((type != 1 && type != 2) || (state != 3 && state != 4)) return Message.createByError("参数异常");
         if(pageSize < 1) pageSize = 1;
         if(currentPage < 1) currentPage = 1;
         return errandOrderService.list(pageSize, currentPage, type, state, getCurrentUserIdFromCookie());
@@ -101,13 +100,6 @@ public class ErrandOrderController extends BaseController {
     @GetMapping("/finish/{id}")
     public Message<String> finishOrder(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();
-        ErrandOrderInfo errandOrderInfo = errandOrderService.selectEntryList(id).get(0);
-        if(!errandOrderInfo.getPublisherId().equals(userId)){
-            log.error("订单的发布者和当前用户不一致,订单id为{},当前用户id为{}",id, userId);
-            return Message.createByError("非法操作,恶意篡改登录信息,如非恶意请重新登录");
-        }
-        errandOrderInfo.setState(4);
-        errandOrderService.updateByKey(errandOrderInfo);
-        return Message.createBySuccess();
+        return errandOrderService.finishOrder(userId, id);
     }
 }

@@ -87,8 +87,8 @@ public interface GoodsServiceFeignApi {
      * @param errandVersion
      * @reture: void
      **/
-    @GetMapping("/errand/{id}/{version}")
-    boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion);
+    @GetMapping("/errand/{id}/{version}/{state}")
+    boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion, @PathVariable("state") Integer state);
 
     /**
      * @Author hmr
@@ -131,4 +131,14 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/state/{targetId}/{state}")
     boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得errand的version
+     * @Date: 2020/5/13 19:57
+     * @param errandId
+     * @reture: java.lang.Integer
+     **/
+    @GetMapping("/errand/version/{id}")
+    Integer getErrandVersionById(@PathVariable("id") Long errandId);
 }

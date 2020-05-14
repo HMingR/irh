@@ -43,6 +43,7 @@ public class ErrandInfo extends BaseDomain {
 	@ApiModelProperty("价钱")
 	private String money;
 
+	//版本
 	private Integer version;
 
 	//送货地址

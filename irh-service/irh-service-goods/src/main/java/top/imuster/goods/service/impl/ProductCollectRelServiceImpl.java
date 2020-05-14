@@ -11,11 +11,18 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.goods.api.dto.ProductAndDemandDto;
 import top.imuster.goods.api.pojo.ProductCollectRel;
+import top.imuster.goods.api.pojo.ProductDemandInfo;
+import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductCollectRelDao;
 import top.imuster.goods.service.ProductCollectRelService;
+import top.imuster.goods.service.ProductDemandInfoService;
+import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ProductCollectRelService 实现类
@@ -29,6 +36,12 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
 
     @Resource
     private ProductCollectRelDao productCollectRelDao;
+
+    @Resource
+    private ProductInfoService productInfoService;
+
+    @Resource
+    private ProductDemandInfoService productDemandInfoService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -45,7 +58,7 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
         collectRel.setType(type);
         collectRel.setUserId(userId);
         productCollectRelDao.insertEntry(collectRel);
-        redisTemplate.opsForHash().increment(RedisUtil.getGoodsCollectMapKey(type), id, 1);
+        redisTemplate.opsForHash().increment(RedisUtil.getGoodsCollectMapKey(type), String.valueOf(id), 1);
         return Message.createBySuccess();
     }
 
@@ -71,7 +84,7 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
     }
 
     @Override
-    public Message<Page<ProductCollectRel>> list(Integer pageSize, Integer currentPage, Long currentUserIdFromCookie) {
+    public Message<Page<ProductAndDemandDto>> list(Integer pageSize, Integer currentPage, Long currentUserIdFromCookie) {
         Page<ProductCollectRel> page = new Page<>();
         ProductCollectRel condition = new ProductCollectRel();
         condition.setState(2);
@@ -81,15 +94,36 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
         page.setPageSize(pageSize < 1 ? 10 : pageSize);
         page.setCurrentPage(currentPage < 1 ? 1: currentPage);
         page = this.selectPage(condition, page);
-        return Message.createBySuccess(page);
+
+        List<ProductCollectRel> data = page.getData();
+
+        ArrayList<ProductAndDemandDto> productInfos = new ArrayList<>();
+        if(data != null && !data.isEmpty()){
+            data.stream().forEach(productCollectRel -> {
+                if(productCollectRel.getType() == 1){
+                    Long productId = productCollectRel.getProductId();
+                    ProductInfo productBriefInfo = productInfoService.getProductBriefInfoById(productId);
+                    productInfos.add(new ProductAndDemandDto(productBriefInfo));
+                }else{
+                    Long productId = productCollectRel.getProductId();
+                    List<ProductDemandInfo> infos = productDemandInfoService.selectEntryList(productId);
+                    if(infos != null && !infos.isEmpty()) productInfos.add(new ProductAndDemandDto(infos.get(0)));
+                }
+            });
+        }
+        Page<ProductAndDemandDto> resPage = new Page<>();
+        resPage.setData(productInfos);
+        resPage.setTotalCount(page.getTotalCount());
+        return Message.createBySuccess(resPage);
     }
 
     @Override
-    public Message<Integer> getCollectStateById(Long userId, Long id) {
+    public Message<Integer> getCollectStateById(Long userId, Long id, Integer type) {
         ProductCollectRel productCollectRel = new ProductCollectRel();
         productCollectRel.setUserId(userId);
         productCollectRel.setProductId(id);
         productCollectRel.setState(2);
+        productCollectRel.setType(type);
         Integer count = productCollectRelDao.selectEntryListCount(productCollectRel);
         return Message.createBySuccess(count);
     }

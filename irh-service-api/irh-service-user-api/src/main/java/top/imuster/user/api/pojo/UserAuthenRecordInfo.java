@@ -24,7 +24,7 @@ public class UserAuthenRecordInfo extends BaseDomain {
 	// 认证人
 	private Long userId;
 
-	// 1-一卡通认证   2-身份证认证失败之后需要人工认证
+	// 1-一卡通认证   2-身份证认证
 	private Integer type;
 
 	// 用户前端输入的名字
@@ -32,9 +32,29 @@ public class UserAuthenRecordInfo extends BaseDomain {
 
 	private String inputCardNo;
 
+	private Integer result;
+
+	//审核备注
+	private String remark;
 	// 1-认证中  2-认证成功  3-认证失败
 	//private Short state;
 
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Integer getResult() {
+		return result;
+	}
+
+	public void setResult(Integer result) {
+		this.result = result;
+	}
 
 	public String getInputCardNo() {
 		return inputCardNo;

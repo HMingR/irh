@@ -146,4 +146,21 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
         page = this.selectPage(searchCondition, page);
         return Message.createBySuccess(page);
     }
+
+    @Override
+    public Message<String> finishOrder(Long userId, Long id) {
+        List<ErrandOrderInfo> res = errandOrderDao.selectEntryList(id);
+        if(res == null || res.isEmpty()) return Message.createByError("未找到相关订单");
+        ErrandOrderInfo errandOrderInfo = res.get(0);
+        if(!errandOrderInfo.getPublisherId().equals(userId)){
+            log.error("订单的发布者和当前用户不一致,订单id为{},当前用户id为{}",id, userId);
+            return Message.createByError("非法操作,恶意篡改登录信息,如非恶意请重新登录");
+        }
+        errandOrderInfo.setState(4);
+        errandOrderInfo.setErrandVersion(errandOrderInfo.getErrandVersion() + 1);
+        errandOrderDao.updateByKey(errandOrderInfo);
+        Integer version = goodsServiceFeignApi.getErrandVersionById(errandOrderInfo.getErrandId());
+        goodsServiceFeignApi.updateErrandInfoById(errandOrderInfo.getErrandId(), version, 4);
+        return Message.createBySuccess();
+    }
 }

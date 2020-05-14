@@ -12,7 +12,8 @@
             type,
             state,
             create_time AS createTime,
-            update_time AS updateTime 
+            update_time AS updateTime,
+            result AS result
 		]]>
 	</sql>
 
@@ -30,6 +31,7 @@
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
+            <if test="result != null and result != ''"><![CDATA[AND result = #{result}]]></if>
 		</where>
 	</sql>
 	
@@ -48,33 +50,44 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="result != null"><![CDATA[result = #{result},]]></if>
 		</set>
 	</sql>
 
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[  id ,]]></if>
+			<if test="picuri != null and picuri != ''"><![CDATA[  picUri  ,]]></if>
+			<if test="userId != null and userId != ''"><![CDATA[  user_id ,]]></if>
+			<if test="type != null and type != ''"><![CDATA[  type ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[  state,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  create_time,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time,]]></if>
+			<if test="result != null and result != ''"><![CDATA[  result ,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ #{id},]]></if>
+			<if test="picuri != null and picuri != ''"><![CDATA[#{picuri},]]></if>
+			<if test="userId != null and userId != ''"><![CDATA[ #{userId},]]></if>
+			<if test="type != null and type != ''"><![CDATA[#{type},]]></if>
+			<if test="state != null and state != ''"><![CDATA[#{state},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
+			<if test="result != null and result != ''"><![CDATA[#{result},]]></if>
+		</trim>
+	</sql>
+
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="userAuthenRecordInfo" >
+	<insert id="insertEntry" parameterType="userAuthenRecordInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
 		<![CDATA[
 			INSERT INTO user_authen_record_info
-				(
-                id, 
-                picUri, 
-                user_id, 
-                type, 
-                state, 
-                create_time, 
-                update_time 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{picuri}, 
-                #{userId}, 
-                #{type}, 
-                #{state}, 
-                #{createTime}, 
-                #{updateTime} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

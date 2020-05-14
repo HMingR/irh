@@ -18,9 +18,11 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @Description 查看自己发布的跑腿服务列表
      * @Date: 2020/2/11 19:47
      * @param searchCondition
+     * @param type
+     * @param state
      * @reture: java.util.List<top.imuster.life.api.pojo.ErrandInfo>
      **/
-    Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId);
+    Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId, Integer state);
 
     /**
      * @Author hmr
@@ -51,7 +53,7 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @param errandVersion 版本
      * @reture: void
      **/
-    boolean updateStateByIdAndVersion(Long id, Integer errandVersion);
+    boolean updateStateByIdAndVersion(Long id, Integer errandVersion, Integer state);
 
     /**
      * @Author hmr
@@ -83,4 +85,12 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      **/
     Message<Page<ErrandInfo>> listByType(Integer pageSize, Integer currentPage, Integer type);
 
+    /**
+     * @Author hmr
+     * @Description 根据id获得版本信息
+     * @Date: 2020/5/13 19:59
+     * @param errandId
+     * @reture: java.lang.Integer
+     **/
+    Integer getErrandVersionById(Long errandId);
 }

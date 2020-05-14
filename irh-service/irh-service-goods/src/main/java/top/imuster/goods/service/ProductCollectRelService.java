@@ -4,6 +4,7 @@ package top.imuster.goods.service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.api.dto.ProductAndDemandDto;
 import top.imuster.goods.api.pojo.ProductCollectRel;
 
 /**
@@ -46,13 +47,13 @@ public interface ProductCollectRelService extends BaseService<ProductCollectRel,
     /**
      * @Author hmr
      * @Description 分页搜索
-     * @Date: 2020/5/9 8:58
+     * @Date: 2020/5/12 19:21
      * @param pageSize
-     * @param currentPage
-     * @param currentUserIdFromCookie
-     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductCollectRel>>
+     * @param currentPage
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.dto.ProductAndDemandDto>>
      **/
-    Message<Page<ProductCollectRel>> list(Integer pageSize, Integer currentPage, Long currentUserIdFromCookie);
+    Message<Page<ProductAndDemandDto>> list(Integer pageSize, Integer currentPage, Long currentUserIdFromCookie);
 
     /**
      * @Author hmr
@@ -60,7 +61,8 @@ public interface ProductCollectRelService extends BaseService<ProductCollectRel,
      * @Date: 2020/5/11 14:20
      * @param userId
      * @param id
+     * @param type
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<Integer> getCollectStateById(Long userId, Long id);
+    Message<Integer> getCollectStateById(Long userId, Long id, Integer type);
 }

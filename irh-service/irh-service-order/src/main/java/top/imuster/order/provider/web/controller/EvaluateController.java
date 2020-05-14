@@ -63,6 +63,17 @@ public class EvaluateController extends BaseController {
         return productEvaluateInfoService.getListByUserId(pageSize, currentPage, userId, type);
     }
 
+
+    /**
+     * @Author hmr
+     * @Description 查询对卖家的评价
+     * @Date: 2020/5/12 15:49
+     * @param type
+     * @param pageSize
+     * @param userId
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductEvaluateInfo>>
+     **/
     @GetMapping("/{pageSize}/{currentPage}/{userId}")
     public Message<Page<ProductEvaluateInfo>> listByUserId(@PathVariable("type") Integer type,
                                                            @PathVariable("pageSize") Integer pageSize,

@@ -1,7 +1,6 @@
 package top.imuster.order.provider.service;
 
 import com.alipay.api.response.AlipayTradePrecreateResponse;
-import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ public interface AlipayService {
      * @param orderInfo
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    AlipayTradePrecreateResponse alipayF2F(OrderInfo orderInfo) throws OrderException;
+    AlipayTradePrecreateResponse alipayF2F(String orderInfo) throws OrderException;
 
     /**
      * @Description: 支付宝的回调验证和付款后的验证等逻辑

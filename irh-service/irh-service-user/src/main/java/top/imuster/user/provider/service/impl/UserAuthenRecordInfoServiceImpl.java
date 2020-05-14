@@ -46,10 +46,10 @@ public class UserAuthenRecordInfoServiceImpl extends BaseServiceImpl<UserAuthenR
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<String> authen(UserAuthenRecordInfo userAuthenRecordInfo) {
         userAuthenRecordInfoDao.updateByKey(userAuthenRecordInfo);
-        Integer state = userAuthenRecordInfo.getState();
+        Integer result = userAuthenRecordInfo.getResult();
         Long userId = userAuthenRecordInfo.getUserId();
         String content;
-        if(state == 2){
+        if(result == 1){
             UserInfo userInfo = new UserInfo();
             userInfo.setId(userId);
             userInfo.setState(40);
@@ -63,7 +63,7 @@ public class UserAuthenRecordInfoServiceImpl extends BaseServiceImpl<UserAuthenR
         SendUserCenterDto message = new SendUserCenterDto();
         message.setContent(content);
         message.setDate(DateUtil.now());
-        message.setFromId(0L);
+        message.setFromId(-1L);
         message.setToId(userId);
         message.setNewsType(70);
         generateSendMessageService.sendToMq(message);
@@ -76,8 +76,9 @@ public class UserAuthenRecordInfoServiceImpl extends BaseServiceImpl<UserAuthenR
         recordInfo.setUserId(recordDto.getUserId());
         recordInfo.setInputName(recordDto.getInputName());
         recordInfo.setUserId(recordDto.getUserId());
+        recordInfo.setInputCardNo(recordDto.getInputNum());
+        recordInfo.setResult(recordDto.getResult());
+        recordInfo.setType(recordDto.getAuthenType());
         userAuthenRecordInfoDao.insertEntry(recordInfo);
     }
-
-
 }

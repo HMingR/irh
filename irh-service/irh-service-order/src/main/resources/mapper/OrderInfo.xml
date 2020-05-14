@@ -258,7 +258,7 @@
 		<![CDATA[SELECT id, payment_money AS paymentMoney, order_version AS orderVersion, saler_id AS salerId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE
-		trade_type = 30 AND state IN (50, 60, 70, 80, 90)
+		trade_type = 30 AND state IN (50, 60, 70, 80, 90, 100)
 	</select>
 
 	<select id="selectOrderVersionById" parameterType="long" resultType="integer">

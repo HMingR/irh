@@ -1,6 +1,5 @@
 package top.imuster.auth.service;
 
-import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.wrapper.Message;
 
 /**
@@ -20,7 +19,7 @@ public interface UserAuthenService {
      * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> oneCardSolution(MultipartFile file, String inputName, Long userId, String inputCardNo) throws Exception;
+    Message<String> oneCardSolution(String fileUri, String inputName, Long userId, String inputCardNo) throws Exception;
 
 
     /**
@@ -32,7 +31,7 @@ public interface UserAuthenService {
      * @param inputName 输入的名字
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> realNameAuthentication(Long userId, MultipartFile file, String inputName);
+    Message<String> realNameAuthentication(Long userId, String fileUri, String inputName, String num);
 
 
 }

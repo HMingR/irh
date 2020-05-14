@@ -6,7 +6,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.goods.api.pojo.ProductCollectRel;
+import top.imuster.goods.api.dto.ProductAndDemandDto;
 import top.imuster.goods.service.ProductCollectRelService;
 
 /**
@@ -55,15 +55,23 @@ public class ProductCollectController extends BaseController {
     }
 
     @NeedLogin
-    @GetMapping("/{pageSize}/{currentPage}")
-    public Message<Page<ProductCollectRel>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+    @GetMapping("/list/{pageSize}/{currentPage}")
+    public Message<Page<ProductAndDemandDto>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         return productCollectRelService.list(pageSize, currentPage, getCurrentUserIdFromCookie());
     }
 
+    /**
+     * @Author hmr
+     * @Description 根据id查看是否收藏
+     * @Date: 2020/5/12 18:52
+     * @param type1-收藏商品  2-收藏需求
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
+     **/
     @NeedLogin
-    @GetMapping("/state/{id}")
-    public Message<Integer> getCollectState(@PathVariable("id") Long id){
+    @GetMapping("/state/{type}/{id}")
+    public Message<Integer> getCollectState(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();
-        return productCollectRelService.getCollectStateById(userId, id);
+        return productCollectRelService.getCollectStateById(userId, id, type);
     }
 }
