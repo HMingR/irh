@@ -10,7 +10,7 @@ mybatis:
 spring:
   data:
     mongodb:
-      uri: mongodb://101.200.87.195:27017/recommender
+      uri: mongodb://101.200.87.195:27017/irh_recommender
   profiles:
     active: dev
   application:

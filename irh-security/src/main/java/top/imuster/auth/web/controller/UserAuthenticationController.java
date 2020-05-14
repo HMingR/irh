@@ -1,14 +1,12 @@
 package top.imuster.auth.web.controller;
 
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.auth.service.Impl.UserAuthenServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.security.api.dto.UserAuthenDto;
 
 import javax.annotation.Resource;
 
@@ -28,16 +26,18 @@ public class UserAuthenticationController extends BaseController {
     @ApiOperation("身份证实名认证,需要上传身份证到本地服务器之后返回一个图片的uri")
     @NeedLogin
     @PostMapping("/identityCard")
-    public Message<String> realNameAuthen(@RequestParam("fileUri") String fileUri, @RequestParam("realName") String inputName, @RequestParam("inputCardNo") String inputCardNo){
+    public Message<String> realNameAuthen(@RequestBody UserAuthenDto userAuthenDto){
         Long userId = getCurrentUserIdFromCookie();
-        return userAuthenServiceImpl.realNameAuthentication(userId, fileUri, inputName, inputCardNo);
+        userAuthenDto.setUserId(userId);
+        return userAuthenServiceImpl.realNameAuthentication(userAuthenDto);
     }
 
     @ApiOperation("一卡通实名认证")
     @NeedLogin
     @PostMapping("/oneCard")
-    public Message<String> oneCardSolution(@RequestParam("fileUri") String fileUri, @RequestParam("realName") String inputName, @RequestParam("inputCardNo") String inputCardNo) throws Exception {
+    public Message<String> oneCardSolution(@RequestBody UserAuthenDto userAuthenDto) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
-        return userAuthenServiceImpl.oneCardSolution(fileUri, inputName, userId, inputCardNo);
+        userAuthenDto.setUserId(userId);
+        return userAuthenServiceImpl.oneCardSolution(userAuthenDto);
     }
 }

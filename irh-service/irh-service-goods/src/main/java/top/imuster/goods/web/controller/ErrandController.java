@@ -15,6 +15,7 @@ import top.imuster.goods.service.ErrandInfoService;
 import top.imuster.life.api.pojo.ErrandInfo;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: ErrandController
@@ -49,7 +50,7 @@ public class ErrandController extends BaseController {
      * @Author hmr
      * @Description 查看和自己有关的跑腿
      * @Date: 2020/5/13 18:08
-     * @param stae 2-还没有被接单的  3-已经被接单   4-已完成
+     * @param state 2-还没有被接单的  3-已经被接单   4-已完成
      * @param pageSize
      * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.life.api.pojo.ErrandInfo>>
@@ -63,6 +64,17 @@ public class ErrandController extends BaseController {
         if((state != 2 && state != 3 && state != 4) || pageSize < 1 || currentPage < 1) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
         return errandInfoService.getListByCondition(pageSize, currentPage, userId, state);
+    }
+
+    @GetMapping("/detail/{id}")
+    public Message<ErrandInfo> getDetail(@PathVariable("id") Long id){
+        List<ErrandInfo> errandInfos = errandInfoService.selectEntryList(id);
+        if(errandInfos == null || errandInfos.isEmpty()) return Message.createByError("未找到相关订单,请稍后重试");
+        ErrandInfo errandInfo = errandInfos.get(0);
+        errandInfo.setCypher("");
+        errandInfo.setPhoneNum("");
+        errandInfo.setAddress("");
+        return Message.createBySuccess(errandInfo);
     }
 
     /**

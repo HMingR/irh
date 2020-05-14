@@ -115,4 +115,13 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer updateProductStateById(ProductInfo condition);
+
+    /**
+     * @Author hmr
+     * @Description 根据ids查询商品简略信息
+     * @Date: 2020/5/14 15:48
+     * @param ids
+     * @reture: java.util.List<top.imuster.goods.api.pojo.ProductInfo>
+     **/
+    List<ProductInfo> selectProductBriefInfoByIds(List<Long> ids);
 }

@@ -12,8 +12,12 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.goods.api.dto.MongoProductInfo;
+import top.imuster.goods.api.dto.ProductContentRecommendDto;
+import top.imuster.goods.api.dto.ProductRealtimeRecommendDto;
 import top.imuster.goods.api.dto.ProductRecommendDto;
 import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.goods.dao.ProductContentRecommendRepository;
+import top.imuster.goods.dao.ProductRealtimeRecommendRepository;
 import top.imuster.goods.dao.ProductRecommendDao;
 import top.imuster.goods.service.ProductInfoService;
 import top.imuster.goods.service.RecommendProductService;
@@ -22,6 +26,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: RecommendProductServiceImpl
@@ -32,6 +37,7 @@ import java.util.*;
 @Service("recommendProductService")
 public class RecommendProductServiceImpl implements RecommendProductService {
 
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @Autowired
@@ -40,9 +46,15 @@ public class RecommendProductServiceImpl implements RecommendProductService {
     @Resource
     private ProductRecommendDao productRecommendDao;
 
+    @Resource
+    private ProductContentRecommendRepository productContentRecommendRepository;
+
+    @Resource
+    private ProductRealtimeRecommendRepository productRealtimeRecommendRepository;
+
 
     @Override
-    public Message<Page<ProductInfo>> getRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId) {
+    public Message<Page<ProductInfo>> getOfflineRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId) {
         if(userId == null){
             return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
         }else{
@@ -51,13 +63,54 @@ public class RecommendProductServiceImpl implements RecommendProductService {
             ProductRecommendDto reco = productRecommendDao.findByUserId(userId);
             List<MongoProductInfo> recs = reco.getRecs();
             recs.stream().forEach(mongoProductInfo -> {
-                Integer productId = mongoProductInfo.getProductId();
+                Long productId = mongoProductInfo.getProductId();
                 list.add(productInfoService.getProductBriefInfoById(productId.longValue()));
             });
             page.setData(list);
             page.setTotalCount(list.size());
             return Message.createBySuccess(page);
         }
+    }
+
+    @Override
+    public Message<Page<ProductInfo>> getRealtimeRecommend(Integer pageSize, Integer currentPage, Long userId) {
+        String redisKey = RedisUtil.getProductRealtimeRecommendListKey(userId);
+        Boolean aBoolean = redisTemplate.hasKey(redisKey);
+        if(aBoolean) return getInfoFromRedis(pageSize, currentPage, redisKey);
+        ProductRealtimeRecommendDto recommendInfo = productRealtimeRecommendRepository.findByUserId(userId);
+        List<MongoProductInfo> recs = recommendInfo.getRecs();
+        List<Long> ids = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
+        redisTemplate.opsForList().leftPush(redisKey, ids);
+        return getInfoFromRedis(pageSize, currentPage, redisKey);
+    }
+
+    @Override
+    public Message<Page<ProductInfo>> getContentRecommend(Integer pageSize, Integer currentPage, Long productId) {
+        String redisKey = RedisUtil.getProductContentRecommendListKey(productId);
+        Boolean flag = redisTemplate.hasKey(redisKey);
+        if(flag) return getInfoFromRedis(pageSize, currentPage, redisKey);
+
+        ProductContentRecommendDto res = productContentRecommendRepository.findByProductId(productId);
+        List<MongoProductInfo> recs = res.getRecs();
+        List<Long> productIds = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
+        redisTemplate.opsForList().leftPush(redisKey, productIds);
+        return getInfoFromRedis(pageSize, currentPage, redisKey);
+    }
+
+    private Message<Page<ProductInfo>> getInfoFromRedis(Integer pageSize, Integer currentPage, String redisKey) {
+        Integer start = (currentPage - 1) * pageSize;
+        Page<ProductInfo> page = new Page<>();
+        Integer size = redisTemplate.opsForList().size(redisKey).intValue();
+        Integer end = start + pageSize > size - 1 ? size : start + pageSize;
+
+        List<Long> res = redisTemplate.opsForList().range(redisKey, start, end);
+        List<ProductInfo> data = null;
+        if(res != null && !res.isEmpty()){
+             data = productInfoService.getProductBriefByIds(res);
+        }
+        page.setData(data);
+        page.setTotalCount(size);
+        return Message.createBySuccess(page);
     }
 
     @Override

@@ -33,5 +33,28 @@ public interface RecommendProductService {
      * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
-    Message<Page<ProductInfo>> getRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId);
+    Message<Page<ProductInfo>> getOfflineRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId);
+
+
+    /**
+     * @Author hmr
+     * @Description 获得实施推荐的商品
+     * @Date: 2020/5/14 9:23
+     * @param pageSize
+     * @param currentPage
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
+     **/
+    Message<Page<ProductInfo>> getRealtimeRecommend(Integer pageSize, Integer currentPage, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 基于内容的推荐
+     * @Date: 2020/5/14 9:43
+     * @param pageSize
+     * @param currentPage
+     * @param productId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
+     **/
+    Message<Page<ProductInfo>> getContentRecommend(Integer pageSize, Integer currentPage, Long productId);
 }

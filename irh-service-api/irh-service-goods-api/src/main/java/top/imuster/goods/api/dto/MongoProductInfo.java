@@ -7,14 +7,14 @@ package top.imuster.goods.api.dto;
  * @date: 2020/5/11 20:51
  */
 public class MongoProductInfo {
-    private Integer productId;
+    private Long productId;
     private Double score;
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 

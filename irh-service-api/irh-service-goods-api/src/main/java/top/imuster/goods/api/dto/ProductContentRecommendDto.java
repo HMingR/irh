@@ -6,21 +6,20 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
-
 /**
- * @ClassName: ProductRecommendDto
- * @Description:
+ * @ClassName: ProductContentRecommendDto
+ * @Description: ProductContentRecommendDto  基于商品内容的推荐
  * @author: hmr
- * @date: 2020/5/1 16:07
+ * @date: 2020/5/14 9:49
  */
-@Document(collection = "rm_product_user_recs")
-public class ProductRecommendDto {
+@Document(collection = "rm_product_recs_content_based")
+public class ProductContentRecommendDto {
 
     @Id
     private String id;
 
-    @Field("user_id")
-    private Integer userId;
+    @Field("product_id")
+    private Long productId;
 
     private List<MongoProductInfo> recs;
 
@@ -32,12 +31,13 @@ public class ProductRecommendDto {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public List<MongoProductInfo> getRecs() {
@@ -47,5 +47,4 @@ public class ProductRecommendDto {
     public void setRecs(List<MongoProductInfo> recs) {
         this.recs = recs;
     }
-
 }

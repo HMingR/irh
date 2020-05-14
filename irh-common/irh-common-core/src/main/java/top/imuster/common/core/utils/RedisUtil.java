@@ -179,4 +179,26 @@ public class RedisUtil {
     public static String getOrderCodeExpireKey(String orderCode) {
         return new StringBuffer(GlobalConstant.IRH_ORDER_CODE_EXPIRE_KEY).append(orderCode).toString();
     }
+
+    /**
+     * @Author hmr
+     * @Description 根据productId 查询redis中是否又基于内容推荐的key
+     * @Date: 2020/5/14 15:08
+     * @param productId
+     * @reture: java.lang.String
+     **/
+    public static String getProductContentRecommendListKey(Long productId) {
+        return new StringBuffer(GlobalConstant.IRH_PRODUCT_CONTENT_RECOMMEND_LIST_KEY).append(productId).toString();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 获得存储在redis中的实施推荐的商品id的list
+     * @Date: 2020/5/14 16:07
+     * @param userId 用户id
+     * @reture: java.lang.String
+     **/
+    public static String getProductRealtimeRecommendListKey(Long userId) {
+        return new StringBuffer(GlobalConstant.IRH_PRODUCT_REAL_TIME_RECOMMEND_LIST_KEY).append(userId).toString();
+    }
 }

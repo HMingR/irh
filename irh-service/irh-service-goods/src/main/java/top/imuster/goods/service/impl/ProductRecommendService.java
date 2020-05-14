@@ -18,7 +18,8 @@ public class ProductRecommendService {
     ProductRecommendDao productRecommendDao;
 
     public ProductRecommendDto findOne(Long userId){
-        return productRecommendDao.findByUserId(userId);
+        //return productRecommendDao.findProductRecommendDtoByUserId(userId);
+        return null;
     }
 
 }

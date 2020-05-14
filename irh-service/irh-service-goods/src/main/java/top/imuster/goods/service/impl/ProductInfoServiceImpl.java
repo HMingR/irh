@@ -192,4 +192,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         Integer temp = productInfoDao.updateProductStateById(condition);
         return temp != 0;
     }
+
+    @Override
+    public List<ProductInfo> getProductBriefByIds(List<Long> ids) {
+        return productInfoDao.selectProductBriefInfoByIds(ids);
+    }
 }

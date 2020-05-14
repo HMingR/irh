@@ -294,5 +294,23 @@
 		SET state = #{state,jdbcType=INTEGER}
 		WHERE id = #{id,jdbcType=BIGINT}
 	</update>
+
+	<select id="selectProductBriefInfoByIds" parameterType="list" resultType="top.imuster.goods.api.pojo.ProductInfo">
+		<![CDATA[SELECT
+					id,
+					main_pic_url AS mainPicUrl,
+					original_price AS originalPrice,
+					sale_price AS salePrice,
+					title,
+					tag_names AS tagNames,
+					browser_times AS browserTimes,
+					trade_type AS tradeType,
+					consumer_id AS consumerId ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE state = 2 AND id IN
+		<foreach collection="list" open="(" close=")" separator="," item="it">
+			#{it,jdbcType=BIGINT}
+		</foreach>
+	</select>
 	
 </mapper>

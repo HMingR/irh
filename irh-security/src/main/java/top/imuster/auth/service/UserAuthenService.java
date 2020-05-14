@@ -1,6 +1,7 @@
 package top.imuster.auth.service;
 
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.security.api.dto.UserAuthenDto;
 
 /**
  * @ClassName: UserAuthenServiceImpl
@@ -19,7 +20,7 @@ public interface UserAuthenService {
      * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> oneCardSolution(String fileUri, String inputName, Long userId, String inputCardNo) throws Exception;
+    Message<String> oneCardSolution(UserAuthenDto userAuthenDto) throws Exception;
 
 
     /**
@@ -31,7 +32,7 @@ public interface UserAuthenService {
      * @param inputName 输入的名字
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> realNameAuthentication(Long userId, String fileUri, String inputName, String num);
+    Message<String> realNameAuthentication(UserAuthenDto userAuthenDto);
 
 
 }

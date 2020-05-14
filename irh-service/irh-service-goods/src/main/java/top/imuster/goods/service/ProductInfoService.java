@@ -124,8 +124,17 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @Description
      * @Date: 2020/5/12 10:49
      * @param productId
-     * @param state
+     * @param state
      * @reture: boolean
      **/
     boolean updateProductStateById(Long productId, Integer state);
+
+    /**
+     * @Author hmr
+     * @Description 根据ids获得商品简略信息
+     * @Date: 2020/5/14 15:47
+     * @param ids
+     * @reture: java.util.List<top.imuster.goods.api.pojo.ProductInfo>
+     **/
+    List<ProductInfo> getProductBriefByIds(List<Long> ids);
 }

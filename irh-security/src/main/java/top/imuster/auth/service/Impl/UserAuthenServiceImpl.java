@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.auth.service.UserAuthenService;
 import top.imuster.auth.utils.Base64Util;
 import top.imuster.auth.utils.HttpUtil;
@@ -23,6 +24,7 @@ import top.imuster.common.core.dto.SendUserCenterDto;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.file.api.service.FileServiceFeignApi;
+import top.imuster.security.api.dto.UserAuthenDto;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.io.IOException;
@@ -74,13 +76,16 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     private static final String failContent = "我们已经收到您提交的审核,但是由于图片不清晰导致AI无法快速识别,请等待管理员审核，感谢您的配合";
     private static final String successContent = "恭喜您已经成功通过实名认证,您现在可以使用irh平台全部功能,感谢您的配合";
 
-    public Message<String> realNameAuthentication(Long userId, String fileUri, String inputName, String inputCardNo) {
-        boolean res = generate(fileUri, inputName, inputCardNo);
-        saveAuthen2DB(fileUri, inputName, userId, res ? 1 : 0, inputCardNo,2);
+    public Message<String> realNameAuthentication(UserAuthenDto userAuthenDto) {
+        boolean res = generate(userAuthenDto);
+        saveAuthen2DB(userAuthenDto, res ? 1 : 0,2);
         return Message.createBySuccess(res ? successContent : failContent);
     }
 
-    private boolean generate(String fileSuffix, String inputName, String inputCardNo){
+    private boolean generate(UserAuthenDto userAuthenDto){
+        String inputCardNo = userAuthenDto.getInputCardNo();
+        String inputName = userAuthenDto.getInputName();
+
         //请根据线上文档修改configure字段
         JSONObject configObj = new JSONObject();
         configObj.put("side", "face");
@@ -94,7 +99,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         // 拼装请求body的json字符串
         JSONObject requestObj = new JSONObject();
         try {
-            requestObj.put("image", Base64.encodeBase64(getFileByUri(fileSuffix)));
+            requestObj.put("image", Base64.encodeBase64(getFileByUri(userAuthenDto.getFileUri())));
             if(config_str.length() > 0) {
                 requestObj.put("configure", config_str);
             }
@@ -142,9 +147,13 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         return response.body().bytes();
     }
 
-    private boolean execOneCard(String fileUri, String inputName, Long userId, String inputCardNo){
+    private boolean execOneCard(UserAuthenDto userAuthenDto){
         Integer errorCode = 0;
         JSONObject out = null;
+        String fileUri = userAuthenDto.getFileUri();
+        String inputCardNo = userAuthenDto.getInputCardNo();
+        String inputName = userAuthenDto.getInputName();
+
         try{
             String imgStr = Base64Util.encode(getFileByUri(fileUri));
             String recogniseParams = new StringBuilder().append("templateSign=").append(bdTemplateSign).append("&image=").append(URLEncoder.encode(imgStr, "UTF-8")).toString();
@@ -152,12 +161,10 @@ public class UserAuthenServiceImpl implements UserAuthenService {
             out = JSON.parseObject(result);
             errorCode = (Integer) out.get("error_code");
         }catch (Exception e){
-            saveAuthen2DB(fileUri, inputName, userId, 1, inputCardNo, 1);
-            return false;
+            throw new CustomSecurityException("认证服务器暂时停止工作,请稍后重试");
         }
         if(errorCode != 0){
             //验证失败
-            saveAuthen2DB(fileUri, inputName, userId, 0, inputCardNo, 1);
             return false;
         }
         String data = out.getString("data");
@@ -173,28 +180,32 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         String name = resMap.get("name");
         String id = resMap.get("idCard");
         if(!name.equals(inputName) || !id.equals(inputCardNo)){
-            saveAuthen2DB(fileUri, inputName, userId, 1, inputCardNo, 1);
             return false;
         }
         return true;
     }
 
-    public Message<String> oneCardSolution(String fileUri, String inputName, Long userId, String inputCardNo){
-        boolean result = execOneCard(fileUri, inputName, userId, inputCardNo);
-        saveAuthen2DB(fileUri, inputName, userId, result ?  1 : 0, inputCardNo, 2);
+    public Message<String> oneCardSolution(UserAuthenDto userAuthenDto){
+        boolean result = execOneCard(userAuthenDto);
+        saveAuthen2DB(userAuthenDto, result ?  1 : 0, 2);
         return Message.createBySuccess(result ? successContent : failContent);
     }
 
     /**
      * @Author hmr
-     * @Description
-     * @Date: 2020/3/29 11:22
-     * @param picUri
-     * @param inputName
-     * @param userId
+     * @Description TODO
+     * @Date: 2020/5/14 12:26
+     * @param userAuthenDto
+     * @param result
+     * @param type
      * @reture: void
      **/
-    private void saveAuthen2DB(String picUri, String inputName, Long userId, Integer result, String inputNum, Integer type){
+    private void saveAuthen2DB(UserAuthenDto userAuthenDto, Integer result, Integer type){
+        String inputNum = userAuthenDto.getInputCardNo();
+        String inputName = userAuthenDto.getInputName();
+        String picUri = userAuthenDto.getFileUri();
+        Long userId = userAuthenDto.getUserId();
+
         if(result == 1){
             userServiceFeignApi.updateUserState(userId, 50);
         }

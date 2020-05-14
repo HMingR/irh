@@ -1,42 +1,29 @@
 package top.imuster.goods.api.dto;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
-
 /**
- * @ClassName: ProductRecommendDto
- * @Description:
+ * @ClassName: ProductRealtimeRecommendDto
+ * @Description: 用户的实时推荐
  * @author: hmr
- * @date: 2020/5/1 16:07
+ * @date: 2020/5/14 15:59
  */
-@Document(collection = "rm_product_user_recs")
-public class ProductRecommendDto {
-
-    @Id
-    private String id;
+@Document(collection = "rm_product_stream_recs")
+public class ProductRealtimeRecommendDto {
 
     @Field("user_id")
-    private Integer userId;
+    private Long userId;
 
     private List<MongoProductInfo> recs;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -47,5 +34,4 @@ public class ProductRecommendDto {
     public void setRecs(List<MongoProductInfo> recs) {
         this.recs = recs;
     }
-
 }

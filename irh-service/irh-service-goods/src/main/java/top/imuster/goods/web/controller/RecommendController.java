@@ -30,17 +30,43 @@ public class RecommendController extends BaseController {
 
     /**
      * @Author hmr
-     * @Description 根据用户id获得推荐给用户的商品
+     * @Description 离线推荐
      * @Date: 2020/5/1 14:06
      * @param pageSize
      * @param currentPage
      * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
-    @GetMapping("/{pageSize}/{currentPage}")
-    public Message<Page<ProductInfo>> getRecommendByUserId(@PathVariable("pageSize") Integer pageSize,
+    @GetMapping("/offline/{pageSize}/{currentPage}")
+    public Message<Page<ProductInfo>> getOfflineRecommendByUserId(@PathVariable("pageSize") Integer pageSize,
                                                            @PathVariable("currentPage") Integer currentPage){
-        return recommendProductService.getRecommendListByUserId(pageSize, currentPage, getCurrentUserIdFromCookie(false));
+        return recommendProductService.getOfflineRecommendListByUserId(pageSize, currentPage, getCurrentUserIdFromCookie(false));
+    }
+
+    /**
+     * @Author hmr
+     * @Description 实时推荐
+     * @Date: 2020/5/14 9:20
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
+     **/
+    @GetMapping("/realtime/{pageSize}/{currentPage}")
+    public Message<Page<ProductInfo>> getRealTimeRecommend(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return recommendProductService.getRealtimeRecommend(pageSize, currentPage, getCurrentUserIdFromCookie());
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 在查看商品的时候推荐和该商品相关的商品
+     * @Date: 2020/5/14 9:41
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
+     **/
+    @GetMapping("/content/{pageSize}/{currentPage}/{productId}")
+    public Message<Page<ProductInfo>> getContentRecommend(@PathVariable("productId") Long productId, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return recommendProductService.getContentRecommend(pageSize, currentPage, productId);
     }
 
     /**

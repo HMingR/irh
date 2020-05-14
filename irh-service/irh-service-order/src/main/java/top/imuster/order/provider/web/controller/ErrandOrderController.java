@@ -2,7 +2,6 @@ package top.imuster.order.provider.web.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
@@ -22,7 +21,6 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/order/errand")
-@Api
 public class ErrandOrderController extends BaseController {
 
     @Resource
@@ -46,6 +44,7 @@ public class ErrandOrderController extends BaseController {
     @ApiOperation("根据id删除订单, type标识 5-删除发布的(作为卖家) 6-删除接单(作为买家)")
     @DeleteMapping("/{type}/{id}")
     public Message<String> delete(@PathVariable("id") Long id, @PathVariable("type") Integer type){
+        if(type != 5 && type != 6) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
         return errandOrderService.delete(id, userId, type);
     }

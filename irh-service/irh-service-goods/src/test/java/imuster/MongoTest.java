@@ -10,9 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.imuster.goods.GoodsProviderApplication;
+import top.imuster.goods.api.dto.ProductContentRecommendDto;
 import top.imuster.goods.api.dto.ProductRecommendDto;
+import top.imuster.goods.dao.ProductContentRecommendRepository;
 import top.imuster.goods.dao.ProductRecommendDao;
+import top.imuster.goods.service.impl.ProductContentRecommendServiceImpl;
 import top.imuster.goods.service.impl.ProductRecommendService;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @ClassName: MongoTest
@@ -35,16 +42,48 @@ public class MongoTest {
     @Autowired
     ProductRecommendService productRecommendService;
 
+    @Resource
+    ProductContentRecommendRepository productContentRecommendRepository;
+
+    @Resource
+    ProductContentRecommendServiceImpl productContentRecommendService;
+
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;
 
     @Test
     public void test() throws JsonProcessingException {
-        ProductRecommendDto one = productRecommendService.findOne(58556L);
+        ProductRecommendDto one = productRecommendService.findOne(1L);
         System.out.println(objectMapper.writeValueAsString(one));
     }
 
-    public void test02(){
-        //sqlSessionTemplate.insert(statement, parameter);
+
+    @Test
+    public void test02() throws JsonProcessingException {
+        ProductContentRecommendDto byProductId = productContentRecommendRepository.findByProductId(2L);
+        String asString = objectMapper.writeValueAsString(byProductId);
+        long count = productContentRecommendRepository.count();
+        ProductRecommendDto productRecommendDtoByUserId = productRecommendDao.findProductRecommendDtoByUserId(1);
+        System.out.println(objectMapper.writeValueAsString(productRecommendDtoByUserId));
+
+        Optional<ProductRecommendDto> byId = productRecommendDao.findById("5eb7db3ab5bd1f2f70c7be82");
+        System.out.println(objectMapper.writeValueAsString(byId.get()));
+        System.out.println(asString);
+        System.out.println(count);
+    }
+
+    @Test
+    public void test03(){
+        List<ProductContentRecommendDto> all = productContentRecommendRepository.findAll();
+        System.out.println(all.toArray());
+    }
+
+
+    @Test
+    public void test04(){
+        List<ProductRecommendDto> all = productRecommendDao.findAll();
+        System.out.println(all.size());
+        long count = productRecommendDao.count();
+        System.out.println(count);
     }
 }
