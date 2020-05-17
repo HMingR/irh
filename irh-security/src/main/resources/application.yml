@@ -15,7 +15,7 @@ auth:
   tokenValiditySeconds: 1200  #token存储到redis的过期时间
   clientId: irhWebApp
   clientSecret: irhWebApp
-  cookieDomain: localhost
+  cookieDomain: www.imuster.top
   cookieMaxAge: -1
 encrypt:
   key-store:
@@ -77,3 +77,7 @@ secure:
       - /error
       - /user/feign/login/
       - /user/feign/roleAndAuth
+
+
+security:
+  applyUrl: https://www.imuster.top:10900

@@ -36,8 +36,8 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Resource
-    UsernameUserDetailsServiceImpl usernameDetailsService;
+    //@Resource
+    //UsernameUserDetailsServiceImpl usernameDetailsService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -67,11 +67,18 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         clients.jdbc(this.dataSource).clients(this.clientDetails());
     }
 
+
     @Bean
     @Autowired
     public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
         return new JwtTokenStore(jwtAccessTokenConverter);
     }
+
+    @Bean
+    public UsernameUserDetailsServiceImpl usernameUserDetailsService(){
+        return new UsernameUserDetailsServiceImpl();
+    }
+
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
@@ -92,7 +99,7 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         endpoints.accessTokenConverter(jwtAccessTokenConverter)
                 .authenticationManager(authenticationManager)//认证管理器
                 .tokenStore(tokenStore)//令牌存储
-                .userDetailsService(usernameDetailsService);//用户信息service
+                .userDetailsService(usernameUserDetailsService());//用户信息service
     }
 
     //授权服务器的安全配置

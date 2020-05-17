@@ -59,7 +59,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("获得个人信息")
     @GetMapping("/detail")
-    @NeedLogin
+   // @NeedLogin
     public Message<UserInfo> getUserInfoById(){
         UserInfo userInfo = userInfoService.selectEntryList(getCurrentUserIdFromCookie()).get(0);
         userInfo.setPassword("");

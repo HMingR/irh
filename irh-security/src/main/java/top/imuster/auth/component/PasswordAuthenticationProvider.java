@@ -9,7 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import top.imuster.auth.config.SmsCodeAuthenticationToken;
+import top.imuster.auth.config.PasswordCodeAuthenticationToken;
 import top.imuster.common.core.utils.RedisUtil;
 
 /**
@@ -18,7 +18,7 @@ import top.imuster.common.core.utils.RedisUtil;
  * @author: hmr
  * @date: 2020/4/30 14:36
  */
-public class SmsAuthenticationProvider implements AuthenticationProvider {
+public class PasswordAuthenticationProvider implements AuthenticationProvider {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -26,7 +26,7 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
+        PasswordCodeAuthenticationToken authenticationToken = (PasswordCodeAuthenticationToken) authentication;
         //登录名
         String loginName = authenticationToken.getPrincipal() == null?"NONE_PROVIDED":authentication.getName();
         //验证码
@@ -40,7 +40,7 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return (SmsCodeAuthenticationToken.class.isAssignableFrom(aClass));
+        return (PasswordCodeAuthenticationToken.class.isAssignableFrom(aClass));
     }
 
 }

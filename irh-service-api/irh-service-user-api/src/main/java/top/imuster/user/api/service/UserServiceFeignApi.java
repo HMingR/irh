@@ -78,4 +78,15 @@ public interface UserServiceFeignApi {
      **/
     @GetMapping("/email/{id}")
     String getUserEmailById(@PathVariable("id") Long holderId);
+
+    /**
+     * @Author hmr
+     * @Description 根据email更新用户的密码
+     * @Date: 2020/5/16 11:11
+     * @param email
+     * @param password
+     * @reture: boolean
+     **/
+    @GetMapping("/reset/{email}/{pwd}")
+    boolean updateUserPwdByEmail(@PathVariable("email") String email, @PathVariable("pwd") String password);
 }

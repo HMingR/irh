@@ -43,12 +43,11 @@ public class EmailQueueListener {
 
     @RabbitListener(queues = QUEUE_NAME)
     private void listener(String msg) throws Exception{
-        log.info("接受到errand的下单消息");
         SendEmailDto sendEmailDto = objectMapper.readValue(msg, SendEmailDto.class);
         MimeMessage mimeMailMessage = null;
         mimeMailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
-        mimeMessageHelper.setFrom("1978773465@qq.com");
+        mimeMessageHelper.setFrom("postmaster@imuster.top");
         mimeMessageHelper.setTo(sendEmailDto.getEmail());
         mimeMessageHelper.setSubject(sendEmailDto.getSubject() == null ? "irh通知" : sendEmailDto.getSubject());
 

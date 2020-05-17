@@ -43,9 +43,9 @@ spring:
     password: '@irh.rabbitmq.password@'
 
   mail:
-    username: 1978773465@qq.com
-    password: srxhdikamojzbajg
-    host: smtp.qq.com
+    username:  postmaster@imuster.top
+    password: 197877346Hmr
+    host: smtp.mxhichina.com
     port: 25
 
   freemarker:
@@ -88,5 +88,8 @@ elasticsearch:
   port: 9300
   cluster:
     name: elasticsearch
+
+security:
+  applyUrl: https://www.imuster.top:10900
 
 

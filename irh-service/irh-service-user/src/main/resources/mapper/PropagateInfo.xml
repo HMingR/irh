@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imuster.user.provider.dao.PropagateInfoDao">
+
+	<!-- propagate_info 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+            id,
+            publisher_id AS publisherId,
+            approver_id AS approverId,
+            title,
+            content,
+            tag_names AS tagNames,
+            create_time AS createTime,
+            type,
+            update_time AS updateTime,
+            state,
+            browse_times AS browseTimes,
+            detail_page_uri AS detailPageUri 
+		]]>
+	</sql>
+
+	<!-- propagate_info 查询列来源表-->
+	<sql id="QUERY_FROM_TABLE"><![CDATA[FROM propagate_info]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+            <if test="publisherId != null and publisherId != ''"><![CDATA[AND publisher_id = #{publisherId}]]></if>
+            <if test="approverId != null and approverId != ''"><![CDATA[AND approver_id = #{approverId}]]></if>
+            <if test="title != null and title != ''"><![CDATA[AND title = #{title}]]></if>
+            <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
+            <if test="tagNames != null and tagNames != ''"><![CDATA[AND tag_names = #{tagNames}]]></if>
+            <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
+            <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
+            <if test="browseTimes != null and browseTimes != ''"><![CDATA[AND browse_times = #{browseTimes}]]></if>
+            <if test="detailPageUri != null and detailPageUri != ''"><![CDATA[AND detail_page_uri = #{detailPageUri}]]></if> 
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDTION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			<if test="publisherId != null"><![CDATA[publisher_id = #{publisherId},]]></if>
+			<if test="approverId != null"><![CDATA[approver_id = #{approverId},]]></if>
+			<if test="title != null"><![CDATA[title = #{title},]]></if>
+			<if test="content != null"><![CDATA[content = #{content},]]></if>
+			<if test="tagNames != null"><![CDATA[tag_names = #{tagNames},]]></if>
+			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
+			<if test="type != null"><![CDATA[type = #{type},]]></if>
+			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
+			<if test="state != null"><![CDATA[state = #{state},]]></if>
+			<if test="browseTimes != null"><![CDATA[browse_times = #{browseTimes},]]></if>
+			<if test="detailPageUri != null"><![CDATA[detail_page_uri = #{detailPageUri},]]></if>
+		</set>
+	</sql>
+
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[ id,]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[  publisher_id,]]></if>
+			<if test="approverId != null and approverId != ''"><![CDATA[  approver_id,]]></if>
+			<if test="title != null and title != ''"><![CDATA[  title,]]></if>
+			<if test="content != null and content != ''"><![CDATA[  content,]]></if>
+			<if test="tagNames != null and tagNames != ''"><![CDATA[  tag_names ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  create_time,]]></if>
+			<if test="type != null and type != ''"><![CDATA[  type ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time,]]></if>
+			<if test="state != null and state != ''"><![CDATA[  state ,]]></if>
+			<if test="browseTimes != null and browseTimes != ''"><![CDATA[  browse_times,]]></if>
+			<if test="detailPageUri != null and detailPageUri != ''"><![CDATA[ detail_page_uri,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[#{id},]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[#{publisherId},]]></if>
+			<if test="approverId != null and approverId != ''"><![CDATA[ #{approverId},]]></if>
+			<if test="title != null and title != ''"><![CDATA[  #{title},]]></if>
+			<if test="content != null and content != ''"><![CDATA[  #{content},]]></if>
+			<if test="tagNames != null and tagNames != ''"><![CDATA[  #{tagNames},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[#{createTime},]]></if>
+			<if test="type != null and type != ''"><![CDATA[ #{type},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
+			<if test="state != null and state != ''"><![CDATA[#{state},]]></if>
+			<if test="browseTimes != null and browseTimes != ''"><![CDATA[#{browseTimes},]]></if>
+			<if test="detailPageUri != null and detailPageUri != ''"><![CDATA[#{detailPageUri},]]></if>
+		</trim>
+	</sql>
+
+	<!-- 插入app记录 -->
+	<insert id="insertEntry" parameterType="propagateInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		<![CDATA[
+			INSERT INTO propagate_info
+				)
+		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="value"></include>
+	</insert>
+	
+	<!-- 返回插入的编号,在事务开启状态下有效 -->
+	<select id="lastSequence" resultType="long"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+	<!-- 删除记录,主键IN(array) -->
+	<delete id="deleteByArrayKey" parameterType="java.lang.reflect.Array" >
+		<![CDATA[DELETE FROM propagate_info WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</delete>
+
+	<!-- 删除,通过条件 -->
+	<delete id="deleteByCondition" parameterType="propagateInfo" >
+		<![CDATA[DELETE FROM propagate_info]]>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</delete>
+
+	<!-- 修改记录通过主键 -->
+	<update id="updateByKey" parameterType="propagateInfo" >
+		<![CDATA[UPDATE propagate_info]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+
+	<!-- 查询,通过主键IN(array) -->
+	<select id="selectEntryArray" parameterType="java.lang.reflect.Array" resultType="propagateInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id IN]]>
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
+		</foreach>
+	</select>
+
+	<!-- 查询,通过条件 -->
+	<select id="selectEntryList" parameterType="propagateInfo" resultType="propagateInfo">
+		<![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+	</select>
+
+	<!-- 总数查询,通过条件 -->
+	<select id="selectEntryListCount" parameterType="propagateInfo" resultType="int">
+		<![CDATA[SELECT COUNT(id) AS dataCount]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+	</select>
+	
+	<!-- 其它SQL语句 -->
+	
+</mapper>

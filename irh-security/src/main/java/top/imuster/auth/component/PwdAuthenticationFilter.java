@@ -1,6 +1,5 @@
 package top.imuster.auth.component;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import top.imuster.auth.config.SecurityConstants;
-import top.imuster.auth.config.SmsCodeAuthenticationToken;
+import top.imuster.auth.config.IrhAuthenticationToken;
+import top.imuster.auth.config.PwdAuthenticationToken;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,53 +18,59 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @ClassName: SmsCodeAuthenticationFilter
- * @Description: 自定义拦截器，拦截登录请求中的登录类型
+ * @ClassName: PwdAuthenticationFilter
+ * @Description: PwdAuthenticationFilter  用户名密码登录拦截器
  * @author: hmr
- * @date: 2020/4/30 12:16
+ * @date: 2020/5/16 13:44
  */
-public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class PwdAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(SmsCodeAuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(PwdAuthenticationFilter.class);
 
     private static final String POST = "post";
 
     private boolean postOnly = true;
 
-    public SmsCodeAuthenticationFilter(){
-        super(new AntPathRequestMatcher("/emailCodeLogin", "POST"));
+    //登录名
+    private static final String LOGIN_PWD_NAME = "email";
+
+    //web端的验证码
+    private static final String LOGIN_PWD_CODE = "code";
+
+    //密码
+    private static final String LOGIN_PWD_PASSWORD = "password";
+
+
+    public PwdAuthenticationFilter(){
+        super(new AntPathRequestMatcher("/pwdLogin", "POST"));
     }
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Override
-    @Autowired
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-        super.setAuthenticationManager(authenticationManager);
-    }
-
-    @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         if(postOnly && !POST.equalsIgnoreCase(httpServletRequest.getMethod())){
             throw new AuthenticationServiceException("不允许{}这种的请求方式: " + httpServletRequest.getMethod());
         }
-        //邮箱地址
-        String loginName = obtainParameter(httpServletRequest, SecurityConstants.LOGIN_PARAM_NAME);
-        //验证码
-        String credentials = obtainParameter(httpServletRequest, SecurityConstants.EMAIL_VERIFY_CODE);
-        loginName = loginName.trim();
 
-        if(StringUtils.isBlank(loginName)) throw new AuthenticationServiceException("登录名不能为空");
-        if(StringUtils.isBlank(credentials)) throw new AuthenticationServiceException("验证码不能为空");
+        //web端的验证码
+        String code = obtainParameter(httpServletRequest, LOGIN_PWD_CODE);
 
-        SmsCodeAuthenticationToken authenticationToken = new SmsCodeAuthenticationToken(loginName, credentials);;
-        setDetails(httpServletRequest, authenticationToken);
-        return authenticationManager.authenticate(authenticationToken);
+        //用户名
+        String loginName = obtainParameter(httpServletRequest, LOGIN_PWD_NAME);
+
+        //密码
+        String credentials = obtainParameter(httpServletRequest, LOGIN_PWD_PASSWORD);
+
+        PwdAuthenticationToken pwdAuthenticationToken = new PwdAuthenticationToken(loginName, credentials);
+        setDetails(httpServletRequest, pwdAuthenticationToken);
+        return pwdAuthenticationToken;
+
     }
 
     private void setDetails(HttpServletRequest request,
-                            SmsCodeAuthenticationToken authRequest) {
+                            IrhAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
@@ -79,4 +84,5 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
     protected String obtainParameter(HttpServletRequest request, String type){
         return request.getParameter(type);
     }
+
 }

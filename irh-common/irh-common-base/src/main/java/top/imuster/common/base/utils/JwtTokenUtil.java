@@ -173,9 +173,7 @@ public class JwtTokenUtil {
     }
 
     public static void main(String[] args) {
-        String hmr = generateToken("hmr", 3L);
-        System.out.println(hmr);
-        String userNameFromToken = getUserNameFromToken(hmr);
-        System.out.println(userNameFromToken);
+        Long userIdFromToken = getUserIdFromToken("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODk2NTU4MDQsInVzZXJfbmFtZSI6IjE5Nzg3NzM0NjVAcXEuY29tIiwiZW1haWwiOiIxOTc4NzczNDY1QHFxLmNvbSIsImp0aSI6IjlmYmE1NTBkLThjNjYtNDkwOS1hZjI5LWY5ZDM4NzM0YTZkNCIsImNsaWVudF9pZCI6ImlyaFdlYkFwcCIsInNjb3BlIjpbImFwcCJdfQ.WysAhZgGbGd2OOUxk21fq59w_DHQ1FOb8oznQU0KpOL-7PXfZbBjzMRBz_eBxDbdjwb7HebV8YVjnwOw_e3poQHqr9HQtQ6A6mhDuKz4gWpLfqN6uHNXm2hsgsC8rE19xy9D3D2squRXi5DF5Xo0rFgWR25eetJY46ZFzXn262yJQbJ1JZ4bOHM5DpcVhKlxr4zoBXHn6t-bPpTmFmMQf0Sy1scA7I_rS5R8t24sGDHTVmgA3YoXbNt9ZuR-vudnJfgIBGTzd64XZWLfu-GsPVQNcwndoNtVVQyqRp2Nwbq3FBKxz43mSyvL2-RZ8NPz5HAP0nUYyhRsH4UOwmJCLA");
+        System.out.println(userIdFromToken);
     }
 }

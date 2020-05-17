@@ -107,4 +107,14 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: java.util.Map<java.lang.String,java.lang.String>  返回的key为:address , phoneNum
      **/
     Map<String, String> getAddAndPhoneById(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 根据email更新pwd
+     * @Date: 2020/5/16 11:14
+     * @param email
+     * @param password
+     * @reture: boolean
+     **/
+    boolean resetPwdByEmail(String email, String password);
 }

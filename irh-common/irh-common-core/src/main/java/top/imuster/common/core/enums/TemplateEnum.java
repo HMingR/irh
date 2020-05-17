@@ -10,10 +10,13 @@ public enum TemplateEnum {
 
     USER_REGISTER("用户注册-发送验证码", "UserRegister.ftl"),
 
+    USER_RESETPWD("用户重置密码发送的email模板", "ResetPassword.ftl"),
+
     ARTICLE_TEMPLATE("论坛模块文章详情页", "static/article.ftl"),
 
     SIMPLE_TEMPLATE("发送简单的邮件模板", "Simple.ftl"),
 
+    USER_LOGIN("用户验证码登录的email模板", "UserLogin.ftl"),
     //todo 商品详情页还没有
     PRODUCT_TEMPLATE("商品详情页", "");
 

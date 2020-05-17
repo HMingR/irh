@@ -9,7 +9,8 @@ package top.imuster.common.core.enums;
 public enum ReleaseType {
     GOODS("info.1.release.1"),
     ARTICLE("info.2.release.2"),
-    DEMAND("info.3.release.3");
+    DEMAND("info.3.release.3"),
+    PROPAGATE("info.4.release.4");
 
     String routingKey;
 

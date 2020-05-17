@@ -1,26 +1,31 @@
 package top.imuster.auth.component;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
-import org.springframework.stereotype.Component;
 import top.imuster.auth.service.Impl.UsernameUserDetailsServiceImpl;
 
-import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Component
 public class CustomUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
-    @Resource
+
+    @Autowired
     UsernameUserDetailsServiceImpl usernameDetailsService;
 
+    /**
+     * @Author hmr
+     * @Description 在jwt中保存更多的信息
+     * @Date: 2020/5/16 20:03
+     * @param authentication
+     * @reture: java.util.Map<java.lang.String,?>
+     **/
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
         LinkedHashMap response = new LinkedHashMap();
         String name = authentication.getName();
-        response.put("user_name", name);
 
         Object principal = authentication.getPrincipal();
         top.imuster.security.api.bo.UserDetails userDetails = null;
@@ -31,13 +36,11 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
             UserDetails userDetails1 = usernameDetailsService.loadUserByUsername(name);
             userDetails = (top.imuster.security.api.bo.UserDetails) userDetails1;
         }
-        response.put("email", userDetails.getUsername());
-        if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
-            response.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
+        response.put("userInfo", userDetails.getUserInfo());
+        if (authentication.getAuthorities() != null && !userDetails.getAuthorities().isEmpty()) {
+            response.put("authorities", AuthorityUtils.authorityListToSet(userDetails.getAuthorities()));
         }
-
         return response;
     }
-
 
 }

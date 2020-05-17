@@ -50,13 +50,11 @@ public class UserLoginController extends BaseController {
     UserServiceFeignApi userServiceFeignApi;
 
     @ApiOperation(value = "会员登录，成功返回token", httpMethod = "POST")
-    @PostMapping("login")
+    //@PostMapping("login")
     public Message<SecurityUserDto> login(@Validated(ValidateGroup.loginGroup.class) @RequestBody UserInfo userInfo, BindingResult bindingResult) throws JsonProcessingException {
         validData(bindingResult);
-        SecurityUserDto result = userLoginService.login(userInfo.getEmail(), userInfo.getPassword());
+        SecurityUserDto result = userLoginService.login(userInfo.getEmail(), userInfo.getPassword(), userInfo.getCode());
         saveAccessTokenToCookie(result.getAuthToken().getAccessToken());
-        result.getAuthToken().setJwtToken("");
-        result.getAuthToken().setRefreshToken("");
         return Message.createBySuccess(result);
     }
 
@@ -99,23 +97,40 @@ public class UserLoginController extends BaseController {
         return userLoginService.register(userInfo, code);
     }
 
+    /**
+     * @Author hmr
+     * @Description 发送给web端的验证码
+     * @Date: 2020/5/16 10:45
+     * @param email
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @GetMapping("/sendCode/{email}")
+    public Message<String> getCode(@PathVariable("email") String email){
+        return userLoginService.getWebCodeByEmail(email);
+    }
+
 
     /**
      * @Author hmr
      * @Description 发送email验证码
      * @Date: 2020/4/30 10:12
      * @param email  接受code的邮箱
-     * @param type   1-注册  2-登录
+     * @param type   1-注册  2-登录   3-忘记密码
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation(value = "发送email验证码",httpMethod = "GET")
     @GetMapping("/sendCode/{type}/{email}")
     public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email, @PathVariable("type") Integer type) throws Exception {
-        if(type != 1 && type != 2){
+        if(type != 1 && type != 2 && type != 3){
             return Message.createByError("参数异常,请刷新后重试");
         }
         userLoginService.getCode(email, type);
         return Message.createBySuccess();
+    }
+
+    @PostMapping("/resetPwd")
+    public Message<String> forgetPwd(@RequestBody UserInfo userInfo){
+        return userLoginService.resetPwd(userInfo);
     }
 
     /**

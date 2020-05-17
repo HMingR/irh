@@ -275,4 +275,10 @@
 		where id = #{userId,jdbcType=BIGINT}
 	</select>
 
+	<update id="updatePwdByEmail" parameterType="userInfo">
+		UPDATE user_info
+		SET password = #{password,jdbcType=VARCHAR}
+		WHERE email = #{email,jdbcType=VARCHAR}
+	</update>
+
 </mapper>

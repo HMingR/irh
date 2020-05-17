@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
@@ -39,7 +40,10 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     private UserInfoDao userInfoDao;
 
     @Autowired
-    GenerateSendMessageService generateSendMessageService;
+   GenerateSendMessageService generateSendMessageService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public BaseDao<UserInfo, Long> getDao() {
@@ -152,6 +156,16 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     @Override
     public Map<String, String> getAddAndPhoneById(Long userId) {
         return userInfoDao.selectAddAndPhoneById(userId);
+    }
+
+    @Override
+    public boolean resetPwdByEmail(String email, String password) {
+        String encode = passwordEncoder.encode(password);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setEmail(email);
+        userInfo.setPassword(encode);
+        Integer i = userInfoDao.updatePwdByEmail(userInfo);
+        return i == 1;
     }
 
 }

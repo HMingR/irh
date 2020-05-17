@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.stereotype.Service;
 import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
@@ -21,7 +20,7 @@ import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.util.List;
 
-@Service("usernameDetailsService")
+//@Service("usernameDetailsService")
 public class UsernameUserDetailsServiceImpl implements UserDetailsService {
 
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -44,7 +43,7 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
         //取出身份，如果身份为空说明没有认证
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //没有认证统一采用httpbasic认证，httpbasic中存储了client_id和client_secret，开始认证client_id和client_secret
-        if(authentication==null){
+        if(authentication == null){
             ClientDetails clientDetails = clientDetailsService.loadClientByClientId(username);
             if(clientDetails!=null){
                 //密码

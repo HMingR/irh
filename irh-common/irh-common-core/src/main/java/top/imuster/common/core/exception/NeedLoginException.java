@@ -6,7 +6,7 @@ package top.imuster.common.core.exception;
  * @author: hmr
  * @date: 2019/12/20 20:16
  */
-public class NeedLoginException extends Exception {
+public class NeedLoginException extends RuntimeException{
 
     public NeedLoginException(){
         super();

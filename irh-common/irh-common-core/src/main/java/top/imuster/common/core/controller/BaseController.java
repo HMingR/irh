@@ -1,11 +1,13 @@
 package top.imuster.common.core.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,7 +17,6 @@ import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.GlobalException;
-import top.imuster.common.core.utils.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
@@ -68,12 +69,20 @@ public class BaseController {
      * @reture: top.imuster.common.base.domain.BaseDomain
      **/
     protected UserDto getCurrentUserFromCookie(){
-        String accessToken = getAccessTokenFromCookie();
+        /*String accessToken = getAccessTokenFromCookie();
         UserDto userDto = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
         if(userDto == null){
-            throw new GlobalException("用户身份货过期,请重新登录后再操作");
+            throw new NeedLoginException("用户身份货过期,请重新登录后再操作");
         }
-        return userDto;
+        return userDto;*/
+        try {
+            org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValueAsString(authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -127,6 +136,4 @@ public class BaseController {
         }
         return null;
     }
-
-
 }

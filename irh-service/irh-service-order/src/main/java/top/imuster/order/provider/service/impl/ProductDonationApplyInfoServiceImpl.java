@@ -201,7 +201,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     @Override
     public Message<String> upOrDownApply(Integer type, Long targetId) {
         String redisKey = RedisUtil.getDonationApplyAttributeKey(type);
-        redisTemplate.opsForHash().increment(redisKey, targetId, 1);
+        redisTemplate.opsForHash().increment(redisKey, String.valueOf(targetId), 1);
         return Message.createBySuccess();
     }
 

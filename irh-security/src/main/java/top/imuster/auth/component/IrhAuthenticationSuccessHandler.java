@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
@@ -13,6 +15,10 @@ import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.utils.CookieUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +45,15 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Value("${auth.cookieMaxAge}")
+    private int cookieMaxAge;
+
+    @Value("${auth.cookieDomain}")
+    private String cookieDomain;
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -61,8 +76,21 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
         OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request, authentication);
 
         OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
-
         response.setContentType("application/json;charset=UTF-8");
+
         response.getWriter().write(objectMapper.writeValueAsString(token));
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 将用户申请到的令牌保存到cookie中
+     * @Date: 2020/1/29 16:08
+     * @param accessToken
+     * @reture: void
+     **/
+    private void saveAccessTokenToCookie(String accessToken){
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        CookieUtil.addCookie(response, cookieDomain, "/", GlobalConstant.COOKIE_ACCESS_TOKEN_NAME, accessToken, cookieMaxAge, false);
     }
 }

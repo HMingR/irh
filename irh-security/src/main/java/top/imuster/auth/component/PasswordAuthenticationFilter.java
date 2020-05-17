@@ -10,8 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import top.imuster.auth.config.PasswordCodeAuthenticationToken;
 import top.imuster.auth.config.SecurityConstants;
-import top.imuster.auth.config.SmsCodeAuthenticationToken;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,16 +24,16 @@ import java.io.IOException;
  * @author: hmr
  * @date: 2020/4/30 12:16
  */
-public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class PasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(SmsCodeAuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(PasswordAuthenticationFilter.class);
 
     private static final String POST = "post";
 
     private boolean postOnly = true;
 
-    public SmsCodeAuthenticationFilter(){
-        super(new AntPathRequestMatcher("/emailCodeLogin", "POST"));
+    public PasswordAuthenticationFilter(){
+        super(new AntPathRequestMatcher("/password", "POST"));
     }
 
     @Autowired
@@ -59,13 +59,13 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         if(StringUtils.isBlank(loginName)) throw new AuthenticationServiceException("登录名不能为空");
         if(StringUtils.isBlank(credentials)) throw new AuthenticationServiceException("验证码不能为空");
 
-        SmsCodeAuthenticationToken authenticationToken = new SmsCodeAuthenticationToken(loginName, credentials);;
+        PasswordCodeAuthenticationToken authenticationToken = new PasswordCodeAuthenticationToken(loginName, credentials);;
         setDetails(httpServletRequest, authenticationToken);
         return authenticationManager.authenticate(authenticationToken);
     }
 
     private void setDetails(HttpServletRequest request,
-                            SmsCodeAuthenticationToken authRequest) {
+                            PasswordCodeAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 

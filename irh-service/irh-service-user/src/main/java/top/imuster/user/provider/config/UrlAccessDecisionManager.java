@@ -1,20 +1,15 @@
 package top.imuster.user.provider.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import top.imuster.user.provider.exception.UserException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * @ClassName: UrlAccessDecisionManager
@@ -22,8 +17,8 @@ import java.util.Iterator;
  * @author: hmr
  * @date: 2019/12/24 16:34
  */
-@Slf4j
 public class UrlAccessDecisionManager implements AccessDecisionManager {
+
     /**
      * @Description:
      * @Author: hmr

@@ -62,6 +62,11 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
             public String getUserEmailById(Long holderId) {
                 return null;
             }
+
+            @Override
+            public boolean updateUserPwdByEmail(String email, String password) {
+                return false;
+            }
         };
     }
 }

@@ -134,12 +134,11 @@
 	<!-- 其它SQL语句 -->
 
 	<!--通过id查询具体的角色权限信息-->
-	<resultMap id="includeAuth" type="roleInfo">
+	<resultMap id="includeAuth" type="top.imuster.user.api.pojo.RoleInfo">
 		<id column="id" property="id"></id>
 		<result column="role_desc" property="roleDesc"></result>
 		<result column="role_name" property="roleName"></result>
 		<result column="create_time" property="createTime"></result>
-		<result column="update_time" property="updateTime"></result>
 		<result column="create_management" property="createManagement"></result>
 		<collection property="authInfoList"
 					column="id"
@@ -147,20 +146,18 @@
 					select="top.imuster.user.provider.dao.AuthRoleRelDao.selectAuthListByRoleId"></collection>
 	</resultMap>
 
-	<select id="selectRoleAndAuthByRoleId" parameterType="Long" resultMap="includeAuth">
-		<![CDATA[SELECT *]]>
-		<include refid="QUERY_FROM_TABLE"/>
+	<select id="selectRoleAndAuthByRoleId" parameterType="long" resultMap="includeAuth">
+		<![CDATA[SELECT id, role_desc, role_name, create_time, create_management FROM role_info]]>
 		WHERE id = #{roleId}
 	</select>
 
-	<select id="selectRoleAndAuthByRoleName" parameterType="Long" resultMap="includeAuth">
-		<![CDATA[SELECT *]]>
-		<include refid="QUERY_FROM_TABLE"/>
+	<select id="selectRoleAndAuthByRoleName" parameterType="long" resultMap="includeAuth">
+		<![CDATA[SELECT * FROM role_info]]>
 		WHERE id = #{roleId}
 	</select>
 
 	<select id="selectRoleAndAuth" resultMap="includeAuth">
-		<![CDATA[SELECT *]]>
+		<![CDATA[SELECT id, role_desc, role_name, create_time, create_management]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = 2
 	</select>

@@ -1,6 +1,7 @@
 package top.imuster.user.provider.config;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.ConfigAttribute;
@@ -8,7 +9,6 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
-import top.imuster.user.api.pojo.AuthInfo;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.provider.service.RoleInfoService;
 
@@ -23,8 +23,10 @@ import java.util.List;
  * @author: hmr
  * @date: 2019/12/24 15:03
  */
-@Slf4j
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
     @Value("${enable.needLogin}")
     boolean enable;
@@ -62,10 +64,24 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         List<RoleInfo> roleAndAuthList = roleInfoService.getRoleAndAuthList();
 
         //将数据库中所有的角色都拿到，然后遍历每每一个角色的权限，如果能匹配上，则返回该角色的名称
+        /*for(RoleInfo roleInfo : roleAndAuthList){
+            if(roleInfo != null && roleInfo.getAuthInfoList() != null){
+                List<AuthInfo> authInfoList = roleInfo.getAuthInfoList();
+                for (AuthInfo authInfo : authInfoList){
+                    if(authInfo == null) continue;
+                    if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){
+                        roles.add(roleInfo.getRoleName());
+                    }
+                }
+            }
+        }*/
+
         roleAndAuthList.stream().forEach(roleInfo -> {
             roleInfo.getAuthInfoList().stream().forEach(authInfo -> {
-                if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){
-                    roles.add(roleInfo.getRoleName());
+                if(authInfo != null){
+                    if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){  //todo 判空
+                        roles.add(roleInfo.getRoleName());
+                    }
                 }
             });
         });

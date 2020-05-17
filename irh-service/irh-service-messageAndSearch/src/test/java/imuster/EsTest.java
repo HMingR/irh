@@ -79,7 +79,7 @@ public class EsTest {
             //template = configuration.getTemplate("Simple.ftl", "UTF-8");
             mimeMailMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
-            mimeMessageHelper.setFrom("irh");
+            mimeMessageHelper.setFrom("postmaster@imuster.top");
             mimeMessageHelper.setTo("1978773465@qq.com");
             mimeMessageHelper.setSubject("验证码");
 

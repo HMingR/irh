@@ -80,4 +80,13 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @reture: java.util.Map<java.lang.String,java.lang.String> 返回的key为:address , phoneNum
      **/
     Map<String, String> selectAddAndPhoneById(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 重置密码
+     * @Date: 2020/5/16 11:16
+     * @param userInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer updatePwdByEmail(UserInfo userInfo);
 }

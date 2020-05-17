@@ -201,4 +201,19 @@ public class RedisUtil {
     public static String getProductRealtimeRecommendListKey(Long userId) {
         return new StringBuffer(GlobalConstant.IRH_PRODUCT_REAL_TIME_RECOMMEND_LIST_KEY).append(userId).toString();
     }
+
+    /**
+     * @Author hmr
+     * @Description 用于web端的验证码
+     * @Date: 2020/5/16 9:28
+     * @param email
+     * @reture: java.lang.String
+     **/
+    public static String getWebCodeByEmail(String email) {
+        return new StringBuffer(GlobalConstant.IRH_WEB_CODE_KEY).append(email).toString();
+    }
+
+    public static String getConsumerResetPwdKey(String email) {
+        return new StringBuffer(GlobalConstant.IRH_USER_RESET_PWD_KEY).append(email).toString();
+    }
 }

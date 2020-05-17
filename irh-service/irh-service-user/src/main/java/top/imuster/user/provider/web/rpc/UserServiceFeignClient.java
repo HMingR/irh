@@ -73,4 +73,10 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     public String getUserEmailById(@PathVariable("id") Long holderId) {
         return userInfoService.getEmailById(holderId);
     }
+
+    @Override
+    @GetMapping("/reset/{email}/{pwd}")
+    public boolean updateUserPwdByEmail(@PathVariable("email") String email, @PathVariable("pwd") String password){
+        return userInfoService.resetPwdByEmail(email, password);
+    }
 }

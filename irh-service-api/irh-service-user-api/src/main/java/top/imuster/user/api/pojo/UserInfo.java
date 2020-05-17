@@ -91,8 +91,20 @@ public class UserInfo extends BaseDomain {
 
 	private String address;
 
+	//登陆时请求的验证码
+	private String code;
+
 	// 10:注销 20:锁定 25:未实名 30:审核中 40:审核通过 50:认证失败
 	//state
+
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	private List<RoleInfo> roleList;
 

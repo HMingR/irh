@@ -15,7 +15,11 @@ import java.util.Collection;
 public class IrhAuthenticationToken extends AbstractAuthenticationToken {
 
     private static final long serialVersionUID = 110L;
+
+    //用户信息
     protected final Object principal;
+
+    //密码或者邮箱验证码
     protected Object credentials;
 
     /**

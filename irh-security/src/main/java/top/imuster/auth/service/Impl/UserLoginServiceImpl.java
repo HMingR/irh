@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,14 +33,10 @@ import top.imuster.security.api.bo.SecurityUserDto;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
-import javax.annotation.Resource;
 import java.io.IOException;
-import java.net.URI;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 /**
  * @ClassName: UserLoginService
@@ -75,8 +70,6 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Autowired
     DiscoveryClient discoveryClient;
 
-    @Resource
-    private Pattern emailPattern;
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -90,6 +83,9 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Value("${auth.tokenValiditySeconds}")
     int tokenValiditySeconds;
 
+    @Value("${security.applyUrl}")
+    private String securityApplyUri;
+
     /**
      * @Author hmr
      * @Description 用户登录
@@ -97,12 +93,20 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @param
      * @reture: top.imuster.security.api.bo.SecurityUserDto
      **/
-    public SecurityUserDto login(String loginName, String password) throws JsonProcessingException {
+    public SecurityUserDto login(String loginName, String password, String code) throws JsonProcessingException {
+        checkCode(loginName, code);
+
         AuthToken authToken = applyToken(loginName, password, clientId, clientSecret);
         String accessToken = authToken.getAccessToken();
         String content = new ObjectMapper().writeValueAsString(authToken);
         saveTokenToRedis(accessToken, content, tokenValiditySeconds);
         return new SecurityUserDto(authToken);
+    }
+
+    private boolean checkCode(String email, String code){
+        String redisCode = (String)redisTemplate.opsForValue().get(RedisUtil.getWebCodeByEmail(email));
+        if(redisCode == null || !redisCode.equalsIgnoreCase(code)) throw new CustomSecurityException("验证码错误或验证码已经过期,请重新获取");
+        return true;
     }
 
     /**
@@ -129,14 +133,20 @@ public class UserLoginServiceImpl implements UserLoginService {
         String code = UUID.randomUUID().toString().substring(0, 4);
         emailDto.setEmail(email);
         emailDto.setContent(code);
-        emailDto.setSubject("irh验证码");
         log.info("验证码为:{}", code);
         if(type == 1){
             emailDto.setRedisKey(RedisUtil.getConsumerRegisterByEmailToken(email));
+            emailDto.setSubject("irh注册");
+            emailDto.setTemplateEnum(TemplateEnum.USER_REGISTER);
         }else if(type == 2){
             emailDto.setRedisKey(RedisUtil.getConsumerLoginByEmail(email));
+            emailDto.setSubject("irh验证码登录");
+            emailDto.setTemplateEnum(TemplateEnum.USER_LOGIN);
+        }else{
+            emailDto.setRedisKey(RedisUtil.getConsumerResetPwdKey(email));
+            emailDto.setTemplateEnum(TemplateEnum.USER_RESETPWD);
+            emailDto.setSubject("irh重置密码");
         }
-        emailDto.setTemplateEnum(TemplateEnum.USER_REGISTER);
         emailDto.setExpiration(20L);
         emailDto.setUnit(TimeUnit.MINUTES);
         generateSendMessageService.sendRegistEmail(emailDto);
@@ -170,8 +180,8 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @reture: top.imuster.security.api.bo.AuthToken
      **/
     private AuthToken applyToken(String loginName, String password, String clientId, String clientSecret){
-        List<String> services = discoveryClient.getServices();
-        URI uri = null;
+        //List<String> services = discoveryClient.getServices();
+        /*URI uri = null;
         for (String service : services) {
             if(service.equalsIgnoreCase("irh-gateway")){
                 ServiceInstance serviceInstance1 = discoveryClient.getInstances(service).get(0);
@@ -180,8 +190,8 @@ public class UserLoginServiceImpl implements UserLoginService {
         }
         if(StringUtils.isBlank(String.valueOf(uri))){
             throw new CustomSecurityException("认证服务器已经停止工作,请稍后重试或联系管理员");
-        }
-        String url = new StringBuilder().append(uri).append("/api/security/oauth/token").toString();
+        }*/
+        String url = new StringBuilder().append(securityApplyUri).append("/api/security/oauth/token").toString();
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         String httpBasic = getHttpBasic(clientId, clientSecret);
         header.add("Authorization",httpBasic);
@@ -226,6 +236,25 @@ public class UserLoginServiceImpl implements UserLoginService {
 
     public void deleteAccessTokenFromRedis(String accessToken){
         redisTemplate.delete(RedisUtil.getAccessToken(accessToken));
+    }
+
+    @Override
+    public Message<String> getWebCodeByEmail(String email) {
+        String code = cn.hutool.core.lang.UUID.randomUUID().toString().substring(0, 4);
+        redisTemplate.opsForValue().set(RedisUtil.getWebCodeByEmail(email), code, 5, TimeUnit.MINUTES);
+        return Message.createBySuccess(code);
+    }
+
+    @Override
+    public Message<String> resetPwd(UserInfo userInfo) {
+        String email = userInfo.getEmail();
+        String password = userInfo.getPassword();
+        String code = userInfo.getCode();
+        String redisCode = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerResetPwdKey(email));
+        if(null == redisCode || !code.equalsIgnoreCase(redisCode)) throw new CustomSecurityException("验证码错误或超时,请重新获取");
+        boolean b = userServiceFeignApi.updateUserPwdByEmail(email, password);
+        if(b) return Message.createBySuccess();
+        return Message.createByError();
     }
 
 

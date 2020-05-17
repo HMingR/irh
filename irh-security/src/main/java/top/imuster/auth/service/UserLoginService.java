@@ -24,7 +24,7 @@ public interface UserLoginService {
      * @param password 密码
      * @reture: top.imuster.security.api.bo.SecurityUserDto
      **/
-    SecurityUserDto login(String loginName, String password) throws JsonProcessingException;
+    SecurityUserDto login(String loginName, String password, String code) throws JsonProcessingException;
 
 
 
@@ -66,4 +66,22 @@ public interface UserLoginService {
      * @reture: void
      **/
     void deleteAccessTokenFromRedis(String accessToken);
+
+    /**
+     * @Author hmr
+     * @Description 用于web页面的验证码
+     * @Date: 2020/5/16 9:27
+     * @param email
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> getWebCodeByEmail(String email);
+
+    /**
+     * @Author hmr
+     * @Description 重置密码
+     * @Date: 2020/5/16 11:00
+     * @param userInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> resetPwd(UserInfo userInfo);
 }

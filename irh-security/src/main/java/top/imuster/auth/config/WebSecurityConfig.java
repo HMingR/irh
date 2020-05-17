@@ -5,15 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import top.imuster.auth.component.IrhAuthenticationFailHandler;
-import top.imuster.auth.component.IrhAuthenticationSuccessHandler;
-import top.imuster.auth.component.SmsAuthenticationProvider;
-import top.imuster.auth.component.SmsCodeAuthenticationFilter;
+import top.imuster.auth.component.*;
+import top.imuster.auth.service.Impl.UsernameUserDetailsServiceImpl;
 
 import java.util.Arrays;
 
@@ -24,7 +21,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/emailCodeLogin","/emailCodeLogin1", "/login","/logout","/jwt", "/oneCard", "/identityCard", "/sendCode/**");
+        web.ignoring().antMatchers("/emailCodeLogin", "/password","/login","/logout","/jwt", "/oneCard", "/identityCard", "/sendCode/**/**", "/resetPwd", "/pwdLogin");
     }
 
     @Bean
@@ -35,15 +32,27 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(smsAuthenticationProvider());
+    @Bean
+    public PwdAuthenticationProvider pwdAuthenticationProvider(){
+        PwdAuthenticationProvider provider = new PwdAuthenticationProvider();
+        return provider;
     }
+
+    @Bean
+    public PasswordAuthenticationProvider passwordAuthenticationProvider(){
+        return new PasswordAuthenticationProvider();
+    }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        //auth.authenticationProvider(smsAuthenticationProvider());
+//        auth.authenticationProvider(pwdAuthenticationProvider());
+//    }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
-        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(smsAuthenticationProvider()));
+        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(smsAuthenticationProvider(), pwdAuthenticationProvider(), passwordAuthenticationProvider()));
         return authenticationManager;
     }
 
@@ -77,8 +86,39 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public PasswordAuthenticationFilter passwordAuthenticationFilter(){
+        PasswordAuthenticationFilter smsCodeAuthenticationFilter = new PasswordAuthenticationFilter();
+        try {
+            smsCodeAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(irhAuthenticationSuccessHandler());
+        smsCodeAuthenticationFilter.setAuthenticationFailureHandler(irhAuthenticationFailHandler());
+        return smsCodeAuthenticationFilter;
+    }
+
+    @Bean
+    public PwdAuthenticationFilter pwdAuthenticationFilter(){
+        PwdAuthenticationFilter pwdAuthenticationFilter = new PwdAuthenticationFilter();
+        try {
+            pwdAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pwdAuthenticationFilter.setAuthenticationSuccessHandler(irhAuthenticationSuccessHandler());
+        pwdAuthenticationFilter.setAuthenticationFailureHandler(irhAuthenticationFailHandler());
+        return pwdAuthenticationFilter;
+    }
+
+    @Bean
     public IrhAuthenticationSuccessHandler irhAuthenticationSuccessHandler(){
         return new IrhAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public UsernameUserDetailsServiceImpl usernameUserDetailsService(){
+        return new UsernameUserDetailsServiceImpl();
     }
 
 }

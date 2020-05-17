@@ -16,6 +16,8 @@ public interface SecurityConstants {
 
     String LOGIN_PARAM_NAME = "loginName";
 
+    String LOGIN_PWD = "password";
+
     //邮箱验证码的方式登录
     String EMAIL_CODE = "emailCode";
 
