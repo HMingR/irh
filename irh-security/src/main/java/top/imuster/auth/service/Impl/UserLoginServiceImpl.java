@@ -2,7 +2,6 @@ package top.imuster.auth.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
-import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.io.IOException;
@@ -142,7 +140,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             emailDto.setRedisKey(RedisUtil.getConsumerLoginByEmail(email));
             emailDto.setSubject("irh验证码登录");
             emailDto.setTemplateEnum(TemplateEnum.USER_LOGIN);
-        }else{
+        }else if (type == 3){
             emailDto.setRedisKey(RedisUtil.getConsumerResetPwdKey(email));
             emailDto.setTemplateEnum(TemplateEnum.USER_RESETPWD);
             emailDto.setSubject("irh重置密码");
@@ -245,18 +243,6 @@ public class UserLoginServiceImpl implements UserLoginService {
         return Message.createBySuccess(code);
     }
 
-    @Override
-    public Message<String> resetPwd(UserInfo userInfo) {
-        String email = userInfo.getEmail();
-        String password = userInfo.getPassword();
-        String code = userInfo.getCode();
-        String redisCode = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerResetPwdKey(email));
-        if(null == redisCode || !code.equalsIgnoreCase(redisCode)) throw new CustomSecurityException("验证码错误或超时,请重新获取");
-        boolean b = userServiceFeignApi.updateUserPwdByEmail(email, password);
-        if(b) return Message.createBySuccess();
-        return Message.createByError();
-    }
-
 
     /**
      * @Author hmr
@@ -273,29 +259,5 @@ public class UserLoginServiceImpl implements UserLoginService {
         return "Basic "+new String(encode);
     }
 
-    public static void main(String[] args) {
-        String httpBasic = getHttpBasic("irhWebApp", "irhWebApp");
-        System.out.println(httpBasic);
-    }
-
-    /**
-     * @Author hmr
-     * @Description 用户注册,需要先校验参数
-     * @Date: 2020/4/30 9:33
-     * @param userInfo
-     * @param code
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    public Message<String> register(UserInfo userInfo, String code) {
-        String email = userInfo.getEmail();
-        if(StringUtils.isEmpty(email)) return Message.createByError("登录邮箱为kong");
-
-        String redisKey = RedisUtil.getConsumerRegisterByEmailToken(email);
-        String redisCode = (String)redisTemplate.opsForValue().get(redisKey);
-
-        if(StringUtils.isEmpty(redisCode) || redisCode.equalsIgnoreCase(code)) return Message.createByError("验证码错误");
-
-        return userServiceFeignApi.register(userInfo);
-    }
 
 }

@@ -7,6 +7,7 @@ import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 import top.imuster.user.provider.service.RoleInfoService;
 import top.imuster.user.provider.service.UserInfoService;
+import top.imuster.user.provider.service.WxAppLoginService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,6 +29,9 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     @Resource
     UserInfoService userInfoService;
 
+    @Resource
+    WxAppLoginService wxAppLoginService;
+
     @Override
     @GetMapping("/login/{email}")
     public UserInfo loadUserInfoByEmail(@PathVariable("email") String email) {
@@ -46,11 +50,6 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
         return roleInfoService.getRoleNameByUserName(loginName);
     }
 
-    @Override
-    @PostMapping("/register")
-    public Message<String> register(@RequestBody UserInfo userInfo) {
-        return userInfoService.register(userInfo);
-    }
 
     @Override
     @GetMapping("/{userId}/{state}")
@@ -74,9 +73,8 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
         return userInfoService.getEmailById(holderId);
     }
 
-    @Override
-    @GetMapping("/reset/{email}/{pwd}")
-    public boolean updateUserPwdByEmail(@PathVariable("email") String email, @PathVariable("pwd") String password){
-        return userInfoService.resetPwdByEmail(email, password);
+    @GetMapping("/wxLogin/{openId}")
+    public UserInfo getInfoByWxOpenId(@PathVariable("openId") String openId){
+        return wxAppLoginService.loginByOpenId(openId);
     }
 }

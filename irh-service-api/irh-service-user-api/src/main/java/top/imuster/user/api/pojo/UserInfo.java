@@ -7,6 +7,7 @@ import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class UserInfo extends BaseDomain {
 
 	// 密码
 	@ApiModelProperty("密码")
-	@NotEmpty(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "密码不能为空")
+	@NotBlank(groups = {ValidateGroup.loginGroup.class, ValidateGroup.register.class}, message = "密码不能为空")
 	private String password;
 
 	//个性签名

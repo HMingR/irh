@@ -18,6 +18,7 @@ public class GlobalConstant {
     public static final String IRH_PRODUCT_REAL_TIME_RECOMMEND_LIST_KEY = "irh::product::realtime::recommend::list::key::";
     public static final String IRH_WEB_CODE_KEY = "irh::web::code::key::";   //web页面登录请求的验证码
     public static final String IRH_USER_RESET_PWD_KEY = "irh::user::reset::pwd::"; //用户重置密码保存的验证码
+    public static final String IRH_USER_BIND_WX_EMAIL_CODE = "irh::bind::wx::email::code::";
 
     private GlobalConstant(){}
 

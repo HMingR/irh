@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.security.api.bo.AuthToken;
 import top.imuster.security.api.bo.SecurityUserDto;
-import top.imuster.user.api.pojo.UserInfo;
 
 import java.io.IOException;
 
@@ -47,17 +46,6 @@ public interface UserLoginService {
      **/
     AuthToken getUserAuthTokenByAccessToken(String accessToken) throws IOException;
 
-
-    /**
-     * @Author hmr
-     * @Description 注册
-     * @Date: 2020/4/30 19:23
-     * @param userInfo
-     * @param code
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    Message<String> register(UserInfo userInfo, String code);
-
     /**
      * @Author hmr
      * @Description 用户退出
@@ -75,13 +63,4 @@ public interface UserLoginService {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> getWebCodeByEmail(String email);
-
-    /**
-     * @Author hmr
-     * @Description 重置密码
-     * @Date: 2020/5/16 11:00
-     * @param userInfo
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    Message<String> resetPwd(UserInfo userInfo);
 }

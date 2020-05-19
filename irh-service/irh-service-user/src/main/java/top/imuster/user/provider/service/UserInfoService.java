@@ -7,6 +7,7 @@ import top.imuster.common.core.dto.UserDto;
 import top.imuster.user.api.dto.CheckValidDto;
 import top.imuster.user.api.pojo.UserInfo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 /**
@@ -41,7 +42,7 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @param userInfo
      * @reture: void
      **/
-    Message<String> register(UserInfo userInfo);
+    Message<String> register(UserInfo userInfo, String code) throws InvocationTargetException, IllegalAccessException;
 
     /**
      * @Author hmr
@@ -113,8 +114,10 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @Description 根据email更新pwd
      * @Date: 2020/5/16 11:14
      * @param email
-     * @param password
+     * @param password
      * @reture: boolean
      **/
-    boolean resetPwdByEmail(String email, String password);
+    Message<String> resetPwdByEmail(UserInfo userInfo);
+
+    UserInfo loadUserDetailsById(Long userId);
 }

@@ -3,8 +3,6 @@ package top.imuster.user.api.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
@@ -40,17 +38,6 @@ public interface UserServiceFeignApi {
 
     /**
      * @Author hmr
-     * @Description 用户注册
-     * @Date: 2020/1/31 15:06
-     * @param userInfo 用户信息
-     * @param code 发送到邮箱的验证码
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    @PostMapping("/register")
-    Message<String> register(@RequestBody UserInfo userInfo);
-
-    /**
-     * @Author hmr
      * @Description 更新用户的状态
      * @Date: 2020/3/29 16:21
      * @param userId
@@ -79,14 +66,6 @@ public interface UserServiceFeignApi {
     @GetMapping("/email/{id}")
     String getUserEmailById(@PathVariable("id") Long holderId);
 
-    /**
-     * @Author hmr
-     * @Description 根据email更新用户的密码
-     * @Date: 2020/5/16 11:11
-     * @param email
-     * @param password
-     * @reture: boolean
-     **/
-    @GetMapping("/reset/{email}/{pwd}")
-    boolean updateUserPwdByEmail(@PathVariable("email") String email, @PathVariable("pwd") String password);
+    @GetMapping("/wxLogin/{openId}")
+    UserInfo getInfoByWxOpenId(@PathVariable("openId") String openId);
 }

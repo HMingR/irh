@@ -217,4 +217,15 @@ public class RedisUtil {
     public static String getConsumerResetPwdKey(String email) {
         return new StringBuffer(GlobalConstant.IRH_USER_RESET_PWD_KEY).append(email).toString();
     }
+
+    /**
+     * @Author hmr
+     * @Description 获得用户绑定微信时发送的email的key
+     * @Date: 2020/5/19 18:20
+     * @param userId
+     * @reture: java.lang.String
+     **/
+    public static String getUserBindWxEmailCode(Long userId) {
+        return new StringBuffer(GlobalConstant.IRH_USER_BIND_WX_EMAIL_CODE).append(userId).toString();
+    }
 }

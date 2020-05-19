@@ -21,7 +21,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/emailCodeLogin", "/password","/login","/logout","/jwt", "/oneCard", "/identityCard", "/sendCode/**/**", "/resetPwd", "/pwdLogin");
+        web.ignoring().antMatchers("/emailCodeLogin", "/password","/wxAppLogin","/logout","/jwt", "/oneCard", "/identityCard", "/sendCode/**/**", "/resetPwd", "/pwdLogin", "/register/**");
     }
 
     @Bean
@@ -45,9 +45,14 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Bean
+    public WxAppAuthenticationProvider wxAppAuthenticationProvider(){
+        return new WxAppAuthenticationProvider();
+    }
+
+    @Bean
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
-        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(smsAuthenticationProvider(), passwordAuthenticationProvider()));
+        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(smsAuthenticationProvider(), passwordAuthenticationProvider(), wxAppAuthenticationProvider()));
         return authenticationManager;
     }
 
@@ -92,6 +97,19 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(irhAuthenticationSuccessHandler());
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(irhAuthenticationFailHandler());
         return smsCodeAuthenticationFilter;
+    }
+
+    @Bean
+    public WxAppAuthenticationFilter wxAppAuthenticationFilter(){
+        WxAppAuthenticationFilter wxAppAuthenticationFilter = new WxAppAuthenticationFilter();
+        try {
+            wxAppAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        wxAppAuthenticationFilter.setAuthenticationSuccessHandler(irhAuthenticationSuccessHandler());
+        wxAppAuthenticationFilter.setAuthenticationFailureHandler(irhAuthenticationFailHandler());
+        return wxAppAuthenticationFilter;
     }
 
 

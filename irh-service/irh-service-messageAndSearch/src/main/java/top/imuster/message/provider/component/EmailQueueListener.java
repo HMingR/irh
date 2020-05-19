@@ -6,11 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.dto.SendEmailDto;
-import top.imuster.common.core.enums.TemplateEnum;
 
 /**
  * @ClassName: EmailQueueListener
@@ -54,7 +52,7 @@ public class EmailQueueListener {
 
         //javaMailSender.send(mimeMailMessage);
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        /*SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("huangmingren@irh.onexmail.com"); //发送者邮箱地址
         message.setTo(sendEmailDto.getEmail()); //收件人邮箱地址
         message.setSubject(sendEmailDto.getSubject() == null ? "irh通知" : sendEmailDto.getSubject());
@@ -65,6 +63,6 @@ public class EmailQueueListener {
         }else{
             message.setText(sendEmailDto.getContent());
         }
-        javaMailSender.send(message);
+        javaMailSender.send(message);*/
     }
 }

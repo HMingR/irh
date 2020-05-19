@@ -48,8 +48,7 @@ public class UserController extends BaseController {
      **/
     @ApiOperation(value = "修改信息前需要校验各种参数(用户名、邮箱、手机号等)必须唯一",httpMethod = "POST")
     @PostMapping("/check")
-    public Message<String> checkValid(@Validated(ValidateGroup.addGroup.class) @RequestBody CheckValidDto checkValidDto, BindingResult bindingResult) throws Exception {
-        validData(bindingResult);
+    public Message<String> checkValid(@RequestBody CheckValidDto checkValidDto) throws Exception {
         boolean flag = userInfoService.checkValid(checkValidDto);
         if(flag){
             return Message.createBySuccess();
@@ -129,4 +128,30 @@ public class UserController extends BaseController {
         return Message.createBySuccess();
     }
 
+    /**
+     * @Description: 会员注册
+     * @Author: hmr
+     * @Date: 2019/12/26 19:29
+     * @param userInfo
+     * @param bindingResult
+     * @reture: top.imuster.common.base.wrapper.Message
+     **/
+    @ApiOperation(value = "会员注册,code为发送的验证码", httpMethod = "POST")
+    @PostMapping("/register/{code}")
+    public Message<String> register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) UserInfo userInfo, BindingResult bindingResult, @ApiParam("发送的验证码") @PathVariable String code) throws Exception {
+        validData(bindingResult);
+        return userInfoService.register(userInfo, code);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 重置密码
+     * @Date: 2020/5/19 16:20
+     * @param userInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @PostMapping("/resetPwd")
+    public Message<String> forgetPwd(@RequestBody UserInfo userInfo){
+        return userInfoService.resetPwdByEmail(userInfo);
+    }
 }

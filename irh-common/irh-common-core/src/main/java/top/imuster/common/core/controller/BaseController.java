@@ -121,6 +121,12 @@ public class BaseController {
         if(map!=null && map.get(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME)!=null){
             return map.get(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME);
         }
+
+        //为了适配wx小程序,微信小程序不能设置cookie
+        String header = request.getHeader(GlobalConstant.COOKIE_ACCESS_TOKEN_NAME);
+        if(header != null){
+            return header;
+        }
         return null;
     }
 }

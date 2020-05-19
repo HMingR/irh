@@ -45,13 +45,18 @@ aliyun:
     path: /rest/160601/ocr/ocr_idcard.json
     appCode: 00840a9616a643ee8d98e323d938ef5f
 
-ribbon:
-  MaxAutoRetries: 2 #最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试，如果eureka中找不到服务则直接走断路器
-  MaxAutoRetriesNextServer: 3 #切换实例的重试次数
-  OkToRetryOnAllOperations: false  #对所有操作请求都进行重试，如果是get则可以，如果是post，put等操作没有实现幂等的情况下是很危险的,所以设置为false
-  ConnectTimeout: 5000  #请求连接的超时时间
-  ReadTimeout: 6000 #请求处理的超时时间
+#ribbon:
+#  MaxAutoRetries: 2 #最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试，如果eureka中找不到服务则直接走断路器
+#  MaxAutoRetriesNextServer: 3 #切换实例的重试次数
+#  OkToRetryOnAllOperations: false  #对所有操作请求都进行重试，如果是get则可以，如果是post，put等操作没有实现幂等的情况下是很危险的,所以设置为false
+#  ConnectTimeout: 5000  #请求连接的超时时间
+#  ReadTimeout: 6000 #请求处理的超时时间
 
+
+wxApp:
+  appId: wxc7911b0a367c62b6
+  appSecret: 937cb3f2017441121d3393c627555301
+  UrlPrefix: https://api.weixin.qq.com/sns/jscode2session?
 
 file:
   urlPrefix: http://39.105.0.169:8080/

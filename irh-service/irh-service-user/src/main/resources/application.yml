@@ -26,6 +26,12 @@ aliyun:                   #阿里云实名认证配置
     path: /rest/160601/ocr/ocr_idcard.json
     appCode: 00840a9616a643ee8d98e323d938ef5f  #500次调用
 
+wxApp:
+  appId: wxc7911b0a367c62b6
+  appSecret: 937cb3f2017441121d3393c627555301
+  UrlPrefix: https://api.weixin.qq.com/sns/jscode2session?
+
+
 secure:
   ignored:
     urls: #安全路径白名单

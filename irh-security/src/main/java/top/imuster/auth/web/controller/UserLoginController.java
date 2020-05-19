@@ -82,20 +82,7 @@ public class UserLoginController extends BaseController {
         return Message.createBySuccess();
     }
 
-    /**
-     * @Description: 会员注册
-     * @Author: hmr
-     * @Date: 2019/12/26 19:29
-     * @param userInfo
-     * @param bindingResult
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @ApiOperation(value = "会员注册,code为发送的验证码", httpMethod = "POST")
-    @PostMapping("/register/{code}")
-    public Message<String> register(@ApiParam("ConsumerInfo实体类") @RequestBody @Validated({ValidateGroup.register.class}) UserInfo userInfo, BindingResult bindingResult, @ApiParam("发送的验证码") @PathVariable String code) throws Exception {
-        validData(bindingResult);
-        return userLoginService.register(userInfo, code);
-    }
+
 
     /**
      * @Author hmr
@@ -121,17 +108,14 @@ public class UserLoginController extends BaseController {
     @ApiOperation(value = "发送email验证码",httpMethod = "GET")
     @GetMapping("/sendCode/{type}/{email}")
     public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email, @PathVariable("type") Integer type) throws Exception {
-        if(type != 1 && type != 2 && type != 3){
+        if(type != 1 && type != 2 && type != 3 && type != 4){
             return Message.createByError("参数异常,请刷新后重试");
         }
         userLoginService.getCode(email, type);
         return Message.createBySuccess();
     }
 
-    @PostMapping("/resetPwd")
-    public Message<String> forgetPwd(@RequestBody UserInfo userInfo){
-        return userLoginService.resetPwd(userInfo);
-    }
+
 
     /**
      * @Author hmr

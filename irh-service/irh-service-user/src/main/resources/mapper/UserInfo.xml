@@ -36,7 +36,7 @@
 	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
 	<sql id="QUERY_WHERE_CLAUSE">
 		<where>
-            <if test="id != null and id != ''"><![CDATA[AND id like "%"#{id}"%"]]></if>
+            <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="age != null and age != ''"><![CDATA[AND age = #{age}]]></if>
             <if test="email != null and email != ''"><![CDATA[AND email = #{email}]]></if>
             <if test="password != null and password != ''"><![CDATA[AND password = #{password}]]></if>
@@ -95,56 +95,21 @@
 		</set>
 	</sql>
 
+
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="userInfo" >
+	<insert id="insertEntry" parameterType="userInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
 		<![CDATA[
 			INSERT INTO user_info
 				(
-                id, 
-                age, 
-                email, 
+                email,
                 password, 
-                alipay_num, 
-                nickname, 
-                qq, 
-                gender, 
-                phone_num, 
-                real_name,
-                certificate_num, 
-                school_name, 
-                academy_name, 
-                major_name, 
-                state, 
-                update_time, 
-                create_time,
-                portrait,
-                type,
-                signature,
-                address
+                nickname
 				)
 			VALUES
 				(
-                #{id}, 
-                #{age}, 
-                #{email}, 
+                #{email},
                 #{password}, 
-                #{alipayNum}, 
-                #{nickname}, 
-                #{qq}, 
-                #{gender}, 
-                #{phoneNum}, 
-                #{realName},
-                #{certificateNum}, 
-                #{schoolName}, 
-                #{academyName}, 
-                #{majorName}, 
-                #{state}, 
-                #{updateTime}, 
-                #{createTime},
-                #{portrait},
-                #{type},
-                #{signature},
-                #{address}
+                #{nickname}
 				)
 		]]>
 	</insert>

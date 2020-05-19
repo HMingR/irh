@@ -1,5 +1,9 @@
 package top.imuster.auth.config;
 
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+
 /**
  * @ClassName: WxAppAuthenticationToken
  * @Description: WxAppAuthenticationToken
@@ -8,8 +12,12 @@ package top.imuster.auth.config;
  */
 public class WxAppAuthenticationToken extends IrhAuthenticationToken  {
 
-
     public WxAppAuthenticationToken(Object principal, Object credentials) {
         super(principal, credentials);
     }
+
+    public WxAppAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+        super(principal, credentials, authorities);
+    }
+
 }

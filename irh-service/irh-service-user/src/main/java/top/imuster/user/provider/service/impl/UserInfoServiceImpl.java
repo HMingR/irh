@@ -22,6 +22,7 @@ import top.imuster.user.provider.exception.UserException;
 import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,30 +73,34 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
      * @param checkValidDto
      * @reture: top.imuster.user.api.pojo.UserInfo
      **/
-    private UserInfo generateCheckCondition(CheckValidDto checkValidDto){
-        try{
-            CheckTypeEnum type = checkValidDto.getType();
-            String validValue = checkValidDto.getValidValue();
-            UserInfo condition = new UserInfo();
-            String field = type.getType();
-            BeanUtils.setProperty(condition, field, validValue);
-            return condition;
-        }catch (Exception e){
-            log.error("生成校验用户信息是否合法的参数是出现错误{}",e.getMessage(), e);
-            throw new UserException("服务器繁忙,请稍后重试");
-        }
+    private UserInfo generateCheckCondition(CheckValidDto checkValidDto) throws InvocationTargetException, IllegalAccessException {
+        CheckTypeEnum type = checkValidDto.getType();
+        String validValue = checkValidDto.getValidValue();
+        UserInfo condition = new UserInfo();
+        String field = type.getType();
+        BeanUtils.setProperty(condition, field, validValue);
+        return condition;
     }
 
     @Override
-    public Message<String> register(UserInfo userInfo){
+    public Message<String> register(UserInfo userInfo, String code) throws InvocationTargetException, IllegalAccessException {
+        String redisCode  = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerRegisterByEmailToken(userInfo.getEmail()));
+        if(StringUtils.isBlank(redisCode) || !code.equalsIgnoreCase(redisCode)) return Message.createByError("验证码失效或错误");
+        redisTemplate.delete(RedisUtil.getConsumerRegisterByEmailToken(userInfo.getEmail()));
+
+        String password = userInfo.getPassword();
+        userInfo.setPassword(passwordEncoder.encode(password));
+
         UserInfo condition;
         CheckValidDto checkValidDto = new CheckValidDto();
+
         //校验邮箱
         String email = userInfo.getEmail();
         checkValidDto.setType(CheckTypeEnum.EMAIL);
         checkValidDto.setValidValue(email);
         condition = generateCheckCondition(checkValidDto);
         int i = userInfoDao.checkInfo(condition);
+
         //校验nickname
         String nickname = userInfo.getNickname();
         checkValidDto.setValidValue(nickname);
@@ -105,9 +110,9 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         if(i != 0){
             return Message.createByError("邮箱或用户名重复");
         }
-        String realToken = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerRegisterByEmailToken(email));
         userInfo.setState(30);
         userInfoDao.insertEntry(userInfo);
+        if(userInfo.getId() == null) return Message.createByError("服务器出现错误.请稍后重试");
         return Message.createBySuccess("注册成功，在个人中心的实名认证中提交相应材料并通过审核之后才能使用全部功能哦!");
     }
 
@@ -159,13 +164,24 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
-    public boolean resetPwdByEmail(String email, String password) {
-        String encode = passwordEncoder.encode(password);
-        UserInfo userInfo = new UserInfo();
-        userInfo.setEmail(email);
+    public Message<String> resetPwdByEmail(UserInfo userInfo) {
+        String email = userInfo.getEmail();
+        String code = userInfo.getCode();
+
+        String redisCode = (String) redisTemplate.opsForValue().get(RedisUtil.getConsumerResetPwdKey(email));
+        if(StringUtils.isBlank(redisCode) || !code.equalsIgnoreCase(redisCode)) throw new UserException("验证码错误或超时,请重新获取");
+        String encode = passwordEncoder.encode(userInfo.getPassword());
         userInfo.setPassword(encode);
         Integer i = userInfoDao.updatePwdByEmail(userInfo);
-        return i == 1;
+        return Message.createBySuccess();
+    }
+
+    @Override
+    public UserInfo loadUserDetailsById(Long userId) {
+        UserInfo condition = new UserInfo();
+        condition.setId(userId);
+        UserInfo userInfo = userInfoDao.selectUserRoleByCondition(condition);
+        return userInfo;
     }
 
 }
