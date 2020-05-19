@@ -32,11 +32,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-    @Bean
-    public PwdAuthenticationProvider pwdAuthenticationProvider(){
-        PwdAuthenticationProvider provider = new PwdAuthenticationProvider();
-        return provider;
-    }
 
     @Bean
     public PasswordAuthenticationProvider passwordAuthenticationProvider(){
@@ -52,7 +47,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
-        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(smsAuthenticationProvider(), pwdAuthenticationProvider(), passwordAuthenticationProvider()));
+        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(smsAuthenticationProvider(), passwordAuthenticationProvider()));
         return authenticationManager;
     }
 
@@ -63,8 +58,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().and()
                 .formLogin().failureHandler(irhAuthenticationFailHandler())
                 .and()
-                .authorizeRequests().anyRequest().authenticated();
-
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
+                .cors();
     }
 
     @Bean
@@ -98,18 +94,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return smsCodeAuthenticationFilter;
     }
 
-    @Bean
-    public PwdAuthenticationFilter pwdAuthenticationFilter(){
-        PwdAuthenticationFilter pwdAuthenticationFilter = new PwdAuthenticationFilter();
-        try {
-            pwdAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        pwdAuthenticationFilter.setAuthenticationSuccessHandler(irhAuthenticationSuccessHandler());
-        pwdAuthenticationFilter.setAuthenticationFailureHandler(irhAuthenticationFailHandler());
-        return pwdAuthenticationFilter;
-    }
 
     @Bean
     public IrhAuthenticationSuccessHandler irhAuthenticationSuccessHandler(){

@@ -1,5 +1,6 @@
 package top.imuster.auth.component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,13 +18,19 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.imuster.auth.service.Impl.UsernameUserDetailsServiceImpl;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.utils.CookieUtil;
+import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.UserDto;
+import top.imuster.common.core.utils.RedisUtil;
+import top.imuster.security.api.bo.UserDetails;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: IrhAuthenticationSuccessHandler
@@ -44,6 +51,9 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    UsernameUserDetailsServiceImpl usernameUserDetailsService;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -76,9 +86,30 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
         OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request, authentication);
 
         OAuth2AccessToken token = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
+        String jti = (String) token.getAdditionalInformation().get("jti");
+
+        Object principal = authentication.getPrincipal();
+        UserDetails userDetails = null;
+        if(principal instanceof UserDetails) userDetails = (UserDetails) principal;
+        else{
+            userDetails = usernameUserDetailsService.loadUserByUsername((String) principal);
+        }
+        saveToCookieAndRedis(jti, userDetails);
         response.setContentType("application/json;charset=UTF-8");
 
-        response.getWriter().write(objectMapper.writeValueAsString(token));
+        Message<OAuth2AccessToken> successMsg = Message.createBySuccess(token);
+        response.getWriter().write(objectMapper.writeValueAsString(successMsg));
+    }
+
+    private void saveToCookieAndRedis(String jti, UserDetails userDetails){
+        saveAccessTokenToCookie(jti);
+
+        UserDto userDto = userDetails.getUserInfo();
+        try {
+            redisTemplate.opsForValue().set(RedisUtil.getAccessToken(jti), objectMapper.writeValueAsString(userDto), 24, TimeUnit.HOURS);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -86,11 +117,11 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
      * @Author hmr
      * @Description 将用户申请到的令牌保存到cookie中
      * @Date: 2020/1/29 16:08
-     * @param accessToken
+     * @param jti
      * @reture: void
      **/
-    private void saveAccessTokenToCookie(String accessToken){
+    private void saveAccessTokenToCookie(String jti){
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        CookieUtil.addCookie(response, cookieDomain, "/", GlobalConstant.COOKIE_ACCESS_TOKEN_NAME, accessToken, cookieMaxAge, false);
+        CookieUtil.addCookie(response, cookieDomain, "/", GlobalConstant.COOKIE_ACCESS_TOKEN_NAME, jti, cookieMaxAge, false);
     }
 }

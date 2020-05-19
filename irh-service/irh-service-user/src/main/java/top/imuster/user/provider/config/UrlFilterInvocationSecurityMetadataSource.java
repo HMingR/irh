@@ -79,7 +79,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         roleAndAuthList.stream().forEach(roleInfo -> {
             roleInfo.getAuthInfoList().stream().forEach(authInfo -> {
                 if(authInfo != null){
-                    if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){  //todo 判空
+                    if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){
                         roles.add(roleInfo.getRoleName());
                     }
                 }

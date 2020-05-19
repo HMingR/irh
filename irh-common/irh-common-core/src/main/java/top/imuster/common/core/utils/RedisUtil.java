@@ -5,6 +5,7 @@ import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.exception.GlobalException;
+import top.imuster.common.core.exception.NeedLoginException;
 
 /**
  * @ClassName: RedisUtil
@@ -16,9 +17,9 @@ public class RedisUtil {
 
     public static String getAccessToken(String token){
         if(!StringUtils.isEmpty(token)){
-            return GlobalConstant.REDIS_ACCESS_TOKEN + token;
+            return new StringBuffer(GlobalConstant.REDIS_ACCESS_TOKEN).append(token).toString();
         }
-        throw new RuntimeException("token为空");
+        throw new NeedLoginException("暂未登录或身份已经过期,请重新登录");
     }
 
     /**

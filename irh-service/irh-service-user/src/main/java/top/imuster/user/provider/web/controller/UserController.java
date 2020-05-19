@@ -93,7 +93,7 @@ public class UserController extends BaseController {
     @GetMapping("/report/{type}/{id}")
     @ApiOperation(value = "用户举报(type可选择 1-商品举报 2-留言举报 3-评价举报 4-帖子举报),id则为举报对象的id", httpMethod = "GET")
     public Message<String> reportFeedback(@ApiParam("1-商品举报 2-留言举报 3-评价举报 4-帖子举报")@PathVariable("type") Integer type, @ApiParam("举报对象的id") @PathVariable("id") Long id, HttpServletRequest request) throws Exception {
-        Long userId = getIdByToken(request);
+        Long userId = getCurrentUserIdFromCookie();
         ReportFeedbackInfo reportFeedbackInfo = new ReportFeedbackInfo();
         reportFeedbackInfo.setCustomerId(userId);
         reportFeedbackInfo.setType(type);

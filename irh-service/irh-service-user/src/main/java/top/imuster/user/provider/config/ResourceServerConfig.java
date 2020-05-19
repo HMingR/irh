@@ -89,6 +89,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return new UrlFilterInvocationSecurityMetadataSource();
     }
 
+    /*@Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        super.configure(resources);
+        resources.authenticationEntryPoint(new IrhAuthenticationEntryPoint());
+    }*/
+
     //Http安全配置，对每个到达系统的http请求链接进行校验
     @Override
     public void configure(HttpSecurity http) throws Exception {

@@ -36,7 +36,9 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
             UserDetails userDetails1 = usernameDetailsService.loadUserByUsername(name);
             userDetails = (top.imuster.security.api.bo.UserDetails) userDetails1;
         }
-        response.put("userInfo", userDetails.getUserInfo());
+        response.put("userId", userDetails.getUserInfo().getUserId());
+        response.put("userType", userDetails.getUserInfo().getUserType());
+        response.put("userState", userDetails.getUserInfo().getState());
         if (authentication.getAuthorities() != null && !userDetails.getAuthorities().isEmpty()) {
             response.put("authorities", AuthorityUtils.authorityListToSet(userDetails.getAuthorities()));
         }

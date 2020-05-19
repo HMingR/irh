@@ -79,8 +79,9 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         if(aBoolean) return getInfoFromRedis(pageSize, currentPage, redisKey);
         ProductRealtimeRecommendDto recommendInfo = productRealtimeRecommendRepository.findByUserId(userId);
         List<MongoProductInfo> recs = recommendInfo.getRecs();
+        if(recs.isEmpty()) return getOfflineRecommendListByUserId(pageSize, currentPage, userId);
         List<Long> ids = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
-        redisTemplate.opsForList().leftPush(redisKey, ids);
+        ids.stream().forEach(id -> redisTemplate.opsForList().leftPush(redisKey, id));
         return getInfoFromRedis(pageSize, currentPage, redisKey);
     }
 
@@ -91,9 +92,10 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         if(flag) return getInfoFromRedis(pageSize, currentPage, redisKey);
 
         ProductContentRecommendDto res = productContentRecommendRepository.findByProductId(productId);
+        if(res == null) return Message.createBySuccess(new Page<>());
         List<MongoProductInfo> recs = res.getRecs();
         List<Long> productIds = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
-        redisTemplate.opsForList().leftPush(redisKey, productIds);
+        productIds.stream().forEach(id -> redisTemplate.opsForList().leftPush(redisKey, id));
         return getInfoFromRedis(pageSize, currentPage, redisKey);
     }
 

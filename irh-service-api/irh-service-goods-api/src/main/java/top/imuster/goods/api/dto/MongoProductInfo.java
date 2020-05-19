@@ -1,5 +1,7 @@
 package top.imuster.goods.api.dto;
 
+import org.springframework.data.mongodb.core.mapping.Field;
+
 /**
  * @ClassName: MongoProductInfo
  * @Description: MongoProductInfo
@@ -7,6 +9,8 @@ package top.imuster.goods.api.dto;
  * @date: 2020/5/11 20:51
  */
 public class MongoProductInfo {
+
+    @Field("product_id")
     private Long productId;
     private Double score;
 

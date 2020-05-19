@@ -32,17 +32,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.base.domain.Page;
-import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.message.provider.MessageProviderApplication;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.Security;
+import java.util.*;
 
 /**
  * @ClassName: EsTest
@@ -79,13 +79,13 @@ public class EsTest {
             //template = configuration.getTemplate("Simple.ftl", "UTF-8");
             mimeMailMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
-            mimeMessageHelper.setFrom("postmaster@imuster.top");
-            mimeMessageHelper.setTo("1978773465@qq.com");
-            mimeMessageHelper.setSubject("验证码");
+            mimeMessageHelper.setFrom("irhmail@imuster.top");
+            mimeMessageHelper.setTo("NapoleonLipf@163.com");
+            mimeMessageHelper.setSubject("irh平台验证码登录");
 
             Map<String, Object> model = new HashMap<>();
-            model.put("context","测试");
-            model.put("date", "today");
+            model.put("context","您好,本次验证码是：1233,请尽快填写到指定位置");
+            model.put("date", DateUtil.now());
             Template template = configuration.getTemplate("Simple.ftl");
             String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
             System.out.println(text);
@@ -96,6 +96,56 @@ public class EsTest {
             log.error("邮件发送失败{}", e.getMessage());
         }
 
+    }
+
+    @Test
+    public void test07(){
+        try {
+            //设置SSL连接、邮件环境
+            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+            Properties props = System.getProperties();
+            props.setProperty("mail.smtp.host", "smtp.mxhichina.com");
+            props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+            props.setProperty("mail.smtp.socketFactory.fallback", "false");
+            props.setProperty("mail.smtp.port", "465");
+            props.setProperty("mail.smtp.socketFactory.port", "465");
+            props.setProperty("mail.smtp.auth", "true");
+            //建立邮件会话
+            Session session = Session.getDefaultInstance(props, new Authenticator() {
+                //身份认证
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("postmaster@imuster.top", "197877346Hmr");
+                }
+            });
+            //建立邮件对象
+            MimeMessage message = new MimeMessage(session);
+            //设置邮件的发件人、收件人、主题
+            //附带发件人名字
+//            message.setFrom(new InternetAddress("from_mail@qq.com", "optional-personal"));
+            message.setFrom(new InternetAddress("postmaster@imuster.top"));
+            message.setRecipients(Message.RecipientType.TO, "1978773465@qq.com");
+            message.setSubject("irh注册验证码");
+            //文本
+            String content="本次验证码为：1234a";
+            message.setText(content);
+
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("context","irh验证登录");
+            model.put("date", DateUtil.now());
+            Template template = configuration.getTemplate("Simple.ftl");
+            String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            System.out.println(text);
+            message.setText(text);
+
+            message.setSentDate(new Date());
+            message.saveChanges();
+            //发送邮件
+            Transport.send(message);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 
     @Test
@@ -149,7 +199,7 @@ public class EsTest {
         SearchResponse search = restHighLevelClient.search(searchRequest);
         SearchHits hits = search.getHits();
         long totalHits = hits.totalHits;
-        Message<Page<ESProductDto>> queryResult = new Message<Page<ESProductDto>>();
+        top.imuster.common.base.wrapper.Message<Page<ESProductDto>> queryResult = new top.imuster.common.base.wrapper.Message<Page<ESProductDto>>();
         Page<ProductInfo> productInfoPage = new Page<>();
         List<ProductInfo> list = productInfoPage.getData();
         productInfoPage.setTotalCount((int)totalHits);
@@ -291,6 +341,48 @@ public class EsTest {
             log.info("Index [" + index + "] is not exist!");
         }
         return inExistsResponse.isExists();
+    }
+
+    @Test
+    public void test05(){
+        try {
+            //设置SSL连接、邮件环境
+            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+            Properties props = System.getProperties();
+            props.setProperty("mail.smtp.host", "smtp.mxhichina.com");
+            props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+            props.setProperty("mail.smtp.socketFactory.fallback", "false");
+            props.setProperty("mail.smtp.port", "465");
+            props.setProperty("mail.smtp.socketFactory.port", "465");
+            props.setProperty("mail.smtp.auth", "true");
+            //建立邮件会话
+            Session session = Session.getDefaultInstance(props, new Authenticator() {
+                //身份认证
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("postmaster@imuster.top", "197877346Hmr");
+                }
+            });
+            //建立邮件对象
+            MimeMessage message = new MimeMessage(session);
+            //附带发件人名字
+//
+           message.setFrom(new InternetAddress("postmaster@imuster.top", "optional-personal"));
+            message.setFrom(new InternetAddress("postmaster@imuster.top"));
+            message.setRecipients(Message.RecipientType.TO, " 1978773465@qq.com");
+            message.setSubject("irh平台注册验证码");
+            //文本
+            String content="本次验证码为2342，请马上填写";
+            message.setText(content);
+            message.setSentDate(new Date());
+            message.saveChanges();
+            //发送邮件
+            Transport.send(message);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+
     }
 
 }

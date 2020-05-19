@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -11,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import top.imuster.auth.config.PasswordCodeAuthenticationToken;
-import top.imuster.auth.config.SecurityConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +27,12 @@ import java.io.IOException;
 public class PasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final Logger log = LoggerFactory.getLogger(PasswordAuthenticationFilter.class);
+
+    private static final String PASSWORD_PARAM_NAME = "loginName";
+
+    private static final String PASSWORD_PARAM_WEB_CODE = "webCode";
+
+    private static final String PASSWORD_PARAM_PASSWORD = "password";
 
     private static final String POST = "post";
 
@@ -51,22 +57,28 @@ public class PasswordAuthenticationFilter extends AbstractAuthenticationProcessi
             throw new AuthenticationServiceException("不允许{}这种的请求方式: " + httpServletRequest.getMethod());
         }
         //邮箱地址
-        String loginName = obtainParameter(httpServletRequest, SecurityConstants.LOGIN_PARAM_NAME);
+        String loginName = obtainParameter(httpServletRequest, PASSWORD_PARAM_NAME);
+
         //验证码
-        String credentials = obtainParameter(httpServletRequest, SecurityConstants.EMAIL_VERIFY_CODE);
+        String webCode = obtainParameter(httpServletRequest, PASSWORD_PARAM_WEB_CODE);
+
+        //密码
+        String credentials = obtainParameter(httpServletRequest, PASSWORD_PARAM_PASSWORD);
         loginName = loginName.trim();
 
         if(StringUtils.isBlank(loginName)) throw new AuthenticationServiceException("登录名不能为空");
-        if(StringUtils.isBlank(credentials)) throw new AuthenticationServiceException("验证码不能为空");
-
+        if(StringUtils.isBlank(credentials)) throw new AuthenticationServiceException("密码不能为空");
+        if(StringUtils.isBlank(webCode)) throw new AuthenticationServiceException("验证码不能为空");
         PasswordCodeAuthenticationToken authenticationToken = new PasswordCodeAuthenticationToken(loginName, credentials);;
+        authenticationToken.setWebCode(webCode);
+
         setDetails(httpServletRequest, authenticationToken);
-        return authenticationManager.authenticate(authenticationToken);
+        return this.getAuthenticationManager().authenticate(authenticationToken);
     }
 
     private void setDetails(HttpServletRequest request,
-                            PasswordCodeAuthenticationToken authRequest) {
-        authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
+                            AbstractAuthenticationToken authenticationToken) {
+        authenticationToken.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
     /**

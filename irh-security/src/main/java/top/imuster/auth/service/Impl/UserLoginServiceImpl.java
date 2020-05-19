@@ -266,11 +266,16 @@ public class UserLoginServiceImpl implements UserLoginService {
      * @param clientSecret
      * @reture: java.lang.String
      **/
-    private String getHttpBasic(String clientId,String clientSecret){
+    private static String getHttpBasic(String clientId,String clientSecret){
         String string = clientId+":"+clientSecret;
         //将串进行base64编码
         byte[] encode = Base64Utils.encode(string.getBytes());
         return "Basic "+new String(encode);
+    }
+
+    public static void main(String[] args) {
+        String httpBasic = getHttpBasic("irhWebApp", "irhWebApp");
+        System.out.println(httpBasic);
     }
 
     /**

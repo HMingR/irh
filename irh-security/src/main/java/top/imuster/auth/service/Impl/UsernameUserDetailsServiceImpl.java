@@ -4,15 +4,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
 import top.imuster.user.api.pojo.UserInfo;
@@ -39,11 +35,11 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
      * @reture: org.springframework.security.core.userdetails.UserDetails
      **/
     @Override
-    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //取出身份，如果身份为空说明没有认证
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //没有认证统一采用httpbasic认证，httpbasic中存储了client_id和client_secret，开始认证client_id和client_secret
-        if(authentication == null){
+        /*f(authentication == null){
             ClientDetails clientDetails = clientDetailsService.loadClientByClientId(username);
             if(clientDetails!=null){
                 //密码
@@ -53,19 +49,20 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
         }
         if (StringUtils.isEmpty(username)) {
             return null;
-        }
+        }*/
 
         UserInfo userInfo = userServiceFeignApi.loadUserInfoByEmail(username);
-        if(userInfo == null) {
-            throw new CustomSecurityException("用户名或者密码错误");
-        }
+        if(userInfo == null) throw new AuthenticationServiceException("用户名不存在,请检查用户名是否输入正确");
         if(userInfo.getState() == null || userInfo.getState() <= 20){
-            throw new CustomSecurityException("该账号已被冻结,请联系管理员");
+            throw new AuthenticationServiceException("该账号已被冻结,请联系管理员");
         }
-        log.info("查询到的用户信息为{}", userInfo);
-        List<String> roleName = userServiceFeignApi.getRoleByUserName(username);
+
+        String userAuth = "";
+        if(userInfo.getType() != 10){
+            List<String> roleName = userServiceFeignApi.getRoleByUserName(username);
+            userAuth  = StringUtils.join(roleName.toArray(), ",");
+        }
         UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
-        String userAuth  = StringUtils.join(roleName.toArray(), ",");
         UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
         userDetails.setUserInfo(userDto);
         return userDetails;

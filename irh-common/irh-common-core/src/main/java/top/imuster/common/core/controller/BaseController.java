@@ -7,19 +7,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.utils.CookieUtil;
-import top.imuster.common.base.utils.JwtTokenUtil;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.exception.GlobalException;
+import top.imuster.common.core.exception.NeedLoginException;
+import top.imuster.common.core.utils.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -36,6 +37,9 @@ public class BaseController {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected void validData(BindingResult bindingResult) {
@@ -49,19 +53,6 @@ public class BaseController {
     }
 
     /**
-     * @Description: 从token中解析当前用户的id
-     * @Author: hmr
-     * @Date: 2020/1/10 16:00
-     * @param request
-     * @reture: java.lang.Long
-     **/
-    protected Long getIdByToken(HttpServletRequest request){
-        String token = StringUtils.substringAfter(request.getHeader(GlobalConstant.JWT_TOKEN_HEADER), GlobalConstant.JWT_TOKEN_HEAD);
-        return JwtTokenUtil.getUserIdFromToken(token);
-    }
-
-
-    /**
      * @Author hmr
      * @Description 从redis中获得当前用户的基本信息
      * @Date: 2020/2/1 17:39
@@ -69,20 +60,16 @@ public class BaseController {
      * @reture: top.imuster.common.base.domain.BaseDomain
      **/
     protected UserDto getCurrentUserFromCookie(){
-        /*String accessToken = getAccessTokenFromCookie();
-        UserDto userDto = (UserDto) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
-        if(userDto == null){
-            throw new NeedLoginException("用户身份货过期,请重新登录后再操作");
-        }
-        return userDto;*/
+        String accessToken = getAccessTokenFromCookie();
+        String jsonStr = (String) redisTemplate.opsForValue().get(RedisUtil.getAccessToken(accessToken));
+        if(StringUtils.isBlank(jsonStr)) throw new NeedLoginException("用户身份过期,请重新登录后再操作");
+        UserDto userDto = null;
         try {
-            org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValueAsString(authentication);
-        } catch (Exception e) {
-            e.printStackTrace();
+            userDto = objectMapper.readValue(jsonStr, UserDto.class);
+        } catch (IOException e) {
+            throw new NeedLoginException("用户身份过期,请重新登录后再操作");
         }
-        return null;
+        return userDto;
     }
 
     /**

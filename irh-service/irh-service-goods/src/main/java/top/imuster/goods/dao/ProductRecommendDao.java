@@ -14,5 +14,5 @@ import top.imuster.goods.api.dto.ProductRecommendDto;
 public interface ProductRecommendDao extends MongoRepository<ProductRecommendDto, String> {
     ProductRecommendDto findByUserId(Long userId);
 
-    ProductRecommendDto findProductRecommendDtoByUserId(Integer userId);
+    ProductRecommendDto findProductRecommendDtoByUserId(Long userId);
 }

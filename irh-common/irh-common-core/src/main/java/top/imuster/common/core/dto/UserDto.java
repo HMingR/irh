@@ -36,6 +36,27 @@ public class UserDto extends BaseDomain {
     public UserDto() {
     }
 
+    public UserDto(Long userId, String loginName, String nickname, String pic, Integer userType) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.pic = pic;
+        this.loginName = loginName;
+        setUserTypeById(userType);
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "userId=" + userId +
+                ", nickname='" + nickname + '\'' +
+                ", pic='" + pic + '\'' +
+                ", loginName='" + loginName + '\'' +
+                ", userType=" + userType +
+                ", academyName='" + academyName + '\'' +
+                ", signature='" + signature + '\'' +
+                '}';
+    }
+
     public String getSignature() {
         return signature;
     }
@@ -54,14 +75,6 @@ public class UserDto extends BaseDomain {
 
     public UserDto(Long userId){
         this.userId = userId;
-    }
-
-    public UserDto(Long userId, String loginName, String nickname, String pic, Integer userType) {
-        this.userId = userId;
-        this.nickname = nickname;
-        this.pic = pic;
-        this.loginName = loginName;
-        setUserTypeById(userType);
     }
 
     public Long getUserId() {
@@ -84,8 +97,8 @@ public class UserDto extends BaseDomain {
         return userType;
     }
 
-    public void setUserType(Integer code) {
-        setUserTypeById(code);
+    public void setUserType(String code) {
+        setUserTypeByName(code);
     }
 
     public String getNickname() {
@@ -108,5 +121,9 @@ public class UserDto extends BaseDomain {
     public void setUserTypeById(Integer id){
         UserType userTypeById = UserType.getUserTypeById(id);
         this.userType = userTypeById;
+    }
+
+    public UserType setUserTypeByName(String name){
+        return UserType.getUserTypeByName(name);
     }
 }

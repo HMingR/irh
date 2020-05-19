@@ -262,7 +262,7 @@
 		</trim>
 		WHERE id IN
 		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-			#{item.targetId,jdbcType=BIGINT,jdbcType=BIGINT}
+			#{item.targetId,jdbcType=BIGINT}
 		</foreach>
 	</update>
 
@@ -295,7 +295,7 @@
 		WHERE id = #{id,jdbcType=BIGINT}
 	</update>
 
-	<select id="selectProductBriefInfoByIds" parameterType="list" resultType="top.imuster.goods.api.pojo.ProductInfo">
+	<select id="selectProductBriefInfoByIds" parameterType="list" resultType="productInfo">
 		<![CDATA[SELECT
 					id,
 					main_pic_url AS mainPicUrl,
@@ -307,9 +307,9 @@
 					trade_type AS tradeType,
 					consumer_id AS consumerId ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE state = 2 AND id IN
-		<foreach collection="list" open="(" close=")" separator="," item="it">
-			#{it,jdbcType=BIGINT}
+		<![CDATA[WHERE state = 2 AND id IN]]>
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			<![CDATA[#{id}]]>
 		</foreach>
 	</select>
 	

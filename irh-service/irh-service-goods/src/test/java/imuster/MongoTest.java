@@ -53,7 +53,7 @@ public class MongoTest {
 
     @Test
     public void test() throws JsonProcessingException {
-        ProductRecommendDto one = productRecommendService.findOne(1L);
+        ProductRecommendDto one = productRecommendService.findOne(5L);
         System.out.println(objectMapper.writeValueAsString(one));
     }
 
@@ -63,7 +63,7 @@ public class MongoTest {
         ProductContentRecommendDto byProductId = productContentRecommendRepository.findByProductId(2L);
         String asString = objectMapper.writeValueAsString(byProductId);
         long count = productContentRecommendRepository.count();
-        ProductRecommendDto productRecommendDtoByUserId = productRecommendDao.findProductRecommendDtoByUserId(1);
+        ProductRecommendDto productRecommendDtoByUserId = productRecommendDao.findProductRecommendDtoByUserId(1L);
         System.out.println(objectMapper.writeValueAsString(productRecommendDtoByUserId));
 
         Optional<ProductRecommendDto> byId = productRecommendDao.findById("5eb7db3ab5bd1f2f70c7be82");
