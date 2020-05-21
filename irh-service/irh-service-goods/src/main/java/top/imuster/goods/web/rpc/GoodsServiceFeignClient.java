@@ -62,11 +62,11 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     }
 
     @Override
-    @GetMapping("/es/lockStock/{productId}")
+    @GetMapping("/es/lockStock/{productId}/{productVersion}")
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ProductInfo lockStock(@PathVariable("productId") Long productId) throws GoodsException {
+    public ProductInfo lockStock(@PathVariable("productId") Long productId, @PathVariable("productVersion") Integer version) throws GoodsException {
         try{
-            Integer count = productInfoService.lockProduct(productId);
+            Integer count = productInfoService.lockProduct(productId, version);
             if(count == null || count == 0) return null;
             ProductInfo productInfo = productInfoService.selectEntryList(productId).get(0);
             return productInfo;

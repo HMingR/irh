@@ -79,14 +79,14 @@ public class EsTest {
             //template = configuration.getTemplate("Simple.ftl", "UTF-8");
             mimeMailMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
-            mimeMessageHelper.setFrom("irhmail@imuster.top");
-            mimeMessageHelper.setTo("NapoleonLipf@163.com");
+            mimeMessageHelper.setFrom("irhmail@imuster.top", "irh");
+            mimeMessageHelper.setTo("1978773465@qq.com");
             mimeMessageHelper.setSubject("irh平台验证码登录");
 
             Map<String, Object> model = new HashMap<>();
-            model.put("context","您好,本次验证码是：1233,请尽快填写到指定位置");
+            model.put("context","25de");
             model.put("date", DateUtil.now());
-            Template template = configuration.getTemplate("Simple.ftl");
+            Template template = configuration.getTemplate("UserRegister.ftl");
             String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
             System.out.println(text);
             mimeMessageHelper.setText(text, true);

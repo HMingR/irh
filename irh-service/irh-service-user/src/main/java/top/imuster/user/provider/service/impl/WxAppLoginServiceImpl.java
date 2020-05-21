@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendEmailDto;
+import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;

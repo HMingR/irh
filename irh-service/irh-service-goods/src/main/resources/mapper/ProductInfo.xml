@@ -23,7 +23,8 @@
             consumer_id AS consumerId,
             tag_names AS tagNames,
             browser_times AS browserTimes,
-            collect_total AS collectTotal
+            collect_total AS collectTotal,
+            version
 		]]>
 	</sql>
 
@@ -47,9 +48,9 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
-            <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="consumerId != null and consumerId != ''"><![CDATA[AND consumer_id = #{consumerId}]]></if>
             <if test="browserTimes != null and browserTimes != ''"><![CDATA[AND browser_times = #{browserTimes}]]></if>
+            <if test="version != null and version != ''"><![CDATA[AND version = #{version}]]></if>
 		</where>
 	</sql>
 	
@@ -77,6 +78,7 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="consumerId != null"><![CDATA[consumer_id = #{consumerId},]]></if>
 			<if test="browserTimes != null"><![CDATA[browser_times = #{browserTimes},]]></if>
+			<if test="version != null"><![CDATA[version = #{version},]]></if>
 		</set>
 	</sql>
 
@@ -213,7 +215,8 @@
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
 					consumer_id AS consumerId,
-					collect_total AS collectTotal]]>
+					collect_total AS collectTotal,
+					version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>
@@ -266,10 +269,10 @@
 		</foreach>
 	</update>
 
-	<update id="lockProductById" parameterType="long">
+	<update id="lockProductById" parameterType="map">
 		UPDATE product_info
-		SET state = 3
-		WHERE state = 2 AND id = #{productId,jdbcType=BIGINT}
+		SET state = 3, version  = version + 1
+		WHERE state = 2 AND id = #{productId} AND version = #{version}
 	</update>
 
 	<select id="selectProductBriefInfoList" parameterType="top.imuster.goods.api.pojo.ProductInfo" resultType="top.imuster.goods.api.pojo.ProductInfo">
@@ -282,7 +285,8 @@
 					tag_names AS tagNames,
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
-					consumer_id AS consumerId ]]>
+					consumer_id AS consumerId,
+					version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = #{state,jdbcType=INTEGER}
 		ORDER BY #{orderField} #{orderFieldType}
@@ -291,7 +295,7 @@
 
 	<update id="updateProductStateById" parameterType="top.imuster.goods.api.pojo.ProductInfo">
 		UPDATE product_info
-		SET state = #{state,jdbcType=INTEGER}
+		SET state = #{state,jdbcType=INTEGER}, version = version + 1
 		WHERE id = #{id,jdbcType=BIGINT}
 	</update>
 
@@ -305,7 +309,8 @@
 					tag_names AS tagNames,
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
-					consumer_id AS consumerId ]]>
+					consumer_id AS consumerId,
+					version ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state = 2 AND id IN]]>
 		<foreach collection="list" item="id" open="(" separator="," close=")">

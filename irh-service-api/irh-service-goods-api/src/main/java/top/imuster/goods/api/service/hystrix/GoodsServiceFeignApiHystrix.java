@@ -38,8 +38,7 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
-            public ProductInfo lockStock(Long productId) {
-                log.error("商品下单锁定库存失败服务降级");
+            public ProductInfo lockStock(Long productId, Integer version) {
                 return null;
             }
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendDetailPageDto;
+import top.imuster.common.core.dto.rabbitMq.SendDetailPageDto;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.provider.service.ArticleInfoService;

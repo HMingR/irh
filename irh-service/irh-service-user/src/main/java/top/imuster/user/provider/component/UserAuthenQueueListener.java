@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.imuster.common.core.dto.SendAuthenRecordDto;
+import top.imuster.common.core.dto.rabbitMq.SendAuthenRecordDto;
 import top.imuster.user.provider.service.UserAuthenRecordInfoService;
 
 import javax.annotation.Resource;

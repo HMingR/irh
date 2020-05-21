@@ -29,11 +29,12 @@ public interface ProductCollectRelService extends BaseService<ProductCollectRel,
      * @Author hmr
      * @Description 删除收藏
      * @Date: 2020/5/9 8:43
-     * @param currentUserIdFromCookie
+     * @param userId
      * @param id
+     * @param type
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> deleteCollect(Long currentUserIdFromCookie, Long id);
+    Message<String> deleteCollect(Long userId, Long id, Integer type);
 
     /**
      * @Author hmr
@@ -65,4 +66,14 @@ public interface ProductCollectRelService extends BaseService<ProductCollectRel,
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<Integer> getCollectStateById(Long userId, Long id, Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 根据主键删除
+     * @Date: 2020/5/20 10:27
+     * @param id
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteCollect(Long id, Long userId);
 }

@@ -12,7 +12,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendUserCenterDto;
+import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.TrendUtil;
@@ -97,9 +97,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
             }
         }
 
-        ProductInfo product = checkProduct(productId);
+        ProductInfo product = checkProduct(productId, orderInfo.getProductVersion());
         if(product == null){
-            return Message.createByError("该商品已经不存在,请刷新后重试");
+            return Message.createByError("下单慢了哦,当前商品已经被别人抢走了");
         }
 
         orderInfo.setProductId(product.getId());
@@ -319,7 +319,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
      * @param productId
      * @reture:
      **/
-    private ProductInfo checkProduct(Long productId){
-        return goodsServiceFeignApi.lockStock(productId);
+    private ProductInfo checkProduct(Long productId, Integer productVersion){
+        return goodsServiceFeignApi.lockStock(productId, productVersion);
     }
 }

@@ -3,7 +3,10 @@ package top.imuster.user.api.service;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
@@ -68,4 +71,7 @@ public interface UserServiceFeignApi {
 
     @GetMapping("/wxLogin/{openId}")
     UserInfo getInfoByWxOpenId(@PathVariable("openId") String openId);
+
+    @PostMapping("/examine")
+    boolean saveExamineRecord2DB(@RequestBody ExamineRecordInfo examineRecordInfo);
 }

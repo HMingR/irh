@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.AlipayService;
 

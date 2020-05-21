@@ -72,7 +72,7 @@ public class AliMail {
             request.setAddressType(1);
             request.setTagName("irh");
             request.setReplyToAddress(true);
-            request.setToAddress("1361618637@qq.com");
+            request.setToAddress("1978773465@qq.com");
             //可以给多个收件人发送邮件，收件人之间用逗号分开，批量发信建议使用BatchSendMailRequest方式
             //request.setToAddress(“邮箱1,邮箱2”);
             request.setSubject("验证码登录");

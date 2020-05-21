@@ -3,7 +3,7 @@ package top.imuster.user.provider.service;
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendAuthenRecordDto;
+import top.imuster.common.core.dto.rabbitMq.SendAuthenRecordDto;
 import top.imuster.user.api.pojo.UserAuthenRecordInfo;
 
 /**

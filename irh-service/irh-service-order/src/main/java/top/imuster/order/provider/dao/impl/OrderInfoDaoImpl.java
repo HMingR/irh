@@ -29,7 +29,7 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	private final static String SELECT_ALL_DONATION_ORDER = "selectAllDonationOrder";
 	private final static String SELECT_ORDER_VERSION_BY_ID = "selectOrderVersionById";
 	private final static String COMPLETE_TRADE = "completeTrade";
-	private final static String SELECT_PRODUCT_ID_BY_ORDER_CODE = "selectProductIdByOrderCode";
+	private final static String SELECT_PRODUCT_ID_BY_ORDER_CODE = "selectProductIdAndBuyerIdByOrderCode";
 	private final static String UPDATE_ORDER_STATE_BY_ORDER_CODE = "updateOrderStateByOrderCode";
 	private final static String GET_BUYER_ID_BY_ORDER_CODE = "getBuyerIdByOrderCode";
 	//返回本DAO命名空间,并添加statement
@@ -58,7 +58,7 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	}
 
 	@Override
-	public long selectOrderTotalByCreateTime(String s) {
+	public Long selectOrderTotalByCreateTime(String s) {
 		return this.select(getNameSpace(SELECT_ORDER_TOTAL_BY_CREATE_TIME), s);
 	}
 

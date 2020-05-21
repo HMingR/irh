@@ -79,7 +79,6 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         return new UsernameUserDetailsServiceImpl();
     }
 
-
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -92,6 +91,7 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
         accessTokenConverter.setUserTokenConverter(customUserAuthenticationConverter);
         return converter;
     }
+
 
     //授权服务器端点配置
     @Override

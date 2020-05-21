@@ -64,6 +64,37 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.huawei</groupId>
+            <artifactId>java-sdk-core</artifactId>
+            <version>3.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.huawei.ais</groupId>
+            <artifactId>ais-java-client</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.66</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.66</version>
+            <optional>true</optional>
+        </dependency>-->
+
     </dependencies>
 
 </project>

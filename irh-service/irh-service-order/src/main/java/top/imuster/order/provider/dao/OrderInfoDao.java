@@ -60,7 +60,7 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      * @param s
      * @reture: long
      **/
-    long selectOrderTotalByCreateTime(String s);
+    Long selectOrderTotalByCreateTime(String s);
 
     /**
      * @Author hmr

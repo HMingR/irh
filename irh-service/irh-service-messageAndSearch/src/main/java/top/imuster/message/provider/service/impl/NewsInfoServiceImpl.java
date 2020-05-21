@@ -12,7 +12,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendUserCenterDto;
+import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.message.pojo.NewsInfo;
 import top.imuster.message.provider.dao.NewsInfoDao;
 import top.imuster.message.provider.service.NewsInfoService;

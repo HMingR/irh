@@ -96,7 +96,7 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @param productId
      * @reture: java.lang.Integer
      **/
-    Integer lockProductById(Long productId);
+    Integer lockProductById(Map<String, String> param);
 
     /**
      * @Author hmr

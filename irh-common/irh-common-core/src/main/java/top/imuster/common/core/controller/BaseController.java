@@ -80,7 +80,6 @@ public class BaseController {
      * @reture: java.lang.Long
      **/
     protected Long getCurrentUserIdFromCookie(){
-        if(!enable) return 5L;
         UserDto currentUser = getCurrentUserFromCookie();
         if(currentUser == null || currentUser.getUserId() == null){
             throw new GlobalException("用户身份过期,请重新登录");

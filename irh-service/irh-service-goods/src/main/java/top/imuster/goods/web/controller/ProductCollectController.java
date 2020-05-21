@@ -43,9 +43,16 @@ public class ProductCollectController extends BaseController {
     }
 
     @NeedLogin
+    @DeleteMapping("/{type}/{targetId}")
+    public Message<String> deleteCollect(@PathVariable("type") Integer type, @PathVariable("targetId") Long targetId){
+        return productCollectRelService.deleteCollect(getCurrentUserIdFromCookie(), targetId, type);
+    }
+
+    @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> deleteCollect(@PathVariable("id") Long id){
-        return productCollectRelService.deleteCollect(getCurrentUserIdFromCookie(), id);
+        Long userId = getCurrentUserIdFromCookie();
+        return productCollectRelService.deleteCollect(id, userId);
     }
 
     @NeedLogin

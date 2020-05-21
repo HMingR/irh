@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.config.ExpressionEvaluator;
-import top.imuster.common.core.dto.SendReleaseDto;
+import top.imuster.common.core.dto.rabbitMq.SendReleaseDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.GenerateSendMessageService;

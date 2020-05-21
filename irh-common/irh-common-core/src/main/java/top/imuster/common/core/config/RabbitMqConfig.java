@@ -77,6 +77,11 @@ public class RabbitMqConfig {
         return new Queue(MqTypeEnum.RELEASE.getQueueName(), true);
     }
 
+    @Bean
+    public Queue examineQueue(){
+        return new Queue(MqTypeEnum.EXAMINE_INFO.getQueueName(), true);
+    }
+
     @Bean(EXCHANGE_TOPICS_INFORM)
     public Exchange exchange(){
         return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(true).build();
@@ -110,6 +115,11 @@ public class RabbitMqConfig {
     @Bean
     public Binding releaseQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
         return BindingBuilder.bind(releaseQueue()).to(exchange).with(MqTypeEnum.RELEASE.getRoutingKeyMatchRule()).noargs();
+    }
+
+    @Bean
+    public Binding examineQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
+        return BindingBuilder.bind(examineQueue()).to(exchange).with(MqTypeEnum.EXAMINE_INFO.getRoutingKeyMatchRule()).noargs();
     }
 
 }

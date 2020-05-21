@@ -10,10 +10,9 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.dto.BrowserTimesDto;
-import top.imuster.common.core.dto.SendDetailPageDto;
+import top.imuster.common.core.dto.rabbitMq.SendExamineDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
-import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
@@ -22,9 +21,7 @@ import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * ProductInfoService 实现类
@@ -75,12 +72,31 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public Message<String> releaseProduct(ProductInfo productInfo) {
         productInfoDao.insertEntry(productInfo);
-        SendDetailPageDto sendMessage = new SendDetailPageDto();
+        /*SendDetailPageDto sendMessage = new SendDetailPageDto();
         productInfo.setId(productInfo.getId());
         sendMessage.setObject(productInfo);
         sendMessage.setTemplateEnum(TemplateEnum.PRODUCT_TEMPLATE);
         generateSendMessageService.sendToMq(sendMessage);
-        convertInfo(new ESProductDto(productInfo));
+        convertInfo(new ESProductDto(productInfo));*/
+
+        SendExamineDto sendExamineDto = new SendExamineDto();
+        sendExamineDto.setUserId(productInfo.getConsumerId());
+        sendExamineDto.setContent(new StringBuffer(productInfo.getTitle()).append(productInfo.getProductDesc()).toString());
+
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add(productInfo.getMainPicUrl());
+
+        if(productInfo.getOtherImgUrl() != null){
+            String otherImgUrl = productInfo.getOtherImgUrl();
+
+            String[] split = otherImgUrl.split("," );
+            List<String> imgs = Arrays.asList(split);
+            strings.addAll(imgs);
+        }
+        sendExamineDto.setImgUrl(strings);
+        sendExamineDto.setTargetType(1);
+
+        generateSendMessageService.sendToMq(sendExamineDto);
         return Message.createBySuccess();
     }
 
@@ -164,8 +180,11 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public Integer lockProduct(Long productId) {
-        return productInfoDao.lockProductById(productId);
+    public Integer lockProduct(Long productId, Integer version) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("productId", String.valueOf(productId));
+        params.put("version", String.valueOf(version));
+        return productInfoDao.lockProductById(params);
     }
 
     @Override

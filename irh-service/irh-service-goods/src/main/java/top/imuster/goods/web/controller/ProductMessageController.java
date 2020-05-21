@@ -46,6 +46,7 @@ public class ProductMessageController extends BaseController {
                                                   @PathVariable("goodsId") Long goodsId,
                                                   @PathVariable("parentId") Long parentId,
                                                   @PathVariable("firstClassId") Long firstClassId){
+        if(pageSize < 0 || currentPage < 0) return Message.createByError("参数异常,请刷新后重试");
         return productMessageService.getMessagePage(pageSize, currentPage, goodsId, parentId, firstClassId);
     }
 

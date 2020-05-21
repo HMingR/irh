@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendEmailDto;
+import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;

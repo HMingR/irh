@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.core.config.RabbitMqConfig;
-import top.imuster.common.core.dto.Send2MQ;
-import top.imuster.common.core.dto.SendEmailDto;
+import top.imuster.common.core.dto.rabbitMq.Send2MQ;
+import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.exception.GlobalException;
 

@@ -15,8 +15,8 @@ public enum MqTypeEnum {
     CENTER("center", "info.3.center.3", "queue_inform_center", "info.#.center.#", "消息中心"),
     ERRAND("errand", "info.4.errand.4", "queue_info_errand", "info.#.errand.#", "goods模块控制跑腿并发"),
     RELEASE("release", "", "queue_info_release", "info.#.release.#", "发布商品需要将一部分商品保存到es中"),
-    AUTHEN_RECORD("authenRecord", "info.5.authenRecord.5", "queue_info_authenRecord", "info.#.authenRecord.#", "security模块用户认证失败之后需要存储到DB");
-
+    AUTHEN_RECORD("authenRecord", "info.5.authenRecord.5", "queue_info_authenRecord", "info.#.authenRecord.#", "security模块用户认证失败之后需要存储到DB"),
+    EXAMINE_INFO("examine", "","queue_info_examine", "info.#.examine.#", "校验发布的内容是否合法");
     String type;
     String routingKey;
     String queueName;
@@ -53,6 +53,10 @@ public enum MqTypeEnum {
 
     public void setRelease(ReleaseType release){
         this.routingKey = release.getRoutingKey();
+    }
+
+    public void setRelease(ExamineEnum examineEnum){
+        this.routingKey = examineEnum.getRoutingKey();
     }
 
     public void setDetail(DetailType detail){

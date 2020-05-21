@@ -37,6 +37,7 @@ public class GoodsOrderController extends BaseController{
     @NeedLogin
     public Message<OrderInfo> createOrder(@PathVariable("productId") Long productId, @RequestBody OrderInfo orderInfo) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
+        if(orderInfo.getProductVersion() == null) return Message.createByError("参数错误");
         return orderInfoService.getOrderByProduct(orderInfo, userId, productId);
     }
 

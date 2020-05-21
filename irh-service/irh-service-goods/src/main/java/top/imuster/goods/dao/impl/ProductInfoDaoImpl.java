@@ -77,8 +77,8 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	}
 
 	@Override
-	public Integer lockProductById(Long productId) {
-		return this.update(getNameSpace(LOCK_PRODUCT_BY_ID), productId);
+	public Integer lockProductById(Map<String, String> param) {
+		return this.update(getNameSpace(LOCK_PRODUCT_BY_ID), param);
 	}
 
 	@Override

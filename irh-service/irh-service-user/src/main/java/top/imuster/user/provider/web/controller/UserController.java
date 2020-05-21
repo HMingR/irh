@@ -154,4 +154,5 @@ public class UserController extends BaseController {
     public Message<String> forgetPwd(@RequestBody UserInfo userInfo){
         return userInfoService.resetPwdByEmail(userInfo);
     }
+
 }

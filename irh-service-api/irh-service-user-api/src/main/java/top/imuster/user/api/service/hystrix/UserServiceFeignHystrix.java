@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
@@ -60,6 +61,11 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
             @Override
             public UserInfo getInfoByWxOpenId(String openId) {
                 return null;
+            }
+
+            @Override
+            public boolean saveExamineRecord2DB(ExamineRecordInfo examineRecordInfo) {
+                return false;
             }
         };
     }

@@ -57,21 +57,26 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
         collectRel.setProductId(id);
         collectRel.setType(type);
         collectRel.setUserId(userId);
+        collectRel.setState(2);
+        Integer count = productCollectRelDao.selectEntryListCount(collectRel);
+        if(count != 0) return Message.createByError("您已经收藏了该商品,请刷新后重试");
+
         productCollectRelDao.insertEntry(collectRel);
         redisTemplate.opsForHash().increment(RedisUtil.getGoodsCollectMapKey(type), String.valueOf(id), 1);
         return Message.createBySuccess();
     }
 
     @Override
-    public Message<String> deleteCollect(Long currentUserId, Long id) {
-        Long userId = productCollectRelDao.selectUserIdById(id);
-        if(userId == null) return Message.createByError("未找到相关的收藏记录,请刷新后重试");
-        if(!currentUserId.equals(userId)) {
-            log.warn("-------->用户id为{}的用户试图删除不属于自己的收藏,收藏id为{}",currentUserId, id);
-            return Message.createByError("非法操作,当前操作已被保存,如果是无意,请立刻刷新后重试");
-        }
-        ProductCollectRel condition = new ProductCollectRel();
-        condition.setId(id);
+    public Message<String> deleteCollect(Long currentUserId, Long targetId, Integer type) {
+        ProductCollectRel productCollectRel = new ProductCollectRel();
+        productCollectRel.setType(type);
+        productCollectRel.setProductId(targetId);
+        productCollectRel.setUserId(currentUserId);
+        productCollectRel.setState(2);
+        List<ProductCollectRel> productCollectRels = productCollectRelDao.selectEntryList(productCollectRel);
+        if(productCollectRels == null || productCollectRels.isEmpty()) return Message.createByError("未找到相关的收藏记录,请刷新后重试");
+
+        ProductCollectRel condition = productCollectRels.get(0);
         condition.setState(1);
         productCollectRelDao.updateByKey(condition);
         return Message.createBySuccess();
@@ -126,5 +131,20 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
         productCollectRel.setType(type);
         Integer count = productCollectRelDao.selectEntryListCount(productCollectRel);
         return Message.createBySuccess(count);
+    }
+
+    @Override
+    public Message<String> deleteCollect(Long id, Long currentUserId) {
+        Long userId = productCollectRelDao.selectUserIdById(id);
+        if(userId == null) return Message.createByError("未找到相关的收藏记录,请刷新后重试");
+        if(!currentUserId.equals(userId)) {
+            log.warn("-------->用户id为{}的用户试图删除不属于自己的收藏,收藏id为{}",currentUserId, id);
+            return Message.createByError("非法操作,当前操作已被保存,如果是无意,请立刻刷新后重试");
+        }
+        ProductCollectRel condition = new ProductCollectRel();
+        condition.setId(id);
+        condition.setState(1);
+        productCollectRelDao.updateByKey(condition);
+        return Message.createBySuccess();
     }
 }

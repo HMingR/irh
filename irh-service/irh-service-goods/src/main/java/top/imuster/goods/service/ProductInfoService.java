@@ -106,9 +106,10 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @Description 更新product的state
      * @Date: 2020/5/11 9:57
      * @param productId
+     * @param version
      * @reture: java.lang.Integer
      **/
-    Integer lockProduct(Long productId);
+    Integer lockProduct(Long productId, Integer version);
 
     /**
      * @Author hmr

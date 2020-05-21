@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.imuster.common.core.dto.SendUserCenterDto;
+import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.message.provider.service.NewsInfoService;
 
 import javax.annotation.Resource;

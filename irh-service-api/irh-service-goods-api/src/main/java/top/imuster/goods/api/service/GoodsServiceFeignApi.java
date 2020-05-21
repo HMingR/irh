@@ -45,8 +45,8 @@ public interface GoodsServiceFeignApi {
      * @param productId
      * @reture: boolean
      **/
-    @GetMapping("/es/lockStock/{productId}")
-    ProductInfo lockStock(@PathVariable("productId") Long productId);
+    @GetMapping("/es/lockStock/{productId}/{productVersion}")
+    ProductInfo lockStock(@PathVariable("productId") Long productId, @PathVariable("productVersion") Integer version);
 
     /**
      * @Author hmr

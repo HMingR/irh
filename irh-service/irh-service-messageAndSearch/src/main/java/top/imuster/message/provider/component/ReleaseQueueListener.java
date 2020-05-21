@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.imuster.common.core.dto.SendReleaseDto;
+import top.imuster.common.core.dto.rabbitMq.SendReleaseDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.life.api.dto.EsArticleDto;
@@ -82,27 +82,4 @@ public class ReleaseQueueListener {
         EsArticleDto releaseInfo = (EsArticleDto)releaseDto.getTargetInfo();
         esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "article");
     }
-
-
-    /**
-     * @Author hmr
-     * @Description 需求
-     * @Date: 2020/4/24 11:26
-     * @param msg
-     * @reture: void
-     **/
-    /*@RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
-            exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
-            key = "info.3.release.3"))
-    public void DemandReleaseListener(String msg){
-        SendReleaseDto releaseDto = null;
-        try {
-            releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
-        } catch (IOException e) {
-            log.error("------Demand-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
-        }
-        OperationType operationType = releaseDto.getOperationType();
-        ESDemandDto releaseInfo = (ESDemandDto)releaseDto.getTargetInfo();
-        demandReleaseInfoService.executeByOperationType(releaseInfo, operationType);
-    }*/
 }

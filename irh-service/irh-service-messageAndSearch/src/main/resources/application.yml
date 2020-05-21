@@ -43,9 +43,9 @@ spring:
     password: '@irh.rabbitmq.password@'
 
   mail:
-    username:  huangmingren@irh.onexmail.com
-    password: 197877346Hmr
-    host: smtp.exmail.qq.com
+    username:  irhmail@imuster.top
+    password: irhAliyunMail12
+    host: smtpdm.aliyun.com
     port: 465
     properties:
       mail:

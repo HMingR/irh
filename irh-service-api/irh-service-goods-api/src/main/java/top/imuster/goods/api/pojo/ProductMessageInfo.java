@@ -54,7 +54,6 @@ public class ProductMessageInfo extends BaseDomain {
 	// 1-无效 2-有效
 	//private Short state;
 
-
 	public Long getParentWriterId() {
 		return parentWriterId;
 	}

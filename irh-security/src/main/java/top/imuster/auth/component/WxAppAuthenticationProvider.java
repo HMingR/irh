@@ -64,13 +64,14 @@ public class WxAppAuthenticationProvider implements AuthenticationProvider {
             String sessionData = responseEntity.getBody();
             JSONObject jsonObject = JSONObject.parseObject(sessionData);
 
-            if(StringUtils.isNotBlank(jsonObject.get("errcode").toString())) {
+            /*if(StringUtils.isNotBlank(jsonObject.get("errcode").toString())) {
                 log.error("------->微信登录请求openId失败,错误信息为{}", responseEntity);
                 throw new AuthenticationServiceException("认证失败,请刷新后重试");
-            }
+            }*/
             String openid = jsonObject.getString("openid");
 
             //获取会话秘钥
+            if(StringUtils.isBlank(openid)) throw new AuthenticationServiceException("认证失败,请刷新后重试");
 
             UserInfo userInfo = userServiceFeignApi.getInfoByWxOpenId(openid);
 

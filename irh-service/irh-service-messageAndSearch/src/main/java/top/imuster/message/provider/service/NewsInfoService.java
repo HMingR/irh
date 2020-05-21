@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.SendUserCenterDto;
+import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.message.pojo.NewsInfo;
 
 /**

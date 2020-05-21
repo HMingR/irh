@@ -1,4 +1,4 @@
-package top.imuster.common.core.dto;
+package top.imuster.common.core.dto.rabbitMq;
 
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.enums.TemplateEnum;

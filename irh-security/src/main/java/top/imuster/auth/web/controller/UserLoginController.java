@@ -15,6 +15,7 @@ import top.imuster.auth.service.UserLoginService;
 import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.utils.CookieUtil;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.Idempotent;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -26,6 +27,7 @@ import top.imuster.user.api.service.UserServiceFeignApi;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: UserLoginController
@@ -71,7 +73,6 @@ public class UserLoginController extends BaseController {
 
     }
 
-
     @ApiOperation("用户退出登录")
     @NeedLogin
     @GetMapping("logout")
@@ -82,8 +83,6 @@ public class UserLoginController extends BaseController {
         return Message.createBySuccess();
     }
 
-
-
     /**
      * @Author hmr
      * @Description 发送给web端的验证码
@@ -92,6 +91,7 @@ public class UserLoginController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @GetMapping("/sendCode/{email}")
+    @Idempotent(submitTotal = 4, timeTotal = 5, timeUnit = TimeUnit.MINUTES)
     public Message<String> getCode(@PathVariable("email") String email){
         return userLoginService.getWebCodeByEmail(email);
     }
@@ -102,10 +102,11 @@ public class UserLoginController extends BaseController {
      * @Description 发送email验证码
      * @Date: 2020/4/30 10:12
      * @param email  接受code的邮箱
-     * @param type   1-注册  2-登录   3-忘记密码
+     * @param type   1-注册  2-登录  3-忘记密码
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation(value = "发送email验证码",httpMethod = "GET")
+    @Idempotent(submitTotal = 5, timeTotal = 30, timeUnit = TimeUnit.MINUTES)
     @GetMapping("/sendCode/{type}/{email}")
     public Message<String> getCode(@ApiParam("邮箱地址") @PathVariable("email") String email, @PathVariable("type") Integer type) throws Exception {
         if(type != 1 && type != 2 && type != 3 && type != 4){

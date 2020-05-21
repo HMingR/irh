@@ -48,7 +48,7 @@ public class ProductController extends BaseController {
      * @param bindingResult
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    @ApiOperation("会员发布二手商品,采用表单的形式，不采用json形式，且上传的图片的<input>或其他标签name必须是file")
+    @ApiOperation("会员发布二手商品")
     @NeedLogin
     @PutMapping
     public Message<String> insertProduct(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {

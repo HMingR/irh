@@ -94,8 +94,19 @@ public class ProductInfo extends BaseDomain {
 
 	private Integer collectTotal;
 
-	//state 1-无效 2-有效 3-锁定 4-卖出
+	//商品的版本号
+	private Integer version;
 
+	//state 1-无效 2-有效 3-锁定 4-卖出  5-审核中
+
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
 	public Integer getCollectTotal() {
 		return collectTotal;

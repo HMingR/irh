@@ -2,9 +2,11 @@ package top.imuster.user.provider.web.rpc;
 
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
+import top.imuster.user.provider.service.ExamineRecordInfoService;
 import top.imuster.user.provider.service.RoleInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 import top.imuster.user.provider.service.WxAppLoginService;
@@ -31,6 +33,10 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
 
     @Resource
     WxAppLoginService wxAppLoginService;
+
+    @Resource
+    ExamineRecordInfoService examineRecordInfoService;
+
 
     @Override
     @GetMapping("/login/{email}")
@@ -76,5 +82,11 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     @GetMapping("/wxLogin/{openId}")
     public UserInfo getInfoByWxOpenId(@PathVariable("openId") String openId){
         return wxAppLoginService.loginByOpenId(openId);
+    }
+
+    @PostMapping("/examine")
+    public boolean saveExamineRecord2DB(@RequestBody ExamineRecordInfo examineRecordInfo){
+        int i = examineRecordInfoService.insertEntry(examineRecordInfo);
+        return i != 0;
     }
 }
