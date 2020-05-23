@@ -1,7 +1,10 @@
 package top.imuster.message.provider.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.core.enums.OperationType;
@@ -15,6 +18,10 @@ import top.imuster.message.provider.exception.MessageException;
  */
 @Service("esOperationService")
 public class EsOperationService {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+
     private String index;
 
     private String id;
@@ -53,7 +60,8 @@ public class EsOperationService {
     }
 
     private void add2ES(String jsonObjectString){
-        transportClient.prepareIndex(getIndex(), getIndex()).setSource(jsonObjectString).setId(id);
+        IndexResponse indexResponse = transportClient.prepareIndex(getIndex(), getIndex()).setSource(jsonObjectString).setId(id).get();
+        log.debug("插入的值为{}", indexResponse.getId());
     }
 
     private void deleteById(String id){

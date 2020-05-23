@@ -115,4 +115,9 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
         return userId;
     }
 
+    @Override
+    public ArticleInfo getArticleInfoById(Long targetId) {
+        return articleInfoService.getBriefById(targetId);
+    }
+
 }

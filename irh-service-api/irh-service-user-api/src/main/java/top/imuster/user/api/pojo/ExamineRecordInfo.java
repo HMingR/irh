@@ -27,13 +27,24 @@ public class ExamineRecordInfo extends BaseDomain {
 	//  1-通过  2-AI审核失败 3-人工审核失败
 	//private Integer state;
 
-	// 审核备注, max length: 255
+	// AI审核备注, max length: 255
 	private String remark;
 
 	//  审核人
 	private Long approveId;
 
 	private Long releaseUserId;
+
+	//审核人意见
+	private String approveRemark;
+
+	public String getApproveRemark() {
+		return approveRemark;
+	}
+
+	public void setApproveRemark(String approveRemark) {
+		this.approveRemark = approveRemark;
+	}
 
 	public Long getReleaseUserId() {
 		return releaseUserId;

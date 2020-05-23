@@ -103,4 +103,6 @@ public interface ForumServiceFeignApi {
     Long getUserIdByType(@PathVariable("targetId") Long targetId, @PathVariable("type") Integer type);
 
 
+    @GetMapping("/article/{targetId}")
+    ArticleInfo getArticleInfoById(@PathVariable("targetId") Long targetId);
 }

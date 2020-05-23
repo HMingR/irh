@@ -152,4 +152,14 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer cancleOrderByCode(String orderCode, Long buyerId, Long orderId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id获得
+     * @Date: 2020/5/22 19:01
+     * @param id
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    Message<OrderInfo> getOrderInfoById(Long id, Long userId);
 }

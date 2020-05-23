@@ -18,6 +18,7 @@ import top.imuster.message.provider.dao.NewsInfoDao;
 import top.imuster.message.provider.service.NewsInfoService;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class NewsInfoServiceImpl extends BaseServiceImpl<NewsInfo, Long> impleme
         if(!flag) return;
         NewsInfo newsInfo = new NewsInfo();
         newsInfo.setContent(sendMessageDto.getContent());
-        newsInfo.setSenderId(sendMessageDto.getFromId());
+        newsInfo.setSenderId(sendMessageDto.getFromId() == null ? -1L : sendMessageDto.getFromId());
         newsInfo.setReceiverId(sendMessageDto.getToId());
         newsInfo.setTargetId(sendMessageDto.getTargetId());
         newsInfo.setResourceId(sendMessageDto.getResourceId());
@@ -85,6 +86,49 @@ public class NewsInfoServiceImpl extends BaseServiceImpl<NewsInfo, Long> impleme
         return Message.createBySuccess();
     }
 
+    @Override
+    public Message<String> updateMessageStateBySourceId(Integer type, Long sourceId) {
+        NewsInfo newsInfo = new NewsInfo();
+        newsInfo.setNewsType(type);
+        newsInfo.setResourceId(sourceId);
+        newsInfo.setState(20);
+        newsInfoDao.updateStateBySourceId(newsInfo);
+        return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<String> getUnreadTotal(Long userId) {
+        NewsInfo newsInfo = new NewsInfo();
+        newsInfo.setState(30);
+        newsInfo.setReceiverId(userId);
+        Integer sysTotal = newsInfoDao.selectSystemUnreadTotal(newsInfo);
+        Integer atMeTotal = newsInfoDao.selectAtMeUnreadTotal(newsInfo);
+        return Message.createBySuccess(new StringBuffer().append(sysTotal).append("|").append(atMeTotal).toString());
+    }
+
+    @Override
+    public Message<String> readAll(Integer type, Long userId) {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", String.valueOf(userId));
+        param.put("type", String.valueOf(type));
+        newsInfoDao.updateStateByUserId(param);
+        return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<Page<NewsInfo>> selectSystemNews(Integer pageSize, Integer currentPage, Long userId) {
+        Integer total = newsInfoDao.selectSystemNewsTotalByUserId(userId);
+        NewsInfo newsInfo = new NewsInfo();
+        newsInfo.setStartIndex((currentPage - 1) * pageSize);
+        newsInfo.setEndIndex(pageSize);
+        newsInfo.setReceiverId(userId);
+        List<NewsInfo> list = newsInfoDao.selectSystemNewsByPage(newsInfo);
+        Page<NewsInfo> page = new Page<>();
+        page.setData(list);
+        page.setTotalCount(total);
+        return Message.createBySuccess(page);
+    }
+
     /**
      * @Author hmr
      * @Description 校验参数是否正常
@@ -95,7 +139,6 @@ public class NewsInfoServiceImpl extends BaseServiceImpl<NewsInfo, Long> impleme
     private boolean checkMessage(SendUserCenterDto message) throws JsonProcessingException {
         if(message == null
                 || message.getToId() == null
-                || message.getFromId() == null
                 || message.getNewsType() == null
                 || message.getContent() == null
                 || StringUtils.isBlank(message.getContent())){

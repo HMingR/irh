@@ -10,7 +10,12 @@ mybatis:
 spring:
   data:
     mongodb:
-      uri: mongodb://101.200.87.195:27017/irh_recommender
+      port: 21083
+      username: imuster
+      password: 123imuster456
+      database: irh_recommender
+      host: 101.200.87.195
+      uri: mongodb://101.200.87.195:21083/irh_recommender
   profiles:
     active: dev
   application:

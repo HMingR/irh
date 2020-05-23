@@ -71,7 +71,8 @@ public class ErrandOrderController extends BaseController {
     @ApiOperation("根据id查看订单详情")
     @GetMapping("/detail/{id}")
     public Message<ErrandOrderInfo> getOrderById(@PathVariable("id") Long id){
-        return errandOrderService.getOrderInfoById(id);
+        Long userId = getCurrentUserIdFromCookie();
+        return errandOrderService.getOrderInfoById(id, userId);
     }
 
     /**

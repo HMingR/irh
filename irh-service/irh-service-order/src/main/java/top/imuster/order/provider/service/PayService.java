@@ -1,18 +1,20 @@
 package top.imuster.order.provider.service;
 
 import com.alipay.api.response.AlipayTradePrecreateResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.order.provider.exception.OrderException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 
 /**
- * @ClassName: AlipayService
+ * @ClassName: PayService
  * @Description:
  * @author: hmr
  * @date: 2019/12/22 20:23
  */
-public interface AlipayService {
+public interface PayService {
 
     /**
      * @Description: 使用支付宝的当面付进行支付,返回二维码文件对象
@@ -31,4 +33,6 @@ public interface AlipayService {
      * @reture: void
      **/
     void aliCallBack(HttpServletRequest request) throws OrderException, ParseException;
+
+    Message<String> wxPay(String orderCode) throws JsonProcessingException;
 }

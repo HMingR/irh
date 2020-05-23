@@ -59,10 +59,11 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @Author hmr
      * @Description 根据订单id查看详情
      * @Date: 2020/5/9 16:01
+     * @param userId
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ErrandOrderInfo>
      **/
-    Message<ErrandOrderInfo> getOrderInfoById(Long id);
+    Message<ErrandOrderInfo> getOrderInfoById(Long userId, Long id);
 
     /**
      * @Author hmr

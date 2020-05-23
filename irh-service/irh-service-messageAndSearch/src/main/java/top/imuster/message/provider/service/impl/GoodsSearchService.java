@@ -12,6 +12,7 @@ import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,32 @@ public class GoodsSearchService {
                     .to(searchParam.getPriceMax());
         }
 
+        Integer priceOrder = searchParam.getPriceOrder();
+        SortOrder orderType;
+        if(priceOrder != null){
+            if(priceOrder == 1){
+                orderType = SortOrder.DESC;
+            }else if(priceOrder == 2){
+                orderType = SortOrder.ASC;
+            }else{
+                return Message.createByError("参数错误");
+            }
+            searchSourceBuilder.sort("salePrice", orderType);
+        }
+
+        Integer timeOrder = searchParam.getTimeOrder();
+        if(timeOrder != null){
+            if(priceOrder == 1){
+                orderType = SortOrder.DESC;
+            }else if(priceOrder == 2){
+                orderType = SortOrder.ASC;
+            }else{
+                return Message.createByError("参数错误");
+            }
+            searchSourceBuilder.sort("createTime", orderType);
+        }
+
+
         searchSourceBuilder.query(boolQueryBuilder);
         searchSourceBuilder.query(rangequerybuilder);
 
@@ -122,8 +149,12 @@ public class GoodsSearchService {
                 //源文档
                 Map<String, Object> sourceAsMap = hit.getSourceAsMap();
                 //取出id
-                String id = String.valueOf(sourceAsMap.get("id"));
-                info.setId(Long.parseLong(id));
+                Object id =sourceAsMap.get("id");
+
+                if(id != null){
+                    info.setId(Long.parseLong(String.valueOf(id)));
+
+                }
 
                 //取出name
                 String title = (String) sourceAsMap.get("title");

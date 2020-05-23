@@ -78,6 +78,11 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
                 log.error("管理员根据类型查看用户id失败");
                 return null;
             }
+
+            @Override
+            public ArticleInfo getArticleInfoById(Long targetId) {
+                return null;
+            }
         };
     }
 }

@@ -80,6 +80,8 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         convertInfo(new ESProductDto(productInfo));*/
 
         SendExamineDto sendExamineDto = new SendExamineDto();
+        sendExamineDto.setTargetId(productInfo.getId());
+        sendExamineDto.setTargetType(1);
         sendExamineDto.setUserId(productInfo.getConsumerId());
         sendExamineDto.setContent(new StringBuffer(productInfo.getTitle()).append(productInfo.getProductDesc()).toString());
 
@@ -88,14 +90,11 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
         if(productInfo.getOtherImgUrl() != null){
             String otherImgUrl = productInfo.getOtherImgUrl();
-
             String[] split = otherImgUrl.split("," );
             List<String> imgs = Arrays.asList(split);
             strings.addAll(imgs);
         }
         sendExamineDto.setImgUrl(strings);
-        sendExamineDto.setTargetType(1);
-
         generateSendMessageService.sendToMq(sendExamineDto);
         return Message.createBySuccess();
     }

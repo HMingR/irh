@@ -71,6 +71,35 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
 
     @Override
     public void transBrowserTimesFromRedis2DB(List<BrowserTimesDto> browserTimesDtos) {
+        /*if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
+        HashSet<Long> targetIds = new HashSet<>();
+        HashSet<Long> times = new HashSet<>();
+        browserTimesDtos.stream().forEach(browserTimesDto -> {
+            Long targetId = browserTimesDto.getTargetId();
+            Long total = browserTimesDto.getTotal();
+            targetIds.add(targetId);
+            times.add(total);
+        });
+        Long[] ids = targetIds.toArray(new Long[targetIds.size()]);
+        Long[] totals = times.toArray(new Long[times.size()]);
+        for (int i = 0; i <= ids.length / batchSize; i++){
+            ArrayList<ProductInfo> update = new ArrayList<>();
+            Long[] selectIds = new Long[batchSize];
+            for (int j = i * batchSize, x = 0; j < (i + 1) * batchSize; j++, x++) {
+                selectIds[x] = ids[j];
+                if(j == ids.length - 1) break;
+            }
+            for (int z = 0; z < selectIds.length; z++){
+                if(selectIds[z] == null || selectIds[z] == 0) break;
+                Long selectId = selectIds[z];
+                Long total = totals[i * batchSize + z];
+                ProductInfo condition = new ProductInfo();
+                condition.setId(selectId);
+                condition.setBrowserTimes(total);
+                update.add(condition);
+            }
+            productDemandInfoDao.updateBrowserTimesByCondition(update);
+        }*/
         if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
         HashSet<Long> targetIds = new HashSet<>();
         HashSet<Long> times = new HashSet<>();

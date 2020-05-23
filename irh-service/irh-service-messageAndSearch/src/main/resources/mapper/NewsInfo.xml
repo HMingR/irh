@@ -192,4 +192,48 @@
 		WHERE id = #{id,jdbcType=BIGINT}
 	</select>
 
+	<update id="updateStateBySourceId">
+		UPDATE news_info
+		SET state = #{state}
+		WHERE news_type = #{newsType} AND resource_id = #{resourceId}
+	</update>
+
+	<select id="selectSystemUnreadTotal" parameterType="newsInfo" resultType="int">
+		SELECT COUNT(1)
+		FROM news_info
+		WHERE state = #{state} AND receiver_id = #{receiverId} AND news_type IN (30, 40, 50, 70, 80, 85, 90)
+	</select>
+
+	<select id="selectAtMeUnreadTotal" parameterType="newsInfo" resultType="int">
+		SELECT COUNT(1)
+		FROM news_info
+		WHERE state = #{state} AND receiver_id = #{receiverId} AND news_type IN (10, 20, 60 )
+	</select>
+
+	<update id="updateStateByUserId" parameterType="map">
+		UPDATE news_info
+		SET state = 20
+		WHERE state = 30 AND receiver_id = #{userId}
+		<if test="type == 1">
+			AND news_type IN  (30, 40, 50, 70, 80, 85, 90)
+		</if>
+		<if test="type == 2">
+			AND news_type IN  (10, 20, 60 )
+		</if>
+	</update>
+
+	<select id="selectSystemNewsTotalByUserId" parameterType="long" resultType="int">
+		SELECT COUNT(1)
+		FROM news_info
+		WHERE state != 10 AND receiver_id = #{userId,jdbcType=BIGINT} AND news_type IN (30, 40, 50, 70, 80, 85, 90)
+	</select>
+
+	<select id="selectSystemNewsByPage" parameterType="newsInfo" resultType="newsInfo">
+		SELECT
+		<include refid="QUERY_COLUMN_LIST"></include>
+		<include refid="QUERY_FROM_TABLE"></include>
+		WHERE receiver_id = #{receiverId,jdbcType=BIGINT} AND state != 10 AND news_type IN (30, 40, 50, 70, 80, 85, 90)
+		ORDER BY create_time LIMIT #{startIndex}, #{endIndex}
+	</select>
+
 </mapper>

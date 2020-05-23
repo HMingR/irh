@@ -255,6 +255,18 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         return temp;
     }
 
+    @Override
+    public Message<OrderInfo> getOrderInfoById(Long id, Long userId) {
+        List<OrderInfo> orderInfoList = orderInfoDao.selectEntryList(id);
+        if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createByError("为找到相关信息");
+        OrderInfo info = orderInfoList.get(0);
+        if(userId.equals(info.getBuyerId()) || userId.equals(info.getSalerId())){
+            return Message.createBySuccess(info);
+        }
+        log.error("---------->编号为{}的用户访问不属于他的订单{}", userId, id);
+        return Message.createByError("非法访问他人数据,请立刻刷新页面重试");
+    }
+
     /**
      * @Author hmr
      * @Description 根据type和clazz获得结果

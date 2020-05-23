@@ -8,7 +8,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
 
@@ -50,6 +53,17 @@ public class HuaweiModerationImageUtil {
             //
             String uri = "/v1.0/moderation/image/batch";
 
+
+            LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
+
+            //定义body
+            LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("urls", urls);
+            body.add("categories", new String[] {"politics", "terrorism", "porn", "ad"});
+            body.add("threshold", 0);
+
+            HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(body, header);
+
             JSONObject json = new JSONObject();
 
             // api请求参数说明可参考：https://support.huaweicloud.com/api-moderation/moderation_03_0036.html
@@ -75,7 +89,7 @@ public class HuaweiModerationImageUtil {
                 JSONObject jsonObject1 = result.getJSONObject(i);
                 String suggestion = jsonObject1.getString("suggestion");
                 if("block".equalsIgnoreCase(suggestion)){
-                    res.append("第").append(i+1).append("张图片审核不通过;");
+                    res.append("第").append(i+1).append("张图片审核不通过; ");
                 }
             }
             return res.toString();

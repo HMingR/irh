@@ -12,6 +12,7 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
@@ -23,6 +24,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.enums.TemplateEnum;
@@ -33,7 +35,7 @@ import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.exception.OrderException;
-import top.imuster.order.provider.service.AlipayService;
+import top.imuster.order.provider.service.PayService;
 import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
@@ -43,15 +45,15 @@ import java.text.ParseException;
 import java.util.*;
 
 /**
- * @ClassName: AlipayServiceImpl
+ * @ClassName: PayServiceImpl
  * @Description:
  * @author: hmr
  * @date: 2019/12/22 20:24
  */
-@Service("alipayService")
-public class AlipayServiceImpl implements AlipayService {
+@Service("payService")
+public class PayServiceImpl implements PayService {
 
-    private static final Logger log = LoggerFactory.getLogger(AlipayServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(PayServiceImpl.class);
 
     @Autowired
     GoodsServiceFeignApi goodsServiceFeignApi;
@@ -207,6 +209,28 @@ public class AlipayServiceImpl implements AlipayService {
         redisTemplate.delete(RedisUtil.getOrderCodeExpireKey(orderInfo.getOrderCode()));
 
         sendMessage(orderInfo);
+    }
+
+    @Override
+    public Message<String> wxPay(String orderCode) throws JsonProcessingException {
+        OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderCode(orderCode);
+        if(orderInfo == null) return Message.createByError("未找到相关订单");
+        orderInfo.setState(40);
+        orderInfo.setPaymentTime(DateUtil.current());
+        Integer state = orderInfoService.completeTrade(orderInfo);
+        if(state != 1){
+            log.error("-------->支付宝支付成功回调时修改订单状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+        }
+
+        //更新商品库存状态
+        boolean b = goodsServiceFeignApi.updateProductState(orderInfo.getProductId(), 4);
+        if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+
+        //删除在redis中保存的key
+        redisTemplate.delete(RedisUtil.getOrderCodeExpireKey(orderCode));
+
+        sendMessage(orderInfo);
+        return Message.createBySuccess();
     }
 
 

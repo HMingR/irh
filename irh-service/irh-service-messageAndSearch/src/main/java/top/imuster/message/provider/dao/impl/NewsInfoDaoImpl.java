@@ -6,6 +6,7 @@ import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.message.pojo.NewsInfo;
 import top.imuster.message.provider.dao.NewsInfoDao;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,6 +21,12 @@ public class NewsInfoDaoImpl extends BaseDaoImpl<NewsInfo, Long> implements News
 	private final static String SELECT_AT_ME_TOTAL = "selectAtMeTotal";
 	private final static String SELECT_RECEIVER_ID_BY_ID = "selectReceiverIdById";
 	private final static String SELECT_IDS_BY_RESOURCE_ID = "selectIdsByResourceId";
+	private final static String UPDATE_STATE_BY_SOURCE_ID = "updateStateBySourceId";
+	private final static String SELECT_SYSTEM_UNREAD_TOTAL = "selectSystemUnreadTotal";
+	private final static String SELECT_AT_ME_UNREAD_TOTAL = "selectAtMeUnreadTotal";
+	private final static String UPDATE_STATE_BY_USER_ID = "updateStateByUserId";
+	private final static String SELECT_SYSTEM_NEWS_TOTAL_BY_USER_ID = "selectSystemNewsTotalByUserId";
+	private final static String SELECT_SYSTEM_NEWS_BY_PAGE = "selectSystemNewsByPage";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -38,5 +45,35 @@ public class NewsInfoDaoImpl extends BaseDaoImpl<NewsInfo, Long> implements News
 	@Override
 	public Long selectReceiverIdById(Long id) {
 		return this.select(getNameSpace(SELECT_RECEIVER_ID_BY_ID), id);
+	}
+
+	@Override
+	public Integer updateStateBySourceId(NewsInfo newsInfo) {
+		return this.update(getNameSpace(UPDATE_STATE_BY_SOURCE_ID), newsInfo);
+	}
+
+	@Override
+	public Integer selectSystemUnreadTotal(NewsInfo newsInfo) {
+		return this.select(getNameSpace(SELECT_SYSTEM_UNREAD_TOTAL), newsInfo);
+	}
+
+	@Override
+	public Integer selectAtMeUnreadTotal(NewsInfo newsInfo) {
+		return this.select(getNameSpace(SELECT_AT_ME_UNREAD_TOTAL), newsInfo);
+	}
+
+	@Override
+	public Integer updateStateByUserId(HashMap<String, String> param) {
+		return this.update(getNameSpace(UPDATE_STATE_BY_USER_ID), param);
+	}
+
+	@Override
+	public Integer selectSystemNewsTotalByUserId(Long userId) {
+		return this.select(getNameSpace(SELECT_SYSTEM_NEWS_TOTAL_BY_USER_ID), userId);
+	}
+
+	@Override
+	public List<NewsInfo> selectSystemNewsByPage(NewsInfo newsInfo) {
+		return this.selectList(getNameSpace(SELECT_SYSTEM_NEWS_BY_PAGE), newsInfo);
 	}
 }

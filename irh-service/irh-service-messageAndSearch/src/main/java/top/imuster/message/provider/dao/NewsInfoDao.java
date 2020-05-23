@@ -4,6 +4,7 @@ package top.imuster.message.provider.dao;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.message.pojo.NewsInfo;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,4 +42,57 @@ public interface NewsInfoDao extends BaseDao<NewsInfo, Long> {
      **/
     Long selectReceiverIdById(Long id);
 
+    /**
+     * @Author hmr
+     * @Description 根据sourceId改变状态
+     * @Date: 2020/5/22 9:56
+     * @param newsInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer updateStateBySourceId(NewsInfo newsInfo);
+
+    /**
+     * @Author hmr
+     * @Description 获得系统未读的总数
+     * @Date: 2020/5/22 10:06
+     * @param newsInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer selectSystemUnreadTotal(NewsInfo newsInfo);
+
+    /**
+     * @Author hmr
+     * @Description 获得at我的未读数量
+     * @Date: 2020/5/22 10:11
+     * @param newsInfo
+     * @reture: java.lang.Integer
+     **/
+    Integer selectAtMeUnreadTotal(NewsInfo newsInfo);
+
+    /**
+     * @Author hmr
+     * @Description 根据userId和type将所有的信息都标称已读 type取值  1-系统通知   2-at我的
+     * @Date: 2020/5/22 10:32
+     * @param param
+     * @reture: java.lang.Integer
+     **/
+    Integer updateStateByUserId(HashMap<String, String> param);
+
+    /**
+     * @Author hmr
+     * @Description 获得用户的系统通知总数
+     * @Date: 2020/5/22 11:06
+     * @param userId
+     * @reture: java.lang.Integer
+     **/
+    Integer selectSystemNewsTotalByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/22 11:09
+     * @param newsInfo
+     * @reture: java.util.List<top.imuster.message.pojo.NewsInfo>
+     **/
+    List<NewsInfo> selectSystemNewsByPage(NewsInfo newsInfo);
 }

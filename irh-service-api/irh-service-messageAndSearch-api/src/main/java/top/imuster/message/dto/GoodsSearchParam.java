@@ -18,6 +18,39 @@ public class GoodsSearchParam {
 
     Integer tradeType;
 
+    //价格排序类型  2-升序 1-降序
+    Integer priceOrder;
+
+    //创建时间排序  2-升序  1-降序
+    Integer timeOrder;
+
+    //新旧程度排序  1-降序  2-升序
+    Integer oldDegreeOrder;
+
+    public Integer getOldDegreeOrder() {
+        return oldDegreeOrder;
+    }
+
+    public void setOldDegreeOrder(Integer oldDegreeOrder) {
+        this.oldDegreeOrder = oldDegreeOrder;
+    }
+
+    public Integer getPriceOrder() {
+        return priceOrder;
+    }
+
+    public void setPriceOrder(Integer priceOrder) {
+        this.priceOrder = priceOrder;
+    }
+
+    public Integer getTimeOrder() {
+        return timeOrder;
+    }
+
+    public void setTimeOrder(Integer timeOrder) {
+        this.timeOrder = timeOrder;
+    }
+
     public String getKeyword() {
         return keyword;
     }

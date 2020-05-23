@@ -84,6 +84,12 @@ public class GoodsOrderController extends BaseController{
         return orderInfoService.getOrderDetailById(id, type,getCurrentUserIdFromCookie());
     }
 
+    @GetMapping("/detail/{id}")
+    public Message<OrderInfo> getDetail(@PathVariable("id") Long id){
+        Long userId = getCurrentUserIdFromCookie();
+        return orderInfoService.getOrderInfoById(id, userId);
+    }
+
     /**
      * @Author hmr
      * @Description 买家完成订单

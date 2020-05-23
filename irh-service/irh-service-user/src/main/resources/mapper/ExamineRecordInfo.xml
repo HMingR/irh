@@ -13,7 +13,8 @@
             remark,
             create_time AS createTime,
             update_time AS updateTime,
-            approve_id AS approveId 
+            approve_id AS approveId,
+            approve_remark AS approveRemark
 		]]>
 	</sql>
 
@@ -31,6 +32,7 @@
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="approveId != null and approveId != ''"><![CDATA[AND approve_id = #{approveId}]]></if> 
+            <if test="approveRemark != null and approveRemark != ''"><![CDATA[AND approve_remark = #{approveRemark}]]></if>
 		</where>
 	</sql>
 	
@@ -50,35 +52,47 @@
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="approveId != null"><![CDATA[approve_id = #{approveId},]]></if>
+			<if test="approveRemark != null"><![CDATA[approve_remark = #{approveRemark},]]></if>
 		</set>
+	</sql>
+
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[  id  ,]]></if>
+			<if test="targetId != null and targetId != ''"><![CDATA[  target_id ,]]></if>
+			<if test="type != null and type != ''"><![CDATA[  type ,]]></if>
+			<if test="state != null and state != ''"><![CDATA[  state  ,]]></if>
+			<if test="remark != null and remark != ''"><![CDATA[  remark ,]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[  create_time ,]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time ,]]></if>
+			<if test="approveId != null and approveId != ''"><![CDATA[  approve_id  ,]]></if>
+			<if test="approveRemark != null and approveRemark != ''"><![CDATA[  approve_remark ,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''"><![CDATA[  #{id},]]></if>
+			<if test="targetId != null and targetId != ''"><![CDATA[ #{targetId},]]></if>
+			<if test="type != null and type != ''"><![CDATA[ #{type},]]></if>
+			<if test="state != null and state != ''"><![CDATA[  #{state},]]></if>
+			<if test="remark != null and remark != ''"><![CDATA[  #{remark},]]></if>
+			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
+			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
+			<if test="approveId != null and approveId != ''"><![CDATA[  #{approveId},]]></if>
+			<if test="approveRemark != null and approveRemark != ''"><![CDATA[  #{approveRemark},]]></if>
+		</trim>
 	</sql>
 
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="examineRecordInfo" >
 		<![CDATA[
 			INSERT INTO examine_record_info
-				(
-                id, 
-                target_id, 
-                type, 
-                state,
-                remark, 
-                create_time, 
-                update_time, 
-                approve_id 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{targetId}, 
-                #{type}, 
-                #{state},
-                #{remark}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{approveId} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

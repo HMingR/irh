@@ -17,10 +17,16 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.lucene.search.function.CombineFunction;
+import org.elasticsearch.common.lucene.search.function.FiltersFunctionScoreQuery;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.functionscore.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -150,9 +156,8 @@ public class EsTest {
 
     @Test
     public void test() throws JsonProcessingException {
-
         ESProductDto esProductDto = new ESProductDto();
-        esProductDto.setId(12L);
+        esProductDto.setId(14L);
         esProductDto.setConsumerId(8L);
 //        esProductDto.setSalePrice("1000");
         esProductDto.setTitle("高价收一台maccccccc");
@@ -162,9 +167,10 @@ public class EsTest {
         esProductDto.setType(2);
         esProductDto.setTagNames("测试|电脑|毕业季|apple");
         esProductDto.setCreateTime(DateUtil.current());
+        String jwtString = objectMapper.writeValueAsString(esProductDto);
         //Iterable<ESProductDto> id = goodsRepository.search(QueryBuilders.matchPhraseQuery("id", 10));
-        IndexResponse indexResponse = transportClient.prepareIndex("goods", "goods").setSource(esProductDto).setId("13").get();
-        //System.out.println(indexResponse.getIndex());
+        IndexResponse indexResponse = transportClient.prepareIndex("goods", "goods").setSource(jwtString).setId("14").get();
+        System.out.println(indexResponse.getIndex());
     }
 
 
@@ -174,9 +180,12 @@ public class EsTest {
 
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
         //过虑源字段
         String[] source_field_array = "id,title,mainPicUrl,tagNames,salePrice,tradeType,desc,type,createTime".split(",");
         searchSourceBuilder.fetchSource(source_field_array,new String[]{});
+
+
         //创建布尔查询对象
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         //搜索条件
@@ -188,13 +197,13 @@ public class EsTest {
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
 
-
         RangeQueryBuilder rangequerybuilder = QueryBuilders
                 .rangeQuery("salePrice")
                 .from("500").to("1100");
 
+
         searchSourceBuilder.query(boolQueryBuilder);
-        //searchSourceBuilder.query(rangequerybuilder);
+        searchSourceBuilder.sort("salePrice", SortOrder.DESC);
         searchRequest.source(searchSourceBuilder);
         SearchResponse search = restHighLevelClient.search(searchRequest);
         SearchHits hits = search.getHits();
@@ -210,8 +219,11 @@ public class EsTest {
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
             log.info(objectMapper.writeValueAsString(sourceAsMap));
             //取出id
-            String id = String.valueOf(sourceAsMap.get("id"));
-            info.setId(Long.parseLong(id));
+            /*String id = String.valueOf(sourceAsMap.get("id"));
+            if(StringUtils.isNotBlank(id)){
+                info.setId(Long.parseLong(id));
+
+            }*/
 
             //取出name
             String productName = (String) sourceAsMap.get("title");
@@ -271,18 +283,63 @@ public class EsTest {
     }
 
 
-/*
-    public void test2(){
-        try {
-            Settings settings = Settings.builder().put("cluster.name", "my-application").build();
-            TransportClient client = new PreBuiltTransportClient(settings)
-                    .addTransportAddresses(new TransportAddress(InetAddress.getByName("39.97.121.108"), 9300L));
-            System.out.println(client.toString());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void test09(){
+        String searchContent = "手机";
+        String index = "goods";
+        SearchRequestBuilder searchBuilder = transportClient.prepareSearch(index);
+        //分页
+        searchBuilder.setFrom(0).setSize(10);
+        //explain为true表示根据数据相关度排序，和关键字匹配最高的排在前面
+        searchBuilder.setExplain(true);
 
-    }*/
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        // 搜索 title字段包含IPhone的数据
+        queryBuilder.must(QueryBuilders.matchQuery("title", searchContent));
+
+        FunctionScoreQueryBuilder.FilterFunctionBuilder[] filterFunctionBuilders = new FunctionScoreQueryBuilder.FilterFunctionBuilder[2];
+
+        //过滤条件1：分类为：品牌手机最重要 -- 权重查询Weight
+        ScoreFunctionBuilder<WeightBuilder> scoreFunctionBuilder = new WeightBuilder();
+        scoreFunctionBuilder.setWeight(2);
+        QueryBuilder termQuery = QueryBuilders.termQuery("title", "iphone");
+        FunctionScoreQueryBuilder.FilterFunctionBuilder category = new FunctionScoreQueryBuilder.FilterFunctionBuilder(termQuery, scoreFunctionBuilder);
+        filterFunctionBuilders[0] = category;
+
+
+        // 过滤条件2：销量越高越排前 --计分查询 FieldValueFactor
+//        ScoreFunctionBuilder<FieldValueFactorFunctionBuilder> fieldValueScoreFunction = new FieldValueFactorFunctionBuilder("createTime");
+//        ((FieldValueFactorFunctionBuilder) fieldValueScoreFunction).factor(1.2f);
+//        FunctionScoreQueryBuilder.FilterFunctionBuilder sales = new FunctionScoreQueryBuilder.FilterFunctionBuilder(fieldValueScoreFunction);
+//        filterFunctionBuilders[1] = sales;
+
+        // 给定每个用户随机展示：  --random_score
+        ScoreFunctionBuilder<RandomScoreFunctionBuilder> randomScoreFilter = new RandomScoreFunctionBuilder();
+        ((RandomScoreFunctionBuilder) randomScoreFilter).seed(2);
+        FunctionScoreQueryBuilder.FilterFunctionBuilder random = new FunctionScoreQueryBuilder.FilterFunctionBuilder(randomScoreFilter);
+        filterFunctionBuilders[1] = random;
+
+        // 多条件查询 FunctionScore
+        FunctionScoreQueryBuilder query = QueryBuilders.functionScoreQuery(queryBuilder, filterFunctionBuilders)
+                .scoreMode(FiltersFunctionScoreQuery.ScoreMode.SUM).boostMode(CombineFunction.SUM);
+
+        SortBuilder sortBuilder1 = SortBuilders.fieldSort("createTime").order(SortOrder.DESC);
+
+        searchBuilder.setQuery(query);
+
+        SearchResponse response = searchBuilder.execute().actionGet();
+        SearchHits hits = response.getHits();
+        String searchSource;
+        for (SearchHit hit : hits)
+        {
+            searchSource = hit.getSourceAsString();
+            System.out.println(searchSource);
+        }
+        //        long took = response.getTook().getMillis();
+        long total = hits.getTotalHits();
+        System.out.println(total);
+
+    }
 
     @Test
     public void highClient(){

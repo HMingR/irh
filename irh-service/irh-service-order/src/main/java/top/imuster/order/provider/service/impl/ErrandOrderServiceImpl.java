@@ -127,10 +127,14 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
-    public Message<ErrandOrderInfo> getOrderInfoById(Long id) {
+    public Message<ErrandOrderInfo> getOrderInfoById(Long id, Long userId) {
         List<ErrandOrderInfo> res = this.selectEntryList(id);
         if(res == null || res.isEmpty()) return Message.createBySuccess("未找到相关订单,请刷新后重试");
         ErrandOrderInfo orderInfo = res.get(0);
+        if(!orderInfo.getPublisherId().equals(userId) && !orderInfo.getHolderId().equals(userId)){
+            log.error("--------->用户编号为{}的用户试图访问编号为{}跑腿订单,该订单不属于他", userId, id);
+            return Message.createByError("当前订单和你无关,请不要访问他人的订单");
+        }
         return Message.createBySuccess(orderInfo);
     }
 

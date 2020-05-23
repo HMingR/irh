@@ -2,7 +2,7 @@ package top.imuster.common.core.aspect;
 
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -54,7 +54,7 @@ public class ReleaseAspect {
      * @param joinPoint
      * @reture: void
      **/
-    @AfterReturning("pointCut()")
+    @After("pointCut()")
     public void afterReturning(JoinPoint joinPoint){
         log.info("进入releaseAspect");
         ReleaseAnnotation annotation = getAnnotation(joinPoint);

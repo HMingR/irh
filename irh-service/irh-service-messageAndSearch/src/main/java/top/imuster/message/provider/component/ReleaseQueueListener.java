@@ -1,5 +1,6 @@
 package top.imuster.message.provider.component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -47,11 +48,14 @@ public class ReleaseQueueListener {
      **/
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
                                             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
-                                            key = "info.1.release.1"))
+                                            key = {"info.1.release.1", "info.3.release.3"}))
     public void GoodsReleaseListener(String msg) throws JsonProcessingException {
         SendReleaseDto releaseDto = null;
         try {
+            JSONObject jsonObject = JSONObject.parseObject(msg);
+            ESProductDto targetInfo = jsonObject.getObject("targetInfo", ESProductDto.class);
             releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+            releaseDto.setTargetInfo(targetInfo);
         } catch (IOException e) {
             log.error("------Product-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
@@ -74,7 +78,10 @@ public class ReleaseQueueListener {
     public void articleReleaseListener(String msg) throws JsonProcessingException {
         SendReleaseDto releaseDto = null;
         try {
+            JSONObject jsonObject = JSONObject.parseObject(msg);
+            EsArticleDto targetInfo = jsonObject.getObject("targetInfo", EsArticleDto.class);
             releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+            releaseDto.setTargetInfo(targetInfo);
         } catch (IOException e) {
             log.error("------Article-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }

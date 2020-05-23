@@ -10,13 +10,10 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.imuster.common.core.annotation.ReleaseAnnotation;
-import top.imuster.common.core.dto.rabbitMq.SendExamineDto;
 import top.imuster.common.core.dto.ExamineResultDetail;
 import top.imuster.common.core.dto.ExamineResultDto;
+import top.imuster.common.core.dto.rabbitMq.SendExamineDto;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
-import top.imuster.common.core.enums.OperationType;
-import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.examine.HuaweiModerationImageUtil;
@@ -64,6 +61,9 @@ public class ExamineQueueListener {
 
     @Autowired
     GenerateSendMessageService generateSendMessageService;
+
+    @Autowired
+    Trans2ES trans2ES;
 
     @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_examine"),
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
@@ -190,20 +190,16 @@ public class ExamineQueueListener {
         if(type == 1){
             //商品
             ProductInfo info = productInfoService.getProductBriefInfoById(targetId);
-            save2Es(new ESProductDto(info));
+            if(info != null) trans2ES.save2ES(new ESProductDto(info));
         }else if(type == 2){
             //需求
             List<ProductDemandInfo> productDemandInfos = productDemandInfoService.selectEntryList(targetId);
             if(productDemandInfos != null && !productDemandInfos.isEmpty()){
-                save2Es(new ESProductDto(productDemandInfos.get(0)));
+                trans2ES.save2ES(new ESProductDto(productDemandInfos.get(0)));
             }
         }else{
             log.error("------>接受的消息错误,type={},targetId={}", type, targetId);
         }
-    }
-
-    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
-    private void save2Es(ESProductDto esProductDto){
     }
 
 

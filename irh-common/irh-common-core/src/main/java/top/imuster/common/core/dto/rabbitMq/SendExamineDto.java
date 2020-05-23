@@ -28,7 +28,6 @@ public class SendExamineDto extends Send2MQ {
 
     private Long userId;
 
-
     public SendExamineDto(){
         setType(MqTypeEnum.EXAMINE_INFO);
     }
