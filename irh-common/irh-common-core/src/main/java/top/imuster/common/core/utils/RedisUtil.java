@@ -249,4 +249,8 @@ public class RedisUtil {
     public static String getDemandRecommendListKey(Long userId) {
         return new StringBuffer().append(GlobalConstant.IRH_DEMAND_RECOMMEND_LIST_KEY).append(userId).toString();
     }
+
+    public static String getProductOfflineRecommendSetKey(Long userId) {
+        return new StringBuffer().append(GlobalConstant.IRH_USER_OFFLINE_RECOMMEND_SET_KEY).append(userId).toString();
+    }
 }

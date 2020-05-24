@@ -23,6 +23,7 @@ public class GlobalConstant {
     public static final String IRH_DEMAND_BROWSE_RECORD_BIT_MAP_KEY = "irh::demand::browse::record::bitmap::key::";
     public static final String IRH_ARTICLE_BROWSE_RECORD_BIT_MAP_KEY = "irh::article::browse::record::bitmap::key::";
     public static final String IRH_DEMAND_RECOMMEND_LIST_KEY = "irh::demand::recommend::list::key::";
+    public static final String IRH_USER_OFFLINE_RECOMMEND_SET_KEY = "irh::user::offline::recommend::set::key::";
 
     private GlobalConstant(){}
 

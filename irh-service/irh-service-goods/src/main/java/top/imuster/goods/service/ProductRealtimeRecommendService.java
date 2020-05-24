@@ -10,6 +10,6 @@ import top.imuster.goods.api.dto.ProductRealtimeRecommendDto;
  */
 public interface ProductRealtimeRecommendService {
 
-    public ProductRealtimeRecommendDto getInfoByUserId(Long userId);
+    ProductRealtimeRecommendDto getInfoByUserId(Long userId);
 
 }

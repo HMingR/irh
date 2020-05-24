@@ -7,19 +7,19 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.List;
 
 /**
- * @ClassName: DemandRecommendDto
- * @Description: DemandRecommendDto  需求推荐
+ * @ClassName: ProductUserTagRecommendDto
+ * @Description: 根据用户选择的标签推挤三
  * @author: hmr
- * @date: 2020/5/24 15:31
+ * @date: 2020/5/24 20:08
  */
-@Document(collection = "rm_product_user_demand")
-public class DemandRecommendDto {
+@Document(collection = "rm_product_user_tagnames")
+public class ProductUserTagRecommendDto {
 
     @Id
     private String id;
 
     @Field("user_id")
-    private Integer userId;
+    private Long userId;
 
     private List<MongoProductInfo> recs;
 
@@ -31,11 +31,11 @@ public class DemandRecommendDto {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
