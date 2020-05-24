@@ -8,6 +8,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.RecommendProductService;
 
@@ -80,6 +81,12 @@ public class RecommendController extends BaseController {
     @GetMapping("/tag/{text}")
     public Message<List<Object>> recommendTagName(@PathVariable("text") String text) throws IOException {
         return recommendProductService.recommendTagNames(text);
+    }
+
+    @GetMapping("/demand/{pageSize}/{currentPage}")
+    public Message<Page<ProductDemandInfo>> getRecommendDemand(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        Long userId = getCurrentUserIdFromCookie(false);
+        return recommendProductService.getDemandRecommend(userId, pageSize, currentPage);
     }
 
 

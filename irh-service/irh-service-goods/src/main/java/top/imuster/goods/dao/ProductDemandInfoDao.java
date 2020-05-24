@@ -41,4 +41,13 @@ public interface ProductDemandInfoDao extends BaseDao<ProductDemandInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer updateCollectTotal(List<GoodsForwardDto> list);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/24 16:06
+     * @param res
+     * @reture: java.util.List<top.imuster.goods.api.pojo.ProductDemandInfo>
+     **/
+    List<ProductDemandInfo> selectInfoByIds(List<Long> res);
 }

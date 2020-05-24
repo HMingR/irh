@@ -163,6 +163,22 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         productDemandInfoDao.updateCollectTotal(list);
     }
 
+    @Override
+    public Message<Page<ProductDemandInfo>> list(Integer pageSize, Integer currentPage) {
+        ProductDemandInfo productDemandInfo = new ProductDemandInfo();
+        productDemandInfo.setState(2);
+        productDemandInfo.setOrderField("createTime");
+        productDemandInfo.setOrderFieldType("DESC");
+        Page<ProductDemandInfo> page = new Page<>();
+        page = this.selectPage(productDemandInfo, page);
+        return Message.createBySuccess(page);
+    }
+
+    @Override
+    public List<ProductDemandInfo> getInfoByIds(List<Long> res) {
+        return productDemandInfoDao.selectInfoByIds(res);
+    }
+
     @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
     private void convertInfo(ESProductDto esDto){}
 

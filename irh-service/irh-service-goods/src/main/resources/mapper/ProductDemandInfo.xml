@@ -200,5 +200,15 @@
 		</foreach>
 	</update>
 
+	<select id="selectInfoByIds" parameterType="list" resultType="productDemandInfo">
+		SELECT
+		<include refid="QUERY_COLUMN_LIST"></include>
+		<include refid="QUERY_FROM_TABLE"></include>
+		WHERE id IN
+		<foreach collection="list" item="it" open="(" close=")" separator=",">
+			#{it,jdbcType=BIGINT}
+		</foreach>
+ 	</select>
+
 
 </mapper>

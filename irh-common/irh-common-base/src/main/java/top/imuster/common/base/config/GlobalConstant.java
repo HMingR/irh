@@ -19,6 +19,10 @@ public class GlobalConstant {
     public static final String IRH_WEB_CODE_KEY = "irh::web::code::key::";   //web页面登录请求的验证码
     public static final String IRH_USER_RESET_PWD_KEY = "irh::user::reset::pwd::"; //用户重置密码保存的验证码
     public static final String IRH_USER_BIND_WX_EMAIL_CODE = "irh::bind::wx::email::code::";
+    public static final String IRH_PRODUCT_BROWSE_RECORD_BIT_MAP_KEY = "irh::product::browse::record::bitmap::key::";
+    public static final String IRH_DEMAND_BROWSE_RECORD_BIT_MAP_KEY = "irh::demand::browse::record::bitmap::key::";
+    public static final String IRH_ARTICLE_BROWSE_RECORD_BIT_MAP_KEY = "irh::article::browse::record::bitmap::key::";
+    public static final String IRH_DEMAND_RECOMMEND_LIST_KEY = "irh::demand::recommend::list::key::";
 
     private GlobalConstant(){}
 

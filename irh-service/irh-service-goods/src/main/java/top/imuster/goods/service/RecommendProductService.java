@@ -2,6 +2,7 @@ package top.imuster.goods.service;
 
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
 
 import java.io.IOException;
@@ -57,4 +58,15 @@ public interface RecommendProductService {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
     Message<Page<ProductInfo>> getContentRecommend(Integer pageSize, Integer currentPage, Long productId);
+
+    /**
+     * @Author hmr
+     * @Description 推荐需求
+     * @Date: 2020/5/24 14:52
+     * @param userId
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductDemandInfo>>
+     **/
+    Message<Page<ProductDemandInfo>> getDemandRecommend(Long userId, Integer pageSize, Integer currentPage);
 }

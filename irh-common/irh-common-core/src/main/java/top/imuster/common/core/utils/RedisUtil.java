@@ -228,4 +228,25 @@ public class RedisUtil {
     public static String getUserBindWxEmailCode(Long userId) {
         return new StringBuffer(GlobalConstant.IRH_USER_BIND_WX_EMAIL_CODE).append(userId).toString();
     }
+
+    public static String getUserBrowseRecordBitmap(BrowserType browserType, Long userId) {
+        if(BrowserType.ES_SELL_PRODUCT.equals(browserType)){
+            return new StringBuffer().append(GlobalConstant.IRH_PRODUCT_BROWSE_RECORD_BIT_MAP_KEY).append(userId).toString();
+        }else if(BrowserType.ES_DEMAND_PRODUCT.equals(browserType)){
+            return new StringBuffer().append(GlobalConstant.IRH_DEMAND_BROWSE_RECORD_BIT_MAP_KEY).append(userId).toString();
+        }else{
+            return new StringBuffer().append(GlobalConstant.IRH_ARTICLE_BROWSE_RECORD_BIT_MAP_KEY).append(userId).toString();
+        }
+    }
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得需求推荐id
+     * @Date: 2020/5/24 16:00
+     * @param userId
+     * @reture: java.lang.String
+     **/
+    public static String getDemandRecommendListKey(Long userId) {
+        return new StringBuffer().append(GlobalConstant.IRH_DEMAND_RECOMMEND_LIST_KEY).append(userId).toString();
+    }
 }

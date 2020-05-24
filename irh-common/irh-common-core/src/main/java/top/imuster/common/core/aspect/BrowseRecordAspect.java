@@ -14,6 +14,7 @@ import org.springframework.context.expression.AnnotatedElementKey;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 import top.imuster.common.core.annotation.BrowseRecordAnnotation;
 import top.imuster.common.core.config.ExpressionEvaluator;
 import top.imuster.common.core.controller.BaseController;
@@ -44,6 +45,9 @@ public class BrowseRecordAspect extends BaseController {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    Jedis jedis;
+
     ExpressionEvaluator<BrowseRecordDto> evaluator = new ExpressionEvaluator();
 
     @After("pointCut()")
@@ -56,6 +60,10 @@ public class BrowseRecordAspect extends BaseController {
         Long userId = recordDto.getUserId();
         if(userId == null || browserType == null) return;
         String recordKey = RedisUtil.getBrowseRecordKey(browserType, userId);
+
+        String recordBitmapKey = RedisUtil.getUserBrowseRecordBitmap(browserType, userId);
+        jedis.setbit(recordBitmapKey, recordDto.getTargetId(), true);
+
         try{
             redisTemplate.opsForList().leftPush(recordKey, objectMapper.writeValueAsString(recordDto));
         }catch (Exception e){

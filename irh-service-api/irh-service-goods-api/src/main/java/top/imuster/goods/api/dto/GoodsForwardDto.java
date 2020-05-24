@@ -6,7 +6,6 @@ package top.imuster.goods.api.dto;
  * @author: hmr
  * @date: 2020/5/9 9:19
  */
-//todo 报错
 public class GoodsForwardDto {
 
     private Long targetId;

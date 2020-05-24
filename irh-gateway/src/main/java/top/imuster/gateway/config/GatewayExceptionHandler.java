@@ -12,7 +12,7 @@ import top.imuster.common.base.wrapper.Message;
  * @author: hmr
  * @date: 2020/4/16 12:06
  */
-@RestControllerAdvice(basePackages = "top.imuster.gateway")
+@RestControllerAdvice
 public class GatewayExceptionHandler {
 
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());

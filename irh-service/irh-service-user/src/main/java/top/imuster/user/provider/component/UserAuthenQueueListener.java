@@ -26,7 +26,7 @@ public class UserAuthenQueueListener {
     @Autowired
     ObjectMapper objectMapper;
 
-    @RabbitListener(queues = "queue_info_authenRecord")
+    @RabbitListener(queues = "queue_inform_authenRecord")
     public void listener(String msg){
         try{
             SendAuthenRecordDto recordDto = objectMapper.readValue(msg, SendAuthenRecordDto.class);

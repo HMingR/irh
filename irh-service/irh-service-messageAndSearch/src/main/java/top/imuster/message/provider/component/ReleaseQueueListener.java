@@ -5,14 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.dto.rabbitMq.SendReleaseDto;
 import top.imuster.common.core.enums.OperationType;
+import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.life.api.dto.EsArticleDto;
 import top.imuster.message.provider.service.impl.EsOperationService;
@@ -34,8 +32,6 @@ public class ReleaseQueueListener {
     @Resource
     EsOperationService esOperationService;
 
-    @Resource
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -46,47 +42,36 @@ public class ReleaseQueueListener {
      * @param msg
      * @reture: void
      **/
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
-                                            exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
-                                            key = {"info.1.release.1", "info.3.release.3"}))
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "queue_inform_release"),
+            exchange = @Exchange(value = "exchange_topics_inform",type = "topic"),
+            key = {"info.release.#"}
+    ))
+    @RabbitHandler
     public void GoodsReleaseListener(String msg) throws JsonProcessingException {
         SendReleaseDto releaseDto = null;
         try {
             JSONObject jsonObject = JSONObject.parseObject(msg);
-            ESProductDto targetInfo = jsonObject.getObject("targetInfo", ESProductDto.class);
             releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
-            releaseDto.setTargetInfo(targetInfo);
+            ReleaseType releaseType = releaseDto.getReleaseType();
+            if(ReleaseType.GOODS.equals(releaseType) || releaseType.DEMAND.equals(releaseType)){
+                ESProductDto targetInfo = jsonObject.getObject("targetInfo", ESProductDto.class);
+                releaseDto.setTargetInfo(targetInfo);
+                OperationType operationType = releaseDto.getOperationType();
+                ESProductDto releaseInfo = (ESProductDto)releaseDto.getTargetInfo();
+                esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "goods");
+            }else{
+                EsArticleDto targetInfo = jsonObject.getObject("targetInfo", EsArticleDto.class);
+                releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
+                releaseDto.setTargetInfo(targetInfo);
+                OperationType operationType = releaseDto.getOperationType();
+                EsArticleDto releaseInfo = (EsArticleDto)releaseDto.getTargetInfo();
+                esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "article");
+            }
         } catch (IOException e) {
             log.error("------Product-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
-        OperationType operationType = releaseDto.getOperationType();
-        ESProductDto releaseInfo = (ESProductDto)releaseDto.getTargetInfo();
-        esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "goods");
-    }
 
 
-    /**
-     * @Author hmr
-     * @Description 文章
-     * @Date: 2020/4/24 11:26
-     * @param msg
-     * @reture: void
-     **/
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_release"),
-            exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
-            key = "info.2.release.2"))
-    public void articleReleaseListener(String msg) throws JsonProcessingException {
-        SendReleaseDto releaseDto = null;
-        try {
-            JSONObject jsonObject = JSONObject.parseObject(msg);
-            EsArticleDto targetInfo = jsonObject.getObject("targetInfo", EsArticleDto.class);
-            releaseDto = objectMapper.readValue(msg, SendReleaseDto.class);
-            releaseDto.setTargetInfo(targetInfo);
-        } catch (IOException e) {
-            log.error("------Article-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
-        }
-        OperationType operationType = releaseDto.getOperationType();
-        EsArticleDto releaseInfo = (EsArticleDto)releaseDto.getTargetInfo();
-        esOperationService.execute(objectMapper.writeValueAsString(releaseInfo), String.valueOf(releaseInfo.getId()), operationType, "article");
     }
 }

@@ -7,10 +7,10 @@ package top.imuster.common.core.enums;
  * @date: 2020/5/21 15:02
  */
 public enum  ExamineEnum {
-    GOODS("info.1.examine.1"),
-    ARTICLE("info.2.examine.2"),
-    DEMAND("info.3.examine.3"),
-    PROPAGATE("info.4.examine.4");
+    GOODS("info.examine.GOODS"),
+    ARTICLE("info.examine.ARTICLE"),
+    DEMAND("info.examine.DEMAND"),
+    PROPAGATE("info.examine.PROPAGATE");
 
     String routingKey;
 

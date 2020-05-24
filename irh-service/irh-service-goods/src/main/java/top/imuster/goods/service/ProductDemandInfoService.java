@@ -58,4 +58,23 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
     Message<String> releaseDemand(ProductDemandInfo productDemandInfo, Long userId);
 
     void updateDemandCollectTotal(List<GoodsForwardDto> list);
+
+    /**
+     * @Author hmr
+     * @Description 根据发布时间查看最新的信息
+     * @Date: 2020/5/24 15:36
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductDemandInfo>>
+     **/
+    Message<Page<ProductDemandInfo>> list(Integer pageSize, Integer currentPage);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/5/24 16:05
+     * @param res
+     * @reture: java.util.List<top.imuster.goods.api.pojo.ProductDemandInfo>
+     **/
+    List<ProductDemandInfo> getInfoByIds(List<Long> res);
 }

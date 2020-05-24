@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @ClassName: ElasticsSearchConfig
  * @Description: ElasticsSearchConfig
@@ -15,6 +17,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class ElasticsSearchConfig {
+
+    @PostConstruct
+    void init() {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
+    }
 
     @Value("${irh.elasticsearch.host}")
     private String host;

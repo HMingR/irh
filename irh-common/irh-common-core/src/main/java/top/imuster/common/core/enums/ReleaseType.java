@@ -7,10 +7,10 @@ package top.imuster.common.core.enums;
  * @date: 2020/4/24 10:12
  */
 public enum ReleaseType {
-    GOODS("info.1.release.1"),
-    ARTICLE("info.2.release.2"),
-    DEMAND("info.3.release.3"),
-    PROPAGATE("info.4.release.4");
+    GOODS("info.release.1"),
+    ARTICLE("info.release.2"),
+    DEMAND("info.release.3"),
+    PROPAGATE("info.release.4");
 
     String routingKey;
 

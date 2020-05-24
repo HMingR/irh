@@ -15,7 +15,7 @@ spring:
       password: 123imuster456
       database: irh_recommender
       host: 101.200.87.195
-      uri: mongodb://101.200.87.195:21083/irh_recommender
+      authentication-database: admin
   profiles:
     active: dev
   application:

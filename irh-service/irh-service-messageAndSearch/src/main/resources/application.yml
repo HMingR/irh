@@ -88,13 +88,6 @@ logging:
 enable:
   needLogin: false
 
-elasticsearch:
-  pool: 10
-  ip: 39.97.121.108
-  port: 9300
-  cluster:
-    name: elasticsearch
-
 security:
   applyUrl: https://www.imuster.top:10900
 

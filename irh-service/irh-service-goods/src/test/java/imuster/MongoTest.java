@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import redis.clients.jedis.Jedis;
 import top.imuster.goods.GoodsProviderApplication;
 import top.imuster.goods.api.dto.ProductContentRecommendDto;
 import top.imuster.goods.api.dto.ProductRecommendDto;
@@ -50,6 +51,15 @@ public class MongoTest {
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;
+
+    @Autowired
+    Jedis jedis;
+
+    @Test
+    public void test05(){
+        String jwtString = jedis.get("test");
+        System.out.println(jwtString);
+    }
 
     @Test
     public void test() throws JsonProcessingException {

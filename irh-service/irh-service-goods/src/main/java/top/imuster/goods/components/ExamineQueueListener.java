@@ -65,9 +65,9 @@ public class ExamineQueueListener {
     @Autowired
     Trans2ES trans2ES;
 
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_info_examine"),
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "queue_inform_examine"),
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
-            key = {"info.1.examine.1", "info.3.examine.3"}))
+            key = {"info.examine.#"}))
     public void listen(String msg) throws IOException {
         log.info("----->进入审核");
         SendExamineDto sendExamineDto = objectMapper.readValue(msg, SendExamineDto.class);

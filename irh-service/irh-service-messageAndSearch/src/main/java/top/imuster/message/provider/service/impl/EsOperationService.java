@@ -1,14 +1,18 @@
 package top.imuster.message.provider.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.message.provider.exception.MessageException;
+
+import java.io.IOException;
 
 /**
  * @ClassName: EsOperationService
@@ -27,7 +31,7 @@ public class EsOperationService {
     private String id;
 
     @Autowired
-    private TransportClient transportClient;
+    private RestHighLevelClient restHighLevelClient;
 
     private String getIndex() {
         return index;
@@ -37,12 +41,12 @@ public class EsOperationService {
         this.index = index;
     }
 
-    private TransportClient getTransportClient() {
-        return transportClient;
+    public RestHighLevelClient getRestHighLevelClient() {
+        return restHighLevelClient;
     }
 
-    private void setTransportClient(TransportClient transportClient) {
-        this.transportClient = transportClient;
+    public void setRestHighLevelClient(RestHighLevelClient restHighLevelClient) {
+        this.restHighLevelClient = restHighLevelClient;
     }
 
     private String getId() {
@@ -53,26 +57,28 @@ public class EsOperationService {
         this.id = id;
     }
 
-    private void executeByOperationType(String jsonObjectString, OperationType type){
+    private void executeByOperationType(String jsonObjectString, OperationType type) throws IOException {
         if(OperationType.INSERT.equals(type)) add2ES(jsonObjectString);
         if(OperationType.REMOVE.equals(type)) deleteById(id);
         if(OperationType.UPDATE.equals(type)) updateById(jsonObjectString);
     }
 
-    private void add2ES(String jsonObjectString){
-        IndexResponse indexResponse = transportClient.prepareIndex(getIndex(), getIndex()).setSource(jsonObjectString).setId(id).get();
-        log.debug("插入的值为{}", indexResponse.getId());
+    private void add2ES(String jsonObjectString) throws IOException {
+        IndexRequest indexRequest = new IndexRequest(index, index);
+        indexRequest.source(jsonObjectString, XContentType.JSON).id(id);
+        restHighLevelClient.index(indexRequest);
     }
 
-    private void deleteById(String id){
-        transportClient.prepareDelete(getIndex(), getIndex(), id).execute();
+    private void deleteById(String id) throws IOException {
+        DeleteRequest deleteRequest = new DeleteRequest(index, index, id);
+        restHighLevelClient.delete(deleteRequest);
     }
 
     private void updateById(String jsonObjectString){
-        transportClient.prepareUpdate(getIndex(), getIndex(), getId()).setDoc(jsonObjectString);
+
     }
 
-    public void execute(String jsonString, String id ,OperationType type, String index){
+    public void execute(String jsonString, String id ,OperationType type, String index) throws IOException {
         Assert.notEmpty(jsonString, "jsonString不能为null");
         Assert.notNull(type, "操作类型不能为null");
         Assert.notNull(index, "ES索引名称不能为null");
@@ -84,7 +90,7 @@ public class EsOperationService {
                 throw new MessageException("参数错误");
             }
         }
-        setTransportClient(transportClient);
+        setRestHighLevelClient(restHighLevelClient);
         setIndex(index);
         setId(id);
         executeByOperationType(jsonString, type);

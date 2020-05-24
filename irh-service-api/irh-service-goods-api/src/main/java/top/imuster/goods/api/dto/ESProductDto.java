@@ -35,6 +35,8 @@ public class ESProductDto extends BaseDomain {
 
     private Long consumerId;
 
+    private Integer oldDegree;
+
     public ESProductDto() {
     }
 
@@ -48,6 +50,7 @@ public class ESProductDto extends BaseDomain {
         this.desc = info.getProductDesc();
         this.tradeType = info.getTradeType();
         this.consumerId = info.getConsumerId();
+        this.oldDegree = info.getOldDegree();
         this.setCreateTime(DateUtil.current());
     }
 
@@ -59,6 +62,14 @@ public class ESProductDto extends BaseDomain {
         this.consumerId = info.getConsumerId();
         this.mainPicUrl = info.getMainPic();
         this.tagNames = info.getTagNames();
+    }
+
+    public Integer getOldDegree() {
+        return oldDegree;
+    }
+
+    public void setOldDegree(Integer oldDegree) {
+        this.oldDegree = oldDegree;
     }
 
     public Integer getType() {

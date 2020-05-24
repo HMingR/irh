@@ -48,7 +48,7 @@ public class ErrandOrderListener {
     @Autowired
     GenerateSendMessageService generateSendMessageService;
 
-    @RabbitListener(queues = "queue_info_errand")
+    @RabbitListener(queues = "queue_inform_errand")
     public void generateOrder(String msg){
         try{
             ErrandOrderInfo order = new ObjectMapper().readValue(msg, ErrandOrderInfo.class);

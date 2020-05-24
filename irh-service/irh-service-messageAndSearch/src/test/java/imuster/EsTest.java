@@ -1,5 +1,6 @@
 package imuster;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.Configuration;
@@ -10,17 +11,23 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FiltersFunctionScoreQuery;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.index.query.functionscore.*;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.RandomScoreFunctionBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
+import org.elasticsearch.index.query.functionscore.WeightBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -76,6 +83,36 @@ public class EsTest {
 
     @Autowired
     Configuration configuration;
+
+    @Test
+    public void test0909() throws IOException {
+        IndexRequest indexRequest = new IndexRequest("goods", "goods");
+        ESProductDto esProductDto = new ESProductDto();
+        esProductDto.setId(21L);
+        esProductDto.setConsumerId(8L);
+        esProductDto.setTitle("谁有华为Mate book14的，高价收");
+        esProductDto.setMainPicUrl("group1/M00/00/01/rBgYGV6wxzyAYZe_AAAi4sTh7gg602.png");
+        esProductDto.setDesc("马上毕业了，那位学长有华为两年前出的哪一款Mate book14,高价收");
+        esProductDto.setType(2);
+        esProductDto.setTagNames("测试|电脑|毕业季|apple");
+        esProductDto.setCreateTime(DateUtil.current());
+        String jwtString = objectMapper.writeValueAsString(esProductDto);
+        indexRequest.source(jwtString, XContentType.JSON).id(esProductDto.getId().toString());
+        restHighLevelClient.index(indexRequest);
+    }
+
+    @Test
+    public void test02020() throws IOException {
+        UpdateRequest updateRequest = new UpdateRequest("goods", "goods", "21");
+        ESProductDto esProductDto = new ESProductDto();
+        esProductDto.setDesc("马上毕业了，那位学长有华为两年前出的哪一款Mate book14,高价收，刚才打错字了");
+        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(esProductDto, true, true);
+        updateRequest.doc(stringObjectMap);
+        restHighLevelClient.update(updateRequest);
+    }
+
+    public void test0303(){
+    }
 
     @Test
     public void sendTemplateMail() {
@@ -157,13 +194,13 @@ public class EsTest {
     @Test
     public void test() throws JsonProcessingException {
         ESProductDto esProductDto = new ESProductDto();
-        esProductDto.setId(14L);
+        esProductDto.setId(20L);
         esProductDto.setConsumerId(8L);
 //        esProductDto.setSalePrice("1000");
-        esProductDto.setTitle("高价收一台maccccccc");
+        esProductDto.setTitle("谁有华为Mate book13的，高价收");
         esProductDto.setMainPicUrl("group1/M00/00/01/rBgYGV6wxzyAYZe_AAAi4sTh7gg602.png");
 //        esProductDto.setTradeType(10);
-        esProductDto.setDesc("马上毕业了，那位学长有mbp,高价收收收收收收收收");
+        esProductDto.setDesc("马上毕业了，那位学长有华为两年前出的哪一款Mate book13,高价收收收收收收收收");
         esProductDto.setType(2);
         esProductDto.setTagNames("测试|电脑|毕业季|apple");
         esProductDto.setCreateTime(DateUtil.current());

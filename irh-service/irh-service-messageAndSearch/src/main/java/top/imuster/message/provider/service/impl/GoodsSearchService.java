@@ -105,9 +105,9 @@ public class GoodsSearchService {
 
         Integer timeOrder = searchParam.getTimeOrder();
         if(timeOrder != null){
-            if(priceOrder == 1){
+            if(timeOrder == 1){
                 orderType = SortOrder.DESC;
-            }else if(priceOrder == 2){
+            }else if(timeOrder == 2){
                 orderType = SortOrder.ASC;
             }else{
                 return Message.createByError("参数错误");
