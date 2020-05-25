@@ -5,6 +5,7 @@ import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ReportFeedbackInfo;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -52,4 +53,13 @@ public interface ReportFeedbackInfoService extends BaseService<ReportFeedbackInf
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     Message<List<ReportFeedbackInfo>> getDetailsByTargetId(Long targetId, Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 校验图片合法性
+     * @Date: 2020/5/25 9:35
+     * @param pciUri
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> checkPic(String pciUri) throws IOException;
 }

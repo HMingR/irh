@@ -17,7 +17,8 @@
             update_time AS updateTime,
             state,
             browse_times AS browseTimes,
-            detail_page_uri AS detailPageUri 
+            detail_page_uri AS detailPageUri,
+            main_pic AS mainPic
 		]]>
 	</sql>
 
@@ -161,7 +162,14 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
 	</select>
-	
+
 	<!-- 其它SQL语句 -->
+	<select id="selectBriefInfoList" parameterType="propagateInfo" resultType="propagateInfo">
+		SELECT id, publisher_id AS publisherId, title, browse_times AS browseTimes, main_pic AS mainPic, create_time AS createTime
+		<include refid="QUERY_FROM_TABLE"></include>
+		WHERE state = #{state,jdbcType=INTEGER} AND type = #{type,jdbcType=INTEGER}
+		ORDER BY #{orderField} #{orderFieldType}
+		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
+	</select>
 	
 </mapper>

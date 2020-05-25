@@ -13,13 +13,12 @@ import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.user.api.dto.CheckValidDto;
-import top.imuster.user.api.pojo.ReportFeedbackInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.provider.service.ReportFeedbackInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
  * @ClassName: CustomerController
@@ -81,27 +80,6 @@ public class UserController extends BaseController {
         return Message.createBySuccess();
     }
 
-    /**
-     * @Description: 用户举报
-     * @Author: hmr
-     * @Date: 2020/1/11 12:18
-     * @param type
-     * @param id
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @GetMapping("/report/{type}/{id}")
-    @ApiOperation(value = "用户举报(type可选择 1-商品举报 2-留言举报 3-评价举报 4-帖子举报),id则为举报对象的id", httpMethod = "GET")
-    public Message<String> reportFeedback(@ApiParam("1-商品举报 2-留言举报 3-评价举报 4-帖子举报")@PathVariable("type") Integer type, @ApiParam("举报对象的id") @PathVariable("id") Long id, HttpServletRequest request) throws Exception {
-        Long userId = getCurrentUserIdFromCookie();
-        ReportFeedbackInfo reportFeedbackInfo = new ReportFeedbackInfo();
-        reportFeedbackInfo.setCustomerId(userId);
-        reportFeedbackInfo.setType(type);
-        reportFeedbackInfo.setTargetId(id);
-        reportFeedbackInfo.setState(2);
-        reportFeedbackInfoService.insertEntry(reportFeedbackInfo);
-        return Message.createBySuccess("反馈成功,我们会尽快处理");
-    }
-
     @ApiOperation(value = "根据用户id获得用户基本信息", httpMethod = "GET")
     @GetMapping("/{id}")
     public Message<UserDto> getUserNameById(@PathVariable("id") String id){
@@ -117,6 +95,11 @@ public class UserController extends BaseController {
         return Message.createBySuccess(userInfo.getUserId());
     }
 
+    @GetMapping("/checkPic")
+    public Message<String> checkPic(String pciUri) throws IOException {
+        return reportFeedbackInfoService.checkPic(pciUri);
+    }
+
     @ApiOperation("更新用户头像")
     @NeedLogin
     @PostMapping("/portrait")
@@ -125,8 +108,10 @@ public class UserController extends BaseController {
         userInfo.setId(getCurrentUserIdFromCookie());
         userInfo.setPortrait(picUrl);
         userInfoService.updateByKey(userInfo);
-        return Message.createBySuccess();
+        return Message.createBySuccess ();
     }
+
+
 
     /**
      * @Description: 会员注册

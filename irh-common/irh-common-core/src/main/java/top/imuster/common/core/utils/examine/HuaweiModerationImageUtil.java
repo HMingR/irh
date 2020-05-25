@@ -8,10 +8,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
 
@@ -53,16 +51,11 @@ public class HuaweiModerationImageUtil {
             //
             String uri = "/v1.0/moderation/image/batch";
 
-
-            LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-
             //定义body
             LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("urls", urls);
             body.add("categories", new String[] {"politics", "terrorism", "porn", "ad"});
             body.add("threshold", 0);
-
-            HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(body, header);
 
             JSONObject json = new JSONObject();
 

@@ -52,6 +52,16 @@ public class PropagateInfo extends BaseDomain {
 	// 静态页面地址, max length: 255
 	private String detailPageUri;
 
+	private String mainPic;
+
+	public String getMainPic() {
+		return mainPic;
+	}
+
+	public void setMainPic(String mainPic) {
+		this.mainPic = mainPic;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

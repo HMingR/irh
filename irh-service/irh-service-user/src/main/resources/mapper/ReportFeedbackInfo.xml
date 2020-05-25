@@ -15,7 +15,9 @@
             remark,
             create_time AS createTime,
             update_time AS updateTime,
-            state 
+            state,
+            report_type_ids AS reportTypeIds,
+            pics
 		]]>
 	</sql>
 
@@ -36,6 +38,8 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="reason != null and reason != ''"><![CDATA[AND reason = #{reason}]]></if>
+            <if test="reportTypeIds != null and reportTypeIds != ''"><![CDATA[AND report_type_ids = #{reportTypeIds}]]></if>
+            <if test="pics != null and pics != ''"><![CDATA[AND pics = #{pics}]]></if>
 		</where>
 	</sql>
 	
@@ -57,39 +61,41 @@
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="reason != null"><![CDATA[reason = #{reason},]]></if>
+			<if test="reportTypeIds != null"><![CDATA[report_type_ids = #{reportTypeIds},]]></if>
+			<if test="pics != null"><![CDATA[pics = #{pics},]]></if>
 		</set>
+	</sql>
+
+	<sql id="key">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="type != null and type != ''"><![CDATA[  type,]]></if>
+			<if test="targetId != null and targetId != '' and targetId != -1"><![CDATA[  target_id ,]]></if>
+			<if test="customerId != null and customerId != '' and customerId != -1"><![CDATA[customer_id ,]]></if>
+			<if test="reason != null and reason != ''"><![CDATA[  reason ,]]></if>
+			<if test="reportTypeIds != null and reportTypeIds != ''"><![CDATA[  report_type_ids,]]></if>
+			<if test="pics != null and pics != ''"><![CDATA[  pics,]]></if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="type != null and type != ''"><![CDATA[  #{type},]]></if>
+			<if test="targetId != null and targetId != '' and targetId != -1"><![CDATA[  #{targetId} ,]]></if>
+			<if test="customerId != null and customerId != '' and customerId != -1"><![CDATA[#{customerId} ,]]></if>
+			<if test="reason != null and reason != ''"><![CDATA[  #{reason} ,]]></if>
+			<if test="reportTypeIds != null and reportTypeIds != ''"><![CDATA[  #{reportTypeIds},]]></if>
+			<if test="pics != null and pics != ''"><![CDATA[  #{pics},]]></if>
+		</trim>
 	</sql>
 
 	<!-- 插入app记录 -->
 	<insert id="insertEntry" parameterType="reportFeedbackInfo" >
 		<![CDATA[
 			INSERT INTO report_feedback_info
-				(
-                id, 
-                type, 
-                target_id, 
-                customer_id,
-                result,
-                reason,
-                remark,
-                create_time,
-                update_time, 
-                state 
-				)
-			VALUES
-				(
-                #{id}, 
-                #{type}, 
-                #{targetId}, 
-                #{customerId}, 
-                #{result},
-                #{reason}
-                #{remark},
-                #{createTime},
-                #{updateTime}, 
-                #{state} 
-				)
 		]]>
+		<include refid="key"></include>
+			VALUES
+		<include refid="value"></include>
 	</insert>
 	
 	<!-- 返回插入的编号,在事务开启状态下有效 -->

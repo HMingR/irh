@@ -13,6 +13,7 @@ import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
+import top.imuster.common.core.utils.examine.HuaweiModerationImageUtil;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.life.api.service.ForumServiceFeignApi;
 import top.imuster.order.api.service.OrderServiceFeignApi;
@@ -24,6 +25,7 @@ import top.imuster.user.provider.service.ReportFeedbackInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,7 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
     @Autowired
     private ForumServiceFeignApi forumServiceFeignApi;
 
+    @Autowired
     private OrderServiceFeignApi orderServiceFeignApi;
 
     @Autowired
@@ -56,6 +59,9 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
 
     @Resource
     UserInfoService userInfoService;
+
+    @Autowired
+    HuaweiModerationImageUtil huaweiModerationImageUtil;
 
 
     @Override
@@ -215,5 +221,16 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         params.put("type", String.valueOf(type));
         List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectAllReportByTargetId(params);
         return Message.createBySuccess(res);
+    }
+
+    @Override
+    public Message<String> checkPic(String pciUri) throws IOException {
+        String[] strings = new String[1];
+        strings[0] = pciUri;
+        String res = huaweiModerationImageUtil.imageContentBatchCheck(strings);
+        if("NULL".equalsIgnoreCase(res)){
+            return Message.createBySuccess();
+        }
+        return Message.createByError("图片审核不通过,请更换图片");
     }
 }

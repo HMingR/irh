@@ -59,9 +59,30 @@ public class ReportFeedbackInfo extends BaseDomain {
 	//总数，用来统计
 	private Integer total;
 
+	//举报的类型id，用“,”分隔
+	private String reportTypeIds;
+
+	private String pics;
+
 	// 1-无效 2-有效
 	//private Integer state
 
+
+	public String getPics() {
+		return pics;
+	}
+
+	public void setPics(String pics) {
+		this.pics = pics;
+	}
+
+	public String getReportTypeIds() {
+		return reportTypeIds;
+	}
+
+	public void setReportTypeIds(String reportTypeIds) {
+		this.reportTypeIds = reportTypeIds;
+	}
 
 	public Long getProcessId() {
 		return processId;
