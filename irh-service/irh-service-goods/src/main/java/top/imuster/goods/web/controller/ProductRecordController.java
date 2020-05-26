@@ -3,7 +3,6 @@ package top.imuster.goods.web.controller;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.ProductRecordService;
@@ -32,14 +31,12 @@ public class ProductRecordController extends BaseController {
      * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
-    @NeedLogin
     @GetMapping("/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> recordList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws IOException {
         return productRecordService.getUserRecordList(pageSize, currentPage, getCurrentUserIdFromCookie());
     }
 
     @DeleteMapping("/{index}")
-    @NeedLogin
     public Message<String> deleteByIndex(@PathVariable("index") Integer index){
         return productRecordService.deleteByIndex(index, getCurrentUserIdFromCookie());
     }

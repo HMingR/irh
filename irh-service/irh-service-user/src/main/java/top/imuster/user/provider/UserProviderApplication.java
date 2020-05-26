@@ -26,7 +26,8 @@ import org.springframework.web.context.request.RequestContextListener;
 @EnableFeignClients(basePackages = {"top.imuster.goods.api.service",
                                     "top.imuster.order.api.service",
                                     "top.imuster.life.api.service",
-                                    "top.imuster.file.api.service"})
+                                    "top.imuster.file.api.service",
+                                    "top.imuster.security.api.service"})
 @ComponentScan(basePackages = {
         "top.imuster.user.provider",
         "top.imuster.common.core",

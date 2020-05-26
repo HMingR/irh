@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
+import javax.management.relation.RoleInfo;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

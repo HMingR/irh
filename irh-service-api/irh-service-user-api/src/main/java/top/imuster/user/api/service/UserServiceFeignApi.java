@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
-import top.imuster.user.api.pojo.RoleInfo;
-import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,23 +19,6 @@ import java.util.Map;
  */
 @FeignClient(name = "user-service", path = "/user/feign", fallbackFactory = UserServiceFeignHystrix.class)
 public interface UserServiceFeignApi {
-
-    @GetMapping("/login/{email}")
-    UserInfo loadUserInfoByEmail(@PathVariable("email") String email);
-
-    @GetMapping("/roleAndAuth")
-    List<RoleInfo> getAllRoleAndAuth();
-
-    /**
-     * @Author hmr
-     * @Description 通过用户登录名获得用户的角色
-     * @Date: 2020/1/30 17:52
-     * @param name
-     * @reture: java.util.List<java.lang.String>
-     **/
-    @GetMapping("/userRole/{loginName}")
-    List<String> getRoleByUserName(@PathVariable("loginName") String loginName);
-
     /**
      * @Author hmr
      * @Description 更新用户的状态
@@ -68,9 +48,6 @@ public interface UserServiceFeignApi {
      **/
     @GetMapping("/email/{id}")
     String getUserEmailById(@PathVariable("id") Long holderId);
-
-    @GetMapping("/wxLogin/{openId}")
-    UserInfo getInfoByWxOpenId(@PathVariable("openId") String openId);
 
     @PostMapping("/examine")
     boolean saveExamineRecord2DB(@RequestBody ExamineRecordInfo examineRecordInfo);

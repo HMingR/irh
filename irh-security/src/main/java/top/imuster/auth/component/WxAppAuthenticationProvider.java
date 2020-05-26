@@ -17,11 +17,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.config.WxAppAuthenticationToken;
+import top.imuster.auth.service.RoleInfoService;
+import top.imuster.auth.service.WxAppLoginService;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
-import top.imuster.user.api.pojo.UserInfo;
+import top.imuster.security.api.pojo.UserLoginInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -53,6 +56,12 @@ public class WxAppAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
 
+    @Resource
+    WxAppLoginService wxAppLoginService;
+
+    @Resource
+    RoleInfoService roleInfoService;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         WxAppAuthenticationToken appAuthenticationToken = (WxAppAuthenticationToken) authentication;
@@ -73,17 +82,20 @@ public class WxAppAuthenticationProvider implements AuthenticationProvider {
             //获取会话秘钥
             if(StringUtils.isBlank(openid)) throw new AuthenticationServiceException("认证失败,请刷新后重试");
 
-            UserInfo userInfo = userServiceFeignApi.getInfoByWxOpenId(openid);
+            UserLoginInfo userInfo = wxAppLoginService.loginByOpenId(openid);
 
             if(userInfo == null) throw new AuthenticationServiceException("该微信没有绑定irh平台账号,请先注册再使用微信登录");
 
             String userAuth = "";
             if(userInfo.getType() != 10){
-                List<String> roleName = userServiceFeignApi.getRoleByUserName(userInfo.getEmail());
+                List<String> roleName = roleInfoService.getRoleNameByUserName(userInfo.getLoginName());
                 userAuth  = StringUtils.join(roleName.toArray(), ",");
             }
-            UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
-            UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
+//            UserDto userDto = new UserDto(userInfo.getId(), userInfo.getLoginName(), userInfo.getState(), userInfo.getType());
+            UserDto userDto = new UserDto();
+            userDto.setUserId(userInfo.getUserId());
+            userDto.setUserTypeById(userInfo.getType());
+            UserDetails userDetails = new UserDetails(userInfo.getLoginName(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
             userDetails.setUserInfo(userDto);
             return new WxAppAuthenticationToken(userDetails, credentials);
         }

@@ -9,14 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.security.api.pojo.UserRoleRel;
 import top.imuster.user.api.pojo.UserInfo;
-import top.imuster.user.api.pojo.UserRoleRel;
 import top.imuster.user.provider.service.UserInfoService;
-import top.imuster.user.provider.service.UserRoleRelService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -38,8 +37,8 @@ public class AdminController extends BaseController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Resource
-    UserRoleRelService userRoleRelService;
+    //@Resource
+    //UserRoleRelService userRoleRelService;
 
     @ApiOperation(value = "查看所有的用户", httpMethod = "POST")
     @PostMapping("/list")
@@ -116,7 +115,8 @@ public class AdminController extends BaseController {
         UserRoleRel condition = new UserRoleRel();
         condition.setRoleId(roleId);
         condition.setStaffId(id);
-        userRoleRelService.deleteByCondtion(condition);
+        //todo
+        //userRoleRelService.deleteByCondtion(condition);
         return Message.createBySuccess();
     }
 

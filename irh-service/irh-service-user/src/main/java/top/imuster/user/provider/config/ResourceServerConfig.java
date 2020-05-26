@@ -8,9 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
  **/
 @Configuration
 @EnableResourceServer
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)//激活方法上的PreAuthorize注解
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)//激活方法上的PreAuthorize注解
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(ResourceServerConfig.class);
@@ -72,8 +74,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return jwtTokenStore;
     }
 
-
-
     @Bean
     FeignClientInterceptor feignClientInterceptor(){
         return new FeignClientInterceptor();
@@ -89,11 +89,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return new UrlFilterInvocationSecurityMetadataSource();
     }
 
-    /*@Override
+    @Autowired
+    CustomizedAuthenticationEntryPoint customizedAuthenticationEntryPoint;
+
+    @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         super.configure(resources);
-        resources.authenticationEntryPoint(new IrhAuthenticationEntryPoint());
-    }*/
+        resources.authenticationEntryPoint(customizedAuthenticationEntryPoint);
+    }
 
     //Http安全配置，对每个到达系统的http请求链接进行校验
     @Override

@@ -9,7 +9,7 @@ spring:
 
 mybatis:
   mapper-locations: mapper/*
-  type-aliases-package: top.imuster.security.pojo
+  type-aliases-package: top.imuster.security.api.pojo
 
 auth:
   tokenValiditySeconds: 1200  #token存储到redis的过期时间

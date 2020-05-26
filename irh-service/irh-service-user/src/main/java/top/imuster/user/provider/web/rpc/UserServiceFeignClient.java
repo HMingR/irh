@@ -3,16 +3,12 @@ package top.imuster.user.provider.web.rpc;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
-import top.imuster.user.api.pojo.RoleInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 import top.imuster.user.provider.service.ExamineRecordInfoService;
-import top.imuster.user.provider.service.RoleInfoService;
 import top.imuster.user.provider.service.UserInfoService;
-import top.imuster.user.provider.service.WxAppLoginService;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,36 +22,10 @@ import java.util.Map;
 public class UserServiceFeignClient implements UserServiceFeignApi {
 
     @Resource
-    RoleInfoService roleInfoService;
-
-    @Resource
     UserInfoService userInfoService;
 
     @Resource
-    WxAppLoginService wxAppLoginService;
-
-    @Resource
     ExamineRecordInfoService examineRecordInfoService;
-
-
-    @Override
-    @GetMapping("/login/{email}")
-    public UserInfo loadUserInfoByEmail(@PathVariable("email") String email) {
-        return userInfoService.loadUserDetailsByEmail(email);
-    }
-
-    @Override
-    @GetMapping("/roleAndAuth")
-    public List<RoleInfo> getAllRoleAndAuth() {
-        return roleInfoService.getRoleAndAuthList();
-    }
-
-    @Override
-    @GetMapping("/userRole/{loginName}")
-    public List<String> getRoleByUserName(@PathVariable("loginName") String loginName) {
-        return roleInfoService.getRoleNameByUserName(loginName);
-    }
-
 
     @Override
     @GetMapping("/{userId}/{state}")
@@ -77,11 +47,6 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     @GetMapping("/email/{id}")
     public String getUserEmailById(@PathVariable("id") Long holderId) {
         return userInfoService.getEmailById(holderId);
-    }
-
-    @GetMapping("/wxLogin/{openId}")
-    public UserInfo getInfoByWxOpenId(@PathVariable("openId") String openId){
-        return wxAppLoginService.loginByOpenId(openId);
     }
 
     @PostMapping("/examine")

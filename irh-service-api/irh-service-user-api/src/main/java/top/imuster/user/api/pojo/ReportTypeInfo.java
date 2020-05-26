@@ -22,7 +22,7 @@ public class ReportTypeInfo extends BaseDomain {
 	private Long parentId;
 
 	// max length: 255
-	private String desc;
+	private String name;
 
 	//  1-无效  2-有效
 //	private Short state;
@@ -40,11 +40,12 @@ public class ReportTypeInfo extends BaseDomain {
     public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
-	
-	public String getDesc() {
-		return this.desc;
+
+	public String getName() {
+		return name;
 	}
-    public void setDesc(String desc) {
-		this.desc = desc;
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

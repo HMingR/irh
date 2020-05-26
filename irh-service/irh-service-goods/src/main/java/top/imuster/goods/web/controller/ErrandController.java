@@ -3,6 +3,7 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ErrandController extends BaseController {
     private ErrandInfoService errandInfoService;
 
     @ApiOperation("发布跑腿")
-    @NeedLogin
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping
     public Message<String> release(@Validated(ValidateGroup.addGroup.class) @RequestBody ErrandInfo errandInfo, BindingResult bindingResult){
         validData(bindingResult);
@@ -40,7 +41,6 @@ public class ErrandController extends BaseController {
     }
 
     @ApiOperation("删除自己的跑腿服务")
-    @NeedLogin
     @DeleteMapping("/{id}/{version}")
     public Message<String> delete(@PathVariable("id") Long id, @PathVariable("version") Integer version){
         return errandInfoService.deleteErrandById(id, getCurrentUserIdFromCookie(), version);
