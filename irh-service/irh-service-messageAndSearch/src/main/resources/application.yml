@@ -1,6 +1,8 @@
 server:
   port: 10100
 spring:
+  profiles:
+    active: dev
   redis:
     database: 0
     host: 39.105.0.169
