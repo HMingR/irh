@@ -8,7 +8,7 @@
 		<![CDATA[
             id,
             parent_id AS parentId,
-            desc,
+            name,
             create_time AS createTime,
             update_time AS updateTime,
             state 
@@ -23,7 +23,7 @@
 		<where>
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="parentId != null and parentId != ''"><![CDATA[AND parent_id = #{parentId}]]></if>
-            <if test="desc != null and desc != ''"><![CDATA[AND desc = #{desc}]]></if>
+            <if test="name != null and name != ''"><![CDATA[AND name = #{name}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
@@ -40,7 +40,7 @@
 	<sql id="UPDATE_COLUMN_SET">
 		<set>
 			<if test="parentId != null"><![CDATA[parent_id = #{parentId},]]></if>
-			<if test="desc != null"><![CDATA[desc = #{desc},]]></if>
+			<if test="name != null"><![CDATA[name = #{name},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
 			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
@@ -54,7 +54,7 @@
 				(
                 id, 
                 parent_id, 
-                desc, 
+                name,
                 create_time, 
                 update_time, 
                 state 
@@ -63,7 +63,7 @@
 				(
                 #{id}, 
                 #{parentId}, 
-                #{desc}, 
+                #{name},
                 #{createTime}, 
                 #{updateTime}, 
                 #{state} 

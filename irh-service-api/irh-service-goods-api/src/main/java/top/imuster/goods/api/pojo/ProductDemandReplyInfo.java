@@ -24,12 +24,6 @@ public class ProductDemandReplyInfo extends BaseDomain {
 	//  发布消息的人的id
 	private Long userId;
 
-	// 一级留言id
-	private Long firstClassId;
-
-	// 父回复id
-	private Long parentId;
-
 	// 1-新的发布 2-引用商品订单信息
 	private Short releaseType;
 
@@ -84,20 +78,6 @@ public class ProductDemandReplyInfo extends BaseDomain {
 	}
     public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-	
-	public Long getFirstClassId() {
-		return this.firstClassId;
-	}
-    public void setFirstClassId(Long firstClassId) {
-		this.firstClassId = firstClassId;
-	}
-	
-	public Long getParentId() {
-		return this.parentId;
-	}
-    public void setParentId(Long parentId) {
-		this.parentId = parentId;
 	}
 	
 	public Short getReleaseType() {

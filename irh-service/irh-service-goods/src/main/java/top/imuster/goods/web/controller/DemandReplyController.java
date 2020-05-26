@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 /**
  * @ClassName: DemandReplyController
- * @Description: DemandReplyController
+ * @Description: DemandReplyController  需求留言
  * @author: hmr
  * @date: 2020/5/3 15:23
  */
@@ -30,13 +30,6 @@ public class DemandReplyController extends BaseController {
                                                                    @PathVariable("demandId") Long demandId){
         return productDemandReplyInfoService.getFirstClassReplyListByPage(pageSize, currentPage, demandId);
 
-    }
-
-    @GetMapping("/child/{pageSize}/{currentPage}/{replyId}")
-    public Message<Page<ProductDemandReplyInfo>> getListByReplyId(@PathVariable("pageSize") Integer pageSize,
-                                                                  @PathVariable("currentPage") Integer currentPage,
-                                                                  @PathVariable("replyId") Long replyId){
-        return productDemandReplyInfoService.getReplyChildById(pageSize, currentPage, replyId);
     }
 
     @PostMapping

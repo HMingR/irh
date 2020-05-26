@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.goods.api.dto.ProductAndDemandDto;
 import top.imuster.goods.service.ProductCollectRelService;
@@ -32,7 +31,6 @@ public class ProductCollectController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @GetMapping("/{type}/{id}")
-    @NeedLogin
     public Message<String> collect(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         if(type != 1 && type != 2) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
@@ -42,26 +40,22 @@ public class ProductCollectController extends BaseController {
         return productCollectRelService.collect(userId, type, id);
     }
 
-    @NeedLogin
     @DeleteMapping("/{type}/{targetId}")
     public Message<String> deleteCollect(@PathVariable("type") Integer type, @PathVariable("targetId") Long targetId){
         return productCollectRelService.deleteCollect(getCurrentUserIdFromCookie(), targetId, type);
     }
 
-    @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> deleteCollect(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();
         return productCollectRelService.deleteCollect(id, userId);
     }
 
-    @NeedLogin
     @DeleteMapping("/all")
     public Message<Integer> deleteAll(){
         return productCollectRelService.deleteAddCollect(getCurrentUserIdFromCookie());
     }
 
-    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ProductAndDemandDto>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         return productCollectRelService.list(pageSize, currentPage, getCurrentUserIdFromCookie());
@@ -75,7 +69,6 @@ public class ProductCollectController extends BaseController {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
      **/
-    @NeedLogin
     @GetMapping("/state/{type}/{id}")
     public Message<Integer> getCollectState(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();

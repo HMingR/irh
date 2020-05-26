@@ -9,11 +9,13 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import top.imuster.auth.service.RoleInfoService;
+import top.imuster.auth.service.UserLoginInfoService;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
-import top.imuster.user.api.pojo.UserInfo;
-import top.imuster.user.api.service.UserServiceFeignApi;
+import top.imuster.security.api.pojo.UserLoginInfo;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 //@Service("usernameDetailsService")
@@ -22,10 +24,13 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    UserServiceFeignApi userServiceFeignApi;
-
-    @Autowired
     ClientDetailsService clientDetailsService;
+
+    @Resource
+    UserLoginInfoService userLoginInfoService;
+
+    @Resource
+    RoleInfoService roleInfoService;
 
     /**
      * @Author hmr
@@ -51,7 +56,7 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
             return null;
         }*/
 
-        UserInfo userInfo = userServiceFeignApi.loadUserInfoByEmail(username);
+        UserLoginInfo userInfo = userLoginInfoService.getInfoByLoginName(username);
         if(userInfo == null) throw new AuthenticationServiceException("用户名不存在,请检查用户名是否输入正确");
         if(userInfo.getState() == null || userInfo.getState() <= 20){
             throw new AuthenticationServiceException("该账号已被冻结,请联系管理员");
@@ -59,11 +64,11 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
 
         String userAuth = "";
         if(userInfo.getType() != 10){
-            List<String> roleName = userServiceFeignApi.getRoleByUserName(username);
+            List<String> roleName = roleInfoService.getRoleNameByUserName(username);
             userAuth  = StringUtils.join(roleName.toArray(), ",");
         }
-        UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
-        UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
+        UserDto userDto = new UserDto();
+        UserDetails userDetails = new UserDetails(userInfo.getLoginName(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
         userDetails.setUserInfo(userDto);
         return userDetails;
     }

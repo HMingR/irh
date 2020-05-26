@@ -9,10 +9,9 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
-import top.imuster.user.api.pojo.RoleInfo;
-import top.imuster.user.provider.service.RoleInfoService;
+import top.imuster.security.api.pojo.RoleInfo;
+import top.imuster.security.api.service.RoleServiceFeignApi;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,8 +30,9 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Value("${enable.needLogin}")
     boolean enable;
 
-    @Resource
-    RoleInfoService roleInfoService;
+
+    @Autowired
+    RoleServiceFeignApi roleServiceFeignApi;
 
     @Autowired
     AntPathMatcher antPathMatcher;
@@ -58,24 +58,11 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
             return null;
         }
         String method = ((FilterInvocation) o).getRequest().getMethod();
-        log.info("访问的地址是{},httpMethod为{}", requestUrl, method);
 
         ArrayList<String> roles = new ArrayList<>();
-        List<RoleInfo> roleAndAuthList = roleInfoService.getRoleAndAuthList();
+        List<RoleInfo> roleAndAuthList = roleServiceFeignApi.getRoleAndAuthList();
 
         //将数据库中所有的角色都拿到，然后遍历每每一个角色的权限，如果能匹配上，则返回该角色的名称
-        /*for(RoleInfo roleInfo : roleAndAuthList){
-            if(roleInfo != null && roleInfo.getAuthInfoList() != null){
-                List<AuthInfo> authInfoList = roleInfo.getAuthInfoList();
-                for (AuthInfo authInfo : authInfoList){
-                    if(authInfo == null) continue;
-                    if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){
-                        roles.add(roleInfo.getRoleName());
-                    }
-                }
-            }
-        }*/
-
         roleAndAuthList.stream().forEach(roleInfo -> {
             roleInfo.getAuthInfoList().stream().forEach(authInfo -> {
                 if(authInfo != null){
