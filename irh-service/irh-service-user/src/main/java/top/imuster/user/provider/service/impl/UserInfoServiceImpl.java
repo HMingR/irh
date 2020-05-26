@@ -53,9 +53,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
 
     @Override
     public UserInfo loadUserDetailsByEmail(String email) {
-        UserInfo condition = new UserInfo();
-        condition.setEmail(email);
-        UserInfo userInfo = userInfoDao.selectUserRoleByCondition(condition);
+        UserInfo userInfo = userInfoDao.selectUserInfoByEmail(email);
         return userInfo;
     }
 
@@ -174,14 +172,6 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         userInfo.setPassword(encode);
         Integer i = userInfoDao.updatePwdByEmail(userInfo);
         return Message.createBySuccess();
-    }
-
-    @Override
-    public UserInfo loadUserDetailsById(Long userId) {
-        UserInfo condition = new UserInfo();
-        condition.setId(userId);
-        UserInfo userInfo = userInfoDao.selectUserRoleByCondition(condition);
-        return userInfo;
     }
 
 }

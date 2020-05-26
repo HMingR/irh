@@ -10,10 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import top.imuster.auth.service.RoleInfoService;
-import top.imuster.auth.service.UserLoginInfoService;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.security.api.bo.UserDetails;
-import top.imuster.security.api.pojo.UserLoginInfo;
+import top.imuster.user.api.pojo.UserInfo;
+import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,10 +27,10 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
     ClientDetailsService clientDetailsService;
 
     @Resource
-    UserLoginInfoService userLoginInfoService;
-
-    @Resource
     RoleInfoService roleInfoService;
+
+    @Autowired
+    UserServiceFeignApi userServiceFeignApi;
 
     /**
      * @Author hmr
@@ -56,7 +56,7 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
             return null;
         }*/
 
-        UserLoginInfo userInfo = userLoginInfoService.getInfoByLoginName(username);
+        UserInfo userInfo = userServiceFeignApi.loadUserInfoByEmail(username);
         if(userInfo == null) throw new AuthenticationServiceException("用户名不存在,请检查用户名是否输入正确");
         if(userInfo.getState() == null || userInfo.getState() <= 20){
             throw new AuthenticationServiceException("该账号已被冻结,请联系管理员");
@@ -67,8 +67,9 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
             List<String> roleName = roleInfoService.getRoleNameByUserName(username);
             userAuth  = StringUtils.join(roleName.toArray(), ",");
         }
-        UserDto userDto = new UserDto();
-        UserDetails userDetails = new UserDetails(userInfo.getLoginName(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
+        //Long userId, String loginName, String nickname, String pic, Integer userType
+        UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
+        UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
         userDetails.setUserInfo(userDto);
         return userDetails;
     }

@@ -6,6 +6,7 @@ import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
+import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
 import java.util.List;
@@ -138,4 +139,13 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @reture: java.util.List<top.imuster.goods.api.pojo.ProductInfo>
      **/
     List<ProductInfo> getProductBriefByIds(List<Long> ids);
+
+    /**
+     * @Author hmr
+     * @Description 根据用户id获得用户中心的数据
+     * @Date: 2020/5/26 16:33
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.goods.api.dto.UserGoodsCenterDto>
+     **/
+    Message<UserGoodsCenterDto> getUserCenterInfoById(Long id);
 }

@@ -4,7 +4,6 @@ package top.imuster.goods.web.controller;
 import cn.hutool.core.date.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +19,7 @@ import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
+import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
@@ -155,6 +155,11 @@ public class ProductController extends BaseController {
     @DeleteMapping("/{id}")
     public Message<String> delProduct(@PathVariable("id") Long id){
         return productInfoService.deleteById(id, getCurrentUserIdFromCookie());
+    }
+
+    @GetMapping("/center/{id}")
+    public Message<UserGoodsCenterDto> getGoodsCenter(@PathVariable("id") Long id){
+        return productInfoService.getUserCenterInfoById(id);
     }
 
     /**

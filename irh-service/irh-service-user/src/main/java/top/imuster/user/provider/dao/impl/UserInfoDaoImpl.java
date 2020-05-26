@@ -19,7 +19,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.UserInfoDao.";
 	private final static String CHECK_INFO = "checkInfo";
 	private final static String SELECT_EMAIL_BY_ID = "selectEmailById";
-	private final static String SELECT_USER_ROLE_BY_CONDITION = "selectUserRoleByCondition";
+	private final static String SELECT_USER_INFO_BY_EMAIL = "selectUserInfoByEmail";
 	private final static String SELECT_USERNAME_BY_ID = "selectUserNameById";
 	private final static String SELECT_USER_TOTAL_BY_CREATE_TIME = "selectUserTotalByCreateTime";
 	private final static String SELECT_INCREMENT_USER_BY_TIME = "selectIncrementUserByTime";
@@ -44,8 +44,8 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	}
 
 	@Override
-	public UserInfo selectUserRoleByCondition(UserInfo condition) {
-		return this.select(getNameSpace(SELECT_USER_ROLE_BY_CONDITION), condition);
+	public UserInfo selectUserInfoByEmail(String email) {
+		return this.select(getNameSpace(SELECT_USER_INFO_BY_EMAIL), email);
 	}
 
 	@Override

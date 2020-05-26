@@ -1,5 +1,6 @@
 package top.imuster.user.provider.web.rpc;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
@@ -9,6 +10,7 @@ import top.imuster.user.provider.service.ExamineRecordInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,5 +55,18 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     public boolean saveExamineRecord2DB(@RequestBody ExamineRecordInfo examineRecordInfo){
         int i = examineRecordInfoService.insertEntry(examineRecordInfo);
         return i != 0;
+    }
+
+    @Override
+    @GetMapping("/login/{email}")
+    public UserInfo loadUserInfoByEmail(@PathVariable("email") String email) {
+        return userInfoService.loadUserDetailsByEmail(email);
+    }
+
+    @Override
+    public UserInfo getInfoById(Long userId) {
+        List<UserInfo> userInfos = userInfoService.selectEntryList(userId);
+        if(CollectionUtils.isNotEmpty(userInfos)) return userInfos.get(0);
+        return null;
     }
 }

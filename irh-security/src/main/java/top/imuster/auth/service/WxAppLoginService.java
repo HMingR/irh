@@ -4,9 +4,9 @@ package top.imuster.auth.service;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.UserDto;
-import top.imuster.security.api.pojo.UserLoginInfo;
 import top.imuster.security.api.pojo.WxAppLoginInfo;
 import top.imuster.user.api.dto.BindWxDto;
+import top.imuster.user.api.pojo.UserInfo;
 
 /**
  * WxAppLoginService接口
@@ -22,7 +22,7 @@ public interface WxAppLoginService extends BaseService<WxAppLoginInfo, Long> {
      * @param openId
      * @reture: top.imuster.user.api.pojo.UserInfo
      **/
-    UserLoginInfo loginByOpenId(String openId);
+    UserInfo loginByOpenId(String openId);
 
     /**
      * @Author hmr

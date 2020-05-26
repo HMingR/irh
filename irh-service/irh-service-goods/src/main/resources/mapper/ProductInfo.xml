@@ -216,6 +216,7 @@
 					trade_type AS tradeType,
 					consumer_id AS consumerId,
 					collect_total AS collectTotal,
+					state,
 					version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
@@ -317,5 +318,22 @@
 			<![CDATA[#{id}]]>
 		</foreach>
 	</select>
-	
+
+	<select id="selectGoodsBrowseTotalByUserId" parameterType="long" resultType="top.imuster.goods.api.dto.UserGoodsCenterDto">
+		SELECT SUM(browser_times) AS browseTotal, SUM(collect_total) AS collectTotal, COUNT(1) AS goodsTotal
+		FROM product_info
+		WHERE consumer_id = #{id,jdbcType=BIGINT} AND state != 1
+	</select>
+
+	<select id="selectDonationMoneyByUserId" parameterType="long" resultType="string">
+		SELECT SUM(sale_price)
+		FROM product_info
+		WHERE consumer_id = #{id,jdbcType=BIGINT} AND state = 4 AND trade_type = 20
+	</select>
+
+	<select id="selectSaleTotalByUserId" parameterType="long" resultType="int">
+		SELECT COUNT(1)
+		FROM product_info
+		WHERE consumer_id = #{id,jdbcType=BIGINT} AND state = 4
+	</select>
 </mapper>

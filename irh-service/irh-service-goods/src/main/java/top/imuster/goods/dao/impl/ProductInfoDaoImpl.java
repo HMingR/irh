@@ -4,6 +4,7 @@ package top.imuster.goods.dao.impl;
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
 import top.imuster.goods.api.dto.GoodsForwardDto;
+import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 
@@ -30,6 +31,9 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String SELECT_PRODUCT_BRIEF_INFO_LIST = "selectProductBriefInfoList";
 	private final static String UPDATE_PRODUCT_STATE_BY_ID = "updateProductStateById";
 	private final static String SELECT_PRODUCT_BRIEF_INFO_BY_IDS = "selectProductBriefInfoByIds";
+	private final static String SELECT_GOODS_BROWSE_TOTAL_BY_USER_ID = "selectGoodsBrowseTotalByUserId";
+	private final static String SELECT_DONATION_MONEY_BU_USER_ID = "selectDonationMoneyByUserId";
+	private final static String SELECT_SALE_TOTAL_BY_USER_ID = "selectSaleTotalByUserId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -94,5 +98,20 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	@Override
 	public List<ProductInfo> selectProductBriefInfoByIds(List<Long> ids) {
 		return this.selectList(getNameSpace(SELECT_PRODUCT_BRIEF_INFO_BY_IDS), ids);
+	}
+
+	@Override
+	public UserGoodsCenterDto selectGoodsBrowseTotalByUserId(Long id) {
+		return this.select(getNameSpace(SELECT_GOODS_BROWSE_TOTAL_BY_USER_ID), id);
+	}
+
+	@Override
+	public String selectDonationMoneyByUserId(Long id) {
+		return this.select(getNameSpace(SELECT_DONATION_MONEY_BU_USER_ID), id);
+	}
+
+	@Override
+	public Integer selectSaleTotalByUserId(Long id) {
+		return this.select(getNameSpace(SELECT_SALE_TOTAL_BY_USER_ID), id);
 	}
 }

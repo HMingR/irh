@@ -36,20 +36,8 @@ public class ProductDemandReplyInfo extends BaseDomain {
 	//一级留言下的留言个数
 	private Integer childTotal;
 
-	//父级留言的作者(回复人的id)
-	private Long parentWriterId;
-
 	// 1-删除   2-有效  3-被需求发布者选中
 	//private Short state;
-
-
-	public Long getParentWriterId() {
-		return parentWriterId;
-	}
-
-	public void setParentWriterId(Long parentWriterId) {
-		this.parentWriterId = parentWriterId;
-	}
 
 	public Integer getChildTotal() {
 		return childTotal;

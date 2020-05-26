@@ -2,7 +2,6 @@ package top.imuster.auth.service.Impl;
 
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.imuster.auth.dao.WxAppLoginDao;
-import top.imuster.auth.service.UserLoginInfoService;
 import top.imuster.auth.service.WxAppLoginService;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -23,13 +21,12 @@ import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.security.api.pojo.UserLoginInfo;
 import top.imuster.security.api.pojo.WxAppLoginInfo;
 import top.imuster.user.api.dto.BindWxDto;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -68,23 +65,17 @@ public class WxAppLoginServiceImpl extends BaseServiceImpl<WxAppLoginInfo, Long>
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
 
-    @Resource
-    UserLoginInfoService userLoginInfoService;
-
     @Override
     public BaseDao<WxAppLoginInfo, Long> getDao() {
         return this.wxAppLoginDao;
     }
 
     @Override
-    public UserLoginInfo loginByOpenId(String openId) {
+    public UserInfo loginByOpenId(String openId) {
         Long userId = wxAppLoginDao.selectUserIdByOpenId(openId);
         if(userId == null) return null;
-        List<UserLoginInfo> userLoginInfos = userLoginInfoService.selectEntryList(userId);
-        if(CollectionUtils.isNotEmpty(userLoginInfos)){
-            return userLoginInfos.get(0);
-        }
-        return null;
+        UserInfo userInfo = userServiceFeignApi.getInfoById(userId);
+        return userInfo;
     }
 
     @Override

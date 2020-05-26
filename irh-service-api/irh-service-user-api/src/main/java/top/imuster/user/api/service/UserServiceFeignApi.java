@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
 
 import java.util.Map;
@@ -51,4 +52,11 @@ public interface UserServiceFeignApi {
 
     @PostMapping("/examine")
     boolean saveExamineRecord2DB(@RequestBody ExamineRecordInfo examineRecordInfo);
+
+
+    @GetMapping("/login/{email}")
+    UserInfo loadUserInfoByEmail(@PathVariable("email") String email);
+
+    @GetMapping("/wxLogin/{id}")
+    UserInfo getInfoById(@PathVariable("id") Long userId);
 }

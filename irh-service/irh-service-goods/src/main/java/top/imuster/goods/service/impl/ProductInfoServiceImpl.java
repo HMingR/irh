@@ -16,6 +16,7 @@ import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
+import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
 import top.imuster.goods.service.ProductInfoService;
@@ -214,5 +215,15 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public List<ProductInfo> getProductBriefByIds(List<Long> ids) {
         return productInfoDao.selectProductBriefInfoByIds(ids);
+    }
+
+    @Override
+    public Message<UserGoodsCenterDto> getUserCenterInfoById(Long id) {
+        UserGoodsCenterDto userGoodsCenterDto = productInfoDao.selectGoodsBrowseTotalByUserId(id);
+        String totalMoney = productInfoDao.selectDonationMoneyByUserId(id);
+        Integer saleTotal = productInfoDao.selectSaleTotalByUserId(id);
+        userGoodsCenterDto.setDonationTotal(totalMoney);
+        userGoodsCenterDto.setSaleTotal(saleTotal);
+        return Message.createBySuccess(userGoodsCenterDto);
     }
 }

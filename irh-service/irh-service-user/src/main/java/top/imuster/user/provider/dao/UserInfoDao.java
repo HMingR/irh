@@ -28,12 +28,12 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
 
     /**
      * @Author hmr
-     * @Description 根据条件查询用户的角色和角色对应的权限
+     * @Description
      * @Date: 2020/1/29 14:24
      * @param condition
      * @reture: top.imuster.user.api.pojo.UserInfo
      **/
-    UserInfo selectUserRoleByCondition(UserInfo condition);
+    UserInfo selectUserInfoByEmail(String email);
 
     /**
      * @Author hmr

@@ -186,26 +186,10 @@
 		<![CDATA[ WHERE id = #{id}]]>
 	</select>
 
-	<resultMap id="includeRoleMap" type="userInfo">
-		<id column="id" property="id"></id>
-		<result column="email" property="email"></result>
-		<result column="password" property="password"></result>
-		<result column="nickname" property="nickname"></result>
-		<result column="state" property="state"></result>
-		<result column="type" property="type"></result>
-		<collection property="roleList"
-					column="id"
-					ofType="top.imuster.user.api.pojo.RoleInfo"
-					select="top.imuster.user.provider.dao.UserRoleRelDao.selectUserRoleInfoByUserId">
-		</collection>
-	</resultMap>
-
-
-	<select id="selectUserRoleByCondition" parameterType="userInfo" resultMap="includeRoleMap">
+	<select id="selectUserInfoByEmail" parameterType="string" resultType="userInfo">
 		<![CDATA[SELECT id, email, password, nickname, state, type ]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		<include refid="QUERY_WHERE_CLAUSE"/>
-		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+		WHERE email = #{email,jdbcType=VARCHAR}
 	</select>
 
 	<select id="selectUserNameById" resultType="string" parameterType="long">

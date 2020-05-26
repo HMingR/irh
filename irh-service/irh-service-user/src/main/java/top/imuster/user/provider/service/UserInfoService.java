@@ -119,5 +119,4 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      **/
     Message<String> resetPwdByEmail(UserInfo userInfo);
 
-    UserInfo loadUserDetailsById(Long userId);
 }

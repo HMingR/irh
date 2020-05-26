@@ -24,7 +24,7 @@ public class DemandReplyController extends BaseController {
     ProductDemandReplyInfoService productDemandReplyInfoService;
 
 
-    @GetMapping("/firstClass/{pageSize}/{currentPage}/{demandId}")
+    @GetMapping("/{pageSize}/{currentPage}/{demandId}")
     public Message<Page<ProductDemandReplyInfo>> getFirstClassList(@PathVariable("pageSize") Integer pageSize,
                                                                    @PathVariable("currentPage") Integer currentPage,
                                                                    @PathVariable("demandId") Long demandId){

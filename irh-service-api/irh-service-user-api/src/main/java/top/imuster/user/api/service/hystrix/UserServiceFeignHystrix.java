@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
+import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import java.util.Map;
@@ -42,6 +43,16 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
             @Override
             public boolean saveExamineRecord2DB(ExamineRecordInfo examineRecordInfo) {
                 return false;
+            }
+
+            @Override
+            public UserInfo loadUserInfoByEmail(String email) {
+                return null;
+            }
+
+            @Override
+            public UserInfo getInfoById(Long userId) {
+                return null;
             }
 
         };

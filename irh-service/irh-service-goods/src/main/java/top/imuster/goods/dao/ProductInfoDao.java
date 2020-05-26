@@ -3,6 +3,7 @@ package top.imuster.goods.dao;
 
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.goods.api.dto.GoodsForwardDto;
+import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 
 import java.util.List;
@@ -124,4 +125,31 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: java.util.List<top.imuster.goods.api.pojo.ProductInfo>
      **/
     List<ProductInfo> selectProductBriefInfoByIds(List<Long> ids);
+
+    /**
+     * @Author hmr
+     * @Description 获得用户发布商品的浏览总数
+     * @Date: 2020/5/26 16:34
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    UserGoodsCenterDto selectGoodsBrowseTotalByUserId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 查询用户的总捐款数
+     * @Date: 2020/5/26 18:43
+     * @param id
+     * @reture: java.lang.String
+     **/
+    String selectDonationMoneyByUserId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 卖出的总数
+     * @Date: 2020/5/26 19:25
+     * @param id
+     * @reture: java.lang.Integer
+     **/
+    Integer selectSaleTotalByUserId(Long id);
 }
