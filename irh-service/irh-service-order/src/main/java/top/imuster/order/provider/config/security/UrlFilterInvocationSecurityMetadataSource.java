@@ -1,4 +1,4 @@
-package top.imuster.goods.config.security;
+package top.imuster.order.provider.config.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +77,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
 
-        if(requestUrl.startsWith("/goods/feign")){
+        if(requestUrl.startsWith("/order/feign")){
             return null;
         }
         List<String> ignoreUrls = ignoreUrlsConfig.getUrls();

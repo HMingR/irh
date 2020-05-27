@@ -44,10 +44,5 @@ secure:
       - /webjars/springfox-swagger-ui/**
       - /actuator/**
       - /druid/**
-      - /admin/login
-      - /admin/register
-      - /customer/login
-      - /customer/register
       - /error
-      - /user/feign/login/
-      - /user/feign/roleAndAuth
+      - /goods/feign/**

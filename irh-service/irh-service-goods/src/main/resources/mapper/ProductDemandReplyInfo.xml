@@ -9,7 +9,6 @@
             id,
             demand_id AS demandId,
             user_id AS userId,
-            release_type AS releaseType,
             target_id AS targetId,
             content,
             create_time AS createTime,
@@ -27,7 +26,6 @@
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="demandId != null and demandId != ''"><![CDATA[AND demand_id = #{demandId}]]></if>
             <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
-            <if test="releaseType != null and releaseType != ''"><![CDATA[AND release_type = #{releaseType}]]></if>
             <if test="targetId != null and targetId != ''"><![CDATA[AND target_id = #{targetId}]]></if>
             <if test="content != null and content != ''"><![CDATA[AND content = #{content}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
@@ -47,7 +45,6 @@
 		<set>
 			<if test="demandId != null"><![CDATA[demand_id = #{demandId},]]></if>
 			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
-			<if test="releaseType != null"><![CDATA[release_type = #{releaseType},]]></if>
 			<if test="targetId != null"><![CDATA[target_id = #{targetId},]]></if>
 			<if test="content != null"><![CDATA[content = #{content},]]></if>
 			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
@@ -61,7 +58,6 @@
 			<if test="id != null and id != ''"><![CDATA[ id ,]]></if>
 			<if test="demandId != null and demandId != ''"><![CDATA[ demand_id ,]]></if>
 			<if test="userId != null and userId != ''"><![CDATA[ user_id ,]]></if>
-			<if test="releaseType != null and releaseType != ''"><![CDATA[ release_type ,]]></if>
 			<if test="targetId != null and targetId != ''"><![CDATA[ target_id ,]]></if>
 			<if test="content != null and content != ''"><![CDATA[ content ,]]></if>
 			<if test="createTime != null and createTime != ''"><![CDATA[ create_time,]]></if>
@@ -75,7 +71,6 @@
 			<if test="id != null and id != ''"><![CDATA[ #{id},]]></if>
 			<if test="demandId != null and demandId != ''"><![CDATA[ #{demandId},]]></if>
 			<if test="userId != null and userId != ''"><![CDATA[  #{userId},]]></if>
-			<if test="releaseType != null and releaseType != ''"><![CDATA[ #{releaseType},]]></if>
 			<if test="targetId != null and targetId != ''"><![CDATA[ #{targetId},]]></if>
 			<if test="content != null and content != ''"><![CDATA[ #{content},]]></if>
 			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>

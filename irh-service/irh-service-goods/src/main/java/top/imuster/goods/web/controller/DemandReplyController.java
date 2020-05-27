@@ -29,7 +29,6 @@ public class DemandReplyController extends BaseController {
                                                                    @PathVariable("currentPage") Integer currentPage,
                                                                    @PathVariable("demandId") Long demandId){
         return productDemandReplyInfoService.getFirstClassReplyListByPage(pageSize, currentPage, demandId);
-
     }
 
     @PostMapping

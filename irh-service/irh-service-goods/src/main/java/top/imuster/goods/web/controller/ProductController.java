@@ -1,7 +1,6 @@
 package top.imuster.goods.web.controller;
 
 
-import cn.hutool.core.date.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -9,12 +8,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowseRecordAnnotation;
 import top.imuster.common.core.annotation.BrowserAnnotation;
+import top.imuster.common.core.annotation.CheckIdentityAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
@@ -50,6 +48,7 @@ public class ProductController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("会员发布二手商品")
+    @CheckIdentityAnnotation
     @PutMapping
     public Message<String> insertProduct(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
@@ -157,32 +156,8 @@ public class ProductController extends BaseController {
         return productInfoService.deleteById(id, getCurrentUserIdFromCookie());
     }
 
-    @GetMapping("/center/{id}")
+    @GetMapping("/er/{id}")
     public Message<UserGoodsCenterDto> getGoodsCenter(@PathVariable("id") Long id){
         return productInfoService.getUserCenterInfoById(id);
-    }
-
-    /**
-     * @Author hmr
-     * @Description 记录浏览和浏览次数
-     * @Date: 2020/4/22 9:04
-     * @param targetId
-     * @reture: void
-     **/
-    @GetMapping("/browse/{targetId}/{type}")
-    @BrowseRecordAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p2")
-    @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0")
-    public Message<String> browser(@PathVariable("targetId") Long targetId, @PathVariable("type") String detail, BrowseRecordDto recordDto){
-        Long userId = getCurrentUserIdFromCookie(false);
-        recordDto.setUserId(userId);
-        recordDto.setTargetId(targetId);
-        recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
-        recordDto.setCreateTime(DateUtil.now());
-        if("11".equals(detail)) recordDto.setScoreDetail("4.0,3.0");
-        else recordDto.setScoreDetail("0.0,3.0");
-        //埋点日志 userId|productId|score
-        log.info("埋点日志=>用户浏览商品");
-        log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + targetId + "|"+ "3" );    //浏览商品得3分
-        return Message.createBySuccess();
     }
 }

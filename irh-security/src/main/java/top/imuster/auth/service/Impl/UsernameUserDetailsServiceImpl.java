@@ -64,8 +64,14 @@ public class UsernameUserDetailsServiceImpl implements UserDetailsService {
 
         String userAuth = "";
         if(userInfo.getType() != 10){
-            List<String> roleName = roleInfoService.getRoleNameByUserName(username);
+            List<String> roleName = roleInfoService.getRoleNameByUserName(userInfo.getEmail());
             userAuth  = StringUtils.join(roleName.toArray(), ",");
+        }
+
+        //已经认证过的需要加一个角色名称
+        if(userInfo.getState() == 40){
+            if(StringUtils.isNotBlank(userAuth)) userAuth += ",identified";
+            else userAuth = "identified";
         }
         //Long userId, String loginName, String nickname, String pic, Integer userType
         UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());

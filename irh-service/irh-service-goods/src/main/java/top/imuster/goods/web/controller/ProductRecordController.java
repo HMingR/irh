@@ -1,9 +1,14 @@
 package top.imuster.goods.web.controller;
 
+import cn.hutool.core.date.DateUtil;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowseRecordAnnotation;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.dto.BrowseRecordDto;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.service.ProductRecordService;
 
@@ -44,5 +49,27 @@ public class ProductRecordController extends BaseController {
     @DeleteMapping
     public Message<String> deleteAll(){
         return productRecordService.deleteAll(getCurrentUserIdFromCookie());
+    }
+
+    /**
+     * @Author hmr
+     * @Description 记录浏览和浏览次数
+     * @Date: 2020/4/22 9:04
+     * @param targetId
+     * @reture: void
+     **/
+    @GetMapping("/browse/{targetId}")
+    @BrowseRecordAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p1")
+    @BrowserAnnotation(browserType = BrowserType.ES_SELL_PRODUCT, value = "#p0")
+    public Message<String> browser(@PathVariable("targetId") Long targetId, BrowseRecordDto recordDto){
+        Long userId = getCurrentUserIdFromCookie(false);
+        recordDto.setUserId(userId);
+        recordDto.setTargetId(targetId);
+        recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
+        recordDto.setCreateTime(DateUtil.now());
+        //埋点日志 userId|productId|score
+        log.info("埋点日志=>用户浏览商品");
+        log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + targetId + "|"+ "3" );    //浏览商品得3分
+        return Message.createBySuccess();
     }
 }

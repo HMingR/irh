@@ -23,9 +23,6 @@ public class BrowseRecordDto implements Serializable {
     //用户id
     private Long userId;
 
-    //浏览时间
-    private String scoreDetail;
-
     private String createTime;
 
     public String getCreateTime() {
@@ -58,13 +55,5 @@ public class BrowseRecordDto implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public String getScoreDetail() {
-        return scoreDetail;
-    }
-
-    public void setScoreDetail(String scoreDetail) {
-        this.scoreDetail = scoreDetail;
     }
 }

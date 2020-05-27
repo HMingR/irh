@@ -1,4 +1,4 @@
-package top.imuster.goods.config.security;
+package top.imuster.order.provider.config.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

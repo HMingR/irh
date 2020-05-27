@@ -91,6 +91,12 @@ public class WxAppAuthenticationProvider implements AuthenticationProvider {
                 List<String> roleName = roleInfoService.getRoleNameByUserName(userInfo.getEmail());
                 userAuth  = StringUtils.join(roleName.toArray(), ",");
             }
+
+            //已经认证过的需要加一个角色名称
+            if(userInfo.getState() == 40){
+                if(StringUtils.isNotBlank(userAuth)) userAuth += ",identified";
+                else userAuth = "identified";
+            }
             UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
             UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
             userDetails.setUserInfo(userDto);

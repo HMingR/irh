@@ -24,9 +24,6 @@ public class ProductDemandReplyInfo extends BaseDomain {
 	//  发布消息的人的id
 	private Long userId;
 
-	// 1-新的发布 2-引用商品订单信息
-	private Short releaseType;
-
 	//  如果type为2，则标识二手商品表的主键id
 	private Long targetId;
 
@@ -67,14 +64,7 @@ public class ProductDemandReplyInfo extends BaseDomain {
     public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
-	public Short getReleaseType() {
-		return this.releaseType;
-	}
-    public void setReleaseType(Short releaseType) {
-		this.releaseType = releaseType;
-	}
-	
+
 	public Long getTargetId() {
 		return this.targetId;
 	}
