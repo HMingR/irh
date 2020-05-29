@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.imuster.auth.exception.CustomSecurityException;
 import top.imuster.auth.service.UserAuthenService;
+import top.imuster.auth.service.UserRoleRelService;
 import top.imuster.auth.utils.Base64Util;
 import top.imuster.auth.utils.HttpUtil;
 import top.imuster.common.base.wrapper.Message;
@@ -25,8 +26,10 @@ import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.security.api.dto.UserAuthenDto;
+import top.imuster.security.api.pojo.UserRoleRel;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -71,6 +74,9 @@ public class UserAuthenServiceImpl implements UserAuthenService {
 
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
+
+    @Resource
+    UserRoleRelService userRoleRelService;
 
 
     private static final String failContent = "我们已经收到您提交的审核,但是由于图片不清晰导致AI无法快速识别,请等待管理员审核，感谢您的配合";
@@ -208,6 +214,10 @@ public class UserAuthenServiceImpl implements UserAuthenService {
 
         if(result == 1){
             userServiceFeignApi.updateUserState(userId, 50);
+            UserRoleRel userRoleRel = new UserRoleRel();
+            userRoleRel.setRoleId(1L);
+            userRoleRel.setStaffId(userId);
+            userRoleRelService.insertEntry(userRoleRel);
         }
 
         SendAuthenRecordDto condition = new SendAuthenRecordDto();

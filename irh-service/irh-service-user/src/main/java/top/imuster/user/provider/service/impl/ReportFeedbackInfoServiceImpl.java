@@ -229,6 +229,8 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
         strings[0] = pciUri;
         String res = huaweiModerationImageUtil.imageContentBatchCheck(strings);
         if("NULL".equalsIgnoreCase(res)){
+            return Message.createBySuccess("请等待管理员审核");
+        }else if(StringUtils.isBlank(res)){
             return Message.createBySuccess();
         }
         return Message.createByError("图片审核不通过,请更换图片");

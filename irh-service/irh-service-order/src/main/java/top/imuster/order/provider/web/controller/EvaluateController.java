@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.order.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.provider.service.ProductEvaluateInfoService;
@@ -36,7 +35,6 @@ public class EvaluateController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("根据订单的id评价(用户的订单只有在收货状态的时候才能进行评论,前台可以先进行一次逻辑判断)")
-    @NeedLogin
     @PostMapping("/{orderId}")
     public Message<String> evaluateByOrderId(@PathVariable("orderId") Long orderId, @RequestBody ProductEvaluateInfo productEvaluateInfo){
         productEvaluateInfo.setBuyerId(getCurrentUserIdFromCookie());
@@ -55,7 +53,6 @@ public class EvaluateController extends BaseController {
      * @param currentPage
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductEvaluateInfo>>
      **/
-    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}/{type}")
     public Message<Page<ProductEvaluateInfo>> getList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         if(type != 1 && type != 2) return Message.createByError();

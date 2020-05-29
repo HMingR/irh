@@ -10,14 +10,14 @@ import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.user.provider.UserProviderApplication;
 
 /**
- * @ClassName: RabbitMqTest
- * @Description: RabbitMqTest
+ * @ClassName: RabbitMqUserUrlFilterInvocationSecurityMetadataSource
+ * @Description: RabbitMqUserUrlFilterInvocationSecurityMetadataSource
  * @author: hmr
  * @date: 2020/5/24 9:49
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserProviderApplication.class)
-public class RabbitMqTest {
+public class RabbitMqUserUrlFilterInvocationSecurityMetadataSource {
 
     @Autowired
     RabbitTemplate rabbitTemplate;

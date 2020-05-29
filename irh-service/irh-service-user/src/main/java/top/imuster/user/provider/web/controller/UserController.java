@@ -96,8 +96,8 @@ public class UserController extends BaseController {
         return Message.createBySuccess(userInfo.getUserId());
     }
 
-    @GetMapping("/checkPic")
-    public Message<String> checkPic(String pciUri) throws IOException {
+    @PutMapping("/checkPic")
+    public Message<String> checkPic(@RequestParam("picUri") String pciUri) throws IOException {
         return reportFeedbackInfoService.checkPic(pciUri);
     }
 

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
-import top.imuster.common.core.annotation.CheckIdentityAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
@@ -48,7 +47,6 @@ public class ProductController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation("会员发布二手商品")
-    @CheckIdentityAnnotation
     @PutMapping
     public Message<String> insertProduct(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductInfo productInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
@@ -83,6 +81,7 @@ public class ProductController extends BaseController {
     @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> productList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
+        if(currentPage < 1 || pageSize < 1) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
         return productInfoService.list(userId, pageSize, currentPage);
     }
@@ -99,6 +98,7 @@ public class ProductController extends BaseController {
      **/
     @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
     public Message<Page<ProductInfo>> productListByUserId(@PathVariable("userId") Long userId, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
+        if(currentPage < 1 || pageSize < 1) return Message.createByError("参数错误");
         return productInfoService.list(userId, pageSize, currentPage);
     }
 
@@ -156,7 +156,14 @@ public class ProductController extends BaseController {
         return productInfoService.deleteById(id, getCurrentUserIdFromCookie());
     }
 
-    @GetMapping("/er/{id}")
+    /**
+     * @Author hmr
+     * @Description 获得用户中心的数据
+     * @Date: 2020/5/27 19:34
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.goods.api.dto.UserGoodsCenterDto>
+     **/
+    @GetMapping("/center/{id}")
     public Message<UserGoodsCenterDto> getGoodsCenter(@PathVariable("id") Long id){
         return productInfoService.getUserCenterInfoById(id);
     }

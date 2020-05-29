@@ -1,4 +1,4 @@
-package top.imuster.user.provider.config;
+package top.imuster.message.provider.config.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -30,13 +29,10 @@ import java.util.stream.Collectors;
  **/
 @Configuration
 @EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)//激活方法上的PreAuthorize注解
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)//激活方法上的PreAuthorize注解
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(ResourceServerConfig.class);
-
-    @Autowired
-    IgnoreUrlsConfig ignoreUrlsConfig;
 
     //公钥
     private static final String PUBLIC_KEY = "publicKey.txt";
@@ -79,19 +75,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return new FeignClientInterceptor();
     }
 
+
     @Bean
     top.imuster.common.core.security.UrlAccessDecisionManager urlAccessDecisionManager() {
         return new top.imuster.common.core.security.UrlAccessDecisionManager();
     }
 
-    /*@Bean
-    UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
-        return new UrlFilterInvocationSecurityMetadataSource();
-    }*/
 
     @Bean
-    UserUrlFilterInvocationSecurityMetadataSource userUrlFilterInvocationSecurityMetadataSource(){
-        return new UserUrlFilterInvocationSecurityMetadataSource();
+    top.imuster.common.core.security.UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource(){
+        return new MessageUrlInvocationSecurityMatedataSourceFilter();
     }
 
     @Autowired
@@ -111,7 +104,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                        o.setSecurityMetadataSource(userUrlFilterInvocationSecurityMetadataSource());
+                        o.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
                         o.setAccessDecisionManager(urlAccessDecisionManager());
                         return o;
                     }
@@ -120,9 +113,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //所有请求必须认证通过
         http.authorizeRequests()
                 //下边的路径放行
-                .antMatchers("/user/feign/**","/v2/api-docs", "/swagger-resources/configuration/ui",
-                        "/swagger-resources","/swagger-resources/configuration/security", "/register/**",
-                        "/swagger-ui.html","/webjars/**","/course/coursepic/list/**","/register/**", "classpath:/resources/").permitAll()
+                .antMatchers("/goods/feign/**","/goods/category/tree", "/demand/reply/child",
+                        "/swagger-resources","/swagger-resources/configuration/security",
+                        "/swagger-ui.html","/webjars/**","/course/coursepic/list/**", "classpath:/resources/").permitAll()
                 .anyRequest().authenticated();
     }
 }

@@ -25,13 +25,6 @@ public class ErrandOrderController extends BaseController {
 
     @Resource
     ErrandOrderService errandOrderService;
-
-    @GetMapping("/test")
-    public Message<String> test(){
-
-        return Message.createBySuccess();
-    }
-
     /**
      * @Author hmr
      * @Description 通过消息队列来控制并发

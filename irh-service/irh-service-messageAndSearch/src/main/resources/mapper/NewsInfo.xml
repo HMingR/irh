@@ -233,7 +233,7 @@
 		<include refid="QUERY_COLUMN_LIST"></include>
 		<include refid="QUERY_FROM_TABLE"></include>
 		WHERE receiver_id = #{receiverId,jdbcType=BIGINT} AND state != 10 AND news_type IN (30, 40, 50, 70, 80, 85, 90)
-		ORDER BY create_time LIMIT #{startIndex}, #{endIndex}
+		ORDER BY create_time DESC  LIMIT #{startIndex}, #{endIndex}
 	</select>
 
 </mapper>

@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.Idempotent;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.goods.api.dto.ProductAndDemandDto;
 import top.imuster.goods.service.ProductCollectRelService;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: ProductCollectController
@@ -30,6 +33,7 @@ public class ProductCollectController extends BaseController {
      * @param id  被收藏的对象id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
+    @Idempotent(submitTotal = 5, timeTotal = 1, timeUnit = TimeUnit.MINUTES)
     @GetMapping("/{type}/{id}")
     public Message<String> collect(@PathVariable("type") Integer type, @PathVariable("id") Long id){
         if(type != 1 && type != 2) return Message.createByError("参数错误");
@@ -71,6 +75,7 @@ public class ProductCollectController extends BaseController {
      **/
     @GetMapping("/state/{type}/{id}")
     public Message<Integer> getCollectState(@PathVariable("type") Integer type, @PathVariable("id") Long id){
+        if(type != 1 && type != 2) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
         return productCollectRelService.getCollectStateById(userId, id, type);
     }

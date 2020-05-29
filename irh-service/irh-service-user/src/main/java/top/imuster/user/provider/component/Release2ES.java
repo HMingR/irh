@@ -23,6 +23,5 @@ public class Release2ES {
 
     @ReleaseAnnotation(type = ReleaseType.ARTICLE, value = "#p0", operationType = OperationType.INSERT)
     public void save2ES(EsArticleDto articleInfo){
-        System.out.println("jinru");
     }
 }

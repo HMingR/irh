@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
+import top.imuster.common.core.utils.DateUtil;
 
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
@@ -53,10 +54,9 @@ public class EmailQueueListener {
 
             Map<String, Object> model = new HashMap<>();
             model.put("context", sendEmailDto.getContent());
-            model.put("date", sendEmailDto.getDate());
+            model.put("date", sendEmailDto.getDate() == null ? DateUtil.now() : sendEmailDto.getDate());
             Template template = configuration.getTemplate(sendEmailDto.getTemplateEnum().getTemplateLocation());
             String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
-            System.out.println(text);
             mimeMessageHelper.setText(text, true);
             javaMailSender.send(mimeMailMessage);
         } catch (Exception e) {

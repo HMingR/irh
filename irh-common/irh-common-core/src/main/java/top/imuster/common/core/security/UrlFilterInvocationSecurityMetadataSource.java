@@ -1,4 +1,4 @@
-package top.imuster.user.provider.config;
+package top.imuster.common.core.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +9,8 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
-import top.imuster.security.api.pojo.RoleInfo;
-import top.imuster.security.api.service.RoleServiceFeignApi;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName: UrlFilterInvocationSecurityMetadataSource
@@ -22,7 +18,7 @@ import java.util.List;
  * @author: hmr
  * @date: 2019/12/24 15:03
  */
-public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
+public abstract class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -30,48 +26,57 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Value("${enable.needLogin}")
     boolean enable;
 
-
-    @Autowired
-    RoleServiceFeignApi roleServiceFeignApi;
-
     @Autowired
     AntPathMatcher antPathMatcher;
 
-    @Autowired
-    IgnoreUrlsConfig ignoreUrlsConfig;
+
+    List<String> ignoreUrls = new ArrayList<>();
+
+    volatile private static Map<String, String> authRoleMap;
+
+    //由于是Rest风格的接口，相同的uri有不同的功能
+    volatile private static Map<String, String> httpMethodMap;
+
+    abstract protected void initRoleAuthMap();
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public static void setAuthRoleMap(Map<String, String> authRoleMap) {
+        UrlFilterInvocationSecurityMetadataSource.authRoleMap = authRoleMap;
+    }
+
+    public static void setHttpMethodMap(Map<String, String> httpMethodMap) {
+        UrlFilterInvocationSecurityMetadataSource.httpMethodMap = httpMethodMap;
+    }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        if(!enable){
-            return null;
-        }
+        if(!enable) return null;
+
+        if(authRoleMap == null || authRoleMap.size() == 0) initRoleAuthMap();
 
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
 
-        List<String> ignoreUrls = ignoreUrlsConfig.getUrls();
+        if(requestUrl.startsWith("/**/feign")) return null;
 
-        if(requestUrl.startsWith("/user/feign")){
-            return null;
-        }
+        if(ignoreUrls != null && ignoreUrls.contains(requestUrl)) return null;
 
-        if(ignoreUrls.contains(requestUrl)){
-            return null;
-        }
+        if(authRoleMap == null || httpMethodMap == null) return null;
+
         String method = ((FilterInvocation) o).getRequest().getMethod();
 
-        ArrayList<String> roles = new ArrayList<>();
-        List<RoleInfo> roleAndAuthList = roleServiceFeignApi.getRoleAndAuthList();
-
         //将数据库中所有的角色都拿到，然后遍历每每一个角色的权限，如果能匹配上，则返回该角色的名称
-        roleAndAuthList.stream().forEach(roleInfo -> {
-            roleInfo.getAuthInfoList().stream().forEach(authInfo -> {
-                if(authInfo != null){
-                    if(antPathMatcher.match(authInfo.getAuthDesc(), requestUrl)){
-                        roles.add(roleInfo.getRoleName());
-                    }
-                }
-            });
+        ArrayList<String> roles = new ArrayList<>();
+        Set<String> urls = authRoleMap.keySet();
+        urls.stream().forEach(u -> {
+            String httpMethod = httpMethodMap.get(u);
+            if(antPathMatcher.match(u, requestUrl)  && method.equalsIgnoreCase(httpMethod)){
+                roles.add(authRoleMap.get(u));
+            }
         });
+
         String[] res = roles.toArray(new String[roles.size()]);
         return SecurityConfig.createList(res);
     }

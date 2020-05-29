@@ -51,27 +51,17 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="userRoleRel" >
+	<insert id="insertEntry" parameterType="userRoleRel" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		<![CDATA[
 			INSERT INTO management_role_rel
 				(
-                id, 
-                staff_id, 
+                staff_id,
                 role_id, 
-                create_ management,
-                create_time, 
-                update_time, 
-                state 
 				)
 			VALUES
 				(
-                #{id}, 
-                #{staffId}, 
+                #{staffId},
                 #{roleId}, 
-                #{createManagement},
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
 				)
 		]]>
 	</insert>

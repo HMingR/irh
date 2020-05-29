@@ -77,17 +77,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
     @Bean
-    UrlAccessDecisionManager urlAccessDecisionManager() {
-        return new UrlAccessDecisionManager();
+    top.imuster.common.core.security.UrlAccessDecisionManager urlAccessDecisionManager() {
+        return new top.imuster.common.core.security.UrlAccessDecisionManager();
     }
 
+
     @Bean
-    UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
-        return new UrlFilterInvocationSecurityMetadataSource();
+    top.imuster.common.core.security.UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource(){
+        return new GoodsUrlInvocationSecurityMatedataSourceFilter();
     }
 
     @Autowired
-    CustomizedAuthenticationEntryPoint customizedAuthenticationEntryPoint;
+    top.imuster.common.core.security.CustomizedAuthenticationEntryPoint customizedAuthenticationEntryPoint;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {

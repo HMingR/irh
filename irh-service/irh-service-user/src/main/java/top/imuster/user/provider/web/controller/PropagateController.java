@@ -4,7 +4,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.enums.BrowserType;
 import top.imuster.user.api.pojo.PropagateInfo;
 import top.imuster.user.provider.service.PropagateInfoService;
 
@@ -48,6 +50,12 @@ public class PropagateController extends BaseController {
         List<PropagateInfo> propagateInfos = propagateInfoService.selectEntryList(id);
         if(CollectionUtils.isNotEmpty(propagateInfos)) return Message.createBySuccess(propagateInfos.get(0));
         return Message.createByError("未找到相关信息");
+    }
+
+    @BrowserAnnotation(browserType = BrowserType.PROPAGATE, value = "#p0")
+    @GetMapping("/browse/{targetId}")
+    public void browse(@PathVariable("targetId") Long targetId){
+
     }
 
 

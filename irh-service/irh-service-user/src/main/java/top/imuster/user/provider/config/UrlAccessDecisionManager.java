@@ -1,6 +1,5 @@
 package top.imuster.user.provider.config;
 
-import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -17,7 +16,7 @@ import java.util.Collection;
  * @author: hmr
  * @date: 2019/12/24 16:34
  */
-public class UrlAccessDecisionManager implements AccessDecisionManager {
+public class UrlAccessDecisionManager /*implements AccessDecisionManager */{
 
     /**
      * @Description:
@@ -28,7 +27,7 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
      * @param collection UrlFilterInvocationSecurityMetadataSource中的getAttributes方法传来的，表示当前请求需要的角色
      * @reture: void
      **/
-    @Override
+//    @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
         Collection<? extends GrantedAuthority> userRole = authentication.getAuthorities();
         ArrayList<String> roleString = new ArrayList<>();
@@ -49,12 +48,12 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
         }
     }
 
-    @Override
+//    @Override
     public boolean supports(ConfigAttribute configAttribute) {
         return false;
     }
 
-    @Override
+//    @Override
     public boolean supports(Class<?> aClass) {
         return false;
     }

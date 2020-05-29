@@ -21,7 +21,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/emailCodeLogin", "/password","/wxAppLogin","/logout","/jwt", "/oneCard", "/identityCard", "/sendCode/**/**", "/resetPwd", "/pwdLogin", "/register/**", "/security/feign/**");
+        web.ignoring().antMatchers("/wx/**", "/emailCodeLogin", "/password","/wxAppLogin","/logout","/jwt", "/oneCard", "/identityCard", "/sendCode/**/**", "/resetPwd", "/register/**", "/security/feign/**");
     }
 
     @Bean

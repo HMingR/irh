@@ -36,4 +36,5 @@ public class UserRoleRelServiceImpl extends BaseServiceImpl<UserRoleRel, Long> i
     public List<String> getRoleNameByUserName(String loginName) {
         return userRoleRelDao.selectRoleNameByUserName(loginName);
     }
+
 }

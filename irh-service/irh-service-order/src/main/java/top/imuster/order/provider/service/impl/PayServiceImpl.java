@@ -207,7 +207,6 @@ public class PayServiceImpl implements PayService {
 
         //删除在redis中保存的key
         redisTemplate.delete(RedisUtil.getOrderCodeExpireKey(orderInfo.getOrderCode()));
-
         sendMessage(orderInfo);
     }
 

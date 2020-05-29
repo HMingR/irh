@@ -1,5 +1,6 @@
 package top.imuster.message.provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -17,7 +18,7 @@ import org.springframework.util.AntPathMatcher;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan(basePackages = {"top.imuster.message", "top.imuster.common"})
-@EnableFeignClients(basePackages = {"top.imuster.goods.api.service", "top.imuster.order.api.service", "top.imuster.security.api.service"})
+@EnableFeignClients(basePackages = {"top.imuster.goods.api.service", "top.imuster.security.api.service","top.imuster.order.api.service", "top.imuster.security.api.service"})
 public class MessageProviderApplication {
     public static void main(String[] args) {
         try{
@@ -32,4 +33,7 @@ public class MessageProviderApplication {
     AntPathMatcher antPathMatcher(){
         return new AntPathMatcher();
     }
+
+    @Autowired
+    top.imuster.common.core.security.CustomizedAuthenticationEntryPoint customizedAuthenticationEntryPoint;
 }

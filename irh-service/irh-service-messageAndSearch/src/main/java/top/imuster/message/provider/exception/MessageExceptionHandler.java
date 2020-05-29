@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.exception.GlobalExceptionHandler;
 
 /**
  * @ClassName: MessageExceptionHandler
@@ -13,7 +14,7 @@ import top.imuster.common.base.wrapper.Message;
  * @date: 2020/1/18 11:19
  */
 @RestControllerAdvice(basePackages = "top.imuster.message")
-public class MessageExceptionHandler {
+public class MessageExceptionHandler extends GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(MessageExceptionHandler.class);
 

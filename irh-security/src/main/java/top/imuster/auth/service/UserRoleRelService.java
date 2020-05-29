@@ -29,6 +29,4 @@ public interface UserRoleRelService extends BaseService<UserRoleRel, Long> {
      * @reture: java.util.List<java.lang.String>
      **/
     List<String> getRoleNameByUserName(String loginName);
-
-
 }

@@ -14,7 +14,6 @@ import top.imuster.common.core.dto.rabbitMq.SendExamineDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.GenerateSendMessageService;
-import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -73,12 +72,6 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public Message<String> releaseProduct(ProductInfo productInfo) {
         productInfoDao.insertEntry(productInfo);
-        /*SendDetailPageDto sendMessage = new SendDetailPageDto();
-        productInfo.setId(productInfo.getId());
-        sendMessage.setObject(productInfo);
-        sendMessage.setTemplateEnum(TemplateEnum.PRODUCT_TEMPLATE);
-        generateSendMessageService.sendToMq(sendMessage);
-        convertInfo(new ESProductDto(productInfo));*/
 
         SendExamineDto sendExamineDto = new SendExamineDto();
         sendExamineDto.setTargetId(productInfo.getId());
@@ -100,20 +93,11 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         return Message.createBySuccess();
     }
 
-    /**
-     * @Author hmr
-     * @Description 将信息转换成ES中的结构并发送到MQ中
-     * @Date: 2020/5/8 9:22
-     * @param productDto
-     * @reture: void
-     **/
-    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
-    private void convertInfo(ESProductDto productDto){
-    }
-
     @Override
     public Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage) {
         Page<ProductInfo> infoPage = new Page<>();
+        infoPage.setPageSize(pageSize);
+        infoPage.setCurrentPage(currentPage);
         ProductInfo productInfo = new ProductInfo();
         productInfo.setConsumerId(userId);
         productInfo.setState(2);
