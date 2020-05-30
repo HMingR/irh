@@ -1,4 +1,4 @@
-package top.imuster.auth.component;
+package top.imuster.auth.component.login;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

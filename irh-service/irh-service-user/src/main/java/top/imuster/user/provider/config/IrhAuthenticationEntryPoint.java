@@ -7,9 +7,7 @@ import org.springframework.http.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.resource.BaseOAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
-import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
-import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -28,8 +26,8 @@ import java.util.Map;
  * @author: hmr
  * @date: 2020/5/19 9:44
  */
-@Component
-public class IrhAuthenticationEntryPoint  extends OAuth2AuthenticationEntryPoint {
+//@Component
+public class IrhAuthenticationEntryPoint  /*extends OAuth2AuthenticationEntryPoint */{
 
     @Autowired
     private OAuth2ClientProperties oAuth2ClientProperties;
@@ -42,7 +40,7 @@ public class IrhAuthenticationEntryPoint  extends OAuth2AuthenticationEntryPoint
     @Resource
     RestTemplate restTemplate;
 
-    @Override
+//    @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         try {
             //解析异常，如果是401则处理
@@ -82,7 +80,7 @@ public class IrhAuthenticationEntryPoint  extends OAuth2AuthenticationEntryPoint
                 }
             }else{
                 //如果不是401异常，则以默认的方法继续处理其他异常
-                super.commence(request,response,authException);
+               // super.commence(request,response,authException);
             }
         } catch (Exception e) {
             e.printStackTrace();

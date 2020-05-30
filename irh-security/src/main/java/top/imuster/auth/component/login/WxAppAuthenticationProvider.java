@@ -1,4 +1,4 @@
-package top.imuster.auth.component;
+package top.imuster.auth.component.login;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;

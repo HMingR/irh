@@ -35,7 +35,7 @@ public class UserAuthenticationController extends BaseController {
         return userAuthenServiceImpl.realNameAuthentication(userAuthenDto);
     }
 
-    @ApiOperation("一卡通实名认证")
+    @ApiOperation("学生证认证")
     @NeedLogin
     @PostMapping("/oneCard")
     public Message<String> oneCardSolution(@RequestBody UserAuthenDto userAuthenDto) throws Exception {

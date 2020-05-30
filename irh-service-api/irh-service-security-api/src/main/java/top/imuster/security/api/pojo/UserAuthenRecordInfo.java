@@ -1,4 +1,4 @@
-package top.imuster.user.api.pojo;
+package top.imuster.security.api.pojo;
 
 
 import top.imuster.common.base.domain.BaseDomain;
@@ -36,9 +36,21 @@ public class UserAuthenRecordInfo extends BaseDomain {
 
 	//审核备注
 	private String remark;
+
+	//审核人
+	private Long approveId;
+
 	// 1-认证中  2-认证成功  3-认证失败
 	//private Short state;
 
+
+	public Long getApproveId() {
+		return approveId;
+	}
+
+	public void setApproveId(Long approveId) {
+		this.approveId = approveId;
+	}
 
 	public String getRemark() {
 		return remark;

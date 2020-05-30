@@ -1,4 +1,4 @@
-package top.imuster.auth.component;
+package top.imuster.auth.component.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

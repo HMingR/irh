@@ -2,8 +2,6 @@ package top.imuster.message.provider.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +25,6 @@ import top.imuster.message.provider.service.impl.GoodsSearchService;
 @RestController
 @RequestMapping("/search")
 public class SearchController {
-
-    private static final Logger log = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
     ObjectMapper objectMapper;

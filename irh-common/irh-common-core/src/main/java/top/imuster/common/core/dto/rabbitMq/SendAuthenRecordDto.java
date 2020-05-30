@@ -21,6 +21,7 @@ public class SendAuthenRecordDto extends Send2MQ implements Serializable {
 
     private String inputNum;
 
+    //1-认证中  2-认证成功  3-认证失败
     private Integer result;
 
     //认证类型  1-一卡通  2-身份证

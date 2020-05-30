@@ -48,6 +48,7 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.pojo.ProductInfo;
+import top.imuster.message.dto.GoodsSearchParam;
 import top.imuster.message.provider.MessageProviderApplication;
 
 import javax.mail.*;
@@ -227,20 +228,16 @@ public class EsTest {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         //搜索条件
         //根据关键字搜索
-        if(StringUtils.isNotEmpty("")){
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("看看", "title", "desc")
+        if(StringUtils.isNotEmpty("这是标题")){
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("这是标题", "title", "desc")
                     .minimumShouldMatch("70%")
                     .field("title", 10);
             boolQueryBuilder.must(multiMatchQueryBuilder);
         }
 
-        RangeQueryBuilder rangequerybuilder = QueryBuilders
-                .rangeQuery("salePrice")
-                .from("500").to("1100");
-
 
         searchSourceBuilder.query(boolQueryBuilder);
-        searchSourceBuilder.sort("salePrice", SortOrder.DESC);
+//        searchSourceBuilder.sort("salePrice", SortOrder.DESC);
         searchRequest.source(searchSourceBuilder);
         SearchResponse search = restHighLevelClient.search(searchRequest);
         SearchHits hits = search.getHits();
@@ -283,6 +280,146 @@ public class EsTest {
             //将coursePub对象放入list
             log.info(objectMapper.writeValueAsString(info));
         }
+    }
+
+    @Test
+    public void test009(){
+        GoodsSearchParam searchParam = new GoodsSearchParam();
+        searchParam.setKeyword("这是标题");
+        if(searchParam == null){
+            searchParam = new GoodsSearchParam();
+        }
+        //创建搜索请求对象
+        SearchRequest searchRequest = new SearchRequest("goods");
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //过虑源字段
+        String[] source_field_array = "id,title,mainPicUrl,tagNames,salePrice,tradeType,desc,type,createTime".split(",");
+
+        searchSourceBuilder.fetchSource(source_field_array,new String[]{});
+        //创建布尔查询对象
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        //搜索条件
+        //根据关键字搜索
+        if(StringUtils.isNotEmpty(searchParam.getKeyword())){
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getKeyword(), "title", "desc", "tagNames")
+                    .minimumShouldMatch("70%")
+                    .field("title", 10);
+            boolQueryBuilder.must(multiMatchQueryBuilder);
+        }
+
+        //交易类型
+        if(searchParam.getTradeType() != null){
+            boolQueryBuilder.filter(QueryBuilders.termQuery("tradeType",searchParam.getTradeType()));
+        }
+
+        RangeQueryBuilder rangequerybuilder = null;
+        if(StringUtils.isNotEmpty(searchParam.getPriceMin()) && StringUtils.isNotEmpty(searchParam.getPriceMax())){
+            rangequerybuilder = QueryBuilders
+                    .rangeQuery("salePrice")
+                    .from(searchParam.getPriceMin()).to(searchParam.getPriceMax());
+        }else if(StringUtils.isNotEmpty(searchParam.getPriceMin()) && StringUtils.isEmpty(searchParam.getPriceMax())){
+            rangequerybuilder = QueryBuilders
+                    .rangeQuery("salePrice")
+                    .from(searchParam.getPriceMin());
+        }else if(StringUtils.isEmpty(searchParam.getPriceMin()) && StringUtils.isNotEmpty(searchParam.getPriceMax())){
+            rangequerybuilder = QueryBuilders
+                    .rangeQuery("salePrice")
+                    .to(searchParam.getPriceMax());
+        }
+
+        Integer priceOrder = searchParam.getPriceOrder();
+        SortOrder orderType = null;
+        if(priceOrder != null){
+            if(priceOrder == 1){
+                orderType = SortOrder.DESC;
+            }else if(priceOrder == 2){
+                orderType = SortOrder.ASC;
+            }else{
+            }
+            searchSourceBuilder.sort("salePrice", orderType);
+        }
+
+        Integer timeOrder = searchParam.getTimeOrder();
+        if(timeOrder != null){
+            if(timeOrder == 1){
+                orderType = SortOrder.DESC;
+            }else if(timeOrder == 2){
+                orderType = SortOrder.ASC;
+            }else{
+            }
+            searchSourceBuilder.sort("createTime", orderType);
+        }
+
+
+        searchSourceBuilder.query(rangequerybuilder);
+        searchSourceBuilder.query(boolQueryBuilder);
+
+
+        searchRequest.source(searchSourceBuilder);
+
+        Page<ESProductDto> productInfoPage = new Page<>();
+        List<ESProductDto> list = new ArrayList<>();
+        try {
+            //执行搜索
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest);
+            //获取响应结果
+            SearchHits hits = searchResponse.getHits();
+            //匹配的总记录数
+            long totalHits = hits.totalHits;
+            productInfoPage.setTotalCount((int)totalHits);
+            SearchHit[] searchHits = hits.getHits();
+            for(SearchHit hit:searchHits){
+                ESProductDto info = new ESProductDto();
+                //源文档
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                //取出id
+                Object id =sourceAsMap.get("id");
+
+                if(id != null){
+                    info.setId(Long.parseLong(String.valueOf(id)));
+
+                }
+
+                //取出name
+                String title = (String) sourceAsMap.get("title");
+                info.setTitle(title);
+
+                //图片
+                String pic = (String) sourceAsMap.get("mainPicUrl");
+                info.setMainPicUrl(pic);
+
+                //价格
+                Object salePrice = sourceAsMap.get("salePrice");
+                if(salePrice != null){
+                    info.setSalePrice(String.valueOf(salePrice));
+                }
+
+                Object tagNames = sourceAsMap.get("tagNames");
+                if(tagNames != null) info.setTagNames(String.valueOf(tagNames));
+
+                //trade_type
+                Object tradeType = sourceAsMap.get("tradeType");
+                if(tradeType != null){
+                    info.setTradeType(Integer.parseInt(String.valueOf(tradeType)));
+                }
+
+                Object type = sourceAsMap.get("type");
+                if(type != null){
+                    info.setType(Integer.parseInt(String.valueOf(type)));
+                }
+
+                Object desc = sourceAsMap.get("desc");
+                if(desc != null) info.setDesc(String.valueOf(desc));
+                //将coursePub对象放入list
+                list.add(info);
+                log.info(objectMapper.writeValueAsString(info));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        productInfoPage.setData(list);
+
     }
 
     @Test

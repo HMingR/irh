@@ -84,6 +84,13 @@ public class WxAppLoginServiceImpl extends BaseServiceImpl<WxAppLoginInfo, Long>
         if(StringUtils.isBlank(redisCode) || !bindDto.getBindEmailCode().equalsIgnoreCase(redisCode)){
             return Message.createByError("验证码失效或错误");
         }
+
+        WxAppLoginInfo condition = new WxAppLoginInfo();
+        condition.setState(2);
+        condition.setUserId(bindDto.getUserId());
+        Integer count = wxAppLoginDao.selectEntryListCount(condition);
+        if(count != 0) return Message.createBySuccess("已经绑定了微信,请不要重复绑定");
+
         WxAppLoginInfo wxAppLoginInfo = new WxAppLoginInfo();
         String url = new StringBuffer(wxAppPrefix).append("appid=").append(appId).append("&secret=").append(appSecret).append("&js_code=").append(bindDto.getCode()).append("&grant_type=authorization_code").toString();
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
@@ -123,6 +130,15 @@ public class WxAppLoginServiceImpl extends BaseServiceImpl<WxAppLoginInfo, Long>
         generateSendMessageService.sendToMq(sendEmailDto);
 
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<Integer> checkIsBind(Long userId) {
+        WxAppLoginInfo condition = new WxAppLoginInfo();
+        condition.setState(2);
+        condition.setUserId(userId);
+        Integer count = wxAppLoginDao.selectEntryListCount(condition);
+        return Message.createBySuccess(count);
     }
 
 }

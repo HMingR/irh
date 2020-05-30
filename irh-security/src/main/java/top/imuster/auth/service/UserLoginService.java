@@ -1,9 +1,7 @@
 package top.imuster.auth.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.security.api.bo.AuthToken;
-import top.imuster.security.api.bo.SecurityUserDto;
 
 import java.io.IOException;
 
@@ -14,18 +12,6 @@ import java.io.IOException;
  * @date: 2020/4/30 19:20
  */
 public interface UserLoginService {
-
-    /**
-     * @Author hmr
-     * @Description 用户登录
-     * @Date: 2020/4/30 19:21
-     * @param loginName 用户名
-     * @param password 密码
-     * @reture: top.imuster.security.api.bo.SecurityUserDto
-     **/
-    SecurityUserDto login(String loginName, String password, String code) throws JsonProcessingException;
-
-
 
     /**
      * @Author hmr

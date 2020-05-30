@@ -1,12 +1,14 @@
-package top.imuster.user.provider.web.controller;
+package top.imuster.auth.web.controller;
+
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.auth.service.UserAuthenRecordInfoService;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
-import top.imuster.user.api.pojo.UserAuthenRecordInfo;
-import top.imuster.user.provider.service.UserAuthenRecordInfoService;
+import top.imuster.common.core.controller.BaseController;
+import top.imuster.security.api.pojo.UserAuthenRecordInfo;
 
 import javax.annotation.Resource;
 
@@ -18,7 +20,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/authen")
-public class UserAuthenRecordController {
+public class UserAuthenRecordController  extends BaseController {
 
     @Resource
     private UserAuthenRecordInfoService userAuthenRecordInfoService;
@@ -44,8 +46,16 @@ public class UserAuthenRecordController {
         return Message.createBySuccess(recordInfo);
     }
 
+    /**
+     * @Author hmr
+     * @Description 人工认证
+     * @Date: 2020/5/30 19:57
+     * @param userAuthenRecordInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
     @PostMapping("/authen")
     public Message<String> authen(@RequestParam UserAuthenRecordInfo userAuthenRecordInfo){
+        userAuthenRecordInfo.setApproveId(getCurrentUserIdFromCookie());
         return userAuthenRecordInfoService.authen(userAuthenRecordInfo);
     }
 }

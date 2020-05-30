@@ -26,6 +26,7 @@ import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.security.api.dto.UserAuthenDto;
+import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.security.api.pojo.UserRoleRel;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
@@ -84,7 +85,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
 
     public Message<String> realNameAuthentication(UserAuthenDto userAuthenDto) {
         boolean res = generate(userAuthenDto);
-        saveAuthen2DB(userAuthenDto, res ? 1 : 0,2);
+        saveAuthen2DB(userAuthenDto, res ? 2 : 1,2);
         return Message.createBySuccess(res ? successContent : failContent);
     }
 
@@ -153,7 +154,8 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         return response.body().bytes();
     }
 
-    private boolean execOneCard(UserAuthenDto userAuthenDto){
+    private UserAuthenResultDto execOneCard(UserAuthenDto userAuthenDto){
+        UserAuthenResultDto resultDto = new UserAuthenResultDto();
         Integer errorCode = 0;
         JSONObject out = null;
         String fileUri = userAuthenDto.getFileUri();
@@ -171,7 +173,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         }
         if(errorCode != 0){
             //验证失败
-            return false;
+            resultDto.setSuccess(false);
         }
         String data = out.getString("data");
         JSONObject jsonData = JSON.parseObject(data);
@@ -183,23 +185,28 @@ public class UserAuthenServiceImpl implements UserAuthenService {
             String value = msg.getString("word");
             resMap.put(key, value);
         }
-        String name = resMap.get("name");
-        String id = resMap.get("idCard");
+        String name = resMap.get("realName");
+        String id = resMap.get("certificateNum");
         if(!name.equals(inputName) || !id.equals(inputCardNo)){
-            return false;
+            resultDto.setSuccess(false);
+        }else{
+            resultDto.setRealName(name);
+            resultDto.setSuccess(true);
+            resultDto.setAcademyName(resMap.get("academyName"));
+            resultDto.setCertificateNum(id);
         }
-        return true;
+        return resultDto;
     }
 
     public Message<String> oneCardSolution(UserAuthenDto userAuthenDto){
-        boolean result = execOneCard(userAuthenDto);
-        saveAuthen2DB(userAuthenDto, result ?  1 : 0, 2);
-        return Message.createBySuccess(result ? successContent : failContent);
+        UserAuthenResultDto result = execOneCard(userAuthenDto);
+        saveAuthen2DB(userAuthenDto, result.isSuccess() ?  2 : 1, 1);
+        return Message.createBySuccess(result.isSuccess() ? successContent : failContent);
     }
 
     /**
      * @Author hmr
-     * @Description TODO
+     * @Description 保存认证记录
      * @Date: 2020/5/14 12:26
      * @param userAuthenDto
      * @param result
@@ -212,8 +219,14 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         String picUri = userAuthenDto.getFileUri();
         Long userId = userAuthenDto.getUserId();
 
-        if(result == 1){
-            userServiceFeignApi.updateUserState(userId, 50);
+        //认证成功
+        if(result == 2){
+            UserAuthenResultDto resultDto = new UserAuthenResultDto();
+            resultDto.setUserId(userId);
+            resultDto.setCertificateNum(inputNum);
+            resultDto.setRealName(inputName);
+            userServiceFeignApi.userAuthenSuccess(resultDto);
+            //实名认证的角色id固定为1L
             UserRoleRel userRoleRel = new UserRoleRel();
             userRoleRel.setRoleId(1L);
             userRoleRel.setStaffId(userId);
@@ -231,7 +244,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
 
         //发送到消息中心
         SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
-        sendUserCenterDto.setContent(result == 1 ? successContent : failContent);
+        sendUserCenterDto.setContent(result == 2 ? successContent : failContent);
         sendUserCenterDto.setNewsType(70);
         sendUserCenterDto.setFromId(-1L);
         sendUserCenterDto.setDate(DateUtil.now());

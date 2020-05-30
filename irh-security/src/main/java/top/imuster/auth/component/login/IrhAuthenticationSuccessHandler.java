@@ -1,4 +1,4 @@
-package top.imuster.auth.component;
+package top.imuster.auth.component.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

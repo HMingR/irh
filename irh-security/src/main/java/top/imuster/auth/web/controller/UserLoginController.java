@@ -1,14 +1,14 @@
 package top.imuster.auth.web.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.auth.service.UserLoginService;
@@ -18,10 +18,7 @@ import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.Idempotent;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.security.api.bo.AuthToken;
-import top.imuster.security.api.bo.SecurityUserDto;
-import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
@@ -50,15 +47,6 @@ public class UserLoginController extends BaseController {
 
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
-
-    @ApiOperation(value = "会员登录，成功返回token", httpMethod = "POST")
-    //@PostMapping("login")
-    public Message<SecurityUserDto> login(@Validated(ValidateGroup.loginGroup.class) @RequestBody UserInfo userInfo, BindingResult bindingResult) throws JsonProcessingException {
-        validData(bindingResult);
-        SecurityUserDto result = userLoginService.login(userInfo.getEmail(), userInfo.getPassword(), userInfo.getCode());
-        saveAccessTokenToCookie(result.getAuthToken().getAccessToken());
-        return Message.createBySuccess(result);
-    }
 
     @ApiOperation("在用户需要访问受保护的信息时，需要调用该接口获得jwt")
     @NeedLogin

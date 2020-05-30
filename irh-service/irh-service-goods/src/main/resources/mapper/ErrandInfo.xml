@@ -166,7 +166,7 @@
 		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE
-		state != 1 AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
+		state = #{state} AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}
 	</select>
 
 	<select id="selectStateByIdAndVersion" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="integer">
@@ -192,7 +192,7 @@
 		SELECT id, content, requirement, money, create_time AS createTime, version
 		FROM errand_info
 		WHERE state = 2
-		ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR}
+		ORDER BY ${orderField} ${orderFieldType}
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
 

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.service.ErrandOrderService;
@@ -34,7 +33,6 @@ public class ErrandOrderController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String> 返回一个orderCode，使用该orderCode查看是否成功接单
      **/
     @ApiOperation("接单")
-    @NeedLogin
     @GetMapping("/{id}/{version}")
     public Message<String> orderReceive(@PathVariable("id") Long id, @PathVariable("version") Integer version) throws JsonProcessingException {
         return errandOrderService.receiveOrder(id, version, getCurrentUserIdFromCookie());
@@ -95,7 +93,6 @@ public class ErrandOrderController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation(value = "发布者完成订单", httpMethod = "GET")
-    @NeedLogin
     @GetMapping("/finish/{id}")
     public Message<String> finishOrder(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();

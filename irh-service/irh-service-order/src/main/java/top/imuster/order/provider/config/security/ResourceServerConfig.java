@@ -17,6 +17,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import top.imuster.common.core.interceptor.FeignClientInterceptor;
+import top.imuster.common.core.security.CustomizedAuthenticationEntryPoint;
+import top.imuster.common.core.security.UrlAccessDecisionManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -82,8 +84,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
 
     @Bean
-    UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
-        return new UrlFilterInvocationSecurityMetadataSource();
+    OrderUrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
+        return new OrderUrlFilterInvocationSecurityMetadataSource();
     }
 
     @Autowired
@@ -112,7 +114,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //所有请求必须认证通过
         http.authorizeRequests()
                 //下边的路径放行
-                .antMatchers("/goods/feign/**","/goods/category/tree", "/demand/reply/child",
+                .antMatchers("/order/feign/**","/goods/category/tree",
                         "/swagger-resources","/swagger-resources/configuration/security",
                         "/swagger-ui.html","/webjars/**","/course/coursepic/list/**", "classpath:/resources/").permitAll()
                 .anyRequest().authenticated();

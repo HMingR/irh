@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
+import top.imuster.common.core.annotation.Idempotent;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
 import top.imuster.order.provider.service.ProductDonationApplyInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: DonationApplyController
@@ -69,7 +70,7 @@ public class DonationApplyController {
      * @param targetId 申请表的主键id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @NeedLogin
+    @Idempotent(submitTotal = 5, timeUnit = TimeUnit.DAYS, timeTotal = 1, msg = "每个人24小时之内只能操作5次哦")
     @GetMapping("/attribute/{type}/{targetId}")
     public Message<String> upOrDown(@PathVariable("type") Integer type, @PathVariable("targetId") Long targetId){
         if(type != 1 && type != 2) return Message.createByError("参数错误");

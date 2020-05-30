@@ -1,10 +1,10 @@
-package top.imuster.user.provider.service;
+package top.imuster.auth.service;
 
 
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.rabbitMq.SendAuthenRecordDto;
-import top.imuster.user.api.pojo.UserAuthenRecordInfo;
+import top.imuster.security.api.pojo.UserAuthenRecordInfo;
 
 /**
  * UserAuthenRecordInfoService接口

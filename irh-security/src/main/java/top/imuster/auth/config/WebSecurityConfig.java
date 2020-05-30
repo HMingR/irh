@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import top.imuster.auth.component.*;
+import top.imuster.auth.component.login.*;
 import top.imuster.auth.service.Impl.UsernameUserDetailsServiceImpl;
 
 import java.util.Arrays;

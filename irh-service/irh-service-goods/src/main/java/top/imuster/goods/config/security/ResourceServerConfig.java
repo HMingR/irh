@@ -113,7 +113,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //所有请求必须认证通过
         http.authorizeRequests()
                 //下边的路径放行
-                .antMatchers("/goods/feign/**","/goods/category/tree", "/demand/reply/child",
+                .antMatchers("/goods/feign/**", "/demand/reply/child",
                         "/swagger-resources","/swagger-resources/configuration/security",
                         "/swagger-ui.html","/webjars/**","/course/coursepic/list/**", "classpath:/resources/").permitAll()
                 .anyRequest().authenticated();

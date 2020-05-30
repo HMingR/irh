@@ -43,4 +43,7 @@ public @interface Idempotent {
      **/
     TimeUnit timeUnit();
 
+
+    String msg() default "操作繁忙,请稍后再试";
+
 }

@@ -1,4 +1,4 @@
-package top.imuster.auth.component;
+package top.imuster.auth.component.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -3,6 +3,7 @@ package top.imuster.user.provider.web.rpc;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.UserServiceFeignApi;
@@ -68,5 +69,15 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
         List<UserInfo> userInfos = userInfoService.selectEntryList(userId);
         if(CollectionUtils.isNotEmpty(userInfos)) return userInfos.get(0);
         return null;
+    }
+
+    @PostMapping("/auth/success")
+    public Integer userAuthenSuccess(@RequestBody UserAuthenResultDto userAuthenResultDto){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userAuthenResultDto.getUserId());
+        userInfo.setAcademyName(userAuthenResultDto.getAcademyName());
+        userInfo.setState(40);
+        int i = userInfoService.updateByKey(userInfo);
+        return i;
     }
 }

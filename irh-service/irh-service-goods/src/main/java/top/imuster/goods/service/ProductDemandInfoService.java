@@ -77,4 +77,13 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @reture: java.util.List<top.imuster.goods.api.pojo.ProductDemandInfo>
      **/
     List<ProductDemandInfo> getInfoByIds(List<Long> res);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看详情
+     * @Date: 2020/5/30 15:45
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.goods.api.pojo.ProductDemandInfo>
+     **/
+    Message<ProductDemandInfo> detailById(Long id);
 }

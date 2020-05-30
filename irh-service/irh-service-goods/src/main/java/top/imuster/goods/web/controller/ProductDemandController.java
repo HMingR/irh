@@ -19,7 +19,6 @@ import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.service.ProductDemandInfoService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: DemandProductController
@@ -54,9 +53,7 @@ public class ProductDemandController extends BaseController {
     @ApiOperation(value = "根据id查询", httpMethod = "GET")
     @GetMapping("/{id}")
     public Message<ProductDemandInfo> getById(@PathVariable("id") Long id){
-        List<ProductDemandInfo> productDemandInfos = productDemandInfoService.selectEntryList(id);
-        if(productDemandInfos == null || productDemandInfos.isEmpty()) return Message.createBySuccess();
-        return Message.createBySuccess(productDemandInfos.get(0));
+        return productDemandInfoService.detailById(id);
     }
 
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")

@@ -35,6 +35,8 @@ public class ProductDemandReplyInfoServiceImpl extends BaseServiceImpl<ProductDe
         ProductDemandReplyInfo condition = new ProductDemandReplyInfo();
         condition.setState(2);
         condition.setDemandId(demandId);
+        condition.setOrderField("create_time");
+        condition.setOrderFieldType("DESC");
         page.setCurrentPage(currentPage);
         page.setPageSize(pageSize);
         page.setSearchCondition(condition);

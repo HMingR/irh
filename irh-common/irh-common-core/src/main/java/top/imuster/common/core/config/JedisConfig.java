@@ -16,13 +16,17 @@ import redis.clients.jedis.Jedis;
 @Component
 public class JedisConfig  {
 
+    public Jedis jedis;
+
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
 
     @Bean
     public Jedis getJedis() throws Exception {
-        RedisConnection connection = jedisConnectionFactory.getConnection();
-        return (Jedis) connection.getNativeConnection();
-
+        if(jedis == null){
+            RedisConnection connection = jedisConnectionFactory.getConnection();
+            return (Jedis) connection.getNativeConnection();
+        }
+        return jedis;
     }
 }

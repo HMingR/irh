@@ -12,7 +12,10 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
+import top.imuster.common.core.enums.OperationType;
+import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.TrendUtil;
@@ -170,7 +173,13 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         orderInfo.setId(orderId);
         orderInfo.setState(50);
         orderInfoDao.updateByKey(orderInfo);
+        deleteFromES(orderInfo.getProductId());
         return Message.createBySuccess();
+    }
+
+    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.REMOVE)
+    private void deleteFromES(Long productId){
+
     }
 
     @Override

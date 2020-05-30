@@ -41,4 +41,13 @@ public interface WxAppLoginService extends BaseService<WxAppLoginInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> sendBindingEmail(UserDto userDto);
+
+    /**
+     * @Author hmr
+     * @Description 查看用户是否绑定了微信
+     * @Date: 2020/5/30 16:34
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
+     **/
+    Message<Integer> checkIsBind(Long userId);
 }

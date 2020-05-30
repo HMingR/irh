@@ -116,8 +116,8 @@ public class GoodsSearchService {
         }
 
 
-        searchSourceBuilder.query(boolQueryBuilder);
         searchSourceBuilder.query(rangequerybuilder);
+        searchSourceBuilder.query(boolQueryBuilder);
 
         //设置分页参数
         if(page<=0){

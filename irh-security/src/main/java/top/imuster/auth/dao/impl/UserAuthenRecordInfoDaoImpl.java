@@ -1,10 +1,10 @@
-package top.imuster.user.provider.dao.impl;
+package top.imuster.auth.dao.impl;
 
 
 import org.springframework.stereotype.Repository;
+import top.imuster.auth.dao.UserAuthenRecordInfoDao;
 import top.imuster.common.base.dao.BaseDaoImpl;
-import top.imuster.user.api.pojo.UserAuthenRecordInfo;
-import top.imuster.user.provider.dao.UserAuthenRecordInfoDao;
+import top.imuster.security.api.pojo.UserAuthenRecordInfo;
 
 /**
  * UserAuthenRecordInfoDao 实现类

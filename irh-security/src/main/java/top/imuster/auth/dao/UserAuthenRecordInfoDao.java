@@ -1,8 +1,8 @@
-package top.imuster.user.provider.dao;
+package top.imuster.auth.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
-import top.imuster.user.api.pojo.UserAuthenRecordInfo;
+import top.imuster.security.api.pojo.UserAuthenRecordInfo;
 
 /**
  * UserAuthenRecordInfoDao 接口

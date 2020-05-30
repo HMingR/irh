@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.UserInfo;
 import top.imuster.user.api.service.hystrix.UserServiceFeignHystrix;
@@ -59,4 +60,14 @@ public interface UserServiceFeignApi {
 
     @GetMapping("/wxLogin/{id}")
     UserInfo getInfoById(@PathVariable("id") Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 用户实名认证成功
+     * @Date: 2020/5/30 17:39
+     * @param userInfo
+     * @reture: java.lang.Integer
+     **/
+    @PostMapping("/auth/success")
+    Integer userAuthenSuccess(@RequestBody UserAuthenResultDto userAuthenResultDto);
 }

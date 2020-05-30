@@ -11,7 +11,7 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
-import top.imuster.auth.component.CustomUserAuthenticationConverter;
+import top.imuster.auth.component.login.CustomUserAuthenticationConverter;
 
 /**
  * @ClassName: IrhSecurityApplication

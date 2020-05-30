@@ -1,5 +1,6 @@
 package top.imuster.goods.service.impl;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -71,11 +72,14 @@ public class RecommendProductServiceImpl implements RecommendProductService {
             String setKey = RedisUtil.getProductOfflineRecommendSetKey(userId);
             if(redisTemplate.hasKey(setKey)) getInfoFromRedis(pageSize, currentPage, setKey);
 
-            String userBrowseRecordBitmapKey = RedisUtil.getUserBrowseRecordBitmap(BrowserType.ES_SELL_PRODUCT, userId);
-            ArrayList<Long> ids = new ArrayList<>();
-
             ProductRecommendDto reco = productRecommendDao.findByUserId(userId);
             List<MongoProductInfo> recs = reco.getRecs();
+
+            //当离线推荐没有数据时转成按照事件搜索最新的
+            if(CollectionUtils.isEmpty(recs)) return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
+
+            String userBrowseRecordBitmapKey = RedisUtil.getUserBrowseRecordBitmap(BrowserType.ES_SELL_PRODUCT, userId);
+            ArrayList<Long> ids = new ArrayList<>();
             appendList(recs, ids);
 
             ProductUserTagRecommendDto tagRec = productUserTagRecommendTRepository.findByUserId(userId);
@@ -107,6 +111,8 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         String userBrowseRecordBitmap = RedisUtil.getUserBrowseRecordBitmap(BrowserType.ES_SELL_PRODUCT, userId);
         ProductRealtimeRecommendDto recommendInfo = productRealtimeRecommendRepository.findByUserId(userId);
         List<MongoProductInfo> recs = recommendInfo.getRecs();
+
+        //当实施推荐中没有商品时,转到离线推荐
         if(recs.isEmpty()) return getOfflineRecommendListByUserId(pageSize, currentPage, userId);
         List<Long> ids = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
         ids.stream().forEach(id -> {

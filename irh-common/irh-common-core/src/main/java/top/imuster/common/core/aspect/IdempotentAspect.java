@@ -55,7 +55,10 @@ public class IdempotentAspect {
             redisTemplate.opsForValue().set(redisKey, submitTotal - 1, timeTotal, timeUnit);
         }else{
             int i = Integer.parseInt(String.valueOf(o));
-            if(i == 0) throw new BusyOperationException("操作繁忙,请稍后重试");
+            if(i == 0){
+                String msg = annotation.msg();
+                throw new BusyOperationException(msg);
+            }
             redisTemplate.opsForValue().increment(redisKey, -1);
         }
 

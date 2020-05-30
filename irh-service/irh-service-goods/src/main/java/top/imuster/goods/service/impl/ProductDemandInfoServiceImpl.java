@@ -179,6 +179,16 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         return productDemandInfoDao.selectInfoByIds(res);
     }
 
+    @Override
+    public Message<ProductDemandInfo> detailById(Long id) {
+        List<ProductDemandInfo> productDemandInfos = productDemandInfoDao.selectEntryList(id);
+        if(productDemandInfos == null || productDemandInfos.isEmpty()) return Message.createBySuccess();
+        ProductDemandInfo demandInfo = productDemandInfos.get(0);
+        Integer replyTotal = productDemandReplyInfoService.getReplyTotalByDemandId(demandInfo.getId());
+        demandInfo.setReplyTotal(replyTotal);
+        return Message.createBySuccess(demandInfo);
+    }
+
     @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
     private void convertInfo(ESProductDto esDto){}
 

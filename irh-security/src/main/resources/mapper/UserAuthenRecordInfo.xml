@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.imuster.user.provider.dao.UserAuthenRecordInfoDao">
+<mapper namespace="top.imuster.auth.dao.UserAuthenRecordInfoDao">
 
 	<!-- user_authen_record_info 所有查询列 -->
 	<sql id="QUERY_COLUMN_LIST">
@@ -13,7 +13,8 @@
             state,
             create_time AS createTime,
             update_time AS updateTime,
-            result AS result
+            result AS resultm,
+            approve_id AS approveId
 		]]>
 	</sql>
 
@@ -64,6 +65,7 @@
 			<if test="createTime != null and createTime != ''"><![CDATA[  create_time,]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time,]]></if>
 			<if test="result != null and result != ''"><![CDATA[  result ,]]></if>
+			<if test="approveId != null and approveId != ''"><![CDATA[  approve_id ,]]></if>
 		</trim>
 	</sql>
 
@@ -77,6 +79,7 @@
 			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
 			<if test="result != null and result != ''"><![CDATA[#{result},]]></if>
+			<if test="approveId != null and approveId != ''"><![CDATA[#{approveId},]]></if>
 		</trim>
 	</sql>
 

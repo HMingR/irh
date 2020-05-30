@@ -34,7 +34,6 @@ public class GoodsOrderController extends BaseController{
      **/
     @ApiOperation("生成订单")
     @PutMapping("/create/{productId}")
-    @NeedLogin
     public Message<OrderInfo> createOrder(@PathVariable("productId") Long productId, @RequestBody OrderInfo orderInfo) throws Exception {
         Long userId = getCurrentUserIdFromCookie();
         if(orderInfo.getProductVersion() == null) return Message.createByError("参数错误");
@@ -42,7 +41,6 @@ public class GoodsOrderController extends BaseController{
     }
 
     @ApiOperation("进入生成订单页面的时候返回一个订单号,用来防止用户重复提交订单,前端提交时必须带上")
-    @NeedLogin
     @GetMapping("/code")
     public Message<String> generateOrderCode(){
         return orderInfoService.createOrderCode(getCurrentUserIdFromCookie());
@@ -59,7 +57,6 @@ public class GoodsOrderController extends BaseController{
      **/
     @ApiOperation("条件分页查询会员自己的订单，按照时间降序排序")
     @GetMapping("/list/{type}/{pageSize}/{currentPage}")
-    @NeedLogin
     public Message<Page<OrderInfo>> orderList(@PathVariable("type") Integer type, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         if(type != 1 && type != 2) return Message.createByError("参数异常,请刷新后重试");
         if(pageSize < 1 || currentPage < 1) return Message.createByError("参数错误,请刷新");
@@ -78,7 +75,6 @@ public class GoodsOrderController extends BaseController{
      **/
     @ApiOperation(value = "根据id获得订单详情", httpMethod = "GET")
     @GetMapping("/{type}/{id}")
-    @NeedLogin
     public Message<OrderInfo> getOrderDetailById(@PathVariable("id") Long id, @PathVariable("type") Integer type){
         if(type != 1 && type != 2) return Message.createByError("参数错误");
         return orderInfoService.getOrderDetailById(id, type,getCurrentUserIdFromCookie());
@@ -98,7 +94,6 @@ public class GoodsOrderController extends BaseController{
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @GetMapping("/finish/{orderId}")
-    @NeedLogin
     public Message<String> finish(@PathVariable("orderId") Long orderId){
         return orderInfoService.finishOrder(orderId, getCurrentUserIdFromCookie());
     }
