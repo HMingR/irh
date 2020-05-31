@@ -65,7 +65,8 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     }
 
     @Override
-    public UserInfo getInfoById(Long userId) {
+    @GetMapping("/wxLogin/{id}")
+    public UserInfo getInfoById(@PathVariable("id") Long userId) {
         List<UserInfo> userInfos = userInfoService.selectEntryList(userId);
         if(CollectionUtils.isNotEmpty(userInfos)) return userInfos.get(0);
         return null;

@@ -97,8 +97,8 @@ public class UserDto extends BaseDomain {
         return userType;
     }
 
-    public void setUserType(String code) {
-        setUserTypeByName(code);
+    public void setUserType(Integer code) {
+        setUserTypeById(code);
     }
 
     public String getNickname() {

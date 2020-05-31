@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.RabbitListenerErrorHandler;
+import org.springframework.amqp.rabbit.listener.exception.ListenerExecutionFailedException;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,6 +49,24 @@ public class RabbitMqConfig {
             }
         });
         return rabbitTemplate;
+    }
+
+    /**
+     * @Author hmr
+     * @Description 当MQ的消费端出现异常的时候不重复发消息
+     * @Date: 2020/5/31 9:00
+     * @param
+     * @reture: org.springframework.amqp.rabbit.listener.RabbitListenerErrorHandler
+     **/
+    @Bean
+    public RabbitListenerErrorHandler rabbitListenerErrorHandler(){
+        return new RabbitListenerErrorHandler() {
+            @Override
+            public Object handleError(Message amqpMessage, org.springframework.messaging.Message<?> message, ListenerExecutionFailedException exception) throws Exception {
+                log.error("--------->MQ消费端出现异常,将{}消息丢了", message);
+                throw exception;
+            }
+        };
     }
 
     @Bean

@@ -95,6 +95,11 @@ public class GlobalExceptionHandler {
         return Message.createByError("非法的请求方式");
     }
 
+    @ExceptionHandler(BusyOperationException.class)
+    public Message<String> BusyOperatorExceptionHandler(BusyOperationException e){
+        return Message.createByError(e.getMessage());
+    }
+
 
     /**
      * @Description: 配置校验规则，当有很多数据需要校验的时候，一个出现问题，则停止校验，直接抛出异常

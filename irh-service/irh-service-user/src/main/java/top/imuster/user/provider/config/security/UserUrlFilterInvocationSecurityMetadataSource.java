@@ -1,4 +1,4 @@
-package top.imuster.user.provider.config;
+package top.imuster.user.provider.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import top.imuster.common.core.security.UrlFilterInvocationSecurityMetadataSource;

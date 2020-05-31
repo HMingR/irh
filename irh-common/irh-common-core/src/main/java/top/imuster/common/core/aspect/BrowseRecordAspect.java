@@ -64,14 +64,8 @@ public class BrowseRecordAspect extends BaseController {
         String recordBitmapKey = RedisUtil.getUserBrowseRecordBitmap(browserType, userId);
         jedis.setbit(recordBitmapKey, recordDto.getTargetId(), true);
 
-        try{
-            redisTemplate.opsForList().leftPush(recordKey, objectMapper.writeValueAsString(recordDto));
-        }catch (Exception e){
-            log.error("将浏览记录序列化失败");
-        }
+        redisTemplate.opsForZSet().add(recordKey, recordDto.getTargetId(), 1.0);
         redisTemplate.expire(recordKey, 180, TimeUnit.DAYS);
-        Long size = redisTemplate.opsForList().size(recordKey);
-        if(size > 30) redisTemplate.opsForList().rightPop(recordKey);
     }
 
 

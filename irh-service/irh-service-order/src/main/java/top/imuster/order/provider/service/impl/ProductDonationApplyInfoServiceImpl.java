@@ -12,13 +12,12 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.dto.UserDto;
+import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.common.core.utils.RedisUtil;
@@ -207,8 +206,8 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
 
     @Override
     public void collectDonationAttribute() {
-        List<DonationAttributeDto> downList = getListByRedisKey(GlobalConstant.IRH_DONATION_APPLY_ATTRIBUTE_DOWN);
-        List<DonationAttributeDto> upList = getListByRedisKey(GlobalConstant.IRH_DONATION_APPLY_ATTRIBUTE_UP);
+        List<DonationAttributeDto> downList = getListByRedisKey(RedisUtil.getDonationApplyAttributeKey(1));
+        List<DonationAttributeDto> upList = getListByRedisKey(RedisUtil.getDonationApplyAttributeKey(2));
         Integer upResTotal = productDonationApplyInfoDao.updateUpTotal(upList);
         log.info("更新了{}条赞成记录", upResTotal);
         Integer downResTotal = productDonationApplyInfoDao.updateDownTotal(downList);
@@ -225,6 +224,16 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             page.setSearchCondition(condition);
         }
         Page<ProductDonationApplyInfo> res = this.selectPage(page.getSearchCondition(), page);
+
+        List<ProductDonationApplyInfo> data = res.getData();
+        String upKey = RedisUtil.getDonationApplyAttributeKey(1);
+        String downKey = RedisUtil.getDonationApplyAttributeKey(2);
+        data.stream().forEach(applyInfo -> {
+            Object up = redisTemplate.opsForHash().get(upKey, applyInfo.getId());
+            if(up instanceof Integer) applyInfo.setUserUpTotal(applyInfo.getUserUpTotal() + Integer.parseInt(String.valueOf(up)));
+            Object down = redisTemplate.opsForHash().get(downKey, applyInfo.getId());
+            if(down instanceof Integer) applyInfo.setUserDownTotal(applyInfo.getUserDownTotal() + Integer.parseInt(String.valueOf(down)));
+        });
         return Message.createBySuccess(res);
     }
 
@@ -244,6 +253,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             attributeDto.setTargetId(targetId);
             attributeDto.setTotal(total);
             list.add(attributeDto);
+            redisTemplate.opsForHash().delete(redisKey, key);
         }
         return list;
     }

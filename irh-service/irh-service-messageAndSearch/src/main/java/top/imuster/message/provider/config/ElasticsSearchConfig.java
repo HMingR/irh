@@ -1,7 +1,14 @@
 package top.imuster.message.provider.config;
 
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,17 +33,35 @@ public class ElasticsSearchConfig {
     @Value("${irh.elasticsearch.host}")
     private String host;
 
+    @Value("${irh.elasticsearch.userName}")
+    private String userName;
+
+    @Value("${irh.elasticsearch.password}")
+    private String password;
+
     @Bean
     public RestHighLevelClient restHighLevelClient(){
-        //创建RestHighLevelClient客户端
-        return new RestHighLevelClient(RestClient.builder(getHttpHost()));
-    }
+        HttpHost[] httpHosts = getHttpHost();
+        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
+        RestClientBuilder builder = RestClient.builder(httpHosts).setRequestConfigCallback(new RestClientBuilder.RequestConfigCallback() {
+            @Override
+            public RequestConfig.Builder customizeRequestConfig(RequestConfig.Builder requestConfigBuilder) {
+                requestConfigBuilder.setConnectTimeout(-1);
+                requestConfigBuilder.setSocketTimeout(-1);
+                requestConfigBuilder.setConnectionRequestTimeout(-1);
+                return requestConfigBuilder;
+            }
+        }).setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+            @Override
+            public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+                httpClientBuilder.disableAuthCaching();
+                return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+            }
+        }).setMaxRetryTimeoutMillis(5*60*1000);
 
-    //项目主要使用RestHighLevelClient，对于低级的客户端暂时不用
-    @Bean
-    public RestClient restClient(){
-
-        return RestClient.builder(getHttpHost()).build();
+        RestHighLevelClient client = new RestHighLevelClient(builder);
+        return client;
     }
 
     private HttpHost[] getHttpHost(){

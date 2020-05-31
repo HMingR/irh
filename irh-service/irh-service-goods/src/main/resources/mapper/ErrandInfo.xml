@@ -163,7 +163,7 @@
 
 	<!-- 其它SQL语句 -->
 	<select id="selectList" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
-		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId]]>
+		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId, version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE
 		state = #{state} AND publisher_id = #{publisherId} ORDER BY #{orderField,jdbcType=VARCHAR} #{orderFieldType,jdbcType=VARCHAR} LIMIT #{startIndex}, #{endIndex}

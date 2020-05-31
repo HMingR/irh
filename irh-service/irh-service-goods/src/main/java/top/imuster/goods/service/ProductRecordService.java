@@ -41,5 +41,5 @@ public interface ProductRecordService {
      * @param index
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> deleteByIndex(Integer index, Long userId);
+    Message<String> deleteByIndex(Long index, Long userId);
 }

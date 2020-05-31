@@ -58,6 +58,7 @@ public class BrowserAspect extends BaseController {
         if(StringUtils.isNotBlank(annotation.value())) targetId = getTargetId(joinPoint);
         if(targetId == null || StringUtils.isBlank(annotation.value()))  targetId = AspectUtil.getTargetIdByPathVariable(joinPoint);
         BrowserType browserType = annotation.browserType();
+
         //处理浏览次数
         redisTemplate.opsForHash().increment(browserType.getRedisKeyHeader(), String.valueOf(targetId), 1);
         redisTemplate.expire(browserType.getRedisKeyHeader(), 30L, TimeUnit.MINUTES);

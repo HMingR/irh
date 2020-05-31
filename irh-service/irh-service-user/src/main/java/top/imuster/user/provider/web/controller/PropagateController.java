@@ -57,6 +57,4 @@ public class PropagateController extends BaseController {
     public void browse(@PathVariable("targetId") Long targetId){
 
     }
-
-
 }

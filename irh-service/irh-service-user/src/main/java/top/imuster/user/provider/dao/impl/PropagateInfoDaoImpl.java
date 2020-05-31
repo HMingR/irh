@@ -7,6 +7,7 @@ import top.imuster.user.api.pojo.PropagateInfo;
 import top.imuster.user.provider.dao.PropagateInfoDao;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * PropagateInfoDao 实现类
@@ -17,7 +18,8 @@ import java.util.List;
 public class PropagateInfoDaoImpl extends BaseDaoImpl<PropagateInfo, Long> implements PropagateInfoDao {
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.PropagateInfoDao.";
 	private static final String SELECT_BRIEF_INFO_LIST = "selectBriefInfoList";
-	
+	private static final String UPDATE_BROWSE_TIMES_BY_MAP = "updateBrowseTimesByMap";
+
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -26,5 +28,10 @@ public class PropagateInfoDaoImpl extends BaseDaoImpl<PropagateInfo, Long> imple
 	@Override
 	public List<PropagateInfo> selectBriefInfoList(PropagateInfo condition) {
 		return this.selectList(getNameSpace(SELECT_BRIEF_INFO_LIST), condition);
+	}
+
+	@Override
+	public Integer updateBrowseTimesByMap(Map<Long, Integer> mapFromRedis) {
+		return this.update(getNameSpace(UPDATE_BROWSE_TIMES_BY_MAP), mapFromRedis);
 	}
 }

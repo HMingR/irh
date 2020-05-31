@@ -2,6 +2,7 @@ package top.imuster.goods.dao;
 
 
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -152,4 +153,13 @@ public interface ProductInfoDao extends BaseDao<ProductInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer selectSaleTotalByUserId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 更新浏览次数
+     * @Date: 2020/5/31 17:51
+     * @param browserTimesDtos
+     * @reture: java.lang.Integer
+     **/
+    Integer updateBrowseTimesByDtoList(List<BrowserTimesDto> browserTimesDtos);
 }

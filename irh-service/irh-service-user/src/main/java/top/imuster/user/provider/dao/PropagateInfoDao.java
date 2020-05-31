@@ -5,6 +5,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.user.api.pojo.PropagateInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * PropagateInfoDao 接口
@@ -22,4 +23,12 @@ public interface PropagateInfoDao extends BaseDao<PropagateInfo, Long> {
      **/
     List<PropagateInfo> selectBriefInfoList(PropagateInfo condition);
 
+    /**
+     * @Author hmr
+     * @Description 更新浏览次数
+     * @Date: 2020/5/31 15:22
+     * @param mapFromRedis
+     * @reture: java.lang.Integer
+     **/
+    Integer updateBrowseTimesByMap(Map<Long, Integer> mapFromRedis);
 }

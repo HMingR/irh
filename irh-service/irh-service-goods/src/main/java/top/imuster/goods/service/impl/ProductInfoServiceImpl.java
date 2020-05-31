@@ -107,7 +107,9 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
     @Override
     public void transBrowserTimesFromRedis2DB(List<BrowserTimesDto> browserTimesDtos) {
-        if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
+        Integer total = productInfoDao.updateBrowseTimesByDtoList(browserTimesDtos);
+        log.info("------------>一共更新了{}条浏览总数记录", total);
+        /*if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
         HashSet<Long> targetIds = new HashSet<>();
         HashSet<Long> times = new HashSet<>();
         browserTimesDtos.stream().forEach(browserTimesDto -> {
@@ -126,7 +128,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
                 if(j == ids.length - 1) break;
             }
 //            Map<Long, Long> result = productInfoDao.selectBrowserTimesByIds(ids);
-            for (int z = 0; z < selectIds.length; z++){
+            for (int z = 0; z < selectIds.length - 1; z++){
                 if(selectIds[z] == null || selectIds[z] == 0) break;
                 Long selectId = selectIds[z];
                 Long total = totals[i * batchSize + z];
@@ -138,7 +140,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
                 update.add(condition);
             }
             productInfoDao.updateBrowserTimesByCondition(update);
-        }
+        }*/
 
     }
 

@@ -1,6 +1,5 @@
 package top.imuster.goods.web.controller;
 
-import cn.hutool.core.date.DateUtil;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -41,9 +40,9 @@ public class ProductRecordController extends BaseController {
         return productRecordService.getUserRecordList(pageSize, currentPage, getCurrentUserIdFromCookie());
     }
 
-    @DeleteMapping("/{index}")
-    public Message<String> deleteByIndex(@PathVariable("index") Integer index){
-        return productRecordService.deleteByIndex(index, getCurrentUserIdFromCookie());
+    @DeleteMapping("/{targetId}")
+    public Message<String> deleteByIndex(@PathVariable("targetId") Long targetId){
+        return productRecordService.deleteByIndex(targetId, getCurrentUserIdFromCookie());
     }
 
     @DeleteMapping
@@ -66,7 +65,6 @@ public class ProductRecordController extends BaseController {
         recordDto.setUserId(userId);
         recordDto.setTargetId(targetId);
         recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
-        recordDto.setCreateTime(DateUtil.now());
         //埋点日志 userId|productId|score
         log.info("埋点日志=>用户浏览商品");
         log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + targetId + "|"+ "3" );    //浏览商品得3分

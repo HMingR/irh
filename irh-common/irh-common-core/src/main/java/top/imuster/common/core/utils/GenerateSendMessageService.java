@@ -45,7 +45,7 @@ public class GenerateSendMessageService {
      * @reture: void
      **/
     public void sendToMq(Send2MQ sendMessageDto){
-        log.info("发送单个消息，消息内容为{}", sendMessageDto.getType().getRoutingKey());
+        log.info("发送单个消息，消息的RoutingKey为{}", sendMessageDto.getType().getRoutingKey());
         send2Mq(sendMessageDto);
     }
 

@@ -69,6 +69,8 @@ spring:
 irh:
   elasticsearch:
     host: '@irh.elasticsearch.host@'
+    userName: elastic
+    password: irhElastic
   goods:     #商城模块索引
     index: goods
     type: goods

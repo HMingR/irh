@@ -43,8 +43,7 @@ public class UserController extends BaseController {
      * @Author hmr
      * @Date 12:53 2020/1/14
      * @Param checkValidDto
-     * @param bindingResult
-     * @return top.imuster.common.base.wrapper.Message 
+     * @return top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "修改信息前需要校验各种参数(用户名、邮箱、手机号等)必须唯一",httpMethod = "POST")
     @PostMapping("/check")
@@ -83,7 +82,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "根据用户id获得用户基本信息", httpMethod = "GET")
     @GetMapping("/{id}")
     public Message<UserDto> getUserNameById(@PathVariable("id") String id){
-        if(id == null || StringUtils.isEmpty(id) || "null".equals(id)) return Message.createByError("参数错误");
+        if(id == null || StringUtils.isEmpty(id) || "null".equals(id) || "undefined".equalsIgnoreCase(id)) return Message.createByError("参数错误");
         return userInfoService.getUserDtoByUserId(Long.parseLong(id));
     }
 
@@ -110,7 +109,6 @@ public class UserController extends BaseController {
         userInfoService.updateByKey(userInfo);
         return Message.createBySuccess ();
     }
-
 
 
     /**

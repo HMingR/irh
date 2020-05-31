@@ -23,16 +23,6 @@ public class BrowseRecordDto implements Serializable {
     //用户id
     private Long userId;
 
-    private String createTime;
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
     public Long getTargetId() {
         return targetId;
     }

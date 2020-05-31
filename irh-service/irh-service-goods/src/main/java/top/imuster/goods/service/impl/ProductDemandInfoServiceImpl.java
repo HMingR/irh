@@ -118,10 +118,10 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
                 selectIds[x] = ids[j];
                 if(j == ids.length - 1) break;
             }
-            for (int z = 0; z < selectIds.length; z++){
+            for (int z = 0; z < selectIds.length - 1; z++){
                 if(selectIds[z] == null || selectIds[z] == 0) break;
                 Long selectId = selectIds[z];
-                Long total = totals[i * batchSize + z];
+                Long total = totals[i * batchSize + z];//
                 ProductInfo condition = new ProductInfo();
                 condition.setId(selectId);
                 condition.setBrowserTimes(total);

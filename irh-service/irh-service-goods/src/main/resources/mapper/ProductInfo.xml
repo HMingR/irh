@@ -336,4 +336,19 @@
 		FROM product_info
 		WHERE consumer_id = #{id,jdbcType=BIGINT} AND state = 4
 	</select>
+
+	<update id="updateBrowseTimesByDtoList" parameterType="list" useGeneratedKeys="true">
+		update product_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="browser_times = case" suffix="end,">
+				<foreach collection="list" item="item" index="index">
+					when id = #{item.targetId,jdbcType=BIGINT} then browser_times + #{item.total,jdbcType=INTEGER}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id IN
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+			#{item.targetId,jdbcType=BIGINT}
+		</foreach>
+	</update>
 </mapper>

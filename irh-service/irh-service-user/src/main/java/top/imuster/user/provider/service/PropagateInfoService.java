@@ -32,4 +32,13 @@ public interface PropagateInfoService extends BaseService<PropagateInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.user.api.pojo.PropagateInfo>>
      **/
     Message<Page<PropagateInfo>> getBriefList(Integer pageSize, Integer currentPage, Integer type);
+
+    /**
+     * @Author hmr
+     * @Description 执行attribute的统计任务
+     * @Date: 2020/5/31 15:07
+     * @param
+     * @reture: void
+     **/
+    void trans2DB();
 }

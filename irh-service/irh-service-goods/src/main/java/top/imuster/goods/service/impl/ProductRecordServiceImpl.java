@@ -6,7 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.BrowseRecordDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -17,6 +16,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName: ProductRecordServiceImpl
@@ -39,23 +39,17 @@ public class ProductRecordServiceImpl implements ProductRecordService {
     @Override
     public Message<Page<ProductInfo>> getUserRecordList(Integer pageSize, Integer currentPage, Long userId) throws IOException {
         String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, userId);
-        List<String> list = redisTemplate.opsForList().range(browseRecordKey, (currentPage - 1) * pageSize, pageSize);
-        if(list == null || list.isEmpty()){
+        Set<Long> ids = redisTemplate.opsForZSet().range(browseRecordKey, (currentPage - 1) * pageSize, pageSize);
+        if(ids == null || ids.isEmpty()){
             return Message.createBySuccess();
         }
+        ArrayList<Long> longs = new ArrayList<>(ids);
         Page<ProductInfo> page = new Page<>();
-        ArrayList<ProductInfo> res = new ArrayList<>();
-        BrowseRecordDto browseRecordDto;
         page.setCurrentPage(currentPage);
         page.setPageSize(pageSize);
-        for (String a : list) {
-            browseRecordDto = objectMapper.readValue(a, BrowseRecordDto.class);
-            ProductInfo articleInfo = productInfoService.getProductBriefInfoById(browseRecordDto.getTargetId());
-            articleInfo.setBrowseDate(browseRecordDto.getCreateTime());
-            res.add(articleInfo);
-        }
-        page.setData(res);
-        page.setTotalCount(redisTemplate.opsForList().size(browseRecordKey).intValue());
+        List<ProductInfo> productBriefByIds = productInfoService.getProductBriefByIds(longs);
+        page.setData(productBriefByIds);
+        page.setTotalCount(redisTemplate.opsForZSet().size(browseRecordKey).intValue());
         return Message.createBySuccess(page);
     }
 
@@ -67,10 +61,9 @@ public class ProductRecordServiceImpl implements ProductRecordService {
     }
 
     @Override
-    public Message<String> deleteByIndex(Integer index, Long userId) {
+    public Message<String> deleteByIndex(Long targetId, Long userId) {
         String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, userId);
-        Object target = redisTemplate.opsForList().index(browseRecordKey, index);
-        redisTemplate.opsForList().remove(browseRecordKey, 1, target);
+        redisTemplate.opsForZSet().remove(browseRecordKey, targetId);
         return Message.createBySuccess();
     }
 }

@@ -171,5 +171,20 @@
 		ORDER BY #{orderField} #{orderFieldType}
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
+
+	<update id="updateBrowseTimesByMap" useGeneratedKeys="true" parameterType="map">
+		update propagate_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="browse_times = case" suffix="end,">
+				<foreach collection="map.entrySet()" index="key" item="value">
+					when id = #{key} then browser_times + #{value}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id IN
+		<foreach collection="map.entrySet()" index="key" separator="," open="(" close=")">
+			#{key}
+		</foreach>
+	</update>
 	
 </mapper>

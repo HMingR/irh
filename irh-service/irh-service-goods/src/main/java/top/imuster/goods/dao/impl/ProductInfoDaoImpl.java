@@ -3,6 +3,7 @@ package top.imuster.goods.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -34,6 +35,7 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	private final static String SELECT_GOODS_BROWSE_TOTAL_BY_USER_ID = "selectGoodsBrowseTotalByUserId";
 	private final static String SELECT_DONATION_MONEY_BU_USER_ID = "selectDonationMoneyByUserId";
 	private final static String SELECT_SALE_TOTAL_BY_USER_ID = "selectSaleTotalByUserId";
+	private final static String UPDATE_BROWSE_TIMES_BY_DTO_LIST = "updateBrowseTimesByDtoList";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -113,5 +115,10 @@ public class ProductInfoDaoImpl extends BaseDaoImpl<ProductInfo, Long> implement
 	@Override
 	public Integer selectSaleTotalByUserId(Long id) {
 		return this.select(getNameSpace(SELECT_SALE_TOTAL_BY_USER_ID), id);
+	}
+
+	@Override
+	public Integer updateBrowseTimesByDtoList(List<BrowserTimesDto> browserTimesDtos) {
+		return this.update(getNameSpace(UPDATE_BROWSE_TIMES_BY_DTO_LIST), browserTimesDtos);
 	}
 }

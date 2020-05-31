@@ -51,7 +51,8 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         condition.setOrderFieldType("DESC");
         condition.setState(state);
         List<ErrandInfo> errandInfos = errandInfoDao.selectList(condition);
-        Integer count = errandInfoDao.selectListCountByUserId(userId);
+//        Integer count = errandInfoDao.selectListCountByUserId(userId);
+        Integer count = errandInfoDao.selectEntryListCount(condition);
         page.setTotalCount(count);
         page.setData(errandInfos);
         return Message.createBySuccess(page);
@@ -82,7 +83,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         }
         errandInfo.setState(1);
         errandInfoDao.updateByKey(errandInfo);
-        return Message.createByError("删除失败,请刷新后重试");
+        return Message.createBySuccess("删除失败,请刷新后重试");
     }
 
     @Override

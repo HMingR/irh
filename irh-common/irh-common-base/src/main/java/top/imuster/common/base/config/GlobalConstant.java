@@ -89,7 +89,7 @@ public class GlobalConstant {
 
 
     //redis中记录用户浏览历史
-    public static final String IRH_BROWSE_RECORD_LIST = "irh::browse::record::list::";
+    public static final String IRH_BROWSE_RECORD_ZSET = "irh::browse::record::zset::";
 
 
     //根据慈善基金申请id把自动生成的订单id保存到redis里面

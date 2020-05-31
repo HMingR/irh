@@ -95,8 +95,8 @@ public class RedisUtil {
      * @reture: java.lang.String
      **/
     public static String getBrowseRecordKey(BrowserType browserType, Long userId){
-        if(browserType.getType() == 1) return new StringBuilder().append(GlobalConstant.IRH_BROWSE_RECORD_LIST).append("1::").append(userId).toString();
-        if(browserType.getType() == 3) return new StringBuilder().append(GlobalConstant.IRH_BROWSE_RECORD_LIST).append("3::").append(userId).toString();
+        if(browserType.getType() == 1) return new StringBuilder().append(GlobalConstant.IRH_BROWSE_RECORD_ZSET).append("1::").append(userId).toString();
+        if(browserType.getType() == 3) return new StringBuilder().append(GlobalConstant.IRH_BROWSE_RECORD_ZSET).append("3::").append(userId).toString();
         throw new GlobalException("参数错误");
     }
 
