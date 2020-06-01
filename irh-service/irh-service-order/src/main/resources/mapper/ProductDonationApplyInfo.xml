@@ -261,7 +261,7 @@
 		UPDATE product_donation_apply_info
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="user_down_total = case" suffix="end,">
-				<foreach collection="list" item="item" separator="," open="(" close=")">
+				<foreach collection="list" item="item">
 					WHEN id = #{item.targetId,jdbcType=BIGINT} THEN user_down_total + #{item.total,jdbcType=INTEGER}
 				</foreach>
 			</trim>

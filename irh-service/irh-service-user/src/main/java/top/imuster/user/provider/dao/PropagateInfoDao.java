@@ -1,7 +1,9 @@
 package top.imuster.user.provider.dao;
 
 
+import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.user.api.pojo.PropagateInfo;
 
 import java.util.List;
@@ -30,5 +32,14 @@ public interface PropagateInfoDao extends BaseDao<PropagateInfo, Long> {
      * @param mapFromRedis
      * @reture: java.lang.Integer
      **/
-    Integer updateBrowseTimesByMap(Map<Long, Integer> mapFromRedis);
+    Integer updateBrowseTimesByMap(@Param("map") Map<Long, Integer> mapFromRedis);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/6/1 20:39
+     * @param res
+     * @reture: java.lang.Integer
+     **/
+    Integer updateBrowseTimes(List<BrowserTimesDto> res);
 }

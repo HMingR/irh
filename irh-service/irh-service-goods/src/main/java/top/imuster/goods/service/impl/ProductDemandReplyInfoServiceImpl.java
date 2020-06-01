@@ -8,6 +8,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductDemandReplyInfo;
 import top.imuster.goods.dao.ProductDemandReplyInfoDao;
+import top.imuster.goods.service.ProductDemandInfoService;
 import top.imuster.goods.service.ProductDemandReplyInfoService;
 
 import javax.annotation.Resource;
@@ -23,6 +24,9 @@ public class ProductDemandReplyInfoServiceImpl extends BaseServiceImpl<ProductDe
 
     @Resource
     private ProductDemandReplyInfoDao productDemandReplyInfoDao;
+
+    @Resource
+    ProductDemandInfoService productDemandInfoService;
 
     @Override
     public BaseDao<ProductDemandReplyInfo, Long> getDao() {
@@ -43,12 +47,12 @@ public class ProductDemandReplyInfoServiceImpl extends BaseServiceImpl<ProductDe
         page = this.selectPage(condition, page);
         List<ProductDemandReplyInfo> data = page.getData();
 
-        if(data != null && !data.isEmpty()){
+        /*if(data != null && !data.isEmpty()){
             data.stream().forEach(productDemandReplyInfo -> {
                 Integer childTotal = productDemandReplyInfoDao.selectEntryListCount(condition);
                 productDemandReplyInfo.setChildTotal(childTotal);
             });
-        }
+        }*/
         return Message.createBySuccess(page);
     }
 

@@ -24,7 +24,8 @@
             tag_names AS tagNames,
             browser_times AS browserTimes,
             collect_total AS collectTotal,
-            version
+            version,
+            other_img_url AS otherImgUrl
 		]]>
 	</sql>
 
@@ -100,6 +101,7 @@
 			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
 			<if test="consumerId != null and consumerId != ''"><![CDATA[ consumer_id, ]]></if>
 			<if test="browserTimes != null and browserTimes != ''"><![CDATA[ browser_times, ]]></if>
+			<if test="otherImgUrl != null and otherImgUrl != ''"><![CDATA[ other_img_url, ]]></if>
 		</trim>
 	</sql>
 
@@ -121,6 +123,7 @@
 			<if test="state != null and state != ''"><![CDATA[ #{state},]]></if>
 			<if test="consumerId != null and consumerId != ''"><![CDATA[ #{consumerId},]]></if>
 			<if test="browserTimes != null and browserTimes != ''"><![CDATA[ #{browserTimes},]]></if>
+			<if test="otherImgUrl != null and otherImgUrl != ''"><![CDATA[ #{otherImgUrl},]]></if>
 		</trim>
 	</sql>
 	<!-- 插入app记录 -->

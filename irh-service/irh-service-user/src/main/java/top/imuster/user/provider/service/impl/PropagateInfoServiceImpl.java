@@ -11,6 +11,7 @@ import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.user.api.pojo.PropagateInfo;
 import top.imuster.user.provider.dao.PropagateInfoDao;
@@ -70,6 +71,11 @@ public class PropagateInfoServiceImpl extends BaseServiceImpl<PropagateInfo, Lon
         if(mapFromRedis == null || mapFromRedis.isEmpty()) return;
         Integer total = propagateInfoDao.updateBrowseTimesByMap(mapFromRedis);
         log.info("-------->一共更新了{}个广告或通知的浏览次数", total);
+    }
+
+    @Override
+    public Integer saveBrowseTimes2DB(List<BrowserTimesDto> res) {
+        return propagateInfoDao.updateBrowseTimes(res);
     }
 
     /**

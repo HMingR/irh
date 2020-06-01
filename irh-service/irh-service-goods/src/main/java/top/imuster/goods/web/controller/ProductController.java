@@ -118,7 +118,7 @@ public class ProductController extends BaseController {
         if(productInfos != null && !productInfos.isEmpty()){
             return Message.createBySuccess(productInfos.get(0));
         }
-        return Message.createBySuccess("为找到相关的商品,请刷新后重试");
+        return Message.createByError("为找到相关的商品,请刷新后重试");
     }
 
 

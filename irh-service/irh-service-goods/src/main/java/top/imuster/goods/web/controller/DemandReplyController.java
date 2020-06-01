@@ -1,10 +1,12 @@
 package top.imuster.goods.web.controller;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductDemandReplyInfo;
 import top.imuster.goods.service.ProductDemandReplyInfoService;
 
@@ -32,8 +34,8 @@ public class DemandReplyController extends BaseController {
     }
 
     @PostMapping
-    @NeedLogin
-    public Message<String> writeReply(@RequestBody ProductDemandReplyInfo replyInfo){
+    public Message<String> writeReply(@RequestBody @Validated({ValidateGroup.addGroup.class}) ProductDemandReplyInfo replyInfo, BindingResult bindingResult){
+        validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         replyInfo.setUserId(userId);
         productDemandReplyInfoService.insertEntry(replyInfo);

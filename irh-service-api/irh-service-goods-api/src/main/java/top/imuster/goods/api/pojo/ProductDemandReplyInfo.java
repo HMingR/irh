@@ -2,6 +2,9 @@ package top.imuster.goods.api.pojo;
 
 
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -19,12 +22,14 @@ public class ProductDemandReplyInfo extends BaseDomain {
 	private Long id;
 
 	//  需求表的主键id
+	@NotNull(groups = ValidateGroup.addGroup.class)
 	private Long demandId;
 
 	//  发布消息的人的id
 	private Long userId;
 
 	//  如果type为2，则标识二手商品表的主键id
+	@NotNull(groups = ValidateGroup.addGroup.class)
 	private Long targetId;
 
 	// 留言内容, max length: 255

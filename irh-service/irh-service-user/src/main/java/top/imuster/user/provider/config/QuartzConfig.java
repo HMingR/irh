@@ -2,7 +2,7 @@ package top.imuster.user.provider.config;
 
 
 import org.quartz.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import top.imuster.user.provider.component.PropagateBrowseTask;
@@ -24,11 +24,13 @@ public class QuartzConfig {
     }
 
     @Bean
-    @Autowired
-    public Trigger goodsBrowserTrigger(JobDetail donationAttribute){
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(40).repeatForever();
+    public Trigger demandBrowserTrigger(@Qualifier("donationAttribute") JobDetail demandBrowserCollect){
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
+                .simpleSchedule()
+                .withIntervalInMinutes(10)
+                .repeatForever();
         return TriggerBuilder.newTrigger()
-                .forJob(donationAttribute)
+                .forJob(demandBrowserCollect)
                 .withIdentity(PROPAGATE_BROWSE_TASK)
                 .withSchedule(scheduleBuilder)
                 .build();

@@ -210,5 +210,19 @@
 		</foreach>
  	</select>
 
+	<update id="updateBrowseTimesByDtoList" parameterType="list" useGeneratedKeys="true">
+		UPDATE product_demand_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="browser_times = case" suffix="end,">
+				<foreach collection="list" item="item" index="index">
+					WHEN id = #{item.targetId,jdbcType=BIGINT} then browser_times + #{item.total}
+				</foreach>
+			</trim>
+		</trim>
+		where id IN
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+			#{item.targetId,jdbcType=BIGINT}
+		</foreach>
+	</update>
 
 </mapper>

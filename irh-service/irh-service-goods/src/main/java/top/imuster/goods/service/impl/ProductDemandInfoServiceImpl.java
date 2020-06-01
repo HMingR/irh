@@ -15,15 +15,12 @@ import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.goods.api.dto.ESProductDto;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
-import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductDemandInfoDao;
 import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductDemandInfoService;
 import top.imuster.goods.service.ProductDemandReplyInfoService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -100,7 +97,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
             }
             productDemandInfoDao.updateBrowserTimesByCondition(update);
         }*/
-        if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
+        /*if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
         HashSet<Long> targetIds = new HashSet<>();
         HashSet<Long> times = new HashSet<>();
         browserTimesDtos.stream().forEach(browserTimesDto -> {
@@ -128,7 +125,8 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
                 update.add(condition);
             }
             productDemandInfoDao.updateBrowserTimesByCondition(update);
-        }
+        }*/
+        Integer total = productDemandInfoDao.updateBrowseTimesByDtoList(browserTimesDtos);
     }
 
     @Override
@@ -182,7 +180,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     @Override
     public Message<ProductDemandInfo> detailById(Long id) {
         List<ProductDemandInfo> productDemandInfos = productDemandInfoDao.selectEntryList(id);
-        if(productDemandInfos == null || productDemandInfos.isEmpty()) return Message.createBySuccess();
+        if(productDemandInfos == null || productDemandInfos.isEmpty()) return Message.createByError("未找到相关信息");
         ProductDemandInfo demandInfo = productDemandInfos.get(0);
         Integer replyTotal = productDemandReplyInfoService.getReplyTotalByDemandId(demandInfo.getId());
         demandInfo.setReplyTotal(replyTotal);

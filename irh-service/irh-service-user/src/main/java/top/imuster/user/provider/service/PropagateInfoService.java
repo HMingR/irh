@@ -4,7 +4,10 @@ package top.imuster.user.provider.service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.user.api.pojo.PropagateInfo;
+
+import java.util.List;
 
 /**
  * PropagateInfoService接口
@@ -41,4 +44,13 @@ public interface PropagateInfoService extends BaseService<PropagateInfo, Long> {
      * @reture: void
      **/
     void trans2DB();
+
+    /**
+     * @Author hmr
+     * @Description 保存浏览总数到db
+     * @Date: 2020/6/1 20:38
+     * @param res
+     * @reture: java.lang.Integer
+     **/
+    Integer saveBrowseTimes2DB(List<BrowserTimesDto> res);
 }

@@ -6,8 +6,6 @@
 
 
         欢迎您使用IRH智慧平台，祝您生活愉快。
-
-        <a href="https://www.imuster.top">如有任何问题，点击该链接进行反馈</a>
         <h4>${date}</h4>
     </body>
 </html>

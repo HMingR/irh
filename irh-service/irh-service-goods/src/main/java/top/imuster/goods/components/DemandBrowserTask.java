@@ -11,6 +11,7 @@ import top.imuster.common.core.utils.DateUtil;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.service.ProductDemandInfoService;
 import top.imuster.goods.service.RedisOperateService;
+import top.imuster.goods.service.impl.ProductRotationBrowseServiceImpl;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,6 +35,9 @@ public class DemandBrowserTask extends QuartzJobBean {
     @Resource
     ProductDemandInfoService productDemandInfoService;
 
+    @Resource
+    ProductRotationBrowseServiceImpl productRotationBrowseService;
+
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.info("{}---->开始执行商城浏览记录的定时任务", DateUtil.now());
@@ -44,5 +48,10 @@ public class DemandBrowserTask extends QuartzJobBean {
         List<GoodsForwardDto> demandCollectDto = redisOperateService.transCollect2DB(2);
         productDemandInfoService.updateDemandCollectTotal(demandCollectDto);
         log.info("{}---->完成执行商城需求收藏的定时任务", DateUtil.now());
+
+        log.info("{}---->开始执行商城首页轮播图点击次数统计的定时任务", DateUtil.now());
+        productRotationBrowseService.generate();
+        log.info("{}---->完成执行商城首页轮播图点击次数统计的定时任务", DateUtil.now());
+
     }
 }

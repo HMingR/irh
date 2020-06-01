@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.huawei.ais.sdk.AisAccess;
 import com.huawei.ais.sdk.util.HttpClientUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
@@ -54,14 +55,14 @@ public class HuaweiModerationImageUtil {
             //定义body
             LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("urls", urls);
-            body.add("categories", new String[] {"politics", "terrorism", "porn", "ad"});
+            body.add("categories", new String[] {"politics", "terrorism", "porn"});
             body.add("threshold", 0);
 
             JSONObject json = new JSONObject();
 
             // api请求参数说明可参考：https://support.huaweicloud.com/api-moderation/moderation_03_0036.html
             json.put("urls", urls);
-            json.put("categories", new String[] {"politics", "terrorism", "porn", "ad"}); //检测内容
+            json.put("categories", new String[] {"politics", "terrorism", "porn"}); //检测内容
             json.put("threshold", 0);
 
             StringEntity stringEntity = new StringEntity(json.toJSONString(), "utf-8");
@@ -83,6 +84,13 @@ public class HuaweiModerationImageUtil {
                 String suggestion = jsonObject1.getString("suggestion");
                 if("block".equalsIgnoreCase(suggestion)){
                     res.append("第").append(i+1).append("张图片审核不通过; ");
+                    JSONObject categorySuggestions = jsonObject1.getJSONObject("category_suggestions");
+                    String politics = (String)categorySuggestions.get("politics");
+                    String terrorism = (String)categorySuggestions.get("terrorism");
+                    String porn = (String)categorySuggestions.get("porn");
+                    if(!StringUtils.equalsIgnoreCase(politics, "pass")) res.append("涉及政治,");
+                    if(!StringUtils.equalsIgnoreCase(terrorism, "pass")) res.append("涉及恐怖暴力信息,");
+                    if(!StringUtils.equalsIgnoreCase(porn, "pass")) res.append("涉及色情信息,");
                 }
             }
             return res.toString();

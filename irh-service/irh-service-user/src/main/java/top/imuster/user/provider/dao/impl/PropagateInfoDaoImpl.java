@@ -3,6 +3,7 @@ package top.imuster.user.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.user.api.pojo.PropagateInfo;
 import top.imuster.user.provider.dao.PropagateInfoDao;
 
@@ -19,6 +20,7 @@ public class PropagateInfoDaoImpl extends BaseDaoImpl<PropagateInfo, Long> imple
 	private final static String NAMESPACE = "top.imuster.user.provider.dao.PropagateInfoDao.";
 	private static final String SELECT_BRIEF_INFO_LIST = "selectBriefInfoList";
 	private static final String UPDATE_BROWSE_TIMES_BY_MAP = "updateBrowseTimesByMap";
+	private static final String UPDATE_BROWSE_TIMES = "updateBrowseTimes";
 
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
@@ -33,5 +35,10 @@ public class PropagateInfoDaoImpl extends BaseDaoImpl<PropagateInfo, Long> imple
 	@Override
 	public Integer updateBrowseTimesByMap(Map<Long, Integer> mapFromRedis) {
 		return this.update(getNameSpace(UPDATE_BROWSE_TIMES_BY_MAP), mapFromRedis);
+	}
+
+	@Override
+	public Integer updateBrowseTimes(List<BrowserTimesDto> res) {
+		return this.update(getNameSpace(UPDATE_BROWSE_TIMES), res);
 	}
 }

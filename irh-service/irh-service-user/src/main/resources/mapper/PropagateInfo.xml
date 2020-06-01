@@ -186,5 +186,20 @@
 			#{key}
 		</foreach>
 	</update>
-	
+
+	<update id="updateBrowseTimes" parameterType="list" useGeneratedKeys="true">
+		update propagate_info
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="browse_times = case" suffix="end,">
+				<foreach collection="list" index="key" item="it">
+					when id = #{it.targetId} then browser_times + #{it.total}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id IN
+		<foreach collection="list" index="key" item="it" separator="," open="(" close=")">
+			#{it.targetId}
+		</foreach>
+	</update>
+
 </mapper>
