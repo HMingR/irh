@@ -1,4 +1,4 @@
-package top.imuster.common.core.security;
+package top.imuster.gateway.config.security;
 
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
@@ -6,7 +6,6 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import top.imuster.common.core.exception.GlobalException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +44,7 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
         needRoles.retainAll(roleString);
 
         if(needRoles.size() == 0){
-            throw new GlobalException("权限不足!");
+            throw new RuntimeException("权限不足!");
         }
     }
 

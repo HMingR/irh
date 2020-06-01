@@ -4,6 +4,7 @@ package top.imuster.order.provider.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
@@ -208,10 +209,14 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     public void collectDonationAttribute() {
         List<DonationAttributeDto> downList = getListByRedisKey(RedisUtil.getDonationApplyAttributeKey(1));
         List<DonationAttributeDto> upList = getListByRedisKey(RedisUtil.getDonationApplyAttributeKey(2));
-        Integer upResTotal = productDonationApplyInfoDao.updateUpTotal(upList);
-        log.info("更新了{}条赞成记录", upResTotal);
-        Integer downResTotal = productDonationApplyInfoDao.updateDownTotal(downList);
-        log.info("更新了{}条反对记录", downResTotal);
+        if(CollectionUtils.isNotEmpty(upList)){
+            Integer upResTotal = productDonationApplyInfoDao.updateUpTotal(upList);
+            log.info("更新了{}条赞成记录", upResTotal);
+        }
+        if(CollectionUtils.isNotEmpty(downList)){
+            Integer downResTotal = productDonationApplyInfoDao.updateDownTotal(downList);
+            log.info("更新了{}条反对记录", downResTotal);
+        }
     }
 
     @Override

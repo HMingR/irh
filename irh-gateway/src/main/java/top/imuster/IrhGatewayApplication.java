@@ -10,7 +10,9 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.AntPathMatcher;
 
 /**
  * @ClassName: IrhGatewayApplication
@@ -18,8 +20,9 @@ import org.springframework.context.annotation.Bean;
  * @author: lpf
  * @date: 2019/11/30 19:11
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "top.imuster")
 @EnableDiscoveryClient
+@EnableFeignClients(basePackages = "top.imuster.security.api.service")
 @EnableZuulProxy
 public class IrhGatewayApplication {
     public static void main(String[] args) {
@@ -52,5 +55,10 @@ public class IrhGatewayApplication {
         return connector;
     }
 
+
+    @Bean
+    AntPathMatcher antPathMatcher(){
+        return new AntPathMatcher();
+    }
 }
 

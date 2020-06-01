@@ -74,9 +74,6 @@ public class ArticleInfo extends BaseDomain {
 	//热搜指数
 	private Long score;
 
-	//浏览时间(浏览记录用)
-	private String browseDate;
-
 	//分类id
 	private Long categoryId;
 
@@ -214,13 +211,4 @@ public class ArticleInfo extends BaseDomain {
 	public void setScore(Long score) {
 		this.score = score;
 	}
-
-	public String getBrowseDate() {
-		return browseDate;
-	}
-
-	public void setBrowseDate(String browseDate) {
-		this.browseDate = browseDate;
-	}
-
 }

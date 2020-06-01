@@ -25,6 +25,10 @@ public class GlobalConstant {
     public static final String IRH_DEMAND_RECOMMEND_LIST_KEY = "irh::demand::recommend::list::key::";
     public static final String IRH_USER_OFFLINE_RECOMMEND_SET_KEY = "irh::user::offline::recommend::set::key::";
 
+
+    public static final String ROLE_AUTH_MAP_KEY = "irh::role::auth::map";
+
+    public static final String AUTH_HTTP_METHOD_MAP_KEY = "irh::http::method::map";
     //系统初始化时需要查出所有的权限和角色保存在redis里面
     public static final String IRH_ROLE_AND_AUTH_LIST = "irh::role::auth::list::key";
 

@@ -4,10 +4,7 @@ import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import top.imuster.security.api.pojo.RoleInfo;
 import top.imuster.security.api.service.RoleServiceFeignApi;
-
-import java.util.List;
 
 /**
  * @ClassName: UserServiceFeignHystrix
@@ -23,9 +20,10 @@ public class RoleServiceFeignHystrix implements FallbackFactory<RoleServiceFeign
     @Override
     public RoleServiceFeignApi create(Throwable throwable) {
         RoleServiceFeignApi roleServiceFeignApi = new RoleServiceFeignApi() {
+
             @Override
-            public List<RoleInfo> getRoleAndAuthList() {
-                return null;
+            public Boolean init() {
+                return false;
             }
         };
         return roleServiceFeignApi;

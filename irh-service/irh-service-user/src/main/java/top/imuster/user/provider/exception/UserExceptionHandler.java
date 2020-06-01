@@ -24,10 +24,10 @@ public class UserExceptionHandler extends GlobalExceptionHandler {
         return Message.createByError(exception.getMessage());
     }
 
-    //用户权限不足
-    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
-    public Message<String> accessDeniedExceptionHandler(){
-        return Message.createByError("您当前的权限不允许操作该资源");
-    }
+//    //用户权限不足
+//    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+//    public Message<String> accessDeniedExceptionHandler(){
+//        return Message.createByError("您当前的权限不允许操作该资源");
+//    }
 
 }

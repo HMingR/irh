@@ -1,9 +1,8 @@
-package top.imuster.common.core.security;
+package top.imuster.gateway.config.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -13,18 +12,14 @@ import org.springframework.util.AntPathMatcher;
 import java.util.*;
 
 /**
- * @ClassName: UrlFilterInvocationSecurityMetadataSource
+ * @ClassName: AbstractUrlFilterInvocationSecurityMetadataSource
  * @Description: 控制角色对资源的访问，该类的作用就是查看当前访问的url是否在数据库中被注册，如果被注册，则需要权限访问
  * @author: hmr
  * @date: 2019/12/24 15:03
  */
-public abstract class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
+public abstract class AbstractUrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource{
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-
-    @Value("${enable.needLogin}")
-    boolean enable;
 
     @Autowired
     AntPathMatcher antPathMatcher;
@@ -39,21 +34,16 @@ public abstract class UrlFilterInvocationSecurityMetadataSource implements Filte
 
     abstract protected void initRoleAuthMap();
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
     public static void setAuthRoleMap(Map<String, String> authRoleMap) {
-        UrlFilterInvocationSecurityMetadataSource.authRoleMap = authRoleMap;
+        AbstractUrlFilterInvocationSecurityMetadataSource.authRoleMap = authRoleMap;
     }
 
     public static void setHttpMethodMap(Map<String, String> httpMethodMap) {
-        UrlFilterInvocationSecurityMetadataSource.httpMethodMap = httpMethodMap;
+        AbstractUrlFilterInvocationSecurityMetadataSource.httpMethodMap = httpMethodMap;
     }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        if(!enable) return null;
 
         if(authRoleMap == null || authRoleMap.size() == 0) initRoleAuthMap();
 

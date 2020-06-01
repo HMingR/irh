@@ -30,6 +30,8 @@ public class UserDto extends BaseDomain {
 
     private String academyName;
 
+    private String uType;
+
     //个性签名
     private String signature;
 
@@ -97,8 +99,16 @@ public class UserDto extends BaseDomain {
         return userType;
     }
 
-    public void setUserType(Integer code) {
-        setUserTypeById(code);
+    public String getuType() {
+        return uType;
+    }
+
+    public void setuType(String uType) {
+        this.uType = uType;
+    }
+
+    public void setUserType(String name){
+        setUserTypeByName(name);
     }
 
     public String getNickname() {

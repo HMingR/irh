@@ -1,6 +1,7 @@
 package top.imuster.goods.service.impl;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -107,6 +108,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
 
     @Override
     public void transBrowserTimesFromRedis2DB(List<BrowserTimesDto> browserTimesDtos) {
+        if(CollectionUtils.isEmpty(browserTimesDtos)) return;
         Integer total = productInfoDao.updateBrowseTimesByDtoList(browserTimesDtos);
         log.info("------------>一共更新了{}条浏览总数记录", total);
         /*if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;

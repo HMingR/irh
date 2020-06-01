@@ -50,7 +50,6 @@ public class BrowseRecordServiceImpl implements BrowseRecordService {
         for (String a : list) {
             browseRecordDto = objectMapper.readValue(a, BrowseRecordDto.class);
             ArticleInfo articleInfo = articleInfoService.getBriefById(browseRecordDto.getTargetId());
-            articleInfo.setBrowseDate(browseRecordDto.getCreateTime());
             res.add(articleInfo);
         }
         page.setTotalCount(redisTemplate.opsForList().size(browseRecordKey).intValue());

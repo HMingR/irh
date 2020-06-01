@@ -32,7 +32,9 @@
             <if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode}]]></if>
             <if test="errandId != null and errandId != ''"><![CDATA[AND errand_id = #{errandId}]]></if>
             <if test="holderId != null and holderId != ''"><![CDATA[AND holder_id = #{holderId}]]></if>
-            <if test="publisherId != null and publisherId != ''"><![CDATA[AND publisher_id = #{publisherId}]]></if>
+			<if test="holderId != null and holderId != ''"><![CDATA[AND state != 7]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[AND publisher_id = #{publisherId}]]></if>
+			<if test="publisherId != null and publisherId != ''"><![CDATA[AND state != 6]]></if>
             <if test="payMoney != null and payMoney != ''"><![CDATA[AND pay_money = #{payMoney}]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="finishTime != null and finishTime != ''"><![CDATA[AND finish_time = #{finishTime}]]></if>

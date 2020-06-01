@@ -1,4 +1,4 @@
-package top.imuster.common.core.security;
+package top.imuster.gateway.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

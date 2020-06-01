@@ -61,6 +61,7 @@ wxApp:
 file:
   urlPrefix: http://39.105.0.169:8080/
 
+
 secure:
   ignored:
     urls: #安全路径白名单

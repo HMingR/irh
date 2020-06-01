@@ -1,25 +1,5 @@
 package top.imuster.user.provider.config.security;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
-import org.springframework.http.*;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.resource.BaseOAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
-import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Map;
-
 /**
  * @ClassName: IrhAuthenticationEntryPoint
  * @Description: IrhAuthenticationEntryPoint
@@ -28,7 +8,7 @@ import java.util.Map;
  */
 //@Component
 public class IrhAuthenticationEntryPoint  /*extends OAuth2AuthenticationEntryPoint */{
-
+/*
     @Autowired
     private OAuth2ClientProperties oAuth2ClientProperties;
 
@@ -86,6 +66,6 @@ public class IrhAuthenticationEntryPoint  /*extends OAuth2AuthenticationEntryPoi
             e.printStackTrace();
         }
 
-    }
+    }*/
 
 }
