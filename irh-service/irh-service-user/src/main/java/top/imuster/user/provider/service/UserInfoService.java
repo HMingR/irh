@@ -118,5 +118,4 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: boolean
      **/
     Message<String> resetPwdByEmail(UserInfo userInfo);
-
 }

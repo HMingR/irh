@@ -8,11 +8,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.BrowserAnnotation;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -111,7 +109,6 @@ public class ProductController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message
      **/
     @ApiOperation(value = "根据id获得商品的所有信息", httpMethod = "GET")
-    @BrowserAnnotation(browserType = BrowserType.ES_DEMAND_PRODUCT)
     @GetMapping("/{id}")
     public Message<ProductInfo> getProductById(@PathVariable("id")Long id){
         List<ProductInfo> productInfos = productInfoService.selectEntryList(id);

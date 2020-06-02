@@ -1,6 +1,7 @@
 package top.imuster.goods.service.impl;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -126,7 +127,9 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
             }
             productDemandInfoDao.updateBrowserTimesByCondition(update);
         }*/
+        if(CollectionUtils.isEmpty(browserTimesDtos)) return;
         Integer total = productDemandInfoDao.updateBrowseTimesByDtoList(browserTimesDtos);
+        log.info("------->更新了{}条商品需求浏览记录", total);
     }
 
     @Override

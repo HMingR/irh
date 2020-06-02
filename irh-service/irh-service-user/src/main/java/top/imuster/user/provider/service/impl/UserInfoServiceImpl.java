@@ -170,8 +170,8 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         if(StringUtils.isBlank(redisCode) || !code.equalsIgnoreCase(redisCode)) throw new UserException("验证码错误或超时,请重新获取");
         String encode = passwordEncoder.encode(userInfo.getPassword());
         userInfo.setPassword(encode);
+        log.info("重置密码");
         Integer i = userInfoDao.updatePwdByEmail(userInfo);
         return Message.createBySuccess();
     }
-
 }

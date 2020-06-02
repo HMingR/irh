@@ -177,7 +177,7 @@
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browse_times = case" suffix="end,">
 				<foreach collection="map.entrySet()" index="key" item="value">
-					when id = #{key} then browser_times + #{value}
+					when id = #{key} then browse_times + #{value}
 				</foreach>
 			</trim>
 		</trim>
@@ -192,7 +192,7 @@
 		<trim prefix="set" suffixOverrides=",">
 			<trim prefix="browse_times = case" suffix="end,">
 				<foreach collection="list" index="key" item="it">
-					when id = #{it.targetId} then browser_times + #{it.total}
+					when id = #{it.targetId} then browse_times + #{it.total}
 				</foreach>
 			</trim>
 		</trim>

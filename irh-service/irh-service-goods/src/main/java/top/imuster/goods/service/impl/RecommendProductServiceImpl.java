@@ -1,5 +1,6 @@
 package top.imuster.goods.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -70,17 +71,16 @@ public class RecommendProductServiceImpl implements RecommendProductService {
             return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
         }else{
             String setKey = RedisUtil.getProductOfflineRecommendSetKey(userId);
-            if(redisTemplate.hasKey(setKey)) getInfoFromRedis(pageSize, currentPage, setKey);
+            if(redisTemplate.hasKey(setKey)) return getInfoFromRedis(pageSize, currentPage, setKey);
 
             ProductRecommendDto reco = productRecommendDao.findByUserId(userId);
-            List<MongoProductInfo> recs = reco.getRecs();
 
             //当离线推荐没有数据时转成按照事件搜索最新的
-            if(CollectionUtils.isEmpty(recs)) return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
+            if(reco == null || CollectionUtils.isEmpty(reco.getRecs())) return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
 
             String userBrowseRecordBitmapKey = RedisUtil.getUserBrowseRecordBitmap(BrowserType.ES_SELL_PRODUCT, userId);
             ArrayList<Long> ids = new ArrayList<>();
-            appendList(recs, ids);
+            appendList(reco.getRecs(), ids);
 
             ProductUserTagRecommendDto tagRec = productUserTagRecommendTRepository.findByUserId(userId);
             List<MongoProductInfo> recs1 = tagRec.getRecs();
@@ -166,9 +166,10 @@ public class RecommendProductServiceImpl implements RecommendProductService {
 
         List<Long> res = redisTemplate.opsForSet().randomMembers(redisKey, pageSize);
         List<ProductDemandInfo> data = null;
-        if(res != null && !res.isEmpty()){
-            data = productDemandInfoService.getInfoByIds(res);
-        }
+        if(CollectionUtils.isNotEmpty(res)) data = productDemandInfoService.getInfoByIds(res);
+
+        if(CollectionUtils.isEmpty(data)) return productDemandInfoService.list(pageSize, currentPage);
+
         Page<ProductDemandInfo> page = new Page<>();
         page.setData(data);
         page.setTotalCount(size);
@@ -191,6 +192,10 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         if(res != null && !res.isEmpty()){
              data = productInfoService.getProductBriefByIds(res);
         }
+
+        //如果推荐中没有数据,则直接从数据库查
+        if(CollectionUtil.isEmpty(data)) return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
+
         page.setData(data);
         page.setTotalCount(size);
 
@@ -218,9 +223,10 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         ts.close();
         reader.close();
         String tempKey = UUID.randomUUID().toString();
-        redisTemplate.opsForSet().add(tempKey, (String[])words.toArray(new String[words.size()]));
+        if(CollectionUtils.isNotEmpty(words)) words.stream().forEach(s -> redisTemplate.opsForSet().add(tempKey ,s));
         Set<String> result = redisTemplate.opsForSet().intersect(RedisUtil.getRedisTagNameKey(ReleaseType.GOODS), tempKey);
         List<Object> res = Arrays.asList(result.toArray());
+        if(res.size() >= 5) res = res.subList(0, 4);
         redisTemplate.delete(tempKey);
         return Message.createBySuccess(res);
     }

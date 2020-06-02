@@ -45,27 +45,30 @@ public class ProductMessageServiceImpl extends BaseServiceImpl<ProductMessageInf
     @Override
     public void generateSendMessage(ProductMessageInfo productMessageInfo){
         Long writer = productMessageInfo.getConsumerId();  //写留言的人
+        Long productId = productMessageInfo.getProductId();
+        Long parentId = productMessageInfo.getParentId();
         productMessageDao.insertEntry(productMessageInfo);  //插入留言后返回的id
         Long messageId = productMessageInfo.getId();
         SendUserCenterDto sendToDto = new SendUserCenterDto();
-        if(productMessageInfo.getParentId() == -1){
-            Long salerId = productInfoService.getConsumerIdById(productMessageInfo.getProductId());
+        if(parentId == -1){
+            Long salerId = productInfoService.getConsumerIdById(productId);
             if(salerId.equals(writer)) return;   //卖家评论自己,不发送消息
             sendToDto.setFromId(writer);
             sendToDto.setToId(salerId);
             sendToDto.setContent(productMessageInfo.getContent());
             sendToDto.setNewsType(10);
-            sendToDto.setTargetId(productMessageInfo.getProductId());
-            sendToDto.setResourceId(messageId);
+            sendToDto.setTargetId(productId);
+//            sendToDto.setResourceId(messageId);
+            sendToDto.setResourceId(productId);
         } else {
-            Long toId = productMessageDao.selectUserIdByMessageParentId(productMessageInfo.getParentId());
+            Long toId = productMessageDao.selectUserIdByMessageParentId(parentId);
             if(toId == null || writer.equals(toId)) return;  //楼主评论自己，不发送消息
             sendToDto.setContent(productMessageInfo.getContent());
             sendToDto.setToId(toId);
             sendToDto.setFromId(writer);
             sendToDto.setNewsType(10);
-            sendToDto.setTargetId(productMessageInfo.getParentId());
-            sendToDto.setResourceId(messageId);
+            sendToDto.setTargetId(productId);
+            sendToDto.setResourceId(parentId);
         }
         generateSendMessageService.sendToMq(sendToDto);
     }

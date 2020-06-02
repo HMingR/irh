@@ -1,12 +1,8 @@
 package top.imuster.goods.web.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -77,9 +73,8 @@ public class RecommendController extends BaseController {
      * @param text
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<java.lang.Object>>
      **/
-    @NeedLogin
-    @GetMapping("/tag/{text}")
-    public Message<List<Object>> recommendTagName(@PathVariable("text") String text) throws IOException {
+    @PostMapping("/tag")
+    public Message<List<Object>> recommendTagName(@RequestParam("text") String text) throws IOException {
         return recommendProductService.recommendTagNames(text);
     }
 
@@ -88,7 +83,4 @@ public class RecommendController extends BaseController {
         Long userId = getCurrentUserIdFromCookie(false);
         return recommendProductService.getDemandRecommend(userId, pageSize, currentPage);
     }
-
-
-
 }

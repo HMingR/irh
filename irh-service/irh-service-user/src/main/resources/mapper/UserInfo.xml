@@ -9,7 +9,6 @@
             id,
             age,
             email,
-            password,
             alipay_num AS alipayNum,
             nickname,
             qq,
@@ -39,7 +38,6 @@
             <if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
             <if test="age != null and age != ''"><![CDATA[AND age = #{age}]]></if>
             <if test="email != null and email != ''"><![CDATA[AND email = #{email}]]></if>
-            <if test="password != null and password != ''"><![CDATA[AND password = #{password}]]></if>
             <if test="alipayNum != null and alipayNum != ''"><![CDATA[AND alipay_num = #{alipayNum}]]></if>
             <if test="nickname != null and nickname != ''"><![CDATA[AND nickname like "%"#{nickname}"%"]]></if>
             <if test="qq != null and qq != ''"><![CDATA[AND qq = #{qq}]]></if>
@@ -74,7 +72,6 @@
 		<set>
 			<if test="age != null"><![CDATA[age = #{age},]]></if>
 			<if test="email != null"><![CDATA[email = #{email},]]></if>
-			<if test="password != null"><![CDATA[password = #{password},]]></if>
 			<if test="alipayNum != null"><![CDATA[alipay_num = #{alipayNum},]]></if>
 			<if test="nickname != null"><![CDATA[nickname = #{nickname},]]></if>
 			<if test="qq != null"><![CDATA[qq = #{qq},]]></if>

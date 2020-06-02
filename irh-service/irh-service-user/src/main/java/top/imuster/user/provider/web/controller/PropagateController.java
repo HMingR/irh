@@ -55,6 +55,5 @@ public class PropagateController extends BaseController {
     @BrowserAnnotation(browserType = BrowserType.PROPAGATE, value = "#p0")
     @GetMapping("/browse/{targetId}")
     public void browse(@PathVariable("targetId") Long targetId){
-
     }
 }

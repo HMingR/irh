@@ -39,7 +39,7 @@ public class ProductRecordServiceImpl implements ProductRecordService {
     @Override
     public Message<Page<ProductInfo>> getUserRecordList(Integer pageSize, Integer currentPage, Long userId) throws IOException {
         String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, userId);
-        Set<Long> ids = redisTemplate.opsForZSet().range(browseRecordKey, (currentPage - 1) * pageSize, pageSize);
+        Set<Long> ids = redisTemplate.opsForZSet().rangeByScore(browseRecordKey, (currentPage - 1) * pageSize, pageSize);
         if(ids == null || ids.isEmpty()){
             return Message.createBySuccess();
         }

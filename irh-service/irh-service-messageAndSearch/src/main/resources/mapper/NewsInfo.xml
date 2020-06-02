@@ -152,28 +152,28 @@
 	
 	<!-- 其它SQL语句 -->
 	<select id="selectAtMeMessage" parameterType="top.imuster.message.pojo.NewsInfo" resultType="top.imuster.message.pojo.NewsInfo">
-
 		SELECT
-		COUNT( 1 ) AS repeatTotal,
-		id,
-		receiver_id AS receiverId,
-		content,
-		news_type AS newsType,
-		create_time AS createTime,
-		state,
-		update_time AS updateTime,
-		sender_id AS senderId,
-		target_id AS targetId,
-		resource_id AS resourceId
+			COUNT( 1 ) AS repeatTotal,
+			id,
+			receiver_id AS receiverId,
+			content,
+			news_type AS newsType,
+			create_time AS createTime,
+			state,
+			update_time AS updateTime,
+			sender_id AS senderId,
+			target_id AS targetId,
+			resource_id AS resourceId
 		FROM
-		news_info
+			news_info
 		WHERE
-		receiver_id = #{receiverId}
-		AND state = 30
-		AND news_type IN ( 10, 20, 60 )
+			receiver_id = #{receiverId}
+			AND state != 10
+			AND news_type IN ( 10, 20, 60 )
 		GROUP BY
-		resource_id
-		LIMIT #{startIndex}, #{endIndex}
+			resource_id
+		ORDER BY state DESC ,create_time DESC
+			LIMIT #{startIndex}, #{endIndex}
 	</select>
 
 	<select id="selectAtMeTotal" parameterType="newsInfo" resultType="int">

@@ -24,6 +24,8 @@ encrypt:
     alias: irhkey
     password: imuster
 
+token:
+  expireTime: 86400 #token过期时间
 
 hot:
   topic:

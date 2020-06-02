@@ -1,6 +1,7 @@
 package top.imuster.goods.service.impl;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -30,6 +31,7 @@ public class ProductRotationImgInfoServiceImpl extends BaseServiceImpl<ProductRo
 
     @Override
     public Integer saveClick2DB(List<BrowserTimesDto> res) {
+        if(CollectionUtils.isEmpty(res)) return 0;
         return productRotationImgInfoDao.updateClickTotal(res);
     }
 }

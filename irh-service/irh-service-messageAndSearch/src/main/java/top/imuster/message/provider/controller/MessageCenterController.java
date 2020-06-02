@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.message.pojo.NewsInfo;
 import top.imuster.message.provider.service.NewsInfoService;
@@ -42,7 +41,6 @@ public class MessageCenterController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.message.pojo.NewsInfo>>
      **/
     @GetMapping("/atMe/{pageSize}/{currentPage}")
-    @NeedLogin
     public Message<Page<NewsInfo>> atMe(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         if(pageSize< 1 || currentPage< 1) return Message.createByError("参数错误");
         return newsInfoService.getAtMeMessage(getCurrentUserIdFromCookie(), pageSize, currentPage);

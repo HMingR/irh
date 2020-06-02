@@ -64,6 +64,12 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
     @Value("${auth.cookieDomain}")
     private String cookieDomain;
 
+    @Value("${token.expireTime:86400}")
+    private Integer tokenExpireTime;
+
+    private void setTokenExpireTime(Integer tokenExpireTime){
+        this.tokenExpireTime = tokenExpireTime;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -78,6 +84,8 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
         } else if (!StringUtils.equals(clientDetails.getClientSecret(), clientSecret)) {
             throw new UnapprovedClientAuthenticationException("clientSecret不匹配" + clientId);
         }
+
+        //setTokenExpireTime(clientDetails.getAccessTokenValiditySeconds());
 
         TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_MAP, clientId, clientDetails.getScope(), "client_credentials");
 
@@ -106,7 +114,7 @@ public class IrhAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
 
         UserDto userDto = userDetails.getUserInfo();
         try {
-            redisTemplate.opsForValue().set(RedisUtil.getAccessToken(jti), objectMapper.writeValueAsString(userDto), 24, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set(RedisUtil.getAccessToken(jti), objectMapper.writeValueAsString(userDto), tokenExpireTime.longValue(), TimeUnit.SECONDS);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
