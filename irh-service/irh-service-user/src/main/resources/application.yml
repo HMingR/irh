@@ -11,6 +11,9 @@ mybatis:
   mapper-locations: mapper/*
   type-aliases-package: top.imuster.user.api.pojo  #别名扫描
 
+#广告定时任务执行周期
+propagate:
+  execTime: 20  #分钟
 
 feign:
   hystrix:

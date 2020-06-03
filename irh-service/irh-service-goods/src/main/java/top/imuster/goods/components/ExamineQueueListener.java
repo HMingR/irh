@@ -69,7 +69,7 @@ public class ExamineQueueListener {
             exchange = @Exchange(name="exchange_topics_inform", type = "topic"),
             key = {"info.examine.#"}))
     public void listen(String msg) throws IOException {
-        log.info("----->进入审核");
+        log.debug("----->进入审核");
         SendExamineDto sendExamineDto = objectMapper.readValue(msg, SendExamineDto.class);
 
         List<String> imgUrl = sendExamineDto.getImgUrl();

@@ -124,7 +124,13 @@
 	<select id="selectUserIdByOpenId" parameterType="string" resultType="long">
 		SELECT user_id
 		<include refid="QUERY_FROM_TABLE"></include>
-		WHERE open_id = #{openId}
+		WHERE open_id = #{openId} AND state = 2
 	</select>
+
+	<update id="updateInfoStateByUserId" parameterType="long" useGeneratedKeys="true">
+		UPDATE wx_app_login
+		SET state = 1
+		WHERE user_id = #{userId,jdbcType=BIGINT}
+	</update>
 	
 </mapper>

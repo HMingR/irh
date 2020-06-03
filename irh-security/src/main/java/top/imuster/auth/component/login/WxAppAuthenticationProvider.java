@@ -87,16 +87,14 @@ public class WxAppAuthenticationProvider implements AuthenticationProvider {
             if(userInfo == null) throw new AuthenticationServiceException("该微信没有绑定irh平台账号,请先注册再使用微信登录");
 
             String userAuth = "";
-            if(userInfo.getType() != 10){
-                List<String> roleName = roleInfoService.getRoleNameByUserName(userInfo.getEmail());
-                userAuth  = StringUtils.join(roleName.toArray(), ",");
-            }
+            List<String> roleName = roleInfoService.getRoleNameByUserName(userInfo.getEmail());
+            userAuth  = StringUtils.join(roleName.toArray(), ",");
 
             //已经认证过的需要加一个角色名称
-            if(userInfo.getState() == 40){
+            /*if(userInfo.getState() == 40){
                 if(StringUtils.isNotBlank(userAuth)) userAuth += ",identified";
                 else userAuth = "identified";
-            }
+            }*/
             UserDto userDto = new UserDto(userInfo.getId(), userInfo.getEmail(), userInfo.getNickname(), userInfo.getPortrait(), userInfo.getType());
             UserDetails userDetails = new UserDetails(userInfo.getEmail(), userInfo.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(userAuth));
             userDetails.setUserInfo(userDto);

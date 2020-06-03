@@ -25,7 +25,8 @@
             portrait,
             type,
             signature,
-            address
+            address,
+            password
 		]]>
 	</sql>
 
@@ -226,5 +227,11 @@
 		SET password = #{password,jdbcType=VARCHAR}
 		WHERE email = #{email,jdbcType=VARCHAR}
 	</update>
+
+	<select id="loginByUserId" parameterType="long" resultType="userInfo">
+		<![CDATA[SELECT id, email, password, nickname, state, type ]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		WHERE id = #{userId,jdbcType=BIGINT}
+	</select>
 
 </mapper>

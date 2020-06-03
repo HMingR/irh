@@ -20,4 +20,12 @@ public interface WxAppLoginDao extends BaseDao<WxAppLoginInfo, Long> {
      **/
     Long selectUserIdByOpenId(String openId);
 
+    /**
+     * @Author hmr
+     * @Description 解绑
+     * @Date: 2020/6/3 10:50
+     * @param userId
+     * @reture: java.lang.Integer
+     **/
+    Integer updateInfoStateByUserId(Long userId);
 }

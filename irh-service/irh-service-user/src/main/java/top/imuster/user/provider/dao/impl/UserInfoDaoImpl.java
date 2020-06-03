@@ -27,6 +27,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	private final static String SELECT_USER_DTO_BY_ID = "selectUserDtoById";
 	private final static String SELECT_ADD_AND_PHONE_BY_ID = "selectAddAndPhoneById";
 	private final static String UPDATE_PWD_BY_EMAIL = "updatePwdByEmail";
+	private final static String LOGIN_BY_USER_ID = "loginByUserId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -75,5 +76,10 @@ public class UserInfoDaoImpl extends BaseDaoImpl<UserInfo, Long> implements User
 	@Override
 	public Integer updatePwdByEmail(UserInfo userInfo) {
 		return this.update(getNameSpace(UPDATE_PWD_BY_EMAIL), userInfo);
+	}
+
+	@Override
+	public UserInfo loginByUserId(Long userId) {
+		return this.select(getNameSpace(LOGIN_BY_USER_ID), userId);
 	}
 }

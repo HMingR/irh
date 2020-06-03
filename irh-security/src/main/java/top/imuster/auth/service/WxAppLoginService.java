@@ -50,4 +50,13 @@ public interface WxAppLoginService extends BaseService<WxAppLoginInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.Integer>
      **/
     Message<Integer> checkIsBind(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 解绑
+     * @Date: 2020/6/3 10:49
+     * @param userId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> unbind(Long userId);
 }

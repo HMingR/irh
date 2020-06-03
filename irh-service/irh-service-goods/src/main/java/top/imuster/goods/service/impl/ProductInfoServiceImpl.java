@@ -111,39 +111,6 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         if(CollectionUtils.isEmpty(browserTimesDtos)) return;
         Integer total = productInfoDao.updateBrowseTimesByDtoList(browserTimesDtos);
         log.info("------------>一共更新了{}条浏览总数记录", total);
-        /*if(browserTimesDtos == null || browserTimesDtos.isEmpty()) return;
-        HashSet<Long> targetIds = new HashSet<>();
-        HashSet<Long> times = new HashSet<>();
-        browserTimesDtos.stream().forEach(browserTimesDto -> {
-            Long targetId = browserTimesDto.getTargetId();
-            Long total = browserTimesDto.getTotal();
-            targetIds.add(targetId);
-            times.add(total);
-        });
-        Long[] ids = targetIds.toArray(new Long[targetIds.size()]);
-        Long[] totals = times.toArray(new Long[times.size()]);
-        for (int i = 0; i <= ids.length / batchSize; i++){
-            ArrayList<ProductInfo> update = new ArrayList<>();
-            Long[] selectIds = new Long[batchSize];
-            for (int j = i * batchSize, x = 0; j < (i + 1) * batchSize; j++, x++) {
-                selectIds[x] = ids[j];
-                if(j == ids.length - 1) break;
-            }
-//            Map<Long, Long> result = productInfoDao.selectBrowserTimesByIds(ids);
-            for (int z = 0; z < selectIds.length - 1; z++){
-                if(selectIds[z] == null || selectIds[z] == 0) break;
-                Long selectId = selectIds[z];
-                Long total = totals[i * batchSize + z];
-//                Long original = result.get(selectId);
-//                original = original + total;
-                ProductInfo condition = new ProductInfo();
-                condition.setId(selectId);
-                condition.setBrowserTimes(total);
-                update.add(condition);
-            }
-            productInfoDao.updateBrowserTimesByCondition(update);
-        }*/
-
     }
 
     @Override

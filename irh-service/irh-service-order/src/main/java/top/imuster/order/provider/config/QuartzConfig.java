@@ -2,6 +2,7 @@ package top.imuster.order.provider.config;
 
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import top.imuster.order.provider.components.DonationApplyAttributeTask;
@@ -14,6 +15,9 @@ import top.imuster.order.provider.components.DonationApplyAttributeTask;
  */
 @Component
 public class QuartzConfig {
+
+    @Value("${donation.execTime:30}")
+    private Integer donationExecTime;
 
     private static final String DONATION_ATTRIBUTE_TASK = "donationAttributeTask";
 

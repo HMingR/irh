@@ -47,3 +47,7 @@ logging:
   config: classpath:logback-spring.xml
   level:
     top.imuster.order.provider: debug
+
+#公益资金态度收集定时任务执行周期
+donation:
+  execTime: 30   # 分钟

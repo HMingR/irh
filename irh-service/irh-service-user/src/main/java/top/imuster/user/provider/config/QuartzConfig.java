@@ -3,6 +3,7 @@ package top.imuster.user.provider.config;
 
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import top.imuster.user.provider.component.PropagateBrowseTask;
@@ -16,6 +17,9 @@ import top.imuster.user.provider.component.PropagateBrowseTask;
 @Component
 public class QuartzConfig {
 
+    @Value("${propagate.execTime:20}")
+    private Integer propagateExecTime;
+
     private static final String PROPAGATE_BROWSE_TASK = "propagateBrowseTask";
 
     @Bean
@@ -27,7 +31,7 @@ public class QuartzConfig {
     public Trigger demandBrowserTrigger(@Qualifier("donationAttribute") JobDetail demandBrowserCollect){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
                 .simpleSchedule()
-                .withIntervalInMinutes(10)
+                .withIntervalInMinutes(20)
                 .repeatForever();
         return TriggerBuilder.newTrigger()
                 .forJob(demandBrowserCollect)

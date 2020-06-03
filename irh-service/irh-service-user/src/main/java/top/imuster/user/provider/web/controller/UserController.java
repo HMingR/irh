@@ -8,7 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -92,13 +91,12 @@ public class UserController extends BaseController {
         return Message.createBySuccess(userInfo.getUserId());
     }
 
-    @PutMapping("/checkPic")
+    @PostMapping("/checkPic")
     public Message<String> checkPic(@RequestParam("picUri") String pciUri) throws IOException {
         return reportFeedbackInfoService.checkPic(pciUri);
     }
 
     @ApiOperation("更新用户头像")
-    @NeedLogin
     @PostMapping("/portrait")
     public Message<String> updateUserPortrait(@RequestBody String picUrl){
         UserInfo userInfo = new UserInfo();

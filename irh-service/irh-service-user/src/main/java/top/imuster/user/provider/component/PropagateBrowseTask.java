@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import top.imuster.common.core.utils.DateUtil;
-import top.imuster.user.provider.service.PropagateInfoService;
 import top.imuster.user.provider.service.impl.PropagateBrowseTotalServiceImpl;
 
 import javax.annotation.Resource;
@@ -22,9 +21,6 @@ import javax.annotation.Resource;
 public class PropagateBrowseTask extends QuartzJobBean {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Resource
-    PropagateInfoService propagateInfoService;
 
     @Resource
     PropagateBrowseTotalServiceImpl propagateBrowseTotalService;

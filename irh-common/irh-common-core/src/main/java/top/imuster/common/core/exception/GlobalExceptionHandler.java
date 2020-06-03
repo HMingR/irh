@@ -1,8 +1,10 @@
 package top.imuster.common.core.exception;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -13,10 +15,14 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.wrapper.Message;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.*;
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +35,9 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     //处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常。
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -96,8 +105,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusyOperationException.class)
-    public Message<String> BusyOperatorExceptionHandler(BusyOperationException e){
-        return Message.createByError(e.getMessage());
+    public void BusyOperatorExceptionHandler(BusyOperationException e) {
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        Message<String> byError = Message.createByError(e.getMessage());
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            response.getWriter().write(objectMapper.writeValueAsString(byError));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 

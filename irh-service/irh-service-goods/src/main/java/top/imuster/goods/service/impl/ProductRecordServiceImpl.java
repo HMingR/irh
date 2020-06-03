@@ -3,6 +3,7 @@ package top.imuster.goods.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -14,9 +15,7 @@ import top.imuster.goods.service.ProductRecordService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @ClassName: ProductRecordServiceImpl
@@ -39,8 +38,19 @@ public class ProductRecordServiceImpl implements ProductRecordService {
     @Override
     public Message<Page<ProductInfo>> getUserRecordList(Integer pageSize, Integer currentPage, Long userId) throws IOException {
         String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, userId);
-        Set<Long> ids = redisTemplate.opsForZSet().rangeByScore(browseRecordKey, (currentPage - 1) * pageSize, pageSize);
-        if(ids == null || ids.isEmpty()){
+        Set<ZSetOperations.TypedTuple<Integer>> set = redisTemplate.opsForZSet().reverseRangeWithScores(browseRecordKey, (currentPage - 1) * pageSize, pageSize);
+
+        HashMap<Long, Double> scoreMap = new HashMap<>();
+        Iterator<ZSetOperations.TypedTuple<Integer>> iterator = set.iterator();
+        while (iterator.hasNext()){
+            ZSetOperations.TypedTuple<Integer> typedTuple = iterator.next();
+            long targetId = typedTuple.getValue().longValue();
+            double score = typedTuple.getScore();
+            scoreMap.put(targetId, score);
+        }
+        Set<Long> ids = scoreMap.keySet();
+
+        if(ids.isEmpty()){
             return Message.createBySuccess();
         }
         ArrayList<Long> longs = new ArrayList<>(ids);
@@ -48,14 +58,21 @@ public class ProductRecordServiceImpl implements ProductRecordService {
         page.setCurrentPage(currentPage);
         page.setPageSize(pageSize);
         List<ProductInfo> productBriefByIds = productInfoService.getProductBriefByIds(longs);
+
+        productBriefByIds.stream().forEach(productInfo -> {
+            Long id = productInfo.getId();
+            Double time = scoreMap.get(id);
+            if(time != null)  productInfo.setBrowseDate(String.valueOf(time));
+        });
+
         page.setData(productBriefByIds);
         page.setTotalCount(redisTemplate.opsForZSet().size(browseRecordKey).intValue());
         return Message.createBySuccess(page);
     }
 
     @Override
-    public Message<String> deleteAll(Long currentUserIdFromCookie) {
-        String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, currentUserIdFromCookie);
+    public Message<String> deleteAll(Long userId) {
+        String browseRecordKey = RedisUtil.getBrowseRecordKey(BrowserType.ES_SELL_PRODUCT, userId);
         redisTemplate.delete(browseRecordKey);
         return Message.createBySuccess();
     }

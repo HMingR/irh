@@ -174,4 +174,9 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
         Integer i = userInfoDao.updatePwdByEmail(userInfo);
         return Message.createBySuccess();
     }
+
+    @Override
+    public UserInfo loginByUserId(Long userId) {
+        return userInfoDao.loginByUserId(userId);
+    }
 }

@@ -169,6 +169,16 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
         param.put("pageSize", pageSize);
         param.put("startIndex", ((currentPage < 1 ? 1 : currentPage) - 1));
         List<ProductDonationApplyInfo> list = productDonationApplyInfoDao.selectUnfinishApplyList(param);
+
+        /*String downKey = RedisUtil.getDonationApplyAttributeKey(1);
+        String upKey = RedisUtil.getDonationApplyAttributeKey(2);
+        list.stream().forEach(applyInfo -> {
+            Long id = applyInfo.getId();
+            Integer down =(Integer) redisTemplate.opsForHash().get(downKey, String.valueOf(id));
+            Integer up =(Integer) redisTemplate.opsForHash().get(upKey, String.valueOf(id));
+            applyInfo.setUserDownTotal(down);
+            applyInfo.setUserUpTotal(up);
+        });*/
         Integer count = productDonationApplyInfoDao.selectApplyCountByState(2);
         Page<ProductDonationApplyInfo> page = new Page<>();
         page.setTotalCount(count);
@@ -191,9 +201,18 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             applyInfo.setUserOrders(useOrders);
         }else{
             applyInfo.setState(state);
+            applyInfo.setId(applyId);
             List<ProductDonationApplyInfo> infos = productDonationApplyInfoDao.selectEntryList(applyInfo);
             if(infos == null || infos.isEmpty()) return Message.createByError("没有找到相关的申请,请刷新后重试");
             applyInfo = infos.get(0);
+            String downKey = RedisUtil.getDonationApplyAttributeKey(1);
+            String upKey = RedisUtil.getDonationApplyAttributeKey(2);
+            Integer down =(Integer) redisTemplate.opsForHash().get(downKey, String.valueOf(applyId));
+            Integer up =(Integer) redisTemplate.opsForHash().get(upKey, String.valueOf(applyId));
+            down = down == null ? 0 : down;
+            up = up == null ? 0 : up;
+            applyInfo.setUserDownTotal(applyInfo.getUserDownTotal() + down);
+            applyInfo.setUserUpTotal(applyInfo.getUserUpTotal() + up);
         }
         return Message.createBySuccess(applyInfo);
     }

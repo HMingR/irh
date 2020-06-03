@@ -141,4 +141,13 @@ public class WxAppLoginServiceImpl extends BaseServiceImpl<WxAppLoginInfo, Long>
         return Message.createBySuccess(count);
     }
 
+    @Override
+    public Message<String> unbind(Long userId) {
+        WxAppLoginInfo condition = new WxAppLoginInfo();
+        condition.setState(1);
+        condition.setUserId(userId);
+        wxAppLoginDao.updateInfoStateByUserId(userId);
+        return Message.createBySuccess();
+    }
+
 }

@@ -38,9 +38,15 @@ public class WxAppInfoController extends BaseController {
         return wxAppLoginService.binding(bindDto);
     }
 
-    @GetMapping("/check}")
+    @GetMapping("/check")
     public Message<Integer> checkIsBind(){
         Long userId = getCurrentUserIdFromCookie();
         return wxAppLoginService.checkIsBind(userId);
+    }
+
+    @DeleteMapping("/unbind")
+    public Message<String> unBind(){
+        Long userId = getCurrentUserIdFromCookie();
+        return wxAppLoginService.unbind(userId);
     }
 }

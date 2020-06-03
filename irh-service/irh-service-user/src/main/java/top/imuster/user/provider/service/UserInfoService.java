@@ -118,4 +118,13 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: boolean
      **/
     Message<String> resetPwdByEmail(UserInfo userInfo);
+
+    /**
+     * @Author hmr
+     * @Description 用户id登录
+     * @Date: 2020/6/3 10:54
+     * @param userId
+     * @reture: top.imuster.user.api.pojo.UserInfo
+     **/
+    UserInfo loginByUserId(Long userId);
 }

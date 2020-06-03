@@ -1,6 +1,5 @@
 package top.imuster.user.provider.web.rpc;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.dto.UserAuthenResultDto;
@@ -11,7 +10,6 @@ import top.imuster.user.provider.service.ExamineRecordInfoService;
 import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,9 +65,7 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
     @Override
     @GetMapping("/wxLogin/{id}")
     public UserInfo getInfoById(@PathVariable("id") Long userId) {
-        List<UserInfo> userInfos = userInfoService.selectEntryList(userId);
-        if(CollectionUtils.isNotEmpty(userInfos)) return userInfos.get(0);
-        return null;
+        return userInfoService.loginByUserId(userId);
     }
 
     @PostMapping("/auth/success")

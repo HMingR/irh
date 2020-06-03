@@ -56,7 +56,7 @@ public class ReleaseAspect {
      **/
     @After("pointCut()")
     public void afterReturning(JoinPoint joinPoint){
-        log.info("进入releaseAspect");
+        log.debug("进入releaseAspect");
         ReleaseAnnotation annotation = getAnnotation(joinPoint);
         Object targetInfo = getTargetInfo(joinPoint, annotation.value());
         if(targetInfo == null){

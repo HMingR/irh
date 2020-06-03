@@ -89,4 +89,13 @@ public interface UserInfoDao extends BaseDao<UserInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer updatePwdByEmail(UserInfo userInfo);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/6/3 10:55
+     * @param userId
+     * @reture: top.imuster.user.api.pojo.UserInfo
+     **/
+    UserInfo loginByUserId(Long userId);
 }

@@ -59,4 +59,9 @@ public class ZuulUrlFilterInvocationSecurityMetadataSource extends AbstractUrlFi
         setHttpMethodMap(httpMethodMap);
     }
 
+    public void resetMap(){
+        setAuthRoleMap(null);
+        setHttpMethodMap(null);
+    }
+
 }
