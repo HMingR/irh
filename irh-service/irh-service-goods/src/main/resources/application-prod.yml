@@ -10,7 +10,7 @@ spring:
         max-idle: 20
         min-idle: 10
         max-wait: 5000
-    timeout: 1000
+    timeout: 10000
     password: irh_aliyun_redis
 
   datasource:

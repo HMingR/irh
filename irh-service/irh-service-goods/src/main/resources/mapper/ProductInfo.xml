@@ -290,6 +290,7 @@
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
 					consumer_id AS consumerId,
+					create_time AS createTime,
 					version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = #{state,jdbcType=INTEGER}

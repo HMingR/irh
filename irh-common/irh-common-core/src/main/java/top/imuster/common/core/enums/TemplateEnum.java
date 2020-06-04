@@ -16,7 +16,9 @@ public enum TemplateEnum {
 
     SIMPLE_TEMPLATE("发送简单的邮件模板", "Simple.ftl"),
 
-    USER_LOGIN("用户验证码登录的email模板", "UserLogin.ftl"),
+    BIND_WX("用户验证码登录的email模板", "Binding.ftl"),
+
+    USER_LOGIN("用户绑定wx的email模板", "UserLogin.ftl"),
     //todo 商品详情页还没有
     PRODUCT_TEMPLATE("商品详情页", "");
 

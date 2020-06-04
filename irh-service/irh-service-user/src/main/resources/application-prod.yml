@@ -5,10 +5,12 @@ spring:
     port: 6379
     jedis:
       pool:
+        MaxWaitMillis: 100000
         max-active: 30
-        max-idle: 10
-        max-wait: -1
-    timeout: 1000
+        max-idle: 20
+        min-idle: 10
+        max-wait: 5000
+    timeout: 10000
     password: irh_aliyun_redis
 
   datasource:

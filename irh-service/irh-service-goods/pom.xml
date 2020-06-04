@@ -66,7 +66,6 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.github.swagger2markup</groupId>
             <artifactId>swagger2markup</artifactId>
@@ -101,6 +100,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>

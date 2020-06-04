@@ -1,6 +1,5 @@
 package top.imuster.common.core.cache;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -27,7 +26,6 @@ import java.util.Set;
  */
 @Configuration
 @EnableCaching
-@Slf4j
 public class RedisCacheConfig extends CachingConfigurerSupport {
 
     /**
@@ -45,7 +43,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();  // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
-        config = config.entryTtl(Duration.ofMinutes(1))     // 设置缓存的默认过期时间，也是使用Duration设置
+        config = config.entryTtl(Duration.ofMinutes(2))     // 设置缓存的默认过期时间，也是使用Duration设置
                 .disableCachingNullValues();     // 不缓存空值
 
         // 设置一个初始化的缓存空间set集合

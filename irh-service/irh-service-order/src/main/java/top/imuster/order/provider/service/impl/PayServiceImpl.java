@@ -218,7 +218,7 @@ public class PayServiceImpl implements PayService {
         orderInfo.setPaymentTime(DateUtil.current());
         Integer state = orderInfoService.completeTrade(orderInfo);
         if(state != 1){
-            log.error("-------->支付宝支付成功回调时修改订单状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+            log.error("-------->微信支付成功回调时修改订单状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
         }
 
         //更新商品库存状态
@@ -248,7 +248,7 @@ public class PayServiceImpl implements PayService {
         SendEmailDto sendEmailDto = new SendEmailDto();
         sendEmailDto.setSubject("发货通知");
         sendEmailDto.setTemplateEnum(TemplateEnum.SIMPLE_TEMPLATE);
-        sendEmailDto.setContent(new StringBuffer("您在irh平台发布的编号为: ").append(orderInfo.getProductId()).append("商品已经被其他人买走了,请登录irh平台查看详情").toString());
+        sendEmailDto.setContent(new StringBuffer("您在irh平台发布的编号为: ").append(orderInfo.getProductId()).append(" 的商品已经被其他人买走了,请登录irh平台查看详情").toString());
         sendEmailDto.setDate(DateUtil.now());
         sendEmailDto.setEmail(sendTo);
         generateSendMessageService.sendToMq(sendEmailDto);
@@ -265,7 +265,7 @@ public class PayServiceImpl implements PayService {
         sendUserCenterDto = new SendUserCenterDto();
 
         sendUserCenterDto.setTargetId(orderInfo.getId());
-        sendUserCenterDto.setContent(new StringBuffer("您已成功下单商品编号为: ").append(orderInfo.getProductId()).append("的商品,点击查看").toString());
+        sendUserCenterDto.setContent(new StringBuffer("您已成功下单,本次交易的订单号为: ").append(orderInfo.getOrderCode()).append(",点击查看").toString());
         sendUserCenterDto.setFromId(-1L);
         sendUserCenterDto.setNewsType(40);
         sendUserCenterDto.setToId(orderInfo.getBuyerId());

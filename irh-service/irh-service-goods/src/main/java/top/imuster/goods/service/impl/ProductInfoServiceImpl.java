@@ -102,7 +102,14 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
         ProductInfo productInfo = new ProductInfo();
         productInfo.setConsumerId(userId);
         productInfo.setState(2);
-        infoPage = this.selectPage(productInfo, infoPage);
+        productInfo.setOrderField("create_time");
+        productInfo.setOrderFieldType("DESC");
+        productInfo.setStartIndex((currentPage - 1) * pageSize);
+        productInfo.setEndIndex(pageSize);
+        List<ProductInfo> productInfos = productInfoDao.selectProductBriefInfoList(productInfo);
+        Integer count = productInfoDao.selectEntryListCount(productInfo);
+        infoPage.setData(productInfos);
+        infoPage.setTotalCount(count);
         return Message.createBySuccess(infoPage);
     }
 

@@ -37,7 +37,9 @@ public class ProductAndDemandDto {
 
     private Integer collectTotal;
 
-    public ProductAndDemandDto(ProductInfo productInfo){
+    private Date collectDate;
+
+    public ProductAndDemandDto(ProductInfo productInfo, Date createTime){
         this.id = productInfo.getId();
         this.browseTimes = productInfo.getBrowserTimes().intValue();
         this.type = 1;
@@ -47,9 +49,10 @@ public class ProductAndDemandDto {
         this.tagNames = productInfo.getTagNames();
         this.salePrice = productInfo.getSalePrice();
         this.collectTotal = productInfo.getCollectTotal();
+        this.collectDate = createTime;
     }
 
-    public ProductAndDemandDto(ProductDemandInfo productDemandInfo){
+    public ProductAndDemandDto(ProductDemandInfo productDemandInfo, Date createTime){
         this.id = productDemandInfo.getId();
         this.userId = productDemandInfo.getConsumerId();
         this.tagNames = productDemandInfo.getTagNames();
@@ -59,6 +62,15 @@ public class ProductAndDemandDto {
         this.content = productDemandInfo.getContent();
         this.browseTimes = productDemandInfo.getBrowserTimes().intValue();
         this.type = 2;
+        this.collectDate = createTime;
+    }
+
+    public Date getCollectDate() {
+        return collectDate;
+    }
+
+    public void setCollectDate(Date collectDate) {
+        this.collectDate = collectDate;
     }
 
     public Integer getCollectTotal() {

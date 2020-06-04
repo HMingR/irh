@@ -34,5 +34,12 @@ public interface PayService {
      **/
     void aliCallBack(HttpServletRequest request) throws OrderException, ParseException;
 
+    /**
+     * @Author hmr
+     * @Description 微信支付
+     * @Date: 2020/6/4 11:18
+     * @param orderCode
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
     Message<String> wxPay(String orderCode) throws JsonProcessingException;
 }

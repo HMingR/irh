@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.wrapper.Message;
 
@@ -85,6 +86,12 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Message<String> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception){
         return Message.createByError("参数异常");
+    }
+
+    //MethodArgumentTypeMismatchException
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public Message<String> MethodArgumentTypeMismatchException(){
+        return Message.createByError("参数不匹配");
     }
 
     @ExceptionHandler(Exception.class)

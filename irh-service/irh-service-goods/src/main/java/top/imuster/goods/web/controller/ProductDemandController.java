@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
@@ -34,7 +33,6 @@ public class ProductDemandController extends BaseController {
     ProductDemandInfoService productDemandInfoService;
 
     @ApiOperation(value = "发布需求", httpMethod = "PUT")
-    @NeedLogin
     @PutMapping
     public Message<String> add(@RequestBody @Validated(ValidateGroup.releaseGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult) {
         validData(bindingResult);
@@ -43,7 +41,6 @@ public class ProductDemandController extends BaseController {
     }
 
     @ApiOperation("分页查看自己发布的需求")
-    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ProductDemandInfo>> getList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         Long userId = getCurrentUserIdFromCookie();
@@ -57,7 +54,6 @@ public class ProductDemandController extends BaseController {
     }
 
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
-    @NeedLogin
     @ReleaseAnnotation(type = ReleaseType.DEMAND, value = "#p0", operationType = OperationType.UPDATE)
     @PostMapping
     public Message<String> edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
@@ -68,7 +64,6 @@ public class ProductDemandController extends BaseController {
     }
 
     @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")
-    @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> delete(@PathVariable("id") Long id){
         Long userId = getCurrentUserIdFromCookie();

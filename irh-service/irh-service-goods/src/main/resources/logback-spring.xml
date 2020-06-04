@@ -66,8 +66,6 @@
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${log.path}/info.log</file>
-
-
         <!--日志文件输出格式-->
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
@@ -85,12 +83,9 @@
         </rollingPolicy>
         <!-- 此日志文件只记录info级别的 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <!--过滤 Error-->
-            <level>ERROR</level>
-            <!--匹配到就禁止-->
-            <onMatch>DENY</onMatch>
-            <!--没有匹配到就允许-->
-            <onMismatch>ACCEPT</onMismatch>
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
 

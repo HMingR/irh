@@ -108,11 +108,11 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
                 if(productCollectRel.getType() == 1){
                     Long productId = productCollectRel.getProductId();
                     ProductInfo productBriefInfo = productInfoService.getProductBriefInfoById(productId);
-                    productInfos.add(new ProductAndDemandDto(productBriefInfo));
+                    productInfos.add(new ProductAndDemandDto(productBriefInfo, productCollectRel.getCreateTime()));
                 }else{
                     Long productId = productCollectRel.getProductId();
                     List<ProductDemandInfo> infos = productDemandInfoService.selectEntryList(productId);
-                    if(infos != null && !infos.isEmpty()) productInfos.add(new ProductAndDemandDto(infos.get(0)));
+                    if(infos != null && !infos.isEmpty()) productInfos.add(new ProductAndDemandDto(infos.get(0), productCollectRel.getCreateTime()));
                 }
             });
         }

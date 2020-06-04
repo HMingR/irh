@@ -120,15 +120,13 @@ public class WxAppLoginServiceImpl extends BaseServiceImpl<WxAppLoginInfo, Long>
         String email = userDto.getLoginName();
         Long userId = userDto.getUserId();
         String code = UUID.randomUUID().toString().substring(0, 4);
-        log.debug("微信绑定验证码为{}", code);
         redisTemplate.opsForValue().set(RedisUtil.getUserBindWxEmailCode(userId), code, 10, TimeUnit.MINUTES);
         SendEmailDto sendEmailDto = new SendEmailDto();
         sendEmailDto.setEmail(email);
         sendEmailDto.setSubject("irh平台绑定微信验证码");
         sendEmailDto.setContent(code);
-        sendEmailDto.setTemplateEnum(TemplateEnum.SIMPLE_TEMPLATE);
+        sendEmailDto.setTemplateEnum(TemplateEnum.BIND_WX);
         generateSendMessageService.sendToMq(sendEmailDto);
-
         return Message.createBySuccess();
     }
 

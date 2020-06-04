@@ -196,19 +196,15 @@
 		<result column="title" property="title"></result>
 		<result column="apply_user_id" property="applyUserId"></result>
 		<result column="apply_amount" property="applyAmount"></result>
-		<result column="payment_amount" property="paymentAmount"></result>
-		<result column="reason" property="reason"></result>
-		<result column="reason_pic_url" property="reasonPicUrl"></result>
-		<result column="feedback" property="feedback"></result>
-		<result column="approve_user" property="approveUser"></result>
-		<result column="grant_user" property="grantUser"></result>
+		<result column="user_up_total" property="userUpTotal"></result>
+		<result column="user_down_total" property="userDownTotal"></result>
 		<result column="update_time" property="updateTime"></result>
+		<result column="create_time" property="createTime"></result>
 		<collection property="useOrders"
 					ofType="top.imuster.order.api.pojo.OrderInfo"
 					column="id"
 					select="top.imuster.order.provider.dao.ProductDonationOrderRelDao.selectOrderListByFinishApplyId"></collection>
 	</resultMap>
-
 
 	<select id="selectFinishApplyList" parameterType="map" resultMap="includeOrderMap">
 		<![CDATA[SELECT *]]>
@@ -223,8 +219,15 @@
 	</select>
 
 	<select id="selectUnfinishApplyList" parameterType="hashmap" resultType="productDonationApplyInfo">
-		<![CDATA[SELECT]]>
-		<include refid="QUERY_COLUMN_LIST"/>
+		<![CDATA[
+		SELECT id,
+			title AS title,
+			apply_user_id AS applyUserId,
+			apply_amount AS applyAmount,
+			create_time AS createTime,
+            user_up_total AS userUpTotal,
+            user_down_total AS userDownTotal
+	]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = 2 ORDER BY update_time LIMIT #{startIndex}, #{pageSize}
 	</select>

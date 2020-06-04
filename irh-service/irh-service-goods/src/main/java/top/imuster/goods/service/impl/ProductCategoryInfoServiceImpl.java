@@ -47,6 +47,7 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     }
 
     @Override
+//    @Cacheable(value = RedisCachePrefix + 'asdf')
     public Message<List<ProductCategoryInfo>> getCategoryTree() throws GoodsException {
         try{
             List<ProductCategoryInfo> allCategory =productCategoryInfoDao.selectAllCategory();

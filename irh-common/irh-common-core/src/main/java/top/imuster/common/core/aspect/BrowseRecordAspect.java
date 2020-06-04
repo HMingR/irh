@@ -66,6 +66,10 @@ public class BrowseRecordAspect extends BaseController {
 
         redisTemplate.opsForZSet().add(recordKey, recordDto.getTargetId(), System.currentTimeMillis());
         redisTemplate.expire(recordKey, 180, TimeUnit.DAYS);
+        Long size = redisTemplate.opsForZSet().size(recordKey);
+        if(size > 100){
+            redisTemplate.opsForZSet().removeRange(recordKey,100, size);
+        }
     }
 
 

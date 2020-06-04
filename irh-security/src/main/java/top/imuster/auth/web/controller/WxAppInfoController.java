@@ -4,7 +4,6 @@ package top.imuster.auth.web.controller;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.auth.service.WxAppLoginService;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.dto.UserDto;
 import top.imuster.user.api.dto.BindWxDto;
@@ -24,7 +23,6 @@ public class WxAppInfoController extends BaseController {
     @Resource
     WxAppLoginService wxAppLoginService;
 
-    @NeedLogin
     @GetMapping
     public Message<String> sendEmail(){
         UserDto userDto = getCurrentUserFromCookie();
