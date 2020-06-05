@@ -28,7 +28,7 @@ public class BrowserTimesServiceImpl extends BrowserTimesService {
 
     @Override
     public void generate() {
-        List<BrowserTimesDto> res = getBrowserTimesFromRedis(redisTemplate, BrowserType.FORUM);
+        List<BrowserTimesDto> res = getBrowserTimesFromRedis(BrowserType.FORUM);
         articleInfoService.updateBrowserTimesFromRedis2Redis(res);
     }
 

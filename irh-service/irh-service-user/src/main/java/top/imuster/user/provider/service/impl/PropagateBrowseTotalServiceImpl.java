@@ -1,8 +1,6 @@
 package top.imuster.user.provider.service.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.enums.BrowserType;
@@ -21,15 +19,12 @@ import java.util.List;
 @Service("propagateBrowseTotalService")
 public class PropagateBrowseTotalServiceImpl extends BrowserTimesService {
 
-    @Autowired
-    RedisTemplate redisTemplate;
-
     @Resource
     PropagateInfoService propagateInfoService;
 
     @Override
     public void generate() {
-        List<BrowserTimesDto> res = getBrowserTimesFromRedis(redisTemplate, BrowserType.PROPAGATE);
+        List<BrowserTimesDto> res = getBrowserTimesFromRedis(BrowserType.PROPAGATE);
         if(CollectionUtils.isEmpty(res)) return;
         Integer total = propagateInfoService.saveBrowseTimes2DB(res);
         log.info("------->一共更新了{}条数据", total);

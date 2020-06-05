@@ -218,8 +218,8 @@
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
 					consumer_id AS consumerId,
-					collect_total AS collectTotal,
 					state,
+					collect_total AS collectTotal,
 					version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
@@ -291,9 +291,11 @@
 					trade_type AS tradeType,
 					consumer_id AS consumerId,
 					create_time AS createTime,
+					collect_total AS collectTotal,
 					version]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = #{state,jdbcType=INTEGER}
+		<if test="consumerId != null"> AND consumer_id = #{consumerId,jdbcType=BIGINT}</if>
 		ORDER BY #{orderField} #{orderFieldType}
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
@@ -315,6 +317,7 @@
 					browser_times AS browserTimes,
 					trade_type AS tradeType,
 					consumer_id AS consumerId,
+					collect_total AS collectTotal,
 					version ]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[WHERE state = 2 AND id IN]]>
@@ -330,7 +333,7 @@
 	</select>
 
 	<select id="selectDonationMoneyByUserId" parameterType="long" resultType="string">
-		SELECT SUM(sale_price)
+		SELECT COUNT(1)
 		FROM product_info
 		WHERE consumer_id = #{id,jdbcType=BIGINT} AND state = 4 AND trade_type = 20
 	</select>

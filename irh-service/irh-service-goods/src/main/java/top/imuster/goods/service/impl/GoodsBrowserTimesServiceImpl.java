@@ -28,7 +28,7 @@ public class GoodsBrowserTimesServiceImpl extends BrowserTimesService {
 
     @Override
     public void generate() {
-        List<BrowserTimesDto> browserTimesDtos = getBrowserTimesFromRedis(redisTemplate, BrowserType.ES_SELL_PRODUCT);
+        List<BrowserTimesDto> browserTimesDtos = getBrowserTimesFromRedis(BrowserType.ES_SELL_PRODUCT);
         productInfoService.transBrowserTimesFromRedis2DB(browserTimesDtos);
     }
 }

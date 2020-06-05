@@ -66,8 +66,10 @@ public class ProductRecordController extends BaseController {
         recordDto.setTargetId(targetId);
         recordDto.setBrowserType(BrowserType.ES_SELL_PRODUCT);
         //埋点日志 userId|productId|score
-        log.info("埋点日志=>用户浏览商品");
-        log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + targetId + "|"+ "3" );    //浏览商品得3分
+        if(userId != null){
+            log.info("埋点日志=>用户浏览商品");
+            log.info("PRODUCT_RATING_PREFIX" + ":" + userId + "|" + targetId + "|"+ "3" );    //浏览商品得3分
+        }
         return Message.createBySuccess();
     }
 }

@@ -14,7 +14,7 @@ spring:
         max-active: 100
         max-idle: 20
         min-idle: 10
-        max-wait: 5000
+        max-wait: 5000ms
     timeout: 10000
     password: irh_aliyun_redis
   profiles:

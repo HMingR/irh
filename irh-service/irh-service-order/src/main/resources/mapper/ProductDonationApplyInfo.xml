@@ -200,6 +200,7 @@
 		<result column="user_down_total" property="userDownTotal"></result>
 		<result column="update_time" property="updateTime"></result>
 		<result column="create_time" property="createTime"></result>
+		<result column="state" property="state"></result>
 		<collection property="useOrders"
 					ofType="top.imuster.order.api.pojo.OrderInfo"
 					column="id"
@@ -226,7 +227,8 @@
 			apply_amount AS applyAmount,
 			create_time AS createTime,
             user_up_total AS userUpTotal,
-            user_down_total AS userDownTotal
+            user_down_total AS userDownTotal,
+            state
 	]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = 2 ORDER BY update_time LIMIT #{startIndex}, #{pageSize}

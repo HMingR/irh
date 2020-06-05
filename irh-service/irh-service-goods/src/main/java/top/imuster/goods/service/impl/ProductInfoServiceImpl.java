@@ -182,7 +182,8 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     @Override
     public Message<UserGoodsCenterDto> getUserCenterInfoById(Long id) {
         UserGoodsCenterDto userGoodsCenterDto = productInfoDao.selectGoodsBrowseTotalByUserId(id);
-        String totalMoney = productInfoDao.selectDonationMoneyByUserId(id);
+        String donationTotal = productInfoDao.selectDonationMoneyByUserId(id);
+        String totalMoney = donationTotal == null ? "0" : donationTotal;
         Integer saleTotal = productInfoDao.selectSaleTotalByUserId(id);
         userGoodsCenterDto.setDonationTotal(totalMoney);
         userGoodsCenterDto.setSaleTotal(saleTotal);

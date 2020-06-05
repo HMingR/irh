@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @ClassName: ProductRotationBrowseServiceImpl
- * @Description: TODO
+ * @Description: ProductRotationBrowseServiceImpl
  * @author: hmr
  * @date: 2020/6/1 16:02
  */
@@ -28,7 +28,7 @@ public class ProductRotationBrowseServiceImpl extends BrowserTimesService {
 
     @Override
     public void generate() {
-        List<BrowserTimesDto> res = getBrowserTimesFromRedis(redisTemplate, BrowserType.PRODUCT_ROTATION);
+        List<BrowserTimesDto> res = getBrowserTimesFromRedis(BrowserType.PRODUCT_ROTATION);
         Integer total = productRotationImgInfoService.saveClick2DB(res);
         log.info("--------->共更新了{}条点击记录", total);
     }
