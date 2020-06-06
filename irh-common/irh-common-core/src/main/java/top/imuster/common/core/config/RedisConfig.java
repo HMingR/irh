@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -41,11 +42,11 @@ public class RedisConfig {
      * 如果没指定TypeReference则会报错java.util.LinkedHashMap cannot be cast。
      */
     @Bean
+    @Primary
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
-
-        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setEnableTransactionSupport(false);
         // 配置默认的序列化器
         redisTemplate.setDefaultSerializer(getGenericJackson2JsonRedisSerializer());
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();

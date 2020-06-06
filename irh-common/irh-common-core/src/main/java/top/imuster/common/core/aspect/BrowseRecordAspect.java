@@ -1,6 +1,7 @@
 package top.imuster.common.core.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lettuce.core.api.sync.RedisCommands;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -14,7 +15,6 @@ import org.springframework.context.expression.AnnotatedElementKey;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
 import top.imuster.common.core.annotation.BrowseRecordAnnotation;
 import top.imuster.common.core.config.ExpressionEvaluator;
 import top.imuster.common.core.controller.BaseController;
@@ -46,7 +46,7 @@ public class BrowseRecordAspect extends BaseController {
     RedisTemplate redisTemplate;
 
     @Autowired
-    Jedis jedis;
+    RedisCommands commands;
 
     ExpressionEvaluator<BrowseRecordDto> evaluator = new ExpressionEvaluator();
 
@@ -62,7 +62,7 @@ public class BrowseRecordAspect extends BaseController {
         String recordKey = RedisUtil.getBrowseRecordKey(browserType, userId);
 
         String recordBitmapKey = RedisUtil.getUserBrowseRecordBitmap(browserType, userId);
-        jedis.setbit(recordBitmapKey, recordDto.getTargetId(), true);
+        commands.setbit(recordBitmapKey.getBytes(), recordDto.getTargetId(), 1);
 
         redisTemplate.opsForZSet().add(recordKey, recordDto.getTargetId(), System.currentTimeMillis());
         redisTemplate.expire(recordKey, 180, TimeUnit.DAYS);

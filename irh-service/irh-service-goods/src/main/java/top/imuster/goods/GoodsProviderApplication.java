@@ -30,7 +30,12 @@ import org.springframework.util.AntPathMatcher;
 public class GoodsProviderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GoodsProviderApplication.class, args);
+        try{
+
+            SpringApplication.run(GoodsProviderApplication.class, args);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Bean

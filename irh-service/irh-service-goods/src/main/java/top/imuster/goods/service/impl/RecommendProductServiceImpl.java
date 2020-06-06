@@ -1,6 +1,7 @@
 package top.imuster.goods.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import io.lettuce.core.api.sync.RedisCommands;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
-import redis.clients.jedis.Jedis;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.enums.BrowserType;
@@ -63,7 +63,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
     ProductUserTagRecommendTRepository productUserTagRecommendTRepository;
 
     @Autowired
-    Jedis jedis;
+    RedisCommands commands;
 
     @Override
     public Message<Page<ProductInfo>> getOfflineRecommendListByUserId(Integer pageSize, Integer currentPage, Long userId) {
@@ -87,8 +87,8 @@ public class RecommendProductServiceImpl implements RecommendProductService {
             appendList(recs1, ids);
 
             ids.stream().forEach(id -> {
-                Boolean isBrowes = jedis.getbit(userBrowseRecordBitmapKey, id);
-                if(!isBrowes) redisTemplate.opsForSet().add(setKey, id);
+                Long getbit = commands.getbit(userBrowseRecordBitmapKey.getBytes(), id);
+                if(getbit != null) redisTemplate.opsForSet().add(setKey, id);
             });
 
             return getInfoFromRedis(pageSize, currentPage, setKey);
@@ -116,7 +116,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         if(recs.isEmpty()) return getOfflineRecommendListByUserId(pageSize, currentPage, userId);
         List<Long> ids = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
         ids.stream().forEach(id -> {
-            if(!jedis.getbit(userBrowseRecordBitmap, id)){
+            if(commands.getbit(userBrowseRecordBitmap.getBytes(), id) == null){
                 redisTemplate.opsForSet().add(redisKey, id);
             }
         });
@@ -154,7 +154,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         List<MongoProductInfo> recs = recommendRes.getRecs();
         List<Long> mongoIds = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
         for(Long id : mongoIds){
-            if(jedis.getbit(userBrowseRecordBitmap, id)) continue;
+            if(commands.getbit(userBrowseRecordBitmap.getBytes(), id) == null) continue;
             redisTemplate.opsForSet().add(redisKey, id);
         }
         return getDemandInfoFromRedis(pageSize, currentPage, redisKey);
