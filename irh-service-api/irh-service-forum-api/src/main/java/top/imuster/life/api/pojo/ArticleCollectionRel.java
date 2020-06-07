@@ -1,6 +1,7 @@
 package top.imuster.life.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -11,6 +12,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-02-08 15:27:10
  */
 @ApiModel("文章收藏表")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ArticleCollectionRel extends BaseDomain {
 
 	private static final long serialVersionUID = 5594240318L;

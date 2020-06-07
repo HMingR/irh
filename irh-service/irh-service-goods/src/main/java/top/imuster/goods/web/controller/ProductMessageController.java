@@ -51,7 +51,6 @@ public class ProductMessageController extends BaseController {
     }
 
     @ApiOperation("根据商品id和留言父id写留言信息")
-    @NeedLogin
     @PostMapping("/write")
     public Message<String> writeMessage(@ApiParam("在写留言信息的时候，留言的商品id、parentId、内容不能为空") @Validated(ValidateGroup.addGroup.class) @RequestBody ProductMessageInfo productMessageInfo,
                                 BindingResult bindingResult) throws Exception{

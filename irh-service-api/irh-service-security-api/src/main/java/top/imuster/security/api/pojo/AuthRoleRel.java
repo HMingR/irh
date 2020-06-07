@@ -1,5 +1,6 @@
 package top.imuster.security.api.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2019-12-01 19:29:14
  */
 @ApiModel("权限角色管理表")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class AuthRoleRel extends BaseDomain {
 
 	private static final long serialVersionUID = 6931487658L;

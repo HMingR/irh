@@ -1,7 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2019-11-24 16:31:57
  */
 @ApiModel("商品分类信息表")
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductCategoryInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 6182073821L;

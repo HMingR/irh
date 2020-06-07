@@ -1,6 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.elasticsearch.annotations.Document;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * @author 黄明人
  * @since 2020-01-16 10:19:41
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(indexName = "demand", type = "demand")
 public class ProductDemandInfo extends BaseDomain {
 

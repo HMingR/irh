@@ -1,12 +1,10 @@
 package top.imuster.life.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
-import top.imuster.common.core.validate.ValidateGroup;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * 
@@ -14,6 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @since 2020-02-21 17:23:45
  */
 @ApiModel("文章转发实体类")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ArticleForwardInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 5594240318L;

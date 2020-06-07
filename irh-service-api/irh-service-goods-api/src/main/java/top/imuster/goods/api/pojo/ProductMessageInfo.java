@@ -1,6 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
  * @since 2019-11-24 16:31:58
  */
 @ApiModel("商品留言实体类")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductMessageInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 9834628784L;

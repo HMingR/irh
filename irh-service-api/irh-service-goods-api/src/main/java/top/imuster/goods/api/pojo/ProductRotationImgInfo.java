@@ -1,6 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +9,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2020-06-01 15:45:21
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductRotationImgInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 9682771997L;

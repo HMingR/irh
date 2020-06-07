@@ -2,6 +2,7 @@ package top.imuster.user.api.pojo;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2020-01-11 12:12:11
  */
 @ApiModel("用户举报反馈表")
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class ReportFeedbackInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 5219703142L;

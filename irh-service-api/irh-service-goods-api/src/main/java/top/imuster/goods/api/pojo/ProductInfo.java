@@ -1,6 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel("商品实体类")
 @Document(indexName = "goods", type = "goods")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 18274143046L;

@@ -1,6 +1,7 @@
 package top.imuster.life.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @ApiModel("文章/帖子表主键")
 @Document(indexName = "article", type = "article")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ArticleInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 7095780754L;

@@ -3,14 +3,13 @@ spring:
     database: 1
     host: 39.105.0.169
     port: 6379
-    jedis:
+    lettuce:
       pool:
-        MaxWaitMillis: 100000
         max-active: 100
         max-idle: 20
         min-idle: 10
-        max-wait: 5000
-    timeout: 1000
+        max-wait: 5000ms
+    timeout: 50000ms
     password: irh_aliyun_redis
 
   datasource:

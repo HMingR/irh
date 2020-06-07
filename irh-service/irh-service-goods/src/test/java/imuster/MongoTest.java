@@ -65,7 +65,7 @@ public class MongoTest {
 
     @Test
     public void test() throws JsonProcessingException {
-        ProductRecommendDto one = productRecommendService.findOne(5L);
+        ProductRecommendDto one = productRecommendService.findOne(100L);
         System.out.println(objectMapper.writeValueAsString(one));
     }
 

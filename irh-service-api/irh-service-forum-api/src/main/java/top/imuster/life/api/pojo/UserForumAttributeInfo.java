@@ -1,6 +1,7 @@
 package top.imuster.life.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +9,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2020-02-08 15:27:10
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UserForumAttributeInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 6844631641L;

@@ -33,11 +33,6 @@ public class OrderServiceFeignApiHystrix implements FallbackFactory<OrderService
             }
 
             @Override
-            public boolean updateOrderStateById(Long id, Integer state) {
-                return false;
-            }
-
-            @Override
             public Message<Page<OrderInfo>> orderList(Page<OrderInfo> page) {
                 log.error("OrderServiceFeignApiHystrix--> 分页条件查询订单服务失败");
                 return null;

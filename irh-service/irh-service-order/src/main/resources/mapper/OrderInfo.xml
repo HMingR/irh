@@ -20,7 +20,8 @@
             finish_time AS finishTime,
             update_time AS updateTime,
             order_code AS orderCode,
-            state 
+            state,
+            phone_num AS phoneNum
 		]]>
 	</sql>
 
@@ -71,6 +72,7 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="orderCode != null and orderCode != ''"><![CDATA[ order_code = #{orderCode},]]></if>
 			<if test="salerNickname != null and salerNickname != ''"><![CDATA[ saler_nickname = #{salerNickname},]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num = #{phoneNum},]]></if>
 		</set>
 	</sql>
 
@@ -162,6 +164,7 @@
 			<if test="orderCode != null and orderCode != ''"><![CDATA[  order_code  ,]]></if>
 			<if test="salerNickname != null and salerNickname != ''"><![CDATA[saler_nickname,]]></if>
 			<if test="orderVersion != null and orderVersion != ''"><![CDATA[  order_version  ,]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[  phone_num  ,]]></if>
 		</trim>
 	</sql>
 
@@ -183,6 +186,7 @@
 			<if test="orderCode != null and orderCode != ''"><![CDATA[ #{orderCode},]]></if>
 			<if test="salerNickname != null and salerNickname != ''"><![CDATA[ #{salerNickname},]]></if>
 			<if test="orderVersion != null and orderVersion != ''"><![CDATA[ #{orderVersion},]]></if>
+			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ #{phoneNum},]]></if>
 		</trim>
 	</sql>
 

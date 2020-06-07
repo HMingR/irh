@@ -1,6 +1,7 @@
 package top.imuster.message.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -11,6 +12,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @since 2020-01-17 17:13:09
  */
 @ApiModel("消息实体类")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class NewsInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 5593091503L;

@@ -39,8 +39,6 @@ public class EvaluateController extends BaseController {
     public Message<String> evaluateByOrderId(@PathVariable("orderId") Long orderId, @RequestBody ProductEvaluateInfo productEvaluateInfo){
         productEvaluateInfo.setBuyerId(getCurrentUserIdFromCookie());
         //埋点日志 userId|productId|score
-        log.info("埋点日志=>用户评价商品");
-        log.info("PRODUCT_RATING_PREFIX" + ":" + productEvaluateInfo.getBuyerId() + "|" + productEvaluateInfo.getProductId() + "|"+ (3.0 + productEvaluateInfo.getProductQualityEvaluate()/5.0) );    //评价商品最高得5分，起始3分
         return productEvaluateInfoService.writeEvaluateByOrderId(orderId, productEvaluateInfo);
     }
 

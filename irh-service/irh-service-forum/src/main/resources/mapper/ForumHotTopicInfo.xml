@@ -48,25 +48,17 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="forumHotTopicInfo" >
+	<insert id="insertEntry" parameterType="forumHotTopicInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
 		<![CDATA[
 			INSERT INTO forum_hot_topic_info
 				(
-                id, 
-                target_id, 
-                score, 
-                create_time, 
-                update_time, 
-                state 
+                target_id,
+                score
 				)
 			VALUES
 				(
-                #{id}, 
-                #{targetId}, 
-                #{score}, 
-                #{createTime}, 
-                #{updateTime}, 
-                #{state} 
+                #{targetId},
+                #{score}
 				)
 		]]>
 	</insert>

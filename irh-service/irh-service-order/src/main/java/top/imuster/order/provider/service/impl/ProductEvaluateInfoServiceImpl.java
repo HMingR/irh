@@ -3,6 +3,8 @@ package top.imuster.order.provider.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -15,6 +17,7 @@ import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.pojo.ProductEvaluateInfo;
 import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.order.provider.dao.ProductEvaluateInfoDao;
+import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.order.provider.service.ProductEvaluateInfoService;
 
 import javax.annotation.Resource;
@@ -40,6 +43,9 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Autowired
     OrderServiceFeignApi orderServiceFeignApi;
 
+    @Resource
+    OrderInfoService orderInfoService;
+
     @Override
     public BaseDao<ProductEvaluateInfo, Long> getDao() {
         return this.productEvaluateInfoDao;
@@ -47,16 +53,18 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
 
     @Override
     public Long evaluateByOrder(OrderInfo order, ProductEvaluateInfo productEvaluateInfo){
-        ProductEvaluateInfo evaluateInfo = new ProductEvaluateInfo();
-        evaluateInfo.setProductId(order.getProductId());
-        evaluateInfo.setSalerId(order.getSalerId());
-        evaluateInfo.setOrderId(order.getId());
-        evaluateInfo.setState(2);
-        productEvaluateInfoDao.insertEntry(evaluateInfo);
-        return evaluateInfo.getId();
+        productEvaluateInfo.setProductId(order.getProductId());
+        productEvaluateInfo.setSalerId(order.getSalerId());
+        productEvaluateInfo.setOrderId(order.getId());
+        productEvaluateInfo.setState(2);
+        log.info("埋点日志=>用户评价商品");
+        log.info("PRODUCT_RATING_PREFIX" + ":" + productEvaluateInfo.getBuyerId() + "|" + productEvaluateInfo.getProductId() + "|"+ (3.0 + productEvaluateInfo.getProductQualityEvaluate()/5.0) );    //评价商品最高得5分，起始3分
+        productEvaluateInfoDao.insertEntry(productEvaluateInfo);
+        return productEvaluateInfo.getId();
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<String> writeEvaluateByOrderId(Long orderId, ProductEvaluateInfo productEvaluateInfo) {
         OrderInfo order = orderServiceFeignApi.getOrderById(orderId);
         Integer orderState = order.getState();
@@ -68,14 +76,17 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
             return Message.createByError("参数错误,您不是该订单的买家,请刷新后重试");
         }if(orderState == 90) return Message.createByError("您已经追评了,不能再进行评价了");
 
-
         Integer state = 80;
         if(orderState == 50) state = 80;   //第一次评价
         else if(orderState == 80) state = 90;   //追评
-        boolean b = orderServiceFeignApi.updateOrderStateById(orderId, state);
-        if(!b) return Message.createByError();
+
+        OrderInfo info = new OrderInfo();
+        info.setState(state);
+        info.setId(orderId);
+        orderInfoService.updateByKey(info);
 
         Long id = this.evaluateByOrder(order, productEvaluateInfo);
+
         SendUserCenterDto sendMessageDto = new SendUserCenterDto();
         sendMessageDto.setToId(order.getSalerId());
         sendMessageDto.setFromId(order.getBuyerId());

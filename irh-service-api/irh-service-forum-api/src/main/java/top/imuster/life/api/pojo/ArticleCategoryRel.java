@@ -1,5 +1,6 @@
 package top.imuster.life.api.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import top.imuster.common.base.domain.BaseDomain;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-02-16 16:19:34
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ArticleCategoryRel extends BaseDomain {
 
 	private static final long serialVersionUID = 1438321107L;

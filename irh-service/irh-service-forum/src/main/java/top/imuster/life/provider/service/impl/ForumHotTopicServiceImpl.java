@@ -63,10 +63,10 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
         HashMap<String, Long> params = new HashMap<>();
         params.put("startIndex", (currentPage - 1) * pageSize);
         params.put("pageSize", pageSize);
-        List<ForumHotTopicInfo> list =forumHotTopicDao.selectMaxScoreTop(params);
+        List<ForumHotTopicInfo> list = forumHotTopicDao.selectMaxScoreTop(params);
         ArrayList<ForumHotTopicInfo> res = new ArrayList<>(list.size());
         if(list.isEmpty()){
-            return Message.createBySuccess();
+            return Message.createBySuccess(new ArrayList<>());
         }
         list.stream().forEach(forumHotTopic -> {
             Long targetId = forumHotTopic.getTargetId();
@@ -85,7 +85,7 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
     public Message<List<ArticleInfo>> currentHotTopicList(int topic, Integer pageSize, Integer currentPage) {
         List<HashSet<Long>> res = redisArticleAttitudeService.getHotTopicFromRedis((long)topic, pageSize, currentPage);
         if(res == null || res.isEmpty()) {
-            return null;
+            return Message.createBySuccess(new ArrayList<>());
         }
         //文章id
         Long[] longs = res.get(0).toArray(new Long[res.get(0).size()]);
@@ -93,8 +93,7 @@ public class ForumHotTopicServiceImpl extends BaseServiceImpl<ForumHotTopicInfo,
         final Long[] scores = res.get(1).toArray(new Long[res.get(1).size()]);
         HashMap<Long, Long> scoreMap = new HashMap<>();
         if(longs.length == 0 || scores.length == 0){
-            //todo 当没有热搜的时候应该放历史热搜
-            return Message.createBySuccess();
+            return Message.createBySuccess(new ArrayList<>());
         }
 
         // 判断id的长度是否和热度的长度相同

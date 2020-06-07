@@ -1,6 +1,7 @@
 package top.imuster.user.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +9,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2020-05-21 19:27:46
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class ExamineRecordInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 8353775316L;

@@ -1,6 +1,7 @@
 package top.imuster.user.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2019-11-24 16:31:57
  */
 @ApiModel("兴趣标签实体类")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class InterestTagInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 5497047741L;

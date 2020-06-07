@@ -1,6 +1,7 @@
 package top.imuster.security.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import top.imuster.common.base.domain.BaseDomain;
 
 /**
@@ -8,6 +9,7 @@ import top.imuster.common.base.domain.BaseDomain;
  * @author 黄明人
  * @since 2020-05-19 15:28:28
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class WxAppLoginInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 8778280145L;

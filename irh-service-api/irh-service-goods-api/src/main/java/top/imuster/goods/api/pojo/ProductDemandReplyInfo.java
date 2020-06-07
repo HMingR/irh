@@ -1,6 +1,7 @@
 package top.imuster.goods.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
  * @author 黄明人
  * @since 2020-05-03 15:01:34
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductDemandReplyInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 12569429257L;

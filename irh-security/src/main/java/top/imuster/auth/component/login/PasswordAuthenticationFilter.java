@@ -56,6 +56,7 @@ public class PasswordAuthenticationFilter extends AbstractAuthenticationProcessi
         if(postOnly && !POST.equalsIgnoreCase(httpServletRequest.getMethod())){
             throw new AuthenticationServiceException("不允许{}这种的请求方式: " + httpServletRequest.getMethod());
         }
+
         //邮箱地址
         String loginName = obtainParameter(httpServletRequest, PASSWORD_PARAM_NAME);
 
@@ -64,11 +65,10 @@ public class PasswordAuthenticationFilter extends AbstractAuthenticationProcessi
 
         //密码
         String credentials = obtainParameter(httpServletRequest, PASSWORD_PARAM_PASSWORD);
-        loginName = loginName.trim();
-
         if(StringUtils.isBlank(loginName)) throw new AuthenticationServiceException("登录名不能为空");
         if(StringUtils.isBlank(credentials)) throw new AuthenticationServiceException("密码不能为空");
         if(StringUtils.isBlank(webCode)) throw new AuthenticationServiceException("验证码不能为空");
+        loginName = loginName.trim();
         PasswordCodeAuthenticationToken authenticationToken = new PasswordCodeAuthenticationToken(loginName, credentials);;
         authenticationToken.setWebCode(webCode);
 

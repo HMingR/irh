@@ -1,6 +1,7 @@
 package top.imuster.life.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
  * @since 2020-01-30 15:25:20
  */
 @ApiModel("文章评论实体类")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ArticleReviewInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 8957837652L;

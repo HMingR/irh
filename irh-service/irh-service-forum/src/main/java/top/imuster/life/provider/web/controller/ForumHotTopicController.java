@@ -1,6 +1,5 @@
 package top.imuster.life.provider.web.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/hot")
-@Api
 public class ForumHotTopicController {
 
     @Value("${hot.topic.total}")

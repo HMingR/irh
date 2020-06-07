@@ -142,17 +142,17 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setStartIndex((currentPage - 1) * pageSize);
         orderInfo.setEndIndex(pageSize);
-        if(type == 1)orderInfo.setBuyerId(userId);  //买家
+        if(type == 2)orderInfo.setBuyerId(userId);  //买家
         else orderInfo.setSalerId(userId);    //卖家
 
         Integer count = orderInfoDao.selectOrderListCountByUserId(orderInfo);
         List<OrderInfo> list = orderInfoDao.selectOrderListByUserId(orderInfo);
 
-        list.stream().forEach(condition -> {
+        /*list.stream().forEach(condition -> {
             Long id = condition.getId();
             Long evaluateId = productEvaluateInfoService.getEvaluateIdByOrderId(id);
             condition.setEvaluateId(evaluateId);
-        });
+        });*/
         page.setTotalCount(count);
         page.setData(list);
         return Message.createBySuccess(page);

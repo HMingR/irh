@@ -88,7 +88,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
 
             ids.stream().forEach(id -> {
                 Long getbit = commands.getbit(userBrowseRecordBitmapKey.getBytes(), id);
-                if(getbit != null) redisTemplate.opsForSet().add(setKey, id);
+                if(getbit == null) redisTemplate.opsForSet().add(setKey, id);
             });
 
             return getInfoFromRedis(pageSize, currentPage, setKey);
@@ -104,16 +104,18 @@ public class RecommendProductServiceImpl implements RecommendProductService {
 
     @Override
     public Message<Page<ProductInfo>> getRealtimeRecommend(Integer pageSize, Integer currentPage, Long userId) {
+        if(userId == null) return productInfoService.getProductBriefInfoByPage(currentPage, pageSize);
         String redisKey = RedisUtil.getProductRealtimeRecommendListKey(userId);
         Boolean aBoolean = redisTemplate.hasKey(redisKey);
         if(aBoolean) return getInfoFromRedis(pageSize, currentPage, redisKey);
 
-        String userBrowseRecordBitmap = RedisUtil.getUserBrowseRecordBitmap(BrowserType.ES_SELL_PRODUCT, userId);
         ProductRealtimeRecommendDto recommendInfo = productRealtimeRecommendRepository.findByUserId(userId);
-        List<MongoProductInfo> recs = recommendInfo.getRecs();
+        List<MongoProductInfo> recs = null;
+        if(recommendInfo != null) recs = recommendInfo.getRecs();
 
+        String userBrowseRecordBitmap = RedisUtil.getUserBrowseRecordBitmap(BrowserType.ES_SELL_PRODUCT, userId);
         //当实施推荐中没有商品时,转到离线推荐
-        if(recs.isEmpty()) return getOfflineRecommendListByUserId(pageSize, currentPage, userId);
+        if(CollectionUtils.isEmpty(recs)) return getOfflineRecommendListByUserId(pageSize, currentPage, userId);
         List<Long> ids = recs.stream().map(MongoProductInfo::getProductId).collect(Collectors.toList());
         ids.stream().forEach(id -> {
             if(commands.getbit(userBrowseRecordBitmap.getBytes(), id) == null){
@@ -175,7 +177,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         page.setTotalCount(size);
 
         //当总数都被浏览完的时候需要重新加载
-        if(start + pageSize > size - 1){
+        if(start + pageSize >= size - 1){
             redisTemplate.delete(redisKey);
         }
         return Message.createBySuccess(page);
@@ -199,7 +201,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         page.setData(data);
         page.setTotalCount(size);
 
-        if(start + pageSize > size - 1){
+        if(start + pageSize >= size - 1){
             redisTemplate.delete(redisKey);
         }
         return Message.createBySuccess(page);

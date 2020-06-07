@@ -1,5 +1,6 @@
 package top.imuster.life.api.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @date: 2020/2/24 10:33
  */
 @ApiModel("life模块的参数实体类")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class LifeSystemConfig {
 
     @ApiModelProperty("热搜榜显示个数")

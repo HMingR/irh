@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -36,9 +35,6 @@ public class PropagateInfoServiceImpl extends BaseServiceImpl<PropagateInfo, Lon
 
     @Autowired
     RedisTemplate redisTemplate;
-
-    @Autowired
-    Jedis jedis;
 
     @Override
     public BaseDao<PropagateInfo, Long> getDao() {

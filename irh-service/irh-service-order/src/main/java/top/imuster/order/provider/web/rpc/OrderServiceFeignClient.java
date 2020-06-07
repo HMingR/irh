@@ -38,16 +38,6 @@ public class OrderServiceFeignClient implements OrderServiceFeignApi {
     }
 
     @Override
-    @GetMapping("/state/{id}/{state}")
-    public boolean updateOrderStateById(@PathVariable("id") Long id, @PathVariable("state") Integer state){
-        OrderInfo info = new OrderInfo();
-        info.setState(state);
-        info.setId(id);
-        int i = orderInfoService.updateByKey(info);
-        return i == 1;
-    }
-
-    @Override
     @PostMapping
     public Message<Page<OrderInfo>> orderList(@RequestBody Page<OrderInfo> page) {
         OrderInfo condition = page.getSearchCondition();

@@ -3,6 +3,7 @@ package top.imuster.life.provider.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,6 +54,7 @@ public class ArticleDetailPageListener {
         SendDetailPageDto entry = objectMapper.readValue(body, SendDetailPageDto.class);
         String content = entry.getEntry();
         HashMap<String, String> param = new HashMap<>();
+        if(StringUtils.isBlank(content)) return;
         param.put("context", content);
         byte[] bytes = FreeMarkerTemplateUtils.processTemplateIntoString(template, param).getBytes();
         Message<String> msg = fileServiceFeignApi.uploadByBytes(bytes);

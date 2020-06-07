@@ -1,7 +1,7 @@
 package top.imuster.order.api.pojo;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author 黄明人
  * @since 2020-04-14 16:45:13
  */
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductDonationApplyInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 15969687939L;

@@ -1,6 +1,7 @@
 package top.imuster.user.api.pojo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import top.imuster.common.base.domain.BaseDomain;
 import top.imuster.common.core.validate.ValidateGroup;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * @author 黄明人
  * @since 2020-05-16 10:05:59
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PropagateInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 11936859429L;

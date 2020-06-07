@@ -49,7 +49,7 @@ public class RecommendController extends BaseController {
      **/
     @GetMapping("/realtime/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> getRealTimeRecommend(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
-        return recommendProductService.getRealtimeRecommend(pageSize, currentPage, getCurrentUserIdFromCookie());
+        return recommendProductService.getRealtimeRecommend(pageSize, currentPage, getCurrentUserIdFromCookie(false));
     }
 
 

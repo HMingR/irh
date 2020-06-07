@@ -1,6 +1,7 @@
 package top.imuster.life.api.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import top.imuster.common.base.domain.BaseDomain;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
  * @since 2020-02-11 17:49:35
  */
 @ApiModel("跑腿信息实体类")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ErrandInfo extends BaseDomain {
 
 	private static final long serialVersionUID = 6877499957L;
