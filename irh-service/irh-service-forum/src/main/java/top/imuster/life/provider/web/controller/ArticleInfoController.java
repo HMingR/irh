@@ -2,7 +2,6 @@ package top.imuster.life.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
-import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.provider.service.ArticleInfoService;
@@ -35,9 +33,6 @@ public class ArticleInfoController extends BaseController {
     @Resource
     ArticleInfoService articleInfoService;
 
-    @Autowired
-    FileServiceFeignApi fileServiceFeignApi;
-
     /**
      * @Author hmr
      * @Description 用户发布帖子
@@ -46,7 +41,6 @@ public class ArticleInfoController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("用户发布帖子")
-    @NeedLogin
     @PostMapping
     public Message<String> releaseArticle(@RequestBody @Validated(ValidateGroup.addGroup.class) ArticleInfo articleInfo, BindingResult bindingResult) throws Exception {
         validData(bindingResult);
@@ -66,6 +60,7 @@ public class ArticleInfoController extends BaseController {
     @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> deleteArticle(@PathVariable("id")Long id){
+        //todo 需要校验
         ArticleInfo condition = new ArticleInfo();
         condition.setId(id);
         condition.setState(1);
@@ -82,10 +77,8 @@ public class ArticleInfoController extends BaseController {
      **/
     @ApiOperation(("用户条件查看自己发布的帖子(列表,没有帖子的内容),按照发布时间降序排列"))
     @PostMapping("/list")
-    @NeedLogin
     public Message<Page<ArticleInfo>> list(@RequestBody Page<ArticleInfo> page){
-        List<ArticleInfo> list = articleInfoService.list(page, getCurrentUserIdFromCookie());
-        page.setData(list);
+        page = articleInfoService.list(page, getCurrentUserIdFromCookie());
         return Message.createBySuccess(page);
     }
 
@@ -103,8 +96,7 @@ public class ArticleInfoController extends BaseController {
         Page<ArticleInfo> page = new Page<>();
         page.setPageSize(pageSize);
         page.setCurrentPage(currentPage);
-        List<ArticleInfo> list = articleInfoService.list(page, userId);
-        page.setData(list);
+        page =  articleInfoService.list(page, userId);
         return Message.createBySuccess(page);
     }
 

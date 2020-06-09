@@ -253,9 +253,9 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
         String upKey = RedisUtil.getDonationApplyAttributeKey(1);
         String downKey = RedisUtil.getDonationApplyAttributeKey(2);
         data.stream().forEach(applyInfo -> {
-            Object up = redisTemplate.opsForHash().get(upKey, applyInfo.getId());
+            Object up = redisTemplate.opsForHash().get(upKey, String.valueOf(applyInfo.getId()));
             if(up instanceof Integer) applyInfo.setUserUpTotal(applyInfo.getUserUpTotal() + Integer.parseInt(String.valueOf(up)));
-            Object down = redisTemplate.opsForHash().get(downKey, applyInfo.getId());
+            Object down = redisTemplate.opsForHash().get(downKey, String.valueOf(applyInfo.getId()));
             if(down instanceof Integer) applyInfo.setUserDownTotal(applyInfo.getUserDownTotal() + Integer.parseInt(String.valueOf(down)));
         });
         return Message.createBySuccess(res);

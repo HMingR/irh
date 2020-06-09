@@ -59,13 +59,10 @@
 
 	<sql id="key">
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null and id != ''"><![CDATA[  id  ,]]></if>
 			<if test="targetId != null and targetId != ''"><![CDATA[  target_id ,]]></if>
 			<if test="type != null and type != ''"><![CDATA[  type ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[  state  ,]]></if>
 			<if test="remark != null and remark != ''"><![CDATA[  remark ,]]></if>
-			<if test="createTime != null and createTime != ''"><![CDATA[  create_time ,]]></if>
-			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time ,]]></if>
 			<if test="approveId != null and approveId != ''"><![CDATA[  approve_id  ,]]></if>
 			<if test="approveRemark != null and approveRemark != ''"><![CDATA[  approve_remark ,]]></if>
 		</trim>
@@ -73,13 +70,10 @@
 
 	<sql id="value">
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null and id != ''"><![CDATA[  #{id},]]></if>
 			<if test="targetId != null and targetId != ''"><![CDATA[ #{targetId},]]></if>
 			<if test="type != null and type != ''"><![CDATA[ #{type},]]></if>
 			<if test="state != null and state != ''"><![CDATA[  #{state},]]></if>
 			<if test="remark != null and remark != ''"><![CDATA[  #{remark},]]></if>
-			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
-			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
 			<if test="approveId != null and approveId != ''"><![CDATA[  #{approveId},]]></if>
 			<if test="approveRemark != null and approveRemark != ''"><![CDATA[  #{approveRemark},]]></if>
 		</trim>

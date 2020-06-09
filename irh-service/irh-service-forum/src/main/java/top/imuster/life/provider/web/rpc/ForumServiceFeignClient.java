@@ -13,7 +13,6 @@ import top.imuster.life.provider.service.ArticleInfoService;
 import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: ForumServiceFeignClient
@@ -37,11 +36,7 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
     @Override
     @DeleteMapping("{id}")
     public Message<String>  adminDeleteArticle(@PathVariable("id") Long id) {
-        ArticleInfo articleInfo = new ArticleInfo();
-        articleInfo.setId(id);
-        articleInfo.setState(1);
-        articleInfoService.updateByKey(articleInfo);
-        return Message.createBySuccess();
+        return articleInfoService.adminDeleteArticle(id);
     }
 
     @Override
@@ -98,8 +93,7 @@ public class ForumServiceFeignClient extends BaseController implements ForumServ
         searchCondition.setState(2);
         searchCondition.setOrderField("create_time");
         searchCondition.setOrderFieldType("DESC");
-        List<ArticleInfo> list = articleInfoService.list(page, getCurrentUserIdFromCookie());
-        page.setData(list);
+        page = articleInfoService.list(page, getCurrentUserIdFromCookie());
         return Message.createBySuccess(page);
     }
 

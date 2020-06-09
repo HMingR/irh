@@ -69,4 +69,14 @@ public interface RecommendProductService {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductDemandInfo>>
      **/
     Message<Page<ProductDemandInfo>> getDemandRecommend(Long userId, Integer pageSize, Integer currentPage);
+
+    /**
+     * @Author hmr
+     * @Description 获得redis中保存的商品推荐标签列表
+     * @Date: 2020/6/9 11:37
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<java.lang.String>>
+     **/
+    Message<Page<Object>> getTagList(Integer pageSize, Integer currentPage);
 }

@@ -37,7 +37,7 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @param userId
      * @reture: java.util.List<ArticleInfo>
      **/
-    List<ArticleInfo> list(Page<ArticleInfo> page, Long userId);
+    Page<ArticleInfo> list(Page<ArticleInfo> page, Long userId);
 
     /**
      * @Author hmr
@@ -157,4 +157,12 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      **/
     List<Long> getUserArticleRank(Integer pageSize, Integer currentPage);
 
+    /**
+     * @Author hmr
+     * @Description 管理员删除文章
+     * @Date: 2020/6/9 10:12
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> adminDeleteArticle(Long id);
 }

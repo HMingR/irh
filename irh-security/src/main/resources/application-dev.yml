@@ -7,8 +7,8 @@ spring:
       pool:
         max-active: 30
         max-idle: 10
-        max-wait: -1
-    timeout: 10000
+        max-wait: 5000ms
+    timeout: 10000ms
     password: irh_aliyun_redis
 
   datasource:

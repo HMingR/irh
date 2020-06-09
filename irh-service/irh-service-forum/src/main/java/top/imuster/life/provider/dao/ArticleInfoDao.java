@@ -150,4 +150,12 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      **/
     Long insertArticle(ArticleInfo articleInfo);
 
+    /**
+     * @Author hmr
+     * @Description 根据文章id查看作者id
+     * @Date: 2020/6/9 10:15
+     * @param id
+     * @reture: java.lang.Long
+     **/
+    Long selectUserIdById(Long id);
 }

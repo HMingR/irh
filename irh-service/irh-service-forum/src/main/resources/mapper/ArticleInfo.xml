@@ -186,7 +186,8 @@
 		<![CDATA[SELECT id, title, review_total AS reviewTotal, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes, category_id AS categoryId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		<include refid="QUERY_WHERE_CLAUSE"/>
-		<include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{endIndex}]]></if>
 	</select>
 
 	<select id="selectUpTotalByIds" parameterType="java.lang.reflect.Array" resultType="top.imuster.life.api.pojo.ArticleInfo">
@@ -313,5 +314,11 @@
 		<![CDATA[ VALUES ]]>
 		<include refid="value"></include>
 	</insert>
+
+	<select id="selectUserIdById" parameterType="long" resultType="long">
+		SELECT user_id
+		FROM article_info
+		WHERE id = #{id,jdbcType=BIGINT}
+	</select>
 
 </mapper>

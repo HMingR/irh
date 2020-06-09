@@ -35,6 +35,7 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	private final static String SELECT_ARTICLE_BRIEF_BY_CATEGORY_ID = "selectArticleBriefByCategoryId";
 	private final static String SELECT_USER_ARTICLE_RANK = "selectUserArticleRank";
 	private final static String INSERT_ARTICLE = "insertArticle";
+	private final static String SELECT_USER_ID_BY_ID = "selectUserIdById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -116,5 +117,10 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	@Override
 	public Long insertArticle(ArticleInfo articleInfo) {
 		return (long)this.insert(getNameSpace(INSERT_ARTICLE), articleInfo);
+	}
+
+	@Override
+	public Long selectUserIdById(Long id) {
+		return this.select(getNameSpace(SELECT_USER_ID_BY_ID), id);
 	}
 }

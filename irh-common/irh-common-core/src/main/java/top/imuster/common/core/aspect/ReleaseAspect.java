@@ -84,7 +84,7 @@ public class ReleaseAspect {
     private void saveTagNames2Redis(String tagNames, ReleaseType releaseType){
         String[] split = tagNames.split("\\|");
         for (int i = 0; i < split.length; i++){
-            redisTemplate.opsForSet().add(RedisUtil.getRedisTagNameKey(releaseType), split[i]);
+            redisTemplate.opsForZSet().add(RedisUtil.getRedisTagNameKey(releaseType), split[i], System.currentTimeMillis());
         }
     }
 

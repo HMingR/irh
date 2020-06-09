@@ -148,9 +148,9 @@ public class RedisUtil {
      **/
     public static String getRedisTagNameKey(ReleaseType releaseType) {
         if(ReleaseType.GOODS.equals(releaseType) || ReleaseType.DEMAND.equals(releaseType))
-            return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_SET_KEY).append("goods").toString();
+            return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_ZSET_KEY).append("goods").toString();
         else
-            return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_SET_KEY).append("article").toString();
+            return new StringBuffer().append(GlobalConstant.IRH_TAG_NAMES_ZSET_KEY).append("article").toString();
     }
 
     public static String getGoodsCollectMapKey(Integer type) {

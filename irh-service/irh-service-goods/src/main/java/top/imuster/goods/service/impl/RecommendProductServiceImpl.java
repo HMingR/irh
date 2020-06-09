@@ -162,6 +162,24 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         return getDemandInfoFromRedis(pageSize, currentPage, redisKey);
     }
 
+    @Override
+    public Message<Page<Object>> getTagList(Integer pageSize, Integer currentPage) {
+        Integer start = (currentPage - 1) * pageSize;
+        Integer end = currentPage * pageSize;
+        String redisTagNameKey = RedisUtil.getRedisTagNameKey(ReleaseType.GOODS);
+        Long size = redisTemplate.opsForZSet().size(redisTagNameKey);
+        List<Object> data = new ArrayList<>();
+        Page<Object> page = new Page<>();
+        if(size != 0){
+            Set<String> range = redisTemplate.opsForZSet().range(redisTagNameKey, start, end);
+            if(CollectionUtils.isNotEmpty(range)){
+                data = Arrays.asList(range.toArray());
+            }
+        }
+        page.setData(data);
+        return Message.createBySuccess(page);
+    }
+
     private Message<Page<ProductDemandInfo>> getDemandInfoFromRedis(Integer pageSize, Integer currentPage, String redisKey){
         Integer start = (currentPage - 1) * pageSize;
         Integer size = redisTemplate.opsForSet().size(redisKey).intValue();
@@ -225,10 +243,15 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         ts.close();
         reader.close();
         String tempKey = UUID.randomUUID().toString();
-        if(CollectionUtils.isNotEmpty(words)) words.stream().forEach(s -> redisTemplate.opsForSet().add(tempKey ,s));
-        Set<String> result = redisTemplate.opsForSet().intersect(RedisUtil.getRedisTagNameKey(ReleaseType.GOODS), tempKey);
-        List<Object> res = Arrays.asList(result.toArray());
-        if(res.size() >= 5) res = res.subList(0, 4);
+        String resultKey = UUID.randomUUID().toString();
+        if(CollectionUtils.isNotEmpty(words)) words.stream().forEach(s -> redisTemplate.opsForZSet().add(tempKey ,s, 1));
+        redisTemplate.opsForZSet().intersectAndStore(RedisUtil.getRedisTagNameKey(ReleaseType.GOODS), tempKey, resultKey);
+        Set<String> tag = redisTemplate.opsForZSet().range(resultKey, 0, -1);
+        List<Object> res = null;
+        if(CollectionUtils.isNotEmpty(tag)){
+            res = Arrays.asList(tag.toArray());
+            if(res.size() >= 5) res = res.subList(0, 4);
+        }
         redisTemplate.delete(tempKey);
         return Message.createBySuccess(res);
     }

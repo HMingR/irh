@@ -20,7 +20,9 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.common.core.dto.rabbitMq.SendDetailPageDto;
+import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.enums.TemplateEnum;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
@@ -113,18 +115,27 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
-    public List<ArticleInfo> list(Page<ArticleInfo> page, Long userId) {
-        ArticleInfo searchCondition = page.getSearchCondition();
-        if(searchCondition == null){
-            page.setSearchCondition(new ArticleInfo());
+    public Page<ArticleInfo> list(Page<ArticleInfo> page, Long userId) {
+        if(page.getSearchCondition() == null){
+            ArticleInfo condition = new ArticleInfo();
+            condition.setOrderField("create_time");
+            condition.setOrderFieldType("DESC");
+            page.setSearchCondition(condition);
         }
+        ArticleInfo searchCondition = page.getSearchCondition();
+        int pageSize = page.getPageSize();
+        int currentPage = page.getCurrentPage();
         searchCondition = page.getSearchCondition();
-        searchCondition.setUserId(userId);
-        searchCondition.setOrderField("create_time");
-        searchCondition.setOrderFieldType("DESC");
+
+        if(userId != null) searchCondition.setUserId(userId);
+
         searchCondition.setState(2);
+        searchCondition.setStartIndex((currentPage - 1) * pageSize);
+        searchCondition.setEndIndex(pageSize);
         page.setTotalCount(articleInfoDao.selectEntryListCount(searchCondition));
-        return articleInfoDao.selectListByCondition(page.getSearchCondition());
+        List<ArticleInfo> articleInfoList = articleInfoDao.selectListByCondition(page.getSearchCondition());
+        page.setData(articleInfoList);
+        return page;
     }
 
     @Override
@@ -243,5 +254,25 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         param.put("pageSize", pageSize);
         param.put("startIndex", (currentPage - 1) * pageSize);
         return articleInfoDao.selectUserArticleRank(param);
+    }
+
+    @Override
+    public Message<String> adminDeleteArticle(Long id) {
+        ArticleInfo articleInfo = new ArticleInfo();
+        articleInfo.setState(3);
+        articleInfo.setId(id);
+        articleInfoDao.updateByKey(articleInfo);
+
+        ArticleInfo articleInfo1 = articleInfoDao.selectBriefById(id);
+
+        SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
+        sendUserCenterDto.setFromId(-1L);
+        sendUserCenterDto.setDate(DateUtil.now());
+        sendUserCenterDto.setContent(new StringBuffer().append("您的文章被多人举报，经过管理员审核，发现情况属实，现已屏蔽您的标题为《 ").append(articleInfo1.getTitle()).append(" 》的文章，请修改之后重新发布").toString());
+        sendUserCenterDto.setToId(articleInfo.getUserId());
+        sendUserCenterDto.setNewsType(70);
+
+        generateSendMessageService.sendToMq(sendUserCenterDto);
+        return Message.createBySuccess();
     }
 }
