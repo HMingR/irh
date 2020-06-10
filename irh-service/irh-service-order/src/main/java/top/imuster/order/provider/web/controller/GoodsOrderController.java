@@ -2,15 +2,16 @@ package top.imuster.order.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: OrderController
@@ -103,12 +104,21 @@ public class GoodsOrderController extends BaseController{
      * @Description
      * @Date: 2020/5/12 11:09
      * @param type   1-买家删除   2-卖家删除
-     * @param orderId
+     * @param orderId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @NeedLogin
     @DeleteMapping("/cancel/{type}/{id}")
-    public Message<String> cancleOrder(@PathVariable("type") Integer type, @PathVariable("id") Long orderId){
-        return orderInfoService.cancleOrder(orderId, getCurrentUserIdFromCookie(), type);
+    public Message<String> cancelOrder(@PathVariable("type") Integer type, @PathVariable("id") Long orderId){
+        return orderInfoService.cancelOrder(orderId, getCurrentUserIdFromCookie(), type);
     }
+
+    @GetMapping("/id/{orderCode}")
+    public Message<Long> getOrderIdByCode(@PathVariable("orderCode") String orderCode){
+        OrderInfo info = new OrderInfo();
+        info.setOrderCode(orderCode);
+        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(info);
+        if(CollectionUtils.isNotEmpty(orderInfoList)) return Message.createBySuccess(orderInfoList.get(0).getId());
+        return Message.createByError("未找到相关订单");
+    }
+
 }

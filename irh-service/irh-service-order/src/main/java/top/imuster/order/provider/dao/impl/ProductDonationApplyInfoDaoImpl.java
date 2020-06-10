@@ -26,6 +26,7 @@ public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonation
 	private final static String SELECT_APPLY_INFO_BY_ID = "selectApplyInfoById";
 	private final static String UPDATE_UP_TOTAL = "updateUpTotal";
 	private final static String UPDATE_DOWN_TOTAL = "updateDownTotal";
+	private final static String SELECT_APPLY_LIST_BY_CONDITION = "selectApplyListByCondition";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -70,5 +71,10 @@ public class ProductDonationApplyInfoDaoImpl extends BaseDaoImpl<ProductDonation
 	@Override
 	public Integer updateDownTotal(List<DonationAttributeDto> downList) {
 		return this.update(getNameSpace(UPDATE_DOWN_TOTAL), downList);
+	}
+
+	@Override
+	public List<ProductDonationApplyInfo> selectApplyListByCondition(ProductDonationApplyInfo searchCondition) {
+		return this.selectList(getNameSpace(SELECT_APPLY_LIST_BY_CONDITION), searchCondition);
 	}
 }

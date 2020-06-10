@@ -76,6 +76,28 @@ public class ProductDonationApplyInfo extends BaseDomain {
 
 	private Integer userDownTotal;
 
+
+	//按照金额范围查找
+	private String minMoney;
+
+	private String maxMoney;
+
+	public String getMinMoney() {
+		return minMoney;
+	}
+
+	public void setMinMoney(String minMoney) {
+		this.minMoney = minMoney;
+	}
+
+	public String getMaxMoney() {
+		return maxMoney;
+	}
+
+	public void setMaxMoney(String maxMoney) {
+		this.maxMoney = maxMoney;
+	}
+
 	public Integer getUserUpTotal() {
 		return userUpTotal;
 	}

@@ -168,6 +168,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
         Integer end = currentPage * pageSize;
         String redisTagNameKey = RedisUtil.getRedisTagNameKey(ReleaseType.GOODS);
         Long size = redisTemplate.opsForZSet().size(redisTagNameKey);
+        if(size == null) size = 0L;
         List<Object> data = new ArrayList<>();
         Page<Object> page = new Page<>();
         if(size != 0){
@@ -177,7 +178,15 @@ public class RecommendProductServiceImpl implements RecommendProductService {
             }
         }
         page.setData(data);
+        page.setTotalCount(size.intValue());
         return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Message<String> deleteRecommendTag(String tagName) {
+        String redisTagNameKey = RedisUtil.getRedisTagNameKey(ReleaseType.GOODS);
+        redisTemplate.opsForZSet().remove(redisTagNameKey, tagName);
+        return Message.createBySuccess();
     }
 
     private Message<Page<ProductDemandInfo>> getDemandInfoFromRedis(Integer pageSize, Integer currentPage, String redisKey){

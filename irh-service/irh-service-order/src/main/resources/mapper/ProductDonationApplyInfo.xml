@@ -121,7 +121,6 @@
 			<if test="remark != null and remark != ''"><![CDATA[  #{remark}, ]]></if>
 			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime}, ]]></if>
 			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime}, ]]></if>
-
 		</trim>
 	</sql>
 	<!-- 插入app记录 -->
@@ -276,5 +275,16 @@
 			#{item.targetId,jdbcType=BIGINT}
 		</foreach>
 	</update>
+
+	<select id="selectApplyListByCondition" parameterType="productDonationApplyInfo" resultType="productDonationApplyInfo">
+		SELECT id, title AS title, apply_user_id AS applyUserId, apply_amount AS applyAmount, reason, witness_name AS witnessName, witness_phone AS witnessPhone, reason_pic_url AS reasonPicUrl, create_time AS createTime, user_up_total AS userUpTotal, user_down_total AS userDownTotal
+		<include refid="QUERY_FROM_TABLE"></include>
+		WHERE state = #{state}
+		<if test="id != null and id != ''"><![CDATA[AND id = #{id}]]></if>
+		<if test="applyUserId != null and applyUserId != ''"><![CDATA[AND apply_user_id #{applyUserId} ]]></if>
+		<if test="title != null and title != ''"><![CDATA[AND title like "%"#{title}"%"]]></if>
+		<if test="minMoney != null and minMoney != ''"><![CDATA[AND apply_amount > #{minMoney}]]></if>
+		<if test="maxMoney != null and maxMoney != ''"><![CDATA[AND apply_amount < #{maxMoney}]]></if>
+	</select>
 	
 </mapper>

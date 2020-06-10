@@ -25,7 +25,6 @@ public class OrderKeyExpirationListener extends KeyExpirationEventMessageListene
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-
     @Resource
     OrderInfoService orderInfoService;
 
@@ -45,10 +44,11 @@ public class OrderKeyExpirationListener extends KeyExpirationEventMessageListene
             String orderCode = split[1];
             Map<String, String> map = orderInfoService.getProductIdByExpireOrderCode(orderCode);
             if(map == null) return;
-            Integer i = orderInfoService.cancleOrderByCode(orderCode, Long.parseLong(map.get("buyerId")), Long.parseLong(map.get("id")));
-            if(i == 1){
-              goodsServiceFeignApi.updateProductState(Long.parseLong(map.get("productId")), 2);
-            }
+//            Integer i = orderInfoService.cancleOrderByCode(String.valueOf(orderCode), Long.parseLong(map.get("buyerId")), Long.parseLong(map.get("id")));
+            orderInfoService.cancelOrder(Long.parseLong(map.get("id")), Long.parseLong(map.get("buyerId")), 4);
+//            if(i == 1){
+//              goodsServiceFeignApi.updateProductState(Long.parseLong(map.get("productId")), 2);
+//            }
         }
     }
 }

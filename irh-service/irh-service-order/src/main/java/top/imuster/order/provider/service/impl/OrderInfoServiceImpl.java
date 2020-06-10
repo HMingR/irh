@@ -142,6 +142,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setStartIndex((currentPage - 1) * pageSize);
         orderInfo.setEndIndex(pageSize);
+        orderInfo.setOrderField("create_time");
+        orderInfo.setOrderFieldType("DESC");
         if(type == 2)orderInfo.setBuyerId(userId);  //买家
         else orderInfo.setSalerId(userId);    //卖家
 
@@ -195,7 +197,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     @Override
     public Message<String> createOrderCode(Long userId) {
         String code = String.valueOf(UuidUtils.nextId());
-        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeKey(userId), code, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeKey(userId), code, 5, TimeUnit.MINUTES);
         return Message.createBySuccess(code);
     }
 
@@ -213,25 +215,38 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
-    public Message<String> cancleOrder(Long orderId, Long userId, Integer type) {
+    @Transactional
+    public Message<String> cancelOrder(Long orderId, Long userId, Integer type) {
         List<OrderInfo> list = this.selectEntryList(orderId);
         if(list == null || list.isEmpty()) return Message.createByError("未找到相关订单");
         OrderInfo order = list.get(0);
         if(type == 1) {
+            //买家删除
             if(!order.getBuyerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
             order.setState(60);
-        }else{
+        }else if(type == 2){
+            //卖家删除
             if(!order.getSalerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
             order.setState(70);
-        }
-        if(order.getState() == 40){
-            //订单还没有支付,取消订单需要更新商品状态
+        }else if(type == 3){
+            //买家关闭订单
+            String orderCodeKey = RedisUtil.getOrderCodeExpireKey(order.getOrderCode());
+            Boolean hasKey = redisTemplate.hasKey(orderCodeKey);
+            if(!hasKey) return Message.createByError("订单已经过期,请刷新后重试");
+            if(order.getState() == 40){
+                //订单还没有支付,取消订单需要更新商品状态
+                if(!order.getBuyerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
+                boolean flag = goodsServiceFeignApi.updateProductState(order.getProductId(), 2);
+                if(!flag) return Message.createByError("删除失败,请稍后重试");
+                redisTemplate.delete(orderCodeKey);
+                order.setState(20);
+            }
+        }else{
+            //订单超时
             boolean flag = goodsServiceFeignApi.updateProductState(order.getProductId(), 2);
             if(!flag) return Message.createByError("删除失败,请稍后重试");
-            String orderCodeKey = RedisUtil.getOrderCodeKey(userId);
-            redisTemplate.delete(orderCodeKey);
-            order.setState(20);
-        }else order.setState(30);
+            order.setState(10);
+        }
         this.updateByKey(order);
         return Message.createBySuccess();
     }
@@ -247,11 +262,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
+    @Transactional
     public Integer cancleOrderByCode(String orderCode, Long buyerId, Long orderId) {
-        OrderInfo info = new OrderInfo();
-        info.setOrderCode(orderCode);
-        info.setState(10);
-        Integer temp = orderInfoDao.updateOrderStateByOrderCode(info);
+        List<OrderInfo> list = this.selectEntryList(orderId);
+        if(list == null || list.isEmpty()) return 0;
+        OrderInfo order = list.get(0);
+        order.setState(10);
+        Integer temp = orderInfoDao.updateOrderStateByOrderCode(order);
+        boolean flag = goodsServiceFeignApi.updateProductState(order.getProductId(), 2);
+        if(!flag) return 0;
         if(temp == 1){
             SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
             sendUserCenterDto.setDate(DateUtil.now());
@@ -259,7 +278,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
             sendUserCenterDto.setNewsType(40);
             sendUserCenterDto.setFromId(-1L);
             sendUserCenterDto.setTargetId(orderId);
-            sendUserCenterDto.setContent(new StringBuffer("您三十分钟之前提交的订单已经超时").toString());
+            sendUserCenterDto.setContent(new StringBuffer("您提交的编号为: ").append(orderCode).append("的订单已经超时,系统已经自动取消该订单").toString());
         }
         return temp;
     }

@@ -123,7 +123,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @param type
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> cancleOrder(Long orderId, Long userId, Integer type);
+    Message<String> cancelOrder(Long orderId, Long userId, Integer type);
 
     /**
      * @Author hmr

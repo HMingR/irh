@@ -240,25 +240,51 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
 
     @Override
     public Message<Page<ProductDonationApplyInfo>> getApplyList(Page<ProductDonationApplyInfo> page) {
-        if(page.getSearchCondition() == null){
-            ProductDonationApplyInfo condition = new ProductDonationApplyInfo();
-            condition.setOrderField("user_up_total");
-            condition.setOrderFieldType("DESC");
-            condition.setState(2);
-            page.setSearchCondition(condition);
+        int pageSize = page.getPageSize();
+        int currentPage = page.getCurrentPage();
+        ProductDonationApplyInfo searchCondition = page.getSearchCondition();
+        if(searchCondition == null){
+            searchCondition = new ProductDonationApplyInfo();
+            searchCondition.setOrderField("user_up_total");
+            searchCondition.setOrderFieldType("DESC");
+            searchCondition.setStartIndex((currentPage - 1) * pageSize);
+            searchCondition.setEndIndex(pageSize);
+            page.setSearchCondition(searchCondition);
         }
-        Page<ProductDonationApplyInfo> res = this.selectPage(page.getSearchCondition(), page);
+        Integer state = searchCondition.getState();
+        if(state == null && state != 2 && state != 3) searchCondition.setState(2);
 
-        List<ProductDonationApplyInfo> data = res.getData();
+        Integer count = productDonationApplyInfoDao.selectEntryListCount(searchCondition);
+        List<ProductDonationApplyInfo> res = productDonationApplyInfoDao.selectApplyListByCondition(searchCondition);
+
         String upKey = RedisUtil.getDonationApplyAttributeKey(1);
         String downKey = RedisUtil.getDonationApplyAttributeKey(2);
-        data.stream().forEach(applyInfo -> {
+        res.stream().forEach(applyInfo -> {
             Object up = redisTemplate.opsForHash().get(upKey, String.valueOf(applyInfo.getId()));
             if(up instanceof Integer) applyInfo.setUserUpTotal(applyInfo.getUserUpTotal() + Integer.parseInt(String.valueOf(up)));
             Object down = redisTemplate.opsForHash().get(downKey, String.valueOf(applyInfo.getId()));
             if(down instanceof Integer) applyInfo.setUserDownTotal(applyInfo.getUserDownTotal() + Integer.parseInt(String.valueOf(down)));
         });
-        return Message.createBySuccess(res);
+
+        page.setTotalCount(count);
+        page.setData(res);
+        return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Message<Page<ProductDonationApplyInfo>> getApproveList(Page<ProductDonationApplyInfo> page) {
+        ProductDonationApplyInfo searchCondition = page.getSearchCondition();
+        if(searchCondition == null){
+            searchCondition = new ProductDonationApplyInfo();
+            searchCondition.setOrderField("update_time");
+            searchCondition.setOrderFieldType("DESC");
+            searchCondition.setState(4);
+            page.setSearchCondition(searchCondition);
+        }
+        Integer state = searchCondition.getState();
+        if(state == null && state != 4 && state != 5) searchCondition.setState(4);
+        page = this.selectPage(searchCondition, page);
+        return Message.createBySuccess(page);
     }
 
     private List<DonationAttributeDto> getListByRedisKey(String redisKey){

@@ -33,6 +33,11 @@ public class CategoryAdminController {
         return recommendProductService.getTagList(pageSize, currentPage);
     }
 
+    @DeleteMapping("/tag/{tagName}")
+    public Message<String> deleteTag(@PathVariable("tagName") String tagName){
+        return recommendProductService.deleteRecommendTag(tagName);
+    }
+
     /**
      * @Description: 添加分类
      * @Author: hmr

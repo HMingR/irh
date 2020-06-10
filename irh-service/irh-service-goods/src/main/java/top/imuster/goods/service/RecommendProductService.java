@@ -79,4 +79,14 @@ public interface RecommendProductService {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<java.lang.String>>
      **/
     Message<Page<Object>> getTagList(Integer pageSize, Integer currentPage);
+
+    /**
+     * @Author hmr
+     * @Description 根据标签名字删除标签
+     * @Date: 2020/6/10 11:37
+     * @param tagName
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteRecommendTag(String tagName);
+
 }

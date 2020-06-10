@@ -124,4 +124,13 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
      **/
     Message<Page<ProductDonationApplyInfo>> getApplyList(Page<ProductDonationApplyInfo> page);
+
+    /**
+     * @Author hmr
+     * @Description 获得审核成功的列表
+     * @Date: 2020/6/10 10:12
+     * @param page
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    Message<Page<ProductDonationApplyInfo>> getApproveList(Page<ProductDonationApplyInfo> page);
 }

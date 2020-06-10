@@ -85,8 +85,14 @@ public class OrderAdminController extends BaseController {
         return productDonationApplyInfoService.getApplyInfoById(state, targetId);
     }
 
-    @PostMapping("/donation/list")
+    @PostMapping("/donation/apply/list")
     public Message<Page<ProductDonationApplyInfo>> getApplyList(@RequestBody Page<ProductDonationApplyInfo> page) {
         return productDonationApplyInfoService.getApplyList(page);
     }
+
+    @PostMapping("/donation/approve/list")
+    public Message<Page<ProductDonationApplyInfo>> getApproveList(@RequestBody Page<ProductDonationApplyInfo> page) {
+        return productDonationApplyInfoService.getApproveList(page);
+    }
+
 }

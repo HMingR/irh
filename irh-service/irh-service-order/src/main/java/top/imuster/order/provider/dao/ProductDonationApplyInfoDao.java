@@ -88,4 +88,13 @@ public interface ProductDonationApplyInfoDao extends BaseDao<ProductDonationAppl
      * @reture: java.lang.Integer
      **/
     Integer updateDownTotal(@Param("list") List<DonationAttributeDto> downList);
+
+    /**
+     * @Author hmr
+     * @Description 获得正在审核或者审核失败的申请
+     * @Date: 2020/6/10 10:18
+     * @param searchCondition
+     * @reture: java.util.List<top.imuster.order.api.pojo.ProductDonationApplyInfo>
+     **/
+    List<ProductDonationApplyInfo> selectApplyListByCondition(ProductDonationApplyInfo searchCondition);
 }
