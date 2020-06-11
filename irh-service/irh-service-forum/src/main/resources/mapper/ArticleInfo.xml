@@ -206,7 +206,7 @@
 	</select>
 
 	<select id="selectBriefById" parameterType="long" resultType="articleInfo">
-		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes, category_id AS categoryId]]>
+		<![CDATA[SELECT id, title, browser_times AS browserTimes, create_time AS createTime, up_total AS upTotal, review_total AS reviewTotal, main_picture AS mainPicture, user_id AS userId, forward_times AS forwardTimes, category_id AS categoryId, detail_page AS detailPage]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE id = #{id}
 	</select>

@@ -27,7 +27,6 @@ public class UserAuthenticationController extends BaseController {
     UserAuthenServiceImpl userAuthenServiceImpl;
 
     @ApiOperation("身份证实名认证,需要上传身份证到本地服务器之后返回一个图片的uri")
-    @NeedLogin
     @PostMapping("/identityCard")
     public Message<String> realNameAuthen(@RequestBody UserAuthenDto userAuthenDto){
         Long userId = getCurrentUserIdFromCookie();

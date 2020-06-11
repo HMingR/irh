@@ -11,5 +11,13 @@ import top.imuster.security.api.pojo.UserAuthenRecordInfo;
  */
 public interface UserAuthenRecordInfoDao extends BaseDao<UserAuthenRecordInfo, Long> {
     //自定义扩展
+    /**
+     * @Author hmr
+     * @Description 根据用户id更新所有的认证记录
+     * @Date: 2020/6/11 20:02
+     * @param userAuthenRecordInfo
+     * @reture: void
+     **/
+    Integer updateStateByUserId(UserAuthenRecordInfo userAuthenRecordInfo);
 
 }

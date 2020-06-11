@@ -254,7 +254,7 @@
 		<if test="salerId != null and salerId != ''">
 			saler_id = #{salerId,jdbcType=BIGINT} AND state != 70
 		</if>
-		AND state NOT IN (10, 20) ORDER BY state ASC, create_time DESC
+		AND state NOT IN (10, 20) ORDER BY create_time DESC
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
 

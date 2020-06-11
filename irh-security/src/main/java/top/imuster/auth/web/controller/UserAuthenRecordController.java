@@ -28,12 +28,12 @@ public class UserAuthenRecordController  extends BaseController {
     @ApiOperation("管理员分页查看认证记录")
     @NeedLogin
     @PostMapping
-    public Message<Page<UserAuthenRecordInfo>> getPage(@RequestParam Page<UserAuthenRecordInfo> page){
+    public Message<Page<UserAuthenRecordInfo>> getPage(@RequestBody Page<UserAuthenRecordInfo> page){
         UserAuthenRecordInfo searchCondition = page.getSearchCondition();
         if(searchCondition == null){
             UserAuthenRecordInfo recordInfo = new UserAuthenRecordInfo();
             recordInfo.setOrderField("create_time");
-            recordInfo.setOrderFieldType("ASC");
+            recordInfo.setOrderFieldType("DESC");
             page.setSearchCondition(recordInfo);
         }
         Page<UserAuthenRecordInfo> res = userAuthenRecordInfoService.selectPage(page.getSearchCondition(), page);
@@ -53,8 +53,8 @@ public class UserAuthenRecordController  extends BaseController {
      * @param userAuthenRecordInfo
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    @PostMapping("/authen")
-    public Message<String> authen(@RequestParam UserAuthenRecordInfo userAuthenRecordInfo){
+    @PostMapping("/approve")
+    public Message<String> authen(@RequestBody UserAuthenRecordInfo userAuthenRecordInfo){
         userAuthenRecordInfo.setApproveId(getCurrentUserIdFromCookie());
         return userAuthenRecordInfoService.authen(userAuthenRecordInfo);
     }

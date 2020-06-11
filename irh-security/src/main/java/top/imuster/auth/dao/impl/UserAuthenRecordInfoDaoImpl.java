@@ -14,9 +14,14 @@ import top.imuster.security.api.pojo.UserAuthenRecordInfo;
 @Repository("userAuthenRecordInfoDao")
 public class UserAuthenRecordInfoDaoImpl extends BaseDaoImpl<UserAuthenRecordInfo, Long> implements UserAuthenRecordInfoDao {
 	private final static String NAMESPACE = "top.imuster.auth.dao.UserAuthenRecordInfoDao.";
-	
+	private final static String UPDATE_STATE_BY_USER_ID = "updateStateByUserId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
+	}
+
+	@Override
+	public Integer updateStateByUserId(UserAuthenRecordInfo userAuthenRecordInfo) {
+		return this.update(getNameSpace(UPDATE_STATE_BY_USER_ID), userAuthenRecordInfo);
 	}
 }

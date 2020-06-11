@@ -68,8 +68,8 @@ public class ReportController extends BaseController {
     @ApiOperation(value = "管理员分页条件查询用户举报反馈",httpMethod = "POST")
     @PostMapping("/admin")
     public Message<Page<ReportFeedbackInfo>> reportFeedbackList(@ApiParam @RequestBody Page<ReportFeedbackInfo> page){
-        Page<ReportFeedbackInfo> list = reportFeedbackInfoService.list(page);
-        return Message.createBySuccess(list);
+        page = reportFeedbackInfoService.list(page);
+        return Message.createBySuccess(page);
     }
 
     @ApiOperation("根据targetId获得所有举报的信息")

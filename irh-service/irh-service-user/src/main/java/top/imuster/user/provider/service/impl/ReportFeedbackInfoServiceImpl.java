@@ -190,15 +190,18 @@ public class ReportFeedbackInfoServiceImpl extends BaseServiceImpl<ReportFeedbac
 
     @Override
     public Page<ReportFeedbackInfo> list(Page<ReportFeedbackInfo> page) {
-        if(page.getSearchCondition() == null){
-            page.setSearchCondition(new ReportFeedbackInfo());
+        ReportFeedbackInfo searchCondition = page.getSearchCondition();
+        if(searchCondition == null){
+            searchCondition = new ReportFeedbackInfo();
+            searchCondition.setOrderField("create_time");
+            searchCondition.setOrderFieldType("DESC");
+            page.setSearchCondition(searchCondition);
         }
-        ReportFeedbackInfo condition = page.getSearchCondition();
-        Integer count = reportFeedbackInfoDao.selectEntryListCount(condition);
+        Integer count = reportFeedbackInfoDao.selectEntryListCount(searchCondition);
         page.setTotalCount(count);
-        condition.setStartIndex(page.getStartIndex());
-        condition.setEndIndex(page.getEndIndex());
-        List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectListByCondition(condition);
+        searchCondition.setStartIndex(page.getStartIndex());
+        searchCondition.setEndIndex(page.getEndIndex());
+        List<ReportFeedbackInfo> res = reportFeedbackInfoDao.selectEntryList(searchCondition);
         page.setData(res);
         return page;
     }

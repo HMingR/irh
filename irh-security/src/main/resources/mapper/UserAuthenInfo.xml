@@ -57,7 +57,7 @@
 			<if test="type != null and type != ''"><![CDATA[  type  ,]]></if>
 			<if test="userId != null and userId != ''"><![CDATA[  user_id  ,]]></if>
 			<if test="realName != null and realName != ''"><![CDATA[  real_name ,]]></if>
-			<if test="certificateNum != null and certificateNum != ''"><![CDATA[  certificateNum  ,]]></if>
+			<if test="certificateNum != null and certificateNum != ''"><![CDATA[  certificate_num  ,]]></if>
 		</trim>
 	</sql>
 
@@ -66,7 +66,7 @@
 			<if test="type != null and type != ''"><![CDATA[   #{type},]]></if>
 			<if test="userId != null and userId != ''"><![CDATA[ #{userId},]]></if>
 			<if test="realName != null and realName != ''"><![CDATA[#{realName},]]></if>
-			<if test="certificateNum != null and certificateNum != ''"><![CDATA[ #{certificate_num},]]></if>
+			<if test="certificateNum != null and certificateNum != ''"><![CDATA[ #{certificateNum},]]></if>
 		</trim>
 	</sql>
 

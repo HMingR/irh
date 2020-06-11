@@ -50,7 +50,7 @@ public class UserAuthenRecordInfoServiceImpl extends BaseServiceImpl<UserAuthenR
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<String> authen(UserAuthenRecordInfo userAuthenRecordInfo) {
-        userAuthenRecordInfoDao.updateByKey(userAuthenRecordInfo);
+        userAuthenRecordInfoDao.updateStateByUserId(userAuthenRecordInfo);
         Integer result = userAuthenRecordInfo.getResult();
         Long userId = userAuthenRecordInfo.getUserId();
         String content;

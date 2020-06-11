@@ -3,6 +3,9 @@ package top.imuster.security.api.pojo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import top.imuster.common.base.domain.BaseDomain;
+import top.imuster.common.core.validate.ValidateGroup;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -24,6 +27,7 @@ public class UserAuthenRecordInfo extends BaseDomain {
 	private String picuri;
 
 	// 认证人
+	@NotNull(groups = ValidateGroup.editGroup.class)
 	private Long userId;
 
 	// 1-一卡通认证   2-身份证认证
@@ -37,6 +41,7 @@ public class UserAuthenRecordInfo extends BaseDomain {
 	private Integer result;
 
 	//审核备注
+	@NotNull(groups = ValidateGroup.editGroup.class)
 	private String remark;
 
 	//审核人
@@ -44,6 +49,8 @@ public class UserAuthenRecordInfo extends BaseDomain {
 
 	// 1-认证中  2-认证成功  3-认证失败
 	//private Short state;
+
+
 
 
 	public Long getApproveId() {

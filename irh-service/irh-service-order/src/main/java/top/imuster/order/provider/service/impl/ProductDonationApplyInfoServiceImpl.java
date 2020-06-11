@@ -81,13 +81,26 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
 
     @Override
     public Message<String> approve(ProductDonationApplyInfo approveInfo) {
+        Long id = approveInfo.getId();
         productDonationApplyInfoDao.updateByKey(approveInfo);
+
+        Integer state = approveInfo.getState();
+        if(state == 3){
+            ProductDonationApplyInfo applyInfo = productDonationApplyInfoDao.selectEntryList(id).get(0);
+            SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
+            sendUserCenterDto.setNewsType(70);
+            sendUserCenterDto.setToId(approveInfo.getApplyUserId());
+            sendUserCenterDto.setContent(new StringBuffer().append("您好,您于").append(applyInfo.getCreateTime()).append("提交的《").append(applyInfo.getTitle()).append("》公益基金申请未能通过,失败原因是:").append(applyInfo.getRemark()).toString());
+            sendUserCenterDto.setFromId(-1L);
+            sendUserCenterDto.setDate(DateUtil.now());
+            generateSendMessageService.sendToMq(sendUserCenterDto);
+        }
         return Message.createBySuccess();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<String> grant(Long operatorId, Long applyId) throws JsonProcessingException {
+    public Message<String> grant(Long applyId, Long operatorId) throws JsonProcessingException {
         ProductDonationApplyInfo applyInfo = productDonationApplyInfoDao.selectAvailableApplyById(applyId);
         if(applyInfo == null) return Message.createByError("当前要申请的工单还不能发放金额");
         List<OrderInfo> orderInfos = orderInfoService.getAllDonationOrderInfo();
@@ -193,14 +206,13 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     }
 
     @Override
-    public Message<ProductDonationApplyInfo> getApplyInfoById(Integer state, Long applyId) {
+    public Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId) {
         ProductDonationApplyInfo applyInfo = new ProductDonationApplyInfo();
-        if(state == 5){
+        if(type == 5){
             applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
             List<OrderInfo> useOrders = productDonationOrderRelService.getOrderInfoByApplyId(applyId);
             applyInfo.setUserOrders(useOrders);
         }else{
-            applyInfo.setState(state);
             applyInfo.setId(applyId);
             List<ProductDonationApplyInfo> infos = productDonationApplyInfoDao.selectEntryList(applyInfo);
             if(infos == null || infos.isEmpty()) return Message.createByError("没有找到相关的申请,请刷新后重试");
@@ -252,7 +264,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
             page.setSearchCondition(searchCondition);
         }
         Integer state = searchCondition.getState();
-        if(state == null && state != 2 && state != 3) searchCondition.setState(2);
+        if(state != null && (state == 5 || state == 6)) return Message.createByError("参数异常");
 
         Integer count = productDonationApplyInfoDao.selectEntryListCount(searchCondition);
         List<ProductDonationApplyInfo> res = productDonationApplyInfoDao.selectApplyListByCondition(searchCondition);

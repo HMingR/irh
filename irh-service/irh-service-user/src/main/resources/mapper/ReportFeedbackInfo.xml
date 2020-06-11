@@ -152,21 +152,16 @@
 	<!-- 其它SQL语句 -->
 
 	<select id="selectListByCondition" parameterType="reportFeedbackInfo" resultType="reportFeedbackInfo">
-		<![CDATA[
 		SELECT
 			COUNT(1) AS total, target_id AS targetId, type, id
 		FROM
 			report_feedback_info
-		WHERE
-			type = #{type}
-			AND result = 2
-			AND state = 2
+		<include refid="QUERY_WHERE_CLAUSE"/>
 		GROUP BY
 			target_id
 		ORDER BY
 			total DESC
 		LIMIT #{startIndex}, #{pageSize}
-	]]>
 	</select>
 
 	<update id="updateByTargetId" parameterType="reportFeedbackInfo">

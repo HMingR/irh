@@ -69,9 +69,9 @@ public class OrderAdminController extends BaseController {
         return productDonationApplyInfoService.approve(approveInfo);
     }
 
-    @PostMapping("/donation/grant/{operatorId}/{id}")
-    public Message<String> grantMoney(@PathVariable("id") Long applyId, @PathVariable("operatorId") Long operatorId) throws JsonProcessingException {
-        return productDonationApplyInfoService.grant(applyId, operatorId);
+    @PostMapping("/donation/grant/{id}")
+    public Message<String> grantMoney(@PathVariable("id") Long applyId) throws JsonProcessingException {
+        return productDonationApplyInfoService.grant(applyId, getCurrentUserIdFromCookie());
     }
 
     @GetMapping("/donation/determine/{operatorId}/{applyId}")

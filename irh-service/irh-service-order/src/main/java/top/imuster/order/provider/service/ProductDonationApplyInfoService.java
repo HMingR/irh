@@ -46,7 +46,7 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @param applyId  申请表的主键id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>   返回自动选择的订单总金额，需要用户确定
      **/
-    Message<String> grant(Long operatorId, Long applyId) throws JsonProcessingException;
+    Message<String> grant(Long applyId, Long operatorId) throws JsonProcessingException;
 
     /**
      * @Author hmr
@@ -95,7 +95,7 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @param applyId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.ProductDonationApplyInfo>
      **/
-    Message<ProductDonationApplyInfo> getApplyInfoById(Integer state, Long applyId);
+    Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId);
 
     /**
      * @Author hmr

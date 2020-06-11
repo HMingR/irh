@@ -13,8 +13,10 @@
             state,
             create_time AS createTime,
             update_time AS updateTime,
-            result AS resultm,
-            approve_id AS approveId
+            approve_id AS approveId,
+            input_card_no AS inputCardNo,
+            input_name AS inputName,
+            remark
 		]]>
 	</sql>
 
@@ -29,10 +31,10 @@
             <if test="userId != null and userId != ''"><![CDATA[AND user_id = #{userId}]]></if>
             <if test="type != null and type != ''"><![CDATA[AND type = #{type}]]></if>
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if>
-            <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
             <if test="createTime != null and createTime != ''"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="updateTime != null and updateTime != ''"><![CDATA[AND update_time = #{updateTime}]]></if> 
-            <if test="result != null and result != ''"><![CDATA[AND result = #{result}]]></if>
+            <if test="inputCardNo != null and inputCardNo != ''"><![CDATA[AND input_card_no = #{inputCardNo}]]></if>
+            <if test="inputName != null and inputName != ''"><![CDATA[AND input_name = #{inputName}]]></if>
 		</where>
 	</sql>
 	
@@ -49,37 +51,30 @@
 			<if test="userId != null"><![CDATA[user_id = #{userId},]]></if>
 			<if test="type != null"><![CDATA[type = #{type},]]></if>
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
-			<if test="createTime != null"><![CDATA[create_time = #{createTime},]]></if>
-			<if test="updateTime != null"><![CDATA[update_time = #{updateTime},]]></if>
-			<if test="result != null"><![CDATA[result = #{result},]]></if>
 		</set>
 	</sql>
 
 	<sql id="key">
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null and id != ''"><![CDATA[  id ,]]></if>
 			<if test="picuri != null and picuri != ''"><![CDATA[  picUri  ,]]></if>
 			<if test="userId != null and userId != ''"><![CDATA[  user_id ,]]></if>
 			<if test="type != null and type != ''"><![CDATA[  type ,]]></if>
 			<if test="state != null and state != ''"><![CDATA[  state,]]></if>
-			<if test="createTime != null and createTime != ''"><![CDATA[  create_time,]]></if>
-			<if test="updateTime != null and updateTime != ''"><![CDATA[  update_time,]]></if>
-			<if test="result != null and result != ''"><![CDATA[  result ,]]></if>
 			<if test="approveId != null and approveId != ''"><![CDATA[  approve_id ,]]></if>
+			<if test="inputName != null and inputName != ''"><![CDATA[  input_name ,]]></if>
+			<if test="inputCardNo != null and inputCardNo != ''"><![CDATA[  input_card_no ,]]></if>
 		</trim>
 	</sql>
 
 	<sql id="value">
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null and id != ''"><![CDATA[ #{id},]]></if>
 			<if test="picuri != null and picuri != ''"><![CDATA[#{picuri},]]></if>
 			<if test="userId != null and userId != ''"><![CDATA[ #{userId},]]></if>
 			<if test="type != null and type != ''"><![CDATA[#{type},]]></if>
 			<if test="state != null and state != ''"><![CDATA[#{state},]]></if>
-			<if test="createTime != null and createTime != ''"><![CDATA[ #{createTime},]]></if>
-			<if test="updateTime != null and updateTime != ''"><![CDATA[ #{updateTime},]]></if>
-			<if test="result != null and result != ''"><![CDATA[#{result},]]></if>
 			<if test="approveId != null and approveId != ''"><![CDATA[#{approveId},]]></if>
+			<if test="inputName != null and inputName != ''"><![CDATA[  #{inputName} ,]]></if>
+			<if test="inputCardNo != null and inputCardNo != ''"><![CDATA[  #{inputCardNo} ,]]></if>
 		</trim>
 	</sql>
 
@@ -145,5 +140,10 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
+	<update id="updateStateByUserId" parameterType="userAuthenRecordInfo">
+		UPDATE user_authen_record_info
+		SET state = #{state}, remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
 	
 </mapper>

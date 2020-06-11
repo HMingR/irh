@@ -40,7 +40,7 @@ baidu:    # 调用百度AI的accessToken
   accessToken: 24.54d8034729e43e77dd2c3b0d7e947236.2592000.1591933911.282335-19129665    # access token
   templateSign: 7cf8f229fe578025234e3556515daf63    # 识别一卡通的模板id
   bdRecogniseUrl: https://aip.baidubce.com/rest/2.0/solution/v1/iocr/recognise
-
+  bdRealNameUrl: https://aip.baidubce.com/rest/2.0/ocr/v1/idcard     #身份证识别
 aliyun:
   realNameAuth:
     host: http://dm-51.data.aliyun.com

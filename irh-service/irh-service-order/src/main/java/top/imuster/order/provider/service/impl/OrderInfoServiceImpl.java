@@ -228,24 +228,40 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
             //卖家删除
             if(!order.getSalerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
             order.setState(70);
-        }else if(type == 3){
-            //买家关闭订单
-            String orderCodeKey = RedisUtil.getOrderCodeExpireKey(order.getOrderCode());
-            Boolean hasKey = redisTemplate.hasKey(orderCodeKey);
-            if(!hasKey) return Message.createByError("订单已经过期,请刷新后重试");
-            if(order.getState() == 40){
-                //订单还没有支付,取消订单需要更新商品状态
-                if(!order.getBuyerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
-                boolean flag = goodsServiceFeignApi.updateProductState(order.getProductId(), 2);
+        }else {
+            Long productId = order.getProductId();
+            if(type == 3){
+                //买家关闭订单
+                String orderCodeKey = RedisUtil.getOrderCodeExpireKey(order.getOrderCode());
+    //            Boolean hasKey = redisTemplate.hasKey(orderCodeKey);
+    //            if(!hasKey) return Message.createByError("订单已经过期,请刷新后重试");
+                if(order.getState() == 40){
+                    //订单还没有支付,取消订单需要更新商品状态
+                    if(!order.getBuyerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
+                    boolean flag = goodsServiceFeignApi.updateProductState(productId, 2);
+                    if(!flag){
+                        log.error("用户关闭订单编号为{}的订单失败,未能改变编号为{}商品的状态", orderId, productId);
+                        return Message.createByError("删除失败,请稍后重试");
+                    }
+                    redisTemplate.delete(orderCodeKey);
+                    order.setState(20);
+                }
+            }else{
+                //订单超时
+                boolean flag = goodsServiceFeignApi.updateProductState(productId, 2);
                 if(!flag) return Message.createByError("删除失败,请稍后重试");
-                redisTemplate.delete(orderCodeKey);
-                order.setState(20);
+                order.setState(10);
+
+                //发送消息
+                SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
+                sendUserCenterDto.setDate(DateUtil.now());
+                sendUserCenterDto.setToId(order.getBuyerId());
+                sendUserCenterDto.setNewsType(40);
+                sendUserCenterDto.setFromId(-1L);
+                sendUserCenterDto.setTargetId(orderId);
+                sendUserCenterDto.setContent(new StringBuffer("您提交的编号为: ").append(order.getOrderCode()).append("的订单已经超时,系统已经自动取消该订单").toString());
+
             }
-        }else{
-            //订单超时
-            boolean flag = goodsServiceFeignApi.updateProductState(order.getProductId(), 2);
-            if(!flag) return Message.createByError("删除失败,请稍后重试");
-            order.setState(10);
         }
         this.updateByKey(order);
         return Message.createBySuccess();

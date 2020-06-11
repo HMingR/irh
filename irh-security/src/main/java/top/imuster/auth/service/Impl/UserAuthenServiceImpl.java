@@ -6,35 +6,35 @@ import com.alibaba.fastjson.JSONObject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.imuster.auth.exception.CustomSecurityException;
+import top.imuster.auth.service.UserAuthenInfoService;
+import top.imuster.auth.service.UserAuthenRecordInfoService;
 import top.imuster.auth.service.UserAuthenService;
 import top.imuster.auth.service.UserRoleRelService;
 import top.imuster.auth.utils.Base64Util;
 import top.imuster.auth.utils.HttpUtil;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.dto.rabbitMq.SendAuthenRecordDto;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.security.api.dto.UserAuthenDto;
-import top.imuster.user.api.dto.UserAuthenResultDto;
+import top.imuster.security.api.pojo.UserAuthenInfo;
+import top.imuster.security.api.pojo.UserAuthenRecordInfo;
 import top.imuster.security.api.pojo.UserRoleRel;
+import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName: UserAuthenServiceImpl
@@ -45,15 +45,6 @@ import java.util.Map;
 @Service("userAuthenService")
 public class UserAuthenServiceImpl implements UserAuthenService {
     protected  final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Value("${aliyun.realNameAuth.host}")
-    private String host;
-
-    @Value("${aliyun.realNameAuth.path}")
-    private String path;
-
-    @Value("${aliyun.realNameAuth.appCode}")
-    private String appCode;
 
     @Value("${baidu.accessToken}")
     private String bdAccessToken;
@@ -67,6 +58,9 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     @Value("${file.urlPrefix}")
     private String urlPrefix;
 
+    @Value("${baidu.bdRealNameUrl}")
+    private String bdRealNameUrl;
+
     @Autowired
     private GenerateSendMessageService generateSendMessageService;
 
@@ -79,6 +73,11 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     @Resource
     UserRoleRelService userRoleRelService;
 
+    @Resource
+    UserAuthenRecordInfoService userAuthenRecordInfoService;
+
+    @Resource
+    UserAuthenInfoService userAuthenInfoService;
 
     private static final String failContent = "我们已经收到您提交的审核,但是由于图片不清晰导致AI无法快速识别,请等待管理员审核，感谢您的配合";
     private static final String successContent = "恭喜您已经成功通过实名认证,您现在可以使用irh平台全部功能,感谢您的配合";
@@ -92,48 +91,25 @@ public class UserAuthenServiceImpl implements UserAuthenService {
     private boolean generate(UserAuthenDto userAuthenDto){
         String inputCardNo = userAuthenDto.getInputCardNo();
         String inputName = userAuthenDto.getInputName();
-
-        //请根据线上文档修改configure字段
-        JSONObject configObj = new JSONObject();
-        configObj.put("side", "face");
-        String config_str = configObj.toString();
-
-        String method = "POST";
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "APPCODE " + appCode);
-        Map<String, String> querys = new HashMap<>();
-
-        // 拼装请求body的json字符串
-        JSONObject requestObj = new JSONObject();
+        String fileUri = userAuthenDto.getFileUri();
+        // 请求url
         try {
-            requestObj.put("image", Base64.encodeBase64(getFileByUri(userAuthenDto.getFileUri())));
-            if(config_str.length() > 0) {
-                requestObj.put("configure", config_str);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String bodys = requestObj.toString();
-
-        try {
-            HttpResponse response = HttpUtil.doPost(host, path, method, headers, querys, bodys);
-            int stat = response.getStatusLine().getStatusCode();
-            if(stat != 200){
-                log.error("------->根据身份证图片获得身份证信息失败,状态码为{},http header error msg为{},http body error msg为{}", stat, response.getFirstHeader("X-Ca-Error-Message"), EntityUtils.toString(response.getEntity()));
-                return false;
-            }
-            String res = EntityUtils.toString(response.getEntity());
-            JSONObject res_obj = JSON.parseObject(res);
-            JSONArray outputArray = res_obj.getJSONArray("outputs");
-            String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
-            JSONObject out = JSON.parseObject(output);
-            Object realName = out.get("name");
-            Object n = out.get("num");
-            if(inputName.equals(realName) && inputCardNo.equals(n)){
+            // 本地文件路径
+            String imgStr = Base64Util.encode(getFileByUri(fileUri));
+            String imgParam = URLEncoder.encode(imgStr, "UTF-8");
+            String param = "id_card_side=" + "front" + "&image=" + imgParam;
+            String result = HttpUtil.post(bdRealNameUrl, bdAccessToken, param);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONObject wordsResult = jsonObject.getJSONObject("words_result");
+            JSONObject realNameObject = wordsResult.getJSONObject("姓名");
+            String realName = (String)realNameObject.get("words");
+            JSONObject numObject = wordsResult.getJSONObject("公民身份号码");
+            String num = (String) numObject.get("words");
+            if(StringUtils.equals(inputCardNo, num) && StringUtils.equals(inputName, realName)){
                 return true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("------------>百度云识别身份证请求失败,错误信息为{}", e.getMessage());
         }
         return false;
     }
@@ -218,7 +194,7 @@ public class UserAuthenServiceImpl implements UserAuthenService {
         String inputName = userAuthenDto.getInputName();
         String picUri = userAuthenDto.getFileUri();
         Long userId = userAuthenDto.getUserId();
-
+        UserAuthenRecordInfo recordInfo = new UserAuthenRecordInfo();
         //认证成功
         if(result == 2){
             UserAuthenResultDto resultDto = new UserAuthenResultDto();
@@ -231,16 +207,33 @@ public class UserAuthenServiceImpl implements UserAuthenService {
             userRoleRel.setRoleId(1L);
             userRoleRel.setStaffId(userId);
             userRoleRelService.insertEntry(userRoleRel);
+
+            recordInfo.setState(2);
+
+            UserAuthenInfo userAuthenInfo = new UserAuthenInfo();
+            userAuthenInfo.setType(type);
+            userAuthenInfo.setRealName(inputName);
+            userAuthenInfo.setCertificateNum(inputNum);
+            userAuthenInfo.setUserId(userId);
+            userAuthenInfoService.insertEntry(userAuthenInfo);
         }
 
-        SendAuthenRecordDto condition = new SendAuthenRecordDto();
+
+        /*SendAuthenRecordDto condition = new SendAuthenRecordDto();
         condition.setInputName(inputName);
         condition.setPicUri(picUri);
         condition.setUserId(userId);
         condition.setInputNum(inputNum);
         condition.setResult(result);
         condition.setAuthenType(type);
-        generateSendMessageService.sendToMq(condition);
+        generateSendMessageService.sendToMq(condition);*/
+        recordInfo.setUserId(userId);
+        recordInfo.setInputCardNo(inputNum);
+        recordInfo.setInputName(inputName);
+        recordInfo.setType(type);
+        recordInfo.setPicuri(picUri);
+        userAuthenRecordInfoService.insertEntry(recordInfo);
+
 
         //发送到消息中心
         SendUserCenterDto sendUserCenterDto = new SendUserCenterDto();
