@@ -254,13 +254,13 @@
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="browser_times = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when id = #{item.id} then browser_times + #{item.browserTimes}
+                    when id = #{item.targetId} then browser_times + #{item.total}
                 </foreach>
             </trim>
         </trim>
         WHERE id in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-            #{item.id,jdbcType=BIGINT}
+            #{item.targetId,jdbcType=BIGINT}
         </foreach>
 	</update>
 

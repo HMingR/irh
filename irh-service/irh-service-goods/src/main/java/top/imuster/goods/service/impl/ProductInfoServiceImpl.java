@@ -95,13 +95,14 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
-    public Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage) {
+    public Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage, int type) {
         Page<ProductInfo> infoPage = new Page<>();
         infoPage.setPageSize(pageSize);
         infoPage.setCurrentPage(currentPage);
         ProductInfo productInfo = new ProductInfo();
         productInfo.setConsumerId(userId);
-        productInfo.setState(2);
+//        productInfo.setState(2);
+        if(type == 2) productInfo.setState(2);
         productInfo.setOrderField("create_time");
         productInfo.setOrderFieldType("DESC");
         productInfo.setStartIndex((currentPage - 1) * pageSize);

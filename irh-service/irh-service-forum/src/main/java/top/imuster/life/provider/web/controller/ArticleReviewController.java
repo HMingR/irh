@@ -2,6 +2,7 @@ package top.imuster.life.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import top.imuster.life.provider.annotation.HotTopicAnnotation;
 import top.imuster.life.provider.service.ArticleReviewService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: ArticleReviewController
@@ -36,7 +38,6 @@ public class ArticleReviewController extends BaseController {
      * @Author hmr
      * @Description 根据一级留言id获得其对应的所有留言或回复
      * @Date: 2020/2/3 10:39
-     * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReviewInfo>>
      **/
     @ApiOperation(value = "根据一级留言id获得其对应的所有留言或回复", httpMethod = "POST")
@@ -114,11 +115,17 @@ public class ArticleReviewController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.util.List<ArticleReviewInfo>>
      **/
     @ApiOperation(value = "用户查看自己的留言记录,按照时间降序排列", httpMethod = "GET")
-    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ArticleReviewInfo>> list(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
         Long userId = getCurrentUserIdFromCookie();
         return articleReviewService.list(userId, pageSize, currentPage);
+    }
+
+    @GetMapping("/detail/{id}")
+    public Message<ArticleReviewInfo> getDetail(@PathVariable("id") Long id){
+        List<ArticleReviewInfo> reviewInfos = articleReviewService.selectEntryList(id);
+        if(CollectionUtils.isEmpty(reviewInfos)) return Message.createByError("未找到相关信息");
+        return Message.createBySuccess(reviewInfos.get(0));
     }
 
 }

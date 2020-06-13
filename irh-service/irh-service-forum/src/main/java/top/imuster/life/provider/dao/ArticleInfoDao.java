@@ -4,6 +4,7 @@ package top.imuster.life.provider.dao;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import top.imuster.common.base.dao.BaseDao;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
@@ -102,7 +103,7 @@ public interface ArticleInfoDao extends BaseDao<ArticleInfo, Long> {
      * @param list
      * @reture: void
      **/
-    void updateBrowserTimesByCondition(@Param("list") List<ArticleInfo> list);
+    Integer updateBrowserTimesByCondition(@Param("list") List<BrowserTimesDto> list);
 
     /**
      * @Author hmr

@@ -292,11 +292,14 @@
 					consumer_id AS consumerId,
 					create_time AS createTime,
 					collect_total AS collectTotal,
-					version]]>
+					version,
+					state]]>
 		<include refid="QUERY_FROM_TABLE"/>
-		WHERE state = #{state,jdbcType=INTEGER}
+		WHERE
+		<if test="state != null and state != ''">state = #{state,jdbcType=INTEGER}</if>
+		<if test="state == null or state == ''">state != 1</if>
 		<if test="consumerId != null"> AND consumer_id = #{consumerId,jdbcType=BIGINT}</if>
-		ORDER BY #{orderField} #{orderFieldType}
+		ORDER BY ${orderField} ${orderFieldType}
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
 

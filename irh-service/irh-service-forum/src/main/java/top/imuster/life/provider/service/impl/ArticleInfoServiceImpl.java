@@ -5,10 +5,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HtmlUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,7 +37,8 @@ import top.imuster.life.provider.service.ArticleInfoService;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * ArticleInfoService 实现类
@@ -86,10 +89,9 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
         articleInfo.setState(3);
         articleInfo.setUserId(userId);
         String content = articleInfo.getContent();
-        articleInfo.setContent("");
 
         //清除文章中的html代码和空白字符
-        String summaryText = StrUtil.cleanBlank(HtmlUtil.cleanHtmlTag(articleInfo.getContent()));
+        String summaryText = StrUtil.cleanBlank(HtmlUtil.cleanHtmlTag(content));
         if(summaryText.length() > 50){
             articleInfo.setArticleSummary(summaryText.substring(0, 50));
         }else{
@@ -139,9 +141,11 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'article::detail::' + #p0")
     public ArticleInfo getArticleDetailById(Long id) {
-        ArticleInfo result = articleInfoDao.selectEntryList(id).get(0);
-        return result;
+        List<ArticleInfo> articleInfoList = articleInfoDao.selectEntryList(id);
+        if(CollectionUtils.isEmpty(articleInfoList)) return null;
+        return articleInfoList.get(0);
     }
 
     @Override
@@ -197,7 +201,10 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
     @Override
     public void updateBrowserTimesFromRedis2Redis(List<BrowserTimesDto> res) {
-        if(res == null || res.isEmpty()) return;
+        if(CollectionUtils.isEmpty(res)) return;
+        Integer integer = articleInfoDao.updateBrowserTimesByCondition(res);
+        log.info("一共更新了{}条记录的浏览总数", integer);
+        /*if(res == null || res.isEmpty()) return;
         HashSet<Long> targetIds = new HashSet<>();
         HashSet<Long> times = new HashSet<>();
         res.stream().forEach(browserTimesDto -> {
@@ -228,7 +235,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
                 update.add(condition);
             }
             articleInfoDao.updateBrowserTimesByCondition(update);
-        }
+        }*/
     }
 
     @Override
@@ -249,6 +256,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_ARTICLE_USER_RANK_CACHE_KEY, key = "#p1 + 'pageNumArticleRank'")
     public List<Long> getUserArticleRank(Integer pageSize, Integer currentPage) {
         HashMap<String, Integer> param = new HashMap<>();
         param.put("pageSize", pageSize);
@@ -257,6 +265,7 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'article::brief::' + #p0", allEntries = true)
     public Message<String> adminDeleteArticle(Long id) {
         ArticleInfo articleInfo = new ArticleInfo();
         articleInfo.setState(3);
@@ -274,5 +283,14 @@ public class ArticleInfoServiceImpl extends BaseServiceImpl<ArticleInfo, Long> i
 
         generateSendMessageService.sendToMq(sendUserCenterDto);
         return Message.createBySuccess();
+    }
+
+    @Override
+    public Message<String> deleteArticle(Long id, Long currentUserIdFromCookie) {
+        ArticleInfo articleInfo = new ArticleInfo();
+        articleInfo.setUserId(currentUserIdFromCookie);
+        articleInfo.setState(1);
+        int i = articleInfoDao.updateByKey(articleInfo);
+        return i == 1 ? Message.createBySuccess() : Message.createByError();
     }
 }

@@ -162,4 +162,23 @@ public interface OrderInfoService extends BaseService<OrderInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.order.api.pojo.OrderInfo>
      **/
     Message<OrderInfo> getOrderInfoById(Long id, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 条件查询公益基金订单
+     * @Date: 2020/6/13 15:27
+     * @param
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.OrderInfo>>
+     **/
+    Message<Page<OrderInfo>> getDonationOrderList(Page<OrderInfo> page);
+
+    /**
+     * @Author hmr
+     * @Description 根据订单id更新订单状态
+     * @Date: 2020/6/13 17:29
+     * @param id
+     * @param orderVersion
+     * @reture: java.lang.Integer
+     **/
+    Integer updateOrderStateByIdAndVersion(Long id, Integer orderVersion, Integer state);
 }

@@ -311,6 +311,35 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         return Message.createByError("非法访问他人数据,请立刻刷新页面重试");
     }
 
+    @Override
+    public Message<Page<OrderInfo>> getDonationOrderList(Page<OrderInfo> page) {
+        int currentPage = page.getCurrentPage();
+        int pageSize = page.getPageSize();
+        OrderInfo searchCondition = page.getSearchCondition();
+        if(searchCondition == null){
+            searchCondition = new OrderInfo();
+            searchCondition.setOrderField("payment_money");
+            searchCondition.setOrderFieldType("DESC");
+        }
+        searchCondition.setStartIndex((currentPage - 1) * pageSize);
+        searchCondition.setEndIndex(pageSize);
+        Integer count = orderInfoDao.selectDonationCount();
+        List<OrderInfo> orderInfoList = orderInfoDao.selectDonationListByCondition(searchCondition);
+        page.setTotalCount(count);
+        page.setData(orderInfoList);
+        return Message.createBySuccess(page);
+    }
+
+    @Override
+    public Integer updateOrderStateByIdAndVersion(Long id, Integer orderVersion, Integer state) {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("id", id.toString());
+        param.put("version", orderVersion.toString());
+        param.put("state", state.toString());
+        Integer i = orderInfoDao.updateOrderStateById(param);
+        return i;
+    }
+
     /**
      * @Author hmr
      * @Description 根据type和clazz获得结果

@@ -1,20 +1,8 @@
 package top.imuster.user.provider.web.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.domain.Page;
-import top.imuster.common.base.wrapper.Message;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.order.api.dto.OrderTrendDto;
-import top.imuster.order.api.pojo.OrderInfo;
-import top.imuster.order.api.pojo.ProductDonationApplyInfo;
-import top.imuster.order.api.service.DonationApplyServiceFeignApi;
-import top.imuster.order.api.service.OrderServiceFeignApi;
-
-import java.io.IOException;
 
 /**
  * @ClassName: AdminOrderController
@@ -26,19 +14,19 @@ import java.io.IOException;
 @RequestMapping("/admin/order")
 public class AdminOrderController extends BaseController {
 
-    @Autowired
+    /*@Autowired
     OrderServiceFeignApi orderServiceFeignApi;
 
     @Autowired
     DonationApplyServiceFeignApi donationApplyServiceFeignApi;
 
-    /**
+    *//**
      * @Description: 管理员分页条件查询订单
      * @Author: hmr
      * @Date: 2020/1/11 10:41
      * @param page
      * @reture: top.imuster.common.base.wrapper.Message
-     **/
+     **//*
     @PostMapping
     @ApiOperation(value = "管理员分页条件查询订单", httpMethod = "POST")
     public Message<Page<OrderInfo>> orderList(@ApiParam @RequestBody Page<OrderInfo> page){
@@ -92,6 +80,6 @@ public class AdminOrderController extends BaseController {
     @PostMapping("/list")
     public Message<Page<ProductDonationApplyInfo>> getList(@RequestBody Page<ProductDonationApplyInfo> page){
         return donationApplyServiceFeignApi.getApplyList(page);
-    }
+    }*/
 }
 

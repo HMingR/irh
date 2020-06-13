@@ -32,6 +32,9 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	private final static String SELECT_PRODUCT_ID_BY_ORDER_CODE = "selectProductIdAndBuyerIdByOrderCode";
 	private final static String UPDATE_ORDER_STATE_BY_ORDER_CODE = "updateOrderStateByOrderCode";
 	private final static String GET_BUYER_ID_BY_ORDER_CODE = "getBuyerIdByOrderCode";
+	private final static String SELECT_DONATION_COUNT = "selectDonationCount";
+	private final static String SELECT_DONATION_LIST_BY_CONDITION = "selectDonationListByCondition";
+	private final static String UPDATE_ORDER_STATE_BY_ID = "updateOrderStateById";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
@@ -100,6 +103,21 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	@Override
 	public Integer updateOrderStateByOrderCode(OrderInfo info) {
 		return this.update(getNameSpace(UPDATE_ORDER_STATE_BY_ORDER_CODE), info);
+	}
+
+	@Override
+	public Integer selectDonationCount() {
+		return this.select(getNameSpace(SELECT_DONATION_COUNT), null);
+	}
+
+	@Override
+	public List<OrderInfo> selectDonationListByCondition(OrderInfo orderInfo) {
+		return this.selectList(getNameSpace(SELECT_DONATION_LIST_BY_CONDITION), orderInfo);
+	}
+
+	@Override
+	public Integer updateOrderStateById(HashMap<String, String> param) {
+		return this.update(getNameSpace(UPDATE_ORDER_STATE_BY_ID), param);
 	}
 
 }

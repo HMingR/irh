@@ -69,7 +69,7 @@ public class OrderInfo extends BaseDomain {
 	private String address;
 
 	// 10:线上交易 20:线下交易 30:公益捐赠
-	@ApiModelProperty("10:线上交易 20:线下交易 30:公益捐赠")
+	@ApiModelProperty("10:正常交易  20:公益捐赠")
 	private Integer tradeType;
 
 	// 支付时间
@@ -103,7 +103,26 @@ public class OrderInfo extends BaseDomain {
 	@ApiModelProperty("10:订单超时 20:取消订单 40:等待支付 50:交易成功 60:买家删除订单  70:卖家删除订单  80:评价  90:追评  100:捐款金额已分配 ")
 	//private Short state;
 
+	//查询时需要
+	private String minMoney;
 
+	private String maxMoney;
+
+	public String getMinMoney() {
+		return minMoney;
+	}
+
+	public void setMinMoney(String minMoney) {
+		this.minMoney = minMoney;
+	}
+
+	public String getMaxMoney() {
+		return maxMoney;
+	}
+
+	public void setMaxMoney(String maxMoney) {
+		this.maxMoney = maxMoney;
+	}
 
 	public Long getEvaluateId() {
 		return evaluateId;

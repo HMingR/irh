@@ -130,7 +130,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
 
         //将选择出来的orderInfo保存到redis里面，并且设置2分钟的过期时间
         String redisKey = RedisUtil.getDonationApplyCode(String.valueOf(applyId));
-        redisTemplate.opsForValue().set(redisKey, resString, 2, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(redisKey, resString, 5, TimeUnit.MINUTES);
         return Message.createBySuccess(String.valueOf(totalMoney.doubleValue()));
     }
 
@@ -297,6 +297,27 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
         if(state == null && state != 4 && state != 5) searchCondition.setState(4);
         page = this.selectPage(searchCondition, page);
         return Message.createBySuccess(page);
+    }
+
+    @Override
+    @Transactional
+    public Message<String> determine(ProductDonationApplyInfo applyInfo, Long userId) {
+        List<OrderInfo> orderInfos = applyInfo.getOrderList();
+        if(CollectionUtils.isEmpty(orderInfos)) return Message.createByError("选择的订单不能为空");
+        Double applyAmount = 0D;
+        Integer index = 0;
+        for (OrderInfo orderInfo : orderInfos){
+            index++;
+            String paymentMoney = orderInfo.getPaymentMoney();
+            applyAmount += Double.parseDouble(paymentMoney);
+            Integer temp = orderInfoService.updateOrderStateByIdAndVersion(orderInfo.getId(), orderInfo.getOrderVersion(), 100);
+            if(temp != 1) throw new OrderException("您选择的第 " + index + " 个订单信息已经被修改,请刷新后重试");
+        }
+        applyInfo.setState(5);
+        applyInfo.setPaymentAmount(applyAmount.toString());
+        int i = productDonationApplyInfoDao.updateByKey(applyInfo);
+        if(i != 1) throw new OrderException("更新申请信息失败");
+        return Message.createBySuccess();
     }
 
     private List<DonationAttributeDto> getListByRedisKey(String redisKey){

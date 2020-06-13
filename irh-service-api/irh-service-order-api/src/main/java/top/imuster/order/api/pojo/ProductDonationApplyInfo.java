@@ -82,6 +82,17 @@ public class ProductDonationApplyInfo extends BaseDomain {
 
 	private String maxMoney;
 
+	//发放金额选中的订单信息
+	List<OrderInfo> orderList;
+
+	public List<OrderInfo> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(List<OrderInfo> orderList) {
+		this.orderList = orderList;
+	}
+
 	public String getMinMoney() {
 		return minMoney;
 	}

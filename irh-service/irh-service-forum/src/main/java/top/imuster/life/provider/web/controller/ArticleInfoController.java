@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
 import top.imuster.common.core.validate.ValidateGroup;
@@ -57,15 +56,9 @@ public class ArticleInfoController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("用户删除自己的帖子")
-    @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> deleteArticle(@PathVariable("id")Long id){
-        //todo 需要校验
-        ArticleInfo condition = new ArticleInfo();
-        condition.setId(id);
-        condition.setState(1);
-        articleInfoService.updateByKey(condition);
-        return Message.createBySuccess();
+        return articleInfoService.deleteArticle(id, getCurrentUserIdFromCookie());
     }
 
     /**

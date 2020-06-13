@@ -3,6 +3,7 @@ package top.imuster.life.provider.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import top.imuster.common.base.dao.BaseDaoImpl;
+import top.imuster.common.core.dto.BrowserTimesDto;
 import top.imuster.life.api.dto.ForwardDto;
 import top.imuster.life.api.dto.UserBriefDto;
 import top.imuster.life.api.pojo.ArticleInfo;
@@ -90,8 +91,8 @@ public class ArticleInfoDaoImpl extends BaseDaoImpl<ArticleInfo, Long> implement
 	}
 
 	@Override
-	public void updateBrowserTimesByCondition(List<ArticleInfo> update) {
-		this.update(getNameSpace(SELECT_BROWSER_TIMES_BY_CONDITION), update);
+	public Integer updateBrowserTimesByCondition(List<BrowserTimesDto> update) {
+		return this.update(getNameSpace(SELECT_BROWSER_TIMES_BY_CONDITION), update);
 	}
 
 	@Override

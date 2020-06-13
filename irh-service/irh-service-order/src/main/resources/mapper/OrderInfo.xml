@@ -291,4 +291,26 @@
 		WHERE order_code = #{orderCode,jdbcType=VARCHAR}
 	</update>
 
+	<select id="selectDonationCount" resultType="int">
+		SELECT COUNT(1)
+		FROM order_info
+		WHERE state = 50 AND trade_type = 20
+	</select>
+
+	<select id="selectDonationListByCondition" parameterType="orderInfo" resultType="orderInfo">
+		SELECT id, payment_money AS paymentMoney, order_code AS orderCode, order_version AS orderVersion
+		FROM order_info
+		WHERE state = 50 AND trade_type = 20
+		<if test="minMoney != null and minMoney != ''">payment_money &gt; #{minMoney}</if>
+		<if test="maxMoney != null and maxMoney != ''">payment_money &lt; #{maxMoney}</if>
+		ORDER BY payment_money ${orderFieldType}
+		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
+	</select>
+
+	<update id="updateOrderStateById" parameterType="hashmap" useGeneratedKeys="true">
+		UPDATE order_info
+		SET state = #{state}, order_version = order_version + 1
+		WHERE id = #{id} AND order_version = #{version}
+	</update>
+
 </mapper>

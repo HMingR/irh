@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductMessageInfo;
@@ -65,7 +64,6 @@ public class ProductMessageController extends BaseController {
     }
 
     @ApiOperation("根据留言id删除自己的留言信息")
-    @NeedLogin
     @DeleteMapping("/{id}")
     public Message<String> deleteMsg(@ApiParam("留言的id") @PathVariable("id") Long id, HttpServletRequest request){
         Long userId = getCurrentUserIdFromCookie();

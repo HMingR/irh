@@ -71,9 +71,10 @@ public interface ProductInfoService extends BaseService<ProductInfo, Long> {
      * @param userId
      * @param pageSize
      * @param currentPage
+     * @param type 1-查看自己的    2-买家查看卖家的
      * @reture: top.imuster.common.base.wrapper.Message
      **/
-    Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage);
+    Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage, int type);
 
     /**
      * @Author hmr

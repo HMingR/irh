@@ -55,6 +55,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put(GlobalConstant.IRH_COMMON_CACHE_KEY, config);
         configMap.put(GlobalConstant.IRH_HOT_TOPIC_CACHE_KEY, config.entryTtl(Duration.ofMinutes(30L)));
+        configMap.put(GlobalConstant.IRH_USER_INFO_CACHE_KEY, config.entryTtl(Duration.ofMinutes(30L)));
 
         RedisCacheManager cacheManager = RedisCacheManager.builder(factory)     // 使用自定义的缓存配置初始化一个cacheManager
                 .initialCacheNames(cacheNames)  // 注意这两句的调用顺序，一定要先调用该方法设置初始化的缓存名，再初始化相关的配置

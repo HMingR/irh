@@ -133,4 +133,32 @@ public interface OrderInfoDao extends BaseDao<OrderInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer updateOrderStateByOrderCode(OrderInfo info);
+
+    /**
+     * @Author hmr
+     * @Description 获得可分配金额的公益捐赠订单总数
+     * @Date: 2020/6/13 15:43
+     * @param
+     * @reture: java.lang.Integer
+     **/
+    Integer selectDonationCount();
+
+    /**
+     * @Author hmr
+     * @Description 查询公益订单信息
+     * @Date: 2020/6/13 15:51
+     * @param
+     * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
+     **/
+    List<OrderInfo> selectDonationListByCondition(OrderInfo orderInfo);
+
+    /**
+     * @Author hmr
+     * @Description 根据
+     * @Date: 2020/6/13 17:31
+     * @param id
+     * @param orderVersion
+     * @reture: java.lang.Integer
+     **/
+    Integer updateOrderStateById(HashMap<String, String> param);
 }

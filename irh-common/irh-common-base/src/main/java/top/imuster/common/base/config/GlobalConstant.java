@@ -82,8 +82,12 @@ public class GlobalConstant {
 
     //redis中的一般缓存
     //一般内容的缓存，使用该字符串作为Cacheable的value时，其key值需要自行添加一个唯一标识符,不能只使用方法形参
-    public static final String IRH_COMMON_CACHE_KEY = "irh::common::cache::key";
-    public static final String IRH_HOT_TOPIC_CACHE_KEY = "irh::hot::topic::cache::key";   //forum模块热搜的缓存
+    public static final String IRH_COMMON_CACHE_KEY = "irh::common::cache::key::";
+    public static final String IRH_HOT_TOPIC_CACHE_KEY = "irh::hot::topic::cache::key::";   //forum模块热搜的缓存
+    public static final String IRH_ARTICLE_USER_RANK_CACHE_KEY = "irh::hot::topic::cache::key::";   //forum用户排名缓存key
+
+    public static final String IRH_USER_INFO_CACHE_KEY = "irh::user::info::cache::key::";   //用户信息缓存
+
 
     //redis中保存浏览次数的hash表的key
     public static final String IRH_FORUM_BROWSER_TIMES_MAP = "irh::forum::browser::times::map";

@@ -165,4 +165,14 @@ public interface ArticleInfoService extends BaseService<ArticleInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> adminDeleteArticle(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 用户删除自己的文章
+     * @Date: 2020/6/12 10:33
+     * @param id
+     * @param currentUserIdFromCookie
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> deleteArticle(Long id, Long currentUserIdFromCookie);
 }

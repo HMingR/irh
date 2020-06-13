@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.OperationType;
@@ -76,12 +75,11 @@ public class ProductController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
     @ApiOperation(value = "用户查看自己发布的商品", httpMethod = "GET")
-    @NeedLogin
     @GetMapping("/list/{pageSize}/{currentPage}")
     public Message<Page<ProductInfo>> productList(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
         if(currentPage < 1 || pageSize < 1) return Message.createByError("参数错误");
         Long userId = getCurrentUserIdFromCookie();
-        return productInfoService.list(userId, pageSize, currentPage);
+        return productInfoService.list(userId, pageSize, currentPage, 1);
     }
 
 
@@ -97,7 +95,7 @@ public class ProductController extends BaseController {
     @GetMapping("/user/{pageSize}/{currentPage}/{userId}")
     public Message<Page<ProductInfo>> productListByUserId(@PathVariable("userId") Long userId, @PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage) throws GoodsException{
         if(currentPage < 1 || pageSize < 1) return Message.createByError("参数错误");
-        return productInfoService.list(userId, pageSize, currentPage);
+        return productInfoService.list(userId, pageSize, currentPage, 2);
     }
 
 
@@ -115,7 +113,7 @@ public class ProductController extends BaseController {
         if(productInfos != null && !productInfos.isEmpty()){
             return Message.createBySuccess(productInfos.get(0));
         }
-        return Message.createByError("为找到相关的商品,请刷新后重试");
+        return Message.createByError("未找到相关的商品,请刷新后重试");
     }
 
 

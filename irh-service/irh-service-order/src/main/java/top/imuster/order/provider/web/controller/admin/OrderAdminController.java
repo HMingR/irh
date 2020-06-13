@@ -69,9 +69,28 @@ public class OrderAdminController extends BaseController {
         return productDonationApplyInfoService.approve(approveInfo);
     }
 
+    /**
+     * @Author hmr
+     * @Description 自动选择订单,并返回订单总金额
+     * @Date: 2020/6/13 17:22
+     * @param applyId
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
     @PostMapping("/donation/grant/{id}")
     public Message<String> grantMoney(@PathVariable("id") Long applyId) throws JsonProcessingException {
         return productDonationApplyInfoService.grant(applyId, getCurrentUserIdFromCookie());
+    }
+
+    /**
+     * @Author hmr
+     * @Description 手动选择订单提交
+     * @Date: 2020/6/13 17:24
+     * @param ids
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @PostMapping("/donation/grant/manual")
+    public Message<String> grantMoney(@RequestBody ProductDonationApplyInfo applyInfo){
+        return productDonationApplyInfoService.determine(applyInfo, getCurrentUserIdFromCookie());
     }
 
     @GetMapping("/donation/determine/{operatorId}/{applyId}")
@@ -93,6 +112,11 @@ public class OrderAdminController extends BaseController {
     @PostMapping("/donation/approve/list")
     public Message<Page<ProductDonationApplyInfo>> getApproveList(@RequestBody Page<ProductDonationApplyInfo> page) {
         return productDonationApplyInfoService.getApproveList(page);
+    }
+
+    @PostMapping("/donation/order/list")
+    public Message<Page<OrderInfo>> getDonationOrderList(@RequestBody Page<OrderInfo> page){
+        return orderInfoService.getDonationOrderList(page);
     }
 
 }

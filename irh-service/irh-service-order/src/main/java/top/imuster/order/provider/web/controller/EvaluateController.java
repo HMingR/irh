@@ -3,6 +3,7 @@ package top.imuster.order.provider.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
@@ -89,9 +90,9 @@ public class EvaluateController extends BaseController {
 
     @ApiOperation("根据id查询该评价的内容")
     @GetMapping("/{id}")
-    public Message getEvaluateById(@PathVariable("id") Long id){
+    public Message<ProductEvaluateInfo> getEvaluateById(@PathVariable("id") Long id){
         List<ProductEvaluateInfo> lists = productEvaluateInfoService.selectEntryList(id);
-        if(lists == null || lists.isEmpty()) return Message.createBySuccess();
+        if(CollectionUtils.isEmpty(lists)) return Message.createByError("未找到相关信息");
         return Message.createBySuccess(lists.get(0));
     }
 

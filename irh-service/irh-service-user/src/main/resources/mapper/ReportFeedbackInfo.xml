@@ -174,7 +174,8 @@
 	</update>
 
 	<select id="selectAllReportByTargetId" parameterType="map" resultType="reportFeedbackInfo">
-		<![CDATA[SELECT customer_id AS customerId, target_id AS targetId, create_time AS createTime, reason]]>
+		<![CDATA[SELECT ]]>
+		<include refid="QUERY_COLUMN_LIST"/>
 		<include refid="QUERY_FROM_TABLE"/>
 		<![CDATA[ WHERE target_id = #{targetId} AND type = #{type} AND result = 2 AND state = 2 ]]>
 	</select>
