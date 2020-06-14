@@ -31,6 +31,9 @@ public class GlobalConstant {
     public static final String AUTH_HTTP_METHOD_MAP_KEY = "irh::http::method::map";
     //系统初始化时需要查出所有的权限和角色保存在redis里面
     public static final String IRH_ROLE_AND_AUTH_LIST = "irh::role::auth::list::key";
+    public static final String IRH_FIVE_MINUTES_CACHE_KEY = "irh::five::minutes::cache::key";
+    public static final String IRH_TEN_MINUTES_CACHE_KEY = "irh::ten::minutes::cache::key";
+    public static final String IRH_THIRTY_MINUTES_CACHE_KEY = "irh::thirty::minutes::cache::key";
 
     private GlobalConstant(){}
 

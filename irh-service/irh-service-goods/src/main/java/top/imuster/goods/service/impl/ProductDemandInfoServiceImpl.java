@@ -2,18 +2,23 @@ package top.imuster.goods.service.impl;
 
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.dto.BrowserTimesDto;
+import top.imuster.common.core.dto.rabbitMq.SendExamineDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
-import top.imuster.goods.api.dto.ESProductDto;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.dao.ProductDemandInfoDao;
@@ -22,6 +27,8 @@ import top.imuster.goods.service.ProductDemandInfoService;
 import top.imuster.goods.service.ProductDemandReplyInfoService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,10 +44,12 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     @Resource
     private ProductDemandReplyInfoService productDemandReplyInfoService;
 
-    private int batchSize = 100;
 
     @Resource
     private ProductDemandInfoDao productDemandInfoDao;
+
+    @Resource
+    GenerateSendMessageService generateSendMessageService;
 
     @Override
     public BaseDao<ProductDemandInfo, Long> getDao() {
@@ -48,6 +57,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_TEN_MINUTES_CACHE_KEY, key = "'userDemandList' + #p0 + '::page::' + #p2")
     public Message<Page<ProductDemandInfo>> list(Long userId, Integer pageSize, Integer currentPage) {
         Page<ProductDemandInfo> page = new Page<>();
         ProductDemandInfo condition = new ProductDemandInfo();
@@ -99,9 +109,24 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         productDemandInfoDao.insertEntry(productDemandInfo);
         Long demandInfoId = productDemandInfo.getId();
         if(demandInfoId == null) return Message.createByError();
-        productDemandInfo.setId(demandInfoId);
-        convertInfo(new ESProductDto(productDemandInfo));
-        return Message.createBySuccess();
+        SendExamineDto sendExamineDto = new SendExamineDto();
+
+        String mainPic = productDemandInfo.getMainPic();
+        String otherPics = productDemandInfo.getOtherPics();
+        ArrayList<String> imgs = new ArrayList<>();
+        if(StringUtils.isNotEmpty(otherPics)){
+            String[] split = otherPics.split(",");
+            List<String> s = Arrays.asList(split);
+            imgs.addAll(s);
+        }
+        if(StringUtils.isNotEmpty(mainPic)) imgs.add(mainPic);
+        sendExamineDto.setImgUrl(imgs);
+        sendExamineDto.setContent(new StringBuffer().append(productDemandInfo.getContent()).append(productDemandInfo.getTopic()).toString());
+        sendExamineDto.setUserId(userId);
+        sendExamineDto.setTargetId(demandInfoId);
+        sendExamineDto.setTargetType(2);
+        generateSendMessageService.sendToMq(sendExamineDto);
+        return Message.createBySuccess("发布成功,请等待审核");
     }
 
     @Override
@@ -126,6 +151,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'demandDetail::' + #p0")
     public Message<ProductDemandInfo> detailById(Long id) {
         List<ProductDemandInfo> productDemandInfos = productDemandInfoDao.selectEntryList(id);
         if(productDemandInfos == null || productDemandInfos.isEmpty()) return Message.createByError("未找到相关信息");
@@ -135,7 +161,13 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
         return Message.createBySuccess(demandInfo);
     }
 
-    @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.INSERT)
-    private void convertInfo(ESProductDto esDto){}
-
+    @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'demandDetail::' + #p0.id")
+    @ReleaseAnnotation(type = ReleaseType.DEMAND, value = "#p0", operationType = OperationType.UPDATE)
+    public Message<String> edit(ProductDemandInfo productDemandInfo) {
+        int i = updateByKey(productDemandInfo);
+        if(i != 1)
+            throw new GoodsException("更新失败");
+        return Message.createBySuccess();
+    }
 }

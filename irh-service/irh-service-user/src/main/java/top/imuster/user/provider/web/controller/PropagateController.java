@@ -1,7 +1,9 @@
 package top.imuster.user.provider.web.controller;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
@@ -46,6 +48,7 @@ public class PropagateController extends BaseController {
     }
 
     @GetMapping("/detail/{id}")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'propagateDetail' + #p0")
     public Message<PropagateInfo> getDetail(@PathVariable("id") Long id){
         List<PropagateInfo> propagateInfos = propagateInfoService.selectEntryList(id);
         if(CollectionUtils.isNotEmpty(propagateInfos)) return Message.createBySuccess(propagateInfos.get(0));

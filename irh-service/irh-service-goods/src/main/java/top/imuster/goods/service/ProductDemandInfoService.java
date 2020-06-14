@@ -42,7 +42,7 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @Description 根据demand的id删除自己发布的需求
      * @Date: 2020/5/3 16:17
      * @param id
-     * @param userId
+     * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> deleteById(Long id, Long userId);
@@ -86,4 +86,13 @@ public interface ProductDemandInfoService extends BaseService<ProductDemandInfo,
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.goods.api.pojo.ProductDemandInfo>
      **/
     Message<ProductDemandInfo> detailById(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 修改信息
+     * @Date: 2020/6/14 8:49
+     * @param productDemandInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> edit(ProductDemandInfo productDemandInfo);
 }

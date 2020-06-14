@@ -32,4 +32,13 @@ public interface ProductDemandReplyInfoService extends BaseService<ProductDemand
      * @reture: java.lang.Integer
      **/
     Integer getReplyTotalByDemandId(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 写留言
+     * @Date: 2020/6/14 10:06
+     * @param replyInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> writeReply(ProductDemandReplyInfo replyInfo);
 }

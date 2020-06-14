@@ -31,7 +31,7 @@ public @interface Idempotent {
      * @param
      * @reture: int
      **/
-    int timeTotal();
+    int timeTotal() default 5;
 
 
     /**
@@ -41,7 +41,7 @@ public @interface Idempotent {
      * @param
      * @reture: java.util.concurrent.TimeUnit
      **/
-    TimeUnit timeUnit();
+    TimeUnit timeUnit() default TimeUnit.MINUTES;
 
 
     String msg() default "操作繁忙,请稍后再试";

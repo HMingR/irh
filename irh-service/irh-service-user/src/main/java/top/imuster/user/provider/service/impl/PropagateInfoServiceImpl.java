@@ -1,12 +1,15 @@
 package top.imuster.user.provider.service.impl;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -49,6 +52,7 @@ public class PropagateInfoServiceImpl extends BaseServiceImpl<PropagateInfo, Lon
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'propagate::' + #p2 + '::page::' + #p1 ")
     public Message<Page<PropagateInfo>> getBriefList(Integer pageSize, Integer currentPage, Integer type) {
         Page<PropagateInfo> page = new Page<>();
         PropagateInfo condition = new PropagateInfo();
@@ -75,6 +79,7 @@ public class PropagateInfoServiceImpl extends BaseServiceImpl<PropagateInfo, Lon
 
     @Override
     public Integer saveBrowseTimes2DB(List<BrowserTimesDto> res) {
+        if(CollectionUtils.isEmpty(res)) return 0;
         return propagateInfoDao.updateBrowseTimes(res);
     }
 

@@ -3,9 +3,12 @@ package top.imuster.goods.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
@@ -47,7 +50,7 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     }
 
     @Override
-//    @Cacheable(value = RedisCachePrefix + 'asdf')
+    @Cacheable(value = GlobalConstant.IRH_THIRTY_MINUTES_CACHE_KEY, key = "goodsCagetory")
     public Message<List<ProductCategoryInfo>> getCategoryTree() throws GoodsException {
         try{
             List<ProductCategoryInfo> allCategory =productCategoryInfoDao.selectAllCategory();
@@ -58,6 +61,7 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_THIRTY_MINUTES_CACHE_KEY, key = "goodsCagetory")
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer delCategoryById(Long id) throws GoodsException {
         Long parentId = productCategoryInfoDao.selectEntryList(id).get(0).getParentId();

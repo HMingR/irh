@@ -262,6 +262,7 @@ public class RecommendProductServiceImpl implements RecommendProductService {
             if(res.size() >= 5) res = res.subList(0, 4);
         }
         redisTemplate.delete(tempKey);
+        redisTemplate.delete(resultKey);
         return Message.createBySuccess(res);
     }
 }

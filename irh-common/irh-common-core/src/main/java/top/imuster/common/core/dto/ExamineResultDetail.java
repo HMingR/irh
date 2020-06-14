@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * @ClassName: ContentDetail
- * @Description: TODO
+ * @Description: ContentDetail
  * @author: hmr
  * @date: 2020/5/21 15:49
  */

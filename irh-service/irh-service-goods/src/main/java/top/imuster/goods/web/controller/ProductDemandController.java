@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.BrowserAnnotation;
-import top.imuster.common.core.annotation.ReleaseAnnotation;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.common.core.enums.BrowserType;
-import top.imuster.common.core.enums.OperationType;
-import top.imuster.common.core.enums.ReleaseType;
 import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductDemandInfo;
 import top.imuster.goods.service.ProductDemandInfoService;
@@ -54,13 +51,10 @@ public class ProductDemandController extends BaseController {
     }
 
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
-    @ReleaseAnnotation(type = ReleaseType.DEMAND, value = "#p0", operationType = OperationType.UPDATE)
-    @PostMapping
     public Message<String> edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
         validData(bindingResult);
         productDemandInfo.setConsumerId(getCurrentUserIdFromCookie());
-        productDemandInfoService.updateByKey(productDemandInfo);
-        return Message.createBySuccess("修改成功");
+        return productDemandInfoService.edit(productDemandInfo);
     }
 
     @ApiOperation(value = "删除用户自己发布的需求", httpMethod = "DELETE")

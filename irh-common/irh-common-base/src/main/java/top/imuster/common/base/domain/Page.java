@@ -1,11 +1,11 @@
 package top.imuster.common.base.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +13,8 @@ import java.util.List;
  * @param <T> 实体
  */
 @ApiModel("分页实体类")
-public class Page<T> {
+public class Page<T> implements Serializable {
+
 	//初始化size
 	@ApiModelProperty("初始化size")
 	private final static int INIT_SIZE = 10;

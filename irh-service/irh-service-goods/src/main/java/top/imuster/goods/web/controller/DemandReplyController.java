@@ -38,8 +38,7 @@ public class DemandReplyController extends BaseController {
         validData(bindingResult);
         Long userId = getCurrentUserIdFromCookie();
         replyInfo.setUserId(userId);
-        productDemandReplyInfoService.insertEntry(replyInfo);
-        return Message.createBySuccess();
+        return productDemandReplyInfoService.writeReply(replyInfo);
     }
 
 }

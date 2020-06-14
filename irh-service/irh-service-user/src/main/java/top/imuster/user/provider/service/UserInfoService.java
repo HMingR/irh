@@ -127,4 +127,23 @@ public interface UserInfoService extends BaseService<UserInfo, Long> {
      * @reture: top.imuster.user.api.pojo.UserInfo
      **/
     UserInfo loginByUserId(Long userId);
+
+    /**
+     * @Author hmr
+     * @Description 修改用户信息
+     * @Date: 2020/6/14 9:19
+     * @param userInfo
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> editUserInfo(UserInfo userInfo);
+
+    /**
+     * @Author hmr
+     * @Description 修改用户头像
+     * @Date: 2020/6/14 9:26
+     * @param userId
+     * @param picUri
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> editUserPortrait(Long userId, String picUri);
 }

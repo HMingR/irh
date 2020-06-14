@@ -4,10 +4,13 @@ package top.imuster.order.provider.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -161,6 +164,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'orderDetail::' + #p0")
     public Message<String> finishOrder(Long orderId, Long userId) {
         List<OrderInfo> orderInfos = this.selectEntryList(orderId);
         if(orderInfos == null || orderInfos.isEmpty()){
@@ -300,6 +304,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'orderDetail::' + #p0")
     public Message<OrderInfo> getOrderInfoById(Long id, Long userId) {
         List<OrderInfo> orderInfoList = orderInfoDao.selectEntryList(id);
         if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createByError("为找到相关信息");

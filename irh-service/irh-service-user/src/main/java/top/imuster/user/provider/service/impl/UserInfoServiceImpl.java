@@ -3,7 +3,9 @@ package top.imuster.user.provider.service.impl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -125,7 +127,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'user::' + #p0")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'userName::' + #p0")
     public String getUserNameById(Long id) {
         String s = userInfoDao.selectUserNameById(id);
         if(StringUtils.isBlank(s)){
@@ -148,6 +150,7 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'userDto::' + #p0")
     public Message<UserDto> getUserDtoByUserId(Long userId) {
         UserDto userDto = userInfoDao.selectUserDtoById(userId);
         //没有找到,则直接返回用户id
@@ -178,5 +181,26 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfo, Long> impleme
     @Override
     public UserInfo loginByUserId(Long userId) {
         return userInfoDao.loginByUserId(userId);
+    }
+
+    @Override
+
+    @Caching(evict = {
+            @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'user::' + #p0.id"),
+            @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'userDto::' + #p0.id")
+    })
+    public Message<String> editUserInfo(UserInfo userInfo) {
+        userInfoDao.updateByKey(userInfo);
+        return Message.createBySuccess();
+    }
+
+    @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'userDto::' + #p0.id")
+    public Message<String> editUserPortrait(Long userId, String picUri) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
+        userInfo.setPortrait(picUri);
+        int i = userInfoDao.updateByKey(userInfo);
+        return i == 1 ? Message.createBySuccess() : Message.createByError();
     }
 }
