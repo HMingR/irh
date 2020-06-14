@@ -2,6 +2,7 @@ package top.imuster.order.provider.dao;
 
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.order.api.dto.DonationAttributeDto;
 import top.imuster.order.api.pojo.ProductDonationApplyInfo;
@@ -69,6 +70,7 @@ public interface ProductDonationApplyInfoDao extends BaseDao<ProductDonationAppl
      * @param applyId
      * @reture: top.imuster.order.api.pojo.ProductDonationApplyInfo
      **/
+    @Cacheable(value = "productDonationDetail", key = "#applyId")
     ProductDonationApplyInfo selectApplyInfoById(Long applyId);
 
     /**

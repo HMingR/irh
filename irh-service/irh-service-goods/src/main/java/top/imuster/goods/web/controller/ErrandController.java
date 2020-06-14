@@ -15,7 +15,6 @@ import top.imuster.goods.service.ErrandInfoService;
 import top.imuster.life.api.pojo.ErrandInfo;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName: ErrandController
@@ -66,13 +65,7 @@ public class ErrandController extends BaseController {
 
     @GetMapping("/detail/{id}")
     public Message<ErrandInfo> getDetail(@PathVariable("id") Long id){
-        List<ErrandInfo> errandInfos = errandInfoService.selectEntryList(id);
-        if(errandInfos == null || errandInfos.isEmpty()) return Message.createByError("未找到相关订单,请稍后重试");
-        ErrandInfo errandInfo = errandInfos.get(0);
-        errandInfo.setCypher("");
-        errandInfo.setPhoneNum("");
-        errandInfo.setAddress("");
-        return Message.createBySuccess(errandInfo);
+        return errandInfoService.detail(id);
     }
 
     /**

@@ -51,6 +51,7 @@ public class ProductDemandController extends BaseController {
     }
 
     @ApiOperation(value = "根据主键id修改信息", httpMethod = "POST")
+    @PostMapping
     public Message<String> edit(@RequestBody @Validated(ValidateGroup.editGroup.class) ProductDemandInfo productDemandInfo, BindingResult bindingResult){
         validData(bindingResult);
         productDemandInfo.setConsumerId(getCurrentUserIdFromCookie());

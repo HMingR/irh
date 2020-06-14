@@ -189,6 +189,7 @@ public class ExamineQueueListener {
     private void getTargetInfoByIdAndType(Integer type, Long targetId){
         if(type == 1){
             //商品
+            productInfoService.updateProductStateById(targetId, 2);
             ProductInfo info = productInfoService.getProductBriefInfoById(targetId);
             if(info != null) trans2ES.save2ES(new ESProductDto(info));
         }else if(type == 2){

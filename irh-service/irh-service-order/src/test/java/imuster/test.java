@@ -1,12 +1,18 @@
 package imuster;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import top.imuster.common.core.dto.rabbitMq.SendOrderExpireDto;
 import top.imuster.order.provider.IrhOrderApplication;
-import top.imuster.order.provider.dao.OrderInfoDao;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
 import javax.annotation.Resource;
@@ -23,8 +29,11 @@ import java.util.Map;
 @SpringBootTest(classes = IrhOrderApplication.class)
 public class test {
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Resource
-    public OrderInfoDao orderInfoDao;
+    RabbitTemplate rabbitTemplate;
 
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
@@ -33,6 +42,21 @@ public class test {
     public void test(){
         Map<String, String> user = userServiceFeignApi.getUserAddressAndPhoneById(5L);
         System.out.println(user.get("address"));
+    }
+
+    @Test
+    public void test02() throws JsonProcessingException {
+        SendOrderExpireDto sendOrderExpireDto = new SendOrderExpireDto();
+        sendOrderExpireDto.setOrderId(1L);
+        sendOrderExpireDto.setUserId(5L);
+        sendOrderExpireDto.setTtl("5000");
+        rabbitTemplate.convertAndSend("dlx_exchange_inform", "dlx_order", objectMapper.writeValueAsString(sendOrderExpireDto), new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message message) throws AmqpException {
+                message.getMessageProperties().getHeaders().put("expiration", "5000");
+                return message;
+            }
+        });
     }
 
 }

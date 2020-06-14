@@ -5,9 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import top.imuster.common.base.config.cache.RedisCachePrefix;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -43,7 +44,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
-    @Cacheable(value = RedisCachePrefix.IRH_ERRAND_LIST, key = "#p2 + 'errandList::' + #p1")
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#userId + 'errandList::' + #p1 + ':state:' + #state")
     public Message<Page<ErrandInfo>> getListByCondition(Integer pageSize, Integer currentPage, Long userId, Integer state) {
         Page<ErrandInfo> page = new Page<>();
         ErrandInfo condition = new ErrandInfo();
@@ -72,6 +73,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#userId + 'errandList*'")
     public Message<String> deleteErrandById(Long id, Long userId, Integer version) {
         List<ErrandInfo> errandInfos = errandInfoDao.selectEntryList(id);
         if(errandInfos == null || errandInfos.isEmpty()) return Message.createByError("未找到相关信息,请刷新后重试");
@@ -90,6 +92,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'*errandList'")
     public boolean updateStateByIdAndVersion(Long id, Integer errandVersion, Integer state) {
         ErrandInfo errandInfo = new ErrandInfo();
         errandInfo.setVersion(errandVersion);
@@ -100,6 +103,7 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#userId + 'errandList*'")
     public Message<String> release(ErrandInfo errandInfo, Long userId) {
         String address = errandInfo.getAddress();
         String phoneNum = errandInfo.getPhoneNum();
@@ -159,6 +163,17 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         List<ErrandInfo> errandInfos = this.selectEntryList(errandId);
         if(errandInfos == null || errandInfos.isEmpty()) return null;
         return errandInfos.get(0).getVersion();
+    }
+
+    @Override
+    public Message<ErrandInfo> detail(Long id) {
+        List<ErrandInfo> errandInfos = errandInfoDao.selectEntryList(id);
+        if(errandInfos == null || errandInfos.isEmpty()) return Message.createByError("未找到相关订单,请稍后重试");
+        ErrandInfo errandInfo = errandInfos.get(0);
+        errandInfo.setCypher("");
+        errandInfo.setPhoneNum("");
+        errandInfo.setAddress("");
+        return Message.createBySuccess(errandInfo);
     }
 
 }

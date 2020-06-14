@@ -21,7 +21,6 @@ import org.springframework.util.AntPathMatcher;
 public class MessageProviderApplication {
     public static void main(String[] args) {
         try{
-
             SpringApplication.run(MessageProviderApplication.class, args);
         }catch (Exception e){
             e.printStackTrace();

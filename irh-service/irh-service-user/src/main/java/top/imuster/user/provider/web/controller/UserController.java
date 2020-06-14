@@ -3,6 +3,7 @@ package top.imuster.user.provider.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,7 @@ import top.imuster.user.provider.service.UserInfoService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @ClassName: CustomerController
@@ -56,7 +58,9 @@ public class UserController extends BaseController {
     @ApiOperation("获得个人信息")
     @GetMapping("/detail")
     public Message<UserInfo> getUserInfoById(){
-        UserInfo userInfo = userInfoService.selectEntryList(getCurrentUserIdFromCookie()).get(0);
+        List<UserInfo> userInfos = userInfoService.selectEntryList(getCurrentUserIdFromCookie());
+        if(CollectionUtils.isEmpty(userInfos)) return Message.createByError("未找到相关人员信息");
+        UserInfo userInfo = userInfos.get(0);
         userInfo.setPassword("");
         return Message.createBySuccess(userInfo);
     }

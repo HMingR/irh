@@ -52,7 +52,7 @@ public class PropagateInfoServiceImpl extends BaseServiceImpl<PropagateInfo, Lon
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'propagate::' + #p2 + '::page::' + #p1 ")
+    @Cacheable(value = GlobalConstant.IRH_THIRTY_MINUTES_CACHE_KEY, key = "'propagate::' + #p2 + '::page::' + #p1 ")
     public Message<Page<PropagateInfo>> getBriefList(Integer pageSize, Integer currentPage, Integer type) {
         Page<PropagateInfo> page = new Page<>();
         PropagateInfo condition = new PropagateInfo();

@@ -93,4 +93,13 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: java.lang.Integer
      **/
     Integer getErrandVersionById(Long errandId);
+
+    /**
+     * @Author hmr
+     * @Description 根据id查看详情
+     * @Date: 2020/6/14 16:12
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.life.api.pojo.ErrandInfo>
+     **/
+    Message<ErrandInfo> detail(Long id);
 }

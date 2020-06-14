@@ -6,11 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -28,6 +28,7 @@ import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.dto.OrderTrendDto;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.provider.dao.OrderInfoDao;
+import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.order.provider.service.ProductEvaluateInfoService;
 import top.imuster.user.api.service.UserServiceFeignApi;
@@ -140,6 +141,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
 
 
     @Override
+    @Cacheable(value = "userProductOrderList::", key = "#userId + ':type:' + #type + ':page:' + #currentPage")
     public Message<Page<OrderInfo>> list(Integer pageSize, Integer currentPage, Long userId, Integer type) {
         Page<OrderInfo> page = new Page<>();
         OrderInfo orderInfo = new OrderInfo();
@@ -164,7 +166,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
-    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'orderDetail::' + #p0")
+    @Caching(evict = {
+            @CacheEvict(value = "userProductOrderList::", key = "#userId + '*'")
+    })
     public Message<String> finishOrder(Long orderId, Long userId) {
         List<OrderInfo> orderInfos = this.selectEntryList(orderId);
         if(orderInfos == null || orderInfos.isEmpty()){
@@ -219,6 +223,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "userProductOrderList::", key = "#userId + '*'")
+    })
     @Transactional
     public Message<String> cancelOrder(Long orderId, Long userId, Integer type) {
         List<OrderInfo> list = this.selectEntryList(orderId);
@@ -245,7 +252,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
                     boolean flag = goodsServiceFeignApi.updateProductState(productId, 2);
                     if(!flag){
                         log.error("用户关闭订单编号为{}的订单失败,未能改变编号为{}商品的状态", orderId, productId);
-                        return Message.createByError("删除失败,请稍后重试");
+                        throw new OrderException("删除失败");
                     }
                     redisTemplate.delete(orderCodeKey);
                     order.setState(20);
@@ -253,7 +260,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
             }else{
                 //订单超时
                 boolean flag = goodsServiceFeignApi.updateProductState(productId, 2);
-                if(!flag) return Message.createByError("删除失败,请稍后重试");
+                if(!flag) throw new OrderException("删除失败,请稍后重试");
                 order.setState(10);
 
                 //发送消息
@@ -283,6 +290,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "userProductOrderList::", key = "#buyerId + '*'")
+    })
     public Integer cancleOrderByCode(String orderCode, Long buyerId, Long orderId) {
         List<OrderInfo> list = this.selectEntryList(orderId);
         if(list == null || list.isEmpty()) return 0;
@@ -304,7 +314,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'orderDetail::' + #p0")
     public Message<OrderInfo> getOrderInfoById(Long id, Long userId) {
         List<OrderInfo> orderInfoList = orderInfoDao.selectEntryList(id);
         if(orderInfoList == null || orderInfoList.isEmpty()) return Message.createByError("为找到相关信息");

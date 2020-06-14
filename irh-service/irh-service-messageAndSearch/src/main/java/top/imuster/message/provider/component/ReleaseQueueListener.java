@@ -49,6 +49,7 @@ public class ReleaseQueueListener {
     ))
     @RabbitHandler
     public void GoodsReleaseListener(String msg) throws JsonProcessingException {
+        log.info("发布商品到ES中");
         SendReleaseDto releaseDto = null;
         try {
             JSONObject jsonObject = JSONObject.parseObject(msg);

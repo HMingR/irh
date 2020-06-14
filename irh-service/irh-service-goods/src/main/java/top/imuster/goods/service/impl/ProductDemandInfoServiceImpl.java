@@ -57,7 +57,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_TEN_MINUTES_CACHE_KEY, key = "'userDemandList' + #p0 + '::page::' + #p2")
+    @Cacheable(value = "userDemandList::", key = "#userId + '::page::' + #currentPage")
     public Message<Page<ProductDemandInfo>> list(Long userId, Integer pageSize, Integer currentPage) {
         Page<ProductDemandInfo> page = new Page<>();
         ProductDemandInfo condition = new ProductDemandInfo();
@@ -88,6 +88,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     }
 
     @Override
+    @CacheEvict(value = "userDemandList::", key = "#userId + '::page::*'")
     @ReleaseAnnotation(type = ReleaseType.DEMAND, value = "#p0", operationType = OperationType.REMOVE)
     public Message<String> deleteById(Long id, Long userId) {
         Long userIdByDemandId = productDemandInfoDao.selectUserIdByDemandId(id);
@@ -104,6 +105,7 @@ public class ProductDemandInfoServiceImpl extends BaseServiceImpl<ProductDemandI
     }
 
     @Override
+    @CacheEvict(value = "userDemandList::", key = "#userId + '::page::*'")
     public Message<String> releaseDemand(ProductDemandInfo productDemandInfo, Long userId) {
         productDemandInfo.setConsumerId(userId);
         productDemandInfoDao.insertEntry(productDemandInfo);

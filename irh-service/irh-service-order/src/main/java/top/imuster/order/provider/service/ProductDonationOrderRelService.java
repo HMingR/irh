@@ -1,6 +1,7 @@
 package top.imuster.order.provider.service;
 
 
+import org.springframework.cache.annotation.Cacheable;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.pojo.ProductDonationOrderRel;
@@ -21,5 +22,6 @@ public interface ProductDonationOrderRelService extends BaseService<ProductDonat
      * @param applyId
      * @reture: java.util.List<top.imuster.order.api.pojo.OrderInfo>
      **/
+    @Cacheable(value = "productDonationUseOrderList", key = "#applyId")
     List<OrderInfo> getOrderInfoByApplyId(Long applyId);
 }

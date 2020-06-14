@@ -24,7 +24,6 @@ public class ProductCollectController extends BaseController {
     @Autowired
     ProductCollectRelService productCollectRelService;
 
-
     /**
      * @Author hmr
      * @Description 收藏

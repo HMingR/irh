@@ -1,5 +1,6 @@
 package top.imuster.common.core.config;
 
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import top.imuster.common.core.enums.MqTypeEnum;
 
+import java.util.Map;
+
 /**
  * @ClassName: RabbitMqConfig
  * @Description: 消息队列配置类
@@ -26,6 +29,9 @@ public class RabbitMqConfig {
     private static final Logger log = LoggerFactory.getLogger(RabbitMqConfig.class);
     //交换机名称
     public static final String EXCHANGE_TOPICS_INFORM = "exchange_topics_inform";
+
+    //私信队列交换机
+    public static final String DLX_EXCHANGE_INFORM = "dlx_exchange_inform";
 
     @Autowired
     private CachingConnectionFactory connectionFactory;
@@ -102,10 +108,71 @@ public class RabbitMqConfig {
         return new Queue(MqTypeEnum.EXAMINE_INFO.getQueueName(), true);
     }
 
+
+    /**
+     * @Author hmr
+     * @Description 下单成功之后进入该队列
+     * @Date: 2020/6/14 19:38
+     * @param
+     * @reture: org.springframework.amqp.core.Queue
+     **/
+    @Bean
+    public Queue orderWaitPayQueue(){
+        Map<String, Object> argsMap= Maps.newHashMap();
+        argsMap.put("x-dead-letter-exchange", DLX_EXCHANGE_INFORM);
+        argsMap.put("x-dead-letter-routing-key", "#");
+        return new Queue("WAIT_PAY_QUEUE",true,false,false,argsMap);
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 订单超时队列
+     * @Date: 2020/6/14 19:41
+     * @param
+     * @reture: org.springframework.amqp.core.Queue
+     **/
+    @Bean
+    public Queue orderExpireQueue(){
+        return new Queue(MqTypeEnum.ORDER_DLX.getQueueName(), true);
+    }
+
     @Bean(EXCHANGE_TOPICS_INFORM)
     public Exchange exchange(){
         return ExchangeBuilder.topicExchange(EXCHANGE_TOPICS_INFORM).durable(true).build();
     }
+
+    /**
+     * @Author hmr
+     * @Description 死信交换机
+     * @Date: 2020/6/14 19:36
+     * @param
+     * @reture: org.springframework.amqp.core.Exchange
+     **/
+    @Bean(DLX_EXCHANGE_INFORM)
+    public Exchange deadExchange(){
+        return ExchangeBuilder.topicExchange(DLX_EXCHANGE_INFORM).durable(true).build();
+    }
+
+
+
+    @Bean
+    public Binding orderWaitPayBinding() {
+        return BindingBuilder.bind(orderWaitPayQueue()).to(exchange()).with("#").noargs();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 处理超时未支付的订单  业务队列
+     * @Date: 2020/6/14 19:36
+     * @param exchange
+     * @reture: org.springframework.amqp.core.Binding
+     **/
+    @Bean
+    public Binding orderExpireBinding() {
+        return BindingBuilder.bind(orderExpireQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKeyMatchRule()).noargs();
+    }
+
 
     @Bean
     public Binding emailQueueBinding(@Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){

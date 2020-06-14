@@ -4,8 +4,11 @@ package top.imuster.goods.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -52,6 +55,7 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#userId + '::goodsCollectionList*'")
     public Message<String> collect(Long userId, Integer type, Long id) {
         ProductCollectRel collectRel = new ProductCollectRel();
         collectRel.setProductId(id);
@@ -67,6 +71,7 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#currentUserId + '::goodsCollectionList*'")
     public Message<String> deleteCollect(Long currentUserId, Long targetId, Integer type) {
         ProductCollectRel productCollectRel = new ProductCollectRel();
         productCollectRel.setType(type);
@@ -83,12 +88,14 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#currentUserIdFromCookie + '::goodsCollectionList*'")
     public Message<Integer> deleteAddCollect(Long currentUserIdFromCookie) {
         Integer total = productCollectRelDao.deleteAllCollectByUserId(currentUserIdFromCookie);
         return Message.createBySuccess(total);
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#currentUserIdFromCookie + '::goodsCollectionList::' + #currentPage")
     public Message<Page<ProductAndDemandDto>> list(Integer pageSize, Integer currentPage, Long currentUserIdFromCookie) {
         Page<ProductCollectRel> page = new Page<>();
         ProductCollectRel condition = new ProductCollectRel();
@@ -134,6 +141,7 @@ public class ProductCollectRelServiceImpl extends BaseServiceImpl<ProductCollect
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#currentUserId + '::goodsCollectionList*'")
     public Message<String> deleteCollect(Long id, Long currentUserId) {
         Long userId = productCollectRelDao.selectUserIdById(id);
         if(userId == null) return Message.createByError("未找到相关的收藏记录,请刷新后重试");

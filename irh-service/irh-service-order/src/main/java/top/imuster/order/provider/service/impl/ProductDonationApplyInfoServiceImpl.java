@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -135,6 +138,11 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "productFinishDonationList", allEntries = true),
+            @CacheEvict(value = "productUnfinishDonationList", allEntries = true),
+            @CacheEvict(value = "productDonationDetail", key = "#applyId")
+    })
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<String> determine(Long applyId, Long operatorId) throws IOException {
         List<ProductDonationApplyInfo> list = productDonationApplyInfoDao.selectEntryList(applyId);
@@ -164,6 +172,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     }
 
     @Override
+    @Cacheable(value = "productFinishDonationList", key = "#currentPage")
     public Message<Page<ProductDonationApplyInfo>> finishApplyList(Integer pageSize, Integer currentPage) {
         HashMap<String, Integer> param = new HashMap<>();
         param.put("pageSize", pageSize);
@@ -177,6 +186,7 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     }
 
     @Override
+    @Cacheable(value = "productUnfinishDonationList", key = "#currentPage")
     public Message<Page<ProductDonationApplyInfo>> unfinishApplyList(Integer pageSize, Integer currentPage) {
         HashMap<String, Integer> param = new HashMap<>();
         param.put("pageSize", pageSize);
@@ -209,8 +219,8 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     public Message<ProductDonationApplyInfo> getApplyInfoById(Integer type, Long applyId) {
         ProductDonationApplyInfo applyInfo = new ProductDonationApplyInfo();
         if(type == 5){
-            applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);
-            List<OrderInfo> useOrders = productDonationOrderRelService.getOrderInfoByApplyId(applyId);
+            applyInfo = productDonationApplyInfoDao.selectApplyInfoById(applyId);    //有缓存
+            List<OrderInfo> useOrders = productDonationOrderRelService.getOrderInfoByApplyId(applyId); //有缓存
             applyInfo.setUserOrders(useOrders);
         }else{
             applyInfo.setId(applyId);
@@ -300,6 +310,11 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "productFinishDonationList", allEntries = true),
+            @CacheEvict(value = "productUnfinishDonationList", allEntries = true),
+            @CacheEvict(value = "productDonationDetail", key = "#applyId")
+    })
     @Transactional
     public Message<String> determine(ProductDonationApplyInfo applyInfo, Long userId) {
         List<OrderInfo> orderInfos = applyInfo.getOrderList();

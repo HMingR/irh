@@ -2,9 +2,10 @@ package top.imuster.goods.service.impl;
 
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -19,10 +20,14 @@ import top.imuster.goods.api.dto.GoodsForwardDto;
 import top.imuster.goods.api.dto.UserGoodsCenterDto;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.dao.ProductInfoDao;
+import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductInfoService;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * ProductInfoService 实现类
@@ -32,17 +37,11 @@ import java.util.*;
 @Service("productInfoService")
 public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> implements ProductInfoService {
 
-    private int batchSize = 100;
-
     @Resource
     private ProductInfoDao productInfoDao;
 
     @Resource
     private GenerateSendMessageService generateSendMessageService;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
-
 
     @Override
     public BaseDao<ProductInfo, Long> getDao() {
@@ -71,6 +70,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#productInfo.consumerId + '::userEsProductList::*'")
     public Message<String> releaseProduct(ProductInfo productInfo) {
         productInfoDao.insertEntry(productInfo);
 
@@ -95,6 +95,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#userId + '::userEsProductList::' + #currentPage + '::type::' + #type")
     public Message<Page<ProductInfo>> list(Long userId, Integer pageSize, Integer currentPage, int type) {
         Page<ProductInfo> infoPage = new Page<>();
         infoPage.setPageSize(pageSize);
@@ -122,13 +123,14 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "#userId + '::userEsProductList::*'")
     @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.REMOVE)
     public Message<String> deleteById(Long id, Long userId) {
         Long userIdByProductId = productInfoDao.selectUserIdByProductId(id);
         if(userIdByProductId == null) return Message.createByError("删除失败,请刷新后重试");
         if(!userId.equals(userIdByProductId)){
             log.error("id为{}的用户试图删除id为{}的商品，但是该商品不属于他", userId, id);
-            return Message.createByError("非法操作,你当前的操作已经被记录");
+            throw new GoodsException("非法操作,你当前的操作已经被记录");
         }
         ProductInfo productInfo = new ProductInfo();
         productInfo.setId(id);
@@ -167,6 +169,7 @@ public class ProductInfoServiceImpl extends BaseServiceImpl<ProductInfo, Long> i
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_COMMON_CACHE_KEY, key = "'*userEsProductList'")
     public boolean updateProductStateById(Long productId, Integer state) {
         ProductInfo condition = new ProductInfo();
         condition.setId(productId);

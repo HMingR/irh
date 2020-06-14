@@ -8,7 +8,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
@@ -50,7 +49,7 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     }
 
     @Override
-    @Cacheable(value = GlobalConstant.IRH_THIRTY_MINUTES_CACHE_KEY, key = "goodsCagetory")
+    @Cacheable(value = "GoodsCategory", key = "'goodsCagetory'")
     public Message<List<ProductCategoryInfo>> getCategoryTree() throws GoodsException {
         try{
             List<ProductCategoryInfo> allCategory =productCategoryInfoDao.selectAllCategory();
@@ -61,7 +60,7 @@ public class ProductCategoryInfoServiceImpl extends BaseServiceImpl<ProductCateg
     }
 
     @Override
-    @CacheEvict(value = GlobalConstant.IRH_THIRTY_MINUTES_CACHE_KEY, key = "goodsCagetory")
+    @CacheEvict(value = "GoodsCategory", key = "'goodsCagetory'")
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer delCategoryById(Long id) throws GoodsException {
         Long parentId = productCategoryInfoDao.selectEntryList(id).get(0).getParentId();
