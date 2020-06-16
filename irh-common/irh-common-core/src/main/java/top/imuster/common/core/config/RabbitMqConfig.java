@@ -118,10 +118,10 @@ public class RabbitMqConfig {
      **/
     @Bean
     public Queue orderWaitPayQueue(){
-        Map<String, Object> argsMap= Maps.newHashMap();
+        Map<String, Object> argsMap = Maps.newHashMap();
         argsMap.put("x-dead-letter-exchange", DLX_EXCHANGE_INFORM);
-        argsMap.put("x-dead-letter-routing-key", "#");
-        return new Queue("WAIT_PAY_QUEUE",true,false,false,argsMap);
+//        argsMap.put("x-dead-letter-routing-key", "#");
+        return new Queue("wait_pay_queue",true,false,false, argsMap);
     }
 
 
@@ -135,6 +135,18 @@ public class RabbitMqConfig {
     @Bean
     public Queue orderExpireQueue(){
         return new Queue(MqTypeEnum.ORDER_DLX.getQueueName(), true);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 订单自动完成死信队列
+     * @Date: 2020/6/16 9:44
+     * @param
+     * @reture: org.springframework.amqp.core.Queue
+     **/
+    @Bean
+    public Queue orderEvaluateQueue(){
+        return new Queue(MqTypeEnum.ORDER_EVALUATE.getQueueName(), true);
     }
 
     @Bean(EXCHANGE_TOPICS_INFORM)
@@ -158,19 +170,30 @@ public class RabbitMqConfig {
 
     @Bean
     public Binding orderWaitPayBinding() {
-        return BindingBuilder.bind(orderWaitPayQueue()).to(exchange()).with("#").noargs();
+        return BindingBuilder.bind(orderWaitPayQueue()).to(exchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKey()).noargs();
     }
 
     /**
      * @Author hmr
      * @Description 处理超时未支付的订单  业务队列
      * @Date: 2020/6/14 19:36
-     * @param exchange
      * @reture: org.springframework.amqp.core.Binding
      **/
     @Bean
     public Binding orderExpireBinding() {
         return BindingBuilder.bind(orderExpireQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKeyMatchRule()).noargs();
+    }
+
+    /**
+     * @Author hmr
+     * @Description 订单自动完成
+     * @Date: 2020/6/14 19:36
+     * @param exchange
+     * @reture: org.springframework.amqp.core.Binding
+     **/
+    @Bean
+    public Binding orderEvaluateBinding() {
+        return BindingBuilder.bind(orderEvaluateQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_EVALUATE.getRoutingKeyMatchRule()).noargs();
     }
 
 

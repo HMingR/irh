@@ -16,13 +16,11 @@ import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.ReleaseAnnotation;
+import top.imuster.common.core.dto.rabbitMq.SendOrderExpireDto;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.enums.OperationType;
 import top.imuster.common.core.enums.ReleaseType;
-import top.imuster.common.core.utils.DateUtil;
-import top.imuster.common.core.utils.RedisUtil;
-import top.imuster.common.core.utils.TrendUtil;
-import top.imuster.common.core.utils.UuidUtils;
+import top.imuster.common.core.utils.*;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.dto.OrderTrendDto;
@@ -57,6 +55,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private GenerateSendMessageService generateSendMessageService;
 
     @Autowired
     ProductEvaluateInfoService productEvaluateInfoService;
@@ -117,13 +118,20 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         orderInfo.setTradeType(orderInfo.getTradeType());
 
         orderInfoDao.insertOrder(orderInfo);
-        if(orderInfo.getId() == null){
+        Long orderId = orderInfo.getId();
+        if(orderId == null){
             log.error("插入订单返回插入值的id为null,订单信息为{}", orderInfo);
             return Message.createByError("生成订单失败,请稍后重试");
         }
 
         //设置十分钟的过期时间
-        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeExpireKey(orderCode), productId, 10, TimeUnit.MINUTES);
+//        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeExpireKey(orderCode), productId, 10, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisUtil.getOrderExpireKeyByOrderId(orderId), productId, 20, TimeUnit.MINUTES);
+        SendOrderExpireDto sendOrderExpireDto = new SendOrderExpireDto();
+        sendOrderExpireDto.setUserId(userId);
+        sendOrderExpireDto.setOrderId(orderId);
+        sendOrderExpireDto.setTtl(10L);
+        generateSendMessageService.sendOrderDeadMsg(sendOrderExpireDto);
         return Message.createBySuccess(orderInfo);
     }
 
@@ -182,9 +190,39 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         orderInfo = new OrderInfo();
         orderInfo.setId(orderId);
         orderInfo.setState(50);
+        orderInfo.setFinishTime(DateUtil.current());
         orderInfoDao.updateByKey(orderInfo);
         deleteFromES(orderInfo.getProductId());
         return Message.createBySuccess();
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "userProductOrderList::", key = "#userId + '*'")
+    })
+    public Boolean autoFinishOrder(Long orderId, Long userId){
+        List<OrderInfo> orderInfos = this.selectEntryList(orderId);
+        if(orderInfos == null || orderInfos.isEmpty()) return false;
+        OrderInfo orderInfo = orderInfos.get(0);
+        Integer state = orderInfo.getState();
+        if(state != 45) return true;
+        orderInfo.setState(50);
+        orderInfo.setFinishTime(DateUtil.current());
+        int i = orderInfoDao.updateByKey(orderInfo);
+        if(i != 1) {
+            log.error("自动完成订单,更新订单状态失败,订单编号为{}", orderId);
+            return false;
+        }
+        SendUserCenterDto userCenterDto = new SendUserCenterDto();
+        userCenterDto.setContent(new StringBuffer().append("您的编号为: ").append(orderInfo.getOrderCode()).append(" 的订单已经超过了完成时间,已经自动完成该订单,如果有任何疑问,请联系客服").toString());
+        userCenterDto.setNewsType(70);
+        userCenterDto.setFromId(-1L);
+        userCenterDto.setToId(orderInfo.getBuyerId());
+        userCenterDto.setDate(DateUtil.now());
+
+        //从es中删除
+        deleteFromES(orderInfo.getProductId());
+        return true;
     }
 
     @ReleaseAnnotation(type = ReleaseType.GOODS, value = "#p0", operationType = OperationType.REMOVE)
@@ -234,11 +272,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         if(type == 1) {
             //买家删除
             if(!order.getBuyerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
-            order.setState(60);
+            order.setDeleteState(1);
         }else if(type == 2){
             //卖家删除
             if(!order.getSalerId().equals(userId)) return Message.createByError("该订单不属于你,请刷新后重试");
-            order.setState(70);
+            order.setDeleteState(2);
         }else {
             Long productId = order.getProductId();
             if(type == 3){
@@ -281,11 +319,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     @Override
     public Integer completeTrade(OrderInfo orderInfo) {
         return orderInfoDao.completeTrade(orderInfo);
-    }
-
-    @Override
-    public Map<String, String> getProductIdByExpireOrderCode(String orderCode) {
-        return orderInfoDao.selectProductIdAndBuyerIdByOrderCode(orderCode);
     }
 
     @Override

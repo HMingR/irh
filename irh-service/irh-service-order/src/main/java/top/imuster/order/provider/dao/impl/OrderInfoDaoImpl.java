@@ -8,7 +8,6 @@ import top.imuster.order.provider.dao.OrderInfoDao;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * OrderInfoDao 实现类
@@ -93,11 +92,6 @@ public class OrderInfoDaoImpl extends BaseDaoImpl<OrderInfo, Long> implements Or
 	@Override
 	public Integer completeTrade(OrderInfo orderInfo) {
 		return this.update(getNameSpace(COMPLETE_TRADE), orderInfo);
-	}
-
-	@Override
-	public Map<String, String> selectProductIdAndBuyerIdByOrderCode(String orderCode) {
-		return this.select(getNameSpace(SELECT_PRODUCT_ID_BY_ORDER_CODE), orderCode);
 	}
 
 	@Override

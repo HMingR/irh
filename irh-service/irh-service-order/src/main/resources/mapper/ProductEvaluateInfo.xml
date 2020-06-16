@@ -165,10 +165,4 @@
 	</select>
 	
 	<!-- 其它SQL语句 -->
-
-	<select id="selectIdByOrderId" parameterType="long" resultType="long">
-		SELECT id
-		FROM product_evaluate_info
-		WHERE order_id = #{id,jdbcType=BIGINT}
-	</select>
 </mapper>

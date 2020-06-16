@@ -46,12 +46,4 @@ public interface ProductEvaluateInfoService extends BaseService<ProductEvaluateI
       **/
     Message<Page<ProductEvaluateInfo>> getListByUserId(Integer pageSize, Integer currentPage, Long userId, Integer type);
 
-    /**
-     * @Author hmr
-     * @Description 根据订单id获得评价id
-     * @Date: 2020/5/11 20:07
-     * @param id
-     * @reture: java.lang.Long
-     **/
-    Long getEvaluateIdByOrderId(Long id);
 }

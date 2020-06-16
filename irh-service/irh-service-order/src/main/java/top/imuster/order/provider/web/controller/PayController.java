@@ -29,7 +29,6 @@ public class PayController extends BaseController {
     @Resource
     PayService payService;
 
-
     /**
      * @Description: 提交订单准备预下单,返回一个支付宝网站,需要解析里面的地址生成二维码
      * @Author: hmr

@@ -17,7 +17,8 @@ public enum MqTypeEnum {
     RELEASE("release", "", "queue_inform_release", "info.release.#", "发布商品需要将一部分商品保存到es中"),
     AUTHEN_RECORD("authenRecord", "info.5.authenRecord.5", "queue_inform_authenRecord", "info.#.authenRecord.#", "security模块用户认证失败之后需要存储到DB"),
     EXAMINE_INFO("examine", "","queue_inform_examine", "info.#.examine.#", "校验发布的内容是否合法"),
-    ORDER_DLX("orderDlx", "dlx_order", "queue_dlx_order_expire", "dlx_order", "订单支付过期队列");
+    ORDER_DLX("orderDlx", "dlx_order", "queue_dlx_order_expire", "dlx_order", "订单支付过期队列"),
+    ORDER_EVALUATE("orderEvaluate", "dlx_order_evaluate", "queue_dlx_order_evaluate", "dlx_order_evaluate", "订单自动完成并评价");
     String type;
     String routingKey;
     String queueName;

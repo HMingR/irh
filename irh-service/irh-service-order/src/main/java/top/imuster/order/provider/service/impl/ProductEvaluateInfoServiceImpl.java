@@ -1,6 +1,7 @@
 package top.imuster.order.provider.service.impl;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,7 +16,6 @@ import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.api.pojo.OrderInfo;
 import top.imuster.order.api.pojo.ProductEvaluateInfo;
-import top.imuster.order.api.service.OrderServiceFeignApi;
 import top.imuster.order.provider.dao.ProductEvaluateInfoDao;
 import top.imuster.order.provider.service.OrderInfoService;
 import top.imuster.order.provider.service.ProductEvaluateInfoService;
@@ -40,9 +40,6 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Resource
     private GenerateSendMessageService generateSendMessageService;
 
-    @Autowired
-    OrderServiceFeignApi orderServiceFeignApi;
-
     @Resource
     OrderInfoService orderInfoService;
 
@@ -66,22 +63,19 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Message<String> writeEvaluateByOrderId(Long orderId, ProductEvaluateInfo productEvaluateInfo) {
-        OrderInfo order = orderServiceFeignApi.getOrderById(orderId);
-        Integer orderState = order.getState();
-        if(order == null){
-            return Message.createByError("未找到相应的订单,请刷新后重试");
-        }if(orderState == 40){
+        List<OrderInfo> orderInfoList = orderInfoService.selectEntryList(orderId);
+        if(CollectionUtils.isEmpty(orderInfoList)) return Message.createByError("未找到相关订单信息");
+        OrderInfo order = orderInfoList.get(0);
+        Integer evaluateState = order.getEvaluateState();
+        Integer state = order.getState();
+        if(state == 45){
             return Message.createByError("该订单还没有完成交易，完成该订单之后才能进行评价");
         }if(!order.getBuyerId().equals(productEvaluateInfo.getBuyerId())){
             return Message.createByError("参数错误,您不是该订单的买家,请刷新后重试");
-        }if(orderState == 90) return Message.createByError("您已经追评了,不能再进行评价了");
-
-        Integer state = 80;
-        if(orderState == 50) state = 80;   //第一次评价
-        else if(orderState == 80) state = 90;   //追评
+        }if(evaluateState == 1) return Message.createByError("您已经评价了,不能再进行评价了");
 
         OrderInfo info = new OrderInfo();
-        info.setState(state);
+        info.setEvaluateState(1);
         info.setId(orderId);
         orderInfoService.updateByKey(info);
 
@@ -119,8 +113,5 @@ public class ProductEvaluateInfoServiceImpl extends BaseServiceImpl<ProductEvalu
         return Message.createBySuccess(page);
     }
 
-    @Override
-    public Long getEvaluateIdByOrderId(Long id) {
-        return productEvaluateInfoDao.selectIdByOrderId(id);
-    }
+
 }

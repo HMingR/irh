@@ -91,6 +91,12 @@ public class OrderInfo extends BaseDomain {
 	@NotEmpty(groups = ValidateGroup.prePayment.class, message = "商品版本信息不能为空")
 	private Integer productVersion;
 
+	//是否删除  1-买家删除  2-卖家删除
+	private Integer deleteState;
+
+	//评价状态 0-未评价  1-已评价
+	private Integer evaluateState;
+
 	public Integer getProductVersion() {
 		return productVersion;
 	}
@@ -99,14 +105,29 @@ public class OrderInfo extends BaseDomain {
 		this.productVersion = productVersion;
 	}
 
-	// 10:订单超时 20:取消订单 30:买家删除订单 35:卖家删除订单  40:等待支付 50:交易成功 60:捐款金额已分配
-	@ApiModelProperty("10:订单超时 20:取消订单 40:等待支付 50:交易成功 60:买家删除订单  70:卖家删除订单  80:评价  90:追评  100:捐款金额已分配 ")
+	@ApiModelProperty("10:订单超时 20:取消订单 40:等待支付 45:支付完成 50:交易成功 100:捐款金额已分配 ")
 	//private Short state;
 
 	//查询时需要
 	private String minMoney;
 
 	private String maxMoney;
+
+	public Integer getEvaluateState() {
+		return evaluateState;
+	}
+
+	public void setEvaluateState(Integer evaluateState) {
+		this.evaluateState = evaluateState;
+	}
+
+	public Integer getDeleteState() {
+		return deleteState;
+	}
+
+	public void setDeleteState(Integer deleteState) {
+		this.deleteState = deleteState;
+	}
 
 	public String getMinMoney() {
 		return minMoney;

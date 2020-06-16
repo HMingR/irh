@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.amqp.AmqpException;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import top.imuster.common.core.dto.rabbitMq.SendOrderEvaluateDto;
 import top.imuster.common.core.dto.rabbitMq.SendOrderExpireDto;
+import top.imuster.common.core.utils.GenerateSendMessageService;
 import top.imuster.order.provider.IrhOrderApplication;
 import top.imuster.user.api.service.UserServiceFeignApi;
 
@@ -38,6 +37,9 @@ public class test {
     @Autowired
     UserServiceFeignApi userServiceFeignApi;
 
+    @Autowired
+    GenerateSendMessageService generateSendMessageService;
+
     @Test
     public void test(){
         Map<String, String> user = userServiceFeignApi.getUserAddressAndPhoneById(5L);
@@ -49,14 +51,21 @@ public class test {
         SendOrderExpireDto sendOrderExpireDto = new SendOrderExpireDto();
         sendOrderExpireDto.setOrderId(1L);
         sendOrderExpireDto.setUserId(5L);
-        sendOrderExpireDto.setTtl("5000");
-        rabbitTemplate.convertAndSend("dlx_exchange_inform", "dlx_order", objectMapper.writeValueAsString(sendOrderExpireDto), new MessagePostProcessor() {
+        sendOrderExpireDto.setTtl(5000L);
+        generateSendMessageService.sendDeadMsg(sendOrderExpireDto);
+
+        SendOrderEvaluateDto sendOrderEvaluateDto = new SendOrderEvaluateDto();
+        sendOrderEvaluateDto.setOrderId(1L);
+        sendOrderEvaluateDto.setTtl(5000L);
+        sendOrderEvaluateDto.setUserId(5L);
+        generateSendMessageService.sendDeadMsg(sendOrderEvaluateDto);
+        /*rabbitTemplate.convertAndSend("dlx_exchange_inform", "dlx_order", objectMapper.writeValueAsString(sendOrderExpireDto), new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message message) throws AmqpException {
                 message.getMessageProperties().getHeaders().put("expiration", "5000");
                 return message;
             }
-        });
+        });*/
     }
 
 }

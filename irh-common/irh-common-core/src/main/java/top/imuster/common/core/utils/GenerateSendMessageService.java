@@ -4,13 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import top.imuster.common.core.config.RabbitMqConfig;
-import top.imuster.common.core.dto.rabbitMq.Send2MQ;
-import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
+import top.imuster.common.core.dto.rabbitMq.*;
 import top.imuster.common.core.enums.MqTypeEnum;
 import top.imuster.common.core.exception.GlobalException;
 
@@ -96,6 +98,44 @@ public class GenerateSendMessageService {
     private void save2Redis(String redisKey, String content, Long expir, TimeUnit timeUnit){
         redisTemplate.opsForValue().set(redisKey, content);
         redisTemplate.expire(redisKey, expir, timeUnit);
+    }
+
+
+    /**
+     * @Author hmr
+     * @Description 下单成功之后发送死信消息到MQ中，用来监听支付超时
+     * @Date: 2020/6/16 9:28
+     * @param msgEntry
+     * @reture: void
+     **/
+    public void sendOrderDeadMsg(SendOrderExpireDto msgEntry){
+        try{
+            Long ttl = msgEntry.getTtl();
+            rabbitTemplate.convertAndSend(RabbitMqConfig.DLX_EXCHANGE_INFORM, msgEntry.getType().getRoutingKey(), objectMapper.writeValueAsString(msgEntry), new MessagePostProcessor() {
+                @Override
+                public Message postProcessMessage(Message message) throws AmqpException {
+                    message.getMessageProperties().getHeaders().put("expiration", ttl == null ? "600000" : ttl.toString());    //如果没有过期时间，则设置为10分钟
+                    return message;
+                }
+            });
+        }catch (Exception e){
+            log.error("发送订单超时死信消息失败,订单id为{},错误消息为{}",msgEntry.getOrderId(), e.getMessage(), e);
+        }
+    }
+
+    public void sendDeadMsg(SendDead2MQ msgEntry){
+        Long ttl = msgEntry.getTtl();
+        try{
+            rabbitTemplate.convertAndSend(RabbitMqConfig.DLX_EXCHANGE_INFORM, msgEntry.getType().getRoutingKey(), objectMapper.writeValueAsString(msgEntry), new MessagePostProcessor() {
+                @Override
+                public Message postProcessMessage(Message message) throws AmqpException {
+                    message.getMessageProperties().getHeaders().put("expiration", ttl == null ? "600000" : ttl.toString());    //如果没有过期时间，则设置为10分钟
+                    return message;
+                }
+            });
+        }catch (Exception e){
+            log.error("发送死信消息失败,订单id为{},错误消息为{}",msgEntry.getOrderId(), e.getMessage(), e);
+        }
     }
 
 }

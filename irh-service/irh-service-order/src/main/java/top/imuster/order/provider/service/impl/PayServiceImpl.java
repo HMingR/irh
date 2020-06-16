@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.dto.rabbitMq.SendEmailDto;
+import top.imuster.common.core.dto.rabbitMq.SendOrderEvaluateDto;
 import top.imuster.common.core.dto.rabbitMq.SendUserCenterDto;
 import top.imuster.common.core.enums.TemplateEnum;
 import top.imuster.common.core.utils.DateUtil;
@@ -193,7 +194,7 @@ public class PayServiceImpl implements PayService {
         }
 
         OrderInfo orderInfo = validateParams(params);
-        orderInfo.setState(40);
+        orderInfo.setState(45);
         orderInfo.setTradeType(10);
 
         Integer state = orderInfoService.completeTrade(orderInfo);
@@ -206,7 +207,7 @@ public class PayServiceImpl implements PayService {
         if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
 
         //删除在redis中保存的key
-        redisTemplate.delete(RedisUtil.getOrderCodeExpireKey(orderInfo.getOrderCode()));
+        redisTemplate.delete(RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId()));
         sendMessage(orderInfo);
     }
 
@@ -214,7 +215,7 @@ public class PayServiceImpl implements PayService {
     public Message<String> wxPay(String orderCode) throws JsonProcessingException {
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderCode(orderCode);
         if(orderInfo == null) return Message.createByError("未找到相关订单");
-        orderInfo.setState(40);
+        orderInfo.setState(45);
         orderInfo.setPaymentTime(DateUtil.current());
         Integer state = orderInfoService.completeTrade(orderInfo);
         if(state != 1){
@@ -226,9 +227,10 @@ public class PayServiceImpl implements PayService {
         if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
 
         //删除在redis中保存的key
-        redisTemplate.delete(RedisUtil.getOrderCodeExpireKey(orderCode));
+        redisTemplate.delete(RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId()));
 
         sendMessage(orderInfo);
+
         return Message.createBySuccess();
     }
 
@@ -271,6 +273,14 @@ public class PayServiceImpl implements PayService {
         sendUserCenterDto.setToId(orderInfo.getBuyerId());
         sendUserCenterDto.setDate(DateUtil.now());
         generateSendMessageService.sendToMq(sendUserCenterDto);
+
+
+        //发送自动完成订单的信息到mq
+        SendOrderEvaluateDto sendOrderEvaluateDto = new SendOrderEvaluateDto();
+        sendOrderEvaluateDto.setUserId(orderInfo.getBuyerId());
+        sendOrderEvaluateDto.setOrderId(orderInfo.getId());
+        sendOrderEvaluateDto.setTtl(5L);
+        generateSendMessageService.sendDeadMsg(sendOrderEvaluateDto);
 
 
     }

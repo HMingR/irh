@@ -11,12 +11,4 @@ import top.imuster.order.api.pojo.ProductEvaluateInfo;
  */
 public interface ProductEvaluateInfoDao extends BaseDao<ProductEvaluateInfo, Long> {
 
-    /**
-     * @Author hmr
-     * @Description 根据order 的id获得评价id
-     * @Date: 2020/5/11 20:08
-     * @param id
-     * @reture: java.lang.Long
-     **/
-    Long selectIdByOrderId(Long id);
 }

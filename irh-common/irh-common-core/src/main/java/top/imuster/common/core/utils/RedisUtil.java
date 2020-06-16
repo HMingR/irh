@@ -253,4 +253,15 @@ public class RedisUtil {
     public static String getProductOfflineRecommendSetKey(Long userId) {
         return new StringBuffer().append(GlobalConstant.IRH_USER_OFFLINE_RECOMMEND_SET_KEY).append(userId).toString();
     }
+
+    /**
+     * @Author hmr
+     * @Description 支付成功之后会将orderId存入Redis中
+     * @Date: 2020/6/16 9:12
+     * @param orderId
+     * @reture: java.lang.String
+     **/
+    public static String getOrderExpireKeyByOrderId(Long orderId) {
+        return new StringBuffer().append(GlobalConstant.IRH_ORDER_EXPIRE_KEY).append(orderId).toString();
+    }
 }

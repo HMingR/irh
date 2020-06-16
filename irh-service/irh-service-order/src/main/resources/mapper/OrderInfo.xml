@@ -21,6 +21,8 @@
             update_time AS updateTime,
             order_code AS orderCode,
             state,
+            delete_state AS deleteState,
+            evaluate_state AS evaluateState,
             phone_num AS phoneNum
 		]]>
 	</sql>
@@ -46,6 +48,8 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
             <if test="orderCode != null and orderCode != ''"><![CDATA[AND order_code = #{orderCode}]]></if>
             <if test="salerNickname != null and salerNickname != ''"><![CDATA[AND saler_nickname = #{salerNickname}]]></if>
+            <if test="deleteState != null and deleteState != ''"><![CDATA[AND delete_state = #{deleteState}]]></if>
+            <if test="evaluateState != null and evaluateState != ''"><![CDATA[AND evaluate_state = #{evaluateState}]]></if>
 		</where>
 	</sql>
 	
@@ -73,6 +77,8 @@
 			<if test="orderCode != null and orderCode != ''"><![CDATA[ order_code = #{orderCode},]]></if>
 			<if test="salerNickname != null and salerNickname != ''"><![CDATA[ saler_nickname = #{salerNickname},]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num = #{phoneNum},]]></if>
+			<if test="deleteState != null and deleteState != ''"><![CDATA[ delete_state = #{deleteState},]]></if>
+			<if test="evaluateState != null and evaluateState != ''"><![CDATA[ evaluate_state = #{evaluateState},]]></if>
 		</set>
 	</sql>
 
@@ -203,7 +209,7 @@
 		<![CDATA[
  			SELECT SUM(payment_money) FROM
  			order_info
- 			WHERE create_time > #{start} AND create_time < #{end} AND state >= 30
+ 			WHERE create_time > #{start} AND create_time < #{end} AND state >= 50
  		 ]]>
 	</select>
 
@@ -211,7 +217,7 @@
 		<![CDATA[
  			SELECT SUM(payment_money) FROM
  			order_info
- 			WHERE create_time < #{s} AND state >=30
+ 			WHERE create_time < #{s} AND state >=50
  		 ]]>
 	</select>
 
@@ -219,7 +225,7 @@
 		<![CDATA[
  			SELECT COUNT(1) FROM
  			order_info
- 			WHERE create_time > #{start} AND create_time < #{end} AND state >= 30
+ 			WHERE create_time > #{start} AND create_time < #{end} AND state >= 50
  		 ]]>
 	</select>
 
@@ -236,10 +242,10 @@
 		FROM order_info
 		WHERE
 		<if test="buyerId != null and buyerId != ''">
-			buyer_id = #{buyerId} AND state NOT IN (10, 20, 60)
+			<![CDATA[buyer_id = #{buyerId} AND state NOT IN (10, 20) AND delete_state != 1]]>
 		</if>
 		<if test="salerId != null and salerId != ''">
-			saler_id = #{salerId,jdbcType=BIGINT} AND state NOT IN (10, 20, 70)
+			<![CDATA[saler_id = #{salerId,jdbcType=BIGINT} AND state NOT IN (10, 20) AND  delete_state != 2]]>
 		</if>
 	</select>
 
@@ -249,10 +255,10 @@
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE
 		<if test="buyerId != null and buyerId != ''">
-			buyer_id = #{buyerId} ANd state != 60
+			<![CDATA[buyer_id = #{buyerId} ANd delete_state != 1]]>
 		</if>
 		<if test="salerId != null and salerId != ''">
-			saler_id = #{salerId,jdbcType=BIGINT} AND state != 70
+			<![CDATA[saler_id = #{salerId,jdbcType=BIGINT} AND delete_state != 2]]>
 		</if>
 		AND state NOT IN (10, 20) ORDER BY create_time DESC
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
@@ -262,7 +268,7 @@
 		<![CDATA[SELECT id, payment_money AS paymentMoney, order_version AS orderVersion, saler_id AS salerId]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE
-		trade_type = 30 AND state IN (50, 60, 70, 80, 90, 100)
+		trade_type = 20 AND state = 50
 	</select>
 
 	<select id="selectOrderVersionById" parameterType="long" resultType="integer">
@@ -275,15 +281,10 @@
 
 	<update id="completeTrade" parameterType="orderInfo">
 		UPDATE order_info
-		SET state = 50, payment_time = #{paymentTime,jdbcType=TIMESTAMP}
+		SET state = 45, payment_time = #{paymentTime,jdbcType=TIMESTAMP}
 		WHERE order_code = #{orderCode,jdbcType=VARCHAR}
 	</update>
 
-	<select id="selectProductIdAndBuyerIdByOrderCode" parameterType="string" resultType="java.util.Map">
-		SELECT product_id AS productId, buyer_id AS buyerId, id
-		FROM order_info
-		WHERE order_code = #{orderCode,jdbcType=VARCHAR} AND state = 40
-	</select>
 
 	<update id="updateOrderStateByOrderCode" parameterType="orderInfo">
 		UPDATE order_info

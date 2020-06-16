@@ -12,7 +12,6 @@ import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.provider.service.OrderInfoService;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * @ClassName: OrderKeyExpirationListener
@@ -42,10 +41,10 @@ public class OrderKeyExpirationListener extends KeyExpirationEventMessageListene
         if(expiredKey.startsWith(GlobalConstant.IRH_ORDER_CODE_EXPIRE_KEY)){
             String[] split = expiredKey.split(GlobalConstant.IRH_ORDER_CODE_EXPIRE_KEY);
             String orderCode = split[1];
-            Map<String, String> map = orderInfoService.getProductIdByExpireOrderCode(orderCode);
-            if(map == null) return;
+//            Map<String, String> map = orderInfoService.getProductIdByExpireOrderCode(orderCode);
+           // if(map == null) return;
 //            Integer i = orderInfoService.cancleOrderByCode(String.valueOf(orderCode), Long.parseLong(map.get("buyerId")), Long.parseLong(map.get("id")));
-            orderInfoService.cancelOrder(Long.parseLong(map.get("id")), Long.parseLong(map.get("buyerId")), 4);
+            //orderInfoService.cancelOrder(Long.parseLong(map.get("id")), Long.parseLong(map.get("buyerId")), 4);
 //            if(i == 1){
 //              goodsServiceFeignApi.updateProductState(Long.parseLong(map.get("productId")), 2);
 //            }

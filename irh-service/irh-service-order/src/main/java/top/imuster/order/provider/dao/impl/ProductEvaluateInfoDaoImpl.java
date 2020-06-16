@@ -14,14 +14,8 @@ import top.imuster.order.provider.dao.ProductEvaluateInfoDao;
 @Repository("productEvaluateInfoDao")
 public class ProductEvaluateInfoDaoImpl extends BaseDaoImpl<ProductEvaluateInfo, Long> implements ProductEvaluateInfoDao {
 	private final static String NAMESPACE = "top.imuster.order.provider.dao.ProductEvaluateInfoDao.";
-	private final static String SELECT_ID_BY_ORDER_ID = "selectIdByOrderId";
 	//返回本DAO命名空间,并添加statement
 	public String getNameSpace(String statement) {
 		return NAMESPACE + statement;
-	}
-
-	@Override
-	public Long selectIdByOrderId(Long id) {
-		return this.select(getNameSpace(SELECT_ID_BY_ORDER_ID), id);
 	}
 }

@@ -34,6 +34,7 @@ public class GlobalConstant {
     public static final String IRH_FIVE_MINUTES_CACHE_KEY = "irh::five::minutes::cache::key";
     public static final String IRH_TEN_MINUTES_CACHE_KEY = "irh::ten::minutes::cache::key";
     public static final String IRH_THIRTY_MINUTES_CACHE_KEY = "irh::thirty::minutes::cache::key";
+    public static final String IRH_ORDER_EXPIRE_KEY = "irh::order::expire::";
 
     private GlobalConstant(){}
 
