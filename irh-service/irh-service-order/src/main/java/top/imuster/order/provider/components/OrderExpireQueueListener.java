@@ -34,13 +34,20 @@ public class OrderExpireQueueListener {
     @Autowired
     RedisTemplate redisTemplate;
 
+    /**
+     * @Author hmr
+     * @Description 订单超时支付
+     * @Date: 2020/6/16 20:06
+     * @param msg
+     * @reture: void
+     **/
     @RabbitListener(queues = "queue_dlx_order_expire")
     private void listener(String msg){
         try{
             SendOrderExpireDto sendMessageDto = objectMapper.readValue(msg, SendOrderExpireDto.class);
             String redisKey  = RedisUtil.getOrderExpireKeyByOrderId(sendMessageDto.getOrderId());
             Boolean hasKey = redisTemplate.hasKey(redisKey);
-            if(!hasKey) return;
+            if(hasKey != null && hasKey) return;
             orderInfoService.cancelOrder(sendMessageDto.getOrderId(), sendMessageDto.getUserId(),  4);
         }catch (Exception e){
             log.error("关闭订单失败,消息为{},错误信息为{}", msg, e.getMessage(), e);
@@ -48,13 +55,20 @@ public class OrderExpireQueueListener {
     }
 
 
+    /**
+     * @Author hmr
+     * @Description 订单超时完成
+     * @Date: 2020/6/16 20:07
+     * @param msg
+     * @reture: void
+     **/
     @RabbitListener(queues = "queue_dlx_order_evaluate")
     private void finishOrderListener(String msg){
         try{
             SendOrderEvaluateDto sendOrderEvaluateDto = objectMapper.readValue(msg, SendOrderEvaluateDto.class);
             Long orderId = sendOrderEvaluateDto.getOrderId();
             Long userId = sendOrderEvaluateDto.getUserId();
-            Boolean flag = orderInfoService.autoFinishOrder(orderId, userId);
+            orderInfoService.autoFinishOrder(orderId, userId);
         }catch (Exception e){
             log.error("自动完成订单失败,消息为{},错误信息为{}", msg, e.getMessage(), e);
         }

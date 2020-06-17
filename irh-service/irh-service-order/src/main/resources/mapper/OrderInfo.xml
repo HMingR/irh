@@ -242,10 +242,10 @@
 		FROM order_info
 		WHERE
 		<if test="buyerId != null and buyerId != ''">
-			<![CDATA[buyer_id = #{buyerId} AND state NOT IN (10, 20) AND delete_state != 1]]>
+			<![CDATA[buyer_id = #{buyerId} AND delete_state != 1]]>
 		</if>
 		<if test="salerId != null and salerId != ''">
-			<![CDATA[saler_id = #{salerId,jdbcType=BIGINT} AND state NOT IN (10, 20) AND  delete_state != 2]]>
+			<![CDATA[saler_id = #{salerId,jdbcType=BIGINT} AND  delete_state != 2]]>
 		</if>
 	</select>
 
@@ -260,7 +260,7 @@
 		<if test="salerId != null and salerId != ''">
 			<![CDATA[saler_id = #{salerId,jdbcType=BIGINT} AND delete_state != 2]]>
 		</if>
-		AND state NOT IN (10, 20) ORDER BY create_time DESC
+		ORDER BY create_time DESC
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>
 

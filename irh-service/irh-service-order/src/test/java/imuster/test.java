@@ -51,21 +51,21 @@ public class test {
         SendOrderExpireDto sendOrderExpireDto = new SendOrderExpireDto();
         sendOrderExpireDto.setOrderId(1L);
         sendOrderExpireDto.setUserId(5L);
-        sendOrderExpireDto.setTtl(5000L);
         generateSendMessageService.sendDeadMsg(sendOrderExpireDto);
 
         SendOrderEvaluateDto sendOrderEvaluateDto = new SendOrderEvaluateDto();
         sendOrderEvaluateDto.setOrderId(1L);
-        sendOrderEvaluateDto.setTtl(5000L);
         sendOrderEvaluateDto.setUserId(5L);
         generateSendMessageService.sendDeadMsg(sendOrderEvaluateDto);
-        /*rabbitTemplate.convertAndSend("dlx_exchange_inform", "dlx_order", objectMapper.writeValueAsString(sendOrderExpireDto), new MessagePostProcessor() {
-            @Override
-            public Message postProcessMessage(Message message) throws AmqpException {
-                message.getMessageProperties().getHeaders().put("expiration", "5000");
-                return message;
-            }
-        });*/
+//        sendOrderExpireDto.setTtl(5000L);
+//        generateSendMessageService.sendDeadMsg(sendOrderExpireDto);
+
+        /*SendOrderEvaluateDto sendOrderEvaluateDto = new SendOrderEvaluateDto();
+        sendOrderEvaluateDto.setOrderId(1L);
+        sendOrderEvaluateDto.setTtl(5000L);
+        sendOrderEvaluateDto.setUserId(5L);
+        generateSendMessageService.sendDeadMsg(sendOrderEvaluateDto);*/
+        //rabbitTemplate.convertAndSend("exchange_topics_inform", "dlx_order", objectMapper.writeValueAsString(sendOrderExpireDto));
     }
 
 }

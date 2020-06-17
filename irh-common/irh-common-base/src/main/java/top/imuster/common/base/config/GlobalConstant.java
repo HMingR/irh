@@ -41,14 +41,7 @@ public class GlobalConstant {
     public static final String USER_TOKEN_DTO = "userTokenDto";         //在本地线程map中的key
 
     //redis相关
-    public static final Long REDIS_JWT_EXPIRATION = 1800L;              //redis中jwt的过期时间
     public static final String REDIS_ACCESS_TOKEN = "irh:token:accessToken:";  //redis中保存的token前缀
-
-    //jwt相关
-    public static final String JWT_TOKEN_HEADER = "Authorization";      //请求头中设置的字段，存放jwt
-    public static final String JWT_SECRET = "irh-admin-secret";        //jwt加密解密的密钥
-    public static final Long JWT_EXPIRATION = 1800L;               //jwt的超时(失效)时间，单位为秒
-    public static final String JWT_TOKEN_HEAD = "Bearer ";               //Authorization头字段中的首部
 
     public static final String COOKIE_ACCESS_TOKEN_NAME = "userAccessToken";
 
@@ -62,17 +55,8 @@ public class GlobalConstant {
 
     public static final String IRH_ARTICLE_COLLECT_MAP = "IRH_ARTICLE_COLLECT_MAP";
 
-    //使用邮箱更换密码时保存在redis中的key头部
-    public static final String REDIS_RESET_PWD_EMAIL_TOKEN = "irh:reset:pwd:email:token:";
-
-    //使用手机更换密码时保存在redis中的key头部
-    public static final String REDIS_RESET_PWD_PHONE_TOKEN = "irh:reset:pwd:phone:token:";
-
     //会员注册时发送的邮箱验证码
     public static final String REDIS_CUSTOMER_EMAIL_REGISTER = "irh:customer:email:register:";
-
-    //forum模块中保存在redis中的文章简略信息的key
-    public static final String IRH_FORUM_ARTICLE = "article::info";
 
     //life模块中跑腿服务接单成功之后将跑腿信息表的id存放在redis中
     public static final String IRH_LIFE_ERRAND_MAP = "irh::life:errand::map";
@@ -92,9 +76,6 @@ public class GlobalConstant {
 
     public static final String IRH_USER_INFO_CACHE_KEY = "irh::user::info::cache::key::";   //用户信息缓存
 
-
-    //redis中保存浏览次数的hash表的key
-    public static final String IRH_FORUM_BROWSER_TIMES_MAP = "irh::forum::browser::times::map";
 
     //redis中记录文章转发次数
     public static final String IRH_FORUM_FORWARD_TIMES_MAP = "irh::forum::forward::times::map";

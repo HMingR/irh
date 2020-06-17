@@ -8,21 +8,9 @@ package top.imuster.common.core.dto.rabbitMq;
  */
 public class SendDead2MQ extends Send2MQ{
 
-    //单位为分钟
-    private Long ttl;
-
     private Long orderId;
 
     private Long userId;
-
-    public Long getTtl() {
-        return ttl;
-    }
-
-    public void setTtl(Long ttl) {
-        ttl *=  60 * 1000;
-        this.ttl = ttl;
-    }
 
     public Long getOrderId() {
         return orderId;

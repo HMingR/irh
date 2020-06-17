@@ -14,8 +14,4 @@ public class SendOrderEvaluateDto extends SendDead2MQ {
         super.setType(MqTypeEnum.ORDER_EVALUATE);
     }
 
-    public void setTtl(Long ttl){
-        super.setTtl(ttl * 24 * 60 * 60 * 1000);
-    }
-
 }

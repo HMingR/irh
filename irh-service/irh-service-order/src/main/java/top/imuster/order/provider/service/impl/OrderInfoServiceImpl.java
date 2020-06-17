@@ -77,13 +77,16 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(value = "userProductOrderList::", key = "#userId + '*'")
+    })
     public Message<OrderInfo> getOrderByProduct(OrderInfo orderInfo, Long userId, Long productId){
         String orderCode = orderInfo.getOrderCode();
         String orderCodeKey = RedisUtil.getOrderCodeKey(userId);
         String redisOrder = (String)redisTemplate.opsForValue().get(orderCodeKey);
 
         if( StringUtils.isEmpty(orderCode) || StringUtils.isEmpty(redisOrder) || !orderCode.equals(redisOrder)){
-            return Message.createByError("错误的订单信息,请刷新页面重新提交订单");
+            throw new OrderException("错误的订单信息,请刷新页面重新提交订单");
         }
         redisTemplate.delete(orderCodeKey);
 
@@ -95,19 +98,19 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
             Map<String, String> addAndPhone = userServiceFeignApi.getUserAddressAndPhoneById(userId);
             if(StringUtils.isEmpty(address)){
                 String originalAdd = addAndPhone.get("address");
-                if(StringUtils.isEmpty(originalAdd)) return Message.createByError("您没有在个人中心中设置默认地址,也没有在提交订单的时候设置送货地址,请填写地址后重新提交");
+                if(StringUtils.isEmpty(originalAdd)) throw new OrderException("您没有在个人中心中设置默认地址,也没有在提交订单的时候设置送货地址,请填写地址后重新提交");
                 orderInfo.setAddress(originalAdd);
             }
             if(StringUtils.isEmpty(phoneNum)){
                 String originalPhone = addAndPhone.get("phoneNum");
-                if (StringUtils.isEmpty(originalPhone)) return Message.createByError("您没有在个人中心中完善您的联系电话或者没有在提交订单的时候提交联系电话");
+                if (StringUtils.isEmpty(originalPhone)) throw new OrderException("您没有在个人中心中完善您的联系电话或者没有在提交订单的时候提交联系电话");
                 orderInfo.setPhoneNum(phoneNum);
             }
         }
 
         ProductInfo product = checkProduct(productId, orderInfo.getProductVersion());
         if(product == null){
-            return Message.createByError("下单慢了哦,当前商品已经被别人抢走了");
+            throw new OrderException("下单慢了哦,当前商品已经被别人抢走了");
         }
 
         orderInfo.setProductId(product.getId());
@@ -121,17 +124,14 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         Long orderId = orderInfo.getId();
         if(orderId == null){
             log.error("插入订单返回插入值的id为null,订单信息为{}", orderInfo);
-            return Message.createByError("生成订单失败,请稍后重试");
+            throw new OrderException("生成订单失败,请稍后重试");
         }
 
         //设置十分钟的过期时间
-//        redisTemplate.opsForValue().set(RedisUtil.getOrderCodeExpireKey(orderCode), productId, 10, TimeUnit.MINUTES);
-        redisTemplate.opsForValue().set(RedisUtil.getOrderExpireKeyByOrderId(orderId), productId, 20, TimeUnit.MINUTES);
         SendOrderExpireDto sendOrderExpireDto = new SendOrderExpireDto();
         sendOrderExpireDto.setUserId(userId);
         sendOrderExpireDto.setOrderId(orderId);
-        sendOrderExpireDto.setTtl(10L);
-        generateSendMessageService.sendOrderDeadMsg(sendOrderExpireDto);
+        generateSendMessageService.sendDeadMsg(sendOrderExpireDto);
         return Message.createBySuccess(orderInfo);
     }
 
@@ -220,7 +220,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
         userCenterDto.setToId(orderInfo.getBuyerId());
         userCenterDto.setDate(DateUtil.now());
 
-        //从es中删除
+        //从es中删除商品
         deleteFromES(orderInfo.getProductId());
         return true;
     }
@@ -309,7 +309,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
                 sendUserCenterDto.setFromId(-1L);
                 sendUserCenterDto.setTargetId(orderId);
                 sendUserCenterDto.setContent(new StringBuffer("您提交的编号为: ").append(order.getOrderCode()).append("的订单已经超时,系统已经自动取消该订单").toString());
-
+                generateSendMessageService.sendToMq(sendUserCenterDto);
             }
         }
         this.updateByKey(order);
@@ -317,6 +317,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, Long> imple
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "userProductOrderList::", key = "#orderInfo.buyerId + '*'")
+    })
     public Integer completeTrade(OrderInfo orderInfo) {
         return orderInfoDao.completeTrade(orderInfo);
     }

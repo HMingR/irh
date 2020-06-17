@@ -44,6 +44,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: PayServiceImpl
@@ -206,8 +207,9 @@ public class PayServiceImpl implements PayService {
         boolean b = goodsServiceFeignApi.updateProductState(orderInfo.getProductId(), 4);
         if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
 
-        //删除在redis中保存的key
-        redisTemplate.delete(RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId()));
+        //支付成功之后将订单保存在redis中
+        String orderExpireKeyByOrderId = RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId());
+        redisTemplate.opsForValue().set(orderExpireKeyByOrderId, 1, 20, TimeUnit.MINUTES);
         sendMessage(orderInfo);
     }
 
@@ -226,8 +228,8 @@ public class PayServiceImpl implements PayService {
         boolean b = goodsServiceFeignApi.updateProductState(orderInfo.getProductId(), 4);
         if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
 
-        //删除在redis中保存的key
-        redisTemplate.delete(RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId()));
+        String orderExpireKeyByOrderId = RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId());
+        redisTemplate.opsForValue().set(orderExpireKeyByOrderId, 1, 20, TimeUnit.MINUTES);
 
         sendMessage(orderInfo);
 
@@ -279,7 +281,6 @@ public class PayServiceImpl implements PayService {
         SendOrderEvaluateDto sendOrderEvaluateDto = new SendOrderEvaluateDto();
         sendOrderEvaluateDto.setUserId(orderInfo.getBuyerId());
         sendOrderEvaluateDto.setOrderId(orderInfo.getId());
-        sendOrderEvaluateDto.setTtl(5L);
         generateSendMessageService.sendDeadMsg(sendOrderEvaluateDto);
 
 

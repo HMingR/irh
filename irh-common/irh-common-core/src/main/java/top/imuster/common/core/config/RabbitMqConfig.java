@@ -120,10 +120,10 @@ public class RabbitMqConfig {
     public Queue orderWaitPayQueue(){
         Map<String, Object> argsMap = Maps.newHashMap();
         argsMap.put("x-dead-letter-exchange", DLX_EXCHANGE_INFORM);
-//        argsMap.put("x-dead-letter-routing-key", "#");
+        argsMap.put("x-message-ttl", 10 * 60 * 1000);
+        argsMap.put("x-dead-letter-routing-key", "dlx_order");
         return new Queue("wait_pay_queue",true,false,false, argsMap);
     }
-
 
     /**
      * @Author hmr
@@ -139,14 +139,63 @@ public class RabbitMqConfig {
 
     /**
      * @Author hmr
+     * @Description 处理超时未支付的订单  业务队列
+     * @Date: 2020/6/14 19:36
+     * @reture: org.springframework.amqp.core.Binding
+     **/
+    @Bean
+    public Binding orderExpireBinding() {
+        return BindingBuilder.bind(orderExpireQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKeyMatchRule()).noargs();
+    }
+
+
+    @Bean
+    public Binding orderWaitPayBinding() {
+        return BindingBuilder.bind(orderWaitPayQueue()).to(exchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKey()).noargs();
+    }
+
+    /**
+     * @Author hmr
      * @Description 订单自动完成死信队列
      * @Date: 2020/6/16 9:44
      * @param
      * @reture: org.springframework.amqp.core.Queue
      **/
     @Bean
+    public Queue waitOrderEvaluateQueue(){
+        Map<String, Object> argsMap = Maps.newHashMap();
+        argsMap.put("x-dead-letter-exchange", DLX_EXCHANGE_INFORM);
+        argsMap.put("x-message-ttl", 5 * 24 * 60 * 60 * 1000);
+        argsMap.put("x-dead-letter-routing-key", "dlx_order_evaluate");
+        return new Queue("wait_evaluate_queue",true,false,false, argsMap);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 具体的业务队列
+     * @Date: 2020/6/16 19:35
+     * @param
+     * @reture: org.springframework.amqp.core.Queue
+     **/
+    @Bean
     public Queue orderEvaluateQueue(){
         return new Queue(MqTypeEnum.ORDER_EVALUATE.getQueueName(), true);
+    }
+
+    /**
+     * @Author hmr
+     * @Description 订单自动完成死信息队列
+     * @Date: 2020/6/14 19:36
+     * @reture: org.springframework.amqp.core.Binding
+     **/
+    @Bean
+    public Binding waitOrderEvaluateBinding() {
+        return BindingBuilder.bind(waitOrderEvaluateQueue()).to(exchange()).with(MqTypeEnum.ORDER_EVALUATE.getRoutingKeyMatchRule()).noargs();
+    }
+
+    @Bean
+    public Binding orderEvaluateBinding(){
+        return BindingBuilder.bind(orderEvaluateQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_EVALUATE.getRoutingKeyMatchRule()).noargs();
     }
 
     @Bean(EXCHANGE_TOPICS_INFORM)
@@ -164,36 +213,6 @@ public class RabbitMqConfig {
     @Bean(DLX_EXCHANGE_INFORM)
     public Exchange deadExchange(){
         return ExchangeBuilder.topicExchange(DLX_EXCHANGE_INFORM).durable(true).build();
-    }
-
-
-
-    @Bean
-    public Binding orderWaitPayBinding() {
-        return BindingBuilder.bind(orderWaitPayQueue()).to(exchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKey()).noargs();
-    }
-
-    /**
-     * @Author hmr
-     * @Description 处理超时未支付的订单  业务队列
-     * @Date: 2020/6/14 19:36
-     * @reture: org.springframework.amqp.core.Binding
-     **/
-    @Bean
-    public Binding orderExpireBinding() {
-        return BindingBuilder.bind(orderExpireQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_DLX.getRoutingKeyMatchRule()).noargs();
-    }
-
-    /**
-     * @Author hmr
-     * @Description 订单自动完成
-     * @Date: 2020/6/14 19:36
-     * @param exchange
-     * @reture: org.springframework.amqp.core.Binding
-     **/
-    @Bean
-    public Binding orderEvaluateBinding() {
-        return BindingBuilder.bind(orderEvaluateQueue()).to(deadExchange()).with(MqTypeEnum.ORDER_EVALUATE.getRoutingKeyMatchRule()).noargs();
     }
 
 
