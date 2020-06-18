@@ -11,7 +11,8 @@ public enum MessageCode {
     ERROR(500, "服务器错误"),
     FORBID(401, "禁止访问"),
     ILLEGAL_ARGUMENT_CODE(406, "非法参数"),
-    UNAUTHORIZED(402, "身份过期或权限不足!!");
+    UNAUTHORIZED(402, "身份过期或权限不足!!"),
+    WAIT(1000, "等待");
     private Integer code;
     private String text;
 

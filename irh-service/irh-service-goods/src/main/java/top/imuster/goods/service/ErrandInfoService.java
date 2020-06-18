@@ -63,7 +63,7 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @param currentUserIdFromCookie
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> release(ErrandInfo errandInfo, Long currentUserIdFromCookie);
+    Message<Long> release(ErrandInfo errandInfo, Long currentUserIdFromCookie);
 
     /**
      * @Author hmr

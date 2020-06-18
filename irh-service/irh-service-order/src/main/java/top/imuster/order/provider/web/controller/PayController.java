@@ -65,5 +65,15 @@ public class PayController extends BaseController {
         return payService.wxPay(orderCode);
     }
 
-
+    /**
+     * @Author hmr
+     * @Description 跑腿支付
+     * @Date: 2020/6/18 11:08
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    @GetMapping("/errand/{id}")
+    Message<String> errandPay(@PathVariable("id") Long id){
+        return payService.errandPay(id);
+    }
 }

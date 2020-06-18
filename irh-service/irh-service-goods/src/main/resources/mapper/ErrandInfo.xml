@@ -17,7 +17,8 @@
             version,
             address,
             phone_num AS phoneNum,
-            cypher
+            cypher,
+            pay_state AS payState
 		]]>
 	</sql>
 
@@ -40,6 +41,7 @@
             <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
             <if test="cypher != null and cypher != ''"><![CDATA[AND cypher = #{cypher}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 1]]></if>
+            <if test="payState != null and payState != ''"><![CDATA[AND pay_state = #{payState}]]></if>
 		</where>
 	</sql>
 	
@@ -62,6 +64,7 @@
 			<if test="phoneNum != null"><![CDATA[phone_num = #{phoneNum},]]></if>
 			<if test="address != null"><![CDATA[address = #{address},]]></if>
 			<if test="cypher != null"><![CDATA[cypher = #{cypher},]]></if>
+			<if test="payState != null"><![CDATA[pay_state = #{payState},]]></if>
 			version = version + 1,
 		</set>
 	</sql>
@@ -101,7 +104,7 @@
 	</sql>
 
 	<!-- 插入app记录 -->
-	<insert id="insertEntry" parameterType="top.imuster.life.api.pojo.ErrandInfo" keyProperty="id" >
+	<insert id="insertEntry" parameterType="top.imuster.life.api.pojo.ErrandInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
 		<![CDATA[
 			INSERT INTO errand_info
 		]]>
@@ -163,7 +166,7 @@
 
 	<!-- 其它SQL语句 -->
 	<select id="selectList" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
-		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId, version]]>
+		<![CDATA[SELECT id, content, money, create_time AS createTime, state, requirement, publisher_id AS publisherId, version, pay_state AS payState]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE
 		state = #{state} AND publisher_id = #{publisherId} ORDER BY ${orderField} ${orderFieldType} LIMIT #{startIndex}, #{endIndex}
@@ -187,11 +190,10 @@
 		WHERE id = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=INTEGER}
 	</update>
 
-
 	<select id="selectErrandBrief" parameterType="top.imuster.life.api.pojo.ErrandInfo" resultType="top.imuster.life.api.pojo.ErrandInfo">
 		SELECT id, content, requirement, money, create_time AS createTime, version
 		FROM errand_info
-		WHERE state = 2
+		WHERE state = 2 AND pay_state = 1
 		ORDER BY ${orderField} ${orderFieldType}
 		LIMIT #{startIndex,jdbcType=INTEGER}, #{endIndex,jdbcType=INTEGER}
 	</select>

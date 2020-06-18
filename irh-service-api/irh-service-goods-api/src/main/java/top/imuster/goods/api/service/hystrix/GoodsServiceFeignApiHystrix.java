@@ -89,6 +89,11 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             public Integer getErrandVersionById(Long errandId) {
                 return null;
             }
+
+            @Override
+            public boolean finishErrandPay(Long id) {
+                return false;
+            }
         };
     }
 }

@@ -264,4 +264,16 @@ public class RedisUtil {
     public static String getOrderExpireKeyByOrderId(Long orderId) {
         return new StringBuffer().append(GlobalConstant.IRH_ORDER_EXPIRE_KEY).append(orderId).toString();
     }
+
+
+    /**
+     * @Author hmr
+     * @Description 根据跑腿信息的主键id生成map，用来存放所有关于该跑腿的订单情况
+     * @Date: 2020/6/18 14:12
+     * @param errandId
+     * @reture: java.lang.String
+     **/
+    public static String getErrandOrderAvaliableMapKey(Long errandId) {
+        return new StringBuffer().append(GlobalConstant.IRH_LIFE_ERRAND_MAP).append(errandId).toString();
+    }
 }

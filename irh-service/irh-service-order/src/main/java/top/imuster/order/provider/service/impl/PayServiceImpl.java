@@ -236,6 +236,12 @@ public class PayServiceImpl implements PayService {
         return Message.createBySuccess();
     }
 
+    @Override
+    public Message<String> errandPay(Long id) {
+        boolean flag = goodsServiceFeignApi.finishErrandPay(id);
+        return flag ? Message.createBySuccess() : Message.createByError();
+    }
+
 
     /**
      * @Author hmr

@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import top.imuster.common.base.config.GlobalConstant;
+import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -81,8 +81,9 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
 
     @Override
     public Message<String> receiveOrder(Long id, Integer version, Long userId) throws JsonProcessingException {
-        boolean flag = redisTemplate.opsForHash().hasKey(GlobalConstant.IRH_LIFE_ERRAND_MAP, RedisUtil.getErrandKey(id));
-        if(flag) return Message.createByError("订单已经被抢走了,请刷新后重新选择其他的");
+        String errandKey = RedisUtil.getErrandKey(id);
+        Boolean hasKey = redisTemplate.hasKey(errandKey);
+        if(hasKey != null && hasKey) return Message.createByError("订单已经被抢走了,请刷新后重新选择其他的");
         ErrandInfo errandInfo = goodsServiceFeignApi.getErrandInfoById(id);
 
         if(errandInfo == null) return Message.createByError("没有找到相关的跑腿信息,请刷新后重试");
@@ -105,18 +106,14 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
-    public Message<String> getOrderStateByCode(String code) {
-        String res = String.valueOf(redisTemplate.opsForHash().get(GlobalConstant.IRH_LIFE_ERRAND_MAP, code));
-        if(res == null) res = "";
-        if(res.equals("1")){
+    public Message<String> getOrderStateByCode(String code, Long targetId) {
+        String redisKey = RedisUtil.getErrandOrderAvaliableMapKey(targetId);
+        Boolean available = (Boolean) redisTemplate.opsForHash().get(redisKey, code);
+        if(available == null) return Message.createByCustom(MessageCode.WAIT);
+        if(available){
             return Message.createByError("接单失败,订单已经被被人抢走了");
-        }else if(res.equals("2")){
+        }else{
             return Message.createBySuccess("接单成功,请按照发布者的要求及时完成任务");
-        } else {
-            Integer state = errandOrderDao.selectOrderStateByCode(code);
-            if(state == null) return Message.createByError("接单失败,订单已经被被人抢走了");
-            if(state == 3) return Message.createBySuccess("接单成功,请按照发布者的要求及时完成任务");
-            return Message.createByError("接单失败,当前订单已经被其他人抢走了");
         }
     }
 
@@ -169,4 +166,5 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
         goodsServiceFeignApi.updateErrandInfoById(errandOrderInfo.getErrandId(), version, 4);
         return Message.createBySuccess();
     }
+
 }

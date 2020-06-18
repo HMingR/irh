@@ -141,4 +141,14 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/errand/version/{id}")
     Integer getErrandVersionById(@PathVariable("id") Long errandId);
+
+    /**
+     * @Author hmr
+     * @Description 完成跑腿支付,修改状态
+     * @Date: 2020/6/18 11:10
+     * @param id
+     * @reture: boolean
+     **/
+    @GetMapping("/errand/finishPay/{id}")
+    boolean finishErrandPay(@PathVariable("id") Long id);
 }

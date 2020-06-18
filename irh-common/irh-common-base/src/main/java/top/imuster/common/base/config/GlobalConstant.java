@@ -59,7 +59,7 @@ public class GlobalConstant {
     public static final String REDIS_CUSTOMER_EMAIL_REGISTER = "irh:customer:email:register:";
 
     //life模块中跑腿服务接单成功之后将跑腿信息表的id存放在redis中
-    public static final String IRH_LIFE_ERRAND_MAP = "irh::life:errand::map";
+    public static final String IRH_LIFE_ERRAND_MAP = "irh::life:errand::map::";
     public static final String IRH_LIFE_ERRAND_KEY = "irh::life::errand::key::";
 
     //热搜

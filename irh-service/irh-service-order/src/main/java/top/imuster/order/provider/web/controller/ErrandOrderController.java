@@ -24,6 +24,8 @@ public class ErrandOrderController extends BaseController {
 
     @Resource
     ErrandOrderService errandOrderService;
+
+
     /**
      * @Author hmr
      * @Description 通过消息队列来控制并发
@@ -80,9 +82,9 @@ public class ErrandOrderController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation("用户接单之后需要一直轮询该接口,code为接单返回的订单编号")
-    @GetMapping("/state/{code}")
-    public Message<String> getOrderStateByCode(@PathVariable("code") String code){
-        return errandOrderService.getOrderStateByCode(code);
+    @GetMapping("/state/{id}/{code}")
+    public Message<String> getOrderStateByCode(@PathVariable("id") Long targetId, @PathVariable("code") String code){
+        return errandOrderService.getOrderStateByCode(code, targetId);
     }
 
     /**

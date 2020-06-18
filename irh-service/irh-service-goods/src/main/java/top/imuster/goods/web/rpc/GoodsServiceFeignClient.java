@@ -143,4 +143,14 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     public Integer getErrandVersionById(@PathVariable("id") Long errandId) {
         return errandInfoService.getErrandVersionById(errandId);
     }
+
+    @Override
+    @GetMapping("/errand/finishPay/{id}")
+    public boolean finishErrandPay(@PathVariable("id") Long id) {
+        ErrandInfo errandInfo = new ErrandInfo();
+        errandInfo.setId(id);
+        errandInfo.setPayState(1);
+        int i = errandInfoService.updateByKey(errandInfo);
+        return i == 1;
+    }
 }

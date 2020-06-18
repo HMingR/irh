@@ -57,8 +57,20 @@ public class ErrandInfo extends BaseDomain {
 	//凭证  如取快递的时候需要取件密码
 	private String cypher;
 
+	//支付状态  0-未支付  1-已支付
+	private Integer payState;
+
 	// 1-删除 2-有效 3-已被接单
 //	private Short state;
+
+
+	public Integer getPayState() {
+		return payState;
+	}
+
+	public void setPayState(Integer payState) {
+		this.payState = payState;
+	}
 
 	public String getCypher() {
 		return cypher;

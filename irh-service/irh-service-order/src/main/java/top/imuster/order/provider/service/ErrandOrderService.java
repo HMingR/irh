@@ -42,9 +42,10 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @Description 根据订单编号查看该订单是否有效
      * @Date: 2020/2/12 11:50
      * @param code
+     * @param targetId
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> getOrderStateByCode(String code);
+    Message<String> getOrderStateByCode(String code, Long targetId);
 
     /**
      * @Author hmr

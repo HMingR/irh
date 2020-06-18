@@ -42,4 +42,13 @@ public interface PayService {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> wxPay(String orderCode) throws JsonProcessingException;
+
+    /**
+     * @Author hmr
+     * @Description 跑腿支付
+     * @Date: 2020/6/18 11:08
+     * @param id
+     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
+     **/
+    Message<String> errandPay(Long id);
 }
