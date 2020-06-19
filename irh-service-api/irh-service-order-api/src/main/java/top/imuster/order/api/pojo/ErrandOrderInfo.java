@@ -61,6 +61,28 @@ public class ErrandOrderInfo extends BaseDomain {
 
 	private String phoneNum;
 
+	//要求时间
+	private String requirement;
+
+	//是否评价,1-未评价  2-已评价
+	private Integer evaluateState;
+
+	public Integer getEvaluateState() {
+		return evaluateState;
+	}
+
+	public void setEvaluateState(Integer evaluateState) {
+		this.evaluateState = evaluateState;
+	}
+
+	public String getRequirement() {
+		return requirement;
+	}
+
+	public void setRequirement(String requirement) {
+		this.requirement = requirement;
+	}
+
 	public String getAddress() {
 		return address;
 	}

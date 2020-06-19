@@ -18,7 +18,9 @@
             state,
             address,
             phone_num AS phoneNum,
-            version AS errandVersion
+            version AS errandVersion,
+            requirement,
+            evaluate_state AS evaluateState
 		]]>
 	</sql>
 
@@ -42,6 +44,8 @@
             <if test="state != null and state != ''"><![CDATA[AND state = #{state}]]></if> 
             <if test="address != null and address != ''"><![CDATA[AND address = #{address}]]></if>
             <if test="phoneNum != null and phoneNum != ''"><![CDATA[AND phone_num = #{phoneNum}]]></if>
+            <if test="evaluateState != null and evaluateState != ''"><![CDATA[AND evaluate_state = #{evaluateState}]]></if>
+            <if test="requirement != null and requirement != ''"><![CDATA[AND requirement = #{requirement}]]></if>
             <if test="state == null or state == ''"><![CDATA[AND state != 2]]></if>
 		</where>
 	</sql>
@@ -66,6 +70,8 @@
 			<if test="state != null"><![CDATA[state = #{state},]]></if>
 			<if test="address != null and address != ''"><![CDATA[ address = #{address},]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num = #{phoneNum},]]></if>
+			<if test="requirement != null and requirement != ''"><![CDATA[ requirement = #{requirement},]]></if>
+			<if test="evaluateState != null and evaluateState != ''"><![CDATA[ evaluate_state = #{evaluateState},]]></if>
 			version = version + 1
 		</set>
 	</sql>
@@ -84,6 +90,7 @@
 			<if test="state != null and state != ''"><![CDATA[ state ,]]></if>
 			<if test="address != null and address != ''"><![CDATA[ address ,]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[ phone_num ,]]></if>
+			<if test="requirement != null and requirement != ''"><![CDATA[ requirement ,]]></if>
 		</trim>
 	</sql>
 
@@ -101,6 +108,7 @@
 			<if test="state != null and state != ''"><![CDATA[   #{state} ,]]></if>
 			<if test="address != null and address != ''"><![CDATA[   #{address} ,]]></if>
 			<if test="phoneNum != null and phoneNum != ''"><![CDATA[   #{phoneNum} ,]]></if>
+			<if test="requirement != null and requirement != ''"><![CDATA[   #{requirement} ,]]></if>
 		</trim>
 	</sql>
 

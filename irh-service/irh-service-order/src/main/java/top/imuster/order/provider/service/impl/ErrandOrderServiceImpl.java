@@ -16,6 +16,7 @@ import top.imuster.common.base.service.BaseServiceImpl;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.config.RabbitMqConfig;
 import top.imuster.common.core.enums.MqTypeEnum;
+import top.imuster.common.core.utils.DateUtil;
 import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.UuidUtils;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
@@ -99,6 +100,7 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
         errandOrderInfo.setErrandVersion(version);
         errandOrderInfo.setAddress(errandInfo.getAddress());
         errandOrderInfo.setPhoneNum(errandInfo.getPhoneNum());
+        errandOrderInfo.setRequirement(errandInfo.getRequirement());
 
         String value = new ObjectMapper().writeValueAsString(errandOrderInfo);
         rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_TOPICS_INFORM, MqTypeEnum.ERRAND.getRoutingKey(), value);
@@ -160,6 +162,7 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
             return Message.createByError("非法操作,恶意篡改登录信息,如非恶意请重新登录");
         }
         errandOrderInfo.setState(4);
+        errandOrderInfo.setFinishTime(DateUtil.now());
         errandOrderInfo.setErrandVersion(errandOrderInfo.getErrandVersion() + 1);
         errandOrderDao.updateByKey(errandOrderInfo);
         Integer version = goodsServiceFeignApi.getErrandVersionById(errandOrderInfo.getErrandId());
