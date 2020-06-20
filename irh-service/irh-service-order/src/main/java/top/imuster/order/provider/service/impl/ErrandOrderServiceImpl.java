@@ -7,8 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.config.MessageCode;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
@@ -21,8 +26,11 @@ import top.imuster.common.core.utils.RedisUtil;
 import top.imuster.common.core.utils.UuidUtils;
 import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.life.api.pojo.ErrandInfo;
+import top.imuster.order.api.pojo.ErrandOrderEvaluateInfo;
 import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.dao.ErrandOrderDao;
+import top.imuster.order.provider.exception.OrderException;
+import top.imuster.order.provider.service.ErrandOrderEvaluateInfoService;
 import top.imuster.order.provider.service.ErrandOrderService;
 
 import javax.annotation.Resource;
@@ -38,7 +46,6 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
 
     private static final Logger log = LoggerFactory.getLogger(ErrandOrderServiceImpl.class);
 
-
     @Resource
     private ErrandOrderDao errandOrderDao;
 
@@ -51,6 +58,9 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     @Autowired
     GoodsServiceFeignApi goodsServiceFeignApi;
 
+    @Resource
+    ErrandOrderEvaluateInfoService errandOrderEvaluateInfoService;
+
 
     @Override
     public BaseDao<ErrandOrderInfo, Long> getDao() {
@@ -58,6 +68,7 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_FIVE_MINUTES_CACHE_KEY, key = " #userId + '::errandOrderList*'")
     public Message<String> delete(Long id, Long userId, Integer type) {
         List<ErrandOrderInfo> errandOrderInfos = errandOrderDao.selectEntryList(id);
         if(errandOrderInfos == null || errandOrderInfos.isEmpty()) return Message.createByError("未找到相关订单,请刷新后重试");
@@ -120,12 +131,14 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
+    @CacheEvict(value = GlobalConstant.IRH_FIVE_MINUTES_CACHE_KEY, key = " #order.holderId + '::errandOrderList*'")
     public ErrandOrderInfo acceptErrand(ErrandOrderInfo order) {
         errandOrderDao.insertEntry(order);
         return order;
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_FIVE_MINUTES_CACHE_KEY, key = "'errandOrderDetail::' + #id")
     public Message<ErrandOrderInfo> getOrderInfoById(Long id, Long userId) {
         List<ErrandOrderInfo> res = this.selectEntryList(id);
         if(res == null || res.isEmpty()) return Message.createBySuccess("未找到相关订单,请刷新后重试");
@@ -138,6 +151,7 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
+    @Cacheable(value = GlobalConstant.IRH_FIVE_MINUTES_CACHE_KEY, key = "#userId + ':errandOrderList::type:' + #type + ':state:' + #state + ':page:' + #currentPage")
     public Message<Page<ErrandOrderInfo>> list(Integer pageSize, Integer currentPage, Integer type, Integer state, Long userId) {
         ErrandOrderInfo searchCondition = new ErrandOrderInfo();
         searchCondition.setOrderField("create_time");
@@ -153,20 +167,25 @@ public class ErrandOrderServiceImpl extends BaseServiceImpl<ErrandOrderInfo, Lon
     }
 
     @Override
-    public Message<String> finishOrder(Long userId, Long id) {
-        List<ErrandOrderInfo> res = errandOrderDao.selectEntryList(id);
+    @CacheEvict(value = GlobalConstant.IRH_FIVE_MINUTES_CACHE_KEY, key = " #userId + '::errandOrderList*'")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Message<String> finishOrder(Long userId, Long errandOrderId, ErrandOrderEvaluateInfo evaluateInfo) {
+        List<ErrandOrderInfo> res = errandOrderDao.selectEntryList(errandOrderId);
         if(res == null || res.isEmpty()) return Message.createByError("未找到相关订单");
         ErrandOrderInfo errandOrderInfo = res.get(0);
         if(!errandOrderInfo.getPublisherId().equals(userId)){
-            log.error("订单的发布者和当前用户不一致,订单id为{},当前用户id为{}",id, userId);
-            return Message.createByError("非法操作,恶意篡改登录信息,如非恶意请重新登录");
+            log.error("订单的发布者和当前用户不一致,订单id为{},当前用户id为{}",errandOrderId, userId);
+            throw new OrderException("非法操作,恶意篡改登录信息,如非恶意请重新登录");
         }
+        Long errandId = errandOrderInfo.getErrandId();
+        boolean b = goodsServiceFeignApi.updateErrandInfoById(errandId, 4);
+        if(!b) throw new OrderException("更新失败,请稍后重试");
+
         errandOrderInfo.setState(4);
         errandOrderInfo.setFinishTime(DateUtil.now());
-        errandOrderInfo.setErrandVersion(errandOrderInfo.getErrandVersion() + 1);
         errandOrderDao.updateByKey(errandOrderInfo);
-        Integer version = goodsServiceFeignApi.getErrandVersionById(errandOrderInfo.getErrandId());
-        goodsServiceFeignApi.updateErrandInfoById(errandOrderInfo.getErrandId(), version, 4);
+
+        errandOrderEvaluateInfoService.writeEvaluate(evaluateInfo);
         return Message.createBySuccess();
     }
 

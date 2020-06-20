@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseService;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.order.api.pojo.ErrandOrderEvaluateInfo;
 import top.imuster.order.api.pojo.ErrandOrderInfo;
 
 /**
@@ -87,5 +88,5 @@ public interface ErrandOrderService extends BaseService<ErrandOrderInfo, Long> {
      * @param id
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
-    Message<String> finishOrder(Long userId, Long id);
+    Message<String> finishOrder(Long userId, Long errandOrderId, ErrandOrderEvaluateInfo evaluateInfo);
 }

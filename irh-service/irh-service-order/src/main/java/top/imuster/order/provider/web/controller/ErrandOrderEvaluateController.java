@@ -23,13 +23,6 @@ public class ErrandOrderEvaluateController extends BaseController {
     @Resource
     ErrandOrderEvaluateInfoService errandOrderEvaluateInfoService;
 
-    @PostMapping
-    public Message<String> write(@RequestBody ErrandOrderEvaluateInfo errandOrderEvaluateInfo){
-        Long userId = getCurrentUserIdFromCookie();
-        errandOrderEvaluateInfo.setUserId(userId);
-        return errandOrderEvaluateInfoService.writeEvaluate(errandOrderEvaluateInfo);
-    }
-
     /**
      * @Author hmr
      * @Description 根据id查看详情
@@ -39,12 +32,7 @@ public class ErrandOrderEvaluateController extends BaseController {
      **/
     @GetMapping("/detail/{id}")
     public Message<ErrandOrderEvaluateInfo> getDetailById(@PathVariable("id") Long id){
-        ErrandOrderEvaluateInfo evaluateInfo = new ErrandOrderEvaluateInfo();
-        evaluateInfo.setState(2);
-        evaluateInfo.setId(id);
-        List<ErrandOrderEvaluateInfo> infos = errandOrderEvaluateInfoService.selectEntryList(evaluateInfo);
-        if(CollectionUtils.isEmpty(infos)) return Message.createByError("未找到相关信息");
-        return Message.createBySuccess(infos.get(0));
+        return errandOrderEvaluateInfoService.getDetailById(id);
     }
 
     /**

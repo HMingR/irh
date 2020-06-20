@@ -102,4 +102,14 @@ public interface ErrandInfoService extends BaseService<ErrandInfo, Long> {
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.life.api.pojo.ErrandInfo>
      **/
     Message<ErrandInfo> detail(Long id);
+
+    /**
+     * @Author hmr
+     * @Description 根据id更新state
+     * @Date: 2020/6/20 15:28
+     * @param id
+     * @param state
+     * @reture: boolean
+     **/
+    boolean updateStateById(Long id, Integer state);
 }

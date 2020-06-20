@@ -54,7 +54,7 @@ public class ErrandOrderInfo extends BaseDomain {
 	//跑腿的版本
 	private Integer errandVersion;
 
-	// 1-取消订单  2-删除  3-未完成 4-已完成 5-下单失败  6-发布者删除  7-接单者删除
+	// 1-取消订单  2-删除  3-未完成 4-已完成 5-下单失败
 //	private Short state;
 
 	private String address;

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.order.api.pojo.ErrandOrderEvaluateInfo;
 import top.imuster.order.api.pojo.ErrandOrderInfo;
 import top.imuster.order.provider.service.ErrandOrderService;
 
@@ -95,9 +96,9 @@ public class ErrandOrderController extends BaseController {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     @ApiOperation(value = "发布者完成订单", httpMethod = "GET")
-    @GetMapping("/finish/{id}")
-    public Message<String> finishOrder(@PathVariable("id") Long id){
+    @PostMapping("/finish/{id}")
+    public Message<String> finishOrder(@PathVariable("id") Long id, @RequestBody ErrandOrderEvaluateInfo evaluateInfo){
         Long userId = getCurrentUserIdFromCookie();
-        return errandOrderService.finishOrder(userId, id);
+        return errandOrderService.finishOrder(userId, id, evaluateInfo);
     }
 }

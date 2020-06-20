@@ -66,6 +66,11 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
+            public boolean updateErrandInfoById(Long id, Integer state) {
+                return false;
+            }
+
+            @Override
             public boolean errandIsAvailable(Long errandId, Integer errandVersion) {
                 return false;
             }

@@ -1,7 +1,6 @@
 package top.imuster.user.api.pojo;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,7 +29,7 @@ public class ReportFeedbackInfo extends BaseDomain {
 	private Long id;
 
 	// 1-商品举报 2-留言举报 3-评价举报 4-帖子举报
-	@ApiModelProperty("1-商品举报 2-商品留言举报 3-商品评价举报 4-帖子举报 5-帖子留言举报")
+	@ApiModelProperty("1-商品举报 2-商品留言举报 3-商品评价举报 4-帖子举报 5-帖子留言举报 6-跑腿申诉(targetId为跑腿订单id)")
 	private Integer type;
 
 	//  举报对象的id

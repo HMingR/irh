@@ -178,4 +178,13 @@ public class ErrandInfoServiceImpl extends BaseServiceImpl<ErrandInfo, Long> imp
         return Message.createBySuccess(errandInfo);
     }
 
+    @Override
+    public boolean updateStateById(Long id, Integer state) {
+        ErrandInfo condition = new ErrandInfo();
+        condition.setState(state);
+        condition.setId(id);
+        int i = errandInfoDao.updateByKey(condition);
+        return i == 1;
+    }
+
 }

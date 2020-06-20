@@ -81,7 +81,7 @@ public interface GoodsServiceFeignApi {
 
     /**
      * @Author hmr
-     * @Description 根据更新errandInfo的信息
+     * @Description 根据更新errandInfo的信息   可能存在并发
      * @Date: 2020/3/7 15:37
      * @param id
      * @param errandVersion
@@ -89,6 +89,18 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/errand/{id}/{version}/{state}")
     boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion, @PathVariable("state") Integer state);
+
+
+    /**
+     * @Author hmr
+     * @Description 不存在并发,直接更新
+     * @Date: 2020/6/20 15:26
+     * @param id
+     * @param state
+     * @reture: boolean
+     **/
+    @GetMapping("/errand/{id}/{state}")
+    boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("state") Integer state);
 
     /**
      * @Author hmr
@@ -131,6 +143,8 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/state/{targetId}/{state}")
     boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state);
+
+
 
     /**
      * @Author hmr

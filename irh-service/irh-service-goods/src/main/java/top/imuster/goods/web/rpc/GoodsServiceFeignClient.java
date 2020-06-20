@@ -115,6 +115,12 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     }
 
     @Override
+    @GetMapping("/errand/{id}/{state}")
+    public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("state") Integer state) {
+        return errandInfoService.updateStateById(id, state);
+    }
+
+    @Override
     @GetMapping("/errand/avail/{errandId}/{version}")
     public boolean errandIsAvailable(@PathVariable("errandId") Long errandId,@PathVariable("version") Integer errandVersion) {
         return errandInfoService.isAvailable(errandId, errandVersion);
