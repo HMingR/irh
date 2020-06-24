@@ -2,10 +2,10 @@ package top.imuster.life.api.service;
 
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import top.imuster.common.base.wrapper.Message;
-import top.imuster.life.api.pojo.ArticleCategoryInfo;
 import top.imuster.life.api.pojo.ArticleInfo;
 import top.imuster.life.api.service.hystrix.ForumServiceFeignHystrix;
 
@@ -30,49 +30,6 @@ public interface ForumServiceFeignApi {
 
     /**
      * @Author hmr
-     * @Description 根据id删除论坛分类
-     * @Date: 2020/2/1 12:18
-     * @param id
-     * @reture: boolean
-     **/
-    @DeleteMapping("/category/{id}")
-    boolean adminDeleteArticleCategory(@PathVariable("id") Long id);
-
-    @PostMapping("/category/list")
-    Message<Page<ArticleCategoryInfo>> adminCategoryList(@RequestBody Page<ArticleCategoryInfo> page);
-
-    /**
-     * @Author hmr
-     * @Description 根据id获得分类信息
-     * @Date: 2020/2/1 12:23
-     * @param id
-     * @reture: top.imuster.forum.api.pojo.ArticleCategory
-     **/
-    @GetMapping("/category/{id}")
-    ArticleCategoryInfo getCategoryInfoById(@PathVariable("id") Long id);
-
-    /**
-     * @Author hmr
-     * @Description 添加分类
-     * @Date: 2020/2/1 12:21
-     * @param category
-     * @reture: boolean
-     **/
-    @PutMapping("/category")
-    boolean addArticleCategory(@RequestBody ArticleCategoryInfo category);
-
-    /**
-     * @Author hmr
-     * @Description 修改分类信息
-     * @Date: 2020/2/1 12:23
-     * @param category
-     * @reture: boolean
-     **/
-    @PutMapping("/category")
-    boolean editArticleCategory(@RequestBody ArticleCategoryInfo category);
-
-    /**
-     * @Author hmr
      * @Description 根据留言id删除帖子留言
      * @Date: 2020/2/1 12:20
      * @param id
@@ -81,15 +38,6 @@ public interface ForumServiceFeignApi {
     @DeleteMapping("/review/{id}")
     boolean adminDeleteArticleReview(@PathVariable("id") Long id);
 
-    /**
-     * @Author hmr
-     * @Description 管理员分页查看帖子信息,不显示内容
-     * @Date: 2020/2/6 15:05
-     * @param page
-     * @reture: top.imuster.common.base.domain.Page<ArticleInfo>
-     **/
-    @PostMapping("/article/list")
-    Message<Page<ArticleInfo>> adminGetArticleList(@RequestBody Page<ArticleInfo> page);
 
     /**
      * @Author hmr

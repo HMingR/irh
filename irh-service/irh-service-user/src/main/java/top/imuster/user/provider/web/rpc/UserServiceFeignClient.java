@@ -1,7 +1,6 @@
 package top.imuster.user.provider.web.rpc;
 
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.UserInfo;
@@ -27,16 +26,6 @@ public class UserServiceFeignClient implements UserServiceFeignApi {
 
     @Resource
     ExamineRecordInfoService examineRecordInfoService;
-
-    @Override
-    @GetMapping("/{userId}/{state}")
-    public Message<String> updateUserState(@PathVariable("userId") Long userId, @PathVariable("state") Integer state) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setId(userId);
-        userInfo.setState(state);
-        userInfoService.updateByKey(userInfo);
-        return Message.createBySuccess();
-    }
 
     @Override
     @GetMapping("/addAndPhone/{userId}")

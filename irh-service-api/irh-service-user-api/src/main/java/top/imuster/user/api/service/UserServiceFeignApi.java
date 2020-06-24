@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.UserInfo;
@@ -21,15 +20,6 @@ import java.util.Map;
  */
 @FeignClient(name = "user-service", path = "/user/feign", fallbackFactory = UserServiceFeignHystrix.class)
 public interface UserServiceFeignApi {
-    /**
-     * @Author hmr
-     * @Description 更新用户的状态
-     * @Date: 2020/3/29 16:21
-     * @param userId
-     * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
-     **/
-    @GetMapping("/{userId}/{state}")
-    Message<String> updateUserState(@PathVariable("userId") Long userId, @PathVariable("state") Integer state);
 
     /**
      * @Author hmr

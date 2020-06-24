@@ -25,11 +25,6 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
     public GoodsServiceFeignApi create(Throwable throwable) {
         log.error("出现异常");
         return new GoodsServiceFeignApi() {
-            @Override
-            public Message<Page<ProductInfo>> list(Page<ProductInfo> page) {
-                log.error("二手商品查询列表服务降级");
-                return Message.createByError("当前网络繁忙,请稍后再试");
-            }
 
             @Override
             public Message<String> delProduct(Long id) {
@@ -51,12 +46,6 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             @Override
             public Long getConsumerIdByType(Long id, Integer type) {
                 log.error("根据商品id查询会员id失败，服务降级");
-                return null;
-            }
-
-            @Override
-            public ProductInfo getProductInfoByProductMessage(Long targetId) {
-                log.error("根据商品留言信息查询商品信息失败,服务降级");
                 return null;
             }
 
@@ -88,11 +77,6 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             @Override
             public boolean updateProductState(Long productId, Integer state) {
                 return false;
-            }
-
-            @Override
-            public Integer getErrandVersionById(Long errandId) {
-                return null;
             }
 
             @Override

@@ -32,45 +32,9 @@ public class ForumServiceFeignHystrix implements FallbackFactory<ForumServiceFei
             }
 
             @Override
-            public boolean adminDeleteArticleCategory(Long id) {
-                log.error("管理员根据id删除帖子分类失败,帖子分类id为{}", id);
-                return false;
-            }
-
-            @Override
-            public Message<Page<ArticleCategoryInfo>> adminCategoryList(Page<ArticleCategoryInfo> page) {
-                log.error("管理员分页条件查询帖子分类失败,page对象为{}",page);
-                return null;
-            }
-
-            @Override
-            public ArticleCategoryInfo getCategoryInfoById(Long id) {
-                log.error("管理员根据id获得帖子分类信息失败,帖子分类id为{}", id);
-                return null;
-            }
-
-            @Override
-            public boolean addArticleCategory(ArticleCategoryInfo category) {
-                log.error("管理员新增帖子分类失败,新增帖子信息为{}", category);
-                return false;
-            }
-
-            @Override
-            public boolean editArticleCategory(ArticleCategoryInfo category) {
-                log.error("管理员根据id提交修改帖子分类信息失败,帖子分类信息为{}", category);
-                return false;
-            }
-
-            @Override
             public boolean adminDeleteArticleReview(Long id) {
                 log.error("管理员根据留言id删除帖子留言失败,留言id为{}", id);
                 return false;
-            }
-
-            @Override
-            public Message<Page<ArticleInfo>> adminGetArticleList(Page<ArticleInfo> page) {
-                log.error("管理员分页条件查询帖子信息失败,page对象为{}", page);
-                return null;
             }
 
             @Override

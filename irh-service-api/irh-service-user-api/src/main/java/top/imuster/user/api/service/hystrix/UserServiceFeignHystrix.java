@@ -4,7 +4,6 @@ import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import top.imuster.common.base.wrapper.Message;
 import top.imuster.user.api.dto.UserAuthenResultDto;
 import top.imuster.user.api.pojo.ExamineRecordInfo;
 import top.imuster.user.api.pojo.UserInfo;
@@ -26,11 +25,6 @@ public class UserServiceFeignHystrix implements FallbackFactory<UserServiceFeign
     @Override
     public UserServiceFeignApi create(Throwable throwable) {
         return new UserServiceFeignApi() {
-            @Override
-            public Message<String> updateUserState(Long userId, Integer state) {
-                return null;
-            }
-
             @Override
             public Map<String, String> getUserAddressAndPhoneById(Long userId) {
                 return null;

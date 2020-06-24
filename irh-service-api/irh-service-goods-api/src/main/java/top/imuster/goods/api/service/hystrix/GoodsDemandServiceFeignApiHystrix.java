@@ -20,16 +20,6 @@ public class GoodsDemandServiceFeignApiHystrix implements FallbackFactory<GoodsD
     public GoodsDemandServiceFeignApi create(Throwable throwable) {
         return new GoodsDemandServiceFeignApi() {
             @Override
-            public Message<Page<ProductDemandInfo>> list(Page<ProductDemandInfo> page) {
-                return null;
-            }
-
-            @Override
-            public Message<String> deleteDemandById(Long id) {
-                return null;
-            }
-
-            @Override
             public Message<ProductDemandInfo> getDemandById(Long id) {
                 return null;
             }

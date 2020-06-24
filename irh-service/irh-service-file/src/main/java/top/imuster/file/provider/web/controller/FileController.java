@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.imuster.common.base.wrapper.Message;
+import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
 import top.imuster.file.api.service.FileServiceFeignApi;
 import top.imuster.file.provider.exception.FileException;
@@ -33,6 +34,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
      *
      * @return*/
     @Override
+    @NeedLogin
     @PostMapping(produces = { MediaType.APPLICATION_JSON_UTF8_VALUE },consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Message<String> upload(@RequestPart("file") MultipartFile file) {
          log.info("开始上传文件");
@@ -64,6 +66,7 @@ public class FileController extends BaseController implements FileServiceFeignAp
      **/
     @Override
     @DeleteMapping
+    @NeedLogin
     public Message<String> deleteByName(@RequestParam("fileUri") String fileUri){
         int index = fileUri.indexOf("/");
         String groupName = fileUri.substring(0, index);

@@ -2,15 +2,10 @@ package top.imuster.goods.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.controller.BaseController;
-import top.imuster.common.core.validate.ValidateGroup;
 import top.imuster.goods.api.pojo.ProductCategoryInfo;
-import top.imuster.goods.api.service.GoodsCategoryServiceFeignApi;
-import top.imuster.goods.exception.GoodsException;
 import top.imuster.goods.service.ProductCategoryInfoService;
 
 import javax.annotation.Resource;

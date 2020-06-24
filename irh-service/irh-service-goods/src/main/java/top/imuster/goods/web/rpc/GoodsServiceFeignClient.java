@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.pojo.ProductInfo;
 import top.imuster.goods.api.pojo.ProductMessageInfo;
@@ -39,14 +38,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Resource
     ErrandInfoService errandInfoService;
-
-    @Override
-    @PostMapping(value = "/es/list")
-    public Message<Page<ProductInfo>> list(@RequestBody Page<ProductInfo> page) {
-        ProductInfo productInfo = page.getSearchCondition();
-        Page<ProductInfo> productInfoPage = productInfoService.selectPage(productInfo, page);
-        return Message.createBySuccess(productInfoPage);
-    }
 
     @Override
     @DeleteMapping("/es/{id}")
@@ -103,12 +94,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     }
 
     @Override
-    @GetMapping("/es/pi/{psId}")
-    public ProductInfo getProductInfoByProductMessage(@PathVariable("psId") Long targetId) {
-        return productInfoService.getProductInfoByMessageId(targetId);
-    }
-
-    @Override
     @GetMapping("/errand/{id}/{version}/{state}")
     public boolean updateErrandInfoById(@PathVariable("id") Long id, @PathVariable("version") Integer errandVersion, @PathVariable("state") Integer state) {
         return errandInfoService.updateStateByIdAndVersion(id, errandVersion, state);
@@ -142,12 +127,6 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
     @GetMapping("/es/state/{targetId}/{state}")
     public boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state) {
         return productInfoService.updateProductStateById(productId, state);
-    }
-
-    @Override
-    @GetMapping("/errand/version/{id}")
-    public Integer getErrandVersionById(@PathVariable("id") Long errandId) {
-        return errandInfoService.getErrandVersionById(errandId);
     }
 
     @Override

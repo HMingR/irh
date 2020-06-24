@@ -1,8 +1,9 @@
 package top.imuster.goods.api.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-import top.imuster.common.base.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.goods.api.config.FeignConfig;
 import top.imuster.goods.api.pojo.ProductInfo;
@@ -17,16 +18,6 @@ import top.imuster.life.api.pojo.ErrandInfo;
  */
 @FeignClient(value = "goods-service", configuration = FeignConfig.class, path = "/goods/feign",fallbackFactory = GoodsServiceFeignApiHystrix.class)
 public interface GoodsServiceFeignApi {
-
-    /**
-     * @Description: 分页条件查询二手商品
-     * @Author: hmr
-     * @Date: 2019/12/26 20:38
-     * @param page
-     * @reture: top.imuster.common.base.wrapper.Message
-     **/
-    @PostMapping(value = "/es/list")
-    Message<Page<ProductInfo>> list(@RequestBody Page<ProductInfo> page);
 
     /**
      * @Description: 提供给管理员的下架商品接口
@@ -67,17 +58,6 @@ public interface GoodsServiceFeignApi {
      **/
     @GetMapping("/es/{type}/{id}")
     Long getConsumerIdByType(@PathVariable("id") Long id, @PathVariable("type")Integer type);
-
-    /**
-     * @Author hmr
-     * @Description 根据商品留言信息查找商品
-     * @Date: 2020/1/22 11:32
-     * @param targetId
-     * @reture: java.lang.String
-     **/
-    @GetMapping("/es/pi/pm/{psId}")
-    ProductInfo getProductInfoByProductMessage(@PathVariable("psId") Long targetId);
-
 
     /**
      * @Author hmr
@@ -144,17 +124,6 @@ public interface GoodsServiceFeignApi {
     @GetMapping("/es/state/{targetId}/{state}")
     boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state);
 
-
-
-    /**
-     * @Author hmr
-     * @Description 根据id获得errand的version
-     * @Date: 2020/5/13 19:57
-     * @param errandId
-     * @reture: java.lang.Integer
-     **/
-    @GetMapping("/errand/version/{id}")
-    Integer getErrandVersionById(@PathVariable("id") Long errandId);
 
     /**
      * @Author hmr
