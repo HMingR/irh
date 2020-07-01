@@ -143,4 +143,14 @@ public interface ProductDonationApplyInfoService extends BaseService<ProductDona
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> determine(ProductDonationApplyInfo applyInfo, Long userId);
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/6/29 10:27
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    Message<Page<ProductDonationApplyInfo>> allBriefInfo(Integer pageSize, Integer currentPage);
 }

@@ -72,7 +72,5 @@ public class ReleaseQueueListener {
         } catch (IOException e) {
             log.error("------Product-解析消息队列中的信息失败,消息队列中的信息为{},错误信息为{}", msg, e.getMessage());
         }
-
-
     }
 }

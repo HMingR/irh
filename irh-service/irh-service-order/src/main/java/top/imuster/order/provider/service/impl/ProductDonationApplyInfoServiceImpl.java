@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.imuster.common.base.config.GlobalConstant;
 import top.imuster.common.base.dao.BaseDao;
 import top.imuster.common.base.domain.Page;
 import top.imuster.common.base.service.BaseServiceImpl;
@@ -333,6 +334,20 @@ public class ProductDonationApplyInfoServiceImpl extends BaseServiceImpl<Product
         int i = productDonationApplyInfoDao.updateByKey(applyInfo);
         if(i != 1) throw new OrderException("更新申请信息失败");
         return Message.createBySuccess();
+    }
+
+    @Override
+    @Cacheable(value = GlobalConstant.IRH_FIVE_MINUTES_CACHE_KEY, key = "'allBriefList::' + #pageSize + '::' + #currentPage")
+    public Message<Page<ProductDonationApplyInfo>> allBriefInfo(Integer pageSize, Integer currentPage) {
+        ProductDonationApplyInfo condition = new ProductDonationApplyInfo();
+        condition.setStartIndex((currentPage - 1) * pageSize);
+        condition.setEndIndex(pageSize);
+        Integer count = productDonationApplyInfoDao.selectEntryListCount(condition);
+        List<ProductDonationApplyInfo> list = productDonationApplyInfoDao.selectAllBriefList(condition);
+        Page<ProductDonationApplyInfo> page = new Page<>();
+        page.setData(list);
+        page.setTotalCount(count);
+        return Message.createBySuccess(page);
     }
 
     private List<DonationAttributeDto> getListByRedisKey(String redisKey){

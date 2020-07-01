@@ -202,6 +202,7 @@
 		<result column="update_time" property="updateTime"></result>
 		<result column="create_time" property="createTime"></result>
 		<result column="state" property="state"></result>
+		<result column="reason_pic_url" property="reasonPicUrl"></result>
 		<collection property="useOrders"
 					ofType="top.imuster.order.api.pojo.OrderInfo"
 					column="id"
@@ -229,7 +230,8 @@
 			create_time AS createTime,
             user_up_total AS userUpTotal,
             user_down_total AS userDownTotal,
-            state
+            state,
+            reason_pic_url AS reasonPicUrl
 	]]>
 		<include refid="QUERY_FROM_TABLE"/>
 		WHERE state = 2 ORDER BY update_time LIMIT #{startIndex}, #{pageSize}
@@ -289,6 +291,15 @@
 		<if test="title != null and title != ''"><![CDATA[AND title like "%"#{title}"%"]]></if>
 		<if test="minMoney != null and minMoney != ''"><![CDATA[AND apply_amount > #{minMoney}]]></if>
 		<if test="maxMoney != null and maxMoney != ''"><![CDATA[AND apply_amount < #{maxMoney}]]></if>
+	</select>
+
+	<select id="selectAllBriefList" parameterType="productDonationApplyInfo" resultType="productDonationApplyInfo">
+		SELECT id, title AS title, apply_user_id AS applyUserId, reason_pic_url AS reasonPicUrl, create_time AS createTime, state
+		<include refid="QUERY_FROM_TABLE"></include>
+		WHERE
+		state != 1
+		ORDER BY create_time DESC
+		LIMIT #{startIndex}, #{endIndex}
 	</select>
 	
 </mapper>

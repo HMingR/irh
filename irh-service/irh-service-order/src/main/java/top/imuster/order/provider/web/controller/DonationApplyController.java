@@ -76,4 +76,17 @@ public class DonationApplyController {
         if(type != 1 && type != 2) return Message.createByError("参数错误");
         return productDonationApplyInfoService.upOrDownApply(type, targetId);
     }
+
+    /**
+     * @Author hmr
+     * @Description
+     * @Date: 2020/6/29 20:02
+     * @param pageSize
+     * @param currentPage
+     * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.order.api.pojo.ProductDonationApplyInfo>>
+     **/
+    @GetMapping("/all/{pageSize}/{currentPage}")
+    public Message<Page<ProductDonationApplyInfo>> allBriefInfo(@PathVariable("pageSize") Integer pageSize, @PathVariable("currentPage") Integer currentPage){
+        return productDonationApplyInfoService.allBriefInfo(pageSize, currentPage);
+    }
 }
