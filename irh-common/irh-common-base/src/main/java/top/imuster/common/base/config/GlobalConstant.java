@@ -26,6 +26,9 @@ public class GlobalConstant {
     public static final String IRH_USER_OFFLINE_RECOMMEND_SET_KEY = "irh::user::offline::recommend::set::key::";
 
 
+    //redis中存储的用户会话信息  key-userId value-session
+    public static final String IRH_CHAT_CLIENTS_MAP = "irh::chat::clients::map";
+
     public static final String ROLE_AUTH_MAP_KEY = "irh::role::auth::map";
 
     public static final String AUTH_HTTP_METHOD_MAP_KEY = "irh::http::method::map";
