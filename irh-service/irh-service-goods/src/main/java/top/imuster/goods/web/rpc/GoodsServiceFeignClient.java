@@ -1,5 +1,6 @@
 package top.imuster.goods.web.rpc;
 
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
@@ -54,16 +55,11 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Override
     @GetMapping("/es/lockStock/{productId}/{productVersion}")
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public ProductInfo lockStock(@PathVariable("productId") Long productId, @PathVariable("productVersion") Integer version) throws GoodsException {
-        try{
-            Integer count = productInfoService.lockProduct(productId, version);
-            if(count == null || count == 0) return null;
-            ProductInfo productInfo = productInfoService.selectEntryList(productId).get(0);
-            return productInfo;
-        }catch (Exception e){
-            return null;
-        }
+        Integer count = productInfoService.lockProduct(productId, version);
+        if(count == null || count == 0) return null;
+        ProductInfo productInfo = productInfoService.selectEntryList(productId).get(0);
+        return productInfo;
     }
 
     @Override
@@ -125,8 +121,18 @@ public class GoodsServiceFeignClient implements GoodsServiceFeignApi {
 
     @Override
     @GetMapping("/es/state/{targetId}/{state}")
+    @Transactional
+    @LcnTransaction
     public boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state) {
         return productInfoService.updateProductStateById(productId, state);
+    }
+
+    @Override
+    @GetMapping("/es/afterPay/{targetId}")
+    @LcnTransaction
+    @Transactional
+    public void afterPay(@PathVariable("targetId") Long productId){
+        productInfoService.updateProductStateById(productId, 4);
     }
 
     @Override

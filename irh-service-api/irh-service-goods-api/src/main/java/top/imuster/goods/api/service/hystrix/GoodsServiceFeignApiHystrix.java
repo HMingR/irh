@@ -80,6 +80,11 @@ public class GoodsServiceFeignApiHystrix implements FallbackFactory<GoodsService
             }
 
             @Override
+            public void afterPay(Long productId) {
+
+            }
+
+            @Override
             public boolean finishErrandPay(Long id) {
                 return false;
             }

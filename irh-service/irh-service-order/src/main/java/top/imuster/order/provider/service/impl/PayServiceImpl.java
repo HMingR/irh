@@ -12,6 +12,7 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
@@ -168,7 +169,8 @@ public class PayServiceImpl implements PayService {
 
     @SneakyThrows
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED)
+    @LcnTransaction
     public void aliCallBack(HttpServletRequest request) throws OrderException, ParseException {
         Map<String,String> params = Maps.newHashMap();
         Map requestParams = request.getParameterMap();
@@ -204,8 +206,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //更新商品库存状态
-        boolean b = goodsServiceFeignApi.updateProductState(orderInfo.getProductId(), 4);
-        if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+        goodsServiceFeignApi.afterPay(orderInfo.getProductId());
 
         //支付成功之后将订单保存在redis中
         String orderExpireKeyByOrderId = RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId());
@@ -214,6 +215,8 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
+    @Transactional
+    @LcnTransaction
     public Message<String> wxPay(String orderCode) throws JsonProcessingException {
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderCode(orderCode);
         if(orderInfo == null) return Message.createByError("未找到相关订单");
@@ -225,8 +228,7 @@ public class PayServiceImpl implements PayService {
         }
 
         //更新商品库存状态
-        boolean b = goodsServiceFeignApi.updateProductState(orderInfo.getProductId(), 4);
-        if(!b) log.error("---------->支付成功之后改变商品状态失败,订单信息为{}", objectMapper.writeValueAsString(orderInfo));
+        goodsServiceFeignApi.afterPay(orderInfo.getProductId());
 
         String orderExpireKeyByOrderId = RedisUtil.getOrderExpireKeyByOrderId(orderInfo.getId());
         redisTemplate.opsForValue().set(orderExpireKeyByOrderId, 1, 20, TimeUnit.MINUTES);
@@ -240,6 +242,14 @@ public class PayServiceImpl implements PayService {
     public Message<String> errandPay(Long id) {
         boolean flag = goodsServiceFeignApi.finishErrandPay(id);
         return flag ? Message.createBySuccess() : Message.createByError();
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public Message<String> testLcn() {
+        goodsServiceFeignApi.afterPay(43L);
+        return null;
     }
 
 

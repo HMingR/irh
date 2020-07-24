@@ -41,4 +41,9 @@ public class DemandReplyController extends BaseController {
         return productDemandReplyInfoService.writeReply(replyInfo);
     }
 
+//    @GetMapping("/test")
+//    public Message<String> testLcn(){
+//
+//    }
+
 }

@@ -4,10 +4,13 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import top.imuster.common.base.wrapper.Message;
 import top.imuster.common.core.annotation.NeedLogin;
 import top.imuster.common.core.controller.BaseController;
+import top.imuster.goods.api.service.GoodsServiceFeignApi;
 import top.imuster.order.provider.exception.OrderException;
 import top.imuster.order.provider.service.PayService;
 
@@ -75,5 +78,11 @@ public class PayController extends BaseController {
     @GetMapping("/errand/{id}")
     Message<String> errandPay(@PathVariable("id") Long id){
         return payService.errandPay(id);
+    }
+
+
+    @GetMapping("/test")
+    public Message<String> testLcn(){
+        return payService.testLcn();
     }
 }

@@ -1,5 +1,6 @@
 package top.imuster.order.provider;
 
+import com.codingapi.txlcn.tc.config.EnableDistributedTransaction;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -24,9 +25,14 @@ import org.springframework.util.AntPathMatcher;
                                     "top.imuster.security.api.service",
                                     "top.imuster.user.api.service"})
 @EnableTransactionManagement
+@EnableDistributedTransaction
 public class IrhOrderApplication {
     public static void main(String[] args) {
-        SpringApplication.run(IrhOrderApplication.class, args);
+        try {
+            SpringApplication.run(IrhOrderApplication.class, args);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Bean

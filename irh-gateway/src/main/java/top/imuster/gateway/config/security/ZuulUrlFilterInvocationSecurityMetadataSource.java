@@ -24,9 +24,6 @@ public class ZuulUrlFilterInvocationSecurityMetadataSource extends AbstractUrlFi
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${enable.needLogin}")
-    boolean enable;
-
     @Autowired
     AntPathMatcher antPathMatcher;
 

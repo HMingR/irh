@@ -51,4 +51,10 @@ public interface PayService {
      * @reture: top.imuster.common.base.wrapper.Message<java.lang.String>
      **/
     Message<String> errandPay(Long id);
+
+    /**
+     * 测试
+     * @return
+     */
+    Message<String> testLcn();
 }

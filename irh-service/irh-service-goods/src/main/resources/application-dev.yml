@@ -50,3 +50,9 @@ hot:
   topic:
     total: 0   # 显示热搜数量
     refreshTime: 0    #总热度榜刷新时间
+
+
+#lcn的服务端地址
+tx-lcn:
+  client:
+    manager-address: 127.0.0.1:8070

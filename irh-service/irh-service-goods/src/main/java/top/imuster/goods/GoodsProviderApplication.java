@@ -1,5 +1,6 @@
 package top.imuster.goods;
 
+import com.codingapi.txlcn.tc.config.EnableDistributedTransaction;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -29,6 +30,7 @@ import org.springframework.util.AntPathMatcher;
         "top.imuster"})
 @EnableTransactionManagement
 @EnableCaching
+@EnableDistributedTransaction
 public class GoodsProviderApplication {
 
     public static void main(String[] args) {

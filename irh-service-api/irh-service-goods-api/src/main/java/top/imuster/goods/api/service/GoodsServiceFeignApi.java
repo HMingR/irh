@@ -30,7 +30,7 @@ public interface GoodsServiceFeignApi {
     Message<String> delProduct(@PathVariable("id") Long id);
 
     /**
-     * @Description: 用户在下单的时候校验库存,如果有库存，则锁住库存.如果没有库存或者没有锁住库存，则返回false
+     * @Description: 用户在下单的时候校验库存,如果有库存，则锁住库存.如果没有库存或者没有锁住库存，则返回null
      * @Author: hmr
      * @Date: 2019/12/28 10:58
      * @param productId
@@ -105,7 +105,7 @@ public interface GoodsServiceFeignApi {
 
     /**
      * @Author hmr
-     * @Description 获得商品的坚简略信息
+     * @Description 获得商品的简略信息
      * @Date: 2020/5/11 19:51
      * @param productId
      * @reture: top.imuster.goods.api.pojo.ProductInfo
@@ -118,12 +118,18 @@ public interface GoodsServiceFeignApi {
      * @Description 卖家
      * @Date: 2020/5/12 10:44
      * @param productId
-     * @param i
      * @reture: boolean
      **/
     @GetMapping("/es/state/{targetId}/{state}")
     boolean updateProductState(@PathVariable("targetId") Long productId, @PathVariable("state") Integer state);
 
+
+    /**
+     * 用户完成支付之后改变商品的状态，由于需要事务控制，所以需要新的方法
+     * @param productId
+     */
+    @GetMapping("/es/afterPay/{targetId}")
+    void afterPay(@PathVariable("targetId") Long productId);
 
     /**
      * @Author hmr
