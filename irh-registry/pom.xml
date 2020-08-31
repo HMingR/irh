@@ -36,6 +36,41 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+
+
+                <configuration>
+                    <imageName>irh/${project.artifactId}</imageName>
+                    <dockerHost>http://127.0.0.1:2375</dockerHost>
+                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>irh-registry-1.0-SNAPSHOT-execute.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+
+<!--                <configuration>-->
+<!--                    <imageName>irh/${project.artifactId}</imageName>-->
+<!--                    <dockerHost>http://127.0.0.1:2375</dockerHost>-->
+<!--                    <baseImage>java:8</baseImage>-->
+<!--                    <entryPoint>["java", "-jar","/irh-registry-1.0-SNAPSHOT-execute.jar"]-->
+<!--                    </entryPoint>-->
+<!--                    <resources>-->
+<!--                        <resource>-->
+<!--                            <targetPath>/</targetPath>-->
+<!--                            <directory>${project.build.directory}</directory>-->
+<!--                            <include>irh-registry-1.0-SNAPSHOT-execute.jar</include>-->
+<!--                        </resource>-->
+<!--                    </resources>-->
+<!--                </configuration>-->
+            </plugin>
         </plugins>
     </build>
 

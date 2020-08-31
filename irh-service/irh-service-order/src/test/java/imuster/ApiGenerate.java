@@ -1,11 +1,6 @@
 package imuster;
 
-import io.github.swagger2markup.GroupBy;
-import io.github.swagger2markup.Language;
-import io.github.swagger2markup.Swagger2MarkupConfig;
-import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import com.sun.tools.internal.xjc.Language;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,18 +30,18 @@ public class ApiGenerate {
      * @reture: void
      **/
     public static void generateMd() throws Exception {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .withOutputLanguage(Language.ZH)
-                .withPathsGroupedBy(GroupBy.TAGS)
-                .withGeneratedExamples()
-                .withoutInlineSchema()
-                .build();
-
-        Swagger2MarkupConverter.from(new URL("http://localhost:8082/v2/api-docs"))
-                .withConfig(config)
-                .build()
-                .toFolder(Paths.get("./docs/markdown/order"));
+//        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+//                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+//                .withOutputLanguage(Language.ZH)
+//                .withPathsGroupedBy(GroupBy.TAGS)
+//                .withGeneratedExamples()
+//                .withoutInlineSchema()
+//                .build();
+//
+//        Swagger2MarkupConverter.from(new URL("http://localhost:8082/v2/api-docs"))
+//                .withConfig(config)
+//                .build()
+//                .toFolder(Paths.get("./docs/markdown/order"));
     }
 
     /**
@@ -57,18 +52,18 @@ public class ApiGenerate {
      * @reture: void
      **/
     public static void generateCf() throws MalformedURLException {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.CONFLUENCE_MARKUP)
-                .withOutputLanguage(Language.ZH)
-                .withPathsGroupedBy(GroupBy.TAGS)
-                .withGeneratedExamples()
-                .withoutInlineSchema()
-                .build();
-
-        Swagger2MarkupConverter.from(new URL("http://localhost:8082/v2/api-docs"))
-                .withConfig(config)
-                .build()
-                .toFolder(Paths.get("./docs/confluence/order"));
+//        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+//                .withMarkupLanguage(MarkupLanguage.CONFLUENCE_MARKUP)
+//                .withOutputLanguage(Language.ZH)
+//                .withPathsGroupedBy(GroupBy.TAGS)
+//                .withGeneratedExamples()
+//                .withoutInlineSchema()
+//                .build();
+//
+//        Swagger2MarkupConverter.from(new URL("http://localhost:8082/v2/api-docs"))
+//                .withConfig(config)
+//                .build()
+//                .toFolder(Paths.get("./docs/confluence/order"));
     }
 
 

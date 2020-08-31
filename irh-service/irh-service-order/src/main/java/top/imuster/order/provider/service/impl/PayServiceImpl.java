@@ -12,7 +12,6 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
-import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
@@ -170,7 +169,7 @@ public class PayServiceImpl implements PayService {
     @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    @LcnTransaction
+//    @LcnTransaction
     public void aliCallBack(HttpServletRequest request) throws OrderException, ParseException {
         Map<String,String> params = Maps.newHashMap();
         Map requestParams = request.getParameterMap();
@@ -216,7 +215,7 @@ public class PayServiceImpl implements PayService {
 
     @Override
     @Transactional
-    @LcnTransaction
+//    @LcnTransaction
     public Message<String> wxPay(String orderCode) throws JsonProcessingException {
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderCode(orderCode);
         if(orderInfo == null) return Message.createByError("未找到相关订单");
@@ -246,7 +245,7 @@ public class PayServiceImpl implements PayService {
 
     @Override
     @Transactional
-    @LcnTransaction
+//    @LcnTransaction
     public Message<String> testLcn() {
         goodsServiceFeignApi.afterPay(43L);
         return null;

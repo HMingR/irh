@@ -31,7 +31,6 @@ public class RecommendController extends BaseController {
      * @Date: 2020/5/1 14:06
      * @param pageSize
      * @param currentPage
-     * @param userId
      * @reture: top.imuster.common.base.wrapper.Message<top.imuster.common.base.domain.Page<top.imuster.goods.api.pojo.ProductInfo>>
      **/
     @GetMapping("/offline/{pageSize}/{currentPage}")
