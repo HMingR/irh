@@ -1,7 +1,7 @@
 spring:
   redis:
     database: 0
-    host: 39.105.0.169
+    host: @irh.redis.host@
     port: 6379
     jedis:
       pool:
@@ -9,7 +9,6 @@ spring:
         max-idle: 10
         max-wait: 5000ms
     timeout: 10000ms
-    password: irh_aliyun_redis
 
   datasource:
     druid:
